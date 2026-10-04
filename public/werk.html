@@ -79,7 +79,7 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
 <div class="wrap">
   <header>
     <a class="logo syne" href="/voorpagina" aria-label="GRØNN Studio, naar de voorpagina">GRØNN</a>
-    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><span class="lbl">Weergave</span></span>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
   </header>
 
   <main>
@@ -142,5 +142,6 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
   knoppen.forEach((k) => k.addEventListener('click', () => zet(k.dataset.weergave)))
   try { const w = localStorage.getItem('gronn-werk-weergave'); if (w === 'raster') zet('raster') } catch {}
 </script>
+<script src="/wf-weergave.js" defer></script>
 </body>
 </html>

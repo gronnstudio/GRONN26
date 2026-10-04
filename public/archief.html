@@ -89,6 +89,7 @@ a{color:#111}
    Nieuwe wireframe? Zet BOVENAAN een regel erbij met het volgende
    WF-nummer en een eigen bestand in public/. Oude bestanden blijven. */
 const WIREFRAMES = [
+  { nr: "WF-026", pagina: "Alle pagina's", titel: "Weergave en toegankelijkheid", src: "/voorpagina.html?paneel=open", status: "Gekozen", toel: "Eén knop met regelaar-icoon: Auto/Licht/Donker + minder beweging, grotere tekst, meer contrast, links onderstrepen." },
   { nr: "WF-025", pagina: "Voorpagina", titel: "Voorpagina: verhaal in stappen + tekening", src: "/voorpagina.html", status: "Gekozen", toel: "WF-017 als voorpagina, de tekening van WF-015 als blok na Werk (Nick)." },
   { nr: "WF-024", pagina: "Voorpagina", titel: "Voorpagina: verhaal in stappen + systeem", src: "/verhaal-systeem.html", status: "Alternatief", toel: "Opbouw van WF-017 met de opening van WF-015 (Nick)." },
   { nr: "WF-023", pagina: "Kennismaken", titel: "Kennismaken", src: "/kennismaken.html", status: "Gekozen", toel: "Formulier als regels op papier, gegevens ernaast." },
@@ -140,7 +141,7 @@ WIREFRAMES.forEach((w) => {
 })
 
 // Filter per pagina
-const PAGINAS = ['Alle', 'Voorpagina', 'Werk', 'Project', 'Vijvers', 'Tuinen', 'Over', 'Kennismaken']
+const PAGINAS = ['Alle', 'Alle pagina\'s', 'Voorpagina', 'Werk', 'Project', 'Vijvers', 'Tuinen', 'Over', 'Kennismaken']
 const filters = document.getElementById('filters')
 PAGINAS.forEach((pg) => {
   const b = document.createElement('button')
