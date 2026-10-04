@@ -19,6 +19,10 @@ a{color:#111}
 .lijst-kop{padding:20px 20px 12px;border-bottom:1px solid #e2e2e2}
 .lijst-kop h1{font-size:18px;font-weight:600;margin:10px 0 4px}
 .lijst-kop p{margin:0;color:#666;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;padding:12px 20px;border-bottom:1px solid #e2e2e2}
+.filters button{all:unset;cursor:pointer;padding:5px 10px;border:1px solid #d0d0d0;border-radius:999px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.04em}
+.filters button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+.filters button:focus-visible{outline:2px solid #111;outline-offset:2px}
 .items{list-style:none;margin:0;padding:0;overflow:auto;flex:1}
 .item button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 10px;width:100%;padding:12px 20px;border-bottom:1px solid #eee;cursor:pointer}
 .item button:hover{background:#f6f6f6}
@@ -58,6 +62,7 @@ a{color:#111}
       <h1>Naslag</h1>
       <p>Nieuwste bovenaan. Klik een regel om hem rechts live te bekijken. Andere layout oppakken? Noem het nummer.</p>
     </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter per pagina"></div>
     <ul class="items" id="items"></ul>
   </aside>
 
@@ -84,26 +89,31 @@ a{color:#111}
    Nieuwe wireframe? Zet BOVENAAN een regel erbij met het volgende
    WF-nummer en een eigen bestand in public/. Oude bestanden blijven. */
 const WIREFRAMES = [
-  { nr: "WF-018", titel: "Voorpagina: systeem + Over", src: "/systeem-2.html", status: "Gekozen", toel: "WF-015 met het Over-blok (portret en Nicks zin) erbij." },
-  { nr: "WF-017", titel: "Voorpagina: verhaal in stappen (uitgewerkt)", src: "/verhaal.html", status: "Alternatief", toel: "WF-004 uitgewerkt. Wissel met WF-015 kan altijd." },
-  { nr: "WF-016", titel: "Voorpagina: contactvel + Zo werk ik", src: "/contactvel.html", status: "Alternatief", toel: "Alle foto's als één genummerde reeks." },
-  { nr: "WF-015", titel: "Voorpagina: systeem + Zo werk ik", src: "/systeem.html", status: "Basis voor WF-018", toel: "Lijntekening van het watersysteem als opening. \"Erg vet\" (Nick)." },
-  { nr: "WF-014", titel: "Voorpagina: veldboek + Zo werk ik", src: "/veldboek.html", status: "Alternatief", toel: "Het werk als dagboek per maand." },
-  { nr: "WF-013", titel: "Voorpagina: spread + Zo werk ik", src: "/keuze-2.html", status: "Verlaten", toel: "Nick wil een andere hoofdlayout." },
-  { nr: "WF-012", titel: "Werk: lijst en raster", src: "/werk.html", status: "Gekozen", toel: "Schakelaar lijst/raster behouden (Nick)." },
-  { nr: "WF-011", titel: "Voorpagina: index + Zo werk ik", src: "/keuze.html", status: "Verlaten", toel: "\"Als opening afgezaagd\" (Nick)." },
-  { nr: "WF-010", titel: "Werk 2 — raster", src: "/werk-2-raster.html", status: "Opgegaan in WF-012", toel: "Naar Con-Tour." },
-  { nr: "WF-009", titel: "Werk 1 — lijst", src: "/werk-1-lijst.html", status: "Opgegaan in WF-012", toel: "Naar Arkitektkontoret Vest." },
-  { nr: "WF-008", titel: "D — Verhaal in stappen, telefoon", src: "/d-telefoon.html", status: "Stappen gebruikt", toel: "Tekening op telefoonformaat." },
-  { nr: "WF-007", titel: "C — Volle foto, telefoon", src: "/c-telefoon.html", status: "Alternatief", toel: "Tekening op telefoonformaat." },
-  { nr: "WF-006", titel: "B — Index, telefoon", src: "/b-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
-  { nr: "WF-005", titel: "A — Spread, telefoon", src: "/a-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
-  { nr: "WF-004", titel: "D — Verhaal in stappen", src: "/d-verhaal.html", status: "Basis voor WF-017", toel: "Naar Bartosz Kolenda." },
-  { nr: "WF-003", titel: "C — Volle foto", src: "/c-volle-foto.html", status: "Alternatief", toel: "Naar Stefan Morael." },
-  { nr: "WF-002", titel: "B — Index", src: "/b-index.html", status: "Verlaten", toel: "Naar Piet Oudolf." },
-  { nr: "WF-001", titel: "A — Spread", src: "/a-spread.html", status: "Verlaten", toel: "Naar Phlypo." },
-  { nr: "Build 2", titel: "Redactionele spread (in kleur)", src: null, status: "Verlaten", toel: "Alleen in git: commit 9a25811." },
-  { nr: "Build 1", titel: "Foto met kop erover (in kleur)", src: null, status: "Verlaten", toel: "Alleen in git: commit 0f23a74." },
+  { nr: "WF-023", pagina: "Kennismaken", titel: "Kennismaken", src: "/kennismaken.html", status: "Gekozen", toel: "Formulier als regels op papier, gegevens ernaast." },
+  { nr: "WF-022", pagina: "Over", titel: "Over mij", src: "/over.html", status: "Gekozen", toel: "Nicks eigen tekst, portret blijft staan, Zo werk ik eronder." },
+  { nr: "WF-021", pagina: "Project", titel: "Project: vijverrenovatie", src: "/project-vijverrenovatie.html", status: "Gekozen", toel: "Casestudy: fiche, cijfers als momenten, de waterroute, plantplan, citaat." },
+  { nr: "WF-020", pagina: "Tuinen", titel: "Tuinen", src: "/tuinen.html", status: "Gekozen", toel: "Beeld eerst, dan diensten per fase: kijken, ontwerpen, aanleggen." },
+  { nr: "WF-019", pagina: "Vijvers", titel: "Vijvers", src: "/vijvers.html", status: "Gekozen", toel: "Diensten als rijen met vanaf-prijs, filterfoto, het vijverproject." },
+  { pagina: "Voorpagina", nr: "WF-018", titel: "Voorpagina: systeem + Over", src: "/systeem-2.html", status: "Gekozen", toel: "WF-015 met het Over-blok (portret en Nicks zin) erbij." },
+  { pagina: "Voorpagina", nr: "WF-017", titel: "Voorpagina: verhaal in stappen (uitgewerkt)", src: "/verhaal.html", status: "Alternatief", toel: "WF-004 uitgewerkt. Wissel met WF-015 kan altijd." },
+  { pagina: "Voorpagina", nr: "WF-016", titel: "Voorpagina: contactvel + Zo werk ik", src: "/contactvel.html", status: "Alternatief", toel: "Alle foto's als één genummerde reeks." },
+  { pagina: "Voorpagina", nr: "WF-015", titel: "Voorpagina: systeem + Zo werk ik", src: "/systeem.html", status: "Basis voor WF-018", toel: "Lijntekening van het watersysteem als opening. \"Erg vet\" (Nick)." },
+  { pagina: "Voorpagina", nr: "WF-014", titel: "Voorpagina: veldboek + Zo werk ik", src: "/veldboek.html", status: "Alternatief", toel: "Het werk als dagboek per maand." },
+  { pagina: "Voorpagina", nr: "WF-013", titel: "Voorpagina: spread + Zo werk ik", src: "/keuze-2.html", status: "Verlaten", toel: "Nick wil een andere hoofdlayout." },
+  { pagina: "Werk", nr: "WF-012", titel: "Werk: lijst en raster", src: "/werk.html", status: "Gekozen", toel: "Schakelaar lijst/raster behouden (Nick)." },
+  { pagina: "Voorpagina", nr: "WF-011", titel: "Voorpagina: index + Zo werk ik", src: "/keuze.html", status: "Verlaten", toel: "\"Als opening afgezaagd\" (Nick)." },
+  { pagina: "Werk", nr: "WF-010", titel: "Werk 2 — raster", src: "/werk-2-raster.html", status: "Opgegaan in WF-012", toel: "Naar Con-Tour." },
+  { pagina: "Werk", nr: "WF-009", titel: "Werk 1 — lijst", src: "/werk-1-lijst.html", status: "Opgegaan in WF-012", toel: "Naar Arkitektkontoret Vest." },
+  { pagina: "Voorpagina", nr: "WF-008", titel: "D — Verhaal in stappen, telefoon", src: "/d-telefoon.html", status: "Stappen gebruikt", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-007", titel: "C — Volle foto, telefoon", src: "/c-telefoon.html", status: "Alternatief", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-006", titel: "B — Index, telefoon", src: "/b-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-005", titel: "A — Spread, telefoon", src: "/a-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-004", titel: "D — Verhaal in stappen", src: "/d-verhaal.html", status: "Basis voor WF-017", toel: "Naar Bartosz Kolenda." },
+  { pagina: "Voorpagina", nr: "WF-003", titel: "C — Volle foto", src: "/c-volle-foto.html", status: "Alternatief", toel: "Naar Stefan Morael." },
+  { pagina: "Voorpagina", nr: "WF-002", titel: "B — Index", src: "/b-index.html", status: "Verlaten", toel: "Naar Piet Oudolf." },
+  { pagina: "Voorpagina", nr: "WF-001", titel: "A — Spread", src: "/a-spread.html", status: "Verlaten", toel: "Naar Phlypo." },
+  { pagina: "Voorpagina", nr: "Build 2", titel: "Redactionele spread (in kleur)", src: null, status: "Verlaten", toel: "Alleen in git: commit 9a25811." },
+  { pagina: "Voorpagina", nr: "Build 1", titel: "Foto met kop erover (in kleur)", src: null, status: "Verlaten", toel: "Alleen in git: commit 0f23a74." },
 ]
 
 const TOESTELLEN = { desktop: [1440, 900], tablet: [834, 1112], telefoon: [390, 844] }
@@ -120,12 +130,26 @@ const bewaar = () => { try { localStorage.setItem('gronn-naslag', JSON.stringify
 WIREFRAMES.forEach((w) => {
   const li = document.createElement('li')
   li.className = 'item' + (w.src ? '' : ' geen')
-  li.innerHTML = `<button type="button"><span class="mono">${w.nr}</span><span class="titel">${w.titel}</span><span class="status muted">${w.status}</span><span class="toel muted">${w.toel}</span></button>`
+  li.dataset.pagina = w.pagina
+  li.innerHTML = `<button type="button"><span class="mono">${w.nr}</span><span class="titel">${w.titel}</span><span class="status muted">${w.pagina} · ${w.status}</span><span class="toel muted">${w.toel}</span></button>`
   const b = li.querySelector('button')
   if (w.src) b.addEventListener('click', () => kies(w))
   else b.setAttribute('aria-disabled', 'true')
   w.knop = b
   lijst.appendChild(li)
+})
+
+// Filter per pagina
+const PAGINAS = ['Alle', 'Voorpagina', 'Werk', 'Project', 'Vijvers', 'Tuinen', 'Over', 'Kennismaken']
+const filters = document.getElementById('filters')
+PAGINAS.forEach((pg) => {
+  const b = document.createElement('button')
+  b.type = 'button'; b.textContent = pg; b.setAttribute('aria-pressed', String(pg === 'Alle'))
+  b.addEventListener('click', () => {
+    filters.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+    lijst.querySelectorAll('.item').forEach((li) => { li.hidden = pg !== 'Alle' && li.dataset.pagina !== pg })
+  })
+  filters.appendChild(b)
 })
 
 function kies(w) {

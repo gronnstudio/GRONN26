@@ -46,3 +46,31 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
   .stap summary .tekst{display:none}
   .stap .tekst-los{display:block;margin:0 0 18px 44px;color:var(--muted);line-height:1.6}
 }
+
+/* Pagina-opbouw vanaf WF-019 */
+.pagina-kop{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;padding-top:clamp(56px,9vw,140px)}
+.pagina-kop h1{margin:0;font-size:clamp(48px,7.5vw,104px);line-height:1;letter-spacing:-.04em}
+.pagina-kop p.inleiding{grid-column:2;margin:28px 0 0;max-width:38ch;font-size:clamp(18px,1.7vw,24px);line-height:1.5;color:var(--muted)}
+.rijen{margin-top:clamp(56px,7vw,96px)}
+.dienst{display:grid;grid-template-columns:60px 4fr 5fr 2fr;column-gap:32px;align-items:baseline;padding:26px 0;border-top:1px solid var(--lijn);text-decoration:none}
+.dienst:last-child{border-bottom:1px solid var(--lijn)}
+.dienst .naam{font-size:clamp(22px,2.3vw,32px);letter-spacing:-.02em;line-height:1.1}
+.dienst .uitleg{color:var(--muted);line-height:1.6}
+.dienst .prijs{text-align:right}
+.onderbreking{margin:clamp(56px,7vw,96px) calc(var(--goot) * -1)}
+.onderbreking .ph{aspect-ratio:21/9}
+.noot{margin-top:16px;max-width:60ch}
+.dock .pil a[aria-current]{background:#e6e6e6;color:#4d4d4d}
+@media (max-width:767px){
+  .pagina-kop{grid-template-columns:1fr;row-gap:16px}
+  .pagina-kop p.inleiding{grid-column:1;margin-top:8px}
+  .dienst{grid-template-columns:32px minmax(0,1fr) auto;row-gap:6px}
+  .dienst .uitleg{grid-column:2 / -1}
+  .dienst .prijs{grid-column:3;grid-row:1}
+  .onderbreking .ph{aspect-ratio:4/3}
+}
+@media (max-width:767px){
+  .werkblok{grid-template-columns:1fr !important;row-gap:20px}
+  .werkblok > *{grid-column:auto !important;grid-row:auto !important}
+  .dienst-kop{display:none}
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-022 Over — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-022: Over. Nicks eigen tekst, letterlijk; het portret blijft staan
+   terwijl de tekst langs loopt (de ene sticky op deze pagina). */
+.verhaal{display:grid;grid-template-columns:5fr 1fr 6fr;margin-top:clamp(48px,6vw,96px);align-items:start}
+.verhaal .portret{position:sticky;top:24px;display:flex;flex-direction:column;gap:12px}
+.verhaal .portret .ph{aspect-ratio:4/5}
+.verhaal .tekst{grid-column:3}
+.verhaal p{margin:0 0 1.2em;line-height:1.7;font-size:clamp(16px,1.2vw,18px)}
+.verhaal p:first-child{font-size:clamp(20px,1.8vw,26px);line-height:1.45}
+@media (max-width:767px){
+  .verhaal{grid-template-columns:1fr;row-gap:32px}
+  .verhaal .portret{position:static;width:75%}
+  .verhaal .tekst{grid-column:1}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/systeem-2">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><span class="lbl">Weergave</span></span>
+  </header>
+
+  <main>
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Hovenier en ecologisch ontwerper</p>
+      <h1 class="syne">Over mij</h1>
+    </section>
+
+    <section class="verhaal" aria-label="Het verhaal van Nick">
+      <figure class="portret" style="margin:0"><div class="ph">Portret Nick</div><figcaption class="lbl muted">Nick Peters · GRØNN Studio</figcaption></figure>
+      <div class="tekst">
+        <p>Ik ben Nick Peters. Vader van twee kinderen, hovenier, ecologisch ontwerper en de persoon achter GRØNN Studio.</p>
+        <p>Ik denk in beelden, patronen en verbanden. Als ik naar een tuin kijk, zie ik hoe licht, water, materialen en beplanting elkaar beïnvloeden. Maar ik ben ook benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? En waar kom je na een drukke dag tot rust? Juist die dagelijkse dingen geven richting aan wat ik maak.</p>
+        <p>Mijn liefde voor bouwen en zorgen kreeg ik van huis uit mee. Ik groeide op in een warm, praktisch gezin, waar aandacht en respect vanzelfsprekend waren. Mijn moeder liet me zien hoeveel het betekent om aanwezig te zijn. Met mijn vader verbouwde ik huizen. Daar leerde ik werken met mijn handen, oplossingen zoeken en doorzetten wanneer iets anders loopt dan bedacht.</p>
+        <p>Mijn eigen weg verliep minder vanzelfsprekend. Binnen school en vaste systemen voelde ik me vaak niet op mijn plek. Later gaf de diagnose autisme woorden aan dingen die ik al langer ervoer. Buiten vond ik rust: in tuinieren, dieren, observeren en bezig zijn. De natuur is altijd een plek geweest waar ik me thuis voel.</p>
+        <p>Het vaderschap maakte voor mij nog duidelijker wat belangrijk is: aandacht geven, verantwoordelijkheid nemen en een omgeving creëren waarin iemand zich veilig voelt. Dat neem ik mee in mijn werk. Ik luister, kijk zorgvuldig en wil begrijpen wat een plek voor iemand moet betekenen.</p>
+        <p>In GRØNN Studio komen mijn manier van kijken en mijn plezier in maken samen. Ik wil tuinen ontwerpen en aanleggen waarin mensen zich thuis voelen en waarin ook ruimte is voor ander leven. Dat begint bij de bodem, bij hoe water zijn weg vindt en bij planten die passen bij de plek. Ik kijk daarbij ook vooruit: hoe groeit een tuin verder, hoe verandert hij met de seizoenen en welk onderhoud past bij de eigenaar?</p>
+        <p>Thuis en in mijn werk zijn er altijd planten, ideeën en projecten. Vaak ook modder. Ik blijf nieuwsgierig naar hoe dingen groeien en hoe ik ze beter kan maken.</p>
+        <p>Met die aandacht werk ik ook aan jouw tuin.</p>
+      </div>
+    </section>
+
+    <section class="sectie" aria-labelledby="stappen-kop">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><p class="lbl muted" id="stappen-kop" style="margin:0">Zo werk ik</p><a class="lnk" href="/systeem-2">Ook op de voorpagina →</a></div>
+      <div class="stappen">
+        <details class="stap"><summary><span class="lbl">01</span><span class="syne titel">Eerst kijken</span><span class="tekst">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</span></summary><p class="tekst-los">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</p></details>
+        <details class="stap"><summary><span class="lbl">02</span><span class="syne titel">Uitzoeken hoe het werkt</span><span class="tekst">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</span></summary><p class="tekst-los">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</p></details>
+        <details class="stap"><summary><span class="lbl">03</span><span class="syne titel">Verbanden leggen</span><span class="tekst">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</span></summary><p class="tekst-los">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</p></details>
+        <details class="stap"><summary><span class="lbl">04</span><span class="syne titel">Ontwerpen</span><span class="tekst">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</span></summary><p class="tekst-los">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</p></details>
+        <details class="stap"><summary><span class="lbl">05</span><span class="syne titel">Aanleggen</span><span class="tekst">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</span></summary><p class="tekst-los">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</p></details>
+        <details class="stap"><summary><span class="lbl">06</span><span class="syne titel">Laten groeien</span><span class="tekst">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</span></summary><p class="tekst-los">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</p></details>
+      </div>
+    </section>
+
+    <section class="einde"><a class="syne" href="/kennismaken">Kennismaken</a><p class="lbl muted" style="margin-top:24px">hello@gronn.studio · +316 181 180 14</p></section>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/vijvers">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk">WERK</a><a href="/over" aria-current="page">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+</body>
+</html>
