@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Keuze: B + stappen uit D — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--goot:clamp(24px,4vw,56px);--ink:#111;--muted:#666;--ph:#dadada;--lijn:rgba(0,0,0,.18)}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Montserrat,sans-serif;padding-bottom:100px}
+a{color:inherit}
+.lbl{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.syne{font-family:Syne,sans-serif;font-weight:600}
+.ph{background:var(--ph);display:flex;align-items:flex-end;padding:14px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lnk{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);padding-bottom:4px}
+.lnk:hover{border-color:var(--ink)}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:var(--goot)}
+.rule{border-top:1px solid var(--lijn)}
+
+/* kop */
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:28px}
+.logo{font-size:28px;letter-spacing:.02em;text-decoration:none}
+.kop-midden{flex:1;text-align:center}
+.kop-cta{display:none}
+.knop{background:#d4d4d4;border-radius:999px;height:36px;padding:0 12px;display:inline-flex;align-items:center;font-size:11px;font-weight:600;letter-spacing:.08em;text-decoration:none}
+
+/* opening: de index */
+.opening{padding-top:clamp(56px,10vw,120px);position:relative}
+.namen{margin:24px 0 0;font-size:clamp(46px,9.6vw,138px);line-height:1.02;letter-spacing:-.045em}
+.naam{text-decoration:none;position:relative;display:inline}
+.naam sup{font-family:'Geist Mono',monospace;font-weight:400;font-size:clamp(11px,1vw,14px);letter-spacing:.04em;color:var(--muted);vertical-align:top;position:relative;top:.9em;margin-right:.5em}
+.naam.stil{color:#a6a6a6}
+.naam:hover,.naam:focus-visible{color:var(--ink)}
+.voorbeeld{position:absolute;right:var(--goot);top:clamp(80px,12vw,150px);width:clamp(180px,18vw,260px);aspect-ratio:4/5;opacity:0;transition:opacity .4s;pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.opening:has(.naam-1:hover) .v1,.opening:has(.naam-1:focus-visible) .v1,.opening:has(.naam-2:hover) .v2,.opening:has(.naam-2:focus-visible) .v2{opacity:1}
+.tel-voorbeeld{display:none}
+.intro{margin:clamp(48px,6vw,80px) 0 0 50%;max-width:32ch;font-size:clamp(18px,1.6vw,22px);line-height:1.5}
+
+/* foto */
+.foto{margin-top:clamp(120px,16vw,240px)}
+.foto .ph{height:clamp(420px,57vw,820px)}
+.onderschrift{display:flex;justify-content:space-between;padding-top:16px}
+
+/* stappen */
+.sectie{padding-top:clamp(120px,16vw,220px)}
+.stappen{margin-top:40px}
+.stap{border-top:1px solid var(--lijn)}
+.stap:last-child{border-bottom:1px solid var(--lijn)}
+.stap summary{list-style:none;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;align-items:baseline;padding:28px 0;cursor:default}
+.stap summary::-webkit-details-marker{display:none}
+.stap .nr{grid-column:span 1}
+.stap .titel{grid-column:span 4;font-size:clamp(22px,2.3vw,32px);letter-spacing:-.02em}
+.stap .tekst{grid-column:span 7;color:var(--muted);line-height:1.6}
+.stap .tekst-los{display:none}
+
+/* over */
+.over{display:flex;gap:32px;align-items:center}
+.over .ph{flex:0 0 clamp(200px,28vw,400px);aspect-ratio:4/5}
+.over h2{margin:24px 0 0;font-size:clamp(40px,5vw,72px);line-height:1.02;letter-spacing:-.03em}
+
+/* einde */
+.einde{margin-top:clamp(120px,16vw,220px);padding-block:clamp(56px,7vw,96px) 80px}
+.einde a.groot{font-size:clamp(46px,10vw,150px);line-height:.92;letter-spacing:-.045em;text-decoration:none;display:flex;justify-content:space-between;align-items:baseline}
+.contact{margin-top:32px;display:flex;flex-wrap:wrap;gap:8px 40px}
+
+/* menu onderaan */
+nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;max-width:1440px;margin:0 auto;padding-inline:var(--goot)}
+.dock .cta{justify-self:start;background:#d4d4d4;border-radius:999px;height:52px;padding:0 24px;display:flex;align-items:center;font-size:12px;font-weight:600;letter-spacing:.1em;text-decoration:none}
+.pil{background:rgba(77,77,77,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;border-radius:999px;height:52px;width:440px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:5px;font-size:12px;font-weight:600;letter-spacing:.1em}
+.pil a{display:grid;place-items:center;text-decoration:none;border-radius:999px}
+.pil a[aria-current]{background:#e6e6e6;color:#4d4d4d}
+.dock .pijl{justify-self:end;width:52px;height:52px;border-radius:999px;background:rgba(77,77,77,.92);color:#fff;display:grid;place-items:center;border:0;font-size:18px;cursor:pointer}
+.terug{position:fixed;left:16px;bottom:96px;z-index:60;background:#111;color:#fff;font:12px/1 'Geist Mono',monospace;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;text-decoration:none}
+
+/* telefoon */
+@media (max-width:767px){
+  .kop-midden{display:none}
+  .kop-cta{display:inline-flex}
+  header .knop{display:inline-flex}
+  .voorbeeld{display:none}
+  .tel-voorbeeld{display:flex;margin-top:32px;aspect-ratio:4/3}
+  .intro{margin-left:0}
+  .stap summary{grid-template-columns:32px minmax(0,1fr) 24px;column-gap:12px;cursor:pointer;padding:20px 0}
+  .stap summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted)}
+  .stap[open] summary::after{content:"−"}
+  .stap .nr,.stap .titel{grid-column:auto}
+  .stap summary .tekst{display:none}
+  .stap .tekst-los{display:block;margin:0 0 20px 44px;color:var(--muted);line-height:1.6}
+  .over{flex-direction:column;align-items:flex-start}
+  .over .ph{width:70%;flex-basis:auto}
+  .einde a.groot span:last-child{display:none}
+  nav.dock{grid-template-columns:1fr;padding-inline:12px}
+  .dock .cta,.dock .pijl{display:none}
+  .pil{width:100%;font-size:11px}
+  .terug{bottom:84px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+
+<div class="wrap">
+  <header>
+    <a class="logo syne" href="#" aria-label="GRØNN Studio, naar de voorpagina">GRØNN</a>
+    <span class="kop-midden lbl muted">Vijvers en tuinen · Stein en omgeving</span>
+    <span style="display:flex;gap:10px;align-items:center">
+      <a class="knop kop-cta" href="#">KENNISMAKEN</a>
+      <span class="lbl">Weergave</span>
+    </span>
+  </header>
+
+  <main>
+    <section class="opening" aria-labelledby="werk-kop">
+      <p class="lbl muted" id="werk-kop" style="margin:0">Werk</p>
+      <h1 class="namen syne">
+        <a class="naam naam-1" href="/werk"><sup>001</sup>Vijverrenovatie,</a><br>
+        <a class="naam naam-2 stil" href="/werk"><sup>002</sup>Terras Geulle.</a>
+      </h1>
+      <div class="ph voorbeeld v1" aria-hidden="true">Foto F01 · bij hover</div>
+      <div class="ph voorbeeld v2" aria-hidden="true">Foto T02 · bij hover</div>
+      <div class="ph tel-voorbeeld" aria-hidden="true">Telefoon: foto onder de namen</div>
+      <p class="intro">Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
+      <p style="margin:32px 0 0 0" class="intro"><a class="lnk" href="/werk">Bekijk het werk →</a></p>
+    </section>
+  </main>
+</div>
+
+<section class="foto" aria-label="Foto">
+  <div class="ph">Foto F10 · de waterval · schermbreed, verder niets</div>
+  <div class="wrap onderschrift"><span class="lbl">GR / 001 — De waterval</span><span class="lbl muted">Vijverrenovatie · 2026</span></div>
+</section>
+
+<div class="wrap">
+  <section class="sectie" aria-labelledby="stappen-kop">
+    <p class="lbl muted" id="stappen-kop" style="margin:0">Zo werk ik</p>
+    <div class="stappen">
+      <details class="stap"><summary><span class="lbl nr">01</span><span class="syne titel">Eerst kijken</span><span class="tekst">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</span></summary><p class="tekst-los">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</p></details>
+      <details class="stap"><summary><span class="lbl nr">02</span><span class="syne titel">Uitzoeken hoe het werkt</span><span class="tekst">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</span></summary><p class="tekst-los">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</p></details>
+      <details class="stap"><summary><span class="lbl nr">03</span><span class="syne titel">Verbanden leggen</span><span class="tekst">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</span></summary><p class="tekst-los">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</p></details>
+      <details class="stap"><summary><span class="lbl nr">04</span><span class="syne titel">Ontwerpen</span><span class="tekst">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</span></summary><p class="tekst-los">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</p></details>
+      <details class="stap"><summary><span class="lbl nr">05</span><span class="syne titel">Aanleggen</span><span class="tekst">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</span></summary><p class="tekst-los">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</p></details>
+      <details class="stap"><summary><span class="lbl nr">06</span><span class="syne titel">Laten groeien</span><span class="tekst">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</span></summary><p class="tekst-los">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</p></details>
+    </div>
+  </section>
+
+  <section class="sectie over" aria-labelledby="over-kop">
+    <div class="ph">Portret Nick</div>
+    <div>
+      <p class="lbl muted" style="margin:0">Over</p>
+      <h2 class="syne" id="over-kop">Ik denk in beelden, patronen en verbanden.</h2>
+      <p style="margin:32px 0 0"><a class="lnk" href="#">Meer over GRØNN →</a></p>
+    </div>
+  </section>
+
+  <section class="einde rule" aria-label="Kennismaken">
+    <a class="groot syne" href="#"><span>Kennismaken</span><span aria-hidden="true">→</span></a>
+    <p class="contact lbl muted"><span>hello@gronn.studio</span><span>+316 181 180 14</span><span>Stein en omgeving</span></p>
+  </section>
+</div>
+
+<nav class="dock" aria-label="Hoofdmenu">
+  <a class="cta" href="#">KENNISMAKEN</a>
+  <div class="pil"><a href="#">VIJVERS</a><a href="#">TUINEN</a><a href="/werk">WERK</a><a href="#">OVER</a></div>
+  <button class="pijl" type="button" aria-label="Verder naar beneden" onclick="window.scrollY<48?scrollBy({top:innerHeight*.85,behavior:'smooth'}):scrollTo({top:0,behavior:'smooth'})">↓</button>
+</nav>
+<script>
+  // Alleen de pijl: omlaag bovenaan, omhoog tijdens het lezen.
+  const p = document.querySelector('.pijl')
+  addEventListener('scroll', () => {
+    const boven = scrollY < 48
+    p.textContent = boven ? '↓' : '↑'
+    p.setAttribute('aria-label', boven ? 'Verder naar beneden' : 'Terug naar boven')
+  }, { passive: true })
+</script>
+</body>
+</html>
