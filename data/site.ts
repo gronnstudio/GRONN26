@@ -24,3 +24,17 @@ export const NAV = [
 ] as const
 
 export const KENNISMAKEN = { href: "/kennismaken", label: "Kennismaken" } as const
+
+/** Over Nick: zijn eigen zinnen uit "Over mij" (gronn-studio teksten.ts), letterlijk. */
+export const OVER_KORT = {
+  uitspraak: "Ik denk in beelden, patronen en verbanden.",
+  zin: "Als ik naar een tuin kijk, zie ik hoe licht, water, materialen en beplanting elkaar beïnvloeden.",
+}
+
+/** Het portret (gronn-studio public/nick, verkleind tot 1000px, zonder metadata). */
+export const PORTRET = {
+  src: "/nick/portret.jpg",
+  width: 1000,
+  height: 1333,
+  alt: "Nick Peters met een espressokopje op een terras in een Maastrichtse straat, kijkend in de camera.",
+}

@@ -1,5 +1,26 @@
 # Componenten
 
+> **Bijgewerkt in fase 1b** (zie `08-bouwlog.md`): `ProjectTeaser` is
+> vervangen door `ProjectSpread`; nieuw zijn `Plaat`, `EditorialStatement`,
+> `AboutFragment` en `ClosingInvite`. `HomeHero` is een spread geworden:
+> foto links zonder tekst erover, papier rechts. De beschrijvingen van
+> `HomeHero` en `ProjectTeaser` verderop gaan over fase 1 en zijn
+> vervangen door die van fase 1b hieronder.
+
+## Fase 1b
+
+| Component | Wat |
+| --- | --- |
+| `HomeHero` | `data-kop-split`: links F10 (7/12, volle hoogte, alleen een mono-bijschrift), rechts een `Plaat` (F09-1), label, kop in `tekst-h1` over drie regels, link "Bekijk het werk". Telefoon: foto 56svh boven, tekst eronder. Het woordmerk wordt boven de foto licht via `body:has([data-kop-split]) .kop-logo` |
+| `Plaat` | kleiner beeld met snijtekens (`plaat`), `foto-toon`, bijschrift in mono. Props: `foto`, `sizes`, `ratio` (standaard 4/5) |
+| `EditorialStatement` | label, één uitspraak in `tekst-reus` (of `tekst-spread`), regels gesplitst op `\n`, optioneel een alinea verschoven naar kolom 8–11 |
+| `ProjectSpread` | `ritme="breed"`: titel volle breedte, groot vierkant beeld kolom 6–12, plaat met detail + tekst kolom 1–3. `ritme="staand"`: staand beeld kolom 3–6, titel, samenvatting, feiten in mono-rijen (`feiten`) kolom 8–11 |
+| `AboutFragment` | portret als plaat (kolom 2–4), Nicks zin in `tekst-spread`, de vervolgzin, link naar `/over` |
+| `ClosingInvite` | "Kennismaken" in `tekst-reus` als link, met e-mail, telefoon en "Stein en omgeving" in mono |
+
+Nieuwe utilities in `styles/globals.css`: `tekst-reus`, `tekst-spread`,
+`foto-toon`, `plaat`.
+
 Zeven componenten in `components/`, elk met één zichtbare
 verantwoordelijkheid. Er is bewust geen bibliotheek van knoppen, secties
 of wrappers: een `<Link>` met een paar klassen is geen component waard.

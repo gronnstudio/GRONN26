@@ -1,26 +1,31 @@
+import { AboutFragment } from "@/components/AboutFragment"
+import { ClosingInvite } from "@/components/ClosingInvite"
+import { EditorialStatement } from "@/components/EditorialStatement"
 import { HomeHero } from "@/components/HomeHero"
-import { ProjectTeaser } from "@/components/ProjectTeaser"
-import { PROJECTS } from "@/data/projects"
-import { OPENING } from "@/data/site"
+import { ProjectSpread } from "@/components/ProjectSpread"
+import { DETAILS, PROJECTS, TERRAS_FEITEN } from "@/data/projects"
+import { MERKBELOFTE, OPENING } from "@/data/site"
 
+// De voorpagina als een kort boek: opening, de belofte, het werk, de
+// maker, en één uitnodiging. Elke spread heeft een eigen ritme.
 export default function Home() {
+  const [vijver, terras] = PROJECTS
   return (
     <>
       <HomeHero />
 
-      {/* De positioneringszin, als tekstpagina na de opening. */}
-      <section aria-label="Over GRØNN" className="raster py-[var(--ruimte-sectie)]">
-        <p className="tekst-label col-span-4 text-muted md:col-span-2">00 / Studio</p>
-        <p className="tekst-h3 col-span-4 mt-[16px] max-w-[30ch] md:col-span-7 md:col-start-4 md:mt-0">
-          {OPENING.zin}
-        </p>
-      </section>
+      <EditorialStatement label="GRØNN Studio" uitspraak={MERKBELOFTE.replace("tuin ", "tuin\n")}>
+        <p>{OPENING.zin}</p>
+      </EditorialStatement>
 
       <div className="flex flex-col gap-[var(--ruimte-sectie)]">
-        {PROJECTS.slice(0, 1).map((project, i) => (
-          <ProjectTeaser key={project.slug} project={project} index={i} />
-        ))}
+        <ProjectSpread project={vijver} index={0} ritme="breed" detail={DETAILS.kogelkranen} />
+        <ProjectSpread project={terras} index={1} ritme="staand" beeld={DETAILS.terraspad} feiten={TERRAS_FEITEN} />
       </div>
+
+      <AboutFragment />
+
+      <ClosingInvite />
     </>
   )
 }

@@ -13,7 +13,7 @@ export function SiteHeader() {
       {/* Geen raster hier: op 320px moeten logo, Kennismaken en Weergave
           naast elkaar passen, dus een smallere goot dan de pagina. */}
       <div className="mx-auto flex h-[72px] max-w-[calc(1520px+var(--goot)*2)] items-center justify-between gap-[12px] px-[16px] min-[400px]:px-[var(--goot)] md:h-[88px]">
-        <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="w-[84px] shrink-0 min-[400px]:w-[104px] md:w-[128px]">
+        <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="kop-logo w-[84px] shrink-0 min-[400px]:w-[104px] md:w-[128px]">
           <span className="woordmerk" aria-hidden="true" />
         </Link>
         <div className="flex items-center gap-[8px] md:gap-[24px]">

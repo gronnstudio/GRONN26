@@ -90,7 +90,39 @@ export const OPENINGSBEELD: Foto = {
   width: 2000,
   height: 1500,
   alt: "De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter.",
-  focus: "50% 60%",
+  focus: "42% 58%",
 }
+
+/** Details voor de spreads: techniek naast natuur. Alt-teksten uit gronn-studio. */
+export const DETAILS = {
+  kogelkranen: {
+    src: `${VIJVER_MAP}/F04-2.jpg`,
+    width: 1000,
+    height: 1333,
+    alt: "Grijze drukvaste pvc-leidingen met twee blauwe kogelkranen tussen de keien bij de waterval.",
+    bijschrift: "50 mm druk-pvc, twee kogelkranen",
+  },
+  plantmand: {
+    src: `${VIJVER_MAP}/F09-1.jpg`,
+    width: 1000,
+    height: 1333,
+    alt: "Een hand zet een jong vijverplantje in een plantmand met grind, met het plantlabel ernaast.",
+    bijschrift: "Plantmand voor de waterlijn",
+  },
+  terraspad: {
+    src: `${TERRAS_MAP}/T02.jpg`,
+    width: 1000,
+    height: 1333,
+    alt: "Het smalle pad van betontegels langs de gevel en de schutting, strak uitgelijnd tot achter in de tuin.",
+  },
+} satisfies Record<string, Foto>
+
+/** Feiten van het terras in mono, letterlijk uit terras-geulle.ts. */
+export const TERRAS_FEITEN: [string, string][] = [
+  ["Oppervlak", "24 m²"],
+  ["Tegels", "60 × 60 × 4 cm"],
+  ["Leggen", "circa 8 uur"],
+  ["Alles samen", "2 dagen"],
+]
 
 export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug)

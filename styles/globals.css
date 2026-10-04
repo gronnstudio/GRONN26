@@ -345,3 +345,67 @@ body:has([data-kop-licht]) .site-header {
   top: 68px;
   right: var(--goot);
 }
+
+/* ── Fase 1b: de redactionele laag ─────────────────────────────────────
+   Na het vergelijken met Phlypo, Oudolf en Morael (4 okt 2026): geen
+   tekst over foto's, meer schaalcontrast, details als platen. */
+
+/* De grootste maat: één uitspraak per pagina, niet meer. */
+:root {
+  --tekst-reus: clamp(40px, 9.2vw, 168px);
+  --tekst-spread: clamp(40px, 5.6vw, 96px);
+}
+@utility tekst-reus {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--tekst-reus);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+@utility tekst-spread {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--tekst-spread);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+/* Eén toon voor alle projectfoto's: iets minder verzadigd, iets meer
+   contrast. Telefoonfoto's lezen daardoor als één reeks. */
+@utility foto-toon {
+  filter: saturate(0.86) contrast(1.04);
+}
+
+/* Een plaat: een kleiner beeld met snijtekens op de hoeken, zoals in een
+   veldboek. Alleen voor beelden die níet schermbreed staan. */
+@utility plaat {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    pointer-events: none;
+    color: color-mix(in srgb, var(--line) 45%, transparent);
+    --t: linear-gradient(currentColor, currentColor);
+    background:
+      var(--t) left top / 8px 1px no-repeat,
+      var(--t) left top / 1px 8px no-repeat,
+      var(--t) right top / 8px 1px no-repeat,
+      var(--t) right top / 1px 8px no-repeat,
+      var(--t) left bottom / 8px 1px no-repeat,
+      var(--t) left bottom / 1px 8px no-repeat,
+      var(--t) right bottom / 8px 1px no-repeat,
+      var(--t) right bottom / 1px 8px no-repeat;
+  }
+}
+
+/* De opening: het woordmerk staat boven de foto en is dus licht. Op de
+   telefoon loopt de foto over de hele breedte en is de hele kop licht. */
+body:has([data-kop-split]) .site-header .kop-logo {
+  color: var(--gronn-wit);
+}
+@media (width < 48rem) {
+  body:has([data-kop-split]) .site-header {
+    color: var(--gronn-wit);
+  }
+}

@@ -131,3 +131,79 @@ login.
 De map `docs/` met de brief, het plan, architectuur, designsysteem,
 componenten, inhoud, kwaliteit, werkwijze, deze log en de roadmap, plus
 `CLAUDE.md` in de root voor toekomstige sessies.
+
+---
+
+## Fase 1b — de redactionele laag (4 oktober 2026)
+
+Nick na de eerste preview: *"Het ziet nog niet prijswinnend uit zoals de
+voorbeelden?"*
+
+### Wat de voorbeelden echt doen
+
+Schermafdrukken gemaakt van Phlypo, Piet Oudolf, Stefan Morael, Studio
+Verde, Con-Tour en Garden Eight (Bart Kolenda was vanuit de bouwomgeving
+niet bereikbaar).
+
+| Voorbeeld | Wat het prijswinnend maakt |
+| --- | --- |
+| Phlypo | Géén tekst over de foto. Een spread: links een foto op volle hoogte, rechts papier met het merk en een tweede, kleinere foto. Beelden asymmetrisch, met veel lucht. |
+| Oudolf | Typografie als beeld: grote namen, piepkleine codes. Bijna geen interface. |
+| Morael | Eén schone foto, het merk in het midden, verder niets. |
+
+Onze eerste opening deed precies het template-gebaar: een drukke
+telefoonfoto met een verloop en een grote kop erover.
+
+### Wat er veranderde
+
+- **De opening is een spread** (`HomeHero`): links F10 (de waterval) op
+  volle hoogte, zonder tekst erover, alleen een bijschrift in mono. Rechts
+  op papier een **plaat** (F09-1, een hand die een plantmand vult), het
+  label, de kop en één link. Water en techniek naast een plantende hand:
+  natuur × techniek. Op de telefoon staat de foto boven (56svh) en de tekst
+  eronder, nooit erover.
+- **Een reuzenmaat** (`tekst-reus`, 40–168px) voor één uitspraak:
+  de merkbelofte "Een tuin die met je meegroeit." (`EditorialStatement`),
+  met de positioneringszin verschoven eronder.
+- **Projecten als spreads met elk een eigen ritme** (`ProjectSpread`):
+  - vijver, *breed*: titel over de volle breedte, een groot vierkant beeld,
+    ernaast een plaat met een detail (F04-2, "50 mm druk-pvc, twee
+    kogelkranen");
+  - terras, *staand*: één smal staand beeld (T02, het pad met zijn
+    lijnen) en de feiten in mono-rijen (24 m², 60 × 60 × 4 cm, circa 8 uur,
+    2 dagen).
+- **Over** (`AboutFragment`): het portret als plaat en Nicks eigen zin
+  "Ik denk in beelden, patronen en verbanden."
+- **Een einde** (`ClosingInvite`): "Kennismaken" in de reuzenmaat, met
+  e-mail, telefoon en "Stein en omgeving" in mono.
+- **Platen met snijtekens** (`plaat`): kleinere beelden krijgen fijne
+  hoektekens, zoals in een veldboek. Alleen voor beelden die niet
+  schermbreed staan.
+- **Eén fototoon** (`foto-toon`): iets minder verzadigd, iets meer
+  contrast, zodat de telefoonfoto's als één reeks lezen.
+- Het portret is overgenomen: verkleind tot 1000 × 1333, 137 kB, zonder
+  metadata (`public/nick/portret.jpg`).
+- `ProjectTeaser` is vervangen door `ProjectSpread`; nieuw zijn ook
+  `Plaat`, `EditorialStatement`, `AboutFragment` en `ClosingInvite`.
+
+### Correcties onderweg
+
+| Gevonden | Oplossing |
+| --- | --- |
+| Het bijschrift van de opening zat achter Kennismaken | desktop: rechtsboven op de foto; telefoon: linksonder |
+| Op de telefoon viel de kop achter het menu | de foto op de telefoon van 68 naar 56svh |
+| "Kennismaken" in de reuzenmaat was op 320px 358px breed | de reuzenmaat begint bij 40px; de pijl alleen vanaf `md` |
+| F01 liet in een brede uitsnede de container links zien | vierkante uitsnede vanaf `md` (focus 82 %) |
+
+### Eerlijk over de foto's
+
+De grootste afstand tot Phlypo zit niet in de code maar in het beeld:
+Phlypo gebruikt architectuurfotografie, wij telefoonfoto's met een
+groothoeklens. De opmaak vangt dat op (details als platen, strakke
+uitsneden, één toon), maar het echte verschil maakt **een fotosessie**:
+een fotograaf, laag licht, na de aanplant in het voorjaar van 2027.
+
+### Checks
+
+Lint, contrast, foto's (24, incl. het portret) en Playwright: 15 geslaagd,
+1 bewust overgeslagen.
