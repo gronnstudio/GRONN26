@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Naslag — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111;--muted:#666;--lijn:rgba(0,0,0,.18)}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Montserrat,sans-serif}
+main{max-width:1440px;margin:0 auto;padding:64px clamp(24px,4vw,56px) 160px}
+a{color:inherit}
+.lbl{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.syne{font-family:Syne,sans-serif;font-weight:600}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.top a{text-decoration:none}
+h1{margin:72px 0 0;font-size:clamp(48px,8vw,112px);letter-spacing:-.045em;line-height:.95}
+.uitleg{margin:28px 0 0;max-width:60ch;color:var(--muted);line-height:1.6}
+.ronde{margin-top:clamp(80px,10vw,140px)}
+.ronde-kop{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;align-items:baseline;border-top:1px solid var(--lijn);padding-top:16px}
+.ronde-kop .nr{grid-column:span 2}
+.ronde-kop h2{grid-column:span 6;margin:0;font-size:clamp(24px,2.6vw,36px);letter-spacing:-.02em;line-height:1.1}
+.ronde-kop .meta{grid-column:span 4;text-align:right}
+.ronde-tekst{margin:16px 0 0;max-width:62ch;color:var(--muted);line-height:1.6}
+.kaarten{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:48px 32px;margin-top:40px}
+.kaart{display:flex;flex-direction:column;gap:12px;text-decoration:none}
+.venster{position:relative;overflow:hidden;background:#f2f2f2;box-shadow:0 0 0 1px var(--lijn);aspect-ratio:16/10}
+.venster.tel{aspect-ratio:390/600;max-width:62%}
+.venster iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;pointer-events:none;background:#fff}
+.kaart:hover .venster,.kaart:focus-visible .venster{box-shadow:0 0 0 1px var(--ink)}
+.kaart-kop{display:flex;justify-content:space-between;gap:12px}
+.titel{font-size:20px;font-weight:500;line-height:1.3}
+.beschrijving{margin:0;color:var(--muted);font-size:15px;line-height:1.55}
+.status{display:inline-block;padding:4px 8px;border:1px solid var(--lijn);border-radius:999px}
+.status.gekozen{background:#111;color:#fff;border-color:#111}
+.tekstkaart{border:1px dashed var(--lijn);padding:20px;display:flex;flex-direction:column;gap:10px}
+.regels{margin-top:clamp(80px,10vw,140px);border-top:1px solid var(--lijn);padding-top:16px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px}
+.regels .lbl{grid-column:span 4}
+.regels ol{grid-column:span 8;margin:0;padding-left:20px;color:var(--muted);line-height:1.7}
+@media (max-width:767px){
+  .ronde-kop{grid-template-columns:1fr;row-gap:6px}
+  .ronde-kop .nr,.ronde-kop h2,.ronde-kop .meta{grid-column:auto;text-align:left}
+  .regels{grid-template-columns:1fr;row-gap:16px}
+  .regels .lbl,.regels ol{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a class="lbl" href="/">← Wireframes</a>
+    <span class="lbl muted">GRØNN Studio</span>
+  </div>
+
+  <h1 class="syne">Naslag</h1>
+  <p class="uitleg">Alle wireframes die we maken, per ronde, met wat we kozen en waarom. Niets wordt overschreven: een nieuwe versie krijgt een nieuw nummer, zodat we altijd kunnen terugkijken. De miniaturen zijn de echte pagina's; klik om ze te openen.</p>
+  <p class="uitleg" style="margin-top:12px;color:var(--ink)">Andere layout oppakken? Noem het WF-nummer (bijvoorbeeld "pak WF-003 op") en we gaan daarmee verder.</p>
+
+  <!-- ─────────────────────────────────────────────────────────────
+       Een nieuwe ronde? Kopieer een <section class="ronde"> en zet hem
+       BOVENAAN (nieuwste eerst). Elke wireframe krijgt het volgende
+       WF-nummer en een eigen bestand in public/; oude bestanden blijven.
+       ───────────────────────────────────────────────────────────── -->
+
+  <section class="ronde" aria-labelledby="r3">
+    <div class="ronde-kop">
+      <span class="lbl nr">Ronde 03</span>
+      <h2 class="syne" id="r3">Tweede keus voor de opening</h2>
+      <span class="lbl muted meta">4 okt 2026 · 1 wireframe</span>
+    </div>
+    <p class="ronde-tekst">Nick over WF-011: "ik vind dit als opening afgezaagd uitzien". Tweede keus: de spread van WF-001 als opening, met de rest van WF-011 eronder (werk als lijst, zes stappen, Over, Kennismaken).</p>
+    <div class="kaarten">
+      <a class="kaart" href="/keuze-2">
+        <div class="venster"><iframe src="/keuze-2.html" data-b="1440" data-h="900" title="Voorbeeld WF-013" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-013</span><span class="lbl status gekozen">Ter keuze</span></div>
+        <span class="titel">Voorpagina: spread + Zo werk ik</span>
+        <p class="beschrijving">Foto links op volle hoogte zonder tekst erover, papier rechts met kop en plaat. Daaronder positionering, werk als lijst, de zes stappen, Over en Kennismaken.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="ronde" aria-labelledby="r2">
+    <div class="ronde-kop">
+      <span class="lbl nr">Ronde 02</span>
+      <h2 class="syne" id="r2">De gekozen richting</h2>
+      <span class="lbl muted meta">4 okt 2026 · 2 wireframes</span>
+    </div>
+    <p class="ronde-tekst">Keuze na ronde 01: de opening van B (de index), met de zes stappen uit D eronder. Werk als lijst én raster, met een schakelaar (Nick: "de switch tussen raster en lijst wil ik behouden").</p>
+    <div class="kaarten">
+      <a class="kaart" href="/keuze">
+        <div class="venster"><iframe src="/keuze.html" data-b="1440" data-h="900" title="Voorbeeld WF-011" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-011</span><span class="lbl status">Verlaten: opening afgezaagd</span></div>
+        <span class="titel">Voorpagina: index + Zo werk ik</span>
+        <p class="beschrijving">Projectnamen als opening, foto bij hover; schermbrede foto; zes stappen (open te tikken op de telefoon); Over; Kennismaken. Desktop en telefoon in één pagina.</p>
+      </a>
+      <a class="kaart" href="/werk">
+        <div class="venster"><iframe src="/werk.html" data-b="1440" data-h="900" title="Voorbeeld WF-012" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-012</span><span class="lbl status gekozen">Gekozen</span></div>
+        <span class="titel">Werk: lijst en raster</span>
+        <p class="beschrijving">Werkende schakelaar tussen lijst (jaar, code, project, type, plaats) en asymmetrisch raster; de keuze blijft bewaard.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="ronde" aria-labelledby="r1">
+    <div class="ronde-kop">
+      <span class="lbl nr">Ronde 01</span>
+      <h2 class="syne" id="r1">Vier richtingen voor de voorpagina, twee voor Werk</h2>
+      <span class="lbl muted meta">4 okt 2026 · 10 wireframes</span>
+    </div>
+    <p class="ronde-tekst">Gemaakt na het bekijken van de Awwwards-inspiratie (landscaping) en de referenties uit de brief. Grijs, zonder merkkleuren. Elke richting naar één voorbeeldsite.</p>
+    <div class="kaarten">
+      <a class="kaart" href="/a-spread">
+        <div class="venster"><iframe src="/a-spread.html" data-b="1440" data-h="900" title="Voorbeeld WF-001" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-001 · A</span><span class="lbl status">Alternatief</span></div>
+        <span class="titel">Spread — desktop</span>
+        <p class="beschrijving">Foto links op volle hoogte, papier rechts met kop en een detail als plaat. Naar Phlypo. Bewaard voor als er professionele foto's komen.</p>
+      </a>
+      <a class="kaart" href="/b-index">
+        <div class="venster"><iframe src="/b-index.html" data-b="1440" data-h="900" title="Voorbeeld WF-002" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-002 · B</span><span class="lbl status">Basis voor WF-011</span></div>
+        <span class="titel">Index — desktop</span>
+        <p class="beschrijving">Projectnamen enorm, met kleine codes; foto bij hover. Naar Piet Oudolf.</p>
+      </a>
+      <a class="kaart" href="/c-volle-foto">
+        <div class="venster"><iframe src="/c-volle-foto.html" data-b="1440" data-h="900" title="Voorbeeld WF-003" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-003 · C</span><span class="lbl status">Alternatief</span></div>
+        <span class="titel">Volle foto — desktop</span>
+        <p class="beschrijving">Schermvullende foto met alleen het woordmerk; projecten als schermbrede foto's. Naar Stefan Morael.</p>
+      </a>
+      <a class="kaart" href="/d-verhaal">
+        <div class="venster"><iframe src="/d-verhaal.html" data-b="1440" data-h="900" title="Voorbeeld WF-004" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-004 · D</span><span class="lbl status">Stappen in WF-011</span></div>
+        <span class="titel">Verhaal in stappen — desktop</span>
+        <p class="beschrijving">Opening, werk, Nick, zes stappen, kennismaken. Naar Bartosz Kolenda.</p>
+      </a>
+      <a class="kaart" href="/a-telefoon">
+        <div class="venster tel"><iframe src="/a-telefoon.html" data-b="470" data-h="1800" title="Voorbeeld WF-005" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-005 · A</span><span class="lbl status">Alternatief</span></div>
+        <span class="titel">Spread — telefoon</span>
+        <p class="beschrijving">Foto boven, tekst eronder; stippellijn = einde eerste scherm.</p>
+      </a>
+      <a class="kaart" href="/b-telefoon">
+        <div class="venster tel"><iframe src="/b-telefoon.html" data-b="470" data-h="1800" title="Voorbeeld WF-006" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-006 · B</span><span class="lbl status">Basis voor WF-011</span></div>
+        <span class="titel">Index — telefoon</span>
+        <p class="beschrijving">Namen groot, foto eronder in plaats van hover.</p>
+      </a>
+      <a class="kaart" href="/c-telefoon">
+        <div class="venster tel"><iframe src="/c-telefoon.html" data-b="470" data-h="1800" title="Voorbeeld WF-007" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-007 · C</span><span class="lbl status">Alternatief</span></div>
+        <span class="titel">Volle foto — telefoon</span>
+        <p class="beschrijving">Eerste scherm alleen foto en woordmerk.</p>
+      </a>
+      <a class="kaart" href="/d-telefoon">
+        <div class="venster tel"><iframe src="/d-telefoon.html" data-b="470" data-h="1800" title="Voorbeeld WF-008" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-008 · D</span><span class="lbl status">Stappen in WF-011</span></div>
+        <span class="titel">Verhaal in stappen — telefoon</span>
+        <p class="beschrijving">De zes stappen als lijst om open te tikken.</p>
+      </a>
+      <a class="kaart" href="/werk-1-lijst">
+        <div class="venster"><iframe src="/werk-1-lijst.html" data-b="1440" data-h="900" title="Voorbeeld WF-009" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-009 · Werk 1</span><span class="lbl status">Opgegaan in WF-012</span></div>
+        <span class="titel">Werk als lijst</span>
+        <p class="beschrijving">Index per regel, foto bij hover. Naar Arkitektkontoret Vest.</p>
+      </a>
+      <a class="kaart" href="/werk-2-raster">
+        <div class="venster"><iframe src="/werk-2-raster.html" data-b="1440" data-h="900" title="Voorbeeld WF-010" loading="lazy" tabindex="-1" aria-hidden="true"></iframe></div>
+        <div class="kaart-kop"><span class="lbl">WF-010 · Werk 2</span><span class="lbl status">Opgegaan in WF-012</span></div>
+        <span class="titel">Werk als raster</span>
+        <p class="beschrijving">Groot liggend naast klein staand, verschoven. Naar Con-Tour.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="ronde" aria-labelledby="r0">
+    <div class="ronde-kop">
+      <span class="lbl nr">Ronde 00</span>
+      <h2 class="syne" id="r0">Eerste builds (vóór de wireframes)</h2>
+      <span class="lbl muted meta">4 okt 2026 · in git bewaard</span>
+    </div>
+    <p class="ronde-tekst">Twee gebouwde versies van de voorpagina, in kleur, daarna uit de repo gehaald. Ze staan nog in de git-geschiedenis van GRONN26 en kunnen terug.</p>
+    <div class="kaarten">
+      <div class="tekstkaart">
+        <div class="kaart-kop"><span class="lbl">Build 1 · commit 0f23a74</span><span class="lbl status">Verlaten</span></div>
+        <span class="titel">Foto met kop erover</span>
+        <p class="beschrijving">Schermvullende foto met een donker verloop en de kop erover. Nick: "nog niet prijswinnend".</p>
+      </div>
+      <div class="tekstkaart">
+        <div class="kaart-kop"><span class="lbl">Build 2 · commit 9a25811</span><span class="lbl status">Verlaten</span></div>
+        <span class="titel">Redactionele spread</span>
+        <p class="beschrijving">De voorloper van WF-001: foto links, papier rechts, platen met snijtekens, merkbelofte in reuzenmaat.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="regels" aria-label="Afspraken">
+    <span class="lbl muted">Afspraken voor deze naslag</span>
+    <ol>
+      <li>Nieuwste ronde bovenaan.</li>
+      <li>Elke wireframe krijgt het volgende WF-nummer en een eigen bestand; niets wordt overschreven.</li>
+      <li>Per wireframe: datum (via de ronde), status en in één zin waarom.</li>
+      <li>Statussen: Gekozen · Alternatief · Basis voor / Opgegaan in WF-… · Verlaten.</li>
+      <li>Wireframes blijven grijs, zonder merkkleuren.</li>
+    </ol>
+  </section>
+</main>
+<script>
+  // Schaal elke miniatuur zodat de echte pagina precies in het vak past.
+  const passen = () => document.querySelectorAll('.venster iframe').forEach((f) => {
+    const b = +f.dataset.b, h = +f.dataset.h, vak = f.parentElement.clientWidth
+    f.style.width = b + 'px'; f.style.height = h + 'px'
+    f.style.transform = `scale(${vak / b})`
+  })
+  passen()
+  new ResizeObserver(passen).observe(document.body)
+</script>
+</body>
+</html>
