@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-045 Project met vaste inhoudsopgave — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-045: de vijverrenovatie met links een vaste inhoudsopgave (12 hoofdstukken,
+   het huidige gemarkeerd) en rechts per hoofdstuk kop, eerste alinea en foto.
+   Op de telefoon wordt de inhoudsopgave een opklapbare lijst bovenaan. */
+.titel{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;padding-top:clamp(48px,6vw,96px)}
+.titel h1{margin:0;font-size:clamp(40px,6vw,88px);line-height:1;letter-spacing:-.035em}
+.titel p{grid-column:2;margin:24px 0 0;max-width:40ch;font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:var(--muted)}
+.fiche{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 24px;margin-top:clamp(48px,6vw,80px);border-top:1px solid var(--lijn)}
+.fiche div{padding:12px 0;display:flex;flex-direction:column;gap:4px}
+
+.boek{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;margin-top:clamp(72px,9vw,140px);align-items:start}
+.toc{position:sticky;top:24px;z-index:5;background:#fff}
+.toc summary{list-style:none;display:none}
+.toc summary::-webkit-details-marker{display:none}
+.toc ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--lijn)}
+.toc li a{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;padding:9px 0;border-bottom:1px solid var(--lijn);text-decoration:none;color:var(--muted)}
+.toc li a[aria-current="true"]{color:var(--ink)}
+.toc li a[aria-current="true"] span:last-child{text-decoration:underline;text-underline-offset:4px}
+.toc .voortgang{height:2px;background:var(--lijn);margin-top:16px}
+.toc .voortgang i{display:block;height:100%;width:0;background:#111}
+
+.hoofdstuk{border-top:1px solid var(--lijn);padding:28px 0 clamp(64px,8vw,120px);scroll-margin-top:24px}
+.hoofdstuk:first-child{border-top:0;padding-top:0}
+.hoofdstuk h2{margin:12px 0 0;max-width:22ch;font-size:clamp(28px,3.2vw,46px);line-height:1.06;letter-spacing:-.025em}
+.hoofdstuk p.alinea{margin:22px 0 0;max-width:60ch;line-height:1.7}
+.hoofdstuk .ph{margin-top:32px;aspect-ratio:16/10}
+.hoofdstuk .ph.staand{aspect-ratio:4/5;max-width:520px}
+.hoofdstuk .ph.leeg{background:#fff;outline:1px dashed var(--lijn);outline-offset:-1px}
+.hoofdstuk .geen{margin-top:24px}
+.verder{margin-top:12px}
+
+.uitspraak{font-size:clamp(28px,3vw,42px);line-height:1.2;letter-spacing:-.015em;max-width:30ch;margin:0}
+.volgende{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-top:1px solid var(--lijn);padding-top:16px;text-decoration:none;margin-top:clamp(96px,12vw,180px)}
+
+@media (max-width:767px){
+  .titel{grid-template-columns:1fr}
+  .titel p{grid-column:1}
+  .fiche{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .boek{grid-template-columns:1fr}
+  .toc{top:0;margin:0 calc(var(--goot) * -1);padding:0 var(--goot);border-bottom:1px solid var(--lijn)}
+  .toc summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px;cursor:pointer}
+  .toc summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted)}
+  .toc[open] summary::after{content:"−"}
+  .toc ol{max-height:60vh;overflow:auto;margin-bottom:12px}
+  .toc .voortgang{margin:0 calc(var(--goot) * -1);height:2px}
+  .toc:not([open]) .voortgang{margin-top:0}
+  .hoofdstuk{scroll-margin-top:70px;padding-top:28px}
+  .hoofdstuk:first-child{padding-top:28px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="titel">
+      <p class="lbl muted" style="margin:0">GR / 001 · Vijverrenovatie</p>
+      <h1 class="syne">Twee vijvers. Eén samenhangend watersysteem.</h1>
+      <p>Een vijverrenovatie waarin watertechniek, beplanting en natuurlijke afwerking samenkomen.</p>
+    </section>
+
+    <div class="fiche lbl">
+      <div><span class="muted">Code</span><span>GR / 001</span></div>
+      <div><span class="muted">Type</span><span>Vijverrenovatie</span></div>
+      <div><span class="muted">Jaar</span><span>2026</span></div>
+      <div><span class="muted">Status</span><span>In afronding</span></div>
+      <div><span class="muted">Tijd</span><span>circa 120 uur</span></div>
+      <div><span class="muted">Water</span><span>circa 5.000 l</span></div>
+    </div>
+
+    <div class="boek">
+      <details class="toc" open>
+        <summary class="lbl"><span>Hoofdstuk <span data-nu>01 · De opgave</span></span></summary>
+        <ol class="lbl" aria-label="Inhoud, 12 hoofdstukken">
+          <li><a href="#opgave"><span>01</span><span>De opgave</span></a></li>
+          <li><a href="#denkwerk"><span>02</span><span>Het denkwerk</span></a></li>
+          <li><a href="#waterroute"><span>03</span><span>De waterroute</span></a></li>
+          <li><a href="#leidingwerk"><span>04</span><span>Het leidingwerk</span></a></li>
+          <li><a href="#onderhoud"><span>05</span><span>Onderhoud</span></a></li>
+          <li><a href="#filter"><span>06</span><span>Het filter</span></a></li>
+          <li><a href="#skimmer"><span>07</span><span>De skimmer</span></a></li>
+          <li><a href="#filterherstel"><span>08</span><span>Filterherstel</span></a></li>
+          <li><a href="#afwerking"><span>09</span><span>Water naar tuin</span></a></li>
+          <li><a href="#beplanting"><span>10</span><span>Beplanting</span></a></li>
+          <li><a href="#afronding"><span>11</span><span>De afronding</span></a></li>
+          <li><a href="#eerste-project"><span>12</span><span>Een eerste project</span></a></li>
+        </ol>
+        <div class="voortgang" aria-hidden="true"><i></i></div>
+      </details>
+
+      <div class="verhaal">
+        <section class="hoofdstuk" id="opgave">
+          <p class="lbl muted" style="margin:0">01 · De opgave</p>
+          <h2 class="syne">De opgave: ieder onderdeel op elkaar afstemmen</h2>
+          <p class="alinea">Een vijverrenovatie bestaat uit veel samenhangende keuzes. Waar stroomt het water heen? Hoe komt het terug? Hoe wordt het verdeeld tussen de waterval en de andere vijver? En hoe blijven het filter en de aansluitingen bereikbaar wanneer de randen eenmaal zijn afgewerkt?</p>
+          <div class="ph staand">Foto F02 · bestaande situatie (F02-1, F02-2)</div>
+        </section>
+
+        <section class="hoofdstuk" id="denkwerk">
+          <p class="lbl muted" style="margin:0">02 · Het denkwerk</p>
+          <h2 class="syne">Het onzichtbare werk: meten, tekenen en blijven puzzelen</h2>
+          <p class="alinea">Een belangrijk deel van het werk gebeurt voordat een leiding wordt aangesloten. Het begint met kijken, meten en de route van het water stap voor stap doordenken.</p>
+          <div class="ph staand">Foto F03 · vijverfolie op maat meten (F03-1)</div>
+        </section>
+
+        <section class="hoofdstuk" id="waterroute">
+          <p class="lbl muted" style="margin:0">03 · De waterroute</p>
+          <h2 class="syne">Hoe de twee vijvers samenwerken</h2>
+          <p class="alinea">Voor de technische uitwerking zijn de vijvers aangeduid als vijver A en vijver B. Vijver B is het vertrekpunt van het opgepompte water.</p>
+          <div class="ph staand">Foto F11 · de beekloop in aanbouw</div>
+          <p class="lbl muted geen">Hier staat ook de waterroute-tekening</p>
+        </section>
+
+        <section class="hoofdstuk" id="leidingwerk">
+          <p class="lbl muted" style="margin:0">04 · Het leidingwerk</p>
+          <h2 class="syne">Drukvast pvc en een zorgvuldig gekozen leidingroute</h2>
+          <p class="alinea">Voor het vaste leidingwerk is gekozen voor druk-pvc met een diameter van 50 millimeter. De toegepaste buis is gespecificeerd tot een druk van 7,5 bar. Dat getal beschrijft de drukvastheid van de buis; de werkdruk van de vijverinstallatie is hier niet mee vastgesteld.</p>
+          <div class="ph staand">Foto F04 · leidingen en kogelkranen (F04-1, F04-2)</div>
+        </section>
+
+        <section class="hoofdstuk" id="onderhoud">
+          <p class="lbl muted" style="margin:0">05 · Onderhoud</p>
+          <h2 class="syne">Losneembare aansluitingen voor onderhoud</h2>
+          <p class="alinea">Bij de technische opstelling zijn koppelingen met schroefdraad gebruikt om onderdelen te kunnen afkoppelen. Zo kan onder meer het filter worden losgenomen voor onderhoud of werkzaamheden aan de opstelling.</p>
+          <p class="lbl muted geen">Geen foto bij dit hoofdstuk</p>
+        </section>
+
+        <section class="hoofdstuk" id="filter">
+          <p class="lbl muted" style="margin:0">06 · Het filter</p>
+          <h2 class="syne">Drie filterkamers, twee regelbare takken en een bypass</h2>
+          <p class="alinea">De technische opstelling combineert een AquaForte DM-10000 Vario S-pomp met een driekamerfilter. Rond het filter is een bypass opgenomen: een alternatieve route waarmee het water langs het filter kan worden geleid.</p>
+          <div class="ph staand">Foto F05 · de filterbak met drie kamers</div>
+        </section>
+
+        <section class="hoofdstuk" id="skimmer">
+          <p class="lbl muted" style="margin:0">07 · De skimmer</p>
+          <h2 class="syne">Een skimmer voor het wateroppervlak</h2>
+          <p class="alinea">Naast de filteropstelling is een skimmer opgenomen voor het opvangen van drijvend vuil, zoals bladeren en ander materiaal aan het wateroppervlak.</p>
+          <div class="ph staand leeg">F06 · [NOG AANLEVEREN: foto skimmer]</div>
+        </section>
+
+        <section class="hoofdstuk" id="filterherstel">
+          <p class="lbl muted" style="margin:0">08 · Filterherstel</p>
+          <h2 class="syne">Een beschadigd filter herstellen: een project binnen het project</h2>
+          <p class="alinea">Een van de lastigere onderdelen was het herstellen van het beschadigde filter van polypropyleen, ook wel PP genoemd. Dat bleek in de praktijk geen eenvoudige reparatie.</p>
+          <div class="ph">Foto F07 · de beschadigde filterbak (F07-1, F07-2)</div>
+        </section>
+
+        <section class="hoofdstuk" id="afwerking">
+          <p class="lbl muted" style="margin:0">09 · Water naar tuin</p>
+          <h2 class="syne">De overgang van water naar tuin</h2>
+          <p class="alinea">Naast het technische werk krijgt de natuurlijke afwerking veel aandacht. Rond circa twaalf meter waterlijn en zes meter beekrand ontmoeten water, steen en planten elkaar.</p>
+          <div class="ph staand">Foto F08 · keien aan de waterlijn (F08-1, F08-2)</div>
+        </section>
+
+        <section class="hoofdstuk" id="beplanting">
+          <p class="lbl muted" style="margin:0">10 · Beplanting</p>
+          <h2 class="syne">Elf plantmanden en zeven soorten in het oorspronkelijke plan</h2>
+          <p class="alinea">Voor de waterlijn en beekrand is een beplantingsplan opgesteld met in totaal elf manden, elk met vier planten. Dat komt neer op 44 planten, verdeeld over zeven soorten.</p>
+          <div class="ph staand">Foto F09 · plantmand en oever (F09-1, F09-2)</div>
+        </section>
+
+        <section class="hoofdstuk" id="afronding">
+          <p class="lbl muted" style="margin:0">11 · De afronding</p>
+          <h2 class="syne">De afronding: opruimen, aanvullen en verder laten groeien</h2>
+          <p class="alinea">Het project bevindt zich in de laatste fase. Het resterende hout en puin moeten worden afgevoerd en de omliggende delen worden aangevuld met teelaarde. De beschadigde vijverplanten kunnen worden vervangen; de aanvullende aanplant volgt naar verwachting in het voorjaar.</p>
+          <p class="lbl muted geen">Geen foto bij dit hoofdstuk</p>
+        </section>
+
+        <section class="hoofdstuk" id="eerste-project">
+          <p class="lbl muted" style="margin:0">12 · Een eerste project</p>
+          <h2 class="syne">Een eerste project dat de basis legt voor GRØNN Studio</h2>
+          <p class="alinea">Deze vijverrenovatie heeft een bijzondere plek binnen GRØNN Studio. Het is een eerste project waarin ontwerp, techniek, uitvoering en beplanting op deze schaal samenkomen.</p>
+          <p class="lbl muted geen">Geen foto bij dit hoofdstuk</p>
+        </section>
+
+        <section aria-label="Citaat" style="margin-top:clamp(24px,4vw,48px)">
+          <p class="syne uitspraak">"Ik heb ontzettend genoten van dit eerste project. Van het uitdenken van de waterstromen tot het moment waarop de onderdelen samenkomen."</p>
+          <p class="lbl muted">Nick Peters</p>
+        </section>
+      </div>
+    </div>
+
+    <a class="volgende" href="/project-terras"><span class="lbl">Volgend project</span><span class="syne" style="font-size:clamp(24px,3vw,40px)">Terras Geulle →</span></a>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/vijvers">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk" aria-current="page">WERK</a><a href="/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script>
+  // Inhoudsopgave: het hoofdstuk dat nu in beeld is, krijgt aria-current.
+  // Desktop: lijst altijd open. Telefoon: dicht, en dicht na een keuze.
+  const toc = document.querySelector('.toc')
+  const breed = matchMedia('(min-width:768px)')
+  const zetOpen = () => { toc.open = breed.matches }
+  zetOpen(); breed.addEventListener('change', zetOpen)
+  toc.querySelector('summary').addEventListener('click', (e) => { if (breed.matches) e.preventDefault() })
+  const links = [...toc.querySelectorAll('ol a')]
+  const nu = toc.querySelector('[data-nu]')
+  const balk = toc.querySelector('.voortgang i')
+  links.forEach((a) => a.addEventListener('click', () => { if (!breed.matches) toc.open = false }))
+  const secties = links.map((a) => document.querySelector(a.getAttribute('href')))
+  const markeer = () => {
+    let i = 0
+    secties.forEach((s, j) => { if (s.getBoundingClientRect().top < innerHeight * 0.35) i = j })
+    links.forEach((a, j) => a.setAttribute('aria-current', String(j === i)))
+    nu.textContent = links[i].textContent.replace(/^(\d+)/, '$1 · ')
+    balk.style.width = ((i + 1) / links.length * 100) + '%'
+  }
+  addEventListener('scroll', markeer, { passive: true }); markeer()
+</script>
+<script src="/wf-weergave.js" defer></script>
+</body>
+</html>

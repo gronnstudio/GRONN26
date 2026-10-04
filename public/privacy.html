@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-033 Privacyverklaring — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-033: sjabloon voor de juridische pagina's. Smalle leeskolom, links
+   een vaste inhoudsopgave (desktop), op telefoon klapt die in boven de tekst. */
+.juridisch{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;margin-top:clamp(56px,7vw,96px);align-items:start}
+.inhoud{position:sticky;top:24px;max-height:calc(100vh - 140px);overflow:auto}
+.inhoud summary{list-style:none;cursor:default}
+.inhoud summary::-webkit-details-marker{display:none}
+.inhoud ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--lijn)}
+.inhoud li a{display:grid;grid-template-columns:28px minmax(0,1fr);padding:8px 0;font-size:14px;line-height:1.35;text-decoration:none;border-bottom:1px solid var(--lijn)}
+.inhoud li a span{font-family:'Geist Mono',monospace;font-size:11px;color:var(--muted);padding-top:2px}
+.inhoud li a:hover{text-decoration:underline}
+.lees{max-width:66ch;line-height:1.7;font-size:17px}
+.lees .intro{font-size:clamp(18px,1.7vw,22px);line-height:1.55;margin:0 0 8px}
+.lees section{padding-top:48px;scroll-margin-top:24px}
+.lees h2{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.02em;line-height:1.2;margin:0 0 16px;display:grid;grid-template-columns:44px minmax(0,1fr)}
+.lees h2 span{font-family:'Geist Mono',monospace;font-size:12px;font-weight:400;color:var(--muted);padding-top:8px}
+.lees p{margin:0 0 14px}
+.lees ul{margin:0 0 14px;padding:0;list-style:none}
+.lees ul li{padding:8px 0;border-top:1px solid var(--lijn)}
+.lees ul li:last-child{border-bottom:1px solid var(--lijn)}
+.open{font-family:'Geist Mono',monospace;font-size:13px;letter-spacing:.02em;border:1px dashed var(--muted);padding:1px 6px;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:28px}
+.bedrijf{margin-top:64px;border-top:1px solid var(--ink);padding-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 32px}
+.bedrijf p{margin:0}
+.verder{display:flex;flex-wrap:wrap;gap:16px 28px;margin-top:40px}
+@media (max-width:1023px){
+  .juridisch{grid-template-columns:1fr;row-gap:32px}
+  .inhoud{position:static;max-height:none;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+  .inhoud summary{cursor:pointer;padding:16px 0;display:flex;justify-content:space-between}
+  .inhoud summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted)}
+  .inhoud[open] summary::after{content:"−"}
+  .inhoud ol{margin:0 0 16px}
+}
+@media (max-width:767px){
+  .lees{font-size:16px}
+  .lees h2{grid-template-columns:32px minmax(0,1fr)}
+  .bedrijf{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Juridisch</p>
+      <h1 class="syne">Privacyverklaring</h1>
+      <div class="meta" style="grid-column:2">
+        <p class="lbl muted" style="margin:0">Laatst bijgewerkt · 25 september 2026</p>
+        <p class="lbl muted" style="margin:0">Status · Concept</p>
+      </div>
+    </section>
+
+    <div class="juridisch">
+      <details class="inhoud" open id="inhoud">
+        <summary class="lbl">Inhoud</summary>
+        <ol>
+          <li><a href="#s1"><span>01</span>Wie verantwoordelijk is</a></li>
+          <li><a href="#s2"><span>02</span>Een projectaanvraag of contactverzoek</a></li>
+          <li><a href="#s3"><span>03</span>Maillijst en checklist vooraf</a></li>
+          <li><a href="#s4"><span>04</span>De uitgebreide ontwerpintake</a></li>
+          <li><a href="#s5"><span>05</span>Het klantenportaal</a></li>
+          <li><a href="#s6"><span>06</span>Offertes, facturen en administratie</a></li>
+          <li><a href="#s7"><span>07</span>Bezoek aan de website</a></li>
+          <li><a href="#s8"><span>08</span>Easter eggs en de Instagram-actie</a></li>
+          <li><a href="#s9"><span>09</span>Met wie wij gegevens delen</a></li>
+          <li><a href="#s10"><span>10</span>Foto's van je tuin</a></li>
+          <li><a href="#s11"><span>11</span>Beveiliging</a></li>
+          <li><a href="#s12"><span>12</span>Je rechten</a></li>
+          <li><a href="#s13"><span>13</span>Wijzigingen</a></li>
+        </ol>
+      </details>
+
+      <article class="lees">
+        <p class="intro">Korte versie: wij gebruiken wat je ons stuurt om je te antwoorden en je project uit te voeren, wij volgen je niet over het web, en wij verkopen niets door. De lange versie staat hieronder, per soort gegeven.</p>
+
+        <section id="s1">
+          <h2 class="syne"><span>01</span>Wie verantwoordelijk is</h2>
+          <p>GRØNN Studio, Kelderstraat 32, 6171 GB Stein, KvK 42072154, is verwerkingsverantwoordelijke voor de gegevens die op deze website en in onze dienstverlening worden verwerkt.</p>
+          <p>Vragen over privacy, of een verzoek om inzage of verwijdering: hello@gronn.studio. Wij reageren binnen een maand.</p>
+          <p>Wij hebben geen functionaris voor gegevensbescherming. Dat hoeft ook niet: die verplichting geldt voor overheidsinstanties en voor organisaties die op grote schaal bijzondere gegevens verwerken of mensen stelselmatig volgen, en dat doen wij geen van beide.</p>
+        </section>
+
+        <section id="s2">
+          <h2 class="syne"><span>02</span>Een projectaanvraag of contactverzoek</h2>
+          <p>Wat wij verwerken: je naam, e-mailadres, telefoonnummer als je dat invult, het adres of de locatie van de tuin, en wat je ons over het project vertelt.</p>
+          <p>Waarvoor: om je aanvraag te beoordelen, je te antwoorden en waar dat volgt een offerte te maken.</p>
+          <p>Grondslag: uitvoering van een overeenkomst, of stappen die daaraan voorafgaan op jouw verzoek (art. 6 lid 1 sub b AVG).</p>
+          <p>Hoe lang: aanvragen waar niets uit voortkomt bewaren wij 30 dagen. Wordt het een opdracht, dan gaan de gegevens over in het klantdossier.</p>
+          <p>Het korte contactformulier stuurt zijn inhoud rechtstreeks vanuit je browser naar FormSubmit (zie hieronder).</p>
+          <p>De uitgebreide ontwerpintake bewaart je antwoorden en bestanden in onze besloten opslag (zie hieronder); FormSubmit krijgt daarvan alleen een melding met je naam en e-mailadres dát er een intake is. Lukt het bewaren niet, dan gaan je antwoorden als terugval via FormSubmit naar onze mailbox, zodat ze niet verloren gaan.</p>
+          <p>Wil je geen van beide, dan kun je de intake printen of kopiëren en de antwoorden zelf per e-mail sturen.</p>
+        </section>
+
+        <section id="s3">
+          <h2 class="syne"><span>03</span>Maillijst en checklist vooraf</h2>
+          <p>Als je de checklist vooraf aanvraagt, verwerk ik je e-mailadres om je de checklist te sturen en je af en toe een mail van mij te sturen.</p>
+          <p>De grondslag is je toestemming; je kunt je op elk moment afmelden.</p>
+          <p>Je bevestigt je aanmelding eerst via een link in je mail; zonder die bevestiging stuur ik niets.</p>
+          <p>MailerLite (MailerLite, UAB) bewaart je adres als verwerker en ik verstuur de mails via MailerLite; elke mail heeft een afmeldlink.</p>
+          <p>Ik bewaar je adres tot je je afmeldt.</p>
+        </section>
+
+        <section id="s4">
+          <h2 class="syne"><span>04</span>De uitgebreide ontwerpintake</h2>
+          <p>Wat wij verwerken: je antwoorden op de intakevragen en de foto's of video's die je meestuurt.</p>
+          <p>Waarvoor: om een ontwerp te kunnen maken dat op jouw tuin en jouw gebruik is toegesneden.</p>
+          <p>Waar dit terechtkomt: antwoorden en bestanden worden samen bewaard in privéopslag bij Vercel Blob. Ze zijn alleen te lezen nadat wij op ons eigen paneel hebben ingelogd — niet op een openbaar adres, en niet door wie toevallig een link heeft. Weigert de opslag een bestand, dan wordt het niet ergens anders neergezet: je krijgt te zien dat het niet is gelukt, en kunt het dan zelf mailen.</p>
+          <p>Zolang je de intake invult, bewaart je browser een concept van je antwoorden op je eigen apparaat, zodat je later verder kunt. Dat concept verlaat je apparaat niet tot je verstuurt, en verdwijnt als je het formulier leegt.</p>
+          <p>Een kort bericht dát er een aanvraag binnen is gaat naar onze mailbox. Dat bericht bevat je naam en contactgegevens, nooit de bestanden zelf.</p>
+          <p>Hoe lang: 30 dagen, tenzij het een opdracht wordt; dan gaat het dossier over in het klantdossier.</p>
+        </section>
+
+        <section id="s5">
+          <h2 class="syne"><span>05</span>Het klantenportaal</h2>
+          <p>Krijg je van ons een uitnodiging voor het klantenportaal, dan maken wij een account voor je aan.</p>
+          <p>Wat wij verwerken: je e-mailadres, een door jou gekozen wachtwoord dat wij versleuteld opslaan en nooit zelf kunnen lezen, en de projectgegevens die bij jouw dossier horen — je project, de planning, wat wij van je nodig hebben, de termijnen, en eventuele documenten.</p>
+          <p>Waarvoor: om je toegang te geven tot je eigen dossier.</p>
+          <p>Grondslag: uitvoering van de overeenkomst.</p>
+          <p>Waar dit staat: bij Supabase, in een database binnen de Europese Unie. Ieder account ziet uitsluitend het eigen dossier; dat is niet alleen een afspraak maar een regel die de database zelf afdwingt.</p>
+          <p>Het portaal gebruikt cookies om je ingelogd te houden. Die zijn noodzakelijk om te kunnen inloggen en vereisen geen toestemming.</p>
+          <p>Hoe lang: zolang je klant bent en daarna <span class="open">[NOG AANLEVEREN: bewaartermijn klantdossiers]</span>. Wil je je account eerder gesloten hebben, dan doen wij dat op verzoek — de administratieve gegevens die wij fiscaal moeten bewaren blijven dan wel bestaan.</p>
+        </section>
+
+        <section id="s6">
+          <h2 class="syne"><span>06</span>Offertes, facturen en administratie</h2>
+          <p>Wat wij verwerken: naam, adres, contactgegevens en de gegevens van de opdracht.</p>
+          <p>Waarvoor: om te kunnen offreren, factureren en onze boekhouding te voeren.</p>
+          <p>Grondslag: uitvoering van de overeenkomst, en voor de boekhouding een wettelijke verplichting (art. 6 lid 1 sub c AVG).</p>
+          <p>Hoe lang: de fiscale bewaarplicht is zeven jaar. Die termijn kunnen wij niet verkorten op verzoek — ook niet op jouw verzoek.</p>
+        </section>
+
+        <section id="s7">
+          <h2 class="syne"><span>07</span>Bezoek aan de website</h2>
+          <p>Deze website plaatst geen tracking- of advertentiecookies en gebruikt geen advertentienetwerken.</p>
+          <p>Wij meten wel de laadsnelheid, via Vercel Speed Insights. Dat verzamelt geanonimiseerde prestatiemetingen, plaatst geen cookie en identificeert of volgt je niet.</p>
+          <p>Zoals elke host verwerkt Vercel technische verzoekgegevens, waaronder IP-adressen, in serverlogs. Dat is nodig om de site veilig en werkend te leveren.</p>
+          <p>Je browser bewaart daarnaast je eigen voorkeuren lokaal: het palet en de taal die je koos, je instellingen voor tekstgrootte, beweging en onderstreepte links, of je de opening hebt gezien, of je de installatiemelding hebt weggeklikt, en je recente zoekopdrachten. Die gegevens verlaten je apparaat niet en vereisen geen toestemming.</p>
+          <p>De website zet twee functionele cookies voor je taal: welke taal je ziet, en of je die zelf koos. Ze gelden een jaar, zodat de server de pagina meteen in jouw taal kan sturen. Het klantenportaal zet daarnaast cookies om je ingelogd te houden. Andere cookies zijn er niet.</p>
+        </section>
+
+        <section id="s8">
+          <h2 class="syne"><span>08</span>Easter eggs en de Instagram-actie</h2>
+          <p>Op deze website zitten verstopte kleine dingen (easter eggs), met een verzamelkaart die bijhoudt welke je gevonden hebt. Die kaart staat in je eigen browser.</p>
+          <p>Zodra je er één vindt, maakt je browser een willekeurige, anonieme code aan en bewaart die lokaal. Bij elke vondst stuurt je browser die code mee, met welk easter egg het is; onze server legt vast welke easter eggs onder die code gevonden zijn en wanneer. Wij vragen en bewaren daarbij geen naam, geen e-mailadres en geen IP-adres, en er wordt geen cookie voor gezet.</p>
+          <p>Waarvoor: om bij de Instagram-actie te kunnen controleren of een inzending klopt en wie het eerst was. Wie het doel haalt, ziet op de kaart een controlecode; stuur je die ons, dan kunnen wij hem koppelen aan de vondsten onder jouw anonieme code.</p>
+          <p>Waar dit staat: in onze opslag bij Vercel Blob.</p>
+          <p>Grondslag: <span class="open">[NOG AANLEVEREN: grondslag controle easter-egg-actie]</span>.</p>
+          <p>Hoe lang: <span class="open">[NOG AANLEVEREN: bewaartermijn easter-egg-gegevens (voorstel: tot drie maanden na het einde van de actie)]</span>.</p>
+        </section>
+
+        <section id="s9">
+          <h2 class="syne"><span>09</span>Met wie wij gegevens delen</h2>
+          <p>Wij verkopen je gegevens niet en delen ze niet voor commerciële doelen van anderen. Wij schakelen wel partijen in die voor ons gegevens verwerken:</p>
+          <ul>
+            <li><strong>Vercel Inc.</strong> — hosting van de website, prestatiemetingen, en Vercel Blob voor de opslag van intakedossiers, documenten en de anonieme gegevens van de easter-egg-actie.</li>
+            <li><strong>Supabase</strong> — de database achter het klantenportaal: accounts, projecten, abonnementen en urenregistratie.</li>
+            <li><strong>FormSubmit (formsubmit.co)</strong> — bezorgt de ingevulde formuliervelden per e-mail bij ons. Het formulier post rechtstreeks vanuit je browser naar deze dienst.</li>
+            <li><strong>MailerLite (MailerLite, UAB)</strong> — bewaart de adressen van de maillijst en verstuurt die mails.</li>
+            <li><strong>Google (Google Workspace)</strong> — onze mailbox en agenda.</li>
+            <li><span class="open">[NOG AANLEVEREN: boekhoudsoftware, indien van toepassing]</span> — verwerking van facturen.</li>
+          </ul>
+          <p>Met elk van deze partijen hoort een verwerkersovereenkomst te bestaan (art. 28 AVG). Status: <span class="open">[NOG AANLEVEREN: status verwerkersovereenkomsten per partij]</span>.</p>
+          <p>Sommige van deze partijen zijn in de Verenigde Staten gevestigd of kunnen daar gegevens verwerken. Voor die doorgifte gelden de standaardbepalingen van de Europese Commissie of het EU-VS Data Privacy Framework. Welke grondslag per partij geldt: <span class="open">[NOG AANLEVEREN: doorgiftegrondslag per partij]</span>.</p>
+          <p>Neem je contact op via WhatsApp of Instagram, dan loopt dat via de diensten van Meta, onder de voorwaarden en de privacyverklaring van Meta zelf. Wat je ons daar stuurt, gebruiken wij alleen om je te antwoorden.</p>
+          <p>Daarnaast kunnen wij gegevens delen met onderaannemers die aan jouw tuin werken, voor zover zij die nodig hebben om hun werk te doen. Zij mogen die gegevens nergens anders voor gebruiken.</p>
+        </section>
+
+        <section id="s10">
+          <h2 class="syne"><span>10</span>Foto's van je tuin</h2>
+          <p>Wij maken tijdens en na het werk foto's, voor onze eigen dossiervorming.</p>
+          <p>Voor gebruik in portfolio, op de website of op sociale media vragen wij je vooraf om toestemming. Die toestemming is vrij te geven en op elk moment in te trekken; trek je haar in, dan halen wij het beeld weg bij de eerstvolgende gelegenheid.</p>
+          <p>Grondslag voor publicatie: toestemming (art. 6 lid 1 sub a AVG).</p>
+        </section>
+
+        <section id="s11">
+          <h2 class="syne"><span>11</span>Beveiliging</h2>
+          <p>Wij nemen passende technische en organisatorische maatregelen. Concreet: verkeer met de website loopt uitsluitend over een versleutelde verbinding, wachtwoorden worden versleuteld opgeslagen en zijn ook voor ons niet leesbaar, intakedossiers staan in privéopslag die alleen na inloggen te lezen is, en het klantenportaal dwingt in de database zelf af dat een account alleen het eigen dossier ziet.</p>
+          <p>Wat een verklaring als deze niet doet, is beveiligen. Deze alinea beschrijft maatregelen; hij vervangt ze niet.</p>
+          <p>Vermoed je een lek of een zwakke plek, meld het dan via hello@gronn.studio. Wij nemen zo'n melding serieus en koppelen terug.</p>
+        </section>
+
+        <section id="s12">
+          <h2 class="syne"><span>12</span>Je rechten</h2>
+          <p>Je hebt het recht om je gegevens in te zien, te laten corrigeren of te laten verwijderen, om de verwerking te laten beperken, om bezwaar te maken, en om je gegevens in een gangbaar formaat mee te krijgen.</p>
+          <p>Heb je toestemming gegeven, dan kun je die op elk moment intrekken. Dat raakt niet aan wat daarvóór al is verwerkt.</p>
+          <p>Een verzoek stuur je naar hello@gronn.studio. Wij reageren binnen een maand. Kunnen wij een verzoek niet uitvoeren — bijvoorbeeld omdat de fiscale bewaarplicht in de weg staat — dan leggen wij uit waarom.</p>
+          <p>Ben je het oneens met hoe wij met je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens. Wij horen het liever eerst zelf, maar dat recht staat los van ons.</p>
+        </section>
+
+        <section id="s13">
+          <h2 class="syne"><span>13</span>Wijzigingen</h2>
+          <p>Wij werken deze verklaring bij wanneer de website of onze dienstverlening verandert. De actuele versie staat altijd op deze pagina, met de datum waarop hij is gewijzigd.</p>
+        </section>
+
+        <div class="bedrijf" aria-label="Bedrijfsgegevens">
+          <p class="lbl muted" style="grid-column:1 / -1">Bedrijfsgegevens</p>
+          <p>GRØNN Studio<br>Kelderstraat 32<br>6171 GB Stein</p>
+          <p><a href="mailto:hello@gronn.studio">hello@gronn.studio</a><br><a href="tel:+31618118014">+316 181 180 14</a></p>
+          <p class="lbl muted">KVK 42072154<br>BTW NL005473265B04</p>
+          <p class="lbl muted">Eenmanszaak</p>
+        </div>
+
+        <nav class="verder" aria-label="Andere juridische pagina's">
+          <a class="lnk" href="#">Algemene voorwaarden</a>
+          <a class="lnk" href="#">Herroepingsrecht</a>
+          <a class="lnk" href="#inhoud">Naar de inhoud ↑</a>
+        </nav>
+      </article>
+    </div>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/vijvers">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk">WERK</a><a href="/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script>
+/* Desktop: inhoudsopgave staat altijd open. Telefoon/tablet: dicht, open te tikken. */
+(() => {
+  const d = document.getElementById('inhoud'), mq = matchMedia('(min-width:1024px)')
+  const zet = () => { d.open = mq.matches }
+  zet(); mq.addEventListener('change', zet)
+  d.querySelector('summary').addEventListener('click', e => { if (mq.matches) e.preventDefault() })
+})()
+</script>
+<script src="/wf-weergave.js" defer></script>
+</body>
+</html>

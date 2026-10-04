@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-027 Voet: colofon — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-027: voet A — een rustig colofon in vier kolommen onder een dunne lijn. */
+.voet{margin-top:clamp(96px,12vw,180px);border-top:1px solid var(--lijn);padding:28px 0 40px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:32px;row-gap:36px}
+.voet h2{margin:0 0 14px;font-weight:400}
+.voet ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.voet p,.voet li{margin:0;font-size:14px;line-height:1.6}
+.voet a{text-decoration:none}
+.voet a:hover{text-decoration:underline}
+.voet .klein li{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--muted)}
+@media (max-width:1023px){.voet{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:479px){.voet{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <main>
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Alle pagina's · voet A</p>
+      <h1 class="syne">Paginakop</h1>
+      <p class="inleiding">Deze demo toont alleen de voet. Erboven staat wat de pagina ook is.</p>
+    </section>
+    <section class="sectie" style="padding-top:clamp(48px,6vw,80px)" aria-label="Inhoud">
+      <div class="ph" style="height:clamp(280px,40vw,520px)">Inhoud van de pagina</div>
+    </section>
+  </main>
+  <footer class="voet" aria-label="Colofon">
+    <div>
+      <h2 class="lbl muted">Studio</h2>
+      <p class="syne" style="font-size:18px">GRØNN Studio</p>
+      <p class="muted">Kelderstraat 32<br>6171 GB Stein</p>
+    </div>
+    <div>
+      <h2 class="lbl muted">Contact</h2>
+      <ul>
+        <li><a href="mailto:hello@gronn.studio">hello@gronn.studio</a></li>
+        <li><a href="tel:+31618118014">+316 181 180 14</a></li>
+        <li><a href="https://wa.me/31618118014">WhatsApp</a></li>
+        <li><a href="https://instagram.com/gronn.studio">Instagram</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="lbl muted">Pagina's</h2>
+      <ul>
+        <li><a href="/vijvers">Vijvers</a></li>
+        <li><a href="/tuinen">Tuinen</a></li>
+        <li><a href="/werk">Werk</a></li>
+        <li><a href="/over">Over</a></li>
+        <li><a href="/kennismaken">Kennismaken</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="lbl muted">Klein</h2>
+      <ul class="klein">
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="#">Voorwaarden</a></li>
+        <li><a href="#">Herroeping</a></li>
+        <li>KVK 42072154</li>
+        <li>BTW NL005473265B04</li>
+      </ul>
+    </div>
+  </footer>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/vijvers">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk">WERK</a><a href="/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wf-weergave.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-031 Vijvers: open rijen — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-031: Vijvers, maar elke dienstrij klapt open op de pagina zelf: wat erbij hoort, wat niet, en de prijzen. */
+.open{border-top:1px solid var(--lijn)}
+.open:last-of-type{border-bottom:1px solid var(--lijn)}
+.open summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:60px 4fr 5fr 2fr 20px;column-gap:32px;align-items:baseline;padding:26px 0}
+.open summary::-webkit-details-marker{display:none}
+.open summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.open[open] summary::after{content:"−"}
+.open .naam{font-size:clamp(22px,2.3vw,32px);letter-spacing:-.02em;line-height:1.1}
+.open .uitleg{color:var(--muted);line-height:1.6}
+.open .prijs{text-align:right}
+.binnen{display:grid;grid-template-columns:60px repeat(3,minmax(0,1fr));column-gap:32px;row-gap:32px;padding:0 0 36px}
+.binnen > div{min-width:0}
+.binnen > div:first-of-type{grid-column:2}
+.binnen h3{margin:0 0 12px;font-weight:400}
+.binnen ul{margin:0;padding:0;list-style:none}
+.binnen li{padding:8px 0;border-top:1px solid var(--lijn);line-height:1.5;font-size:15px}
+.binnen .niet li{color:var(--muted)}
+.binnen .prijzen li{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px}
+.binnen .prijzen .noot-tier{grid-column:1 / -1;color:var(--muted);font-size:13px;margin-top:4px}
+.binnen .verreken{margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+.kolomkop{display:grid;grid-template-columns:60px 4fr 5fr 2fr 20px;column-gap:32px;padding:10px 0}
+.kolomkop .prijs{text-align:right}
+@media (max-width:1023px){
+  .binnen{grid-template-columns:60px repeat(2,minmax(0,1fr))}
+}
+@media (max-width:767px){
+  .kolomkop{display:none}
+  .open summary{grid-template-columns:32px minmax(0,1fr) 14px;column-gap:12px;row-gap:6px}
+  .open summary .naam{grid-column:2;grid-row:1}
+  .open summary::after{grid-column:3;grid-row:1}
+  .open summary .uitleg{grid-column:2;grid-row:2}
+  .open summary .prijs{grid-column:2;grid-row:3;text-align:left}
+  .binnen{grid-template-columns:minmax(0,1fr);padding:0 0 28px 44px}
+  .binnen > div:first-of-type{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <main>
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Diensten · water</p>
+      <h1 class="syne">Vijvers</h1>
+      <p class="inleiding">Vijvers, beken, watervallen en natte zones. Ik kijk hoe het water door je tuin loopt, hoe het schoon blijft en hoe het regenwater een plek krijgt.</p>
+    </section>
+
+    <section class="rijen" aria-label="Vijverdiensten">
+      <div class="kolomkop lbl muted" aria-hidden="true"><span>Nr</span><span>Dienst</span><span>Wat</span><span class="prijs">Prijs incl. btw</span><span></span></div>
+      <details class="open"><summary><span class="lbl">01</span><span class="syne naam">Vijverdoorlichting</span><span class="uitleg">Een betaald diagnosebezoek voor een vijver die groen is, lekt, stinkt of waar niets in leeft. Gemeten, niet geraden, en op papier.</span><span class="lbl prijs">€ 195</span></summary>
+        <div class="binnen"><div class="wel"><h3 class="lbl muted">Wat erbij hoort</h3><ul><li>Volledig waterpanel — pH, KH, GH, nitriet, nitraat, ammonium, fosfaat</li><li>Sliblaag op drie plekken gemeten</li><li>Zonuren en plantbezetting</li><li>Pompcapaciteit tegenover vijverinhoud</li><li>Omgeving — bomen, gazonbemesting, afspoeling van verharding</li><li>Een verslag: wat ik zag, het patroon, waarom het gebeurt, wat je doet</li><li>Drie scenario's uitgewerkt — zelf doen, gedeeltelijk, volledig</li></ul></div><div class="niet"><h3 class="lbl muted">Wat niet</h3><ul><li>Teststrips. Te onnauwkeurig om een plan op te baseren, en het blijft gokken aan je vijverrand. Ik gebruik druppeltests.</li><li>Een fles algenmiddel. Alg is niet de ziekte — het is het symptoom van te veel voeding.</li></ul></div><div class="prijzen"><h3 class="lbl muted">Prijzen incl. btw</h3><ul><li><span>Vijverdoorlichting</span><span class="lbl">€ 195</span></li><li><span>Tuinscan</span><span class="lbl">€ 175</span><span class="noot-tier">Bodem, beplanting en waterhuishouding.</span></li><li><span>Beide</span><span class="lbl">€ 295</span></li></ul><p class="verreken">Ik verreken hem volledig bij een opdracht boven €750. Leidt de doorlichting tot werk, dan was de doorlichting gratis.</p></div></div>
+      </details>
+      <details class="open"><summary><span class="lbl">02</span><span class="syne naam">Vijvers en water</span><span class="uitleg">Vijvers, beken, watervallen en natte zones. Ik kijk hoe het water door je tuin loopt, hoe het schoon blijft en hoe het regenwater een plek krijgt.</span><span class="lbl prijs">Op maat</span></summary>
+        <div class="binnen"><div class="wel"><h3 class="lbl muted">Wat erbij hoort</h3><ul><li>Een bestaande vijver opnieuw ontwerpen</li><li>Water dat met planten en bodem schoon blijft</li><li>Biologische filters</li><li>Hoe het water rondgaat</li><li>Beken en watervallen</li><li>Planten voor de natte randen</li><li>Een veilige rand voor dieren die komen drinken</li><li>Regenwater dat in de tuin blijft</li><li>Uitzoeken waarom een vijver niet goed loopt</li></ul></div><div class="prijzen"><h3 class="lbl muted">Prijzen incl. btw</h3><ul><li><span>Op maat</span><span class="lbl">Offerte</span></li></ul></div></div>
+      </details>
+      <details class="open"><summary><span class="lbl">03</span><span class="syne naam">Najaarsbeurt vijver</span><span class="uitleg">Slib afgezogen, afgestorven groei teruggeknipt, filter gereinigd, water gemeten vóór en na. De volledige reset voor de winter.</span><span class="lbl prijs">vanaf € 250</span></summary>
+        <div class="binnen"><div class="wel"><h3 class="lbl muted">Wat erbij hoort</h3><ul><li>Water gemeten vóórdat er iets gebeurt</li><li>pH, KH, GH, nitriet, ammonium</li><li>Slib vanaf het diepste punt</li><li>Filtermedia gespoeld in vijverwater</li><li>UV-lamp gecontroleerd, uren genoteerd</li><li>Opnieuw gemeten, vastgelegd</li><li>Een verslag met de metingen en één advies</li></ul></div><div class="niet"><h3 class="lbl muted">Wat niet</h3><ul><li>Een steriele vijver. Zuig je alles weg, dan gooi je de biologie weg, en volgend jaar heb je meer algen dan ooit. Ik haal bewust 60–70% van het slib weg.</li><li>Filtermedia gespoeld in kraanwater. Chloor doodt de bacteriecultuur die het eigenlijke werk doet.</li><li>Slib in het riool. Dat gaat de border in, waar de voeding thuishoort.</li></ul></div><div class="prijzen"><h3 class="lbl muted">Prijzen incl. btw</h3><ul><li><span>Klein, licht onderhouden</span><span class="lbl">€ 250</span></li><li><span>Gemiddeld</span><span class="lbl">€ 350</span></li><li><span>Verwaarloosd</span><span class="lbl">€ 450–650</span><span class="noot-tier">Prijs pas na een blik ter plaatse, nooit blind — een vijver waar jaren niets aan gedaan is, is precies het geval waarin een gegokte prijs iemand een dag kost.</span></li></ul></div></div>
+      </details>
+      <details class="open"><summary><span class="lbl">04</span><span class="syne naam">Bladnet plaatsen</span><span class="uitleg">Een net over de vijver vóór de bladval, en er in december weer af. De enige vijverklus met een absolute deadline.</span><span class="lbl prijs">vanaf € 125</span></summary>
+        <div class="binnen"><div class="wel"><h3 class="lbl muted">Wat erbij hoort</h3><ul><li>Opmeten bij aankomst</li><li>Net op maat gesneden</li><li>Randen om de 60–80 cm vastgezet</li><li>Spanten bij vijvers breder dan 4 m</li><li>Ophalen in december meteen ingepland</li><li>Elk jaar als je wilt: in het najaar erop, in december eraf, zelfde prijs</li></ul></div><div class="niet"><h3 class="lbl muted">Wat niet</h3><ul><li>Een net dat strak op het water ligt. Hangt het in de vijver, dan vangt het niets en verdrinkt wat erin zwemt.</li><li>Een garantie tegen elk blad. Een net vangt wat van boven valt, niet wat er zijwaarts in waait.</li></ul></div><div class="prijzen"><h3 class="lbl muted">Prijzen incl. btw</h3><ul><li><span>Tot 15 m²</span><span class="lbl">€ 125</span></li><li><span>15 tot 35 m²</span><span class="lbl">€ 175</span></li><li><span>Meer dan 35 m²</span><span class="lbl">€ 250</span></li></ul><p class="verreken">Inclusief het ophalen in december — meteen ingepland op de dag dat het net erop gaat, niet als “ik bel nog”. Wil je het elk jaar? Dan staat het vast in de agenda: elk najaar erop, in december eraf, voor dezelfde prijs. Opzeggen kan elk jaar tot 1 september.</p></div></div>
+      </details>
+      <details class="open"><summary><span class="lbl">05</span><span class="syne naam">Winterklaar maken</span><span class="uitleg">Techniek eruit, ijsvrijhouder erin, de vijver zo ingericht dat hij de kou doorkomt zonder pomp die ertegenin werkt.</span><span class="lbl prijs">vanaf € 95</span></summary>
+        <div class="binnen"><div class="wel"><h3 class="lbl muted">Wat erbij hoort</h3><ul><li>Pomp en filter eruit en opgeslagen</li><li>Leidingwerk leeg tegen vorst</li><li>IJsvrijhouder geplaatst en getest</li><li>Laatste watermeting vastgelegd</li><li>Bladnet opgehaald indien geplaatst</li></ul></div><div class="niet"><h3 class="lbl muted">Wat niet</h3><ul><li>Een gat in het ijs hakken. De schokgolf is wat de vissen schaadt; een ijsvrijhouder staat er juist zodat dat nooit hoeft.</li><li>Een pomp die de hele winter doordraait. Die trekt koud water omlaag, precies waar de vissen de winter uitzitten.</li></ul></div><div class="prijzen"><h3 class="lbl muted">Prijzen incl. btw</h3><ul><li><span>Basis</span><span class="lbl">€ 95</span></li><li><span>Met bladnet ophalen</span><span class="lbl">€ 135</span></li><li><span>Met ijsvrijhouder</span><span class="lbl">€ 150</span></li><li><span>Alles</span><span class="lbl">€ 185</span></li></ul></div></div>
+      </details>
+      <details class="open"><summary><span class="lbl">06</span><span class="syne naam">Onderhoudsabonnement</span><span class="uitleg">Een vijver is geen apparaat dat je installeert en vergeet. Hij verandert elk jaar, en een vijver waar lang niemand naar omkijkt, raakt uit balans.</span><span class="lbl prijs">vanaf € 45 p/m</span></summary>
+        <div class="binnen"><div class="wel"><h3 class="lbl muted">Wat erbij hoort</h3><ul><li>Ingeplande bezoeken door het jaar</li><li>Techniek in- en uitbouwen per seizoen</li><li>Water gemeten en vastgelegd bij elk bezoek</li><li>Een seizoensverslag met metingen en een trendlijn</li><li>Vragen tussendoor beantwoord binnen twee werkdagen</li></ul></div><div class="niet"><h3 class="lbl muted">Wat niet</h3><ul><li>Onbeperkt uitrukken. Voorrang bij een storing betekent voorrang bij het inplannen, geen gratis reparatie.</li><li>Een prijs die eeuwig vaststaat. Het contract wordt jaarlijks per 1 januari geïndexeerd volgens de CBS-prijsindex.</li></ul></div><div class="prijzen"><h3 class="lbl muted">Prijzen incl. btw</h3><ul><li><span>Basis</span><span class="lbl">€ 45 p/m</span><span class="noot-tier">Twee bezoeken per jaar — voorjaar opstarten, najaar afsluiten.</span></li><li><span>Standaard</span><span class="lbl">€ 85 p/m</span><span class="noot-tier">Vier bezoeken per jaar. Voor de meeste vijvers is dit de juiste.</span></li><li><span>Compleet</span><span class="lbl">€ 165 p/m</span><span class="noot-tier">Zes bezoeken per jaar, inclusief tuinonderhoud.</span></li></ul></div></div>
+      </details>
+    </section>
+    <p class="lbl muted noot">Tik op een dienst: wat erbij hoort, wat niet, en alle prijzen.</p>
+
+    <div class="onderbreking"><div class="ph">Foto F05 · het driekamerfilter · schermbreed</div></div>
+
+    <section class="sectie" style="padding-top:0" aria-labelledby="vijver-werk">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--lijn);padding-top:14px"><span class="lbl" id="vijver-werk">Vijverwerk</span><a class="lnk" href="/werk">Alle werk →</a></div>
+      <a href="/project-vijverrenovatie" class="werkblok" style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;margin-top:32px;text-decoration:none;align-items:end">
+        <div class="ph" style="grid-column:span 5;aspect-ratio:4/5">F10 · de waterval</div>
+        <div style="grid-column:7 / span 6">
+          <p class="lbl muted" style="margin:0">GR / 001 · Vijverrenovatie · In afronding</p>
+          <p class="syne" style="margin:16px 0 0;font-size:clamp(28px,3.4vw,48px);line-height:1.05;letter-spacing:-.025em">Twee vijvers. Eén samenhangend watersysteem.</p>
+          <p class="lnk" style="display:inline-block;margin-top:28px">Bekijk het project →</p>
+        </div>
+      </a>
+    </section>
+
+    <section class="sectie" aria-label="Veelgestelde vraag">
+      <p class="lbl muted" style="margin:0">Vraag</p>
+      <p class="syne" style="margin:16px 0 0;font-size:clamp(24px,2.6vw,36px);letter-spacing:-.02em">Kan ik alleen hulp met mijn vijver krijgen?</p>
+      <p class="muted" style="margin:12px 0 0">Ja. Elk van deze diensten kun je los vragen.</p>
+    </section>
+
+    <section class="einde"><a class="syne" href="/kennismaken">Kennismaken</a><p class="lbl muted" style="margin-top:24px">hello@gronn.studio · +316 181 180 14</p></section>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/vijvers" aria-current="page">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk">WERK</a><a href="/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wf-weergave.js" defer></script>
+</body>
+</html>

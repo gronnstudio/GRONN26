@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-034 Kennismaken · verzonden — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-034: de staat ná verzenden van Kennismaken. Twee staten onder elkaar,
+   elk met een eigen mono-label: gelukt (met samenvatting) en mislukt (mailto). */
+.staat{margin-top:clamp(56px,7vw,96px);display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
+.staat + .staat{border-top:1px dashed var(--muted);padding-top:clamp(48px,6vw,80px)}
+.staat-lbl{margin:0;align-self:start}
+.staat-lbl b{display:block;font-weight:400;color:var(--ink);margin-bottom:6px}
+.bevestiging{max-width:40ch}
+.bevestiging h2{margin:0;font-size:clamp(32px,4.4vw,60px);line-height:1.05;letter-spacing:-.035em}
+.bevestiging p.sub{margin:20px 0 0;font-size:clamp(17px,1.5vw,21px);line-height:1.5;color:var(--muted)}
+.samenvatting{margin-top:40px;max-width:640px;border-top:1px solid var(--ink)}
+.samenvatting .rij{display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:24px;padding:12px 0;border-bottom:1px solid var(--lijn);font-family:'Geist Mono',monospace;font-size:13px;line-height:1.5}
+.samenvatting .rij dt{text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.samenvatting .rij dd{margin:0;overflow-wrap:anywhere}
+.knoppen{display:flex;flex-wrap:wrap;gap:16px 28px;margin-top:32px;align-items:center}
+.mailto{display:inline-flex;align-items:center;height:52px;padding:0 24px;border-radius:999px;background:#d4d4d4;color:#111;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
+.mailto:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+@media (max-width:767px){
+  .staat{grid-template-columns:1fr;row-gap:20px}
+  .samenvatting .rij{grid-template-columns:1fr;row-gap:2px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Contact</p>
+      <h1 class="syne">Kennismaken</h1>
+      <p class="inleiding">Wat je ziet nadat je op Verstuur hebt gedrukt. Het formulier verdwijnt; deze melding komt op zijn plek.</p>
+    </section>
+
+    <!-- Staat 1: gelukt -->
+    <section class="staat" aria-labelledby="s1">
+      <p class="lbl muted staat-lbl"><b>Staat 1 / 2</b>Als verzenden lukt</p>
+      <div>
+        <div class="bevestiging" role="status">
+          <h2 class="syne" id="s1">Dank je, je bericht is binnen.</h2>
+          <p class="sub">Ik reageer meestal binnen twee werkdagen.</p>
+        </div>
+
+        <p class="lbl muted" style="margin:48px 0 0">Wat je hebt ingevuld</p>
+        <dl class="samenvatting">
+          <div class="rij"><dt>Vraag</dt><dd>[voorbeeld] Vijver of watersysteem</dd></div>
+          <div class="rij"><dt>Budget</dt><dd>[voorbeeld] € 5.000–15.000</dd></div>
+          <div class="rij"><dt>Naam</dt><dd>[voorbeeld] Naam bezoeker</dd></div>
+          <div class="rij"><dt>E-mail</dt><dd>[voorbeeld] naam@voorbeeld.nl</dd></div>
+          <div class="rij"><dt>Telefoon</dt><dd>[voorbeeld] 06 00 00 00 00</dd></div>
+          <div class="rij"><dt>Plaats of postcode</dt><dd>[voorbeeld] 6171</dd></div>
+          <div class="rij"><dt>Bericht</dt><dd>[voorbeeld] Een paar zinnen over de tuin of vijver.</dd></div>
+        </dl>
+
+        <div class="knoppen">
+          <a class="lnk" href="/voorpagina">Terug naar de voorpagina</a>
+          <a class="lnk" href="/werk">Bekijk mijn werk</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Staat 2: mislukt -->
+    <section class="staat" aria-labelledby="s2">
+      <p class="lbl muted staat-lbl"><b>Staat 2 / 2</b>Als verzenden mislukt</p>
+      <div>
+        <div class="bevestiging" role="status">
+          <h2 class="syne" id="s2">Verzenden lukte niet — er staat een e-mail voor je klaar.</h2>
+          <p class="sub">Je e-mailprogramma is geopend met dezelfde tekst. Verstuur hem daar, of mail naar hello@gronn.studio.</p>
+        </div>
+        <div class="knoppen">
+          <a class="mailto" href="mailto:hello@gronn.studio?subject=Kennismaking%20%E2%80%94%20%5Bvoorbeeld%5D%20Vijver%20of%20watersysteem">Open de e-mail opnieuw</a>
+          <a class="lnk" href="tel:+31618118014">Of bel +316 181 180 14</a>
+        </div>
+        <p class="lbl muted noot">Onderwerp: Kennismaking — [voorbeeld] Vijver of watersysteem · de tekst is dezelfde als hierboven</p>
+      </div>
+    </section>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken" aria-current="page">KENNISMAKEN</a><div class="pil"><a href="/vijvers">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk">WERK</a><a href="/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wf-weergave.js" defer></script>
+</body>
+</html>
