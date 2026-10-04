@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;color:#111;font-family:Montserrat,sans-serif}
+main{max-width:1200px;margin:0 auto;padding:80px 24px 120px}
+.lbl{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#666}
+h1{font-family:Syne,sans-serif;font-weight:600;font-size:clamp(40px,7vw,88px);letter-spacing:-.04em;line-height:1;margin:16px 0 0}
+h2{font-family:'Geist Mono',monospace;font-weight:400;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#666;margin:96px 0 0;padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,.18)}
+.rij{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:24px 0;border-bottom:1px solid rgba(0,0,0,.18)}
+.rij strong{font-family:Syne,sans-serif;font-weight:600;font-size:clamp(22px,3vw,32px);letter-spacing:-.02em}
+.rij p{margin:6px 0 0;color:#666;max-width:60ch;line-height:1.55}
+.links{display:flex;gap:16px;flex-wrap:wrap}
+.links a{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#111;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);padding-bottom:4px}
+.links a:hover{border-color:#111}
+@media (max-width:640px){.rij{grid-template-columns:32px minmax(0,1fr)}.links{grid-column:2}}
+</style>
+</head>
+<body>
+<main>
+  <p class="lbl">GRØNN Studio · wireframes · 4 oktober 2026</p>
+  <h1>Wireframes</h1>
+  <p style="margin:24px 0 0;max-width:56ch;color:#666;line-height:1.6">Opbouw zonder kleur: grijze vlakken zijn foto's (met het foto-ID erin), de teksten zijn echt. Kies per onderdeel een richting, of combineer.</p>
+
+  <h2>Voorpagina — vier richtingen</h2>
+  <div class="rij"><span class="lbl">A</span><div><strong>Spread</strong><p>Foto links op volle hoogte zonder tekst erover; rechts papier met kop, link en een detail als plaat. Naar Phlypo.</p></div><div class="links"><a href="/a-spread">Desktop</a><a href="/a-telefoon">Telefoon</a></div></div>
+  <div class="rij"><span class="lbl">B</span><div><strong>Index</strong><p>De projectnamen enorm, met kleine codes; een foto verschijnt bij hover. Typografie als beeld. Naar Piet Oudolf.</p></div><div class="links"><a href="/b-index">Desktop</a><a href="/b-telefoon">Telefoon</a></div></div>
+  <div class="rij"><span class="lbl">C</span><div><strong>Volle foto</strong><p>Schermvullende foto met alleen het woordmerk; de tekst staat eronder. Projecten als schermbrede foto's. Naar Stefan Morael.</p></div><div class="links"><a href="/c-volle-foto">Desktop</a><a href="/c-telefoon">Telefoon</a></div></div>
+  <div class="rij"><span class="lbl">D</span><div><strong>Verhaal in stappen</strong><p>Opening, werk, Nick, de zes stappen "Zo werk ik", kennismaken. Legt het meest uit. Naar Bartosz Kolenda.</p></div><div class="links"><a href="/d-verhaal">Desktop</a><a href="/d-telefoon">Telefoon</a></div></div>
+
+  <h2>Werk — twee richtingen</h2>
+  <div class="rij"><span class="lbl">1</span><div><strong>Lijst</strong><p>Een index per regel: jaar, code, project, type, plaats. Foto bij hover. Naar Arkitektkontoret Vest.</p></div><div class="links"><a href="/werk-1-lijst">Desktop</a></div></div>
+  <div class="rij"><span class="lbl">2</span><div><strong>Asymmetrisch raster</strong><p>Het vijverproject groot en liggend, het terras klein, staand en lager gezet. Naar Con-Tour.</p></div><div class="links"><a href="/werk-2-raster">Desktop</a></div></div>
+</main>
+</body>
+</html>

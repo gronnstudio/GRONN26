@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Werk 1 — Lijst — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&amp;family=Montserrat:wght@400;500;600&amp;family=Geist+Mono&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#111111}a:hover{color:#4d4d4d}
+.lbl{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.syne{font-family:Syne,sans-serif;font-weight:600}
+.ph{background:#dadada;box-sizing:border-box;padding:14px;display:flex;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#666666}
+.rule{border-top:1px solid rgba(0,0,0,.18)}
+.rij{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;align-items:baseline;padding:28px 0;text-decoration:none}
+</style>
+<style>.terug{position:fixed;bottom:96px;left:16px;z-index:99;background:#111;color:#fff;font:12px/1 'Geist Mono',monospace;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;text-decoration:none}</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+
+<div style="width: 100%; max-width: 1440px; margin: 0 auto; background: #ffffff; color: #111111; font-family: Montserrat, sans-serif; position: relative; padding-bottom: 200px">
+  <header style="display: flex; justify-content: space-between; align-items: center; padding: 34px 56px">
+    <span class="syne" style="font-size: 30px; letter-spacing: .02em">GRØNN</span>
+    <span class="lbl">Weergave</span>
+  </header>
+
+  <section style="padding: 140px 56px 0">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end">
+      <h1 class="syne" style="margin: 0; font-size: 104px; letter-spacing: -.04em; line-height: 1">Werk</h1>
+      <div class="lbl" style="display: flex; gap: 24px"><span style="border-bottom: 1px solid #111111; padding-bottom: 4px">Lijst</span><span style="color: #666666">Raster</span></div>
+    </div>
+
+    <div class="lbl rule" style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 32px; padding: 14px 0; margin-top: 80px; color: #666666">
+      <span style="grid-column: span 1">Jaar</span><span style="grid-column: span 2">Code</span><span style="grid-column: span 5">Project</span><span style="grid-column: span 2">Type</span><span style="grid-column: span 2">Plaats · status</span>
+    </div>
+    <a class="rij rule" href="#" style="position: relative">
+      <span class="lbl" style="grid-column: span 1">2026</span>
+      <span class="lbl" style="grid-column: span 2">GR / 001</span>
+      <span class="syne" style="grid-column: span 5; font-size: 40px; letter-spacing: -.025em; line-height: 1.05">Twee vijvers. Eén samenhangend watersysteem.</span>
+      <span class="lbl" style="grid-column: span 2; color: #666666">Vijverrenovatie</span>
+      <span class="lbl" style="grid-column: span 2; color: #666666">— · In afronding</span>
+      <span class="ph" style="position: absolute; right: 240px; top: -60px; width: 220px; height: 275px; box-shadow: 0 0 0 1px rgba(0,0,0,.15)">Foto bij hover</span>
+    </a>
+    <a class="rij rule" href="#">
+      <span class="lbl" style="grid-column: span 1">2026</span>
+      <span class="lbl" style="grid-column: span 2">GR / 002</span>
+      <span class="syne" style="grid-column: span 5; font-size: 40px; letter-spacing: -.025em; line-height: 1.05; color: #7d7d7d">Een terras van 24 m², gelegd in twee dagen.</span>
+      <span class="lbl" style="grid-column: span 2; color: #666666">Terrasaanleg</span>
+      <span class="lbl" style="grid-column: span 2; color: #666666">Geulle · Afgerond</span>
+    </a>
+    <div class="rule"></div>
+  </section>
+
+  <nav aria-label="Hoofdmenu (wireframe)" style="position: absolute; left: 0; right: 0; top: 1240px; display: flex; justify-content: space-between; align-items: center; padding: 0 56px">
+    <a href="#" style="background: #d4d4d4; color: #111111; border-radius: 999px; height: 52px; padding: 0 24px; display: flex; align-items: center; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-decoration: none">KENNISMAKEN</a>
+    <div style="background: #4d4d4d; color: #ffffff; border-radius: 999px; height: 52px; width: 440px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 5px; box-sizing: border-box; font-size: 12px; font-weight: 600; letter-spacing: .1em">
+      <span style="display: grid; place-items: center">VIJVERS</span><span style="display: grid; place-items: center">TUINEN</span><span style="display: grid; place-items: center; background: #e6e6e6; color: #4d4d4d; border-radius: 999px">WERK</span><span style="display: grid; place-items: center">OVER</span>
+    </div>
+    <span style="width: 52px; height: 52px; border-radius: 999px; background: #4d4d4d; color: #ffffff; display: grid; place-items: center">↑</span>
+  </nav>
+</div>
+
+</body>
+</html>
