@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-014 Veldboek — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-014: de voorpagina als veldboek. Links een vaste kolom met wie en wat;
+   rechts loopt het werk als dagboek, nieuwste bovenaan. */
+.boek{display:grid;grid-template-columns:4fr 8fr;gap:clamp(24px,4vw,64px);align-items:start}
+.zij{position:sticky;top:24px;display:flex;flex-direction:column;gap:28px;padding-top:24px}
+.zij h1{margin:0;font-size:clamp(32px,3.2vw,48px);line-height:1.06;letter-spacing:-.025em}
+.zij p{margin:0;line-height:1.6;color:var(--muted)}
+.inhoud{list-style:none;margin:0;padding:0;border-top:1px solid var(--lijn)}
+.inhoud li{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--lijn)}
+.inhoud a{text-decoration:none}
+.log{list-style:none;margin:0;padding:24px 0 0}
+.notitie{display:grid;grid-template-columns:140px minmax(0,1fr);gap:24px;padding:40px 0;border-top:1px solid var(--lijn)}
+.notitie:first-child{border-top:0;padding-top:0}
+.notitie .datum{display:flex;flex-direction:column;gap:6px}
+.notitie h2{margin:0;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.02em;line-height:1.1}
+.notitie p{margin:14px 0 0;max-width:52ch;line-height:1.6;color:var(--muted)}
+.platen{display:flex;gap:16px;margin-top:24px;flex-wrap:wrap}
+.platen .ph{width:clamp(120px,14vw,200px);aspect-ratio:3/4}
+.platen .ph.breed{width:clamp(200px,26vw,380px);aspect-ratio:4/3}
+.gepland{opacity:.55}
+.gepland .datum .lbl:first-child::after{content:" · gepland"}
+@media (max-width:767px){
+  .boek{grid-template-columns:1fr}
+  .zij{position:static}
+  .notitie{grid-template-columns:1fr;gap:10px}
+  .notitie .datum{flex-direction:row;gap:12px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="#">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="#">KENNISMAKEN</a><span class="lbl">Weergave</span></span>
+  </header>
+
+  <main class="boek">
+    <aside class="zij">
+      <p class="lbl muted">Veldboek · Stein en omgeving</p>
+      <h1 class="syne">Een vijver en tuin die gezond blijven.</h1>
+      <p>Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
+      <ul class="inhoud lbl">
+        <li><a href="#">GR / 001 · Vijverrenovatie</a><span class="muted">2026</span></li>
+        <li><a href="#">GR / 002 · Terras Geulle</a><span class="muted">2026</span></li>
+        <li><a href="#">Zo werk ik</a><span class="muted">6 stappen</span></li>
+      </ul>
+    </aside>
+
+    <ol class="log" aria-label="Veldboek, nieuwste eerst">
+      <li class="notitie gepland">
+        <div class="datum"><span class="lbl">Voorjaar 2027</span><span class="lbl muted">GR / 001</span></div>
+        <div><h2 class="syne">Verdere aanplant rond de vijvers</h2><p>Na de afronding van het technische werk krijgt het groen een eigen vervolgstap.</p></div>
+      </li>
+      <li class="notitie">
+        <div class="datum"><span class="lbl">Oktober 2026</span><span class="lbl muted">GR / 001</span></div>
+        <div><h2 class="syne">In afronding</h2><p>Twee vijvers, een waterval en een beekloop verbonden tot één watersysteem. Circa 120 uur werk, inclusief denkwerk.</p>
+          <div class="platen"><div class="ph breed">F10 · de waterval</div><div class="ph">F04-2 · kogelkranen</div></div></div>
+      </li>
+      <li class="notitie">
+        <div class="datum"><span class="lbl">September 2026</span><span class="lbl muted">GR / 001</span></div>
+        <div><h2 class="syne">Keien aan de waterlijn</h2><p>Rond circa twaalf meter waterlijn en zes meter beekrand ontmoeten water, steen en planten elkaar.</p>
+          <div class="platen"><div class="ph">F08-1 · keien op de folie</div><div class="ph">F08-2 · Nick aan het werk</div></div></div>
+      </li>
+      <li class="notitie">
+        <div class="datum"><span class="lbl">Augustus 2026</span><span class="lbl muted">GR / 002</span></div>
+        <div><h2 class="syne">Een terras van 24 m², gelegd in twee dagen</h2><p>Betontegels van 60 × 60 × 4 cm in Geulle. Het leggen zelf kostte ongeveer 8 uur.</p>
+          <div class="platen"><div class="ph">T02 · het pad</div><div class="ph">T03 · klaar</div></div></div>
+      </li>
+      <li class="notitie">
+        <div class="datum"><span class="lbl">Juli 2026</span><span class="lbl muted">GR / 001</span></div>
+        <div><h2 class="syne">De beekloop in aanbouw</h2><p>Vijverfolie, grind en de eerste stenen van de beekloop.</p>
+          <div class="platen"><div class="ph">F11 · beekloop</div></div></div>
+      </li>
+    </ol>
+  </main>
+
+  <section class="sectie" aria-labelledby="stappen-kop">
+    <p class="lbl muted" id="stappen-kop" style="margin:0">Zo werk ik</p>
+    <div class="stappen">
+      <details class="stap"><summary><span class="lbl">01</span><span class="syne titel">Eerst kijken</span><span class="tekst">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</span></summary><p class="tekst-los">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</p></details>
+      <details class="stap"><summary><span class="lbl">02</span><span class="syne titel">Uitzoeken hoe het werkt</span><span class="tekst">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</span></summary><p class="tekst-los">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</p></details>
+      <details class="stap"><summary><span class="lbl">03</span><span class="syne titel">Verbanden leggen</span><span class="tekst">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</span></summary><p class="tekst-los">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</p></details>
+      <details class="stap"><summary><span class="lbl">04</span><span class="syne titel">Ontwerpen</span><span class="tekst">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</span></summary><p class="tekst-los">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</p></details>
+      <details class="stap"><summary><span class="lbl">05</span><span class="syne titel">Aanleggen</span><span class="tekst">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</span></summary><p class="tekst-los">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</p></details>
+      <details class="stap"><summary><span class="lbl">06</span><span class="syne titel">Laten groeien</span><span class="tekst">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</span></summary><p class="tekst-los">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</p></details>
+    </div>
+  </section>
+
+  <section class="einde"><a class="syne" href="#">Kennismaken</a><p class="lbl muted" style="margin-top:24px">hello@gronn.studio · +316 181 180 14</p></section>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="#">KENNISMAKEN</a><div class="pil"><a href="#">VIJVERS</a><a href="#">TUINEN</a><a href="/werk">WERK</a><a href="#">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+</body>
+</html>

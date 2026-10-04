@@ -8,54 +8,171 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#fff;color:#111;font-family:Montserrat,sans-serif;font-size:15px;line-height:1.5}
-main{max-width:1200px;margin:0 auto;padding:48px clamp(16px,4vw,48px) 96px}
+html,body{height:100%}
+body{margin:0;background:#fff;color:#111;font-family:Montserrat,sans-serif;font-size:14px;line-height:1.45}
 a{color:#111}
 .mono{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em}
 .muted{color:#666}
-h1{font-size:28px;font-weight:600;margin:32px 0 8px}
-p.intro{margin:0 0 32px;color:#666;max-width:70ch}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-family:'Geist Mono',monospace;font-size:12px;font-weight:400;letter-spacing:.04em;color:#666;padding:8px 12px 8px 0;border-bottom:1px solid #111}
-td{padding:12px 12px 12px 0;border-bottom:1px solid #e2e2e2;vertical-align:top}
-td a{font-weight:500}
-@media (max-width:760px){
-  thead{display:none}
-  tr{display:block;padding:12px 0;border-bottom:1px solid #e2e2e2}
-  td{display:block;border:0;padding:2px 0}
+.app{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);height:100vh}
+/* lijst */
+.lijst{border-right:1px solid #e2e2e2;display:flex;flex-direction:column;min-height:0}
+.lijst-kop{padding:20px 20px 12px;border-bottom:1px solid #e2e2e2}
+.lijst-kop h1{font-size:18px;font-weight:600;margin:10px 0 4px}
+.lijst-kop p{margin:0;color:#666;font-size:13px}
+.items{list-style:none;margin:0;padding:0;overflow:auto;flex:1}
+.item button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 10px;width:100%;padding:12px 20px;border-bottom:1px solid #eee;cursor:pointer}
+.item button:hover{background:#f6f6f6}
+.item button:focus-visible{outline:2px solid #111;outline-offset:-2px}
+.item button[aria-current="true"]{background:#111;color:#fff}
+.item button[aria-current="true"] .muted{color:#bbb}
+.item .titel{font-weight:500}
+.item .status{grid-column:2;font-size:12px}
+.item .toel{grid-column:2;font-size:12px}
+.item.geen button{cursor:default;opacity:.6}
+.item.geen button:hover{background:none}
+/* kijker */
+.kijker{display:flex;flex-direction:column;min-width:0;min-height:0;background:#f2f2f2}
+.balk{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:12px 20px;background:#fff;border-bottom:1px solid #e2e2e2}
+.switch{display:inline-flex;border:1px solid #d0d0d0;border-radius:999px;padding:3px}
+.switch button{all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em}
+.switch button[aria-pressed="true"]{background:#111;color:#fff}
+.switch button:focus-visible{outline:2px solid #111;outline-offset:2px}
+.scherm{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;padding:20px}
+.toestel{position:relative;background:#fff;box-shadow:0 0 0 1px #d0d0d0,0 20px 50px -30px rgba(0,0,0,.4);overflow:hidden;flex:none}
+.toestel.telefoon,.toestel.tablet{border-radius:28px;box-shadow:0 0 0 10px #222,0 20px 50px -20px rgba(0,0,0,.5)}
+.toestel iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;background:#fff}
+.leeg{margin:auto;color:#666}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;min-height:100vh}
+  .lijst{border-right:0;border-bottom:1px solid #e2e2e2}
+  .items{max-height:40vh}
+  .kijker{min-height:80vh}
 }
 </style>
 </head>
 <body>
-<main>
-  <a class="mono" href="/">← Wireframes</a>
-  <h1>Naslag: alle wireframes</h1>
-  <p class="intro">Nieuwste bovenaan. Niets wordt overschreven: een nieuwe versie krijgt een nieuw nummer. Andere layout oppakken? Noem het nummer, bijvoorbeeld "pak WF-003 op".</p>
+<div class="app">
+  <aside class="lijst" aria-label="Alle wireframes">
+    <div class="lijst-kop">
+      <a class="mono" href="/">← Wireframes</a>
+      <h1>Naslag</h1>
+      <p>Nieuwste bovenaan. Klik een regel om hem rechts live te bekijken. Andere layout oppakken? Noem het nummer.</p>
+    </div>
+    <ul class="items" id="items"></ul>
+  </aside>
 
-  <!-- Nieuwe wireframe: voeg BOVENAAN een <tr> toe met het volgende WF-nummer
-       en een eigen bestand in public/. Oude bestanden blijven staan. -->
-  <table>
-    <thead>
-      <tr><th>Nr</th><th>Wireframe</th><th>Datum</th><th>Status</th><th>Toelichting</th></tr>
-    </thead>
-    <tbody>
-      <tr><td class="mono">WF-013</td><td><a href="/keuze-2">Voorpagina: spread + Zo werk ik</a></td><td class="mono muted">4 okt 2026</td><td>Ter keuze</td><td class="muted">Tweede keus na WF-011: opening van WF-001, rest van WF-011.</td></tr>
-      <tr><td class="mono">WF-012</td><td><a href="/werk">Werk: lijst en raster</a></td><td class="mono muted">4 okt 2026</td><td>Gekozen</td><td class="muted">Schakelaar lijst/raster behouden (Nick).</td></tr>
-      <tr><td class="mono">WF-011</td><td><a href="/keuze">Voorpagina: index + Zo werk ik</a></td><td class="mono muted">4 okt 2026</td><td>Verlaten</td><td class="muted">"Als opening afgezaagd" (Nick).</td></tr>
-      <tr><td class="mono">WF-010</td><td><a href="/werk-2-raster">Werk 2 — raster</a></td><td class="mono muted">4 okt 2026</td><td>Opgegaan in WF-012</td><td class="muted">Naar Con-Tour.</td></tr>
-      <tr><td class="mono">WF-009</td><td><a href="/werk-1-lijst">Werk 1 — lijst</a></td><td class="mono muted">4 okt 2026</td><td>Opgegaan in WF-012</td><td class="muted">Naar Arkitektkontoret Vest.</td></tr>
-      <tr><td class="mono">WF-008</td><td><a href="/d-telefoon">D — Verhaal in stappen, telefoon</a></td><td class="mono muted">4 okt 2026</td><td>Stappen gebruikt</td><td class="muted">Zes stappen om open te tikken.</td></tr>
-      <tr><td class="mono">WF-007</td><td><a href="/c-telefoon">C — Volle foto, telefoon</a></td><td class="mono muted">4 okt 2026</td><td>Alternatief</td><td class="muted">Eerste scherm alleen foto en woordmerk.</td></tr>
-      <tr><td class="mono">WF-006</td><td><a href="/b-telefoon">B — Index, telefoon</a></td><td class="mono muted">4 okt 2026</td><td>Verlaten</td><td class="muted">Zie WF-011.</td></tr>
-      <tr><td class="mono">WF-005</td><td><a href="/a-telefoon">A — Spread, telefoon</a></td><td class="mono muted">4 okt 2026</td><td>Basis voor WF-013</td><td class="muted">Foto boven, tekst eronder.</td></tr>
-      <tr><td class="mono">WF-004</td><td><a href="/d-verhaal">D — Verhaal in stappen</a></td><td class="mono muted">4 okt 2026</td><td>Stappen gebruikt</td><td class="muted">Naar Bartosz Kolenda.</td></tr>
-      <tr><td class="mono">WF-003</td><td><a href="/c-volle-foto">C — Volle foto</a></td><td class="mono muted">4 okt 2026</td><td>Alternatief</td><td class="muted">Naar Stefan Morael.</td></tr>
-      <tr><td class="mono">WF-002</td><td><a href="/b-index">B — Index</a></td><td class="mono muted">4 okt 2026</td><td>Verlaten</td><td class="muted">Naar Piet Oudolf. Zie WF-011.</td></tr>
-      <tr><td class="mono">WF-001</td><td><a href="/a-spread">A — Spread</a></td><td class="mono muted">4 okt 2026</td><td>Basis voor WF-013</td><td class="muted">Naar Phlypo.</td></tr>
-      <tr><td class="mono">Build 2</td><td>Redactionele spread (in kleur)</td><td class="mono muted">4 okt 2026</td><td>Verlaten</td><td class="muted">Alleen in git: commit 9a25811.</td></tr>
-      <tr><td class="mono">Build 1</td><td>Foto met kop erover (in kleur)</td><td class="mono muted">4 okt 2026</td><td>Verlaten</td><td class="muted">Alleen in git: commit 0f23a74. "Nog niet prijswinnend" (Nick).</td></tr>
-    </tbody>
-  </table>
-</main>
+  <section class="kijker" aria-label="Live weergave">
+    <div class="balk">
+      <div><span class="mono" id="nu-nr">—</span> <span id="nu-titel" style="font-weight:500">Kies een wireframe</span></div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <div class="switch" role="group" aria-label="Schermgrootte">
+          <button type="button" data-toestel="desktop" aria-pressed="true">Desktop</button>
+          <button type="button" data-toestel="tablet" aria-pressed="false">Tablet</button>
+          <button type="button" data-toestel="telefoon" aria-pressed="false">Telefoon</button>
+        </div>
+        <a class="mono" id="los" href="#" target="_blank" rel="noopener">Open los ↗</a>
+      </div>
+    </div>
+    <div class="scherm" id="scherm">
+      <div class="toestel" id="toestel"><iframe id="frame" title="Live weergave van de gekozen wireframe"></iframe></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ── De naslag ───────────────────────────────────────────────────────
+   Nieuwe wireframe? Zet BOVENAAN een regel erbij met het volgende
+   WF-nummer en een eigen bestand in public/. Oude bestanden blijven. */
+const WIREFRAMES = [
+  { nr: "WF-016", titel: "Voorpagina: contactvel + Zo werk ik", src: "/contactvel.html", status: "Ter keuze", toel: "Alle foto's als één genummerde reeks." },
+  { nr: "WF-015", titel: "Voorpagina: systeem + Zo werk ik", src: "/systeem.html", status: "Ter keuze", toel: "Lijntekening van het watersysteem als opening." },
+  { nr: "WF-014", titel: "Voorpagina: veldboek + Zo werk ik", src: "/veldboek.html", status: "Ter keuze", toel: "Het werk als dagboek per maand." },
+  { nr: "WF-013", titel: "Voorpagina: spread + Zo werk ik", src: "/keuze-2.html", status: "Verlaten", toel: "Nick wil een andere hoofdlayout." },
+  { nr: "WF-012", titel: "Werk: lijst en raster", src: "/werk.html", status: "Gekozen", toel: "Schakelaar lijst/raster behouden (Nick)." },
+  { nr: "WF-011", titel: "Voorpagina: index + Zo werk ik", src: "/keuze.html", status: "Verlaten", toel: "\"Als opening afgezaagd\" (Nick)." },
+  { nr: "WF-010", titel: "Werk 2 — raster", src: "/werk-2-raster.html", status: "Opgegaan in WF-012", toel: "Naar Con-Tour." },
+  { nr: "WF-009", titel: "Werk 1 — lijst", src: "/werk-1-lijst.html", status: "Opgegaan in WF-012", toel: "Naar Arkitektkontoret Vest." },
+  { nr: "WF-008", titel: "D — Verhaal in stappen, telefoon", src: "/d-telefoon.html", status: "Stappen gebruikt", toel: "Tekening op telefoonformaat." },
+  { nr: "WF-007", titel: "C — Volle foto, telefoon", src: "/c-telefoon.html", status: "Alternatief", toel: "Tekening op telefoonformaat." },
+  { nr: "WF-006", titel: "B — Index, telefoon", src: "/b-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
+  { nr: "WF-005", titel: "A — Spread, telefoon", src: "/a-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
+  { nr: "WF-004", titel: "D — Verhaal in stappen", src: "/d-verhaal.html", status: "Stappen gebruikt", toel: "Naar Bartosz Kolenda." },
+  { nr: "WF-003", titel: "C — Volle foto", src: "/c-volle-foto.html", status: "Alternatief", toel: "Naar Stefan Morael." },
+  { nr: "WF-002", titel: "B — Index", src: "/b-index.html", status: "Verlaten", toel: "Naar Piet Oudolf." },
+  { nr: "WF-001", titel: "A — Spread", src: "/a-spread.html", status: "Verlaten", toel: "Naar Phlypo." },
+  { nr: "Build 2", titel: "Redactionele spread (in kleur)", src: null, status: "Verlaten", toel: "Alleen in git: commit 9a25811." },
+  { nr: "Build 1", titel: "Foto met kop erover (in kleur)", src: null, status: "Verlaten", toel: "Alleen in git: commit 0f23a74." },
+]
+
+const TOESTELLEN = { desktop: [1440, 900], tablet: [834, 1112], telefoon: [390, 844] }
+
+const lijst = document.getElementById('items')
+const frame = document.getElementById('frame')
+const toestel = document.getElementById('toestel')
+const scherm = document.getElementById('scherm')
+let gekozen = null
+let soort = 'desktop'
+
+const bewaar = () => { try { localStorage.setItem('gronn-naslag', JSON.stringify({ nr: gekozen?.nr, soort })) } catch {} }
+
+WIREFRAMES.forEach((w) => {
+  const li = document.createElement('li')
+  li.className = 'item' + (w.src ? '' : ' geen')
+  li.innerHTML = `<button type="button"><span class="mono">${w.nr}</span><span class="titel">${w.titel}</span><span class="status muted">${w.status}</span><span class="toel muted">${w.toel}</span></button>`
+  const b = li.querySelector('button')
+  if (w.src) b.addEventListener('click', () => kies(w))
+  else b.setAttribute('aria-disabled', 'true')
+  w.knop = b
+  lijst.appendChild(li)
+})
+
+function kies(w) {
+  gekozen = w
+  WIREFRAMES.forEach((x) => x.knop.setAttribute('aria-current', String(x === w)))
+  document.getElementById('nu-nr').textContent = w.nr
+  document.getElementById('nu-titel').textContent = w.titel
+  document.getElementById('los').href = w.src.replace('.html', '')
+  frame.src = w.src
+  bewaar()
+}
+
+function zetToestel(s) {
+  soort = s
+  document.querySelectorAll('[data-toestel]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.toestel === s)))
+  toestel.className = 'toestel ' + s
+  pas()
+  bewaar()
+}
+
+// Past het toestel in het venster. Desktop en tablet vullen de hoogte
+// (zo zie je zoveel mogelijk van de pagina), de telefoon blijft een telefoon.
+function pas() {
+  const [b, h] = TOESTELLEN[soort]
+  const rand = soort === 'desktop' ? 0 : 20
+  const cw = scherm.clientWidth - 40 - rand, ch = scherm.clientHeight - 40 - rand
+  let schaal = Math.min(cw / b, 1)
+  let hoog = soort === 'desktop' ? ch / schaal : h
+  if (soort !== 'desktop') { schaal = Math.min(cw / b, ch / h, 1); hoog = h }
+  frame.style.width = b + 'px'
+  frame.style.height = hoog + 'px'
+  frame.style.transform = `scale(${schaal})`
+  toestel.style.width = b * schaal + 'px'
+  toestel.style.height = hoog * schaal + 'px'
+}
+
+document.querySelectorAll('[data-toestel]').forEach((b) => b.addEventListener('click', () => zetToestel(b.dataset.toestel)))
+// In het venster hoort de terugknop van de wireframe zelf niet.
+frame.addEventListener('load', () => { try { frame.contentDocument.querySelector('.terug')?.remove() } catch {} })
+new ResizeObserver(pas).observe(scherm)
+
+let start = WIREFRAMES[0]
+try {
+  const m = JSON.parse(localStorage.getItem('gronn-naslag') || '{}')
+  if (m.soort && TOESTELLEN[m.soort]) soort = m.soort
+  start = WIREFRAMES.find((w) => w.nr === m.nr && w.src) || start
+} catch {}
+zetToestel(soort)
+kies(start)
+</script>
 </body>
 </html>
