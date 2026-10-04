@@ -27,11 +27,11 @@
 .paar .ph:first-child{aspect-ratio:9/16}
 .paar .ph:last-child{grid-column:3;aspect-ratio:9/16}
 .tekening{width:100%;max-width:900px;height:auto;font-family:'Geist Mono',monospace;display:block;margin:0 auto}
-.tekening text{font-size:11px;letter-spacing:.06em;fill:#111}
-.tekening .noot{fill:#666;font-size:10px}
-.tekening .lijn{stroke:#111;stroke-width:1;fill:none}
-.tekening .vak{fill:#fff;stroke:#111}
-.tekening .vijver{fill:#e9e9e9;stroke:#111}
+.tekening text{font-size:11px;letter-spacing:.06em;fill:#202020}
+.tekening .noot{fill:#5E5E5B;font-size:10px}
+.tekening .lijn{stroke:#202020;stroke-width:1;fill:none}
+.tekening .vak{fill:#EFEEEA;stroke:#202020}
+.tekening .vijver{fill:#B8C5A8;stroke:#202020}
 .inhoud{columns:2;column-gap:32px;margin-top:24px}
 .inhoud div{break-inside:avoid;display:flex;gap:16px;padding:10px 0;border-top:1px solid var(--lijn)}
 .tabel{width:100%;border-collapse:collapse;margin-top:24px}
@@ -40,7 +40,7 @@
 .volgende{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--lijn);padding-top:16px;text-decoration:none}
 @media (max-width:767px){
   .titel,.lees{grid-template-columns:1fr}
-  .titel p,.lees .kolom{grid-column:1}
+  .titel p:not(.lbl),.lees .kolom{grid-column:1}
   .fiche{grid-template-columns:repeat(2,minmax(0,1fr))}
   .cijfer{grid-template-columns:1fr}
   .cijfer .getal,.cijfer .wat{grid-column:1}

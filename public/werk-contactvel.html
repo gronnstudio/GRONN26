@@ -11,7 +11,7 @@
 /* WF-044: Werk als contactvel. Alle beelden van beide projecten klein en
    genummerd, per project gegroepeerd met een kop en een fiche erboven. */
 .groep{margin-top:clamp(56px,7vw,96px)}
-.groep-kop{display:grid;grid-template-columns:3fr 7fr 2fr;column-gap:32px;align-items:baseline;border-top:1px solid #111;padding-top:14px}
+.groep-kop{display:grid;grid-template-columns:3fr 7fr 2fr;column-gap:32px;align-items:baseline;border-top:1px solid #202020;padding-top:14px}
 .groep-kop h2{margin:0;font-size:clamp(26px,3vw,44px);line-height:1.05;letter-spacing:-.025em}
 .groep-kop .lnk{justify-self:end;white-space:nowrap}
 .fiche{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 24px;margin-top:24px;border-top:1px solid var(--lijn)}
@@ -20,10 +20,10 @@
 .vel a{text-decoration:none;display:flex;flex-direction:column;gap:6px;min-width:0}
 .vel .ph{aspect-ratio:3/4;padding:6px;font-size:9px;overflow-wrap:anywhere}
 .vel .nr{font-family:'Geist Mono',monospace;font-size:10px;color:var(--muted);line-height:1.35;overflow-wrap:anywhere}
-.vel .ai .ph{background:#fff;outline:1px solid var(--lijn);outline-offset:-1px}
+.vel .ai .ph{background:#EFEEEA;outline:1px solid var(--lijn);outline-offset:-1px}
 .vel .ai .ph{position:relative}
 .vel .ai .ph::before{content:"AI-visualisatie · geen foto";position:absolute;top:6px;left:6px;right:6px}
-.vel .leeg .ph{background:#fff;outline:1px dashed var(--lijn);outline-offset:-1px}
+.vel .leeg .ph{background:#EFEEEA;outline:1px dashed var(--lijn);outline-offset:-1px}
 .balk{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--lijn);padding-bottom:10px;margin-top:clamp(40px,5vw,64px)}
 .legenda{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px}
 @media (max-width:1100px){.vel{grid-template-columns:repeat(6,minmax(0,1fr))}}

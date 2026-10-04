@@ -21,7 +21,7 @@
   .regelaar:hover{background:rgba(127,127,127,.15)}
   .regelaar:focus-visible{outline:2px solid currentColor;outline-offset:2px}
   .regelaar[aria-expanded="true"]{background:rgba(127,127,127,.2)}
-  .wv-paneel{position:fixed;top:72px;right:clamp(12px,4vw,56px);z-index:200;width:320px;max-width:calc(100vw - 24px);background:var(--wv-bg,#fff);color:var(--wv-ink,#111);border:1px solid var(--wv-lijn,rgba(0,0,0,.15));box-shadow:0 24px 60px -30px rgba(0,0,0,.45);padding:20px;font-family:Montserrat,sans-serif;font-size:14px}
+  .wv-paneel{position:fixed;top:72px;right:clamp(12px,4vw,56px);z-index:200;width:320px;max-width:calc(100vw - 24px);background:var(--wv-bg,#EFEEEA);color:var(--wv-ink,#202020);border:1px solid var(--wv-lijn,rgba(0,0,0,.15));box-shadow:0 24px 60px -30px rgba(0,0,0,.45);padding:20px;font-family:Montserrat,sans-serif;font-size:14px}
   .wv-paneel[hidden]{display:none}
   .wv-kop{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
   .wv-kop strong{font-size:15px;font-weight:600}
@@ -32,26 +32,27 @@
   .wv-seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--wv-lijn,rgba(0,0,0,.2));border-radius:999px;padding:3px}
   .wv-seg label{text-align:center;padding:8px 0;border-radius:999px;cursor:pointer;font-size:13px;font-weight:500}
   .wv-seg input{position:absolute;opacity:0;pointer-events:none}
-  .wv-seg label:has(input:checked){background:var(--wv-ink,#111);color:var(--wv-bg,#fff)}
-  .wv-seg label:has(input:focus-visible){outline:2px solid var(--wv-ink,#111);outline-offset:2px}
+  .wv-seg label:has(input:checked){background:var(--wv-ink,#202020);color:var(--wv-bg,#EFEEEA)}
+  .wv-seg label:has(input:focus-visible){outline:2px solid var(--wv-ink,#202020);outline-offset:2px}
   .wv-uitleg{margin:8px 0 0;font-size:12px;opacity:.7}
   .wv-rij{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--wv-lijn,rgba(0,0,0,.12));cursor:pointer}
   .wv-rij:last-child{border-bottom:1px solid var(--wv-lijn,rgba(0,0,0,.12))}
   .wv-rij input{appearance:none;-webkit-appearance:none;margin:0;flex:none;width:40px;height:24px;border-radius:999px;background:rgba(127,127,127,.35);position:relative;cursor:pointer;transition:background .2s}
-  .wv-rij input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
-  .wv-rij input:checked{background:var(--wv-ink,#111)}
-  .wv-rij input:checked::after{transform:translateX(16px);background:var(--wv-bg,#fff)}
-  .wv-rij input:focus-visible{outline:2px solid var(--wv-ink,#111);outline-offset:2px}
+  .wv-rij input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#EFEEEA;transition:transform .2s}
+  .wv-rij input:checked{background:var(--wv-ink,#202020)}
+  .wv-rij input:checked::after{transform:translateX(16px);background:var(--wv-bg,#EFEEEA)}
+  .wv-rij input:focus-visible{outline:2px solid var(--wv-ink,#202020);outline-offset:2px}
   .wv-reset{all:unset;cursor:pointer;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid currentColor;margin-top:4px}
   @media (max-width:767px){.wv-paneel{top:auto;bottom:84px;left:12px;right:12px;width:auto}}
 
   /* de keuzes zelf */
-  html.wv-donker{--wv-bg:#171717;--wv-ink:#ececec;--wv-lijn:rgba(255,255,255,.18);--ink:#ececec;--muted:#a6a6a6;--ph:#3a3a3a;--lijn:rgba(255,255,255,.18);color-scheme:dark}
-  html.wv-donker body{background:#171717;color:#ececec}
-  html.wv-donker .tekening text{fill:#ececec}html.wv-donker .tekening .noot{fill:#a6a6a6}
-  html.wv-donker .tekening .lijn{stroke:#ececec}html.wv-donker .tekening .vak{fill:#171717;stroke:#ececec}html.wv-donker .tekening .vijver{fill:#3a3a3a;stroke:#ececec}
-  html.wv-donker .kennis{background:#2c2c2c}
-  html.wv-donker .cta,html.wv-donker .knop{color:#111}
+  html.wv-donker{--wv-bg:#202020;--wv-ink:#EFEEEA;--wv-lijn:rgba(255,255,255,.18);--ink:#EFEEEA;--muted:#A9A8A3;--ph:#333331;--lijn:rgba(255,255,255,.18);color-scheme:dark}
+  html.wv-donker .ph{color:#A9A8A3}
+  html.wv-donker body{background:#202020;color:#EFEEEA}
+  html.wv-donker .tekening text{fill:#EFEEEA}html.wv-donker .tekening .noot{fill:#A9A8A3}
+  html.wv-donker .tekening .lijn{stroke:#EFEEEA}html.wv-donker .tekening .vak{fill:#202020;stroke:#EFEEEA}html.wv-donker .tekening .vijver{fill:#23483A;stroke:#EFEEEA}
+  html.wv-donker .kennis{background:#23483A}
+  html.wv-donker .cta,html.wv-donker .knop{color:#202020}
   html.wv-groot main{zoom:1.15}
   html.wv-contrast{--muted:var(--ink);--lijn:currentColor}
   html.wv-contrast .muted{color:inherit !important;opacity:1}
@@ -83,7 +84,7 @@
   knop.setAttribute('aria-expanded', 'false')
   knop.setAttribute('aria-controls', 'wv-paneel')
   /* het regelaar-icoon: drie schuiven */
-  knop.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 5h14M3 10h14M3 15h14"/><circle cx="7" cy="5" r="2" fill="var(--wv-bg,#fff)"/><circle cx="13" cy="10" r="2" fill="var(--wv-bg,#fff)"/><circle cx="9" cy="15" r="2" fill="var(--wv-bg,#fff)"/></svg>'
+  knop.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 5h14M3 10h14M3 15h14"/><circle cx="7" cy="5" r="2" fill="var(--wv-bg,#EFEEEA)"/><circle cx="13" cy="10" r="2" fill="var(--wv-bg,#EFEEEA)"/><circle cx="9" cy="15" r="2" fill="var(--wv-bg,#EFEEEA)"/></svg>'
 
   const paneel = document.createElement('div')
   paneel.id = 'wv-paneel'
