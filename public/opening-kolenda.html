@@ -123,6 +123,12 @@
 .opnieuw{position:fixed;left:16px;bottom:140px;z-index:60;background:#202020;color:#EFEEEA;font:12px/1 'Geist Mono',monospace;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;border:0;cursor:pointer}
 @media (max-width:1023px){.intro .zin{max-width:640px;padding-bottom:32px}.intro .zin p{padding-inline:20px}.intro .merk{bottom:80px}.opnieuw{bottom:128px}}
 @media (prefers-reduced-motion:reduce){.intro{display:none}}
+
+/* Geen werk op de voorpagina (eigenaar 4 okt 2026): alleen foto's, zonder projectnamen of links. */
+.beeld .breed{aspect-ratio:21/9}
+.beeld .paar{display:grid;grid-template-columns:5fr 7fr;gap:32px;margin-top:32px;align-items:end}
+.beeld .paar .ph:first-child{aspect-ratio:4/5}.beeld .paar .ph:last-child{aspect-ratio:4/3}
+@media (max-width:767px){.beeld .breed{aspect-ratio:4/3}.beeld .paar{grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.beeld .paar .ph{aspect-ratio:3/4 !important}}
 </style>
 </head>
 <body>
@@ -153,25 +159,16 @@
       </div>
     </section>
 
-    <section class="sectie" aria-labelledby="h-werk">
-      <div class="hoofdstuk"><span class="lbl" id="h-werk">01 — Werk</span><a class="lnk" href="/werk">Alle werk · lijst of raster →</a></div>
-      <div class="projecten">
-        <a class="project" href="/project-vijverrenovatie">
-          <div class="ph">Foto F01 · vijverrenovatie</div>
-          <h3 class="syne">Twee vijvers. Eén samenhangend watersysteem.</h3>
-          <div class="fiche lbl"><span>GR / 001</span><span>Vijverrenovatie</span><span>circa 120 uur</span><span>In afronding</span></div>
-        </a>
-        <a class="project twee" href="#">
-          <div class="ph">Foto T02 · terras Geulle</div>
-          <h3 class="syne">Een terras van 24 m², gelegd in twee dagen.</h3>
-          <div class="fiche lbl"><span>GR / 002</span><span>Geulle</span><span>24 m²</span><span>2 dagen</span></div>
-        </a>
-      </div>
+    <section class="sectie beeld" aria-label="Beeld">
+      <div class="ph breed">Foto F01</div>
+      <div class="paar"><div class="ph">Foto F08-2</div><div class="ph">Foto F11</div></div>
+    </section>
 
+    <section class="sectie" aria-label="De waterroute">
       <div class="systeem">
         <figure>
           <svg class="tekening" viewBox="0 0 640 460" role="img" aria-labelledby="sys-titel">
-          <title id="sys-titel">De waterroute van GR / 001: van vijver B via pomp en filter naar vijver A en de waterval, en via de beekloop terug.</title>
+          <title id="sys-titel">De waterroute: van vijver B via pomp en filter naar vijver A en de waterval, en via de beekloop terug.</title>
           <!-- lijnen -->
           <path class="lijn" d="M120 380 V300 H200" />
           <path class="lijn" d="M260 300 H330" />
@@ -193,21 +190,20 @@
           <text x="330" y="340" class="noot">3 KAMERS · BYPASS</text>
           <text x="340" y="182" class="noot">50 MM DRUK-PVC</text>
           <text x="462" y="212" class="noot">2 TAKKEN</text><text x="462" y="226" class="noot">REGELBAAR</text>
-          <text x="20" y="40" class="noot">GR / 001 — WATERROUTE · SCHEMATISCH</text>
+          <text x="20" y="40" class="noot">WATERROUTE · SCHEMATISCH</text>
         </svg>
           <figcaption class="legenda lbl muted"><span>— aanvoer onder druk</span><span>- - - terug onder vrij verval</span></figcaption>
         </figure>
         <div class="uitleg">
-          <p class="lbl" style="margin:0;color:var(--ink)">GR / 001 · De waterroute</p>
+          <p class="lbl" style="margin:0;color:var(--ink)">De waterroute</p>
           <p>Vanuit vijver B gaat het water via de pomp naar het driekamerfilter. Na de filtratie wordt het verdeeld over twee takken: één richting vijver A en één richting de waterval.</p>
           <p>Het water van de waterval loopt via de beekloop terug naar vijver B. Vijver A voert via de afvoer- en overloopverbinding terug naar vijver B.</p>
-          <p style="margin-top:28px"><a class="lnk" href="/project-vijverrenovatie" style="color:var(--ink)">Bekijk het project →</a></p>
         </div>
       </div>
     </section>
 
     <section class="sectie" aria-labelledby="h-over">
-      <div class="hoofdstuk"><span class="lbl" id="h-over">02 — Over</span></div>
+      <div class="hoofdstuk"><span class="lbl" id="h-over">01 — Over</span></div>
       <div class="over">
         <div class="ph">Portret Nick</div>
         <div class="tekst">
@@ -219,7 +215,7 @@
     </section>
 
     <section class="sectie" aria-labelledby="h-stappen">
-      <div class="hoofdstuk" style="margin-bottom:0"><span class="lbl" id="h-stappen">03 — Zo werk ik</span><span class="lbl muted">6 stappen</span></div>
+      <div class="hoofdstuk" style="margin-bottom:0"><span class="lbl" id="h-stappen">02 — Zo werk ik</span><span class="lbl muted">6 stappen</span></div>
       <div class="stappen">
         <details class="stap"><summary><span class="lbl">01</span><span class="syne titel">Eerst kijken</span><span class="tekst">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</span></summary><p class="tekst-los">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</p></details>
         <details class="stap"><summary><span class="lbl">02</span><span class="syne titel">Uitzoeken hoe het werkt</span><span class="tekst">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</span></summary><p class="tekst-los">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</p></details>
@@ -233,7 +229,7 @@
 </div>
 
 <section class="kennis" aria-labelledby="h-kennis">
-  <span class="lbl" id="h-kennis">04 — Kennismaken</span>
+  <span class="lbl" id="h-kennis">03 — Kennismaken</span>
   <a class="groot syne" href="/kennismaken">Kennismaken</a>
   <p class="lbl" style="margin:28px 0 0">hello@gronn.studio · +316 181 180 14 · Stein en omgeving</p>
 </section>
