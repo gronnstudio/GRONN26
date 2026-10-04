@@ -13,7 +13,7 @@
 .held .ph{height:clamp(420px,72vh,820px)}
 .titel{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;padding-top:clamp(48px,6vw,96px)}
 .titel h1{margin:0;font-size:clamp(40px,6vw,88px);line-height:1;letter-spacing:-.035em}
-.titel p{grid-column:2;margin:24px 0 0;max-width:40ch;font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:var(--muted)}
+.titel p:not(.lbl){grid-column:2;margin:24px 0 0;max-width:40ch;font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:var(--muted)}
 .fiche{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 24px;margin-top:clamp(48px,6vw,80px);border-top:1px solid var(--lijn)}
 .fiche div{padding:12px 0;display:flex;flex-direction:column;gap:4px}
 .lees{display:grid;grid-template-columns:3fr 6fr 3fr;column-gap:32px}
