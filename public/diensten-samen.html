@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-047 Vijvers en Tuinen samen — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wf.css">
+<style>
+/* WF-047: Vijvers en Tuinen op één pagina; een schakelaar bovenaan wisselt de lijst, met dezelfde rijen en prijzen als WF-019 en WF-020. */
+.schakel{display:inline-grid;grid-template-columns:1fr 1fr;border:1px solid var(--lijn);border-radius:999px;padding:4px;margin-top:clamp(40px,5vw,64px)}
+.schakel button{all:unset;cursor:pointer;padding:12px 28px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.1em;text-align:center}
+.schakel button[aria-selected="true"]{background:#4d4d4d;color:#fff}
+.schakel button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.paneel[hidden]{display:none}
+.paneel .inleiding{margin:28px 0 0;max-width:46ch;font-size:clamp(18px,1.7vw,22px);line-height:1.5;color:var(--muted)}
+.fase{margin-top:clamp(40px,5vw,72px)}
+</style>
+</head>
+<body>
+<a class="terug" href="/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="pagina-kop" style="grid-template-columns:1fr">
+      <p class="lbl muted" style="margin:0">Diensten · Stein en omgeving</p>
+      <h1 class="syne" style="margin-top:16px">Vijvers en tuinen</h1>
+    </section>
+
+    <div class="schakel" role="tablist" aria-label="Kies een soort werk">
+      <button role="tab" id="tab-vijvers" aria-controls="p-vijvers" aria-selected="true">VIJVERS</button>
+      <button role="tab" id="tab-tuinen" aria-controls="p-tuinen" aria-selected="false" tabindex="-1">TUINEN</button>
+    </div>
+
+    <section class="paneel" id="p-vijvers" role="tabpanel" aria-labelledby="tab-vijvers">
+      <p class="inleiding">Vijvers, beken, watervallen en natte zones. Ik kijk hoe het water door je tuin loopt, hoe het schoon blijft en hoe het regenwater een plek krijgt.</p>
+      <div class="rijen" style="margin-top:40px">
+      <div class="dienst dienst-kop lbl muted" aria-hidden="true" style="padding:10px 0"><span>Nr</span><span>Dienst</span><span>Wat</span><span class="prijs">Prijs incl. btw</span></div>
+      <a class="dienst" href="#"><span class="lbl">01</span><span class="syne naam">Vijverdoorlichting</span><span class="uitleg">Een betaald diagnosebezoek voor een vijver die groen is, lekt, stinkt of waar niets in leeft. Gemeten, niet geraden, en op papier.</span><span class="lbl prijs">€ 195</span></a>
+      <a class="dienst" href="#"><span class="lbl">02</span><span class="syne naam">Vijvers en water</span><span class="uitleg">Renovatie, aanleg en watersystemen: vijvers, beken, watervallen en natte zones.</span><span class="lbl prijs">Op maat</span></a>
+      <a class="dienst" href="#"><span class="lbl">03</span><span class="syne naam">Najaarsbeurt vijver</span><span class="uitleg">Slib afgezogen, afgestorven groei teruggeknipt, filter gereinigd, water gemeten vóór en na.</span><span class="lbl prijs">vanaf € 250</span></a>
+      <a class="dienst" href="#"><span class="lbl">04</span><span class="syne naam">Bladnet plaatsen</span><span class="uitleg">Een net over de vijver vóór de bladval, en er in december weer af.</span><span class="lbl prijs">vanaf € 125</span></a>
+      <a class="dienst" href="#"><span class="lbl">05</span><span class="syne naam">Winterklaar maken</span><span class="uitleg">Techniek eruit, ijsvrijhouder erin, de vijver zo ingericht dat hij de kou doorkomt.</span><span class="lbl prijs">vanaf € 95</span></a>
+      <a class="dienst" href="#"><span class="lbl">06</span><span class="syne naam">Onderhoudsabonnement</span><span class="uitleg">Een vijver verandert elk jaar. Vaste bezoeken per seizoen, zodat hij in balans blijft.</span><span class="lbl prijs">vanaf € 45 p/m</span></a>
+      </div>
+      <p class="lbl muted noot">De doorlichting verreken ik volledig bij een opdracht boven € 750.</p>
+    </section>
+
+    <section class="paneel" id="p-tuinen" role="tabpanel" aria-labelledby="tab-tuinen" hidden>
+      <p class="inleiding">Een ontwerp voor je hele tuin. Ik kijk naar de bodem, het water, het licht en naar hoe jij de tuin gebruikt, en maak daar één plan van.</p>
+      <div class="fase" aria-labelledby="f1">
+      <p class="lbl" id="f1" style="margin:0 0 12px">A · Kijken</p>
+      <a class="dienst" href="#"><span class="lbl">01</span><span class="syne naam">Advies op locatie</span><span class="uitleg">Ik kom kijken, luister naar wat je wilt en zeg eerlijk wat ik zou doen. Een advies dat je zelf kunt uitvoeren.</span><span class="lbl prijs">Op maat</span></a>
+    </div>
+      <div class="fase" aria-labelledby="f2">
+      <p class="lbl" id="f2" style="margin:0 0 12px">B · Ontwerpen</p>
+      <a class="dienst" href="#"><span class="lbl">02</span><span class="syne naam">Tuinontwerp</span><span class="uitleg">Eén plan voor je hele tuin dat met de jaren mee kan. Laat je het door mij aanleggen, dan verreken ik de helft van het ontwerpbedrag.</span><span class="lbl prijs">Offerte</span></a>
+      <a class="dienst" href="#"><span class="lbl">03</span><span class="syne naam">Beplanting</span><span class="uitleg">Planten in lagen, van bodembedekker tot boom, die passen bij de plek en voedsel en beschutting geven.</span><span class="lbl prijs">Op maat</span></a>
+    </div>
+      <div class="fase" aria-labelledby="f3">
+      <p class="lbl" id="f3" style="margin:0 0 12px">C · Aanleggen</p>
+      <a class="dienst" href="#"><span class="lbl">04</span><span class="syne naam">Bestaande tuin omvormen</span><span class="uitleg">Ik kijk wat kan blijven, wat weg mag en hoe de tuin stap voor stap meer leven krijgt.</span><span class="lbl prijs">Op maat</span></a>
+      <a class="dienst" href="#"><span class="lbl">05</span><span class="syne naam">Tuin aanleggen</span><span class="uitleg">Ik leg aan wat we samen bedacht hebben, van de grond tot de laatste plant.</span><span class="lbl prijs">Op maat</span></a>
+    </div>
+    </section>
+
+    <section class="sectie" aria-label="Veelgestelde vraag">
+      <p class="lbl muted" style="margin:0">Vraag</p>
+      <p class="syne" style="margin:16px 0 0;font-size:clamp(24px,2.6vw,36px);letter-spacing:-.02em">Kan ik alleen hulp met mijn vijver krijgen?</p>
+      <p class="muted" style="margin:12px 0 0">Ja. Elk van deze diensten kun je los vragen.</p>
+    </section>
+
+    <section class="einde"><a class="syne" href="/kennismaken">Kennismaken</a><p class="lbl muted" style="margin-top:24px">hello@gronn.studio · +316 181 180 14</p></section>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/vijvers" aria-current="page">VIJVERS</a><a href="/tuinen">TUINEN</a><a href="/werk">WERK</a><a href="/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script>
+/* De schakelaar: wisselt het zichtbare paneel. Pijltjestoetsen werken ook; #tuinen opent Tuinen. */
+(() => {
+  const tabs = [...document.querySelectorAll('.schakel [role=tab]')]
+  const kies = t => tabs.forEach(b => {
+    const aan = b === t
+    b.setAttribute('aria-selected', aan); b.tabIndex = aan ? 0 : -1
+    document.getElementById(b.getAttribute('aria-controls')).hidden = !aan
+  })
+  tabs.forEach((b, i) => {
+    b.addEventListener('click', () => kies(b))
+    b.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+      const n = tabs[(i + 1) % tabs.length]; kies(n); n.focus()
+    })
+  })
+  if (location.hash === '#tuinen') kies(tabs[1])
+})()
+</script>
+<script src="/wf-weergave.js" defer></script>
+</body>
+</html>
