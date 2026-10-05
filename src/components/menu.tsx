@@ -70,7 +70,7 @@ export function Menu() {
 
   return (
     <>
-      <nav aria-label="Hoofdmenu" data-menu className="fixed bottom-5 left-3 z-[101] max-lg:right-[64px] lg:left-1/2 lg:-translate-x-1/2 lg:bottom-10">
+      <nav aria-label="Hoofdmenu" data-menu className="fixed bottom-5 left-3 z-[101] max-lg:right-[68px] lg:left-1/2 lg:-translate-x-1/2 lg:bottom-10">
         <ul className="m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -116,7 +116,7 @@ export function Menu() {
         onClick={pijl}
         data-menu
         aria-label={boven ? "Naar beneden" : "Terug naar boven"}
-        className="fixed right-3 bottom-5 z-[101] grid size-11 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
+        className="fixed right-3 bottom-5 z-[101] grid size-12 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
       >
         <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${boven ? "" : "rotate-180"}`}>
           <path d="M8 1.5v12M2.5 8 8 13.5 13.5 8" fill="none" stroke="currentColor" strokeWidth="1.9" />
