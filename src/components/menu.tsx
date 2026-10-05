@@ -12,7 +12,7 @@ import { useTaal } from "./taal-klant"
 // oranje:
 // - midden onderaan een donkere glazen pil met lichte woorden; hover = wit
 //   vlak met donkere tekst;
-//   de huidige pagina krijgt een wit vlak op Licht en een donker vlak op
+//   de huidige pagina krijgt een donker vlak op Licht en een wit vlak op
 //   Donker (eigenaar, 5 okt 2026); de pijl en zijn ring zijn wit op Licht en
 //   antraciet op Donker; het woordmerk is de weg naar huis, de
 //   regelaar zit achteraan;
@@ -30,7 +30,7 @@ const MENU = [
 ]
 
 const ITEM = "flex items-center rounded-full py-3 text-[12px] leading-4 font-bold tracking-[-.01em] uppercase no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-white aria-[current=page]:text-antraciet dark:aria-[current=page]:bg-antraciet dark:aria-[current=page]:text-gebroken-wit"
+const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-antraciet aria-[current=page]:text-gebroken-wit dark:aria-[current=page]:bg-white dark:aria-[current=page]:text-antraciet"
 
 /** Helderheid van de grond onder een punt: 0 donker … 1 licht; een foto telt als donker. */
 function grondOnder(x: number, y: number): number {
