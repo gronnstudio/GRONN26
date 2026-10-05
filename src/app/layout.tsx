@@ -3,6 +3,7 @@ import { Syne, Montserrat } from "next/font/google"
 import { Kop } from "@/components/kop"
 import { Menu } from "@/components/menu"
 import { Bekijk } from "@/components/bekijk"
+import { App } from "@/components/app"
 import { WereldBeweging } from "@/components/wereld/beweging"
 import "@/components/wereld/wereld.css"
 import { Voet } from "@/components/voet"
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Voet />
         <Menu />
         <Bekijk />
+        <App />
         <WereldBeweging />
         <Overgang />
       </body>
