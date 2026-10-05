@@ -76,7 +76,7 @@ export function Menu() {
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026) */}
             <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="flex items-center rounded-full px-2 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[9px] w-auto min-[421px]:h-[10px]" />
+              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[11px] w-auto min-[421px]:h-[13px]" />
             </Link>
           </li>
           {MENU.map((m) => {
