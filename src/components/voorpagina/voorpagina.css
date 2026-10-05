@@ -184,11 +184,15 @@
   .vp-held {
     padding-top: 96px;
   }
+  /* op de telefoon is er te weinig hoogte voor kop-over-foto: de kop scrolt
+     mee en de foto staat er direct onder, groot (groeit nog wel) */
   .vp-held-titel {
-    top: 88px;
+    position: relative;
+    top: auto;
+    mix-blend-mode: normal;
   }
   .vp-held-foto {
-    margin: 32px var(--vp-rand) 0;
+    margin: 24px 0 0;
   }
   .vp-held-beeld {
     aspect-ratio: 4 / 3;
