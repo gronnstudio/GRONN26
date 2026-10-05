@@ -62,19 +62,22 @@ export function Voet() {
           </nav>
           <div>
             <p className="lbl m-0 text-gedempt"><T t={{ nl: "Klein", en: "Small print" }} /></p>
-            <p className="mt-4 mb-0 leading-[1.75]">
-              <Link href="/privacy" className="w-lijnlink text-inkt">Privacy</Link>
-              <br />
-              <Link href="/voorwaarden" className="w-lijnlink text-inkt"><T t={{ nl: "Voorwaarden", en: "Terms" }} /></Link>
-              <br />
-              <Link href="/herroeping" className="w-lijnlink text-inkt"><T t={{ nl: "Herroeping", en: "Withdrawal" }} /></Link>
-              <br />
-              <Link href="/colofon" className="w-lijnlink text-inkt"><T t={{ nl: "Colofon", en: "Colophon" }} /></Link>
-              <br />
-              <Link href="/merk" className="w-lijnlink text-inkt"><T t={{ nl: "Merk", en: "Brand" }} /></Link>
-              <br />
-              <Link href="/techniek" className="w-lijnlink text-inkt"><T t={{ nl: "Techniek", en: "Technology" }} /></Link>
-            </p>
+            <ul className="mt-4 mb-0 list-none space-y-1.5 p-0 leading-[1.6]">
+              {(
+                [
+                  ["/privacy", { nl: "Privacy", en: "Privacy" }],
+                  ["/voorwaarden", { nl: "Voorwaarden", en: "Terms" }],
+                  ["/herroeping", { nl: "Herroeping", en: "Withdrawal" }],
+                  ["/colofon", { nl: "Colofon", en: "Colophon" }],
+                  ["/merk", { nl: "Merk", en: "Brand" }],
+                  ["/techniek", { nl: "Techniek", en: "Technology" }],
+                ] as const
+              ).map(([h, t]) => (
+                <li key={h}>
+                  <Link href={h} className="w-lijnlink"><T t={t} /></Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
