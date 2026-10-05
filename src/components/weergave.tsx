@@ -128,7 +128,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
           <circle cx="13" cy="10" r="2" fill="none" />
           <circle cx="9" cy="15" r="2" fill="none" />
         </svg>
-        <span className="text-[8px] leading-[10px] font-semibold tracking-[.06em] uppercase lg:hidden">Weergave</span>
+        
       </button>
       {gereed &&
         createPortal(

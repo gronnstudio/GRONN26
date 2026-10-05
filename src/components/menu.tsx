@@ -90,7 +90,7 @@ export function Menu() {
                   <svg viewBox="0 0 22 22" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="lg:hidden">
                     <path d={m.icoon} />
                   </svg>
-                  <span className="max-lg:text-[8px] max-lg:leading-[10px] max-lg:font-semibold max-lg:tracking-[.06em]">{m.label}</span>
+                  <span className="max-lg:sr-only">{m.label}</span>
                 </Link>
               </li>
             )
