@@ -24,7 +24,7 @@ const OUD: [string, string][] = [
   ["/services", "/vijvers"],
   ["/studio", "/over"],
   ["/contact", "/kennismaken"],
-  ["/stack", "/over"],
+  ["/stack", "/techniek"],
   ["/calendar", "/"],
   ["/herfstbeurt", "/vijvers"],
   ["/checklist", "/kennismaken"],

@@ -18,6 +18,7 @@ const ROUTES = [
   "/herroeping",
   "/colofon",
   "/merk",
+  "/techniek",
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
