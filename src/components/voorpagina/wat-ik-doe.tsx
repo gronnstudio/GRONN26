@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import Link from "next/link"
 import { Foto, GeenFoto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
@@ -53,7 +54,7 @@ export function WatIkDoe() {
               {rij.map((d, k) => {
                 const n = DIENSTEN.indexOf(d)
                 return (
-                  <span key={d.slug} className="vp-zin-item">
+                  <span key={d.slug} className="vp-zin-item" style={{ "--n": n } as CSSProperties}>
                     <Link href={d.href} data-naam={n}>
                       <sup>{nr(n)}</sup>
                       <T t={{ ...d.dienst.title, nl: d.dienst.title.nl.replace("Onderhoudsabonnement", "Onderhouds\u00ADabonnement") }} />

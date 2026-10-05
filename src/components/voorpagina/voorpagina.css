@@ -386,44 +386,33 @@
 .vp-inline {
   display: none;
 }
-/* telefoon en touch: een lijst met de uitleg eronder; de dienst in het
-   midden van het scherm wordt actief (de rest dimt) en toont zijn foto */
+/* telefoon en touch: een stapel kaarten met de uitleg en de foto erin */
 @media (max-width: 767px), (hover: none), (pointer: coarse) {
   .vp-zwerf {
     display: none;
   }
   .vp-komma { display: none; }
-  /* zichtbare kaarten (eigenaar, 5 okt 2026: "maak hier zichtbare kaarten van") */
+  /* zichtbare kaarten die als een stapel over elkaar schuiven (eigenaar,
+     5 okt 2026: "kaarten als een stapel opvouwen want ze zijn nogal jumpy");
+     de foto staat vast in de kaart, er klapt niets meer open of dicht */
   .vp-zin-item {
     display: block;
-    margin-top: 10px;
+    position: sticky;
+    top: calc(84px + var(--n, 0) * 8px);
+    margin-top: 12px;
     padding: 20px;
     border-radius: 16px;
     background: var(--vlak);
-    transition: opacity 0.35s var(--vp-ease);
+    box-shadow: 0 -8px 24px -16px rgba(0, 0, 0, 0.35);
   }
   .vp-zin-item a { hyphens: manual; }
-  .vp-zin-item a { display: block; }
-  .vp-diensten.actief .vp-zin-item:not(.midden) {
-    opacity: 0.55;
-  }
-  .vp-diensten.actief .vp-zin-item a:not(:hover) {
-    opacity: 1;
-  }
-  /* de foto klapt open onder de actieve dienst: hoogte-animatie met een
-     harde clip, zodat de (absolute) afbeelding nooit over de tekst lekt */
+  .vp-diensten.actief .vp-zin-item a:not(:hover) { opacity: 1; }
   .vp-inline {
     display: block;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.5s var(--vp-ease), margin-top 0.5s var(--vp-ease);
-  }
-  .vp-zin-item.midden .vp-inline {
-    height: 200px;
     margin-top: 16px;
   }
   .vp-inline-foto {
-    height: 200px;
+    height: 180px;
     aspect-ratio: auto;
   }
   .vp-zin-item a {
