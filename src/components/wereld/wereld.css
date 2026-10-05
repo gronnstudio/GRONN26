@@ -84,7 +84,8 @@
   letter-spacing: -0.02em;
   max-width: 1100px;
 }
-.w-onthul .w-wd { transition: opacity 0.2s; }
+.w-onthul .w-wd, .vp-onthul .vp-wd { white-space: nowrap; }
+/* geen transition: het oplichten volgt het scrollen beeld voor beeld (letters.ts) */
 
 /* ── sectiekop zoals op de voorpagina: label · aantal ───────────────── */
 .w-sectie {

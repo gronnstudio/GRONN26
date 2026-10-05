@@ -118,9 +118,6 @@
   font: inherit;
   margin: 0;
 }
-.vp-onthul .vp-wd {
-  transition: opacity 0.2s;
-}
 .vp-onthul .vp-meer {
   display: inline-block;
   margin-top: 32px;
