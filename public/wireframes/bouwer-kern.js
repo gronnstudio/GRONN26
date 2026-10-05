@@ -21,8 +21,8 @@
     if (steen.wrap) html = `<div class="wrap">${html}</div>`
     const extra = `<style>
       body{padding:0!important;margin:0!important;min-height:0!important}
-      .terug,.opnieuw,.intro,.wv-paneel{display:none!important}
-      ${steen.vast ? 'nav.dock,nav.km,.km-hoeken,header.balk,.vast{position:relative!important;inset:auto!important;bottom:auto!important;top:auto!important;margin:16px auto!important}' : ''}
+      .wv-paneel{display:none!important}
+      ${steen.vast ? 'nav.dock,nav.km,.km-hoeken,header.balk,.vast{position:relative!important;inset:auto!important;bottom:auto!important;top:auto!important;margin:0 auto!important}body{padding:16px 0!important;overflow:hidden}nav.km{transform:none!important;width:max-content!important;left:auto!important;right:auto!important}nav.km:not(.licht) .km-pil a{color:#202020}' : ''}
     </style>`
     // Kies licht of donker zoals het weergavepaneel van de wireframes.
     const thema = `<script>try{var s=JSON.parse(localStorage.getItem('gronn-wf-weergave')||'{}'),u=new Date().getHours(),k=s.kleur||'auto';if(k==='donker'||(k==='auto'&&(u<7||u>=19)))document.documentElement.classList.add('wv-donker')}catch(e){}<\/script>`
