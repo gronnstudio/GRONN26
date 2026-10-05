@@ -193,10 +193,12 @@
   }
   .vp-held-foto {
     margin: 32px 0 0;
-    transform: scale(var(--s, 0.7));
+    transform: scale(var(--s, 0.8));
   }
+  /* bijna een scherm hoog, zodat de foto echt onder de kop doorschuift */
   .vp-held-beeld {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: auto;
+    height: 78svh;
   }
   .vp-held {
     padding-bottom: 0;
@@ -205,7 +207,7 @@
     display: none;
   }
   .vp-onthul {
-    padding-top: 56px;
+    padding-top: 40px;
   }
   .vp-lbl-tel {
     display: block;

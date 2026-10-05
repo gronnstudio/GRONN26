@@ -31,7 +31,8 @@ export function Beweging() {
       const vh = innerHeight
       const s = stil()
       // foto groeit van 0,7 naar 1 over ~1,29 schermhoogte (gemeten: 1160px bij 900 hoog)
-      foto?.style.setProperty("--s", String(s ? 0.7 : Math.min(1, 0.7 + (0.3 * y) / (vh * 1.29))))
+      const basis = breed() ? 0.7 : 0.8
+      foto?.style.setProperty("--s", String(s ? basis : Math.min(1, basis + ((1 - basis) * y) / (vh * (breed() ? 1.29 : 0.6)))))
       labels.forEach((l) => l.classList.toggle("vp-weg", y > 80))
       // woorden boven 70 % van het scherm lichten op, de rest staat op 0,1
       for (const w of woorden) w.style.opacity = s || w.getBoundingClientRect().top < vh * 0.7 ? "" : "0.1"
