@@ -142,7 +142,7 @@
 
 /* ── het slot van elke pagina: kop + omlijnde pijl (Kolenda) ──────────── */
 .w-verder {
-  padding: clamp(120px, 14vw, 220px) var(--w-rand) clamp(96px, 12vw, 180px);
+  padding: clamp(72px, 14vw, 220px) var(--w-rand) clamp(40px, 12vw, 180px);
   text-align: center;
 }
 .w-verder-kop {
