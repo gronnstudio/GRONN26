@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 export default function Kennismaken() {
   return (
     <>
-      <Opening label="Contact" titel="Kennismaken" zin="Ik reageer meestal binnen twee werkdagen." />
+      {/* Eén lang woord: op de telefoon iets kleiner, zodat het past. */}
+      <div className="max-md:[&_.w-reus]:text-[13vw]!">
+        <Opening label="Contact" titel="Kennismaken" zin="Ik reageer meestal binnen twee werkdagen." />
+      </div>
       <div className="wrap">
         <KennismakenFormulier />
       </div>
