@@ -25,6 +25,7 @@ const MENU = [
   { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, icoon: "M3 5h16v12H3zM3 14l5-4 4 3 3-2 4 3" },
   { href: "/over", label: { nl: "Over", en: "About" }, icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
+  { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.8M11 15.6v.1" },
 ]
 
 const ITEM = "flex items-center rounded-full py-3 text-[12px] leading-4 font-bold tracking-[-.01em] uppercase no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
@@ -90,7 +91,7 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex max-lg:min-w-0 max-lg:flex-1">
-                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} max-lg:h-10 max-lg:w-full max-lg:flex-col max-lg:justify-center max-lg:gap-[4px] max-lg:px-1.5 max-lg:py-0 lg:px-5 lg:text-[13px] ${RUST}`}>
+                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} max-lg:h-10 max-lg:w-full max-lg:flex-col max-lg:justify-center max-lg:gap-[4px] max-lg:px-1.5 max-lg:py-0 lg:px-3.5 lg:text-[13px] xl:px-5 ${RUST}`}>
                   <svg viewBox="0 0 22 22" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="lg:hidden">
                     <path d={m.icoon} />
                   </svg>
