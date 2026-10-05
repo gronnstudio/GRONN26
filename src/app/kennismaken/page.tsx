@@ -14,7 +14,7 @@ export default function Kennismaken() {
   return (
     <>
       {/* Eén lang woord: op de telefoon iets kleiner, zodat het past. */}
-      <div className="max-md:[&_.w-reus]:text-[13vw]!">
+      <div className="max-md:[&_.w-reus]:text-[12vw]!">
         <Opening label="Contact" titel="Kennismaken" zin="Ik reageer meestal binnen twee werkdagen." />
       </div>
       <div className="wrap">
