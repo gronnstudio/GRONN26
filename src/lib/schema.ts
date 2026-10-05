@@ -38,6 +38,7 @@ export function studioSchema() {
       name: `${BUSINESS.owner.given} ${BUSINESS.owner.family}`,
       jobTitle: "Hovenier en ecologisch ontwerper",
       image: `${SITE}/nick/portret-espresso.jpg`,
+      sameAs: [BUSINESS.linkedin],
     },
     knowsLanguage: ["nl-NL"],
     sameAs: [BUSINESS.instagram],

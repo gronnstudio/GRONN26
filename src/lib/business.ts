@@ -26,4 +26,5 @@ export const BUSINESS = {
   legalForm: "eenmanszaak",
   instagram: "https://instagram.com/gronn.studio",
   whatsapp: "https://wa.me/31618118014",
+  linkedin: "https://www.linkedin.com/in/nick-peters-58678a431",
 } as const

@@ -60,6 +60,11 @@ export function Voet() {
                       <path d="M9.1 8.2c-.5.3-.8.9-.7 1.5.4 2.6 2.4 4.6 5 5 .6.1 1.2-.2 1.5-.7l.5-.9-2-1-.9.9a5.6 5.6 0 0 1-2.4-2.4l.9-.9-1-2-.9.5Z" fill="currentColor" stroke="none" />
                     </svg>
                   </a>
+                  <a href={BUSINESS.linkedin} aria-label="LinkedIn" className="grid size-11 place-items-center rounded-full bg-[#0A66C2] text-white transition-transform hover:-translate-y-0.5">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                      <path d="M5.2 8.6h3.1V19H5.2zM6.8 3.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6zM10.3 8.6h3v1.4h.1c.4-.8 1.4-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.8V19h-3.1v-5.2c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V19h-3.1z" />
+                    </svg>
+                  </a>
                 </span>
               </li>
             </ul>
