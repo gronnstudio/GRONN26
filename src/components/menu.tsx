@@ -70,8 +70,8 @@ export function Menu() {
 
   return (
     <>
-      <nav aria-label="Hoofdmenu" data-menu className="fixed bottom-5 left-1/2 z-[101] -translate-x-1/2 lg:bottom-10">
-        <ul className="m-0 flex list-none items-center gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
+      <nav aria-label="Hoofdmenu" data-menu className="fixed bottom-5 left-3 z-[101] max-lg:right-[64px] lg:left-1/2 lg:-translate-x-1/2 lg:bottom-10">
+        <ul className="m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
             <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="flex items-center rounded-full px-2 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
@@ -109,6 +109,16 @@ export function Menu() {
         </svg>
       </Link>
 
+      {/* op de telefoon: oranje terug-naar-boven naast de pil, zodra je gescrold hebt (eigenaar, 5 okt 2026) */}
+      <button
+        type="button"
+        onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
+        data-menu
+        aria-label="Terug naar boven"
+        className={`fixed right-3 bottom-5 z-[101] grid size-11 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-[opacity,transform] duration-300 lg:hidden ${boven ? "pointer-events-none scale-75 opacity-0" : ""}`}
+      >
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden><path d="M8 13.5v-12M2.5 7 8 1.5 13.5 7" fill="none" stroke="currentColor" strokeWidth="1.9" /></svg>
+      </button>
       <button
         type="button"
         onClick={pijl}
