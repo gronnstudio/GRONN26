@@ -60,8 +60,8 @@ const PAREN: { voor: string; achter: string; wat: L }[] = [
 function Icoon({ vormen, inkt, tint, grond, naam, i }: { vormen: readonly Vorm[]; inkt: string; tint: string; grond: string; naam: L; i: number }) {
   return (
     <li className="flex flex-col gap-2" data-zie style={{ "--i": i % 4 } as CSSProperties}>
-      <svg viewBox="-0.75 -0.75 5.5 5.5" className="block aspect-square w-full ring-1 ring-lijn" aria-hidden="true">
-        <rect x="-0.75" y="-0.75" width="5.5" height="5.5" fill={grond} />
+      <svg viewBox="-0.75 -0.75 5.5 5.5" className="merk-icoon block aspect-square w-full ring-1 ring-lijn" aria-hidden="true">
+        <rect x="-0.75" y="-0.75" width="5.5" height="5.5" fill={grond} className="merk-grond" />
         {vlakken(vormen, inkt, tint).map((v, n) => (
           <path key={n} d={v.d} fill={v.kleur} />
         ))}

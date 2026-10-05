@@ -7,6 +7,7 @@ import { MERKBASIS, MERKBELOFTE } from "@/lib/data/plekken"
 import type { L } from "@/lib/i18n"
 import { MerkGids } from "@/components/merk/gids"
 import { Kopieer } from "@/components/kopieer"
+import { MerkElementen } from "@/components/merk/elementen"
 
 export const metadata: Metadata = {
   title: "Merk",
@@ -75,6 +76,31 @@ export default function Merk() {
       />
 
       <div className="wrap">
+        <nav aria-label="Inhoud" className="mt-[clamp(48px,6vw,96px)] flex flex-wrap gap-2">
+          {(
+            [
+              ["#h-naam", { nl: "Naam", en: "Name" }],
+              ["#h-logo", { nl: "Woordmerk", en: "Wordmark" }],
+              ["#h-kleur", { nl: "Kleur", en: "Colour" }],
+              ["#h-letters", { nl: "Letters", en: "Type" }],
+              ["#h-schaal", { nl: "Kleurschaal", en: "Colour scale" }],
+              ["#h-iconen", { nl: "Iconen", en: "Icons" }],
+              ["#h-schaal-type", { nl: "Letterschaal", en: "Type scale" }],
+              ["#h-raster", { nl: "Raster", en: "Grid" }],
+              ["#h-contrast", { nl: "Contrast", en: "Contrast" }],
+              ["#h-beeld", { nl: "Beeld", en: "Imagery" }],
+              ["#stem", { nl: "Stem", en: "Voice" }],
+              ["#elementen", { nl: "Elementen", en: "Elements" }],
+              ["#beweging", { nl: "Beweging", en: "Motion" }],
+              ["#h-regels", { nl: "Regels", en: "Rules" }],
+            ] as [string, L][]
+          ).map(([href, naam], i) => (
+            <a key={href} href={href} className="rounded-full border border-lijn px-4 py-2 text-[13px] font-medium no-underline transition-colors hover:border-inkt hover:bg-inkt hover:text-grond" data-zie style={{ "--i": i % 6 } as CSSProperties}>
+              <T t={naam} />
+            </a>
+          ))}
+        </nav>
+
         <section aria-labelledby="h-naam" className="w-sectie">
           <Kop id="h-naam" label={{ nl: "Naam en belofte", en: "Name and promise" }} />
           <div className="grid gap-8 md:grid-cols-[5fr_7fr]">
@@ -123,7 +149,7 @@ export default function Merk() {
 
         <section aria-labelledby="h-kleur" className="w-sectie">
           <Kop id="h-kleur" label={{ nl: "Kleur", en: "Colour" }} aantal={{ nl: "60 · 30 · 10", en: "60 · 30 · 10" }} />
-          <div className="mb-8 flex h-14 overflow-hidden rounded-full ring-1 ring-lijn" aria-hidden="true" data-zie>
+          <div className="merk-balk mb-8 flex h-14 overflow-hidden rounded-full ring-1 ring-lijn" aria-hidden="true" data-zie>
             <span className="w-[60%] bg-[#EFEEEA]" />
             <span className="w-[30%] bg-[#202020]" />
             <span className="w-[10%] bg-[#DB6923]" />
@@ -179,6 +205,8 @@ export default function Merk() {
         </section>
 
         <MerkGids />
+
+        <MerkElementen />
 
         <section aria-labelledby="h-regels" className="w-sectie">
           <Kop id="h-regels" label={{ nl: "Vorm en gebruik", en: "Form and use" }} aantal={{ nl: `${REGELS.length} regels`, en: `${REGELS.length} rules` }} />
