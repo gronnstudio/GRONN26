@@ -280,12 +280,16 @@
   font-weight: 400;
   color: var(--gedempt);
 }
+/* twee vaste kolommen (vijvers links, tuinen rechts), zodat er geen losse
+   gaten vallen zoals bij doorlopende tekst (eigenaar, 5 okt 2026) */
 .vp-namen {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-template-rows: repeat(6, auto);
   column-gap: clamp(32px, 6.5vw, 96px);
   row-gap: clamp(4px, 1vw, 16px);
 }
