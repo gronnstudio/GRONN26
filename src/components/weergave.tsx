@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { toon } from "@/lib/geluid";
 
 // WF-026: één knop met een regelaar-icoon opent Kleur (Auto · Licht · Donker;
 // Auto = licht van 07.00 tot 19.00) en Toegankelijkheid. Bewaard in deze
@@ -12,6 +13,7 @@ type Stand = {
   groot: boolean;
   contrast: boolean;
   onderstreep: boolean;
+  geluid: boolean;
 };
 const KEY = "gronn-weergave";
 const STANDAARD: Stand = {
@@ -20,12 +22,14 @@ const STANDAARD: Stand = {
   groot: false,
   contrast: false,
   onderstreep: false,
+  geluid: false,
 };
 const SCHAKELAARS: [keyof Omit<Stand, "kleur">, string][] = [
   ["beweging", "Minder beweging"],
   ["groot", "Grotere tekst"],
   ["contrast", "Meer contrast"],
   ["onderstreep", "Links onderstrepen"],
+  ["geluid", "Geluid bij paginawissel"],
 ];
 
 function pasToe(s: Stand) {
@@ -39,6 +43,7 @@ function pasToe(s: Stand) {
   c.toggle("groot", s.groot);
   c.toggle("contrast", s.contrast);
   c.toggle("onderstreep", s.onderstreep);
+  c.toggle("geluid", s.geluid);
   try {
     localStorage.setItem(KEY, JSON.stringify(s));
   } catch {}
@@ -95,6 +100,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   const zet = (s: Stand) => {
     setStand(s);
     pasToe(s);
+    if (s.geluid && !stand.geluid) toon(); // meteen laten horen hoe het klinkt
   };
 
   return (
@@ -106,7 +112,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
         aria-expanded={open}
         aria-controls="weergave-paneel"
         onClick={() => setOpen(!open)}
-        className={`grid size-10 cursor-pointer place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 ${knopKlasse}`}
+        className={`flex h-12 w-full cursor-pointer flex-col items-center justify-center gap-[3px] rounded-full px-1.5 lg:grid lg:size-10 lg:min-w-0 lg:place-items-center lg:px-0 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 ${knopKlasse}`}
       >
         <svg
           width="20"
@@ -122,6 +128,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
           <circle cx="13" cy="10" r="2" fill="none" />
           <circle cx="9" cy="15" r="2" fill="none" />
         </svg>
+        <span className="text-[10px] leading-[12px] font-medium lg:hidden">Weergave</span>
       </button>
       {gereed &&
         createPortal(

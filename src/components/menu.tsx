@@ -15,11 +15,13 @@ import { Weergave } from "./weergave"
 // - linksonder (vanaf 1024px) Kennismaken ↗ in oranje;
 // - rechtsonder de ronde pijl (omlaag bovenaan, omhoog tijdens het lezen) die
 //   omkeert met de grond eronder: oranje op donker, antraciet op licht.
+// Op de telefoon draagt elk woord een lijnicoon met een klein label eronder
+// (eigenaar, 5 okt 2026); vanaf 1024px blijft het tekst.
 const MENU = [
-  { href: "/vijvers", label: "Vijvers" },
-  { href: "/tuinen", label: "Tuinen" },
-  { href: "/werk", label: "Werk" },
-  { href: "/over", label: "Over" },
+  { href: "/vijvers", label: "Vijvers", icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
+  { href: "/tuinen", label: "Tuinen", icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
+  { href: "/werk", label: "Werk", icoon: "M3 5h16v12H3zM3 14l5-4 4 3 3-2 4 3" },
+  { href: "/over", label: "Over", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
 ]
 
 const ITEM = "flex items-center rounded-full py-3 text-[12px] leading-4 font-bold tracking-[-.01em] uppercase no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
@@ -83,14 +85,17 @@ export function Menu() {
           {MENU.map((m) => {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
-              <li key={m.href} className="flex">
-                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} px-2 text-[11px] min-[421px]:px-3.5 min-[421px]:text-[13px] lg:px-5 ${RUST}`}>
-                  {m.label}
+              <li key={m.href} className="flex max-lg:min-w-0 max-lg:flex-1">
+                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} max-lg:h-12 max-lg:w-full max-lg:flex-col max-lg:justify-center max-lg:gap-[3px] max-lg:px-1.5 max-lg:py-0 lg:px-5 lg:text-[13px] ${RUST}`}>
+                  <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="lg:hidden">
+                    <path d={m.icoon} />
+                  </svg>
+                  <span className="max-lg:text-[10px] max-lg:leading-[12px] max-lg:font-medium max-lg:tracking-normal max-lg:normal-case">{m.label}</span>
                 </Link>
               </li>
             )
           })}
-          <li className="flex">
+          <li className="flex max-lg:min-w-0 max-lg:flex-1">
             <Weergave knopKlasse="text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-expanded:bg-gebroken-wit aria-expanded:text-antraciet" />
           </li>
         </ul>
