@@ -392,13 +392,16 @@
     display: none;
   }
   .vp-komma { display: none; }
+  /* zichtbare kaarten (eigenaar, 5 okt 2026: "maak hier zichtbare kaarten van") */
   .vp-zin-item {
     display: block;
-    border-top: 1px solid var(--lijn);
-    padding: 14px 0;
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--vlak);
     transition: opacity 0.35s var(--vp-ease);
   }
-  .vp-zin-item:last-child { border-bottom: 1px solid var(--lijn); }
+  .vp-zin-item a { hyphens: manual; }
   .vp-zin-item a { display: block; }
   .vp-diensten.actief .vp-zin-item:not(.midden) {
     opacity: 0.55;
@@ -416,7 +419,7 @@
   }
   .vp-zin-item.midden .vp-inline {
     height: 200px;
-    margin-top: 14px;
+    margin-top: 16px;
   }
   .vp-inline-foto {
     height: 200px;

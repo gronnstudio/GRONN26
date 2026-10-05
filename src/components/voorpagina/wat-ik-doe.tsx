@@ -56,17 +56,16 @@ export function WatIkDoe() {
                   <span key={d.slug} className="vp-zin-item">
                     <Link href={d.href} data-naam={n}>
                       <sup>{nr(n)}</sup>
-                      <T t={d.dienst.title} />
+                      <T t={{ ...d.dienst.title, nl: d.dienst.title.nl.replace("Onderhoudsabonnement", "Onderhouds\u00ADabonnement") }} />
                       <span className="vp-uitleg"><T t={d.dienst.summary} /></span>
                     </Link>
                     <span className="vp-komma">{k < rij.length - 1 ? "," : "."}</span>{" "}
-                    <span className="vp-inline" aria-hidden="true">
-                      {typeof d.beeld === "string" ? (
-                        <GeenFoto wat={d.beeld} className="vp-inline-foto" />
-                      ) : (
+                    {/* zonder foto geen lege plek in de kaart */}
+                    {typeof d.beeld === "string" ? null : (
+                      <span className="vp-inline" aria-hidden="true">
                         <Foto foto={d.beeld} sizes="90vw" className="vp-inline-foto" />
-                      )}
-                    </span>
+                      </span>
+                    )}
                   </span>
                 )
               })}
