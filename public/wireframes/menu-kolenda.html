@@ -111,6 +111,7 @@
 .beeld .paar .ph:first-child{aspect-ratio:4/5}.beeld .paar .ph:last-child{aspect-ratio:4/3}
 @media (max-width:767px){.beeld .breed{aspect-ratio:4/3}.beeld .paar{grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.beeld .paar .ph{aspect-ratio:3/4 !important}}
 </style>
+<style>/* echte foto's (5 okt 2026): het label blijft klein leesbaar over het beeld */.ph-foto{background-size:cover!important;background-position:center!important;background-color:#DCD9D2;color:#EFEEEA!important;text-shadow:0 1px 3px rgba(0,0,0,.7)}</style>
 </head>
 <body>
 <a class="terug" href="/wireframes/">← Alle wireframes</a>
@@ -127,14 +128,14 @@
         <h1 class="syne" id="kop">Een vijver en tuin die gezond blijven.</h1>
       </div>
       <div class="rechts">
-        <div class="ph">Foto F10 · de waterval</div>
+        <div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F10.jpg)" role="img" aria-label="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter.">Foto F10 · de waterval</div>
         <p>Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
       </div>
     </section>
 
     <section class="sectie beeld" aria-label="Beeld">
-      <div class="ph breed">Foto F01</div>
-      <div class="paar"><div class="ph">Foto F08-2</div><div class="ph">Foto F11</div></div>
+      <div class="ph-foto ph breed" style="background-image:url(/projecten/vijverrenovatie/F01.jpg)" role="img" aria-label="Overzicht van de tuin tijdens de afronding: een klinkerpad, een treurwilg, ronde stapstenen in de vijver en borders met keien en jonge beplanting.">Foto F01</div>
+      <div class="paar"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F08-2.jpg)" role="img" aria-label="Nick gehurkt tussen de keien aan de vijverrand, lachend, met een zwart onderdeel in de hand en een geopende doos naast zich.">Foto F08-2</div><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F11.jpg)" role="img" aria-label="Nick zit op de keien bij de beekloop in aanbouw, met vijverfolie, grind en een zwarte slang om hem heen.">Foto F11</div></div>
     </section>
 
     <section class="sectie" aria-label="De waterroute">
@@ -178,7 +179,7 @@
     <section class="sectie" aria-labelledby="h-over">
       <div class="hoofdstuk"><span class="lbl" id="h-over">01 — Over</span></div>
       <div class="over">
-        <div class="ph">Portret Nick</div>
+        <div class="ph-foto ph" style="background-image:url(/nick/portret-espresso.jpg)" role="img" aria-label="Portret van Nick Peters.">Portret Nick</div>
         <div class="tekst">
           <h2 class="syne">Ik denk in beelden, patronen en verbanden.</h2>
           <p>Als ik naar een tuin kijk, zie ik hoe licht, water, materialen en beplanting elkaar beïnvloeden.</p>

@@ -98,6 +98,7 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
   .terug{bottom:84px}
 }
 </style>
+<style>/* echte foto's (5 okt 2026): het label blijft klein leesbaar over het beeld */.ph-foto{background-size:cover!important;background-position:center!important;background-color:#DCD9D2;color:#EFEEEA!important;text-shadow:0 1px 3px rgba(0,0,0,.7)}</style>
 </head>
 <body>
 <a class="terug" href="/wireframes/">← Alle wireframes</a>
@@ -119,8 +120,8 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
         <a class="naam naam-1" href="/wireframes/werk"><sup>001</sup>Vijverrenovatie,</a><br>
         <a class="naam naam-2 stil" href="/wireframes/werk"><sup>002</sup>Terras Geulle.</a>
       </h1>
-      <div class="ph voorbeeld v1" aria-hidden="true">Foto F01 · bij hover</div>
-      <div class="ph voorbeeld v2" aria-hidden="true">Foto T02 · bij hover</div>
+      <div class="ph-foto ph voorbeeld v1" aria-hidden="true" style="background-image:url(/projecten/vijverrenovatie/F01.jpg)" role="img" aria-label="Overzicht van de tuin tijdens de afronding: een klinkerpad, een treurwilg, ronde stapstenen in de vijver en borders met keien en jonge beplanting.">Foto F01 · bij hover</div>
+      <div class="ph-foto ph voorbeeld v2" aria-hidden="true" style="background-image:url(/projecten/terras-geulle/T02.jpg)" role="img" aria-label="Het smalle pad van betontegels langs de gevel en de schutting, strak uitgelijnd tot achter in de tuin.">Foto T02 · bij hover</div>
       <div class="ph tel-voorbeeld" aria-hidden="true">Telefoon: foto onder de namen</div>
       <p class="intro">Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
       <p style="margin:32px 0 0 0" class="intro"><a class="lnk" href="/wireframes/werk">Bekijk het werk →</a></p>
@@ -129,7 +130,7 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
 </div>
 
 <section class="foto" aria-label="Foto">
-  <div class="ph">Foto F10 · de waterval · schermbreed, verder niets</div>
+  <div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F10.jpg)" role="img" aria-label="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter.">Foto F10 · de waterval · schermbreed, verder niets</div>
   <div class="wrap onderschrift"><span class="lbl">GR / 001 — De waterval</span><span class="lbl muted">Vijverrenovatie · 2026</span></div>
 </section>
 
@@ -147,7 +148,7 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
   </section>
 
   <section class="sectie over" aria-labelledby="over-kop">
-    <div class="ph">Portret Nick</div>
+    <div class="ph-foto ph" style="background-image:url(/nick/portret-espresso.jpg)" role="img" aria-label="Portret van Nick Peters.">Portret Nick</div>
     <div>
       <p class="lbl muted" style="margin:0">Over</p>
       <h2 class="syne" id="over-kop">Ik denk in beelden, patronen en verbanden.</h2>

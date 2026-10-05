@@ -142,6 +142,7 @@ html.wv-donker .held{--licht:#EFEEEA}
 html.wv-beweging .opkomen,html.wv-beweging .tegel,html.wv-beweging .tegel .ph{opacity:1 !important;transform:none !important;clip-path:none !important}
 html.wv-beweging .held .beeld,html.wv-beweging .held .onder,html.wv-beweging .woord{transform:none !important;opacity:1 !important}
 </style>
+<style>/* echte foto's (5 okt 2026): het label blijft klein leesbaar over het beeld */.ph-foto{background-size:cover!important;background-position:center!important;background-color:#DCD9D2;color:#EFEEEA!important;text-shadow:0 1px 3px rgba(0,0,0,.7)}</style>
 </head>
 <body>
 <a class="terug" href="/wireframes/">← Alle wireframes</a>
@@ -162,7 +163,7 @@ html.wv-beweging .held .beeld,html.wv-beweging .held .onder,html.wv-beweging .wo
 
   <!-- 2 · Portret links, lange intro rechts met Lees meer -->
   <section class="rand intro" aria-label="Over Nick">
-    <figure class="portret opkomen"><div class="ph">Portret Nick</div><figcaption class="lbl muted">Nick Peters · hovenier en ecologisch ontwerper</figcaption></figure>
+    <figure class="portret opkomen"><div class="ph-foto ph" style="background-image:url(/nick/portret-espresso.jpg)" role="img" aria-label="Portret van Nick Peters.">Portret Nick</div><figcaption class="lbl muted">Nick Peters · hovenier en ecologisch ontwerper</figcaption></figure>
     <div class="tekst opkomen">
       <div class="vouw" id="vouw">
         <p>Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
@@ -211,16 +212,16 @@ html.wv-beweging .held .beeld,html.wv-beweging .held .onder,html.wv-beweging .wo
     <div class="anker" aria-hidden="true"><p class="woord syne" id="woord"><span>✳ Vijvers en tuinen</span><span>✳ Vijvers en tuinen</span><span>✳ Vijvers en tuinen</span><span>✳ Vijvers en tuinen</span></p></div>
     <div class="rand">
       <div class="vlak">
-        <figure class="tegel breed" style="--x:0;--w:2;--y:0;--h:822"><div class="ph">Foto F10</div></figure>
-        <figure class="tegel" style="--x:3;--w:1;--y:0;--h:331"><div class="ph">Foto T02</div></figure>
-        <figure class="tegel" style="--x:2;--w:1;--y:545;--h:277"><div class="ph">Foto F05</div></figure>
-        <figure class="tegel" style="--x:1;--w:1;--y:858;--h:398"><div class="ph">Foto F08-2</div></figure>
-        <figure class="tegel" style="--x:0;--w:1;--y:1292;--h:277"><div class="ph">Foto F02</div></figure>
-        <figure class="tegel breed" style="--x:2;--w:2;--y:1292;--h:821"><div class="ph">Foto F11</div></figure>
-        <figure class="tegel" style="--x:1;--w:1;--y:1783;--h:331"><div class="ph">Foto T01</div></figure>
-        <figure class="tegel" style="--x:2;--w:1;--y:2149;--h:277"><div class="ph">Foto F07</div></figure>
-        <figure class="tegel breed" style="--x:0;--w:2;--y:2463;--h:670"><div class="ph">Foto F09</div></figure>
-        <figure class="tegel" style="--x:2;--w:1;--y:2735;--h:398"><div class="ph">Foto T04</div></figure>
+        <figure class="tegel breed" style="--x:0;--w:2;--y:0;--h:822"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F10.jpg)" role="img" aria-label="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter.">Foto F10</div></figure>
+        <figure class="tegel" style="--x:3;--w:1;--y:0;--h:331"><div class="ph-foto ph" style="background-image:url(/projecten/terras-geulle/T02.jpg)" role="img" aria-label="Het smalle pad van betontegels langs de gevel en de schutting, strak uitgelijnd tot achter in de tuin.">Foto T02</div></figure>
+        <figure class="tegel" style="--x:2;--w:1;--y:545;--h:277"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F05.jpg)" role="img" aria-label="Een zwarte filterbak met drie kamers, rechtop gezet naast de haag tijdens de werkzaamheden.">Foto F05</div></figure>
+        <figure class="tegel" style="--x:1;--w:1;--y:858;--h:398"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F08-2.jpg)" role="img" aria-label="Nick gehurkt tussen de keien aan de vijverrand, lachend, met een zwart onderdeel in de hand en een geopende doos naast zich.">Foto F08-2</div></figure>
+        <figure class="tegel" style="--x:0;--w:1;--y:1292;--h:277"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F02-1.jpg)" role="img" aria-label="De bestaande vijver vóór de renovatie, afgedekt met een net, met een rand van natuursteen langs het klinkerpad.">Foto F02</div></figure>
+        <figure class="tegel breed" style="--x:2;--w:2;--y:1292;--h:821"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F11.jpg)" role="img" aria-label="Nick zit op de keien bij de beekloop in aanbouw, met vijverfolie, grind en een zwarte slang om hem heen.">Foto F11</div></figure>
+        <figure class="tegel" style="--x:1;--w:1;--y:1783;--h:331"><div class="ph-foto ph" style="background-image:url(/projecten/terras-geulle/T01.jpg)" role="img" aria-label="Het nieuwe terras van lichte betontegels onder de overkapping, met de opsluitband langs de rand van het zandbed.">Foto T01</div></figure>
+        <figure class="tegel" style="--x:2;--w:1;--y:2149;--h:277"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F07-1.jpg)" role="img" aria-label="De beschadigde filterbak van dichtbij, met een lijmpistool voor de reparatie en losse pvc-buizen eromheen.">Foto F07</div></figure>
+        <figure class="tegel breed" style="--x:0;--w:2;--y:2463;--h:670"><div class="ph-foto ph" style="background-image:url(/projecten/vijverrenovatie/F09-1.jpg)" role="img" aria-label="Een hand zet een jong vijverplantje in een plantmand met grind, met het plantlabel ernaast.">Foto F09</div></figure>
+        <figure class="tegel" style="--x:2;--w:1;--y:2735;--h:398"><div class="ph-foto ph" style="background-image:url(/projecten/terras-geulle/T04.jpg)" role="img" aria-label="Het tegelpad vanaf de andere kant, doorlopend tot aan de achterdeur onder de overkapping.">Foto T04</div></figure>
       </div>
     </div>
   </section>

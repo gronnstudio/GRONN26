@@ -132,6 +132,7 @@ html.wv-donker .rand{border-color:#2F5A49}
 @keyframes omhoog{from{transform:translate3d(0,110%,0)}to{transform:none}}
 @keyframes alpha{from{opacity:0}to{opacity:1}}
 </style>
+<style>/* echte foto's (5 okt 2026): het label blijft klein leesbaar over het beeld */.ph-foto{background-size:cover!important;background-position:center!important;background-color:#DCD9D2;color:#EFEEEA!important;text-shadow:0 1px 3px rgba(0,0,0,.7)}</style>
 </head>
 <body>
 <a class="terug" href="/wireframes/">← Alle wireframes</a>
@@ -155,11 +156,11 @@ html.wv-donker .rand{border-color:#2F5A49}
 
   <section class="donker blok" aria-label="Foto's">
     <div class="baan alpha" data-zie tabindex="0" aria-label="Fotostrook, scroll opzij">
-      <div class="dia ph">Foto F01</div>
-      <div class="dia ph">Foto F10</div>
-      <div class="dia ph">Foto F08-2</div>
-      <div class="dia ph">Foto F11</div>
-      <div class="dia ph">Foto T02</div>
+      <div class="ph-foto dia ph" style="background-image:url(/projecten/vijverrenovatie/F01.jpg)" role="img" aria-label="Overzicht van de tuin tijdens de afronding: een klinkerpad, een treurwilg, ronde stapstenen in de vijver en borders met keien en jonge beplanting.">Foto F01</div>
+      <div class="ph-foto dia ph" style="background-image:url(/projecten/vijverrenovatie/F10.jpg)" role="img" aria-label="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter.">Foto F10</div>
+      <div class="ph-foto dia ph" style="background-image:url(/projecten/vijverrenovatie/F08-2.jpg)" role="img" aria-label="Nick gehurkt tussen de keien aan de vijverrand, lachend, met een zwart onderdeel in de hand en een geopende doos naast zich.">Foto F08-2</div>
+      <div class="ph-foto dia ph" style="background-image:url(/projecten/vijverrenovatie/F11.jpg)" role="img" aria-label="Nick zit op de keien bij de beekloop in aanbouw, met vijverfolie, grind en een zwarte slang om hem heen.">Foto F11</div>
+      <div class="ph-foto dia ph" style="background-image:url(/projecten/terras-geulle/T02.jpg)" role="img" aria-label="Het smalle pad van betontegels langs de gevel en de schutting, strak uitgelijnd tot achter in de tuin.">Foto T02</div>
     </div>
     <div class="stippen" data-zie aria-label="Kies een foto"></div>
   </section>
@@ -190,7 +191,7 @@ html.wv-donker .rand{border-color:#2F5A49}
     </div>
   </section>
 
-  <div class="portret ph" role="img" aria-label="Portret Nick">Portret Nick</div>
+  <div class="ph-foto portret ph" role="img" aria-label="Portret Nick" style="background-image:url(/nick/portret-espresso.jpg)">Portret Nick</div>
 </main>
 
 <footer class="voet" data-schuif aria-labelledby="h-voet">
