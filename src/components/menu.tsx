@@ -12,8 +12,9 @@ import { useTaal } from "./taal-klant"
 // oranje:
 // - midden onderaan een donkere glazen pil met lichte woorden; hover = wit
 //   vlak met donkere tekst;
-//   de huidige pagina krijgt een vlak in de inktkleur (zwart op licht, wit
-//   op donker, eigenaar 5 okt 2026); het woordmerk is de weg naar huis, de
+//   de huidige pagina krijgt een wit vlak op Licht en een donker vlak op
+//   Donker (eigenaar, 5 okt 2026); de pijl en zijn ring zijn wit op Licht en
+//   antraciet op Donker; het woordmerk is de weg naar huis, de
 //   regelaar zit achteraan;
 // - linksonder (vanaf 1024px) Kennismaken ↗ in oranje;
 // - rechtsonder de ronde pijl (omlaag bovenaan, omhoog tijdens het lezen) die
@@ -29,7 +30,7 @@ const MENU = [
 ]
 
 const ITEM = "flex items-center rounded-full py-3 text-[12px] leading-4 font-bold tracking-[-.01em] uppercase no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-inkt aria-[current=page]:text-grond"
+const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-white aria-[current=page]:text-antraciet dark:aria-[current=page]:bg-antraciet dark:aria-[current=page]:text-gebroken-wit"
 
 /** Helderheid van de grond onder een punt: 0 donker … 1 licht; een foto telt als donker. */
 function grondOnder(x: number, y: number): number {
@@ -127,7 +128,7 @@ export function Menu() {
         onClick={pijl}
         data-menu
         aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
-        className="fixed right-3 bottom-5 z-[101] grid size-12 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
+        className="fixed right-3 bottom-5 z-[101] grid size-12 cursor-pointer place-items-center rounded-full bg-oranje text-white shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-antraciet lg:hidden"
       >
         <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
         <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${boven ? "" : "rotate-180"}`}>
@@ -141,7 +142,7 @@ export function Menu() {
         data-pijl
         aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
         className={`fixed right-10 bottom-10 z-[99] hidden size-[52px] cursor-pointer place-items-center rounded-full shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3 lg:grid ${
-          pijlOpLicht ? "bg-antraciet text-oranje" : "bg-oranje text-antraciet"
+          pijlOpLicht ? "bg-antraciet text-oranje" : "bg-oranje text-white dark:text-antraciet"
         }`}
       >
         <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
