@@ -4,6 +4,7 @@ import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
 import { T } from "@/components/taal"
 import { GROEPEN, ONDERDELEN } from "@/lib/data/techniek"
+import { JouwBezoek } from "@/components/techniek/bezoek"
 import "./techniek.css"
 
 export const metadata: Metadata = {
@@ -13,6 +14,16 @@ export const metadata: Metadata = {
 }
 
 const NAMEN = ONDERDELEN.map((o) => o.naam)
+
+// De weg van elke wijziging: precies wat .github/workflows/quality.yml en Vercel doen.
+const STAPPEN: { naam: string; wat: { nl: string; en: string } }[] = [
+  { naam: "GitHub", wat: { nl: "De wijziging wordt vastgelegd, met wie, wat en waarom.", en: "The change is recorded: who, what and why." } },
+  { naam: "TypeScript", wat: { nl: "Klopt elke waarde met wat de code verwacht?", en: "Does every value match what the code expects?" } },
+  { naam: "ESLint", wat: { nl: "Geen slordigheid, geen bekende valkuilen.", en: "No sloppiness, no known pitfalls." } },
+  { naam: "Build", wat: { nl: "Alle pagina's worden vooraf gebouwd, in twee talen.", en: "Every page is built in advance, in two languages." } },
+  { naam: "Playwright", wat: { nl: "Elke pagina in een echte browser, op drie breedtes.", en: "Every page in a real browser, at three widths." } },
+  { naam: "Vercel", wat: { nl: "Live, op servers dicht bij jou. Gaat er iets mis: één klik terug.", en: "Live, on servers close to you. If something breaks: one click back." } },
+]
 
 function Band({ omgekeerd = false }: { omgekeerd?: boolean }) {
   // twee keer dezelfde rij, zodat de band naadloos doorloopt
@@ -99,6 +110,46 @@ export default function Techniek() {
             </section>
           )
         })}
+      </div>
+
+      <div className="wrap">
+        <section aria-labelledby="tk-pijp" className="tk-pijp-blok">
+          <div className="w-kopregel">
+            <h2 id="tk-pijp" className="lbl m-0 font-normal">
+              <T t={{ nl: "Van wijziging tot live", en: "From change to live" }} />
+            </h2>
+            <span className="lbl text-gedempt">
+              <T t={{ nl: `${STAPPEN.length} stappen · elke keer`, en: `${STAPPEN.length} steps · every time` }} />
+            </span>
+          </div>
+          <p className="syne m-0 max-w-[18ch] text-[clamp(32px,4.6vw,72px)] leading-[1.02] tracking-[-.035em]" data-zie>
+            <T t={{ nl: "Elke wijziging loopt dezelfde weg.", en: "Every change takes the same road." }} />
+          </p>
+          <ol className="tk-pijp m-0 list-none p-0" data-zie>
+            {STAPPEN.map((s, i) => (
+              <li key={i} style={{ "--i": i } as CSSProperties}>
+                <span className="tk-pijp-stip" aria-hidden="true" />
+                <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")}</span>
+                <span className="tk-pijp-naam syne">{s.naam}</span>
+                <span className="text-[14px] leading-[1.5] text-gedempt">
+                  <T t={s.wat} />
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section aria-labelledby="tk-bezoek" className="tk-pijp-blok">
+          <div className="w-kopregel">
+            <h2 id="tk-bezoek" className="lbl m-0 font-normal">
+              <T t={{ nl: "Jouw bezoek", en: "Your visit" }} />
+            </h2>
+            <span className="lbl text-gedempt">
+              <T t={{ nl: "nu, op dit scherm", en: "now, on this screen" }} />
+            </span>
+          </div>
+          <JouwBezoek />
+        </section>
       </div>
 
       <Verder voor={{ nl: "En hoe het", en: "And how it" }} nadruk={{ nl: "eruitziet", en: "looks" }} na="?" href="/merk" label={{ nl: "Naar het merk", en: "To the brand" }} />

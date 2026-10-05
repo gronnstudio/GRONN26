@@ -135,3 +135,99 @@
   .tk-rij-item::before, .tk-naam { transition: none; }
 }
 html.stil .tk-rij-item::before, html.stil .tk-naam { transition: none; }
+
+/* ── Van wijziging tot live: zes stations aan één lijn ─────────────── */
+.tk-pijp-blok { padding-top: clamp(96px, 12vw, 180px); }
+.tk-pijp-blok > p { margin-bottom: clamp(40px, 5vw, 72px); }
+.tk-pijp {
+  position: relative;
+  display: grid;
+  gap: 28px;
+}
+.tk-pijp::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--oranje);
+  transform-origin: top;
+}
+.tk-pijp li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding-left: 36px;
+}
+.tk-pijp-stip {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--grond);
+  border: 2px solid var(--oranje);
+}
+.tk-pijp li:last-child .tk-pijp-stip { background: var(--oranje); }
+.tk-pijp-naam { font-size: clamp(24px, 2.4vw, 34px); line-height: 1.05; letter-spacing: -0.02em; }
+@media (min-width: 1024px) {
+  .tk-pijp { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px; }
+  .tk-pijp::before { left: 6px; right: 6px; top: 6px; bottom: auto; width: auto; height: 2px; transform-origin: left; }
+  .tk-pijp li { padding-left: 0; padding-top: 40px; }
+  .tk-pijp-stip { top: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.w-fx:not(.stil) .tk-pijp::before { transform: scaleY(0); transition: transform 1.6s cubic-bezier(.22, 1, .36, 1) .2s; }
+  html.w-fx:not(.stil) .tk-pijp.aan::before { transform: none; }
+  html.w-fx:not(.stil) .tk-pijp li { opacity: 0; transform: translate3d(0, 24px, 0); transition: opacity .6s, transform .6s cubic-bezier(.22, 1, .36, 1); transition-delay: calc(.3s + var(--i) * .22s); }
+  html.w-fx:not(.stil) .tk-pijp.aan li { opacity: 1; transform: none; }
+  html.w-fx:not(.stil) .tk-pijp.aan li:last-child .tk-pijp-stip { animation: tk-puls 2s ease-out 1.8s infinite; }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html.w-fx:not(.stil) .tk-pijp::before { transform: scaleX(0); }
+  html.w-fx:not(.stil) .tk-pijp.aan::before { transform: none; }
+}
+/* de pijp zelf komt niet als blok op, alleen zijn stations */
+html.w-fx:not(.stil) .tk-pijp[data-zie] { opacity: 1; transform: none; }
+@keyframes tk-puls { 0% { box-shadow: 0 0 0 0 rgba(219, 105, 35, .55); } 100% { box-shadow: 0 0 0 18px rgba(219, 105, 35, 0); } }
+
+/* ── Jouw bezoek: een donker paneel met live waarden ──────────────── */
+.tk-bezoek {
+  display: grid;
+  gap: 28px;
+  padding: clamp(24px, 3vw, 48px);
+  border-radius: 16px;
+  background: #202020;
+  color: #efeeea;
+}
+.tk-bezoek-kop { display: flex; align-items: center; gap: 10px; }
+.tk-live { width: 10px; height: 10px; border-radius: 999px; background: #db6923; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .tk-live { animation: tk-puls 1.8s ease-out infinite; }
+}
+.tk-bezoek-lijst {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: rgba(239, 238, 234, .14);
+  border-radius: 12px;
+  overflow: hidden;
+}
+@media (min-width: 768px) { .tk-bezoek-lijst { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tk-bezoek-lijst > div { display: flex; flex-direction: column; gap: 10px; padding: 18px; background: #202020; }
+.tk-bezoek-lijst dt { color: #a9a8a3; }
+.tk-bezoek-waarde {
+  margin: 0;
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(18px, 2.4vw, 34px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.tk-bezoek-lijst > div:last-child .tk-bezoek-waarde { color: #db6923; }
