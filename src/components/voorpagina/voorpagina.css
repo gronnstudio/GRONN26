@@ -9,8 +9,8 @@
   --vp-rand: max(20px, 2.5vw);
   --vp-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
   --vp-regel: cubic-bezier(0.25, 1, 0.5, 1);
-  --vp-inhoud: min(1032px, 100% - 2 * var(--goot));
-  --vp-kolom: min(1068px, 100% - 2 * var(--goot));
+  --vp-inhoud: min(1440px, 100% - 2 * var(--goot)); /* volle breedte: de zes stappen stonden te smal (eigenaar, 5 okt 2026) */
+  --vp-kolom: min(1440px, 100% - 2 * var(--goot));
 }
 .vp-licht {
   font-family: var(--font-syne);
@@ -231,6 +231,9 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.vp-zes li {
+  max-width: 420px;
 }
 .vp-zes .lbl {
   display: block;
