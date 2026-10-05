@@ -34,10 +34,14 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   const paneel = useRef<HTMLDivElement>(null)
   const knop = useRef<HTMLButtonElement>(null)
 
+  // Bewaarde stand ophalen ná de eerste render (hydration-veilig).
   useEffect(() => {
-    try {
-      setStand({ ...STANDAARD, ...JSON.parse(localStorage.getItem(KEY) || "{}") })
-    } catch {}
+    const t = setTimeout(() => {
+      try {
+        setStand({ ...STANDAARD, ...JSON.parse(localStorage.getItem(KEY) || "{}") })
+      } catch {}
+    }, 0)
+    return () => clearTimeout(t)
   }, [])
   useEffect(() => {
     if (!open) return

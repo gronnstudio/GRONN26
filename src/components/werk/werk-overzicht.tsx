@@ -21,10 +21,15 @@ const volg = (n: number) => ({ "--i": n }) as CSSProperties
 export function WerkOverzicht() {
   const [weergave, setWeergave] = useState<Weergave>("lijst")
 
+  // Bewaarde keuze ophalen ná de eerste render (hydration-veilig): de server
+  // kent localStorage niet, dus de lijst is altijd de eerste stand.
   useEffect(() => {
-    try {
-      if (localStorage.getItem(SLEUTEL) === "raster") setWeergave("raster")
-    } catch {}
+    const t = setTimeout(() => {
+      try {
+        if (localStorage.getItem(SLEUTEL) === "raster") setWeergave("raster")
+      } catch {}
+    }, 0)
+    return () => clearTimeout(t)
   }, [])
 
   const kies = (w: Weergave) => {

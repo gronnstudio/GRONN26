@@ -31,7 +31,8 @@ const T02 = TERRAS_FOTOS.reeks[0]
 const PLAATS = TERRAS.plaats.split(",")[0]
 
 export default function TuinenPagina() {
-  let n = 0
+  // startnummer per fase, zodat de diensten doorlopen (01…05)
+  const START = FASEN.map((_, i) => FASEN.slice(0, i).reduce((t, f) => t + f.diensten.length, 0))
   return (
     <>
       {/* Tuinen heeft nog geen eigen foto: het sfeerbeeld draagt zijn label. */}
@@ -44,10 +45,9 @@ export default function TuinenPagina() {
           <section key={f.id} aria-labelledby={f.id} className={i === 0 ? "w-sectie" : "pt-[clamp(56px,7vw,96px)]"}>
             <KopRegel id={f.id} label={f.kop} aantal={aantalDiensten(f.diensten.length)} />
             <div data-zie>
-              {f.diensten.map((d) => {
-                n += 1
-                return <DienstRij key={d.slug} nr={String(n).padStart(2, "0")} dienst={d} />
-              })}
+              {f.diensten.map((d, k) => (
+                <DienstRij key={d.slug} nr={String(START[i] + k + 1).padStart(2, "0")} dienst={d} />
+              ))}
             </div>
           </section>
         ))}

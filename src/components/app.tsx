@@ -38,11 +38,12 @@ export function App() {
     if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {})
 
     const d = document as Document & { webkitFullscreenEnabled?: boolean }
-    setKanVol(!!(document.fullscreenEnabled || d.webkitFullscreenEnabled) && !/iphone|ipod/i.test(navigator.userAgent))
+    const kan = !!(document.fullscreenEnabled || d.webkitFullscreenEnabled) && !/iphone|ipod/i.test(navigator.userAgent)
+    const t0 = setTimeout(() => setKanVol(kan), 0) // ná de eerste render (hydration-veilig)
     const bijVol = () => setVol(!!document.fullscreenElement)
     document.addEventListener("fullscreenchange", bijVol)
 
-    if (alsApp() || weggeklikt()) return () => document.removeEventListener("fullscreenchange", bijVol)
+    if (alsApp() || weggeklikt()) return () => { clearTimeout(t0); document.removeEventListener("fullscreenchange", bijVol) }
     const ios = /iphone|ipod/i.test(navigator.userAgent) || (/ipad|macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1)
     const bijPrompt = (e: Event) => {
       e.preventDefault()
@@ -66,6 +67,7 @@ export function App() {
     addEventListener("appinstalled", bijInstallatie)
     addEventListener("scroll", bijScroll, { passive: true })
     return () => {
+      clearTimeout(t0)
       document.removeEventListener("fullscreenchange", bijVol)
       removeEventListener("beforeinstallprompt", bijPrompt)
       removeEventListener("appinstalled", bijInstallatie)

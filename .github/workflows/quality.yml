@@ -1,0 +1,31 @@
+name: quality
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    # Bewust klein: typecheck, lint, build en een handvol e2e-tests. Loopt
+    # dit tegen de tien minuten, dan is de suite aan de beurt, niet het plafond.
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npx eslint src
+      - run: npm run build
+      - run: npx playwright install chromium --with-deps
+      - run: npx playwright test
+        env:
+          CI: "true"

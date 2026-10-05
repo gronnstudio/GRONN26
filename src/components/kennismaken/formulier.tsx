@@ -280,6 +280,7 @@ export function KennismakenFormulier() {
       form.reset()
       setStatus("verzonden")
     } catch {
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- mailto:, geen interne pagina
       window.location.href = mailto
       setStatus("terugval")
     }
