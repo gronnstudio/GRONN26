@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import type { CSSProperties } from "react"
 import { Opening } from "@/components/wereld/opening"
+import { Zaaien } from "@/components/niet-gevonden/zaaien"
 
 export const metadata: Metadata = {
   title: "Pagina niet gevonden",
@@ -22,6 +23,7 @@ export default function NietGevonden() {
       <Opening label="404 · Pagina niet gevonden" titel={"Hier groeit\nnog niets."} />
 
       <div className="wrap">
+        <Zaaien />
         <nav aria-label="De weg terug" className="mt-[clamp(64px,8vw,120px)] max-w-[900px] border-t border-lijn">
           {WEGEN.map((w, i) => (
             <Link
