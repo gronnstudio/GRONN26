@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { BUSINESS } from "@/lib/business"
 import { Logo } from "./logo"
+import { Kopieer } from "./kopieer"
 
 const PAGINAS: [string, string][] = [
   ["/vijvers", "Vijvers"],
@@ -60,11 +61,11 @@ export function Voet() {
           </nav>
           <div>
             <p className="lbl m-0 text-gedempt">Klein</p>
-            <p className="mt-4 mb-0 leading-[1.75] text-gedempt tabular-nums">
-              KVK {BUSINESS.kvk}
-              <br />
-              BTW {BUSINESS.btw}
-              <br />
+            <div className="mt-4 flex flex-col items-start gap-2 text-sm">
+              <Kopieer label="KVK" waarde={BUSINESS.kvk} />
+              <Kopieer label="BTW" waarde={BUSINESS.btw} />
+            </div>
+            <p className="mt-4 mb-0 leading-[1.75]">
               <Link href="/privacy" className="w-lijnlink text-inkt">Privacy</Link>
             </p>
           </div>
