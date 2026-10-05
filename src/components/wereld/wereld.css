@@ -19,7 +19,7 @@
 }
 .w-opening .w-label {
   margin: 0 0 clamp(20px, 2.5vw, 36px);
-  color: #b8c5a8;
+  color: #a9a8a3;
 }
 .w-reus {
   margin: 0;
@@ -158,7 +158,7 @@
   font-weight: 300;
   font-style: italic;
   letter-spacing: -0.04em;
-  color: var(--mos);
+  color: var(--gedempt);
 }
 .w-cirkel {
   display: inline-grid;

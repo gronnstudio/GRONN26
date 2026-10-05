@@ -24,7 +24,7 @@ export function Voet() {
       <div className="wrap">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-8">
           <div>
-            <p className="lbl m-0 text-salie">Studio</p>
+            <p className="lbl m-0 text-gedempt">Studio</p>
             <p className="mt-4 mb-0 leading-[1.75]">
               {BUSINESS.name}
               <br />
@@ -34,7 +34,7 @@ export function Voet() {
             </p>
           </div>
           <div className="min-w-0">
-            <p className="lbl m-0 text-salie">Contact</p>
+            <p className="lbl m-0 text-gedempt">Contact</p>
             <ul className="mt-4 mb-0 list-none space-y-1.5 p-0 leading-[1.6]">
               <li>
                 <a href={BUSINESS.emailHref} className="w-lijnlink [overflow-wrap:anywhere]">{BUSINESS.email}</a>
@@ -49,7 +49,7 @@ export function Voet() {
             </ul>
           </div>
           <nav aria-label="Pagina's">
-            <p className="lbl m-0 text-salie">Pagina&apos;s</p>
+            <p className="lbl m-0 text-gedempt">Pagina&apos;s</p>
             <ul className="mt-4 mb-0 list-none space-y-1.5 p-0 leading-[1.6]">
               {PAGINAS.map(([h, t]) => (
                 <li key={h}>
@@ -59,7 +59,7 @@ export function Voet() {
             </ul>
           </nav>
           <div>
-            <p className="lbl m-0 text-salie">Klein</p>
+            <p className="lbl m-0 text-gedempt">Klein</p>
             <p className="mt-4 mb-0 leading-[1.75] text-gedempt tabular-nums">
               KVK {BUSINESS.kvk}
               <br />

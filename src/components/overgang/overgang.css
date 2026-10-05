@@ -8,7 +8,7 @@ html.intro:not(.intro-los) { overflow: hidden; }
 
 .og-laad { position: absolute; left: 0; top: 0; height: 8px; width: 0; background: #db6923; z-index: 1005; }
 .og-grond { position: absolute; inset: 0; background: #202020; }
-.og-verloop { position: absolute; inset: 0; background: linear-gradient(to bottom, #23483a, #202020); opacity: 0; }
+.og-verloop { position: absolute; inset: 0; background: linear-gradient(to bottom, #2e2e2c, #202020); opacity: 0; }
 .og-laad, .og-grond, .og-merk { display: none; }
 html.intro .og-laad, html.intro .og-grond, .og[data-actief] .og-laad, .og[data-actief] .og-grond { display: block; }
 html.intro .og-merk, .og[data-actief] .og-merk { display: flex; }
@@ -25,7 +25,7 @@ html.intro .og-merk, .og[data-actief] .og-merk { display: flex; }
   font-family: var(--font-syne), sans-serif; font-weight: 700;
   font-size: clamp(28px, 3.4vw, 52px); line-height: 1.2; letter-spacing: -0.02em;
 }
-.og-zin em { font-style: normal; color: #b8c5a8; }
+.og-zin em { font-style: normal; color: #a9a8a3; }
 .og-merk { position: absolute; left: 0; right: 0; bottom: 94px; justify-content: center; opacity: 0; z-index: 1005; }
 
 @media (max-width: 1023px) {
