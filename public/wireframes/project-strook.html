@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-046 Project met fotostrook — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-046: de vijverrenovatie met de foto's als één horizontale strook
+   (scroll-snap, genummerd, mono bijschriften), de tekening groot en de
+   cijfers als één rij grote getallen. */
+.titel{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;padding-top:clamp(48px,6vw,96px)}
+.titel h1{margin:0;font-size:clamp(40px,6vw,88px);line-height:1;letter-spacing:-.035em}
+.titel p{grid-column:2;margin:24px 0 0;max-width:40ch;font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:var(--muted)}
+.fiche{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 24px;margin-top:clamp(48px,6vw,80px);border-top:1px solid var(--lijn)}
+.fiche div{padding:12px 0;display:flex;flex-direction:column;gap:4px}
+
+/* cijfers: één rij grote getallen */
+.cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:32px;border-top:1px solid #202020}
+.cijfers div{padding-top:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.cijfers .getal{font-size:clamp(64px,9vw,148px);line-height:.85;letter-spacing:-.06em}
+.cijfers .getal small{font-size:.32em;letter-spacing:-.01em;margin-left:.15em}
+.cijfers p{margin:0}
+
+/* fotostrook */
+.strook-kop{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.strook-knoppen{display:flex;gap:8px}
+.strook-knoppen button{width:44px;height:44px;border-radius:999px;border:1px solid var(--lijn);background:#EFEEEA;font:16px/1 'Geist Mono',monospace;cursor:pointer}
+.strook{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--goot);padding:24px var(--goot) 16px;margin:0;list-style:none;scrollbar-width:thin}
+.strook li{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;width:clamp(220px,24vw,340px)}
+.strook li.lig{width:clamp(300px,40vw,560px)}
+.strook .ph{height:clamp(300px,34vw,460px)}
+.strook li.ai .ph{background:#EFEEEA;outline:1px solid var(--lijn);outline-offset:-1px}
+.strook li.leeg .ph{background:#EFEEEA;outline:1px dashed var(--lijn);outline-offset:-1px}
+.strook .onder{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.04em;line-height:1.5;color:var(--muted);text-transform:uppercase}
+.strook .onder b{color:var(--ink);font-weight:400}
+
+/* tekening groot */
+.tekening{width:100%;height:auto;font-family:'Geist Mono',monospace;display:block}
+.tekening text{font-size:11px;letter-spacing:.06em;fill:#202020}
+.tekening .noot{fill:#5E5E5B;font-size:10px}
+.tekening .lijn{stroke:#202020;stroke-width:1;fill:none}
+.tekening .stip{fill:#202020}
+.tekening .vak{fill:#EFEEEA;stroke:#202020;stroke-width:1}
+.tekening .vijver{fill:#B8C5A8;stroke:#202020;stroke-width:1}
+.legenda{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px}
+.tekening-blok{border-top:1px solid var(--lijn);padding-top:14px}
+.tekening-uitleg{display:grid;grid-template-columns:3fr 6fr 3fr;column-gap:32px;margin-top:32px}
+.tekening-uitleg div{grid-column:2}
+.tekening-uitleg p{margin:0 0 1em;line-height:1.7}
+
+.lees{display:grid;grid-template-columns:3fr 6fr 3fr;column-gap:32px}
+.lees .kolom{grid-column:2}
+.lees p{line-height:1.7;margin:0 0 1.1em}
+.inhoud{columns:2;column-gap:32px;margin-top:24px}
+.inhoud div{break-inside:avoid;display:flex;gap:16px;padding:10px 0;border-top:1px solid var(--lijn)}
+.volgende{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-top:1px solid var(--lijn);padding-top:16px;text-decoration:none}
+@media (max-width:1000px){
+  .cijfers{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}
+}
+@media (max-width:767px){
+  .titel,.lees,.tekening-uitleg{grid-template-columns:1fr}
+  .titel p,.lees .kolom,.tekening-uitleg div{grid-column:1}
+  .fiche{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cijfers{column-gap:16px}
+  .cijfers .getal{font-size:clamp(56px,16vw,96px)}
+  .strook{gap:12px}
+  .strook li{width:72vw}
+  .strook li.lig{width:86vw}
+  .strook .ph{height:min(96vw,420px)}
+  .tekening-scroll{overflow-x:auto;margin:0 calc(var(--goot) * -1);padding:0 var(--goot)}
+  .tekening-scroll .tekening{min-width:560px}
+  .inhoud{columns:1}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+</div>
+
+<main>
+  <div class="wrap">
+    <section class="titel">
+      <p class="lbl muted" style="margin:0">GR / 001 · Vijverrenovatie</p>
+      <h1 class="syne">Twee vijvers. Eén samenhangend watersysteem.</h1>
+      <p>Een vijverrenovatie waarin watertechniek, beplanting en natuurlijke afwerking samenkomen.</p>
+    </section>
+
+    <div class="fiche lbl">
+      <div><span class="muted">Code</span><span>GR / 001</span></div>
+      <div><span class="muted">Type</span><span>Vijverrenovatie</span></div>
+      <div><span class="muted">Jaar</span><span>2026</span></div>
+      <div><span class="muted">Status</span><span>In afronding</span></div>
+      <div><span class="muted">Tijd</span><span>circa 120 uur</span></div>
+      <div><span class="muted">Water</span><span>circa 5.000 l</span></div>
+    </div>
+
+    <section class="sectie" aria-label="Het project in cijfers">
+      <div class="cijfers">
+        <div><span class="syne getal">120</span><p class="lbl">uur, circa</p><p class="muted">inclusief voorbereiding en denkwerk</p></div>
+        <div><span class="syne getal">2</span><p class="lbl">vijvers</p><p class="muted">verbonden binnen één watersysteem</p></div>
+        <div><span class="syne getal">5.000</span><p class="lbl">liter, circa</p><p class="muted">open water</p></div>
+        <div><span class="syne getal">12<small>m</small></span><p class="lbl">waterlijn, circa</p><p class="muted">plus circa 6 meter beekrand</p></div>
+      </div>
+      <p class="lbl muted" style="margin-top:24px">Afmetingen, waterinhoud en uren zijn benaderingen.</p>
+    </section>
+
+    <section class="sectie lees" aria-label="Inleiding">
+      <div class="kolom">
+        <p>Circa 5.000 liter water, twee vijvers, een waterval en een beekloop. Voor GRØNN Studio kwamen ze samen in een eerste vijverrenovatie waarin bijna ieder onderdeel invloed heeft op de rest. Van de route van een ondergrondse leiding tot de plek van een plantmand: achter het uiteindelijke beeld gaat veel uitzoekwerk, afstemming en aandacht schuil.</p>
+        <p>Inmiddels is ongeveer 120 uur besteed aan de voorbereiding en uitvoering. Het project bevindt zich in de afrondende fase. De basis krijgt zijn definitieve vorm; de beplanting zal het geheel daarna verder laten groeien.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="sectie" aria-labelledby="strook-kop">
+    <div class="wrap strook-kop">
+      <p class="lbl muted" id="strook-kop" style="margin:0">Het werk in beeld · 18 beelden · veeg of scroll →</p>
+      <div class="strook-knoppen"><button type="button" data-strook="-1" aria-label="Vorige beelden">←</button><button type="button" data-strook="1" aria-label="Volgende beelden">→</button></div>
+    </div>
+    <ol class="strook" aria-label="Fotostrook, in de volgorde van het verhaal" tabindex="0">
+      <li><div class="ph">F02-1</div><p class="onder"><b>01</b> · bestaande situatie<br>De vijver vóór de renovatie, afgedekt met een net</p></li>
+      <li><div class="ph">F02-2</div><p class="onder"><b>02</b> · bestaande situatie<br>De vijver tegen een gemetselde muur onder een boom</p></li>
+      <li><div class="ph">F03-1</div><p class="onder"><b>03</b> · proces<br>Vijverfolie uitgerold om op maat te meten</p></li>
+      <li class="lig ai"><div class="ph">F03-2 · AI-visualisatie</div><p class="onder"><b>04</b> · AI-visualisatie<br>Visualisatie vooraf, geen foto van het resultaat.</p></li>
+      <li class="ai"><div class="ph">F03-3 · AI-visualisatie</div><p class="onder"><b>05</b> · AI-visualisatie<br>Visualisatie, geen foto van het resultaat.</p></li>
+      <li><div class="ph">F11</div><p class="onder"><b>06</b> · uitvoering<br>De beekloop in aanbouw, juli.</p></li>
+      <li><div class="ph">F04-1</div><p class="onder"><b>07</b> · uitvoering<br>Sleuf met twee pvc-leidingen langs de haag</p></li>
+      <li><div class="ph">F04-2</div><p class="onder"><b>08</b> · uitvoering<br>Kogelkranen tussen de keien bij de waterval</p></li>
+      <li><div class="ph">F05</div><p class="onder"><b>09</b> · uitvoering<br>Filterbak met drie kamers</p></li>
+      <li class="leeg"><div class="ph">F06</div><p class="onder"><b>10</b> · de skimmer<br>[NOG AANLEVEREN: foto skimmer]</p></li>
+      <li class="lig"><div class="ph">F07-1</div><p class="onder"><b>11</b> · proces<br>De beschadigde filterbak, met lijmpistool</p></li>
+      <li><div class="ph">F07-2</div><p class="onder"><b>12</b> · proces<br>Een hand vol slib uit de filterbak</p></li>
+      <li><div class="ph">F08-1</div><p class="onder"><b>13</b> · uitvoering<br>Keien en natuursteen op de vijverfolie</p></li>
+      <li><div class="ph">F08-2</div><p class="onder"><b>14</b> · uitvoering<br>Nick aan het werk, september.</p></li>
+      <li><div class="ph">F09-1</div><p class="onder"><b>15</b> · uitvoering<br>Een jong vijverplantje in een plantmand</p></li>
+      <li><div class="ph">F09-2</div><p class="onder"><b>16</b> · uitvoering<br>Nick aan het werk.</p></li>
+      <li class="lig"><div class="ph">F10</div><p class="onder"><b>17</b> · uitvoering<br>De waterval over natuursteen</p></li>
+      <li class="lig"><div class="ph">F01</div><p class="onder"><b>18</b> · uitvoering<br>Overzicht van de tuin tijdens de afronding</p></li>
+    </ol>
+  </section>
+
+  <div class="wrap">
+    <section class="sectie" aria-labelledby="route">
+      <div class="tekening-blok">
+        <p class="lbl muted" id="route" style="margin:0 0 24px">03 · De waterroute</p>
+        <figure style="margin:0">
+          <div class="tekening-scroll">
+          <svg class="tekening" viewBox="0 0 640 460" role="img" aria-labelledby="sys-titel">
+          <title id="sys-titel">De waterroute van GR / 001: van vijver B via pomp en filter naar vijver A en de waterval, en via de beekloop terug.</title>
+          <!-- lijnen -->
+          <path class="lijn" d="M120 380 V300 H200" />
+          <path class="lijn" d="M260 300 H330" />
+          <path class="lijn" d="M410 300 H450 V190" />
+          <path class="lijn" d="M450 190 V110 H510" />
+          <path class="lijn" d="M450 190 H330 V130" />
+          <path class="lijn" d="M555 130 V400 H200" stroke-dasharray="4 4" />
+          <path class="lijn" d="M230 105 H150 V366" stroke-dasharray="4 4" />
+          <!-- onderdelen -->
+          <ellipse class="vijver" cx="120" cy="400" rx="80" ry="34" /><text x="82" y="404">VIJVER B</text>
+          <rect class="vak" x="200" y="285" width="60" height="30" /><text x="212" y="304">POMP</text>
+          <rect class="vak" x="330" y="280" width="80" height="40" /><text x="344" y="304">FILTER</text>
+          <circle class="stip" cx="450" cy="190" r="4" /><text x="462" y="194">SPLITSING</text>
+          <ellipse class="vijver" cx="300" cy="105" rx="70" ry="28" /><text x="264" y="109">VIJVER A</text>
+          <rect class="vak" x="510" y="90" width="90" height="40" /><text x="522" y="114">WATERVAL</text>
+          <text x="565" y="300" class="noot">BEEKLOOP</text>
+          <!-- annotaties -->
+          <text x="200" y="272" class="noot">AQUAFORTE DM-10000 VARIO S</text>
+          <text x="330" y="340" class="noot">3 KAMERS · BYPASS</text>
+          <text x="340" y="182" class="noot">50 MM DRUK-PVC</text>
+          <text x="462" y="212" class="noot">2 TAKKEN</text><text x="462" y="226" class="noot">REGELBAAR</text>
+          <text x="20" y="40" class="noot">GR / 001 — WATERROUTE · SCHEMATISCH</text>
+        </svg>
+          </div>
+          <figcaption class="legenda lbl muted"><span>— aanvoer onder druk</span><span>- - - terug onder vrij verval</span></figcaption>
+        </figure>
+      </div>
+      <div class="tekening-uitleg">
+        <div>
+          <p>Vanuit vijver B gaat het water via de pomp naar het driekamerfilter. Na de filtratie wordt het verdeeld over twee takken: één richting vijver A en één richting de waterval. Het water van de waterval loopt via de beekloop terug naar vijver B. Vijver A voert via de afvoer- en overloopverbinding terug naar vijver B.</p>
+          <p class="muted">Zo ontstaan twee routes binnen hetzelfde watersysteem. De verdeling is regelbaar, zodat de toevoer naar vijver A en naar de waterval op elkaar kan worden afgestemd.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie" aria-labelledby="hoofdstukken">
+      <p class="lbl muted" id="hoofdstukken" style="margin:0">Het hele verhaal · 12 hoofdstukken</p>
+      <div class="inhoud lbl">
+        <div><span class="muted">01</span><span>De opgave</span></div><div><span class="muted">02</span><span>Het denkwerk</span></div><div><span class="muted">03</span><span>De waterroute</span></div><div><span class="muted">04</span><span>Het leidingwerk</span></div><div><span class="muted">05</span><span>Onderhoud</span></div><div><span class="muted">06</span><span>Het filter</span></div><div><span class="muted">07</span><span>De skimmer</span></div><div><span class="muted">08</span><span>Filterherstel</span></div><div><span class="muted">09</span><span>Water naar tuin</span></div><div><span class="muted">10</span><span>Beplanting</span></div><div><span class="muted">11</span><span>De afronding</span></div><div><span class="muted">12</span><span>Een eerste project</span></div>
+      </div>
+    </section>
+
+    <section class="sectie lees" aria-label="Citaat">
+      <div class="kolom">
+        <p class="syne" style="font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.015em">"Ik heb ontzettend genoten van dit eerste project. Van het uitdenken van de waterstromen tot het moment waarop de onderdelen samenkomen."</p>
+        <p class="lbl muted">Nick Peters</p>
+      </div>
+    </section>
+
+    <a class="volgende" href="/wireframes/project-terras" style="margin-top:clamp(96px,12vw,180px)"><span class="lbl">Volgend project</span><span class="syne" style="font-size:clamp(24px,3vw,40px)">Terras Geulle →</span></a>
+  </div>
+</main>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk" aria-current="page">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script>
+  // Pijlknoppen naast de strook: één scherm verder of terug.
+  const strook = document.querySelector('.strook')
+  document.querySelectorAll('[data-strook]').forEach((k) => k.addEventListener('click', () => {
+    strook.scrollBy({ left: Number(k.dataset.strook) * strook.clientWidth * 0.8, behavior: 'smooth' })
+  }))
+</script>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

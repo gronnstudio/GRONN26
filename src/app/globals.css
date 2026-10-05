@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* GRØNN Brand Guide 2026, 60/30/10: gebroken wit en antraciet voeren de
+   boventoon, aarde-oranje is het ene accent (een oranje vlak draagt
+   antraciet tekst; oranje als tekst op licht is #A14312), bosgroen, mos en
+   salie zijn bijkleuren. Donker = de Blauwe Uur-kant: antraciet grond. */
+@custom-variant dark (&:where(.donker, .donker *));
+
+:root {
+  --grond: #efeeea;
+  --inkt: #202020;
+  --gedempt: #5e5e5b;
+  --lijn: rgba(32, 32, 32, 0.18);
+  --vlak: #dcd9d2;
+  --oranje: #db6923;
+  --oranje-tekst: #a14312;
+  --bos: #23483a;
+  --mos: #607a59;
+  --salie: #b8c5a8;
+  --goot: clamp(20px, 4vw, 56px);
+}
+html.donker {
+  --grond: #202020;
+  --inkt: #efeeea;
+  --gedempt: #a9a8a3;
+  --lijn: rgba(239, 238, 234, 0.18);
+  --vlak: #333331;
+  --oranje-tekst: #db6923;
+  color-scheme: dark;
+}
+html.contrast { --gedempt: var(--inkt); --lijn: currentColor; }
+html.groot { font-size: 115%; }
+html.onderstreep main a { text-decoration: underline; text-underline-offset: 3px; }
+html.stil *, html.stil *::before, html.stil *::after { transition: none !important; animation: none !important; }
+
+@theme inline {
+  --color-grond: var(--grond);
+  --color-inkt: var(--inkt);
+  --color-gedempt: var(--gedempt);
+  --color-lijn: var(--lijn);
+  --color-vlak: var(--vlak);
+  --color-oranje: var(--oranje);
+  --color-oranje-tekst: var(--oranje-tekst);
+  --color-bos: var(--bos);
+  --color-mos: var(--mos);
+  --color-salie: var(--salie);
+  --color-antraciet: #202020;
+  --color-gebroken-wit: #efeeea;
+  --font-syne: var(--font-syne), sans-serif;
+  --font-sans: var(--font-montserrat), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+body {
+  margin: 0;
+  background: var(--grond);
+  color: var(--inkt);
+  font-family: var(--font-sans);
+  padding-bottom: 110px;
+}
+
+/* Bouwstenen uit de wireframes (wf.css), één keer gedefinieerd */
+@utility wrap { max-width: 1440px; margin-inline: auto; padding-inline: var(--goot); }
+@utility lbl { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+@utility syne { font-family: var(--font-syne); font-weight: 600; }
+@utility lnk {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px;
+}
+@utility sectie { padding-top: clamp(96px, 12vw, 180px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}

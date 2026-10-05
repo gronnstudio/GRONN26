@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-040 Combinatie · typografie — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-040: geen foto en geen tekening in de opening: alleen de kop heel groot over de volle breedte, label en zin klein in mono; daarna alle hoofdstukken van WF-025. */
+.hoofdstuk{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-top:1px solid var(--lijn);padding-top:14px;margin-bottom:clamp(32px,4vw,56px)}
+/* 01 werk */
+.projecten{display:grid;grid-template-columns:7fr 5fr;gap:32px;align-items:start}
+.project{text-decoration:none;display:flex;flex-direction:column;gap:18px}
+.project .ph{aspect-ratio:7/6}
+.project.twee{margin-top:clamp(80px,16vw,240px)}
+.project.twee .ph{aspect-ratio:4/5}
+.project h3{margin:0;font-size:clamp(24px,2.5vw,36px);letter-spacing:-.02em;line-height:1.1}
+.fiche{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--lijn);padding-top:10px;color:var(--muted)}
+/* 02 over */
+.over{display:grid;grid-template-columns:4fr 1fr 7fr;align-items:center}
+.over .ph{grid-column:1;aspect-ratio:4/5}
+.over .tekst{grid-column:3}
+.over h2{margin:0;font-size:clamp(36px,5vw,72px);line-height:1.02;letter-spacing:-.03em}
+.over p{margin:24px 0 0;line-height:1.6;color:var(--muted);max-width:44ch}
+/* 04 kennismaken */
+.kennis{margin-top:clamp(96px,12vw,180px);background:#23483A;color:#EFEEEA;padding:clamp(56px,7vw,96px) var(--goot) clamp(72px,9vw,140px);display:flex;flex-direction:column;align-items:center;text-align:center}
+.kennis a.groot{font-size:clamp(44px,6.5vw,88px);line-height:1;letter-spacing:-.035em;text-decoration:none;margin-top:20px}
+.kennis .lbl{color:#E3E1DB}
+/* de tekening (letterlijk uit WF-025) */
+.systeem{display:grid;grid-template-columns:7fr 1fr 4fr;align-items:center;margin-top:clamp(96px,12vw,180px)}
+.systeem figure{margin:0}
+.systeem .uitleg{grid-column:3}
+.systeem .uitleg p{margin:16px 0 0;line-height:1.6;color:var(--muted)}
+.tekening{width:100%;height:auto;font-family:'Geist Mono',monospace}
+.tekening text{font-size:11px;letter-spacing:.06em;fill:#202020}
+.tekening .noot{fill:#5E5E5B;font-size:10px}
+.tekening .lijn{stroke:#202020;stroke-width:1;fill:none}
+.tekening .stip{fill:#202020}
+.tekening .vak{fill:#EFEEEA;stroke:#202020;stroke-width:1}
+.tekening .vijver{fill:#B8C5A8;stroke:#202020;stroke-width:1}
+.legenda{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:16px}
+@media (max-width:767px){
+  .projecten{grid-template-columns:1fr}
+  .project.twee{margin-top:24px}
+  .fiche{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:6px}
+  .over{grid-template-columns:1fr;row-gap:32px}
+  .over .ph{width:70%}
+  .over .tekst{grid-column:1}
+  .systeem{grid-template-columns:1fr;row-gap:24px}
+  .systeem .uitleg{grid-column:1}
+}
+
+/* opening van WF-040 */
+
+.typo{padding-top:clamp(40px,7vw,120px);min-height:calc(100svh - 90px);display:flex;flex-direction:column;justify-content:space-between;gap:clamp(40px,6vw,80px)}
+.typo h1{margin:0;font-size:clamp(52px,11.6vw,176px);line-height:.92;letter-spacing:-.05em;overflow-wrap:break-word}
+.typo .voet{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;border-top:1px solid var(--lijn);padding-top:14px;padding-bottom:clamp(24px,4vw,56px)}
+.typo .voet .lbl:first-child{grid-column:1 / span 4}
+.typo .voet .zin{grid-column:6 / span 7;margin:0;font-family:'Geist Mono',monospace;font-size:13px;line-height:1.7;color:var(--muted);max-width:60ch}
+@media (max-width:767px){
+  .typo{min-height:0}
+  .typo .voet{grid-template-columns:1fr;row-gap:16px}
+  .typo .voet .lbl:first-child,.typo .voet .zin{grid-column:auto}
+}
+
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="typo" aria-labelledby="kop">
+      <h1 class="syne" id="kop">Een vijver en tuin die gezond blijven.</h1>
+      <div class="voet">
+        <p class="lbl muted" style="margin:0">Vijvers en tuinen · Stein en omgeving</p>
+        <p class="zin">Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
+      </div>
+    </section>
+
+    <section class="sectie" aria-labelledby="h-werk">
+      <div class="hoofdstuk"><span class="lbl" id="h-werk">01 — Werk</span><a class="lnk" href="/wireframes/werk">Alle werk · lijst of raster →</a></div>
+      <div class="projecten">
+        <a class="project" href="/wireframes/project-vijverrenovatie">
+          <div class="ph">Foto F01 · vijverrenovatie</div>
+          <h3 class="syne">Twee vijvers. Eén samenhangend watersysteem.</h3>
+          <div class="fiche lbl"><span>GR / 001</span><span>Vijverrenovatie</span><span>circa 120 uur</span><span>In afronding</span></div>
+        </a>
+        <a class="project twee" href="/wireframes/project-terras">
+          <div class="ph">Foto T02 · terras Geulle</div>
+          <h3 class="syne">Een terras van 24 m², gelegd in twee dagen.</h3>
+          <div class="fiche lbl"><span>GR / 002</span><span>Geulle</span><span>24 m²</span><span>2 dagen</span></div>
+        </a>
+      </div>
+      <div class="systeem">
+        <figure>
+          <svg class="tekening" viewBox="0 0 640 460" role="img" aria-labelledby="sys-titel">
+          <title id="sys-titel">De waterroute van GR / 001: van vijver B via pomp en filter naar vijver A en de waterval, en via de beekloop terug.</title>
+          <!-- lijnen -->
+          <path class="lijn" d="M120 380 V300 H200" />
+          <path class="lijn" d="M260 300 H330" />
+          <path class="lijn" d="M410 300 H450 V190" />
+          <path class="lijn" d="M450 190 V110 H510" />
+          <path class="lijn" d="M450 190 H330 V130" />
+          <path class="lijn" d="M555 130 V400 H200" stroke-dasharray="4 4" />
+          <path class="lijn" d="M230 105 H150 V366" stroke-dasharray="4 4" />
+          <!-- onderdelen -->
+          <ellipse class="vijver" cx="120" cy="400" rx="80" ry="34" /><text x="82" y="404">VIJVER B</text>
+          <rect class="vak" x="200" y="285" width="60" height="30" /><text x="212" y="304">POMP</text>
+          <rect class="vak" x="330" y="280" width="80" height="40" /><text x="344" y="304">FILTER</text>
+          <circle class="stip" cx="450" cy="190" r="4" /><text x="462" y="194">SPLITSING</text>
+          <ellipse class="vijver" cx="300" cy="105" rx="70" ry="28" /><text x="264" y="109">VIJVER A</text>
+          <rect class="vak" x="510" y="90" width="90" height="40" /><text x="522" y="114">WATERVAL</text>
+          <text x="565" y="300" class="noot">BEEKLOOP</text>
+          <!-- annotaties -->
+          <text x="200" y="272" class="noot">AQUAFORTE DM-10000 VARIO S</text>
+          <text x="330" y="340" class="noot">3 KAMERS · BYPASS</text>
+          <text x="340" y="182" class="noot">50 MM DRUK-PVC</text>
+          <text x="462" y="212" class="noot">2 TAKKEN</text><text x="462" y="226" class="noot">REGELBAAR</text>
+          <text x="20" y="40" class="noot">GR / 001 — WATERROUTE · SCHEMATISCH</text>
+        </svg>
+          <figcaption class="legenda lbl muted"><span>— aanvoer onder druk</span><span>- - - terug onder vrij verval</span></figcaption>
+        </figure>
+        <div class="uitleg">
+          <p class="lbl" style="margin:0;color:var(--ink)">GR / 001 · De waterroute</p>
+          <p>Vanuit vijver B gaat het water via de pomp naar het driekamerfilter. Na de filtratie wordt het verdeeld over twee takken: één richting vijver A en één richting de waterval.</p>
+          <p>Het water van de waterval loopt via de beekloop terug naar vijver B. Vijver A voert via de afvoer- en overloopverbinding terug naar vijver B.</p>
+          <p style="margin-top:28px"><a class="lnk" href="/wireframes/project-vijverrenovatie" style="color:var(--ink)">Bekijk het project →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie" aria-labelledby="h-over">
+      <div class="hoofdstuk"><span class="lbl" id="h-over">02 — Over</span></div>
+      <div class="over">
+        <div class="ph">Portret Nick</div>
+        <div class="tekst">
+          <h2 class="syne">Ik denk in beelden, patronen en verbanden.</h2>
+          <p>Als ik naar een tuin kijk, zie ik hoe licht, water, materialen en beplanting elkaar beïnvloeden.</p>
+          <p style="margin-top:32px"><a class="lnk" href="/wireframes/over" style="color:var(--ink)">Meer over GRØNN →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie" id="zo-werk-ik" aria-labelledby="h-stappen">
+      <div class="hoofdstuk" style="margin-bottom:0"><span class="lbl" id="h-stappen">03 — Zo werk ik</span><span class="lbl muted">6 stappen</span></div>
+      <div class="stappen">
+        <details class="stap"><summary><span class="lbl">01</span><span class="syne titel">Eerst kijken</span><span class="tekst">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</span></summary><p class="tekst-los">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</p></details>
+        <details class="stap"><summary><span class="lbl">02</span><span class="syne titel">Uitzoeken hoe het werkt</span><span class="tekst">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</span></summary><p class="tekst-los">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</p></details>
+        <details class="stap"><summary><span class="lbl">03</span><span class="syne titel">Verbanden leggen</span><span class="tekst">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</span></summary><p class="tekst-los">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</p></details>
+        <details class="stap"><summary><span class="lbl">04</span><span class="syne titel">Ontwerpen</span><span class="tekst">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</span></summary><p class="tekst-los">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</p></details>
+        <details class="stap"><summary><span class="lbl">05</span><span class="syne titel">Aanleggen</span><span class="tekst">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</span></summary><p class="tekst-los">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</p></details>
+        <details class="stap"><summary><span class="lbl">06</span><span class="syne titel">Laten groeien</span><span class="tekst">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</span></summary><p class="tekst-los">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</p></details>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<section class="kennis" aria-labelledby="h-kennis">
+  <span class="lbl" id="h-kennis">04 — Kennismaken</span>
+  <a class="groot syne" href="/wireframes/kennismaken">Kennismaken</a>
+  <p class="lbl" style="margin:28px 0 0">hello@gronn.studio · +316 181 180 14 · Stein en omgeving</p>
+</section>
+
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

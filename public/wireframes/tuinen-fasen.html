@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-049 Tuinen in drie fasen — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-049: WF-020 met de drie fasen (Kijken, Ontwerpen, Aanleggen) als drie grote kolommen naast elkaar, de diensten per fase eronder; op telefoon onder elkaar. */
+.opening{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;padding-top:clamp(56px,9vw,140px);align-items:end}
+.opening .ph{grid-column:6 / span 7;aspect-ratio:4/5}
+.opening .tekst{grid-column:1 / span 5;grid-row:1}
+.opening h1{margin:16px 0 0;font-size:clamp(48px,7.5vw,104px);line-height:1;letter-spacing:-.04em}
+.opening p.inleiding{margin:28px 0 0;font-size:clamp(18px,1.7vw,22px);line-height:1.5;color:var(--muted)}
+.fasen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:32px;margin-top:clamp(72px,9vw,140px);align-items:start}
+.kolom{border-top:1px solid var(--ink);padding-top:16px;min-width:0}
+.kolom h2{margin:20px 0 0;font-size:clamp(36px,4.4vw,64px);line-height:1;letter-spacing:-.035em}
+.kolom .aantal{margin:16px 0 28px}
+.kaart{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;row-gap:8px;padding:20px 0;border-top:1px solid var(--lijn);text-decoration:none}
+.kaart .lbl.muted{grid-column:1 / -1}
+.kaart .naam{font-size:clamp(20px,1.8vw,26px);letter-spacing:-.02em;line-height:1.15}
+.kaart .naam{grid-row:2;grid-column:1}
+.kaart .prijs{grid-row:2;grid-column:2;text-align:right;align-self:baseline;white-space:nowrap}
+.kaart .uitleg{grid-row:3;grid-column:1 / -1;color:var(--muted);line-height:1.6}
+@media (max-width:767px){
+  .opening{grid-template-columns:1fr;row-gap:32px}
+  .opening .ph,.opening .tekst{grid-column:1;grid-row:auto}
+  .fasen{grid-template-columns:1fr;row-gap:56px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="opening">
+      <div class="tekst">
+        <p class="lbl muted" style="margin:0">Diensten · tuin</p>
+        <h1 class="syne">Tuinen</h1>
+        <p class="inleiding">Een ontwerp voor je hele tuin. Ik kijk naar de bodem, het water, het licht en naar hoe jij de tuin gebruikt, en maak daar één plan van.</p>
+      </div>
+      <div class="ph">Foto · tuinproject (nog geen eigen foto: [FOTO])</div>
+    </section>
+
+    <div class="fasen">
+      <section class="kolom" aria-labelledby="fase-1">
+        <p class="lbl muted" style="margin:0">Fase A</p>
+        <h2 class="syne" id="fase-1">Kijken</h2>
+        <p class="lbl muted aantal">1 dienst</p>
+        <a class="kaart" href="#"><span class="lbl muted">01</span><span class="syne naam">Advies op locatie</span><span class="uitleg">Ik kom kijken, luister naar wat je wilt en zeg eerlijk wat ik zou doen. Een advies dat je zelf kunt uitvoeren.</span><span class="lbl prijs">Op maat</span></a>
+      </section>
+      <section class="kolom" aria-labelledby="fase-2">
+        <p class="lbl muted" style="margin:0">Fase B</p>
+        <h2 class="syne" id="fase-2">Ontwerpen</h2>
+        <p class="lbl muted aantal">2 diensten</p>
+        <a class="kaart" href="#"><span class="lbl muted">02</span><span class="syne naam">Tuinontwerp</span><span class="uitleg">Eén plan voor je hele tuin dat met de jaren mee kan. Laat je het door mij aanleggen, dan verreken ik de helft van het ontwerpbedrag.</span><span class="lbl prijs">Offerte</span></a>
+        <a class="kaart" href="#"><span class="lbl muted">03</span><span class="syne naam">Beplanting</span><span class="uitleg">Planten in lagen, van bodembedekker tot boom, die passen bij de plek en voedsel en beschutting geven.</span><span class="lbl prijs">Op maat</span></a>
+      </section>
+      <section class="kolom" aria-labelledby="fase-3">
+        <p class="lbl muted" style="margin:0">Fase C</p>
+        <h2 class="syne" id="fase-3">Aanleggen</h2>
+        <p class="lbl muted aantal">2 diensten</p>
+        <a class="kaart" href="#"><span class="lbl muted">04</span><span class="syne naam">Bestaande tuin omvormen</span><span class="uitleg">Ik kijk wat kan blijven, wat weg mag en hoe de tuin stap voor stap meer leven krijgt.</span><span class="lbl prijs">Op maat</span></a>
+        <a class="kaart" href="#"><span class="lbl muted">05</span><span class="syne naam">Tuin aanleggen</span><span class="uitleg">Ik leg aan wat we samen bedacht hebben, van de grond tot de laatste plant.</span><span class="lbl prijs">Op maat</span></a>
+      </section>
+    </div>
+
+    <section class="sectie" aria-labelledby="tuin-werk">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--lijn);padding-top:14px"><span class="lbl" id="tuin-werk">Tuinwerk</span><a class="lnk" href="/wireframes/werk">Alle werk →</a></div>
+      <a href="#" class="werkblok" style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:32px;margin-top:32px;text-decoration:none;align-items:end">
+        <div style="grid-column:1 / span 6">
+          <p class="lbl muted" style="margin:0">GR / 002 · Terrasaanleg · Geulle</p>
+          <p class="syne" style="margin:16px 0 0;font-size:clamp(28px,3.4vw,48px);line-height:1.05;letter-spacing:-.025em">Een terras van 24 m², gelegd in twee dagen.</p>
+        </div>
+        <div class="ph" style="grid-column:8 / span 5;aspect-ratio:3/4">T02 · het pad</div>
+      </a>
+    </section>
+
+    <section class="einde"><a class="syne" href="/wireframes/kennismaken">Kennismaken</a><p class="lbl muted" style="margin-top:24px">hello@gronn.studio · +316 181 180 14</p></section>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen" aria-current="page">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

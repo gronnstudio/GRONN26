@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Naslag — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#EFEEEA;color:#202020;font-family:Montserrat,sans-serif;font-size:14px;line-height:1.45}
+a{color:#202020}
+.mono{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em}
+.muted{color:#5E5E5B}
+.app{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);height:100vh}
+/* lijst */
+.lijst{border-right:1px solid #E3E1DB;display:flex;flex-direction:column;min-height:0}
+.lijst-kop{padding:20px 20px 12px;border-bottom:1px solid #E3E1DB}
+.lijst-kop h1{font-size:18px;font-weight:600;margin:10px 0 4px}
+.lijst-kop p{margin:0;color:#5E5E5B;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;padding:12px 20px;border-bottom:1px solid #E3E1DB}
+.filters button{all:unset;cursor:pointer;padding:5px 10px;border:1px solid #E3E1DB;border-radius:999px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.04em}
+.filters button[aria-pressed="true"]{background:#202020;color:#EFEEEA;border-color:#202020}
+.filters button:focus-visible{outline:2px solid #202020;outline-offset:2px}
+.items{list-style:none;margin:0;padding:0;overflow:auto;flex:1}
+.item button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 10px;width:100%;padding:12px 20px;border-bottom:1px solid #E3E1DB;cursor:pointer}
+.item button:hover{background:#E3E1DB}
+.item button:focus-visible{outline:2px solid #202020;outline-offset:-2px}
+.item button[aria-current="true"]{background:#202020;color:#EFEEEA}
+.item button[aria-current="true"] .muted{color:#A9A8A3}
+.item .titel{font-weight:500}
+.item .status{grid-column:2;font-size:12px}
+.item .toel{grid-column:2;font-size:12px}
+.item.geen button{cursor:default;opacity:.6}
+.item.geen button:hover{background:none}
+/* kijker */
+.kijker{display:flex;flex-direction:column;min-width:0;min-height:0;background:#E3E1DB}
+.balk{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding:12px 20px;background:#EFEEEA;border-bottom:1px solid #E3E1DB}
+.switch{display:inline-flex;border:1px solid #E3E1DB;border-radius:999px;padding:3px}
+.switch button{all:unset;cursor:pointer;padding:7px 14px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em}
+.switch button[aria-pressed="true"]{background:#202020;color:#EFEEEA}
+.switch button:focus-visible{outline:2px solid #202020;outline-offset:2px}
+.scherm{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;justify-content:center;align-items:flex-start;padding:20px}
+.toestel{position:relative;background:#EFEEEA;box-shadow:0 0 0 1px #E3E1DB,0 20px 50px -30px rgba(0,0,0,.4);overflow:hidden;flex:none}
+.toestel.telefoon,.toestel.tablet{border-radius:28px;box-shadow:0 0 0 10px #202020,0 20px 50px -20px rgba(0,0,0,.5)}
+.toestel iframe{position:absolute;top:0;left:0;border:0;transform-origin:0 0;background:#EFEEEA}
+.leeg{margin:auto;color:#5E5E5B}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto;min-height:100vh}
+  .lijst{border-right:0;border-bottom:1px solid #E3E1DB}
+  .items{max-height:40vh}
+  .kijker{min-height:80vh}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="lijst" aria-label="Alle wireframes">
+    <div class="lijst-kop">
+      <a class="mono" href="/wireframes/">← Wireframes</a>
+      <h1>Naslag</h1>
+      <p>Nieuwste bovenaan. Klik een regel om hem rechts live te bekijken. Andere layout oppakken? Noem het nummer.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter per pagina"></div>
+    <ul class="items" id="items"></ul>
+  </aside>
+
+  <section class="kijker" aria-label="Live weergave">
+    <div class="balk">
+      <div><span class="mono" id="nu-nr">—</span> <span id="nu-titel" style="font-weight:500">Kies een wireframe</span></div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <div class="switch" role="group" aria-label="Schermgrootte">
+          <button type="button" data-toestel="desktop" aria-pressed="true">Desktop</button>
+          <button type="button" data-toestel="tablet" aria-pressed="false">Tablet</button>
+          <button type="button" data-toestel="telefoon" aria-pressed="false">Telefoon</button>
+        </div>
+        <a class="mono" id="los" href="#" target="_blank" rel="noopener">Open los ↗</a>
+      </div>
+    </div>
+    <div class="scherm" id="scherm">
+      <div class="toestel" id="toestel"><iframe id="frame" title="Live weergave van de gekozen wireframe"></iframe></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ── De naslag ───────────────────────────────────────────────────────
+   Nieuwe wireframe? Zet BOVENAAN een regel erbij met het volgende
+   WF-nummer en een eigen bestand in public/. Oude bestanden blijven. */
+const WIREFRAMES = [
+  { nr: "WF-059", pagina: "Voorpagina", titel: "Uncode · Creative Freelance", src: "/wireframes/uncode-freelance.html", status: "Ter keuze", toel: "Kop die woord voor woord opkomt met één accentwoord, donker blok met fotostrook over de rand, bosgroen vlak met oplichtende tekst, stappen als 3×2-raster, groot portret." },
+  { nr: "WF-058", pagina: "Voorpagina", titel: "Uncode · Portfolio Atelier (donker)", src: "/wireframes/uncode-atelier.html", status: "Ter keuze", toel: "Reuzenkop die blijft staan terwijl de foto groeit, tekst die woord voor woord oplicht, VIJVERS TUINEN schuift opzij, fotocollage met parallax." },
+  { nr: "WF-057", pagina: "Voorpagina", titel: "Uncode · Creative Persona", src: "/wireframes/uncode-persona.html", status: "Ter keuze", toel: "Dit ben ik — Nick Peters, draaiende badge, lopende band, de diensten als grote namen met een beeld dat met de muis meeloopt." },
+  { nr: "WF-056", pagina: "Voorpagina", titel: "Uncode · Creative Architect", src: "/wireframes/uncode-architect.html", status: "Ter keuze", toel: "Schermvullende foto met kop, intro met Lees meer, donker blok met stappen en diensten, fotocollage met schuivend woord erachter." },
+  { nr: "WF-055", pagina: "Voorpagina", titel: "Opening zoals Bartosz Kolenda", src: "/wireframes/opening-kolenda.html", status: "Ter keuze", toel: "De intro 1:1 nagebouwd (zelfde GSAP-tijden): laadlijn, zin uit een masker, drie blokken als trap omhoog, pagina komt op." },
+  { nr: "WF-054", pagina: "Alle pagina's", titel: "Menu zoals Bartosz Kolenda", src: "/wireframes/menu-kolenda.html", status: "Ter keuze", toel: "Nagebouwd uit hun broncode: glazen pil met automatisch contrast, CTA met rol-hover en schuine pijl, ronde pijlknop. In grijs." },
+  { nr: "WF-053", pagina: "Alle pagina's", titel: "Menu bovenaan", src: "/wireframes/menu-boven.html", status: "Ter keuze", toel: "Rustige balk bovenaan in plaats van het menu onderaan; op telefoon de vier woorden onderaan." },
+  { nr: "WF-052", pagina: "Kennismaken", titel: "Kennismaken · direct", src: "/wireframes/kennismaken-direct.html", status: "Ter keuze", toel: "Geen formulier: bellen, mailen, WhatsApp als drie grote regels." },
+  { nr: "WF-051", pagina: "Kennismaken", titel: "Kennismaken · in stappen", src: "/wireframes/kennismaken-stappen.html", status: "Ter keuze", toel: "Eén vraag per scherm, vijf stappen met voortgang." },
+  { nr: "WF-050", pagina: "Over", titel: "Over, kort", src: "/wireframes/over-kort.html", status: "Ter keuze", toel: "Portret groot, twee alinea's, Zo werk ik groot, link naar het hele verhaal." },
+  { nr: "WF-049", pagina: "Tuinen", titel: "Tuinen in drie fasen", src: "/wireframes/tuinen-fasen.html", status: "Ter keuze", toel: "Kijken, Ontwerpen, Aanleggen als drie kolommen met de diensten eronder." },
+  { nr: "WF-048", pagina: "Vijvers", titel: "Vijvers met tekening", src: "/wireframes/vijvers-tekening.html", status: "Ter keuze", toel: "De waterroute-tekening naast de kop, daarna de dienstrijen." },
+  { nr: "WF-047", pagina: "Vijvers", titel: "Vijvers en Tuinen samen", src: "/wireframes/diensten-samen.html", status: "Ter keuze", toel: "Eén dienstenpagina met een schakelaar Vijvers | Tuinen." },
+  { nr: "WF-046", pagina: "Project", titel: "Project met fotostrook", src: "/wireframes/project-strook.html", status: "Ter keuze", toel: "Horizontale fotostrook, rij grote cijfers, tekening groot." },
+  { nr: "WF-045", pagina: "Project", titel: "Project met vaste inhoudsopgave", src: "/wireframes/project-sticky.html", status: "Ter keuze", toel: "12 hoofdstukken links vast, huidige gemarkeerd; per hoofdstuk de eerste alinea." },
+  { nr: "WF-044", pagina: "Werk", titel: "Werk als contactvel", src: "/wireframes/werk-contactvel.html", status: "Ter keuze", toel: "Alle beelden klein en genummerd, per project gegroepeerd." },
+  { nr: "WF-043", pagina: "Werk", titel: "Werk als tijdlijn", src: "/wireframes/werk-tijdlijn.html", status: "Ter keuze", toel: "Werk per maand, nieuwste bovenaan, met maandbalk." },
+  { nr: "WF-042", pagina: "Voorpagina", titel: "Combinatie · tekening groot", src: "/wireframes/combi-tekening-groot.html", status: "Ter keuze", toel: "De waterroute-tekening schermbreed als opening." },
+  { nr: "WF-041", pagina: "Voorpagina", titel: "Combinatie · stappen eerst", src: "/wireframes/combi-stappen-eerst.html", status: "Ter keuze", toel: "De zes stappen direct na een korte kop." },
+  { nr: "WF-040", pagina: "Voorpagina", titel: "Combinatie · typografie", src: "/wireframes/combi-typografie.html", status: "Ter keuze", toel: "Geen foto, geen tekening: alleen een enorme kop." },
+  { nr: "WF-039", pagina: "Voorpagina", titel: "Combinatie · volle foto", src: "/wireframes/combi-volle-foto.html", status: "Ter keuze", toel: "Schermvullende foto met alleen het woordmerk, dan de hoofdstukken." },
+  { nr: "WF-038", pagina: "Voorpagina", titel: "Combinatie · spread", src: "/wireframes/combi-spread.html", status: "Ter keuze", toel: "Foto links, papier rechts, dan de hoofdstukken met tekening." },
+  { nr: "WF-037", pagina: "Voorpagina", titel: "Combinatie · contactvel", src: "/wireframes/combi-contactvel.html", status: "Ter keuze", toel: "Contactvel als opening, dan de hoofdstukken met tekening." },
+  { nr: "WF-036", pagina: "Voorpagina", titel: "Combinatie · veldboek", src: "/wireframes/combi-veldboek.html", status: "Ter keuze", toel: "Veldboek-opening met drie maandnotities, dan Over, stappen, kennismaken." },
+  { nr: "WF-035", pagina: "Overig", titel: "404", src: "/wireframes/404.html", status: "Ter keuze", toel: "\"Hier groeit nog niets.\" met drie wegen terug." },
+  { nr: "WF-034", pagina: "Kennismaken", titel: "Kennismaken · verzonden en fout", src: "/wireframes/kennismaken-verzonden.html", status: "Ter keuze", toel: "De twee staten na verzenden: gelukt en mislukt." },
+  { nr: "WF-033", pagina: "Overig", titel: "Privacyverklaring (juridisch sjabloon)", src: "/wireframes/privacy.html", status: "Ter keuze", toel: "Leeskolom met vaste inhoudsopgave; volledige tekst uit de oude site." },
+  { nr: "WF-032", pagina: "Overig", titel: "Veelgestelde vragen", src: "/wireframes/faq.html", status: "Ter keuze", toel: "De 12 vragen openklapbaar, antwoorden uitgeschreven." },
+  { nr: "WF-031", pagina: "Vijvers", titel: "Vijvers met open rijen", src: "/wireframes/vijvers-open.html", status: "Ter keuze", toel: "Elke dienst klapt open: wat erbij hoort, wat niet, alle prijzen." },
+  { nr: "WF-030", pagina: "Project", titel: "Project: Terras Geulle", src: "/wireframes/project-terras.html", status: "Ter keuze", toel: "GR / 002, korter dan de vijver: fiche, 8 werkstappen, citaat." },
+  { nr: "WF-029", pagina: "Alle pagina's", titel: "Voet C: groot woordmerk", src: "/wireframes/voet-woordmerk.html", status: "Ter keuze", toel: "Gegevens in kolommen met GRØNN over de volle breedte." },
+  { nr: "WF-028", pagina: "Alle pagina's", titel: "Voet B: één regel", src: "/wireframes/voet-regel.html", status: "Ter keuze", toel: "Minimale voet in twee mono-regels." },
+  { nr: "WF-027", pagina: "Alle pagina's", titel: "Voet A: colofon", src: "/wireframes/voet-colofon.html", status: "Ter keuze", toel: "Colofon in vier kolommen: studio, contact, pagina's, klein." },
+  { nr: "WF-026", pagina: "Alle pagina's", titel: "Weergave en toegankelijkheid", src: "/wireframes/voorpagina.html?paneel=open", status: "Gekozen", toel: "Eén knop met regelaar-icoon: Auto/Licht/Donker + minder beweging, grotere tekst, meer contrast, links onderstrepen." },
+  { nr: "WF-025", pagina: "Voorpagina", titel: "Voorpagina: verhaal in stappen + tekening", src: "/wireframes/voorpagina.html", status: "Gekozen", toel: "WF-017 als voorpagina, de tekening van WF-015 als blok na Werk (Nick)." },
+  { nr: "WF-024", pagina: "Voorpagina", titel: "Voorpagina: verhaal in stappen + systeem", src: "/wireframes/verhaal-systeem.html", status: "Alternatief", toel: "Opbouw van WF-017 met de opening van WF-015 (Nick)." },
+  { nr: "WF-023", pagina: "Kennismaken", titel: "Kennismaken", src: "/wireframes/kennismaken.html", status: "Gekozen", toel: "Formulier als regels op papier, gegevens ernaast." },
+  { nr: "WF-022", pagina: "Over", titel: "Over mij", src: "/wireframes/over.html", status: "Gekozen", toel: "Nicks eigen tekst, portret blijft staan, Zo werk ik eronder." },
+  { nr: "WF-021", pagina: "Project", titel: "Project: vijverrenovatie", src: "/wireframes/project-vijverrenovatie.html", status: "Gekozen", toel: "Casestudy: fiche, cijfers als momenten, de waterroute, plantplan, citaat." },
+  { nr: "WF-020", pagina: "Tuinen", titel: "Tuinen", src: "/wireframes/tuinen.html", status: "Gekozen", toel: "Beeld eerst, dan diensten per fase: kijken, ontwerpen, aanleggen." },
+  { nr: "WF-019", pagina: "Vijvers", titel: "Vijvers", src: "/wireframes/vijvers.html", status: "Gekozen", toel: "Diensten als rijen met vanaf-prijs, filterfoto, het vijverproject." },
+  { pagina: "Voorpagina", nr: "WF-018", titel: "Voorpagina: systeem + Over", src: "/wireframes/systeem-2.html", status: "Alternatief", toel: "WF-015 met het Over-blok (portret en Nicks zin) erbij." },
+  { pagina: "Voorpagina", nr: "WF-017", titel: "Voorpagina: verhaal in stappen (uitgewerkt)", src: "/wireframes/verhaal.html", status: "Basis voor WF-024 en WF-025", toel: "WF-004 uitgewerkt. Wissel met WF-015 kan altijd." },
+  { pagina: "Voorpagina", nr: "WF-016", titel: "Voorpagina: contactvel + Zo werk ik", src: "/wireframes/contactvel.html", status: "Alternatief", toel: "Alle foto's als één genummerde reeks." },
+  { pagina: "Voorpagina", nr: "WF-015", titel: "Voorpagina: systeem + Zo werk ik", src: "/wireframes/systeem.html", status: "Basis voor WF-018 en WF-024", toel: "Lijntekening van het watersysteem als opening. \"Erg vet\" (Nick)." },
+  { pagina: "Voorpagina", nr: "WF-014", titel: "Voorpagina: veldboek + Zo werk ik", src: "/wireframes/veldboek.html", status: "Alternatief", toel: "Het werk als dagboek per maand." },
+  { pagina: "Voorpagina", nr: "WF-013", titel: "Voorpagina: spread + Zo werk ik", src: "/wireframes/keuze-2.html", status: "Verlaten", toel: "Nick wil een andere hoofdlayout." },
+  { pagina: "Werk", nr: "WF-012", titel: "Werk: lijst en raster", src: "/wireframes/werk.html", status: "Gekozen", toel: "Schakelaar lijst/raster behouden (Nick)." },
+  { pagina: "Voorpagina", nr: "WF-011", titel: "Voorpagina: index + Zo werk ik", src: "/wireframes/keuze.html", status: "Verlaten", toel: "\"Als opening afgezaagd\" (Nick)." },
+  { pagina: "Werk", nr: "WF-010", titel: "Werk 2 — raster", src: "/wireframes/werk-2-raster.html", status: "Opgegaan in WF-012", toel: "Naar Con-Tour." },
+  { pagina: "Werk", nr: "WF-009", titel: "Werk 1 — lijst", src: "/wireframes/werk-1-lijst.html", status: "Opgegaan in WF-012", toel: "Naar Arkitektkontoret Vest." },
+  { pagina: "Voorpagina", nr: "WF-008", titel: "D — Verhaal in stappen, telefoon", src: "/wireframes/d-telefoon.html", status: "Stappen gebruikt", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-007", titel: "C — Volle foto, telefoon", src: "/wireframes/c-telefoon.html", status: "Alternatief", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-006", titel: "B — Index, telefoon", src: "/wireframes/b-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-005", titel: "A — Spread, telefoon", src: "/wireframes/a-telefoon.html", status: "Verlaten", toel: "Tekening op telefoonformaat." },
+  { pagina: "Voorpagina", nr: "WF-004", titel: "D — Verhaal in stappen", src: "/wireframes/d-verhaal.html", status: "Basis voor WF-017", toel: "Naar Bartosz Kolenda." },
+  { pagina: "Voorpagina", nr: "WF-003", titel: "C — Volle foto", src: "/wireframes/c-volle-foto.html", status: "Alternatief", toel: "Naar Stefan Morael." },
+  { pagina: "Voorpagina", nr: "WF-002", titel: "B — Index", src: "/wireframes/b-index.html", status: "Verlaten", toel: "Naar Piet Oudolf." },
+  { pagina: "Voorpagina", nr: "WF-001", titel: "A — Spread", src: "/wireframes/a-spread.html", status: "Verlaten", toel: "Naar Phlypo." },
+]
+
+const TOESTELLEN = { desktop: [1440, 900], tablet: [834, 1112], telefoon: [390, 844] }
+
+const lijst = document.getElementById('items')
+const frame = document.getElementById('frame')
+const toestel = document.getElementById('toestel')
+const scherm = document.getElementById('scherm')
+let gekozen = null
+let soort = 'desktop'
+
+const bewaar = () => { try { localStorage.setItem('gronn-naslag', JSON.stringify({ nr: gekozen?.nr, soort })) } catch {} }
+
+WIREFRAMES.forEach((w) => {
+  const li = document.createElement('li')
+  li.className = 'item' + (w.src ? '' : ' geen')
+  li.dataset.pagina = w.pagina
+  li.innerHTML = `<button type="button"><span class="mono">${w.nr}</span><span class="titel">${w.titel}</span><span class="status muted">${w.pagina} · ${w.status}</span><span class="toel muted">${w.toel}</span></button>`
+  const b = li.querySelector('button')
+  if (w.src) b.addEventListener('click', () => kies(w))
+  else b.setAttribute('aria-disabled', 'true')
+  w.knop = b
+  lijst.appendChild(li)
+})
+
+// Filter per pagina
+const PAGINAS = ['Alle', 'Alle pagina\'s', 'Voorpagina', 'Werk', 'Project', 'Vijvers', 'Tuinen', 'Over', 'Kennismaken', 'Overig']
+const filters = document.getElementById('filters')
+PAGINAS.forEach((pg) => {
+  const b = document.createElement('button')
+  b.type = 'button'; b.textContent = pg; b.setAttribute('aria-pressed', String(pg === 'Alle'))
+  b.addEventListener('click', () => {
+    filters.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+    lijst.querySelectorAll('.item').forEach((li) => { li.hidden = pg !== 'Alle' && li.dataset.pagina !== pg })
+  })
+  filters.appendChild(b)
+})
+
+function kies(w) {
+  gekozen = w
+  WIREFRAMES.forEach((x) => x.knop.setAttribute('aria-current', String(x === w)))
+  document.getElementById('nu-nr').textContent = w.nr
+  document.getElementById('nu-titel').textContent = w.titel
+  document.getElementById('los').href = w.src.replace('.html', '')
+  frame.src = w.src
+  bewaar()
+}
+
+function zetToestel(s) {
+  soort = s
+  document.querySelectorAll('[data-toestel]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.toestel === s)))
+  toestel.className = 'toestel ' + s
+  pas()
+  bewaar()
+}
+
+// Past het toestel in het venster. Desktop en tablet vullen de hoogte
+// (zo zie je zoveel mogelijk van de pagina), de telefoon blijft een telefoon.
+function pas() {
+  const [b, h] = TOESTELLEN[soort]
+  const rand = soort === 'desktop' ? 0 : 20
+  const cw = scherm.clientWidth - 40 - rand, ch = scherm.clientHeight - 40 - rand
+  let schaal = Math.min(cw / b, 1)
+  let hoog = soort === 'desktop' ? ch / schaal : h
+  if (soort !== 'desktop') { schaal = Math.min(cw / b, ch / h, 1); hoog = h }
+  frame.style.width = b + 'px'
+  frame.style.height = hoog + 'px'
+  frame.style.transform = `scale(${schaal})`
+  toestel.style.width = b * schaal + 'px'
+  toestel.style.height = hoog * schaal + 'px'
+}
+
+document.querySelectorAll('[data-toestel]').forEach((b) => b.addEventListener('click', () => zetToestel(b.dataset.toestel)))
+// In het venster hoort de terugknop van de wireframe zelf niet.
+frame.addEventListener('load', () => { try { frame.contentDocument.querySelector('.terug')?.remove() } catch {} })
+new ResizeObserver(pas).observe(scherm)
+
+let start = WIREFRAMES[0]
+try {
+  const m = JSON.parse(localStorage.getItem('gronn-naslag') || '{}')
+  if (m.soort && TOESTELLEN[m.soort]) soort = m.soort
+  start = WIREFRAMES.find((w) => w.nr === m.nr && w.src) || start
+} catch {}
+zetToestel(soort)
+kies(start)
+</script>
+</body>
+</html>

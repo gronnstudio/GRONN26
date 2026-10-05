@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-035 404 — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-035: de 404. Eén zin en drie wegen terug als regels; geen spelletje. */
+.leeg{padding-top:clamp(72px,12vw,180px)}
+.leeg h1{margin:16px 0 0;font-size:clamp(44px,8vw,112px);line-height:1;letter-spacing:-.04em;max-width:12ch}
+.wegen{margin-top:clamp(56px,7vw,96px);max-width:900px;border-top:1px solid var(--lijn)}
+.wegen a{display:grid;grid-template-columns:60px minmax(0,1fr) auto;column-gap:32px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--lijn);text-decoration:none}
+.wegen .naam{font-size:clamp(22px,2.3vw,32px);letter-spacing:-.02em}
+.wegen .pijl-r{font-family:'Geist Mono',monospace;color:var(--muted)}
+.wegen a:hover .naam,.wegen a:focus-visible .naam{text-decoration:underline;text-underline-offset:6px}
+@media (max-width:767px){
+  .wegen a{grid-template-columns:32px minmax(0,1fr) auto;column-gap:12px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="leeg">
+      <p class="lbl muted" style="margin:0">404 · Pagina niet gevonden</p>
+      <h1 class="syne">Hier groeit nog niets.</h1>
+    </section>
+
+    <nav class="wegen" aria-label="De weg terug">
+      <a href="/wireframes/voorpagina"><span class="lbl muted">01</span><span class="naam syne">Naar de voorpagina</span><span class="pijl-r" aria-hidden="true">→</span></a>
+      <a href="/wireframes/werk"><span class="lbl muted">02</span><span class="naam syne">Werk</span><span class="pijl-r" aria-hidden="true">→</span></a>
+      <a href="/wireframes/kennismaken"><span class="lbl muted">03</span><span class="naam syne">Kennismaken</span><span class="pijl-r" aria-hidden="true">→</span></a>
+    </nav>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

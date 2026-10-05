@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-023 Kennismaken — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-023: Kennismaken. Een formulier als regels op papier: label, lijn,
+   geen kaders. Rechts de gegevens, zodat bellen of mailen ook kan. */
+.indeling{display:grid;grid-template-columns:7fr 1fr 4fr;margin-top:clamp(48px,6vw,96px);align-items:start}
+form{display:flex;flex-direction:column;gap:28px}
+.veld{display:grid;grid-template-columns:180px minmax(0,1fr);column-gap:24px;align-items:end;border-bottom:1px solid var(--ink);padding-bottom:10px}
+.veld label{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.veld input,.veld textarea{border:0;background:none;font:inherit;font-size:18px;padding:4px 0;outline:none;width:100%}
+.veld textarea{resize:vertical;min-height:120px}
+.veld:focus-within{border-bottom-width:2px}
+fieldset{border:0;margin:0;padding:0}
+legend{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.keuzes{display:flex;flex-wrap:wrap;gap:8px}
+.keuzes label{border:1px solid var(--lijn);border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer}
+.keuzes input{position:absolute;opacity:0}
+.keuzes label:has(input:checked){background:#202020;color:#EFEEEA;border-color:#202020}
+.keuzes label:has(input:focus-visible){outline:2px solid #202020;outline-offset:2px}
+button.verstuur{align-self:flex-start;background:none;border:0;border-bottom:1px solid var(--ink);padding:0 0 4px;font:inherit;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.gegevens{display:flex;flex-direction:column;gap:20px;border-top:1px solid var(--lijn);padding-top:16px}
+.gegevens a{text-decoration:none;font-size:18px}
+@media (max-width:767px){
+  .indeling{grid-template-columns:1fr;row-gap:56px}
+  .veld{grid-template-columns:1fr;row-gap:6px}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Contact</p>
+      <h1 class="syne">Kennismaken</h1>
+      <p class="inleiding">Ik reageer meestal binnen twee werkdagen.</p>
+    </section>
+
+    <div class="indeling">
+      <form onsubmit="event.preventDefault()" aria-label="Kennismaken">
+        <div class="veld"><label for="naam">Naam</label><input id="naam" autocomplete="name"></div>
+        <div class="veld"><label for="email">E-mail</label><input id="email" inputmode="email" autocomplete="email"></div>
+        <div class="veld"><label for="tel">Telefoon <span class="muted">· optioneel</span></label><input id="tel" type="tel" autocomplete="tel"></div>
+        <div class="veld"><label for="plaats">Plaats of postcode</label><input id="plaats" autocomplete="postal-code"></div>
+        <fieldset><legend>Waar gaat het over?</legend><div class="keuzes">
+          <label><input type="radio" name="soort">Ontwerp — meekijken of een plan</label>
+          <label><input type="radio" name="soort">Aanleg — leg de tuin aan</label>
+          <label><input type="radio" name="soort">Onderhoud — per seizoen</label>
+          <label><input type="radio" name="soort">Vijver of watersysteem</label>
+          <label><input type="radio" name="soort" checked>Weet ik nog niet</label>
+        </div></fieldset>
+        <fieldset><legend>Wat is je budget?</legend><div class="keuzes">
+          <label><input type="radio" name="budget">Tot € 5.000</label>
+          <label><input type="radio" name="budget">€ 5.000–15.000</label>
+          <label><input type="radio" name="budget">Meer dan € 15.000</label>
+        </div></fieldset>
+        <div class="veld"><label for="bericht">Vertel kort over je tuin of vijver</label><textarea id="bericht"></textarea></div>
+        <button class="verstuur" type="submit">Verstuur →</button>
+        <p class="lbl muted" style="margin:0">Je bericht gaat via FormSubmit naar mijn mailbox. · Privacy</p>
+      </form>
+
+      <aside class="gegevens" style="grid-column:3" aria-label="Contactgegevens">
+        <p class="lbl muted" style="margin:0">Liever direct?</p>
+        <a href="#">hello@gronn.studio</a>
+        <a href="#">+316 181 180 14</a>
+        <a href="#">WhatsApp</a>
+        <p class="lbl muted" style="margin:16px 0 0">Kelderstraat 32 · 6171 GB Stein<br>KVK 42072154</p>
+      </aside>
+    </div>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken" aria-current="page">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

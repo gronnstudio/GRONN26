@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-050 Over kort — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-050: korte Over-pagina. Portret groot, alleen de eerste twee alinea's van Nicks verhaal en de slotzin, daarna Zo werk ik groot; het hele verhaal staat op /over. */
+.kort{display:grid;grid-template-columns:6fr 1fr 5fr;align-items:end;padding-top:clamp(48px,7vw,104px)}
+.kort .portret{margin:0;display:flex;flex-direction:column;gap:12px}
+.kort .portret .ph{aspect-ratio:4/5}
+.kort .tekst{grid-column:3}
+.kort h1{margin:16px 0 0;font-size:clamp(48px,7vw,100px);line-height:1;letter-spacing:-.04em}
+.kort p{margin:20px 0 0;line-height:1.7;font-size:clamp(16px,1.2vw,18px);color:var(--muted)}
+.kort p.eerste{margin-top:36px;font-size:clamp(20px,1.8vw,26px);line-height:1.45;color:var(--ink)}
+.kort p.slot{color:var(--ink);font-weight:500}
+.zo{margin:0;font-size:clamp(44px,7vw,100px);line-height:1;letter-spacing:-.04em}
+.zo + .lbl{align-self:end}
+@media (max-width:767px){
+  .kort{grid-template-columns:1fr;row-gap:32px}
+  .kort .tekst{grid-column:1}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+
+  <main>
+    <section class="kort" aria-labelledby="kop">
+      <figure class="portret"><div class="ph">Portret Nick · groot</div><figcaption class="lbl muted">Nick Peters · GRØNN Studio</figcaption></figure>
+      <div class="tekst">
+        <p class="lbl muted" style="margin:0">Hovenier en ecologisch ontwerper</p>
+        <h1 class="syne" id="kop">Over mij</h1>
+        <p class="eerste">Ik ben Nick Peters. Vader van twee kinderen, hovenier, ecologisch ontwerper en de persoon achter GRØNN Studio.</p>
+        <p>Ik denk in beelden, patronen en verbanden. Als ik naar een tuin kijk, zie ik hoe licht, water, materialen en beplanting elkaar beïnvloeden. Maar ik ben ook benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? En waar kom je na een drukke dag tot rust? Juist die dagelijkse dingen geven richting aan wat ik maak.</p>
+        <p class="slot">Met die aandacht werk ik ook aan jouw tuin.</p>
+        <p style="margin-top:32px"><a class="lnk" href="/wireframes/over">Lees mijn hele verhaal →</a></p>
+      </div>
+    </section>
+
+    <section class="sectie" aria-labelledby="stappen-kop">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><h2 class="syne zo" id="stappen-kop">Zo werk ik</h2><span class="lbl muted">6 stappen</span></div>
+      <div class="stappen">
+        <details class="stap"><summary><span class="lbl">01</span><span class="syne titel">Eerst kijken</span><span class="tekst">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</span></summary><p class="tekst-los">Ik kom langs en kijk hoe je tuin nu leeft: waar het licht valt, waar water blijft staan, wat er al groeit. En ik vraag hoe jij de tuin gebruikt.</p></details>
+        <details class="stap"><summary><span class="lbl">02</span><span class="syne titel">Uitzoeken hoe het werkt</span><span class="tekst">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</span></summary><p class="tekst-los">Ik breng in kaart wat de plek meebrengt: de bodem, het water, de schaduw. Wat kan hier, en wat niet?</p></details>
+        <details class="stap"><summary><span class="lbl">03</span><span class="syne titel">Verbanden leggen</span><span class="tekst">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</span></summary><p class="tekst-los">Bodem, water, planten, dieren en jij. Ik kijk hoe die elkaar kunnen helpen in plaats van tegenwerken.</p></details>
+        <details class="stap"><summary><span class="lbl">04</span><span class="syne titel">Ontwerpen</span><span class="tekst">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</span></summary><p class="tekst-los">Daar maak ik één helder plan van. Een plan dat je kunt lezen en begrijpen, ook als je geen tuinman bent.</p></details>
+        <details class="stap"><summary><span class="lbl">05</span><span class="syne titel">Aanleggen</span><span class="tekst">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</span></summary><p class="tekst-los">Ik leg de tuin aan, plant in en blijf meekijken terwijl hij zijn eerste seizoenen doormaakt.</p></details>
+        <details class="stap"><summary><span class="lbl">06</span><span class="syne titel">Laten groeien</span><span class="tekst">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</span></summary><p class="tekst-los">Daarna krijgt de tuin tijd. Hij verandert met de seizoenen, en het onderhoud stemmen we af op wat bij jou past.</p></details>
+      </div>
+    </section>
+
+    <section class="einde"><a class="syne" href="/wireframes/kennismaken">Kennismaken</a><p class="lbl muted" style="margin-top:24px">hello@gronn.studio · +316 181 180 14</p></section>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over" aria-current="page">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

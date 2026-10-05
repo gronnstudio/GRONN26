@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-030 Project: terras Geulle — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-030: project GR / 002 — korter dan de vijver, zelfde systeem: foto, fiche, tekst, acht stappen, paar, citaat, slotbeeld. */
+.held .ph{height:clamp(420px,72vh,820px)}
+.titel{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;padding-top:clamp(48px,6vw,96px)}
+.titel h1{margin:0;font-size:clamp(40px,6vw,88px);line-height:1;letter-spacing:-.035em}
+.titel h1{grid-column:2}
+.titel p.lbl{grid-column:1;grid-row:1}
+.titel p:not(.lbl){grid-column:2;margin:24px 0 0;max-width:40ch;font-size:clamp(18px,1.6vw,22px);line-height:1.5;color:var(--muted)}
+.fiche{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0 24px;margin-top:clamp(48px,6vw,80px);border-top:1px solid var(--lijn)}
+@media (min-width:1200px){.fiche{grid-template-columns:repeat(9,minmax(0,1fr))}}
+.fiche div{padding:12px 0;display:flex;flex-direction:column;gap:4px}
+.lees{display:grid;grid-template-columns:3fr 6fr 3fr;column-gap:32px}
+.lees .kolom{grid-column:2}
+.lees p{line-height:1.7;margin:0 0 1.1em}
+.werkstappen{list-style:none;margin:24px 0 0;padding:0;counter-reset:stap}
+.werkstappen li{counter-increment:stap;display:grid;grid-template-columns:60px minmax(0,1fr);column-gap:32px;padding:14px 0;border-top:1px solid var(--lijn)}
+.werkstappen li:last-child{border-bottom:1px solid var(--lijn)}
+.werkstappen li::before{content:counter(stap,decimal-leading-zero);color:var(--muted)}
+.paar{display:grid;grid-template-columns:5fr 1fr 6fr;align-items:end}
+.paar .ph{aspect-ratio:3/4}
+.paar .ph:last-child{grid-column:3}
+.slot{display:grid;grid-template-columns:3fr 6fr 3fr;column-gap:32px}
+.slot figure{grid-column:2;margin:0}
+.slot .ph{aspect-ratio:3/4}
+.volgende{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-top:1px solid var(--lijn);padding-top:16px;text-decoration:none}
+@media (max-width:767px){
+  .titel,.lees,.slot{grid-template-columns:1fr}
+  .titel h1,.titel p.lbl,.titel p:not(.lbl),.lees .kolom,.slot figure{grid-column:1;grid-row:auto}
+  .werkstappen li{grid-template-columns:32px minmax(0,1fr);column-gap:12px}
+  .paar{grid-template-columns:1fr 1fr;gap:12px}
+  .paar .ph:last-child{grid-column:2}
+}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+</div>
+
+<main>
+  <section class="held"><div class="ph">Foto T01 · het nieuwe terras onder de overkapping · bijna schermvullend</div></section>
+
+  <div class="wrap">
+    <section class="titel">
+      <p class="lbl muted" style="margin:0">GR / 002 · Terras Geulle</p>
+      <h1 class="syne">Een terras van 24&nbsp;m², gelegd in twee dagen.</h1>
+      <p>Van ruwe ondergrond naar een strak terras, met het water de goede kant op.</p>
+    </section>
+
+    <div class="fiche lbl">
+      <div><span class="muted">Code</span><span>GR / 002</span></div>
+      <div><span class="muted">Type</span><span>Terrasaanleg</span></div>
+      <div><span class="muted">Plaats</span><span>Geulle</span></div>
+      <div><span class="muted">Wanneer</span><span>Augustus 2026</span></div>
+      <div><span class="muted">Status</span><span>Afgerond</span></div>
+      <div><span class="muted">Oppervlak</span><span>24 m²</span></div>
+      <div><span class="muted">Tegels</span><span>60 × 60 × 4 cm</span></div>
+      <div><span class="muted">Leggen</span><span>circa 8 uur</span></div>
+      <div><span class="muted">Alles samen</span><span>2 dagen</span></div>
+    </div>
+
+    <section class="sectie lees" aria-label="Inleiding">
+      <div class="kolom">
+        <p>De vraag kwam op een kinderfeestje. Iemand vroeg naar mijn werk en vertelde over een terras dat er maar niet kwam: stratenmakers waren te duur, of pas de volgende zomer beschikbaar. De materialen lagen er al. Wat ontbrak, was iemand die het deed.</p>
+        <p>Het werden 24&nbsp;m² betontegels van 60 × 60 × 4 cm. Geen tegels erin en klaar: de voorbereiding bepaalt uiteindelijk het resultaat. Het leggen zelf kostte ongeveer 8 uur; met het grondwerk erbij waren het twee dagen.</p>
+      </div>
+    </section>
+
+    <section class="sectie" aria-labelledby="werk-stappen">
+      <p class="lbl muted" id="werk-stappen" style="margin:0">De werkzaamheden · 8 stappen</p>
+      <ol class="werkstappen lbl">
+        <li>Ondergrond ontgraven en voorbereiden</li>
+        <li>Ondergrond ophogen en verdichten</li>
+        <li>Zandbed aanbrengen en afrijen</li>
+        <li>Banden stellen en uitlijnen</li>
+        <li>Zandbed aantrillen en opnieuw controleren</li>
+        <li>24 m² betontegels leggen</li>
+        <li>Alles zorgvuldig op afschot richting het gras</li>
+        <li>Afwerken en het geheel controleren</li>
+      </ol>
+    </section>
+
+    <section class="sectie" aria-label="Het pad">
+      <div class="paar"><div class="ph">Foto T02 · het tegelpad langs de gevel</div><div class="ph">Foto T04 · het pad tot aan de achterdeur</div></div>
+    </section>
+
+    <section class="sectie lees" aria-label="Citaat">
+      <div class="kolom">
+        <p class="syne" style="font-size:clamp(24px,2.6vw,36px);line-height:1.25;letter-spacing:-.015em">"Een goed terras ziet er niet alleen waterpas uit. Het weet ook waar het water heen moet."</p>
+        <p class="lbl muted">Nick Peters, GRØNN Studio</p>
+      </div>
+    </section>
+
+    <section class="sectie slot" aria-label="Slotbeeld">
+      <figure><div class="ph">Foto T03 · Nick op het nieuwe tegelpad</div><figcaption class="lbl muted" style="margin-top:12px">Klaar, na twee dagen.</figcaption></figure>
+    </section>
+
+    <a class="volgende" href="/wireframes/project-vijverrenovatie" style="margin-top:clamp(96px,12vw,180px)"><span class="lbl">Volgend project</span><span class="syne" style="font-size:clamp(24px,3vw,40px)">Vijverrenovatie →</span></a>
+  </div>
+</main>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk" aria-current="page">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>
