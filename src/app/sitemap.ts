@@ -14,6 +14,9 @@ const ROUTES = [
   "/kennismaken",
   "/faq",
   "/privacy",
+  "/voorwaarden",
+  "/herroeping",
+  "/colofon",
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {

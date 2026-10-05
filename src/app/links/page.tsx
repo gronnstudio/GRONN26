@@ -57,6 +57,10 @@ export default function Links() {
         <a href={BUSINESS.phoneHref} className={TEGEL}><span className="lbl text-gedempt">Bellen</span><span className={`${NAAM} text-[17px]!`}>{BUSINESS.phone}</span></a>
         <a href={BUSINESS.instagram} className={TEGEL}><span className="lbl text-gedempt">Volgen</span><span className={NAAM}>Instagram</span></a>
 
+        <a href="/contact.vcf" download="gronn-studio.vcf" className={`${TEGEL} col-span-2 md:col-span-4 md:min-h-0 md:flex-row md:items-center`}>
+          <span className="lbl text-gedempt">Visitekaartje</span>
+          <span className={NAAM}>Bewaar in je contacten</span>
+        </a>
         <Link href="/" className={`${TEGEL} col-span-2 border-0 bg-antraciet! text-gebroken-wit! md:col-span-4 md:min-h-0 md:flex-row md:items-center`}>
           <span className={NAAM}>Naar de website</span>
           <Pijl />

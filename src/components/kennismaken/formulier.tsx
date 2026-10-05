@@ -367,6 +367,7 @@ export function KennismakenFormulier() {
         <p className="lbl m-0 text-gedempt">Liever direct?</p>
         <a href={BUSINESS.emailHref} className="w-lijnlink self-start text-[18px] [overflow-wrap:anywhere]">{BUSINESS.email}</a>
         <a href={BUSINESS.phoneHref} className="w-lijnlink self-start text-[18px] tabular-nums">{BUSINESS.phone}</a>
+        <a href="/contact.vcf" download="gronn-studio.vcf" className="w-lijnlink self-start text-[15px]">Visitekaartje bewaren</a>
         <a href={BUSINESS.whatsapp} className="w-lijnlink self-start text-[18px]">WhatsApp</a>
         <p className="lbl mt-4 mb-0 text-gedempt">
           {BUSINESS.address.street} · {BUSINESS.address.postalCode} {BUSINESS.address.city}

@@ -63,6 +63,12 @@ export function Voet() {
             <p className="lbl m-0 text-gedempt">Klein</p>
             <p className="mt-4 mb-0 leading-[1.75]">
               <Link href="/privacy" className="w-lijnlink text-inkt">Privacy</Link>
+              <br />
+              <Link href="/voorwaarden" className="w-lijnlink text-inkt">Voorwaarden</Link>
+              <br />
+              <Link href="/herroeping" className="w-lijnlink text-inkt">Herroeping</Link>
+              <br />
+              <Link href="/colofon" className="w-lijnlink text-inkt">Colofon</Link>
             </p>
           </div>
         </div>
