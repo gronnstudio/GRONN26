@@ -8,6 +8,7 @@ import type { L } from "@/lib/i18n"
 import { MerkGids } from "@/components/merk/gids"
 import { Kopieer } from "@/components/kopieer"
 import { MerkElementen } from "@/components/merk/elementen"
+import { Verder } from "@/components/wereld/verder"
 
 export const metadata: Metadata = {
   title: "Merk",
@@ -227,6 +228,7 @@ export default function Merk() {
           </p>
         </section>
       </div>
+      <Verder voor={{ nl: "En wat er", en: "And what" }} nadruk={{ nl: "onder de motorkap", en: "is under the hood" }} na={{ nl: "zit?", en: "?" }} href="/techniek" label={{ nl: "Naar Techniek", en: "To Technology" }} />
     </>
   )
 }
