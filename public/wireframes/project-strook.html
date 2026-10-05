@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-046 Project met fotostrook — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-046: de vijverrenovatie met de foto's als één horizontale strook
@@ -27,18 +27,18 @@
 /* fotostrook */
 .strook-kop{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
 .strook-knoppen{display:flex;gap:8px}
-.strook-knoppen button{width:44px;height:44px;border-radius:999px;border:1px solid var(--lijn);background:#EFEEEA;font:16px/1 'Geist Mono',monospace;cursor:pointer}
+.strook-knoppen button{width:44px;height:44px;border-radius:999px;border:1px solid var(--lijn);background:#EFEEEA;font:16px/1 Montserrat,sans-serif;cursor:pointer}
 .strook{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--goot);padding:24px var(--goot) 16px;margin:0;list-style:none;scrollbar-width:thin}
 .strook li{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;width:clamp(220px,24vw,340px)}
 .strook li.lig{width:clamp(300px,40vw,560px)}
 .strook .ph{height:clamp(300px,34vw,460px)}
 .strook li.ai .ph{background:#EFEEEA;outline:1px solid var(--lijn);outline-offset:-1px}
 .strook li.leeg .ph{background:#EFEEEA;outline:1px dashed var(--lijn);outline-offset:-1px}
-.strook .onder{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.04em;line-height:1.5;color:var(--muted);text-transform:uppercase}
+.strook .onder{font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.04em;line-height:1.5;color:var(--muted);text-transform:uppercase}
 .strook .onder b{color:var(--ink);font-weight:400}
 
 /* tekening groot */
-.tekening{width:100%;height:auto;font-family:'Geist Mono',monospace;display:block}
+.tekening{width:100%;height:auto;font-family:Montserrat,sans-serif;display:block}
 .tekening text{font-size:11px;letter-spacing:.06em;fill:#202020}
 .tekening .noot{fill:#5E5E5B;font-size:10px}
 .tekening .lijn{stroke:#202020;stroke-width:1;fill:none}

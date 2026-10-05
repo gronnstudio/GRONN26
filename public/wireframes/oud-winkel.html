@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-075 Winkel (live, concept) — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-075: live archief. Conceptwinkel met plaatshouders in vier groepen. Inhoud 1:1 van gronn.studio/nl/winkel (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
 
 .bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
 .oudnav{margin:8px 0 0;max-width:72ch}
-.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.noot-live{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
 .kruimel{margin:clamp(40px,6vw,72px) 0 0}
 .kruimel span+span::before{content:" / ";color:var(--muted)}
 .kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
@@ -23,7 +23,7 @@
 .pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 .prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
 .prijsrij:first-of-type{border-top:0}
-.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:700;font-size:20px;white-space:nowrap}
 .prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
 .streep{list-style:none;margin:0;padding:0}
 .streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
@@ -47,10 +47,10 @@ h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;m
 @media (max-width:479px){.oudvoet .kol{grid-template-columns:1fr}}
 
 
-.banner{background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:10px var(--goot);font-family:'Geist Mono',monospace;font-size:12px}
+.banner{background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:10px var(--goot);font-family:Montserrat,sans-serif;font-size:12px}
 .hoe{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:32px;list-style:none;padding:0}
-.hoe li{border:1px solid var(--lijn);border-radius:16px;padding:18px;font-family:Syne,sans-serif;font-weight:600;font-size:20px}
-.hoe li span{font-family:'Geist Mono',monospace;font-weight:400;font-size:11px;color:var(--muted);margin-right:8px}
+.hoe li{border:1px solid var(--lijn);border-radius:16px;padding:18px;font-family:Syne,sans-serif;font-weight:700;font-size:20px}
+.hoe li span{font-family:Montserrat,sans-serif;font-weight:400;font-size:11px;color:var(--muted);margin-right:8px}
 .wgroep{margin-top:clamp(72px,9vw,120px)}
 .wgroep header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;align-items:baseline}
 .producten{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px;align-items:start}
@@ -58,7 +58,7 @@ h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;m
 .product .ph{aspect-ratio:16/9;position:relative}
 .product .plh{position:absolute;top:10px;left:10px;background:#202020;color:#EFEEEA;border-radius:999px;padding:3px 9px;font-size:10px}
 .product .in{padding:18px}
-.product ul{list-style:none;padding:0;margin:8px 0 0;font-family:'Geist Mono',monospace;font-size:12px;line-height:1.8}
+.product ul{list-style:none;padding:0;margin:8px 0 0;font-family:Montserrat,sans-serif;font-size:12px;line-height:1.8}
 .product .boek{display:flex;justify-content:center;border:1px solid var(--lijn);border-radius:999px;padding:10px;margin-top:14px;font-size:14px;font-weight:600}
 @media (max-width:1000px){.producten{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.producten,.hoe{grid-template-columns:1fr}}

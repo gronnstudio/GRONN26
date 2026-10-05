@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-068 Oud: menu's — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-068: alle menu’s van gronn.studio op één pagina: desktopbalk met drie panelen, ⌘K-zoekvenster, telefoon-bovenbalk en dock (twee standen), de voorkeurenpanelen, zijbubbels en de voet. */
@@ -13,7 +13,7 @@
    1:1 in inhoud en volgorde, in de taal van de wireframes. */
 .archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
 .archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
-.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live{font-family:Montserrat,sans-serif;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
 .live::before{content:"Op de live site: ";color:var(--ink)}
 .oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
 .pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
@@ -31,23 +31,23 @@ figcaption{margin-top:8px}
 .blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
 .blok > :first-child{margin:0}
 .fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
-.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
 .fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
 .fasen li.nog{border-top-color:rgba(0,0,0,.18)}
 .fasen li.nu{font-weight:700}
 .cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
-.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:700;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
 .cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
 .cijfers span{display:block;margin-top:8px}
 .feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
 .feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
-.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dt{font-family:Montserrat,sans-serif;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .feiten dd{margin:0;line-height:1.5}
 .akk{border-top:1px solid var(--lijn)}
 .akk:last-of-type{border-bottom:1px solid var(--lijn)}
 .akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
 .akk summary::-webkit-details-marker{display:none}
-.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk summary::after{content:"+";font-family:Montserrat,sans-serif;color:var(--muted);text-align:right}
 .akk[open] summary::after{content:"\2212"}
 .akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
 .akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
@@ -74,7 +74,7 @@ figcaption{margin-top:8px}
 .donker .live::before{color:#EFEEEA}
 .kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
 .kruimel a{text-decoration:none}
-.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:700;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
 @media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:767px){
   .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
@@ -91,7 +91,7 @@ figcaption{margin-top:8px}
 .donkerpil{display:inline-flex;align-items:center;background:#202020;color:#EFEEEA;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600}
 .scheid{width:1px;height:24px;background:var(--lijn)}
 .zoek{font-size:14px}
-kbd{font-family:'Geist Mono',monospace;font-size:11px;border:1px solid var(--lijn);border-radius:4px;padding:1px 5px;background:#fff}
+kbd{font-family:Montserrat,sans-serif;font-size:11px;border:1px solid var(--lijn);border-radius:4px;padding:1px 5px;background:#fff}
 .ikoon,.rond{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:999px;border:1px solid var(--lijn);font-size:14px}
 .rond.groot{width:52px;height:52px;font-size:18px}
 .paneel{position:relative;margin-top:16px;border:1px solid var(--lijn);border-radius:16px;padding:28px;background:#F6F5F2;gap:32px}
@@ -99,11 +99,11 @@ kbd{font-family:'Geist Mono',monospace;font-size:11px;border:1px solid var(--lij
 .regels{list-style:none;padding:0;margin:14px 0 0}
 .regels li{border-top:1px solid var(--lijn)}
 .regels a{display:block;padding:10px 0;text-decoration:none}
-.regels strong{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:15px}
+.regels strong{display:block;font-family:Syne,sans-serif;font-weight:700;font-size:15px}
 .regels span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
 .regels em{display:block;font-style:normal;margin-top:4px}
 .punten-k{list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}
-.punten-k li{font-family:Syne,sans-serif;font-weight:600;font-size:15px;line-height:1.3}
+.punten-k li{font-family:Syne,sans-serif;font-weight:700;font-size:15px;line-height:1.3}
 .paneel-voet{grid-column:1 / -1;margin:8px 0 0;padding-top:16px;border-top:1px solid var(--lijn)}
 .zoekvenster{margin-top:32px;max-width:640px;border:1px solid var(--lijn);border-radius:16px;background:#F6F5F2;overflow:hidden}
 .zoekveld{padding:18px 20px;border-bottom:1px solid var(--lijn);font-size:16px}

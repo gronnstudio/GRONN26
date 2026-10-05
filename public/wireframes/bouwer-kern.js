@@ -29,7 +29,7 @@
     // Links in een bouwsteen openen niets: de bouwer is geen site.
     const stil = `<script>document.addEventListener('click',function(e){var a=e.target.closest('a');if(a){e.preventDefault()}},true)<\/script>`
     return `<!doctype html><html lang="nl" class="wv-beweging"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
       ${kop}${extra}${thema}</head><body>${html}<script src="/wireframes/wf-weergave.js"><\/script>${stil}</body></html>`
   }
 

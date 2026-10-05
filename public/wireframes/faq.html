@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-032 Veelgestelde vragen — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-032: Veelgestelde vragen. Alle twaalf vragen als openklapbare regels
@@ -15,7 +15,7 @@
 .vraag:last-child{border-bottom:1px solid var(--lijn)}
 .vraag summary{list-style:none;display:grid;grid-template-columns:60px minmax(0,1fr) 24px;column-gap:32px;align-items:baseline;padding:24px 0;cursor:pointer}
 .vraag summary::-webkit-details-marker{display:none}
-.vraag summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.vraag summary::after{content:"+";font-family:Montserrat,sans-serif;color:var(--muted);text-align:right}
 .vraag[open] summary::after{content:"−"}
 .vraag summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
 .vraag .titel{font-size:clamp(20px,2.1vw,28px);letter-spacing:-.02em;line-height:1.2}
@@ -27,11 +27,11 @@
 .antwoord dd{margin:0;color:var(--muted)}
 .antwoord ol{margin:4px 0 14px;padding:0;list-style:none;counter-reset:s}
 .antwoord ol li{counter-increment:s;display:grid;grid-template-columns:32px minmax(0,1fr);padding:8px 0;border-bottom:1px solid var(--lijn)}
-.antwoord ol li::before{content:"0" counter(s);font-family:'Geist Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px}
+.antwoord ol li::before{content:"0" counter(s);font-family:Montserrat,sans-serif;font-size:12px;color:var(--muted);padding-top:3px}
 .antwoord ol strong{display:block}
 .antwoord ol span{color:var(--muted)}
 .antwoord .lnk{display:inline-block;margin-top:6px}
-.prijs{font-family:'Geist Mono',monospace;font-size:.92em;white-space:nowrap}
+.prijs{font-family:Montserrat,sans-serif;font-size:.92em;white-space:nowrap}
 @media (max-width:767px){
   .vraag summary{grid-template-columns:32px minmax(0,1fr) 20px;column-gap:12px;padding:18px 0}
   .antwoord{margin-left:44px}

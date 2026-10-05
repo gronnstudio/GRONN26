@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-076 Colofon (live) — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-076: live archief. Bedrijfsgegevens, documentenlijst en een zin over de site. Inhoud 1:1 van gronn.studio/nl/colofon (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
 
 .bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
 .oudnav{margin:8px 0 0;max-width:72ch}
-.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.noot-live{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
 .kruimel{margin:clamp(40px,6vw,72px) 0 0}
 .kruimel span+span::before{content:" / ";color:var(--muted)}
 .kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
@@ -23,7 +23,7 @@
 .pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 .prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
 .prijsrij:first-of-type{border-top:0}
-.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:700;font-size:20px;white-space:nowrap}
 .prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
 .streep{list-style:none;margin:0;padding:0}
 .streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
@@ -49,14 +49,14 @@ h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;m
 
 .gegevens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;margin:16px 0 0}
 .gegevens div{border-top:1px solid var(--lijn);padding:12px 0}
-.gegevens dt{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.gegevens dt{font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .gegevens dd{margin:4px 0 0;font-weight:600;overflow-wrap:anywhere}
 .docs{list-style:none;margin:16px 0 0;padding:0}
 .docs li a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 24px;padding:16px 0;border-top:1px solid var(--lijn);text-decoration:none}
 .docs li:last-child a{border-bottom:1px solid var(--lijn)}
 .docs .naam{font-weight:600}
-.docs .wie{grid-column:1;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--muted)}
-.docs .datum{grid-row:1;grid-column:2;font-family:'Geist Mono',monospace;font-size:12px;color:var(--muted)}
+.docs .wie{grid-column:1;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.docs .datum{grid-row:1;grid-column:2;font-family:Montserrat,sans-serif;font-size:12px;color:var(--muted)}
 .blok{margin-top:clamp(56px,7vw,88px);max-width:880px}
 @media (max-width:600px){.gegevens{grid-template-columns:1fr}}
 

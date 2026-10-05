@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-063 Oud: project vijverrenovatie — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-063: de projectpagina van de vijverrenovatie zoals hij live stond: alle twaalf hoofdstukken, cijfers, schema, tabel, foto’s en clips. */
@@ -13,7 +13,7 @@
    1:1 in inhoud en volgorde, in de taal van de wireframes. */
 .archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
 .archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
-.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live{font-family:Montserrat,sans-serif;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
 .live::before{content:"Op de live site: ";color:var(--ink)}
 .oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
 .pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
@@ -31,23 +31,23 @@ figcaption{margin-top:8px}
 .blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
 .blok > :first-child{margin:0}
 .fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
-.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
 .fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
 .fasen li.nog{border-top-color:rgba(0,0,0,.18)}
 .fasen li.nu{font-weight:700}
 .cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
-.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:700;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
 .cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
 .cijfers span{display:block;margin-top:8px}
 .feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
 .feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
-.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dt{font-family:Montserrat,sans-serif;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .feiten dd{margin:0;line-height:1.5}
 .akk{border-top:1px solid var(--lijn)}
 .akk:last-of-type{border-bottom:1px solid var(--lijn)}
 .akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
 .akk summary::-webkit-details-marker{display:none}
-.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk summary::after{content:"+";font-family:Montserrat,sans-serif;color:var(--muted);text-align:right}
 .akk[open] summary::after{content:"\2212"}
 .akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
 .akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
@@ -74,7 +74,7 @@ figcaption{margin-top:8px}
 .donker .live::before{color:#EFEEEA}
 .kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
 .kruimel a{text-decoration:none}
-.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:700;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
 @media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:767px){
   .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
@@ -99,7 +99,7 @@ figcaption{margin-top:8px}
 .inhoudsopgave li{break-inside:avoid;border-top:1px solid var(--lijn)}
 .inhoudsopgave a{display:block;padding:10px 0;text-decoration:none}
 .begrip{border-bottom:1px dashed currentColor}
-.tekening{width:100%;max-width:900px;height:auto;font-family:'Geist Mono',monospace;display:block}
+.tekening{width:100%;max-width:900px;height:auto;font-family:Montserrat,sans-serif;display:block}
 .tekening text{font-size:11px;letter-spacing:.06em;fill:#202020}
 .tekening .noot{fill:#5E5E5B;font-size:10px}
 .tekening .lijn{stroke:#202020;stroke-width:1;fill:none}
@@ -110,11 +110,11 @@ figcaption{margin-top:8px}
 .tabel-schuif{overflow-x:auto;margin-top:8px}
 .tabel{width:100%;border-collapse:collapse;min-width:480px}
 .tabel th,.tabel td{text-align:left;padding:12px 12px 12px 0;border-top:1px solid var(--lijn);vertical-align:top}
-.tabel th{font-family:'Geist Mono',monospace;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.04em}
+.tabel th{font-family:Montserrat,sans-serif;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.04em}
 .stappen-lijst{list-style:none;padding:0;margin:24px 0 0;counter-reset:s}
 .stappen-lijst li{counter-increment:s;display:grid;grid-template-columns:48px minmax(0,1fr);padding:14px 0;border-top:1px solid var(--lijn)}
 .stappen-lijst li:last-child{border-bottom:1px solid var(--lijn)}
-.stappen-lijst li::before{content:"0" counter(s);font-family:'Geist Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px}
+.stappen-lijst li::before{content:"0" counter(s);font-family:Montserrat,sans-serif;font-size:12px;color:var(--muted);padding-top:3px}
 @media (max-width:767px){
   .hoofdstuk{grid-template-columns:minmax(0,1fr)}
   .inhoudsopgave ol{columns:1}

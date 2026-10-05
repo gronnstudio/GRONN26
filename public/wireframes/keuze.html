@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Keuze: B + stappen uit D — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--goot:clamp(24px,4vw,56px);--ink:#202020;--muted:#5E5E5B;--ph:#DCD9D2;--lijn:rgba(0,0,0,.18)}
 *{box-sizing:border-box}
 body{margin:0;background:#EFEEEA;color:var(--ink);font-family:Montserrat,sans-serif;padding-bottom:100px}
 a{color:inherit}
-.lbl{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.lbl{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .muted{color:var(--muted)}
-.syne{font-family:Syne,sans-serif;font-weight:600}
-.ph{background:var(--ph);display:flex;align-items:flex-end;padding:14px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.syne{font-family:Syne,sans-serif;font-weight:700}
+.ph{background:var(--ph);display:flex;align-items:flex-end;padding:14px;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .lnk{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(0,0,0,.3);padding-bottom:4px}
 .lnk:hover{border-color:var(--ink)}
 .wrap{max-width:1440px;margin:0 auto;padding-inline:var(--goot)}
@@ -31,7 +31,7 @@ header{display:flex;justify-content:space-between;align-items:center;gap:12px;pa
 .opening{padding-top:clamp(56px,10vw,120px);position:relative}
 .namen{margin:24px 0 0;font-size:clamp(46px,9.6vw,138px);line-height:1.02;letter-spacing:-.045em}
 .naam{text-decoration:none;position:relative;display:inline}
-.naam sup{font-family:'Geist Mono',monospace;font-weight:400;font-size:clamp(11px,1vw,14px);letter-spacing:.04em;color:var(--muted);vertical-align:top;position:relative;top:.9em;margin-right:.5em}
+.naam sup{font-family:Montserrat,sans-serif;font-weight:400;font-size:clamp(11px,1vw,14px);letter-spacing:.04em;color:var(--muted);vertical-align:top;position:relative;top:.9em;margin-right:.5em}
 .naam.stil{color:#A9A8A3}
 .naam:hover,.naam:focus-visible{color:var(--ink)}
 .voorbeeld{position:absolute;right:var(--goot);top:clamp(80px,12vw,150px);width:clamp(180px,18vw,260px);aspect-ratio:4/5;opacity:0;transition:opacity .4s;pointer-events:none;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
@@ -73,7 +73,7 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
 .pil a{display:grid;place-items:center;text-decoration:none;border-radius:999px}
 .pil a[aria-current]{background:#E3E1DB;color:#202020}
 .dock .pijl{justify-self:end;width:52px;height:52px;border-radius:999px;background:rgba(32,32,32,.92);color:#EFEEEA;display:grid;place-items:center;border:0;font-size:18px;cursor:pointer}
-.terug{position:fixed;left:16px;bottom:96px;z-index:60;background:#202020;color:#EFEEEA;font:12px/1 'Geist Mono',monospace;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;text-decoration:none}
+.terug{position:fixed;left:16px;bottom:96px;z-index:60;background:#202020;color:#EFEEEA;font:12px/1 Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border-radius:999px;text-decoration:none}
 
 /* telefoon */
 @media (max-width:767px){
@@ -84,7 +84,7 @@ nav.dock{position:fixed;left:0;right:0;bottom:16px;z-index:50;display:grid;grid-
   .tel-voorbeeld{display:flex;margin-top:32px;aspect-ratio:4/3}
   .intro{margin-left:0}
   .stap summary{grid-template-columns:32px minmax(0,1fr) 24px;column-gap:12px;cursor:pointer;padding:20px 0}
-  .stap summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted)}
+  .stap summary::after{content:"+";font-family:Montserrat,sans-serif;color:var(--muted)}
   .stap[open] summary::after{content:"−"}
   .stap .nr,.stap .titel{grid-column:auto}
   .stap summary .tekst{display:none}

@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-073 Vijver winterklaar (live) — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-073: live archief. De najaarspagina: drie klussen met vaste prijzen, stappen, abonnement en tips. Inhoud 1:1 van gronn.studio/nl/herfstbeurt (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
 
 .bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
 .oudnav{margin:8px 0 0;max-width:72ch}
-.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.noot-live{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
 .kruimel{margin:clamp(40px,6vw,72px) 0 0}
 .kruimel span+span::before{content:" / ";color:var(--muted)}
 .kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
@@ -23,7 +23,7 @@
 .pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 .prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
 .prijsrij:first-of-type{border-top:0}
-.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:700;font-size:20px;white-space:nowrap}
 .prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
 .streep{list-style:none;margin:0;padding:0}
 .streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
@@ -52,8 +52,8 @@ h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;m
 .drie{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:32px;align-items:start}
 .vlak{background:#F7F6F2;margin-inline:calc(var(--goot) * -1);padding:clamp(56px,7vw,96px) var(--goot);margin-top:clamp(72px,9vw,128px)}
 .stapjes{list-style:none;margin:24px 0 32px;padding:0}
-.stapjes li{display:grid;grid-template-columns:44px minmax(0,1fr);padding:14px 0;border-top:1px solid var(--lijn);font-family:Syne,sans-serif;font-weight:600;font-size:clamp(19px,2vw,26px);line-height:1.25}
-.stapjes li span{font-family:'Geist Mono',monospace;font-weight:400;font-size:12px;color:var(--muted);padding-top:6px}
+.stapjes li{display:grid;grid-template-columns:44px minmax(0,1fr);padding:14px 0;border-top:1px solid var(--lijn);font-family:Syne,sans-serif;font-weight:700;font-size:clamp(19px,2vw,26px);line-height:1.25}
+.stapjes li span{font-family:Montserrat,sans-serif;font-weight:400;font-size:12px;color:var(--muted);padding-top:6px}
 .abo{display:grid;grid-template-columns:6fr 5fr;gap:32px;align-items:start;margin-top:24px}
 .tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:32px}
 @media (max-width:900px){.drie,.tips{grid-template-columns:1fr}.abo{grid-template-columns:1fr}}

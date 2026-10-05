@@ -28,7 +28,7 @@
   .wv-sluit{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;border-radius:999px}
   .wv-sluit:focus-visible{outline:2px solid currentColor}
   .wv-groep{border:0;margin:0 0 18px;padding:0}
-  .wv-groep legend{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:10px;padding:0}
+  .wv-groep legend{font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:10px;padding:0}
   .wv-seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--wv-lijn,rgba(0,0,0,.2));border-radius:999px;padding:3px}
   .wv-seg label{text-align:center;padding:8px 0;border-radius:999px;cursor:pointer;font-size:13px;font-weight:500}
   .wv-seg input{position:absolute;opacity:0;pointer-events:none}
@@ -42,7 +42,7 @@
   .wv-rij input:checked{background:var(--wv-ink,#202020)}
   .wv-rij input:checked::after{transform:translateX(16px);background:var(--wv-bg,#EFEEEA)}
   .wv-rij input:focus-visible{outline:2px solid var(--wv-ink,#202020);outline-offset:2px}
-  .wv-reset{all:unset;cursor:pointer;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid currentColor;margin-top:4px}
+  .wv-reset{all:unset;cursor:pointer;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid currentColor;margin-top:4px}
   @media (max-width:767px){.wv-paneel{top:auto;bottom:84px;left:12px;right:12px;width:auto}}
 
   /* de keuzes zelf */

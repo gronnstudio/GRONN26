@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-072 Techniek (live) — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-072: live archief. Filterbare kaarten met alle 38 onderdelen, opengeklapt. Inhoud 1:1 van gronn.studio/nl/stack (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
 
 .bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
 .oudnav{margin:8px 0 0;max-width:72ch}
-.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.noot-live{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
 .kruimel{margin:clamp(40px,6vw,72px) 0 0}
 .kruimel span+span::before{content:" / ";color:var(--muted)}
 .kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
@@ -23,7 +23,7 @@
 .pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 .prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
 .prijsrij:first-of-type{border-top:0}
-.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:700;font-size:20px;white-space:nowrap}
 .prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
 .streep{list-style:none;margin:0;padding:0}
 .streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
@@ -50,14 +50,14 @@ h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;m
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
 .filters span{border:1px solid var(--lijn);border-radius:999px;padding:8px 14px;font-size:14px;display:inline-flex;gap:8px;align-items:center}
 .filters span.aan{background:#23483A;color:#EFEEEA;border-color:#23483A}
-.filters small{font-family:'Geist Mono',monospace;font-size:11px;opacity:.8}
+.filters small{font-family:Montserrat,sans-serif;font-size:11px;opacity:.8}
 .zoek{display:block;border:1px solid var(--lijn);border-radius:999px;padding:12px 18px;color:var(--muted);max-width:360px;margin-top:8px;font-size:14px}
 .groep{border-top:1px solid var(--ink);margin-top:clamp(56px,7vw,96px);padding-top:20px}
 .groep header{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
 .kaarten{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px;align-items:start}
 .kaarten .kaart{padding:18px}
 .kaarten dl{margin:14px 0 0;border-top:1px dashed var(--lijn);padding-top:10px}
-.kaarten dt{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);margin-top:8px}
+.kaarten dt{font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:.06em;color:var(--muted);margin-top:8px}
 .kaarten dd{margin:4px 0 0;font-size:14px;line-height:1.55}
 .fav{background:#DB6923;color:#202020;border-radius:999px;padding:2px 8px;font-size:10px}
 @media (max-width:1000px){.kaarten{grid-template-columns:repeat(2,minmax(0,1fr))}}

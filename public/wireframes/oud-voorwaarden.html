@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>WF-077 Algemene voorwaarden (live) — GRØNN wireframes</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/wireframes/wf.css">
 <style>
 /* WF-077: live archief. De volledige consumentenvoorwaarden, negentien artikelen. Inhoud 1:1 van gronn.studio/nl/voorwaarden (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
 
 .bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
 .oudnav{margin:8px 0 0;max-width:72ch}
-.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.noot-live{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
 .kruimel{margin:clamp(40px,6vw,72px) 0 0}
 .kruimel span+span::before{content:" / ";color:var(--muted)}
 .kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
@@ -23,7 +23,7 @@
 .pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
 .prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
 .prijsrij:first-of-type{border-top:0}
-.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:700;font-size:20px;white-space:nowrap}
 .prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
 .streep{list-style:none;margin:0;padding:0}
 .streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
@@ -54,24 +54,24 @@ h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;m
 .inhoud summary::-webkit-details-marker{display:none}
 .inhoud ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--lijn)}
 .inhoud li a{display:grid;grid-template-columns:28px minmax(0,1fr);padding:8px 0;font-size:14px;line-height:1.35;text-decoration:none;border-bottom:1px solid var(--lijn)}
-.inhoud li a span{font-family:'Geist Mono',monospace;font-size:11px;color:var(--muted);padding-top:2px}
-.lees .taal{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.inhoud li a span{font-family:Montserrat,sans-serif;font-size:11px;color:var(--muted);padding-top:2px}
+.lees .taal{font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .lees .concept{border:1px dashed var(--muted);border-radius:12px;padding:14px 16px;font-size:15px;color:var(--muted)}
 .lees .intro{font-size:clamp(18px,1.6vw,21px);line-height:1.55}
 .lees section{padding-top:44px;scroll-margin-top:24px}
 .lees h2{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.02em;line-height:1.2;margin:0 0 16px;display:grid;grid-template-columns:44px minmax(0,1fr)}
-.lees h2 span{font-family:'Geist Mono',monospace;font-size:12px;font-weight:400;color:var(--muted);padding-top:8px}
+.lees h2 span{font-family:Montserrat,sans-serif;font-size:12px;font-weight:400;color:var(--muted);padding-top:8px}
 .lees ul{margin:0 0 14px;padding:0;list-style:none}
 .lees ul li{padding:8px 0;border-top:1px solid var(--lijn)}
 .lees ul li:last-child{border-bottom:1px solid var(--lijn)}
-.lees .regel{font-family:'Geist Mono',monospace;font-size:13px;overflow-wrap:anywhere}
-.open{overflow-wrap:anywhere;font-family:'Geist Mono',monospace;font-size:13px;letter-spacing:.02em;border:1px dashed var(--muted);padding:1px 6px;color:var(--muted)}
+.lees .regel{font-family:Montserrat,sans-serif;font-size:13px;overflow-wrap:anywhere}
+.open{overflow-wrap:anywhere;font-family:Montserrat,sans-serif;font-size:13px;letter-spacing:.02em;border:1px dashed var(--muted);padding:1px 6px;color:var(--muted)}
 .formulier{border:1px solid var(--ink);border-radius:16px;padding:20px;margin:8px 0 14px}
 @media (max-width:1023px){
   .jur{grid-template-columns:1fr;row-gap:24px}
   .inhoud{position:static;max-height:none;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
   .inhoud summary{cursor:pointer;padding:16px 0;display:flex;justify-content:space-between}
-  .inhoud summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted)}
+  .inhoud summary::after{content:"+";font-family:Montserrat,sans-serif;color:var(--muted)}
   .inhoud[open] summary::after{content:"−"}
   .inhoud ol{margin:0 0 16px}
 }
