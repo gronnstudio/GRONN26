@@ -109,15 +109,18 @@ export function Menu() {
         </svg>
       </Link>
 
-      {/* op de telefoon: oranje terug-naar-boven naast de pil, zodra je gescrold hebt (eigenaar, 5 okt 2026) */}
+      {/* op de telefoon: de oranje pijl naast de pil, altijd zichtbaar; omlaag
+          bovenaan, omhoog tijdens het lezen (zoals Kolenda; eigenaar, 5 okt 2026) */}
       <button
         type="button"
-        onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
+        onClick={pijl}
         data-menu
-        aria-label="Terug naar boven"
-        className={`fixed right-3 bottom-5 z-[101] grid size-11 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-[opacity,transform] duration-300 lg:hidden ${boven ? "pointer-events-none scale-75 opacity-0" : ""}`}
+        aria-label={boven ? "Naar beneden" : "Terug naar boven"}
+        className="fixed right-3 bottom-5 z-[101] grid size-11 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
       >
-        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden><path d="M8 13.5v-12M2.5 7 8 1.5 13.5 7" fill="none" stroke="currentColor" strokeWidth="1.9" /></svg>
+        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${boven ? "" : "rotate-180"}`}>
+          <path d="M8 1.5v12M2.5 8 8 13.5 13.5 8" fill="none" stroke="currentColor" strokeWidth="1.9" />
+        </svg>
       </button>
       <button
         type="button"
