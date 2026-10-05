@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-063 Oud: project vijverrenovatie — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-063: de projectpagina van de vijverrenovatie zoals hij live stond: alle twaalf hoofdstukken, cijfers, schema, tabel, foto’s en clips. */
+/* Gedeeld in het live archief (WF-060 t/m WF-068): de oude site gronn.studio
+   1:1 in inhoud en volgorde, in de taal van de wireframes. */
+.archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+.archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
+.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live::before{content:"Op de live site: ";color:var(--ink)}
+.oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
+.pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
+.kop1{margin:0;font-size:clamp(42px,6.5vw,92px);line-height:1;letter-spacing:-.04em}
+.kop2{margin:0;font-size:clamp(28px,3.6vw,52px);line-height:1.05;letter-spacing:-.03em}
+.kop3{margin:0;font-size:clamp(19px,1.9vw,25px);letter-spacing:-.02em;line-height:1.2}
+.lead{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);max-width:46ch;margin:20px 0 0}
+.tekst p{line-height:1.7;margin:0 0 1em;max-width:66ch}
+.lbl-r{margin:0 0 14px}
+.foto{display:block;width:100%;height:auto;border-radius:16px;object-fit:cover;background:var(--ph)}
+figure{margin:0}
+figcaption{margin-top:8px}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
+.blok > :first-child{margin:0}
+.fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
+.fasen li.nog{border-top-color:rgba(0,0,0,.18)}
+.fasen li.nu{font-weight:700}
+.cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
+.cijfers span{display:block;margin-top:8px}
+.feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
+.feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
+.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dd{margin:0;line-height:1.5}
+.akk{border-top:1px solid var(--lijn)}
+.akk:last-of-type{border-bottom:1px solid var(--lijn)}
+.akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
+.akk summary::-webkit-details-marker{display:none}
+.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk[open] summary::after{content:"\2212"}
+.akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
+.akk .in p{margin:0 0 12px}
+.akk .in ul{margin:0 0 12px;padding-left:18px}
+.akk .in li{margin:4px 0}
+.veld{display:block;width:100%;min-height:44px;border:1px solid var(--lijn);border-radius:8px;background:#F6F5F2;padding:10px 12px;font:inherit;font-size:14px;color:var(--muted)}
+.veld-lbl{display:block;font-weight:600;font-size:13px;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--lijn);border-radius:999px;padding:8px 14px;font-size:13px;background:#F6F5F2}
+.kaart{border:1px solid var(--lijn);border-radius:16px;padding:24px;background:#F6F5F2}
+.donker{background:#202020;color:#EFEEEA;border-radius:16px}
+.donker .muted,.donker .lbl.muted{color:#B9B8B3}
+.donker .pil-lijn{border-color:rgba(239,238,234,.35)}
+.slot{margin-top:clamp(96px,12vw,160px);padding:clamp(28px,4vw,56px)}
+.slot .rij{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.slot .knoppen{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.voet-raster{display:grid;grid-template-columns:3fr 2fr 2fr 2fr;gap:32px;margin-top:clamp(40px,5vw,64px);padding-top:32px;border-top:1px solid rgba(239,238,234,.18)}
+.voet-raster ul{list-style:none;padding:0;margin:12px 0 0}
+.voet-raster li{margin:0 0 10px}
+.voet-raster a,.voet-raster span.geen{text-decoration:none;font-size:14px}
+.voet-onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:32px;padding-top:16px;border-top:1px solid rgba(239,238,234,.18)}
+.donker .live{color:#B9B8B3;border-color:rgba(239,238,234,.35)}
+.donker .live::before{color:#EFEEEA}
+.kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
+.kruimel a{text-decoration:none}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+@media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){
+  .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
+  .blok{row-gap:12px}
+  .feiten div{grid-template-columns:1fr;gap:4px}
+  .cijfers,.fasen{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fasen{row-gap:14px}
+  .voet-raster{grid-template-columns:1fr}
+}
+.volgend{display:grid;grid-template-columns:4fr 8fr;gap:clamp(20px,3vw,40px);align-items:center;text-decoration:none;padding-top:24px;border-top:1px solid var(--lijn)}
+.volgend .foto{aspect-ratio:4/3}
+@media (max-width:767px){.volgend{grid-template-columns:1fr}}
+
+.pj-kop{padding-top:16px}
+.hoofdstuk{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;padding-top:clamp(72px,9vw,128px)}
+.hoofdstuk > .lbl{margin:10px 0 0}
+.hoofdstuk > div{min-width:0}
+.beelden{margin-top:32px}
+.beelden figure .foto{aspect-ratio:4/3}
+.cap-tekst{display:block;margin-top:4px;font-size:14px;color:var(--muted)}
+.inhoudsopgave ol{list-style:none;padding:0;margin:0;columns:3;column-gap:32px}
+.inhoudsopgave li{break-inside:avoid;border-top:1px solid var(--lijn)}
+.inhoudsopgave a{display:block;padding:10px 0;text-decoration:none}
+.begrip{border-bottom:1px dashed currentColor}
+.tekening{width:100%;max-width:900px;height:auto;font-family:'Geist Mono',monospace;display:block}
+.tekening text{font-size:11px;letter-spacing:.06em;fill:#202020}
+.tekening .noot{fill:#5E5E5B;font-size:10px}
+.tekening .lijn{stroke:#202020;stroke-width:1;fill:none}
+.tekening .vak{fill:#EFEEEA;stroke:#202020}
+.tekening .vijver{fill:#B8C5A8;stroke:#202020}
+.route{margin:0;padding-left:22px;line-height:1.6;max-width:64ch}
+.route li{margin:6px 0}
+.tabel-schuif{overflow-x:auto;margin-top:8px}
+.tabel{width:100%;border-collapse:collapse;min-width:480px}
+.tabel th,.tabel td{text-align:left;padding:12px 12px 12px 0;border-top:1px solid var(--lijn);vertical-align:top}
+.tabel th{font-family:'Geist Mono',monospace;font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.04em}
+.stappen-lijst{list-style:none;padding:0;margin:24px 0 0;counter-reset:s}
+.stappen-lijst li{counter-increment:s;display:grid;grid-template-columns:48px minmax(0,1fr);padding:14px 0;border-top:1px solid var(--lijn)}
+.stappen-lijst li:last-child{border-bottom:1px solid var(--lijn)}
+.stappen-lijst li::before{content:"0" counter(s);font-family:'Geist Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px}
+@media (max-width:767px){
+  .hoofdstuk{grid-template-columns:minmax(0,1fr)}
+  .inhoudsopgave ol{columns:1}
+}
+@media (min-width:768px) and (max-width:1023px){.inhoudsopgave ol{columns:2}}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="archief lbl muted"><span>WF-063 · Live archief</span><span>gronn.studio/projects/vijverrenovatie-twee-vijvers-waterval-beekloop</span><span>Vastgelegd 5 oktober 2026 · Nederlandse versie</span><a href="/wireframes/oud-menus">Menu's en voet: WF-068</a></p>
+  <main>
+
+    <p class="kruimel lbl muted"><a href="/wireframes/oud-voorpagina">Home</a> / <a href="/wireframes/oud-projecten">Projecten</a> / Twee vijvers. Eén samenhangend watersysteem.</p>
+    <section class="pj-kop">
+      <p class="lbl muted" style="margin:0 0 14px">Vijverrenovatie · ● In afronding</p>
+      <h1 class="kop1 syne" style="max-width:14ch">Twee vijvers. Eén samenhangend watersysteem.</h1>
+      <p class="lead">Een vijverrenovatie waarin watertechniek, beplanting en natuurlijke afwerking samenkomen.</p>
+      <ol class="fasen" aria-label="Projectfasen">
+  <li>Opgave<span>(afgerond)</span></li>
+  <li>Uitvoering<span>(afgerond)</span></li>
+  <li class="nu">● Afronding<span>(huidige fase)</span></li>
+  <li class="nog">Beplanting<span>(nog niet begonnen) · voorjaar 2027</span></li>
+</ol>
+      <p class="lbl muted" style="margin:20px 0 0;line-height:1.9">Nick Peters, GRØNN Studio<br>Bijgewerkt op 23 september 2026<br>± 7 min lezen</p>
+    </section>
+    <figure style="margin-top:40px"><img class="foto" src="/projecten/vijverrenovatie/F01.jpg" alt="Overzicht van de tuin tijdens de afronding: een klinkerpad, een treurwilg, ronde stapstenen in de vijver en borders met keien en jonge beplanting." style="aspect-ratio:3/2"><figcaption class="lbl muted">Uitvoering</figcaption></figure>
+
+    <div class="r2" style="margin-top:40px">
+      <p style="margin:0;line-height:1.7">Circa 5.000 liter water, twee vijvers, een waterval en een beekloop. Voor GRØNN Studio kwamen ze samen in een eerste vijverrenovatie waarin bijna ieder onderdeel invloed heeft op de rest. Van de route van een ondergrondse leiding tot de plek van een plantmand: achter het uiteindelijke beeld gaat veel uitzoekwerk, afstemming en aandacht schuil.</p>
+      <p style="margin:0;line-height:1.7">Inmiddels is ongeveer 120 uur besteed aan de voorbereiding en uitvoering. Het project bevindt zich in de afrondende fase. De basis krijgt zijn definitieve vorm; de beplanting zal het geheel daarna verder laten groeien.</p>
+    </div>
+
+    <section class="sectie" aria-label="Het project in cijfers">
+      <h2 class="kop2 syne">Het project in cijfers</h2>
+      <ul class="cijfers">
+  <li><b>2</b><span class="lbl muted">Vijvers, één watersysteem</span></li>
+  <li><b>5.000<small>l</small></b><span class="lbl muted">Open water, circa</span></li>
+  <li><b>120<small>uur</small></b><span class="lbl muted">Werk, circa, incl. denkwerk</span></li>
+  <li><b>50<small>mm</small></b><span class="lbl muted">Druk-pvc leidingwerk</span></li>
+</ul>
+      <dl class="feiten"><div><dt>Vijvers</dt><dd>2, verbonden binnen één watersysteem</dd></div><div><dt>Open water</dt><dd>Circa 5.000 liter</dd></div><div><dt>Waterlijn</dt><dd>Circa 12 meter</dd></div><div><dt>Beekrand</dt><dd>Circa 6 meter</dd></div><div><dt>Droge grind- en steenzone</dt><dd>Circa 3 m²</dd></div><div><dt>Pvc-leidingwerk</dt><dd>50 mm druk-pvc; toegepaste buis gespecificeerd tot <span class="begrip">7,5 bar</span></dd></div><div><dt>Bochten</dt><dd>2 tot maximaal 4 bochten van 90°; overige bochten 45°</dd></div><div><dt>Oppervlakteopvang</dt><dd>1 <span class="begrip">skimmer</span></dd></div><div><dt>Onderhoudsaansluitingen</dt><dd>Losneembare koppelingen met schroefdraad</dd></div><div><dt>Filter</dt><dd>3 kamers, met een <span class="begrip">bypass</span></dd></div><div><dt>Regelbare waterverdeling</dt><dd>2 takken: naar vijver A en naar de waterval</dd></div><div><dt>Bestede tijd</dt><dd>Circa 120 uur, inclusief voorbereiding en denkwerk</dd></div><div><dt>Oorspronkelijk beplantingsplan</dt><dd>11 manden, 44 planten en 7 soorten</dd></div><div><dt>Projectstatus</dt><dd>In afronding; verdere aanplant voorzien voor voorjaar 2027</dd></div></dl>
+      <p class="muted" style="font-size:13px;margin:16px 0 0">Afmetingen, waterinhoud en uren zijn benaderingen. De plantenaantallen beschrijven het oorspronkelijke plan.</p>
+      <p class="live">de cijfers tellen op bij in beeld komen. De onderstreepte begrippen openen een kaartje (‘Begrip’, met ‘Sluiten’): <b>7,5 bar</b> — Dat getal beschrijft de drukvastheid van de buis; de werkdruk van de vijverinstallatie is hier niet mee vastgesteld. <b>Skimmer</b> — Voor het opvangen van drijvend vuil, zoals bladeren en ander materiaal aan het wateroppervlak. <b>Bypass</b> — Een alternatieve route waarmee het water langs het filter kan worden geleid.</p>
+    </section>
+
+    <nav class="sectie inhoudsopgave" aria-label="Inhoud">
+      <p class="lbl muted" style="margin:0 0 12px">Inhoud</p>
+      <ol><li><a href="#opgave"><span class="lbl muted">01</span> De opgave</a></li><li><a href="#denkwerk"><span class="lbl muted">02</span> Het denkwerk</a></li><li><a href="#waterroute"><span class="lbl muted">03</span> De waterroute</a></li><li><a href="#leidingwerk"><span class="lbl muted">04</span> Het leidingwerk</a></li><li><a href="#onderhoud"><span class="lbl muted">05</span> Onderhoud</a></li><li><a href="#filter"><span class="lbl muted">06</span> Het filter</a></li><li><a href="#skimmer"><span class="lbl muted">07</span> De skimmer</a></li><li><a href="#filterherstel"><span class="lbl muted">08</span> Filterherstel</a></li><li><a href="#afwerking"><span class="lbl muted">09</span> Water naar tuin</a></li><li><a href="#beplanting"><span class="lbl muted">10</span> Beplanting</a></li><li><a href="#afronding"><span class="lbl muted">11</span> De afronding</a></li><li><a href="#eerste-project"><span class="lbl muted">12</span> Een eerste project</a></li></ol>
+      <p class="live">de inhoud blijft op desktop naast de tekst staan en licht het hoofdstuk op waar je bent; een leesdraad bovenin toont de voortgang.</p>
+    </nav>
+
+    <section class="hoofdstuk" id="opgave">
+      <p class="lbl muted">01</p>
+      <div>
+        <h2 class="kop2 syne">De opgave: ieder onderdeel op elkaar afstemmen</h2>
+        <div class="tekst" style="margin-top:24px"><p>Een vijverrenovatie bestaat uit veel samenhangende keuzes. Waar stroomt het water heen? Hoe komt het terug? Hoe wordt het verdeeld tussen de waterval en de andere vijver? En hoe blijven het filter en de aansluitingen bereikbaar wanneer de randen eenmaal zijn afgewerkt?</p><p>Bij dit project vraagt vooral de combinatie van twee vijvers, een waterval en een beekloop om een doordachte inrichting. Ze moeten technisch op elkaar aansluiten en in de tuin als één geheel aanvoelen. Dat betekent voortdurend schakelen tussen leidingen, waterverdeling, beplanting en de zichtbare afwerking.</p><p>De bestaande situatie vormt daarbij het vertrekpunt. De reconstructie richt zich op het verbinden en afstemmen van de onderdelen, met aandacht voor de plekken waar techniek overgaat in water, steen en groen.</p></div>
+        <div class="r2 beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F02-1.jpg" alt="De bestaande vijver vóór de renovatie, afgedekt met een net, met een rand van natuursteen langs het klinkerpad." loading="lazy"><figcaption><span class="lbl muted">Bestaande situatie</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F02-2.jpg" alt="De oude situatie: een vijver tegen een gemetselde muur onder een boom, met keien en beplanting langs het klinkerpad." loading="lazy"><figcaption><span class="lbl muted">Bestaande situatie</span></figcaption></figure></div><p class="live">twee foto’s in één vak met de knop ‘Volgende foto →’; hier naast elkaar.</p>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="denkwerk">
+      <p class="lbl muted">02</p>
+      <div>
+        <h2 class="kop2 syne">Het onzichtbare werk: meten, tekenen en blijven puzzelen</h2>
+        <div class="tekst" style="margin-top:24px"><p>Een belangrijk deel van het werk gebeurt voordat een leiding wordt aangesloten. Het begint met kijken, meten en de route van het water stap voor stap doordenken.</p><p>Waar kan een leiding lopen? Welke bochten en koppelingen zijn nodig? Op welke plek is een afsluiter nog bereikbaar? Hoe passen de aansluitingen op de pomp en het filter? En wat betekent een wijziging op één plek voor de rest van het systeem?</p><p>Achter de schermen zijn de opstelling en aansluitingen steeds verder uitgewerkt. Daarbij zijn schema’s, materiaalkeuzes en de praktische mogelijkheden in de tuin naast elkaar gelegd. Tijdens de uitvoering vraagt de bestaande situatie soms opnieuw om afwegingen: een aansluiting komt anders uit, er is een extra bocht nodig of een kraan moet op een beter bereikbare plek worden gezet.</p><p>Dat is het puzzelwerk dat straks grotendeels uit beeld verdwijnt. Het bepaalt wel hoe het systeem functioneert en hoe prettig eraan gewerkt kan worden wanneer onderhoud nodig is.</p><p>De circa 120 bestede uren omvatten daarom zowel het zichtbare werk in de tuin als de voorbereiding, het uitzoeken en het uitdenken van het geheel. Omgerekend is dat ongeveer vijftien werkdagen van acht uur, verspreid over het traject.</p></div>
+        <div class="r3 beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F03-1.jpg" alt="Een lange baan vijverfolie uitgerold over het gazon om hem op maat te meten." loading="lazy"><figcaption><span class="lbl muted">Proces</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F03-2.jpg" alt="AI-visualisatie van het beoogde eindbeeld: twee vijvers met een waterval, stapstenen en beplanting in avondlicht. Geen foto." loading="lazy"><figcaption><span class="lbl muted">AI-visualisatie</span><span class="cap-tekst">Visualisatie vooraf, geen foto van het resultaat.</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F03-3.jpg" alt="AI-visualisatie van de vijver met waterlelies en lissen tegen een gemetselde muur, omringd door grind, keien en beplanting. Geen foto." loading="lazy"><figcaption><span class="lbl muted">AI-visualisatie</span><span class="cap-tekst">Visualisatie, geen foto van het resultaat.</span></figcaption></figure></div>
+<figure class="beelden" style="max-width:420px"><video class="foto" src="/projecten/vijverrenovatie/V01.mp4" poster="/projecten/vijverrenovatie/V01-poster.jpg" muted playsinline controls preload="none" aria-label="Een telefoonstatiefje op een bemoste kei in de tuin in aanbouw, met zand en leidingen op de achtergrond."></video><figcaption><span class="cap-tekst">Het werk vastleggen onderweg, met een Ulanzi-statiefje op een kei.</span></figcaption></figure>
+<p class="live">de clip V01 speelt stil en herhalend af; de AI-visualisaties dragen altijd het label ‘AI-visualisatie’.</p>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="waterroute">
+      <p class="lbl muted">03</p>
+      <div>
+        <h2 class="kop2 syne">Hoe de twee vijvers samenwerken</h2>
+        <div class="tekst" style="margin-top:24px"><p>Voor de technische uitwerking zijn de vijvers aangeduid als vijver A en vijver B. Vijver B is het vertrekpunt van het opgepompte water.</p><p>Vanuit vijver B gaat het water via de pomp naar het driekamerfilter. Na de filtratie wordt het verdeeld over twee takken: één richting vijver A en één richting de waterval. Het water van de waterval loopt via de beekloop terug naar vijver B. Vijver A voert via de afvoer- en overloopverbinding terug naar vijver B.</p><p>Zo ontstaan twee routes binnen hetzelfde watersysteem. De verdeling is regelbaar, zodat de toevoer naar vijver A en naar de waterval op elkaar kan worden afgestemd.</p><p>Het systeem is daarmee als geheel uitgedacht. De waterval, beekloop, vijvers en filteropstelling hebben ieder een eigen plek in de route van het water.</p></div>
+        <figure class="beelden"><svg class="tekening" viewBox="0 0 640 460" role="img" aria-label="De waterroute: van vijver B via pomp en filter (met bypass) over twee takken naar vijver A en de waterval; via de beekloop en de afvoer of overloop terug naar vijver B.">
+  <path class="lijn" d="M120 366 V300 H200"/><path class="lijn" d="M260 300 H330"/><path class="lijn" d="M410 300 H450 V190"/>
+  <path class="lijn" d="M450 190 V110 H510"/><path class="lijn" d="M450 190 H300 V133"/>
+  <path class="lijn" d="M230 300 V350 H440 V300" stroke-dasharray="2 3"/>
+  <path class="lijn" d="M555 130 V400 H200" stroke-dasharray="4 4"/><path class="lijn" d="M230 105 H150 V366" stroke-dasharray="4 4"/>
+  <ellipse class="vijver" cx="120" cy="400" rx="80" ry="34"/><text x="82" y="404">VIJVER B</text>
+  <rect class="vak" x="200" y="285" width="60" height="30"/><text x="212" y="304">POMP</text>
+  <rect class="vak" x="330" y="280" width="80" height="40"/><text x="344" y="304">FILTER</text><text x="330" y="338" class="noot">FILTER · 3 KAMERS</text>
+  <text x="300" y="366" class="noot">BYPASS</text>
+  <ellipse class="vijver" cx="300" cy="105" rx="70" ry="28"/><text x="264" y="109">VIJVER A</text>
+  <rect class="vak" x="510" y="90" width="90" height="40"/><text x="522" y="114">WATERVAL</text>
+  <text x="314" y="182" class="noot">TAK 1 · REGELBAAR</text><text x="462" y="160" class="noot">TAK 2</text>
+  <text x="548" y="250" class="noot" text-anchor="end">BEEKLOOP →</text><text x="548" y="264" class="noot" text-anchor="end">TERUG NAAR B</text>
+  <text x="18" y="200" class="noot">AFVOER / OVERLOOP</text><text x="18" y="214" class="noot">→ TERUG NAAR B</text>
+</svg><figcaption><p class="lbl muted" style="margin:16px 0 8px">De route, in woorden</p><ol class="route">
+<li>Vijver B is het vertrekpunt van het opgepompte water.</li>
+<li>De pomp brengt het water naar het driekamerfilter; een bypass kan het water langs het filter leiden.</li>
+<li>Na de filtratie wordt het verdeeld over twee regelbare takken: naar vijver A en naar de waterval.</li>
+<li>De waterval loopt via de beekloop terug naar vijver B.</li>
+<li>Vijver A voert via de afvoer- en overloopverbinding terug naar vijver B.</li></ol></figcaption></figure>
+<p class="live">een eigen schema met dezelfde tien labels (VIJVER B, VIJVER A, POMP, FILTER · 3 KAMERS, WATERVAL, BYPASS, TAK 1 · REGELBAAR, TAK 2, BEEKLOOP → TERUG NAAR B, AFVOER / OVERLOOP → TERUG NAAR B); de lijnen tekenden zich bij het scrollen.</p>
+<div class="beelden" style="max-width:640px"><figure><img class="foto" src="/projecten/vijverrenovatie/F11.jpg" alt="Nick zit op de keien bij de beekloop in aanbouw, met vijverfolie, grind en een zwarte slang om hem heen." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span><span class="cap-tekst">De beekloop in aanbouw, juli.</span></figcaption></figure></div>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="leidingwerk">
+      <p class="lbl muted">04</p>
+      <div>
+        <h2 class="kop2 syne">Drukvast pvc en een zorgvuldig gekozen leidingroute</h2>
+        <div class="tekst" style="margin-top:24px"><p>Voor het vaste leidingwerk is gekozen voor druk-pvc met een diameter van 50 millimeter. De toegepaste buis is gespecificeerd tot een druk van 7,5 bar. Dat getal beschrijft de drukvastheid van de buis; de werkdruk van de vijverinstallatie is hier niet mee vastgesteld.</p><p>Bij de leidingroute is bewust aandacht besteed aan de bochten. Het aantal bochten van 90 graden is beperkt gehouden tot twee à maximaal vier. De overige richtingsveranderingen worden met bochten van 45 graden gemaakt. Het doel is om het water zo geleidelijk mogelijk door de leidingen te laten stromen en onnodige weerstand te beperken.</p><p>Daar gaat veel ruimtelijk puzzelwerk aan vooraf. Een leiding moet passen binnen de bestaande tuin, aansluiten op de apparatuur en voldoende ruimte laten om kranen en koppelingen te bedienen. Iedere bocht heeft daardoor een plaats in het ontwerp.</p><p>Naast de buizen en bochten zijn T-stukken, verloopstukken, koppelingen en afsluiters verwerkt. Een T-stuk maakt een vertakking mogelijk; een verloopstuk verbindt onderdelen met verschillende aansluitmaten. Samen vormen die kleine onderdelen het complete leidingstelsel.</p><p>Bij deze renovatie bleken meer van die onderdelen nodig dan vooraf was voorzien. Het is een van de lessen uit het project: een globale route op papier moet op locatie worden vertaald naar alle afzonderlijke aansluitingen.</p></div>
+        <div class="r2 beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F04-1.jpg" alt="Een gegraven sleuf langs de haag met twee grijze pvc-leidingen, op weg naar het filter naast de vijver." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F04-2.jpg" alt="Grijze drukvaste pvc-leidingen met twee blauwe kogelkranen tussen de keien bij de waterval." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span></figcaption></figure></div><p class="live">twee foto’s in één vak met de knop ‘Volgende foto →’; hier naast elkaar.</p>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="onderhoud">
+      <p class="lbl muted">05</p>
+      <div>
+        <h2 class="kop2 syne">Losneembare aansluitingen voor onderhoud</h2>
+        <div class="tekst" style="margin-top:24px"><p>Bij de technische opstelling zijn koppelingen met schroefdraad gebruikt om onderdelen te kunnen afkoppelen. Zo kan onder meer het filter worden losgenomen voor onderhoud of werkzaamheden aan de opstelling.</p><p>Die keuze vraagt al tijdens de aanleg om vooruitdenken. Er moet ruimte zijn om een koppeling los te draaien, een kraan te bedienen en een onderdeel daadwerkelijk uit de opstelling te halen.</p><p>De bereikbaarheid is daarom meegenomen in het leidingontwerp en de afwerking. Ook wanneer het project klaar is, moet er aan de installatie gewerkt kunnen worden.</p></div>
+        
+      </div>
+    </section>
+    <section class="hoofdstuk" id="filter">
+      <p class="lbl muted">06</p>
+      <div>
+        <h2 class="kop2 syne">Drie filterkamers, twee regelbare takken en een bypass</h2>
+        <div class="tekst" style="margin-top:24px"><p>De technische opstelling combineert een AquaForte DM-10000 Vario S-pomp met een driekamerfilter. Rond het filter is een bypass opgenomen: een alternatieve route waarmee het water langs het filter kan worden geleid.</p><p>Dat geeft mogelijkheden om de waterroute aan te passen wanneer aan het filter wordt gewerkt. Welke kranen daarbij open of dicht moeten staan, maakt deel uit van het gebruik van de installatie.</p><p>De afsluiters en regelkranen hebben verschillende taken. Schuifafsluiters bij de onderste filterafvoeren dienen voor het openen en sluiten van die afvoeren. Kogelkranen in de leidingen maken het mogelijk om de waterverdeling over de twee uitgaande takken bij te stellen.</p><p>Die functies zijn meegenomen in de inrichting. Zo krijgt onderhoud al tijdens de aanleg een plek en kan de waterverdeling na het aansluiten worden afgestemd.</p></div>
+        <div class="beelden" style="max-width:640px"><figure><img class="foto" src="/projecten/vijverrenovatie/F05.jpg" alt="Een zwarte filterbak met drie kamers, rechtop gezet naast de haag tijdens de werkzaamheden." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span></figcaption></figure></div>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="skimmer">
+      <p class="lbl muted">07</p>
+      <div>
+        <h2 class="kop2 syne">Een skimmer voor het wateroppervlak</h2>
+        <div class="tekst" style="margin-top:24px"><p>Naast de filteropstelling is een skimmer opgenomen voor het opvangen van drijvend vuil, zoals bladeren en ander materiaal aan het wateroppervlak.</p><p>Daarmee krijgt ook het oppervlak van de vijver een plek in het technische plan. De skimmer vormt een extra onderdeel om bij het gebruik en onderhoud van het geheel rekening mee te houden.</p></div>
+        <p class="live">dit hoofdstuk heeft geen foto (F06, de skimmer, is nog niet aangeleverd).</p>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="filterherstel">
+      <p class="lbl muted">08</p>
+      <div>
+        <h2 class="kop2 syne">Een beschadigd filter herstellen: een project binnen het project</h2>
+        <div class="tekst" style="margin-top:24px"><p>Een van de lastigere onderdelen was het herstellen van het beschadigde filter van polypropyleen, ook wel PP genoemd. Dat bleek in de praktijk geen eenvoudige reparatie.</p><p>Voor het herstel is tweecomponentenlijm gebruikt. Daarmee was het werk nog niet afgerond: naderhand bleek aanvullende afdichting met RubberSeal nodig. De reparatie vroeg daardoor meer aandacht en uitzoekwerk dan vooraf voorzien.</p><p>Dit onderdeel laat goed zien wat renovatiewerk inhoudt. Bestaande materialen en beschadigingen brengen vragen met zich mee die pas tijdens de uitvoering volledig duidelijk worden. Hier moest de aanpak worden bijgesteld om het herstel verder uit te werken.</p><p>Het repareren van het filter is daarmee ook onderdeel van de ervaring die in dit project is opgedaan: zorgvuldig kijken naar het materiaal, beoordelen wat een ingreep oplevert en verder zoeken wanneer de eerste aanpak nog niet voldoende is.</p></div>
+        <div class="r2 beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F07-1.jpg" alt="De beschadigde filterbak van dichtbij, met een lijmpistool voor de reparatie en losse pvc-buizen eromheen." loading="lazy"><figcaption><span class="lbl muted">Proces</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F07-2.jpg" alt="Een hand vol slib uit de filterbak, boven het troebele water in de kamer." loading="lazy"><figcaption><span class="lbl muted">Proces</span></figcaption></figure></div>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="afwerking">
+      <p class="lbl muted">09</p>
+      <div>
+        <h2 class="kop2 syne">De overgang van water naar tuin</h2>
+        <div class="tekst" style="margin-top:24px"><p>Naast het technische werk krijgt de natuurlijke afwerking veel aandacht. Rond circa twaalf meter waterlijn en zes meter beekrand ontmoeten water, steen en planten elkaar.</p><p>Daar bepaalt de afwerking hoe de vijvers in de tuin liggen. De randen moeten aansluiten op de waterval en beekloop, terwijl er ruimte blijft voor beplanting. De droge grind- en steenzone van ongeveer drie vierkante meter maakt eveneens deel uit van die overgang.</p><p>Het aanvullen met teelaarde hoort bij de laatste werkzaamheden rondom het project. Daarna kan de verdere aanplant de aansluiting op de tuin versterken. Het beeld zal dus ook na de technische afronding nog veranderen: planten moeten zich ontwikkelen en hun plek tussen het water en de stenen gaan innemen.</p></div>
+        <div class="r2 beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F08-1.jpg" alt="Keien en natuursteen op de vijverfolie aan de rand bij het terras, waar het water overgaat in de tuin." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F08-2.jpg" alt="Nick gehurkt tussen de keien aan de vijverrand, lachend, met een zwart onderdeel in de hand en een geopende doos naast zich." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span><span class="cap-tekst">Nick aan het werk, september.</span></figcaption></figure></div><p class="live">twee foto’s in één vak met de knop ‘Volgende foto →’; hier naast elkaar.</p>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="beplanting">
+      <p class="lbl muted">10</p>
+      <div>
+        <h2 class="kop2 syne">Elf plantmanden en zeven soorten in het oorspronkelijke plan</h2>
+        <div class="tekst" style="margin-top:24px"><p>Voor de waterlijn en beekrand is een beplantingsplan opgesteld met in totaal elf manden, elk met vier planten. Dat komt neer op 44 planten, verdeeld over zeven soorten.</p><p>De verdeling in het oorspronkelijke plan is:</p></div>
+        <div class="tabel-schuif"><table class="tabel"><caption class="lbl muted" style="text-align:left;caption-side:top;padding-bottom:8px">Oorspronkelijk beplantingsplan</caption>
+<thead><tr><th>Zone</th><th>Soorten</th><th>Aantal manden</th><th>Aantal planten</th></tr></thead>
+<tbody><tr><td>Waterlijn</td><td>Gele lis, zwanenbloem, egelskop, holpijp</td><td>6</td><td>24</td></tr>
+<tr><td>Beekrand</td><td>Penningkruid, beekpunge, watermunt</td><td>5</td><td>20</td></tr>
+<tr><td><strong>Totaal</strong></td><td><strong>7 soorten</strong></td><td><strong>11</strong></td><td><strong>44</strong></td></tr></tbody></table></div>
+<div class="tekst" style="margin-top:24px"><p>De plantmanden bevatten naast de planten ook klei en substraat. Het plan maakt onderscheid tussen de waterlijn en de ondiepere beekrand, zodat de beplanting aansluit op de verschillende plekken in het systeem.</p>
+<p>Tijdens het project hebben de aanwezige vissen een deel van de vijverplanten beschadigd. Die planten worden vervangen. Het onderstreept dat de inrichting van een vijver ook moet passen bij de dieren die er al leven. De plaatsing en eventuele bescherming van vervangende planten verdienen daarom aandacht.</p>
+<p>De verdere aanplant rond het project is voorzien voor het voorjaar van 2027. Daarmee krijgt het groen een eigen vervolgstap na de afronding van het technische werk.</p></div>
+<div class="r2 beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F09-1.jpg" alt="Een hand zet een jong vijverplantje in een plantmand met grind, met het plantlabel ernaast." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span></figcaption></figure><figure><img class="foto" src="/projecten/vijverrenovatie/F09-2.jpg" alt="Nick Peters lachend tussen de oeverplanten, aan het werk in de vijver." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span><span class="cap-tekst">Nick aan het werk.</span></figcaption></figure></div><p class="live">twee foto’s in één vak met de knop ‘Volgende foto →’; hier naast elkaar.</p>
+<figure class="beelden" style="max-width:420px"><video class="foto" src="/projecten/vijverrenovatie/V02.mp4" poster="/projecten/vijverrenovatie/V02-poster.jpg" muted playsinline controls preload="none" aria-label="Nick ligt op zijn buik aan de waterkant en zet oeverplanten tussen de stenen, onder een treurwilg."></video><figcaption><span class="cap-tekst">Oeverplanten zetten aan de waterkant.</span></figcaption></figure>
+      </div>
+    </section>
+    <section class="hoofdstuk" id="afronding">
+      <p class="lbl muted">11</p>
+      <div>
+        <h2 class="kop2 syne">De afronding: opruimen, aanvullen en verder laten groeien</h2>
+        <div class="tekst" style="margin-top:24px"><p>Het project bevindt zich in de laatste fase. Het resterende hout en puin moeten worden afgevoerd en de omliggende delen worden aangevuld met teelaarde. De beschadigde vijverplanten kunnen worden vervangen; de aanvullende aanplant volgt naar verwachting in het voorjaar.</p><p>Bij de afronding hoort ook aandacht voor het gebruik: de bediening van de kranen, de waterverdeling en de bereikbaarheid van de technische onderdelen. Een zorgvuldig aangelegd systeem moet voor de eigenaar ook begrijpelijk zijn.</p><p>Het resultaat tot nu toe is een gereconstrueerde samenhang tussen twee vijvers, een waterval, een beekloop en de technische opstelling. De komende aanplant zal die basis verder verbinden met de tuin.</p></div>
+        
+      </div>
+    </section>
+    <section class="hoofdstuk" id="eerste-project">
+      <p class="lbl muted">12</p>
+      <div>
+        <h2 class="kop2 syne">Een eerste project dat de basis legt voor GRØNN Studio</h2>
+        <div class="tekst" style="margin-top:24px"><p>Deze vijverrenovatie heeft een bijzondere plek binnen GRØNN Studio. Het is een eerste project waarin ontwerp, techniek, uitvoering en beplanting op deze schaal samenkomen.</p><p>Het traject heeft veel geleerd over voorbereiding, materiaalgebruik, het herstellen van bestaande onderdelen en de tijd die nodig is om een bestaande situatie zorgvuldig aan te passen. Vooral het vertalen van een plan naar alle afzonderlijke aansluitingen en werkstappen heeft waardevolle ervaring opgeleverd.</p></div>
+        <figure style="margin:32px 0"><blockquote class="citaat" style="margin:0">“Ik heb ontzettend genoten van dit eerste project. Van het uitdenken van de waterstromen tot het moment waarop de onderdelen samenkomen. Het vertrouwen om dit te mogen maken was een belangrijke stap in het opbouwen van GRØNN Studio.”</blockquote><figcaption class="lbl muted" style="margin-top:16px">— Nick Peters, GRØNN Studio</figcaption></figure>
+<div class="tekst"><p>Het uitgangspunt voor volgende projecten is daarmee verder aangescherpt: de werking van het watersysteem, het onderhoud en de inrichting van de tuin vanaf het begin samen bekijken. Met evenveel aandacht voor het zichtbare resultaat als voor de keuzes die achter de schermen nodig zijn.</p></div>
+<div class="beelden"><figure><img class="foto" src="/projecten/vijverrenovatie/F10.jpg" alt="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter." loading="lazy"><figcaption><span class="lbl muted">Uitvoering</span></figcaption></figure></div>
+      </div>
+    </section>
+    <section class="sectie" aria-label="Een vijver die weer past bij de tuin">
+      <div class="blok">
+        <span></span>
+        <div class="kaart">
+          <h2 class="kop2 syne">Een vijver die weer past bij de tuin</h2>
+          <div class="tekst" style="margin-top:20px"><p>Heb je een bestaande vijver die aan renovatie toe is, of wil je onderzoeken hoe een waterval, beekloop en beplanting beter op elkaar kunnen aansluiten?</p>
+          <p>GRØNN Studio bekijkt de bestaande situatie en denkt mee over de techniek, inrichting en uitvoering. Zo begint ieder project met een duidelijk beeld van wat er nodig is om water en tuin samen te laten werken.</p>
+          <p>Bespreek jouw vijverproject met GRØNN Studio.</p></div>
+          <a class="pil-lijn" href="/wireframes/oud-contact">Bespreek jouw vijverproject →</a>
+          <p class="live">de knop was oranje en leidt naar Contact.</p>
+        </div>
+      </div>
+    </section>
+    <section class="sectie" aria-label="Volgend project">
+<a class="volgend" href="/wireframes/oud-project-terras">
+  <img class="foto" src="/projecten/terras-geulle/T01.jpg" alt="Het nieuwe terras van lichte betontegels onder de overkapping, met de opsluitband langs de rand van het zandbed." loading="lazy">
+  <span><span class="lbl muted">Volgend project</span><span class="kop2 syne" style="display:block;margin-top:10px">Een terras van 24 m², gelegd in twee dagen.</span><span class="muted" style="display:block;margin-top:12px;line-height:1.6">Stratenmakers waren te duur of pas volgend jaar beschikbaar. De materialen lagen er al; in twee dagen lag er een strak terras van 24 m².</span><span class="lbl" style="display:block;margin-top:16px">Afgerond →</span></span>
+</a>
+      <p class="muted" style="margin:24px 0 0">Meer echt werk: <a class="lnk" href="/wireframes/oud-projecten">alle projecten</a></p>
+    </section>
+
+    <footer>
+      <section class="slot donker" aria-label="Kennismaken">
+        <div class="rij">
+          <h2 class="kop2 syne" style="max-width:16ch">Zullen we eens naar jouw tuin kijken?</h2>
+          <div class="knoppen"><a class="oranje" href="/wireframes/oud-contact">Plan een kennismaking →</a><a class="pil-lijn" href="https://wa.me/31618118014">WhatsApp</a><a class="pil-lijn" href="https://instagram.com/gronn.studio">Instagram</a></div>
+        </div>
+        <div class="voet-raster">
+          <div>
+            <p class="syne" style="font-size:26px;margin:0">GRØNN</p>
+            <p class="lbl" style="margin:8px 0 0">Rooted in nature.</p>
+            <p class="muted" style="margin:12px 0 0;line-height:1.6;font-size:14px;max-width:30ch">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p>
+          </div>
+          <nav aria-label="Voettekst"><p class="lbl muted" style="margin:0">Site</p><ul><li><a href="/wireframes/oud-diensten">Diensten</a></li><li><a href="/wireframes/oud-projecten">Projecten</a></li><li><a href="/wireframes/oud-studio">Over mij</a></li><li><a href="/wireframes/oud-faq">Veelgestelde vragen</a></li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></nav>
+          <div><p class="lbl muted" style="margin:0">Contact</p><ul><li><a href="/wireframes/oud-contact">Contactformulier</a></li><li><a href="https://instagram.com/gronn.studio">Instagram</a></li><li><a href="/wireframes/oud-colofon">Adres en gegevens</a></li><li><span class="pil-lijn" style="min-height:34px">Dashboard →</span></li></ul></div>
+          <nav aria-label="Juridisch"><p class="lbl muted" style="margin:0">Juridisch</p><ul><li><a href="/wireframes/privacy">Privacy</a></li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></nav>
+        </div>
+        <div class="voet-onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+        <p class="live">KVK en BTW zijn kopieerknoppen. Onder 1280 px staat in de voet ook de hemelregel (Tuinkalender: vandaag, zon en maan voor Stein, link naar de <a href="/wireframes/oud-tuinkalender">Tuinkalender</a>). Dashboard heeft geen wireframe.</p>
+      </section>
+    </footer>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk" aria-current="page">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

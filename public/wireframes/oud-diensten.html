@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-061 Oud: diensten — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-061: de dienstenpagina van gronn.studio: vijf onderdelen en drie niveaus met alle diensten, ondertitels en vanaf-prijzen. */
+/* Gedeeld in het live archief (WF-060 t/m WF-068): de oude site gronn.studio
+   1:1 in inhoud en volgorde, in de taal van de wireframes. */
+.archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+.archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
+.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live::before{content:"Op de live site: ";color:var(--ink)}
+.oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
+.pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
+.kop1{margin:0;font-size:clamp(42px,6.5vw,92px);line-height:1;letter-spacing:-.04em}
+.kop2{margin:0;font-size:clamp(28px,3.6vw,52px);line-height:1.05;letter-spacing:-.03em}
+.kop3{margin:0;font-size:clamp(19px,1.9vw,25px);letter-spacing:-.02em;line-height:1.2}
+.lead{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);max-width:46ch;margin:20px 0 0}
+.tekst p{line-height:1.7;margin:0 0 1em;max-width:66ch}
+.lbl-r{margin:0 0 14px}
+.foto{display:block;width:100%;height:auto;border-radius:16px;object-fit:cover;background:var(--ph)}
+figure{margin:0}
+figcaption{margin-top:8px}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
+.blok > :first-child{margin:0}
+.fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
+.fasen li.nog{border-top-color:rgba(0,0,0,.18)}
+.fasen li.nu{font-weight:700}
+.cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
+.cijfers span{display:block;margin-top:8px}
+.feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
+.feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
+.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dd{margin:0;line-height:1.5}
+.akk{border-top:1px solid var(--lijn)}
+.akk:last-of-type{border-bottom:1px solid var(--lijn)}
+.akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
+.akk summary::-webkit-details-marker{display:none}
+.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk[open] summary::after{content:"\2212"}
+.akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
+.akk .in p{margin:0 0 12px}
+.akk .in ul{margin:0 0 12px;padding-left:18px}
+.akk .in li{margin:4px 0}
+.veld{display:block;width:100%;min-height:44px;border:1px solid var(--lijn);border-radius:8px;background:#F6F5F2;padding:10px 12px;font:inherit;font-size:14px;color:var(--muted)}
+.veld-lbl{display:block;font-weight:600;font-size:13px;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--lijn);border-radius:999px;padding:8px 14px;font-size:13px;background:#F6F5F2}
+.kaart{border:1px solid var(--lijn);border-radius:16px;padding:24px;background:#F6F5F2}
+.donker{background:#202020;color:#EFEEEA;border-radius:16px}
+.donker .muted,.donker .lbl.muted{color:#B9B8B3}
+.donker .pil-lijn{border-color:rgba(239,238,234,.35)}
+.slot{margin-top:clamp(96px,12vw,160px);padding:clamp(28px,4vw,56px)}
+.slot .rij{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.slot .knoppen{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.voet-raster{display:grid;grid-template-columns:3fr 2fr 2fr 2fr;gap:32px;margin-top:clamp(40px,5vw,64px);padding-top:32px;border-top:1px solid rgba(239,238,234,.18)}
+.voet-raster ul{list-style:none;padding:0;margin:12px 0 0}
+.voet-raster li{margin:0 0 10px}
+.voet-raster a,.voet-raster span.geen{text-decoration:none;font-size:14px}
+.voet-onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:32px;padding-top:16px;border-top:1px solid rgba(239,238,234,.18)}
+.donker .live{color:#B9B8B3;border-color:rgba(239,238,234,.35)}
+.donker .live::before{color:#EFEEEA}
+.kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
+.kruimel a{text-decoration:none}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+@media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){
+  .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
+  .blok{row-gap:12px}
+  .feiten div{grid-template-columns:1fr;gap:4px}
+  .cijfers,.fasen{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fasen{row-gap:14px}
+  .voet-raster{grid-template-columns:1fr}
+}
+.mini{margin-top:14px;max-width:260px}
+.mini .foto{aspect-ratio:4/3;border-radius:12px}
+.dienst .prijs{white-space:nowrap}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="archief lbl muted"><span>WF-061 · Live archief</span><span>gronn.studio/services</span><span>Vastgelegd 5 oktober 2026 · Nederlandse versie</span><a href="/wireframes/oud-menus">Menu's en voet: WF-068</a></p>
+  <main>
+
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Diensten</p>
+      <h1 class="syne">Tekenen, maken, bijhouden.</h1>
+      <p class="inleiding">Ik werk voor particulieren in Stein en omgeving, tot zo’n 30 km. Drie niveaus: ontwerp, aanleg en onderhoud, van even meekijken tot het werk per seizoen. Waar een vaste prijs kan, staat hij erbij, inclusief btw.</p>
+    </section>
+
+    <section class="sectie" aria-label="Vijf dingen die ik in een tuin maak.">
+      <div class="blok">
+        <p class="lbl muted">Per onderdeel</p>
+        <div><h2 class="kop2 syne">Vijf dingen die ik in een tuin maak.</h2><p class="lead">Elk onderdeel doet iets voor de natuur. Vraag er één, of laat ze samen een tuin worden.</p></div>
+      </div>
+      <div class="rijen"><a class="dienst" href="/wireframes/oud-diensten#ontwerp"><span class="lbl muted">01 · Onderdeel</span><span class="naam syne">Vijver</span><span class="uitleg">Water trekt libellen, kikkers en vogels aan: geen onderdeel brengt zo snel leven in een tuin.<figure class="mini"><img class="foto" src="/projecten/vijverrenovatie/F01.jpg" alt="" loading="lazy"><figcaption class="lbl muted">Eigen werk · Vijverrenovatie</figcaption></figure></span><span class="prijs lbl">→</span></a><a class="dienst" href="/wireframes/oud-contact"><span class="lbl muted">02 · Onderdeel</span><span class="naam syne">Natuurlijke oever</span><span class="uitleg">Een flauwe, beplante rand laat egels en kikkers veilig in en uit het water, en de planten houden het water helder.</span><span class="prijs lbl">→</span></a><a class="dienst" href="/wireframes/oud-contact"><span class="lbl muted">03 · Onderdeel</span><span class="naam syne">Takkenril</span><span class="uitleg">Snoeihout op een rij in plaats van in de container: schuilplaats en nestplek voor egels, winterkoninkjes en insecten.</span><span class="prijs lbl">→</span></a><a class="dienst" href="/wireframes/oud-contact"><span class="lbl muted">04 · Onderdeel</span><span class="naam syne">Stapelmuur</span><span class="uitleg">Natuursteen zonder cement houdt de warmte van de zon vast; in de voegen wonen wilde bijen, hagedissen en muurplanten.</span><span class="prijs lbl">→</span></a><a class="dienst" href="/wireframes/oud-contact"><span class="lbl muted">05 · Onderdeel</span><span class="naam syne">Voedselbos</span><span class="uitleg">Lagen van bomen, struiken en bodemplanten die eten geven en elkaar beschermen, zodat de bodem nooit kaal ligt.</span><span class="prijs lbl">→</span></a></div>
+      <p class="live">een ‘interactive link showcase’: grote namen in rijen; bij aanwijzen schuift de uitleg open en verschijnt bij Vijver de foto F01 met het label ‘Eigen werk · Vijverrenovatie’. Vijver linkt naar #ontwerp hieronder, de andere vier naar Contact.</p>
+    </section>
+    
+    <section class="sectie" id="ontwerp" aria-label="Een plan dat klopt">
+      <div class="blok">
+        <p class="lbl muted">01 · Ontwerp</p>
+        <div><h2 class="kop2 syne">Een plan dat klopt</h2><p class="lead">Van meekijken tot een heel plan. Soms heb je geen ontwerp nodig, maar iemand die meekijkt. Ik kom langs en zeg eerlijk wat ik zou doen. Elk ontwerp krijgt een eigen offerte: je betaalt voor het denkwerk.</p></div>
+      </div>
+      <div class="rijen"><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Ecologische watersystemen</span><span class="uitleg">Water dat zijn weg vindt<figure class="mini"><img class="foto" src="/projecten/vijverrenovatie/F10.jpg" alt="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter." loading="lazy"><figcaption class="lbl muted">Eigen werk · Vijverrenovatie</figcaption></figure></span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Regeneratief tuinontwerp</span><span class="uitleg">De hele tuin, doordacht</span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Beplantings- en habitatontwerp</span><span class="uitleg">Beplanting die iets voedt</span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Tuintransformatie</span><span class="uitleg">Van gazon en tegels naar een tuin die leeft</span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Ecologisch advies</span><span class="uitleg">Een tweede paar ogen<figure class="mini"><img class="foto" src="/projecten/vijverrenovatie/F08-2.jpg" alt="Nick gehurkt tussen de keien aan de vijverrand, lachend, met een zwart onderdeel in de hand en een geopende doos naast zich." loading="lazy"><figcaption class="lbl muted">Eigen werk · Vijverrenovatie</figcaption></figure></span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Vijverdoorlichting</span><span class="uitleg">Gemeten, niet geraden<figure class="mini"><img class="foto" src="/projecten/vijverrenovatie/F02-1.jpg" alt="De bestaande vijver vóór de renovatie, afgedekt met een net, met een rand van natuursteen langs het klinkerpad." loading="lazy"><figcaption class="lbl muted">Eigen werk · Vijverrenovatie</figcaption></figure></span><span class="prijs lbl">vanaf € 175 →</span></a></div>
+    </section>
+    
+    <section class="sectie" id="aanleg" aria-label="Handen in de grond">
+      <div class="blok">
+        <p class="lbl muted">02 · Aanleg</p>
+        <div><h2 class="kop2 syne">Handen in de grond</h2><p class="lead">Het plan wordt een tuin. Ik leg aan wat getekend is, waar het kan met een vaste datum en een vaste prijs.</p></div>
+      </div>
+      <div class="rijen"><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Uitvoering</span><span class="uitleg">Aangelegd zoals getekend<figure class="mini"><img class="foto" src="/projecten/terras-geulle/T01.jpg" alt="Het nieuwe terras van lichte betontegels onder de overkapping, met de opsluitband langs de rand van het zandbed." loading="lazy"><figcaption class="lbl muted">Eigen werk · Terras</figcaption></figure></span><span class="prijs lbl">op maat →</span></a></div>
+    </section>
+    
+    <section class="sectie" id="onderhoud" aria-label="Het hele jaar door">
+      <div class="blok">
+        <p class="lbl muted">03 · Onderhoud</p>
+        <div><h2 class="kop2 syne">Het hele jaar door</h2><p class="lead">Een vijver of tuin is nooit af. Met een beetje aandacht per seizoen blijft hij gezond, waar het kan met een vaste datum en een vaste prijs.</p></div>
+      </div>
+      <div class="rijen"><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Bladnet plaatsen</span><span class="uitleg">Vóór de bladval</span><span class="prijs lbl">vanaf € 125 →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Najaarsbeurt vijver</span><span class="uitleg">De volledige reset voor de winter</span><span class="prijs lbl">vanaf € 250 →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Winterklaar maken</span><span class="uitleg">Veilig door de vorst</span><span class="prijs lbl">vanaf € 95 →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">·</span><span class="naam syne">Onderhoudsabonnement</span><span class="uitleg">Vier bezoeken, één systeem</span><span class="prijs lbl">vanaf € 45 /mnd →</span></a></div>
+    </section>
+    <p class="live">elke dienst linkt naar een eigen dienstpagina (/services/water-systems, /garden-design, /planting-habitat, /garden-transformation, /consultancy, /pond-survey, /implementation, /leaf-net, /pond-autumn-service, /winterising, /maintenance-subscription); die vallen buiten deze ronde. De foto’s met ‘Eigen werk’ verschijnen bij aanwijzen van de rij.</p>
+
+    <footer>
+      <section class="slot donker" aria-label="Kennismaken">
+        <div class="rij">
+          <h2 class="kop2 syne" style="max-width:16ch">Zullen we eens naar jouw tuin kijken?</h2>
+          <div class="knoppen"><a class="oranje" href="/wireframes/oud-contact">Plan een kennismaking →</a><a class="pil-lijn" href="https://wa.me/31618118014">WhatsApp</a><a class="pil-lijn" href="https://instagram.com/gronn.studio">Instagram</a></div>
+        </div>
+        <div class="voet-raster">
+          <div>
+            <p class="syne" style="font-size:26px;margin:0">GRØNN</p>
+            <p class="lbl" style="margin:8px 0 0">Rooted in nature.</p>
+            <p class="muted" style="margin:12px 0 0;line-height:1.6;font-size:14px;max-width:30ch">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p>
+          </div>
+          <nav aria-label="Voettekst"><p class="lbl muted" style="margin:0">Site</p><ul><li><a href="/wireframes/oud-diensten">Diensten</a></li><li><a href="/wireframes/oud-projecten">Projecten</a></li><li><a href="/wireframes/oud-studio">Over mij</a></li><li><a href="/wireframes/oud-faq">Veelgestelde vragen</a></li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></nav>
+          <div><p class="lbl muted" style="margin:0">Contact</p><ul><li><a href="/wireframes/oud-contact">Contactformulier</a></li><li><a href="https://instagram.com/gronn.studio">Instagram</a></li><li><a href="/wireframes/oud-colofon">Adres en gegevens</a></li><li><span class="pil-lijn" style="min-height:34px">Dashboard →</span></li></ul></div>
+          <nav aria-label="Juridisch"><p class="lbl muted" style="margin:0">Juridisch</p><ul><li><a href="/wireframes/privacy">Privacy</a></li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></nav>
+        </div>
+        <div class="voet-onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+        <p class="live">KVK en BTW zijn kopieerknoppen. Onder 1280 px staat in de voet ook de hemelregel (Tuinkalender: vandaag, zon en maan voor Stein, link naar de <a href="/wireframes/oud-tuinkalender">Tuinkalender</a>). Dashboard heeft geen wireframe.</p>
+      </section>
+    </footer>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

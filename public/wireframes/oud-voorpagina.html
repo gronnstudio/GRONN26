@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-060 Oud: voorpagina — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-060: de voorpagina van gronn.studio zoals hij live stond: held, merk, diensten, uitgelicht project, checklist, over mij, vragen. */
+/* Gedeeld in het live archief (WF-060 t/m WF-068): de oude site gronn.studio
+   1:1 in inhoud en volgorde, in de taal van de wireframes. */
+.archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+.archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
+.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live::before{content:"Op de live site: ";color:var(--ink)}
+.oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
+.pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
+.kop1{margin:0;font-size:clamp(42px,6.5vw,92px);line-height:1;letter-spacing:-.04em}
+.kop2{margin:0;font-size:clamp(28px,3.6vw,52px);line-height:1.05;letter-spacing:-.03em}
+.kop3{margin:0;font-size:clamp(19px,1.9vw,25px);letter-spacing:-.02em;line-height:1.2}
+.lead{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);max-width:46ch;margin:20px 0 0}
+.tekst p{line-height:1.7;margin:0 0 1em;max-width:66ch}
+.lbl-r{margin:0 0 14px}
+.foto{display:block;width:100%;height:auto;border-radius:16px;object-fit:cover;background:var(--ph)}
+figure{margin:0}
+figcaption{margin-top:8px}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
+.blok > :first-child{margin:0}
+.fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
+.fasen li.nog{border-top-color:rgba(0,0,0,.18)}
+.fasen li.nu{font-weight:700}
+.cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
+.cijfers span{display:block;margin-top:8px}
+.feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
+.feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
+.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dd{margin:0;line-height:1.5}
+.akk{border-top:1px solid var(--lijn)}
+.akk:last-of-type{border-bottom:1px solid var(--lijn)}
+.akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
+.akk summary::-webkit-details-marker{display:none}
+.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk[open] summary::after{content:"\2212"}
+.akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
+.akk .in p{margin:0 0 12px}
+.akk .in ul{margin:0 0 12px;padding-left:18px}
+.akk .in li{margin:4px 0}
+.veld{display:block;width:100%;min-height:44px;border:1px solid var(--lijn);border-radius:8px;background:#F6F5F2;padding:10px 12px;font:inherit;font-size:14px;color:var(--muted)}
+.veld-lbl{display:block;font-weight:600;font-size:13px;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--lijn);border-radius:999px;padding:8px 14px;font-size:13px;background:#F6F5F2}
+.kaart{border:1px solid var(--lijn);border-radius:16px;padding:24px;background:#F6F5F2}
+.donker{background:#202020;color:#EFEEEA;border-radius:16px}
+.donker .muted,.donker .lbl.muted{color:#B9B8B3}
+.donker .pil-lijn{border-color:rgba(239,238,234,.35)}
+.slot{margin-top:clamp(96px,12vw,160px);padding:clamp(28px,4vw,56px)}
+.slot .rij{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.slot .knoppen{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.voet-raster{display:grid;grid-template-columns:3fr 2fr 2fr 2fr;gap:32px;margin-top:clamp(40px,5vw,64px);padding-top:32px;border-top:1px solid rgba(239,238,234,.18)}
+.voet-raster ul{list-style:none;padding:0;margin:12px 0 0}
+.voet-raster li{margin:0 0 10px}
+.voet-raster a,.voet-raster span.geen{text-decoration:none;font-size:14px}
+.voet-onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:32px;padding-top:16px;border-top:1px solid rgba(239,238,234,.18)}
+.donker .live{color:#B9B8B3;border-color:rgba(239,238,234,.35)}
+.donker .live::before{color:#EFEEEA}
+.kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
+.kruimel a{text-decoration:none}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+@media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){
+  .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
+  .blok{row-gap:12px}
+  .feiten div{grid-template-columns:1fr;gap:4px}
+  .cijfers,.fasen{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fasen{row-gap:14px}
+  .voet-raster{grid-template-columns:1fr}
+}
+.projectkaart{display:grid;grid-template-columns:6fr 6fr;column-gap:clamp(24px,4vw,56px);align-items:start;padding:32px 0;border-top:1px solid var(--lijn)}
+.projectkaart .foto{aspect-ratio:4/3}
+.cl-punten{list-style:none;padding:0;margin:0}
+.cl-punten li{display:grid;grid-template-columns:32px minmax(0,1fr);padding:8px 0;border-bottom:1px solid var(--lijn)}
+.cl-punten li .lbl{padding-top:3px}
+@media (max-width:767px){.projectkaart{grid-template-columns:1fr;row-gap:20px}}
+
+.held{position:relative;border-radius:16px;overflow:hidden;min-height:clamp(560px,86vh,860px);display:flex;align-items:flex-end;background:#202020;color:#EFEEEA;margin-top:16px}
+.held-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+.held-tekst{position:relative;padding:clamp(24px,5vw,72px);max-width:760px}
+.held .lbl{color:#EFEEEA}
+.persoon{display:inline-flex;align-items:center;gap:14px;margin-top:28px;text-decoration:none;font-size:14px;line-height:1.4}
+.persoon img{width:56px;height:56px;border-radius:999px;object-fit:cover}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.dienst .prijs{white-space:nowrap}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="archief lbl muted"><span>WF-060 · Live archief</span><span>gronn.studio/</span><span>Vastgelegd 5 oktober 2026 · Nederlandse versie</span><a href="/wireframes/oud-menus">Menu's en voet: WF-068</a></p>
+  <main>
+
+    <section class="held" aria-label="Een vijver en tuin die gezond blijven.">
+      <img class="held-foto" src="/projecten/vijverrenovatie/F10.jpg" alt="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter.">
+      <div class="held-tekst">
+        <p class="lbl" style="margin:0">Vijvers en tuinen · Stein en omgeving</p>
+        <h1 class="kop1 syne" style="margin-top:18px;max-width:11ch">Een vijver en tuin die gezond blijven.</h1>
+        <p class="lead" style="color:inherit">Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.</p>
+        <p style="margin:28px 0 0"><a class="oranje" href="/wireframes/oud-contact">Plan een kennismaking →</a></p>
+        <a class="persoon" href="/wireframes/oud-studio"><img src="/nick/portret-espresso.jpg" alt=""><span><span class="sr">Over </span><strong>Nick Peters</strong><br><span>Stein, Limburg</span></span></a>
+      </div>
+    </section>
+    <p class="live">de foto F10 vult het hele scherm achter de tekst (lichte tekst op een donkere waas); de zwevende menubalk ligt erover (zie WF-068). Op de telefoon staat de dock onderaan.</p>
+
+    <section class="sectie" aria-label="Ontworpen voor leven.">
+      <div class="blok">
+        <span></span>
+        <div>
+          <h2 class="kop2 syne">Ontworpen voor leven.</h2>
+          <p class="lead">GRØNN Studio ontwerpt, legt aan en onderhoudt vijvers en tuinen bij particulieren in Stein en omgeving. Planten, water en bodem als één systeem, zodat het gezond blijft met weinig ingrijpen.</p>
+          <p class="lbl muted" style="margin:56px 0 8px">Merkbelofte</p>
+          <p class="citaat">Een tuin die met je meegroeit.</p>
+          <div class="r3" style="margin-top:40px">
+            <div><p class="lbl muted" style="margin:0">01 / Levend</p><h3 class="kop3 syne" style="margin-top:10px">Natuur als basis</h3><p class="muted" style="line-height:1.6">We kijken naar de samenhang tussen bodem, water en planten. De plek bepaalt de keuzes.</p></div>
+            <div><p class="lbl muted" style="margin:0">02 / Doordacht</p><h3 class="kop3 syne" style="margin-top:10px">Ontwerp met reden</h3><p class="muted" style="line-height:1.6">Vorm en functie versterken elkaar. Materialen, details en beplanting passen bij het gebruik.</p></div>
+            <div><p class="lbl muted" style="margin:0">03 / Persoonlijk</p><h3 class="kop3 syne" style="margin-top:10px">Dicht bij de maker</h3><p class="muted" style="line-height:1.6">Direct contact, heldere afspraken en zichtbaar vakwerk. Je weet wie er aan jouw tuin werkt.</p></div>
+          </div>
+          <p class="live">de alinea’s verschijnen woord voor woord bij het scrollen (reveal).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie" aria-label="Van meekijken tot onderhouden.">
+      <div class="blok">
+        <p class="lbl muted">Diensten</p>
+        <div>
+          <h2 class="kop2 syne">Van meekijken tot onderhouden.</h2>
+          <p class="lead">Drie niveaus, in de volgorde waarin een tuin ze doorloopt — niet geordend naar wat ik het liefst verkoop.</p>
+        </div>
+      </div>
+      <div class="rijen">
+        <a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">01 · Ontwerp</span><span class="naam syne">Een plan dat klopt</span><span class="uitleg">Van meekijken tot een heel plan. Soms heb je geen ontwerp nodig, maar iemand die meekijkt. Ik kom langs en zeg eerlijk wat ik zou doen. Elk ontwerp krijgt een eigen offerte: je betaalt voor het denkwerk.</span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">02 · Aanleg</span><span class="naam syne">Handen in de grond</span><span class="uitleg">Het plan wordt een tuin. Ik leg aan wat getekend is, waar het kan met een vaste datum en een vaste prijs.</span><span class="prijs lbl">op maat →</span></a><a class="dienst" href="/wireframes/oud-diensten"><span class="lbl muted">03 · Onderhoud</span><span class="naam syne">Het hele jaar door</span><span class="uitleg">Een vijver of tuin is nooit af. Met een beetje aandacht per seizoen blijft hij gezond, waar het kan met een vaste datum en een vaste prijs.</span><span class="prijs lbl">vanaf € 95 →</span></a>
+      </div>
+      <p class="live">elke rij toont alleen nummer, kop en prijs met een klein icoon; de uitleg schuift open bij aanwijzen. De rijen linken naar Diensten#ontwerp, #aanleg en #onderhoud.</p>
+    </section>
+
+    <section class="sectie" aria-label="Twee vijvers. Eén samenhangend watersysteem.">
+      <p class="lbl muted lbl-r">Uitgelicht project · In afronding</p>
+      <article class="projectkaart">
+  <a href="/wireframes/oud-project-vijver" class="pk-beeld"><img class="foto" src="/projecten/vijverrenovatie/F01.jpg" alt="Overzicht van de tuin tijdens de afronding: een klinkerpad, een treurwilg, ronde stapstenen in de vijver en borders met keien en jonge beplanting." loading="lazy"></a>
+  <div>
+    <p class="lbl muted" style="margin:0 0 12px">Vijverrenovatie</p>
+    <h2 class="kop2 syne">Twee vijvers. Eén samenhangend watersysteem.</h2>
+    <p class="lead">Twee vijvers, een waterval en een beekloop verbonden tot één watersysteem. Een renovatie met aandacht voor techniek, onderhoud en natuurlijke afwerking.</p>
+    <ol class="fasen" aria-label="Projectfasen">
+  <li>Opgave<span>(afgerond)</span></li>
+  <li>Uitvoering<span>(afgerond)</span></li>
+  <li class="nu">● Afronding<span>(huidige fase)</span></li>
+  <li class="nog">Beplanting<span>(nog niet begonnen) · voorjaar 2027</span></li>
+</ol>
+    <ul class="cijfers">
+  <li><b>2</b><span class="lbl muted">Vijvers, één watersysteem</span></li>
+  <li><b>5.000<small>l</small></b><span class="lbl muted">Open water, circa</span></li>
+  <li><b>120<small>uur</small></b><span class="lbl muted">Werk, circa, incl. denkwerk</span></li>
+  <li><b>50<small>mm</small></b><span class="lbl muted">Druk-pvc leidingwerk</span></li>
+</ul>
+    <p style="margin:24px 0 0"><a class="lnk" href="/wireframes/oud-project-vijver">Lees het hele project →</a></p>
+    <p class="live">bij aanwijzen schuift een tweede foto in beeld (F10, de waterval).</p>
+  </div>
+</article>
+    </section>
+
+    <section class="sectie" aria-label="Checklist vooraf">
+  <div class="blok">
+    <p class="lbl muted">Gratis checklist</p>
+    <div>
+      <h2 class="kop2 syne">Checklist vooraf</h2>
+      <p class="lead">Wat je kunt nakijken voordat je aan je tuin of vijver begint. Het zijn de dingen waar ik zelf naar kijk als ik langskom.</p>
+      <form style="margin-top:28px;max-width:520px" onsubmit="return false">
+        <label class="veld-lbl" for="cl-mail">Je e-mailadres</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px"><input class="veld" id="cl-mail" type="email" placeholder="bijv. naam@voorbeeld.nl" style="flex:1 1 220px;width:auto" disabled><button class="pil-lijn" type="button" style="min-height:44px">Stuur me de checklist →</button></div>
+        <p class="muted" style="font-size:13px;line-height:1.55;margin:10px 0 0">Je krijgt de checklist en af en toe een mail van mij. Afmelden kan altijd. Je adres staat bij MailerLite, waarmee ik de mails verstuur. <a href="/wireframes/privacy">Privacy</a></p>
+      </form>
+      <p class="live">e-mailadres verplicht; een verborgen veld ‘Website’ vangt spam. Na verzenden: ‘Bijna klaar: kijk in je mail.’ of ‘Dank je, je bent aangemeld.’ Lukt het niet: ‘Aanmelden lukte niet. Mail me op hello@gronn.studio, dan stuur ik je de checklist zelf.’ De knop was oranje.</p>
+      <div class="kaart" style="margin-top:32px">
+        <p class="lbl muted" style="display:flex;justify-content:space-between;gap:12px;margin:0 0 8px"><span>Wat erin staat · 21 punten</span><span>4 delen</span></p>
+        <div class="r2" style="row-gap:0">
+          <div><details class="akk"><summary><span style="display:flex;justify-content:space-between;gap:12px"><span class="lbl">Je tuin zoals hij nu is</span><span class="lbl muted">01–05</span></span></summary><div class="in"><ol class="cl-punten"><li><span class="lbl muted">01</span> Waar valt het licht, en waar is het schaduw?</li><li><span class="lbl muted">02</span> Waar blijft water staan, en waar gaat het regenwater heen?</li><li><span class="lbl muted">03</span> Hoe is de bodem?</li><li><span class="lbl muted">04</span> Wat groeit er al, en welk leven zie je?</li><li><span class="lbl muted">05</span> Wat mag blijven, en wat mag weg?</li></ol></div></details><details class="akk"><summary><span style="display:flex;justify-content:space-between;gap:12px"><span class="lbl">Heb je een vijver?</span><span class="lbl muted">11–15</span></span></summary><div class="in"><ol class="cl-punten"><li><span class="lbl muted">11</span> Wat zie je: is hij groen, lekt hij, stinkt hij, of leeft er niets in?</li><li><span class="lbl muted">12</span> Hoeveel uur zon krijgt de vijver, en hoeveel planten staan erin?</li><li><span class="lbl muted">13</span> Welke pomp draait er, en hoeveel water zit er in de vijver?</li><li><span class="lbl muted">14</span> Wat ligt eromheen: bomen, een gazon dat bemest wordt, verharding die afspoelt?</li><li><span class="lbl muted">15</span> Hoe groot is de vijver, in m²?</li></ol></div></details></div>
+          <div><details class="akk"><summary><span style="display:flex;justify-content:space-between;gap:12px"><span class="lbl">Hoe jij de tuin gebruikt</span><span class="lbl muted">06–10</span></span></summary><div class="in"><ol class="cl-punten"><li><span class="lbl muted">06</span> Waar drink je ’s ochtends je koffie?</li><li><span class="lbl muted">07</span> Waar spelen de kinderen?</li><li><span class="lbl muted">08</span> Waar kom je na een drukke dag tot rust?</li><li><span class="lbl muted">09</span> Welk onderhoud past bij jou?</li><li><span class="lbl muted">10</span> Alles in één keer, of in stappen?</li></ol></div></details><details class="akk"><summary><span style="display:flex;justify-content:space-between;gap:12px"><span class="lbl">Voordat je contact opneemt</span><span class="lbl muted">16–21</span></span></summary><div class="in"><ol class="cl-punten"><li><span class="lbl muted">16</span> Waar gaat het over: advies, een ontwerp, aanleg of onderhoud, of een vijver of watersysteem?</li><li><span class="lbl muted">17</span> Wat is je budget?</li><li><span class="lbl muted">18</span> Heb je eerst iemand nodig die meekijkt?</li><li><span class="lbl muted">19</span> Wanneer wil je beginnen?</li><li><span class="lbl muted">20</span> Waar is het? Je plaats of postcode.</li><li><span class="lbl muted">21</span> Schrijf een paar zinnen over je tuin of vijver.</li></ol></div></details></div>
+        </div>
+      </div>
+      <p class="live">de vier delen klappen open met +; standaard dicht.</p>
+    </div>
+  </div>
+</section>
+
+    <section class="sectie" aria-label="Wie er aan jouw tuin werkt.">
+      <div class="blok">
+        <img class="foto" src="/nick/portret-espresso.jpg" alt="Nick Peters met een espressokopje op een terras in een Maastrichtse straat, kijkend in de camera." style="aspect-ratio:1/1;max-width:300px">
+        <div>
+          <p class="lbl muted" style="margin:0 0 14px">Over mij</p>
+          <h2 class="kop2 syne">Wie er aan jouw tuin werkt.</h2>
+          <div class="tekst" style="margin-top:24px">
+            <p>Ik ben Nick Peters. Vader van twee kinderen, hovenier, ecologisch ontwerper en de persoon achter GRØNN Studio.</p>
+            <p>Ik denk in beelden, patronen en verbanden. Als ik naar een tuin kijk, zie ik hoe licht, water, materialen en beplanting elkaar beïnvloeden. Maar ik ben ook benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? En waar kom je na een drukke dag tot rust? Juist die dagelijkse dingen geven richting aan wat ik maak.</p>
+          </div>
+          <a class="lnk" href="/wireframes/oud-studio">Lees mijn hele verhaal →</a>
+          <p class="live">het portret begint onscherp en wordt scherp bij het scrollen.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sectie" aria-label="Wat je wilt weten voordat je begint.">
+      <div class="blok">
+        <div>
+          <p class="lbl muted" style="margin:0 0 14px">Veelgestelde vragen</p>
+          <h2 class="kop2 syne">Wat je wilt weten voordat je begint.</h2>
+          <p style="margin:20px 0 0"><a class="lnk" href="/wireframes/oud-faq">Alle vragen →</a></p>
+        </div>
+        <div>
+          <details class="akk"><summary><h3 class="kop3 syne" style="font-size:clamp(18px,1.8vw,23px)">Wat kost een tuinontwerp?</h3></summary><div class="in"><p>Van meekijken tot een heel plan. Soms heb je geen ontwerp nodig, maar iemand die meekijkt. Ik kom langs en zeg eerlijk wat ik zou doen. Elk ontwerp krijgt een eigen offerte: je betaalt voor het denkwerk.</p>
+<p>Voor regeneratief tuinontwerp, ecologische watersystemen, beplantings- en habitatontwerp en tuintransformatie maak ik per project een offerte, na een kennismaking op locatie.</p>
+<p>Laat je het door mij aanleggen? Dan verreken ik de helft van het ontwerpbedrag met de eerste factuur. Nooit alles — een ontwerp dat gratis wordt, leert iedereen dat het denkwerk niets waard was.</p>
+<a class="lnk" href="/wireframes/oud-diensten">Wat een regeneratief tuinontwerp inhoudt →</a></div></details>
+<details class="akk"><summary><h3 class="kop3 syne" style="font-size:clamp(18px,1.8vw,23px)">Werk je ook in mijn plaats?</h3></summary><div class="in"><p>Ik werk vanuit Stein, Limburg. Voor seizoenswerk kom ik onder meer in Stein, Elsloo, Beek, Geleen, Sittard, Maastricht, Meerssen, Valkenburg, Heerlen, Brunssum en Kerkrade.</p>
+<p>Ontwerp en advies reizen verder. Vertel wat je voor je ziet, dan zeg ik eerlijk of ik de juiste ben.</p>
+<a class="lnk" href="/wireframes/oud-contact">Plan een kennismaking →</a></div></details>
+<details class="akk"><summary><h3 class="kop3 syne" style="font-size:clamp(18px,1.8vw,23px)">Hoe lang duurt een ontwerp of aanleg?</h3></summary><div class="in"><p>Dat hangt af van wat ik aantref.</p>
+<p>Daarom begint het met de eerste stap: eerst kijken.</p></div></details>
+<details class="akk"><summary><h3 class="kop3 syne" style="font-size:clamp(18px,1.8vw,23px)">Wanneer kan ik het best beginnen?</h3></summary><div class="in"><p>Hoe lang je moet wachten, hangt af van mijn agenda.</p>
+<p>Het beste moment is de herfst, of net daarvoor. Dan plant je aan in de rustperiode, de winter, en krijgen de planten in het voorjaar een extra boost als ze uitlopen.</p></div></details>
+<details class="akk"><summary><h3 class="kop3 syne" style="font-size:clamp(18px,1.8vw,23px)">Hoe begin ik?</h3></summary><div class="in"><p>Stuur me een bericht via het contactformulier, over je tuin of vijver.</p>
+<p>Een paar zinnen is genoeg. Ik lees mee, stel een vraag als dat nodig is, en we spreken af om samen te kijken.</p>
+<p>Een kennismaking is vrijblijvend; je hoort meestal binnen twee werkdagen iets.</p>
+<p>Liever direct? Bel of app <a href="tel:+31618118014">+316 181 180 14</a>, of mail <a href="mailto:hello@gronn.studio">hello@gronn.studio</a>.</p>
+<a class="lnk" href="/wireframes/oud-contact">Plan een kennismaking →</a></div></details>
+          <p class="live">vijf vragen als losse kaarten met een +, standaard dicht.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <section class="slot donker" aria-label="Kennismaken">
+        <div class="rij">
+          <h2 class="kop2 syne" style="max-width:16ch">Zullen we eens naar jouw tuin kijken?</h2>
+          <div class="knoppen"><a class="oranje" href="/wireframes/oud-contact">Plan een kennismaking →</a><a class="pil-lijn" href="https://wa.me/31618118014">WhatsApp</a><a class="pil-lijn" href="https://instagram.com/gronn.studio">Instagram</a></div>
+        </div>
+        <div class="voet-raster">
+          <div>
+            <p class="syne" style="font-size:26px;margin:0">GRØNN</p>
+            <p class="lbl" style="margin:8px 0 0">Rooted in nature.</p>
+            <p class="muted" style="margin:12px 0 0;line-height:1.6;font-size:14px;max-width:30ch">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p>
+          </div>
+          <nav aria-label="Voettekst"><p class="lbl muted" style="margin:0">Site</p><ul><li><a href="/wireframes/oud-diensten">Diensten</a></li><li><a href="/wireframes/oud-projecten">Projecten</a></li><li><a href="/wireframes/oud-studio">Over mij</a></li><li><a href="/wireframes/oud-faq">Veelgestelde vragen</a></li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></nav>
+          <div><p class="lbl muted" style="margin:0">Contact</p><ul><li><a href="/wireframes/oud-contact">Contactformulier</a></li><li><a href="https://instagram.com/gronn.studio">Instagram</a></li><li><a href="/wireframes/oud-colofon">Adres en gegevens</a></li><li><span class="pil-lijn" style="min-height:34px">Dashboard →</span></li></ul></div>
+          <nav aria-label="Juridisch"><p class="lbl muted" style="margin:0">Juridisch</p><ul><li><a href="/wireframes/privacy">Privacy</a></li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></nav>
+        </div>
+        <div class="voet-onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+        <p class="live">KVK en BTW zijn kopieerknoppen. Onder 1280 px staat in de voet ook de hemelregel (Tuinkalender: vandaag, zon en maan voor Stein, link naar de <a href="/wireframes/oud-tuinkalender">Tuinkalender</a>). Dashboard heeft geen wireframe.</p>
+      </section>
+    </footer>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

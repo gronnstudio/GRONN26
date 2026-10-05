@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-066 Oud: contact — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-066: de contactpagina van gronn.studio: direct contact met visitekaartje links, het formulier met alle velden rechts. */
+/* Gedeeld in het live archief (WF-060 t/m WF-068): de oude site gronn.studio
+   1:1 in inhoud en volgorde, in de taal van de wireframes. */
+.archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+.archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
+.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live::before{content:"Op de live site: ";color:var(--ink)}
+.oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
+.pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
+.kop1{margin:0;font-size:clamp(42px,6.5vw,92px);line-height:1;letter-spacing:-.04em}
+.kop2{margin:0;font-size:clamp(28px,3.6vw,52px);line-height:1.05;letter-spacing:-.03em}
+.kop3{margin:0;font-size:clamp(19px,1.9vw,25px);letter-spacing:-.02em;line-height:1.2}
+.lead{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);max-width:46ch;margin:20px 0 0}
+.tekst p{line-height:1.7;margin:0 0 1em;max-width:66ch}
+.lbl-r{margin:0 0 14px}
+.foto{display:block;width:100%;height:auto;border-radius:16px;object-fit:cover;background:var(--ph)}
+figure{margin:0}
+figcaption{margin-top:8px}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
+.blok > :first-child{margin:0}
+.fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
+.fasen li.nog{border-top-color:rgba(0,0,0,.18)}
+.fasen li.nu{font-weight:700}
+.cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
+.cijfers span{display:block;margin-top:8px}
+.feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
+.feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
+.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dd{margin:0;line-height:1.5}
+.akk{border-top:1px solid var(--lijn)}
+.akk:last-of-type{border-bottom:1px solid var(--lijn)}
+.akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
+.akk summary::-webkit-details-marker{display:none}
+.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk[open] summary::after{content:"\2212"}
+.akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
+.akk .in p{margin:0 0 12px}
+.akk .in ul{margin:0 0 12px;padding-left:18px}
+.akk .in li{margin:4px 0}
+.veld{display:block;width:100%;min-height:44px;border:1px solid var(--lijn);border-radius:8px;background:#F6F5F2;padding:10px 12px;font:inherit;font-size:14px;color:var(--muted)}
+.veld-lbl{display:block;font-weight:600;font-size:13px;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--lijn);border-radius:999px;padding:8px 14px;font-size:13px;background:#F6F5F2}
+.kaart{border:1px solid var(--lijn);border-radius:16px;padding:24px;background:#F6F5F2}
+.donker{background:#202020;color:#EFEEEA;border-radius:16px}
+.donker .muted,.donker .lbl.muted{color:#B9B8B3}
+.donker .pil-lijn{border-color:rgba(239,238,234,.35)}
+.slot{margin-top:clamp(96px,12vw,160px);padding:clamp(28px,4vw,56px)}
+.slot .rij{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.slot .knoppen{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.voet-raster{display:grid;grid-template-columns:3fr 2fr 2fr 2fr;gap:32px;margin-top:clamp(40px,5vw,64px);padding-top:32px;border-top:1px solid rgba(239,238,234,.18)}
+.voet-raster ul{list-style:none;padding:0;margin:12px 0 0}
+.voet-raster li{margin:0 0 10px}
+.voet-raster a,.voet-raster span.geen{text-decoration:none;font-size:14px}
+.voet-onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:32px;padding-top:16px;border-top:1px solid rgba(239,238,234,.18)}
+.donker .live{color:#B9B8B3;border-color:rgba(239,238,234,.35)}
+.donker .live::before{color:#EFEEEA}
+.kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
+.kruimel a{text-decoration:none}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+@media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){
+  .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
+  .blok{row-gap:12px}
+  .feiten div{grid-template-columns:1fr;gap:4px}
+  .cijfers,.fasen{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fasen{row-gap:14px}
+  .voet-raster{grid-template-columns:1fr}
+}
+.contact{display:grid;grid-template-columns:5fr 7fr;column-gap:clamp(24px,4vw,48px);padding-top:clamp(40px,6vw,96px);align-items:start}
+.direct{padding:24px;margin-top:32px}
+.kanalen{list-style:none;padding:0;margin:20px 0 14px}
+.kanalen li{margin:0 0 10px}
+.visitekaartje{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;margin-top:20px;background:#EFEEEA;color:#202020;border-radius:12px;padding:18px}
+.visitekaartje .achterkant{border-left:1px dashed rgba(0,0,0,.25);padding-left:16px}
+.formulier fieldset{border:0;padding:0;margin:20px 0 0}
+.chip.gekozen{background:#202020;color:#EFEEEA;border-color:#202020}
+@media (max-width:899px){.contact{grid-template-columns:1fr;row-gap:32px}}
+@media (max-width:420px){.visitekaartje{grid-template-columns:1fr}.visitekaartje .achterkant{border-left:0;border-top:1px dashed rgba(0,0,0,.25);padding:12px 0 0}}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="archief lbl muted"><span>WF-066 · Live archief</span><span>gronn.studio/contact</span><span>Vastgelegd 5 oktober 2026 · Nederlandse versie</span><a href="/wireframes/oud-menus">Menu's en voet: WF-068</a></p>
+  <main>
+
+    <section class="contact">
+      <div>
+        <p class="lbl muted" style="margin:0 0 14px">Contact</p>
+        <h1 class="kop1 syne" style="max-width:12ch">Laten we je tuin bekijken.</h1>
+        <p class="lead">Een paar zinnen is genoeg. Ik lees mee, stel een vraag als dat nodig is, en we spreken af om samen te kijken.</p>
+
+        <div class="donker direct">
+          <p class="lbl muted" style="margin:0 0 16px">Liever direct?</p>
+          <div style="display:flex;gap:14px;align-items:center">
+            <img src="/nick/portret-espresso.jpg" alt="" style="width:52px;height:52px;border-radius:999px;object-fit:cover">
+            <div><strong>Nick Peters</strong><br><span class="muted" style="font-size:14px">Liever even appen? Dat komt rechtstreeks bij mij.</span></div>
+          </div>
+          <p style="margin:14px 0 0"><a class="pil-lijn" href="https://wa.me/31618118014">WhatsApp Nick</a></p>
+          <ul class="kanalen">
+            <li><a href="mailto:hello@gronn.studio">hello@gronn.studio</a></li>
+            <li><a href="tel:+31618118014">+316 181 180 14</a></li>
+            <li><a href="https://instagram.com/gronn.studio">Instagram</a></li>
+          </ul>
+          <p class="muted" style="margin:0;font-size:14px;line-height:1.6">Kelderstraat 32<br>6171 GB Stein</p>
+          <div class="visitekaartje">
+            <div class="voorkant">
+              <p class="syne" style="margin:0;font-size:20px">GRØNN</p>
+              <p style="margin:18px 0 0"><strong>Nick Peters</strong><br><span class="muted" style="font-size:13px">Hovenier en ecologisch ontwerper</span></p>
+              <p class="lbl" style="margin:14px 0 0;line-height:1.7;text-transform:none">+316 181 180 14<br>hello@gronn.studio<br>gronn.studio</p>
+            </div>
+            <div class="achterkant">
+              <div class="ph" style="aspect-ratio:1/1;width:120px">QR-code</div>
+              <p class="lbl" style="margin:10px 0 0">Scan om me op te slaan</p>
+            </div>
+          </div>
+          <p class="live">het visitekaartje draait om bij een tik (‘Draai het kaartje om’): voorkant met het woordmerk, achterkant met een QR-code. Op Donker staat het primaire woordmerk.</p>
+          <p style="margin:16px 0 0"><a class="pil-lijn" href="/contact.vcf">Zet in je contacten</a></p>
+        </div>
+
+        <div class="kaart" style="margin-top:16px">
+          <p style="margin:0 0 12px;font-size:14px">Al klant? Je tuin en je aanvragen staan in je dossier.</p>
+          <span class="pil-lijn">Naar je dossier →</span>
+        </div>
+      </div>
+
+      <form class="kaart formulier" onsubmit="return false" aria-label="Contactformulier">
+        <p style="margin:0 0 20px;font-size:14px">Eerst een vraag? <a href="/wireframes/oud-faq">Kijk bij de veelgestelde vragen</a></p>
+        <div class="r2" style="gap:16px">
+          <div><label class="veld-lbl">Naam</label><input class="veld" placeholder="bijv. Anna de Vries" disabled></div>
+          <div><label class="veld-lbl">E-mail</label><input class="veld" placeholder="bijv. naam@voorbeeld.nl" disabled></div>
+          <div><label class="veld-lbl">Telefoon <span class="muted" style="font-weight:400">(optioneel)</span></label><input class="veld" placeholder="bijv. 06 12 34 56 78" disabled></div>
+          <div><label class="veld-lbl">Plaats of postcode</label><input class="veld" placeholder="bijv. Stein of 6171 AB" disabled></div>
+        </div>
+        <fieldset><legend class="veld-lbl">Waar gaat het over?</legend>
+          <div class="chips"><span class="chip">Ontwerp — meekijken of een plan</span><span class="chip">Aanleg — leg de tuin aan</span><span class="chip">Onderhoud — per seizoen</span><span class="chip">Vijver of watersysteem</span><span class="chip gekozen">Weet ik nog niet</span></div>
+        </fieldset>
+        <fieldset><legend class="veld-lbl">Wat is je budget?</legend>
+          <div class="chips"><span class="chip">Tot € 5.000</span><span class="chip">€ 5.000–15.000</span><span class="chip">Meer dan € 15.000</span></div>
+        </fieldset>
+        <label class="veld-lbl" style="margin-top:20px">Vertel kort over je tuin of vijver</label>
+        <textarea class="veld" rows="5" placeholder="bijv. Een vijver van zo’n 3 × 4 meter die elke zomer groen wordt…" disabled></textarea>
+        <p style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:20px 0 0"><button class="pil-lijn" type="button" style="min-height:44px">Verstuur →</button><span class="muted" style="font-size:13px">Je bericht gaat via FormSubmit naar mijn mailbox. <a href="/wireframes/privacy">Privacy</a></span></p>
+        <p class="live">Naam, E-mail, budget en bericht zijn verplicht (‘Kies je budget.’); ‘Weet ik nog niet’ staat vooraf gekozen bij het onderwerp; een verborgen veld ‘Website’ vangt spam. Het formulier gaat rechtstreeks naar FormSubmit; tijdens verzenden ‘Versturen…’, daarna ‘Dank je, je bericht is binnen.’ en ‘Ik reageer meestal binnen twee werkdagen.’ Lukt het niet: ‘Verzenden lukte niet — er staat een e-mail voor je klaar.’ (mailto). De knop was oranje.</p>
+      </form>
+    </section>
+
+    <footer>
+      <section class="slot donker" aria-label="Kennismaken">
+        <div class="rij">
+          <h2 class="kop2 syne" style="max-width:16ch">Zullen we eens naar jouw tuin kijken?</h2>
+          <div class="knoppen"><a class="oranje" href="/wireframes/oud-contact">Plan een kennismaking →</a><a class="pil-lijn" href="https://wa.me/31618118014">WhatsApp</a><a class="pil-lijn" href="https://instagram.com/gronn.studio">Instagram</a></div>
+        </div>
+        <div class="voet-raster">
+          <div>
+            <p class="syne" style="font-size:26px;margin:0">GRØNN</p>
+            <p class="lbl" style="margin:8px 0 0">Rooted in nature.</p>
+            <p class="muted" style="margin:12px 0 0;line-height:1.6;font-size:14px;max-width:30ch">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p>
+          </div>
+          <nav aria-label="Voettekst"><p class="lbl muted" style="margin:0">Site</p><ul><li><a href="/wireframes/oud-diensten">Diensten</a></li><li><a href="/wireframes/oud-projecten">Projecten</a></li><li><a href="/wireframes/oud-studio">Over mij</a></li><li><a href="/wireframes/oud-faq">Veelgestelde vragen</a></li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></nav>
+          <div><p class="lbl muted" style="margin:0">Contact</p><ul><li><a href="/wireframes/oud-contact">Contactformulier</a></li><li><a href="https://instagram.com/gronn.studio">Instagram</a></li><li><a href="/wireframes/oud-colofon">Adres en gegevens</a></li><li><span class="pil-lijn" style="min-height:34px">Dashboard →</span></li></ul></div>
+          <nav aria-label="Juridisch"><p class="lbl muted" style="margin:0">Juridisch</p><ul><li><a href="/wireframes/privacy">Privacy</a></li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></nav>
+        </div>
+        <div class="voet-onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+        <p class="live">KVK en BTW zijn kopieerknoppen. Onder 1280 px staat in de voet ook de hemelregel (Tuinkalender: vandaag, zon en maan voor Stein, link naar de <a href="/wireframes/oud-tuinkalender">Tuinkalender</a>). Dashboard heeft geen wireframe.</p>
+      </section>
+    </footer>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

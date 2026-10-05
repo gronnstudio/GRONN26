@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-068 Oud: menu's — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-068: alle menu’s van gronn.studio op één pagina: desktopbalk met drie panelen, ⌘K-zoekvenster, telefoon-bovenbalk en dock (twee standen), de voorkeurenpanelen, zijbubbels en de voet. */
+/* Gedeeld in het live archief (WF-060 t/m WF-068): de oude site gronn.studio
+   1:1 in inhoud en volgorde, in de taal van de wireframes. */
+.archief{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline;margin:0;padding:10px 0;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+.archief a{text-decoration:none;border-bottom:1px solid var(--lijn)}
+.live{font-family:'Geist Mono',monospace;font-size:11.5px;line-height:1.55;letter-spacing:.02em;color:var(--muted);border:1px dashed rgba(0,0,0,.3);border-radius:8px;padding:8px 12px;margin:16px 0 0;max-width:72ch}
+.live::before{content:"Op de live site: ";color:var(--ink)}
+.oranje{display:inline-flex;align-items:center;gap:10px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 22px;font-weight:600;font-size:14px;text-decoration:none}
+.pil-lijn{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,0,0,.3);border-radius:999px;min-height:40px;padding:0 16px;font-size:13px;font-weight:600;text-decoration:none;background:transparent;color:inherit;font-family:inherit}
+.kop1{margin:0;font-size:clamp(42px,6.5vw,92px);line-height:1;letter-spacing:-.04em}
+.kop2{margin:0;font-size:clamp(28px,3.6vw,52px);line-height:1.05;letter-spacing:-.03em}
+.kop3{margin:0;font-size:clamp(19px,1.9vw,25px);letter-spacing:-.02em;line-height:1.2}
+.lead{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);max-width:46ch;margin:20px 0 0}
+.tekst p{line-height:1.7;margin:0 0 1em;max-width:66ch}
+.lbl-r{margin:0 0 14px}
+.foto{display:block;width:100%;height:auto;border-radius:16px;object-fit:cover;background:var(--ph)}
+figure{margin:0}
+figcaption{margin-top:8px}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.blok{display:grid;grid-template-columns:3fr 9fr;column-gap:32px}
+.blok > :first-child{margin:0}
+.fasen{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;padding:0;margin:20px 0 0;max-width:620px}
+.fasen li{border-top:3px solid var(--ink);padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.fasen li span{display:block;color:var(--muted);text-transform:none;letter-spacing:0;margin-top:2px}
+.fasen li.nog{border-top-color:rgba(0,0,0,.18)}
+.fasen li.nu{font-weight:700}
+.cijfers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:24px 0 0;padding:16px 0 0;border-top:1px solid var(--lijn);list-style:none}
+.cijfers b{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(32px,4vw,56px);letter-spacing:-.03em;line-height:1}
+.cijfers b small{font-size:.42em;letter-spacing:0;margin-left:2px}
+.cijfers span{display:block;margin-top:8px}
+.feiten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;margin:24px 0 0}
+.feiten div{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;padding:12px 0;border-top:1px solid var(--lijn)}
+.feiten dt{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feiten dd{margin:0;line-height:1.5}
+.akk{border-top:1px solid var(--lijn)}
+.akk:last-of-type{border-bottom:1px solid var(--lijn)}
+.akk summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) 24px;column-gap:24px;align-items:baseline;padding:20px 0;cursor:pointer}
+.akk summary::-webkit-details-marker{display:none}
+.akk summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted);text-align:right}
+.akk[open] summary::after{content:"\2212"}
+.akk summary:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.akk .in{padding:0 0 24px;max-width:64ch;line-height:1.65}
+.akk .in p{margin:0 0 12px}
+.akk .in ul{margin:0 0 12px;padding-left:18px}
+.akk .in li{margin:4px 0}
+.veld{display:block;width:100%;min-height:44px;border:1px solid var(--lijn);border-radius:8px;background:#F6F5F2;padding:10px 12px;font:inherit;font-size:14px;color:var(--muted)}
+.veld-lbl{display:block;font-weight:600;font-size:13px;margin:0 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--lijn);border-radius:999px;padding:8px 14px;font-size:13px;background:#F6F5F2}
+.kaart{border:1px solid var(--lijn);border-radius:16px;padding:24px;background:#F6F5F2}
+.donker{background:#202020;color:#EFEEEA;border-radius:16px}
+.donker .muted,.donker .lbl.muted{color:#B9B8B3}
+.donker .pil-lijn{border-color:rgba(239,238,234,.35)}
+.slot{margin-top:clamp(96px,12vw,160px);padding:clamp(28px,4vw,56px)}
+.slot .rij{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start}
+.slot .knoppen{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.voet-raster{display:grid;grid-template-columns:3fr 2fr 2fr 2fr;gap:32px;margin-top:clamp(40px,5vw,64px);padding-top:32px;border-top:1px solid rgba(239,238,234,.18)}
+.voet-raster ul{list-style:none;padding:0;margin:12px 0 0}
+.voet-raster li{margin:0 0 10px}
+.voet-raster a,.voet-raster span.geen{text-decoration:none;font-size:14px}
+.voet-onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:32px;padding-top:16px;border-top:1px solid rgba(239,238,234,.18)}
+.donker .live{color:#B9B8B3;border-color:rgba(239,238,234,.35)}
+.donker .live::before{color:#EFEEEA}
+.kruimel{margin:0;padding-top:clamp(40px,5vw,72px)}
+.kruimel a{text-decoration:none}
+.citaat{margin:0;font-family:Syne,sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);line-height:1.15;letter-spacing:-.02em;max-width:30ch}
+@media (max-width:1023px){.voet-raster{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){
+  .r2,.r3,.blok,.feiten{grid-template-columns:1fr}
+  .blok{row-gap:12px}
+  .feiten div{grid-template-columns:1fr;gap:4px}
+  .cijfers,.fasen{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fasen{row-gap:14px}
+  .voet-raster{grid-template-columns:1fr}
+}
+.klein{font-size:13px;line-height:1.55;margin:6px 0 0}
+.balk{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:32px;padding:12px 20px;border:1px solid var(--lijn);border-radius:999px;background:#F6F5F2}
+.trigger{font-size:14px;font-weight:500}
+.trigger.actief{border-bottom:1px solid #202020;padding-bottom:2px}
+.donkerpil{display:inline-flex;align-items:center;background:#202020;color:#EFEEEA;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600}
+.scheid{width:1px;height:24px;background:var(--lijn)}
+.zoek{font-size:14px}
+kbd{font-family:'Geist Mono',monospace;font-size:11px;border:1px solid var(--lijn);border-radius:4px;padding:1px 5px;background:#fff}
+.ikoon,.rond{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:999px;border:1px solid var(--lijn);font-size:14px}
+.rond.groot{width:52px;height:52px;font-size:18px}
+.paneel{position:relative;margin-top:16px;border:1px solid var(--lijn);border-radius:16px;padding:28px;background:#F6F5F2;gap:32px}
+.paneel .lbl{margin:0}
+.regels{list-style:none;padding:0;margin:14px 0 0}
+.regels li{border-top:1px solid var(--lijn)}
+.regels a{display:block;padding:10px 0;text-decoration:none}
+.regels strong{display:block;font-family:Syne,sans-serif;font-weight:600;font-size:15px}
+.regels span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.regels em{display:block;font-style:normal;margin-top:4px}
+.punten-k{list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}
+.punten-k li{font-family:Syne,sans-serif;font-weight:600;font-size:15px;line-height:1.3}
+.paneel-voet{grid-column:1 / -1;margin:8px 0 0;padding-top:16px;border-top:1px solid var(--lijn)}
+.zoekvenster{margin-top:32px;max-width:640px;border:1px solid var(--lijn);border-radius:16px;background:#F6F5F2;overflow:hidden}
+.zoekveld{padding:18px 20px;border-bottom:1px solid var(--lijn);font-size:16px}
+.groepen{display:flex;flex-wrap:wrap;gap:8px 24px;padding:0 20px 18px}
+.groepen .lbl{margin:0}
+.zoekvoet{display:flex;gap:20px;margin:0;padding:12px 20px;border-top:1px solid var(--lijn)}
+.tip{display:inline-flex;align-items:center;gap:6px;margin-top:20px;padding:8px 14px;border-radius:999px;background:#202020;color:#EFEEEA;font-size:13px}
+.tip kbd{color:#202020}
+.telefoons{display:flex;flex-wrap:wrap;gap:48px 32px;margin-top:32px;padding-bottom:36px}
+.telefoon{position:relative;width:min(100%,340px);height:560px;border:1px solid var(--lijn);border-radius:32px;background:#F6F5F2;padding:14px;display:flex;flex-direction:column}
+.t-boven{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:999px;padding:8px 8px 8px 16px;border:1px solid var(--lijn)}
+.t-midden{flex:1;display:grid;place-items:center}
+.t-dock{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:#fff;border:1px solid var(--lijn);border-radius:999px;padding:6px;box-shadow:0 10px 30px -18px rgba(0,0,0,.4)}
+.t-dock .vak{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:500;padding:4px 0;border-radius:999px}
+.t-dock .vak i{font-style:normal;font-size:16px;line-height:1}
+.t-dock .vak.actief{background:#E3E1DB}
+.t-dock .vak.actief i{color:#A14312}
+.telefoon .onder{position:absolute;left:0;right:0;bottom:-28px;text-align:center;margin:0}
+.vk{margin:18px 0 6px}
+.keuzes{list-style:none;padding:0;margin:0}
+.keuzes li{padding:8px 0;border-top:1px solid var(--lijn);font-size:14px}
+.keuzes span{color:var(--muted);font-size:13px}
+@media (max-width:767px){.paneel{padding:20px}.punten-k{grid-template-columns:1fr}.telefoon{height:500px}}
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="archief lbl muted"><span>WF-068 · Live archief</span><span>gronn.studio/ (alle pagina's)</span><span>Vastgelegd 5 oktober 2026 · Nederlandse versie</span><a href="/wireframes/oud-menus">Menu's en voet: WF-068</a></p>
+  <main>
+
+    <section class="pagina-kop">
+      <p class="lbl muted" style="margin:0">Menu's · 5 delen</p>
+      <h1 class="syne">De menu's van de oude site</h1>
+      <p class="inleiding">Desktopbalk met drie panelen, telefoon-dock en bovenbalk, het zoekvenster (⌘K) en de voet, samen op één pagina.</p>
+    </section>
+    <p class="live">de mirror van gronn.studio laadt zonder JavaScript, dus panelen, zoekvenster en voorkeurenpanelen zijn hier opgebouwd uit de broncode (src/lib/nav.ts, bar-panels.tsx, services-mega-menu.tsx, dock-nav.tsx, hoek-paneel.tsx, command-palette.tsx), met precies de teksten die daar staan.</p>
+
+    <!-- ── 1. Desktop ───────────────────────────── -->
+    <section class="sectie" aria-label="Desktop: de menubalk">
+      <div class="blok"><p class="lbl muted">01 · Desktop en tablet</p><div><h2 class="kop2 syne">De menubalk</h2></div></div>
+      <div class="balk" role="presentation">
+        <span class="syne" style="font-size:22px">GRØNN</span>
+        <span class="trigger">Studio ⌄</span><span class="trigger actief">Diensten ⌄</span><span class="trigger">Projecten ⌄</span>
+        <span class="donkerpil">Start een project</span>
+        <span class="scheid" aria-hidden="true"></span>
+        <span class="zoek">⌕ Zoeken <kbd>⌘K</kbd></span>
+        <span class="ikoon" title="Naar licht / Naar donker">☼</span>
+        <span class="ikoon" title="Schakel naar Engels">NL</span>
+        <span class="ikoon" title="Conceptpaletten en toegankelijkheid">◎</span>
+      </div>
+      <p class="live">op de voorpagina zweeft de balk als pil over de foto; op de andere pagina’s staat hij over de volle breedte (logo links, menu in het midden, Zoeken en de knoppen rechts in een eigen pil). Het logo is het primaire woordmerk (de Ø oranje). Onder het actieve woord en bij aanwijzen loopt een oranje haarlijn vanuit het midden uit; de letters ‘flippen’ bij aanwijzen. ‘Start een project’ is een donkergroene pil naar Contact. De zon wisselt Licht en Donker (‘Naar licht’ / ‘Naar donker’), de vlag wisselt de taal (‘Schakel naar Engels’), het laatste icoon opent het paneel Weergave en toegankelijkheid. Tussen 768 en 1024 px staat er één knop ‘Menu’ die alle secties in één kaart toont.</p>
+
+      <h3 class="kop3 syne" style="margin-top:56px">Paneel Studio</h3>
+      <div class="paneel r3">
+        <div><p class="lbl muted">De praktijk</p><p class="muted klein">Wie er achter GRØNN zit</p>
+          <ul class="regels">
+            <li><a href="/wireframes/oud-studio"><strong>Over mij</strong><span>Mijn verhaal: wie ik ben en hoe ik naar een tuin kijk</span></a></li>
+            <li><a href="/wireframes/oud-studio#uitgangspunten"><strong>Waar ik op let</strong><span>Vijf dingen die ik altijd meeneem</span></a></li>
+            <li><a href="/wireframes/oud-studio#werkwijze"><strong>Zo werk ik</strong><span>Zes stappen, van eerst kijken tot laten groeien</span></a></li>
+            <li><a href="/wireframes/oud-studio#manifest"><strong>Waar ik voor sta</strong><span>In mijn eigen woorden, met een citaat uit mijn eerste project</span></a></li>
+            <li><a href="/wireframes/oud-techniek"><strong>Techniek</strong><span>Waar ik mee werk, van telefoon tot code</span></a></li>
+          </ul>
+        </div>
+        <div><p class="lbl muted">Waar ik op let</p>
+          <ol class="punten-k">
+            <li><span class="lbl muted">01</span> Ik kijk naar de tuin als één geheel</li>
+            <li><span class="lbl muted">02</span> Mooi en bruikbaar horen bij elkaar</li>
+            <li><span class="lbl muted">03</span> Ik begin bij de bodem en het water</li>
+            <li><span class="lbl muted">04</span> Wat ik aanleg, doet meer dan één ding</li>
+            <li><span class="lbl muted">05</span> Een goede tuin wordt elk jaar beter</li>
+          </ol>
+        </div>
+        <div><p class="lbl muted">Inloggen</p><p class="muted klein">Eén deur. Die weet zelf of je klant bent of de studio.</p>
+          <p style="margin:14px 0 8px"><span class="donkerpil">Dashboard →</span></p>
+          <p class="muted klein">Je tuin en je aanvragen — of, voor de studio, het paneel</p>
+        </div>
+        <p class="paneel-voet"><a class="lnk" href="/wireframes/oud-contact">Plan een kennismaking →</a></p>
+      </div>
+
+      <h3 class="kop3 syne" style="margin-top:48px">Paneel Diensten</h3>
+      <div class="paneel diensten-p">
+        <div class="r3">
+          <div><p class="lbl muted">Een plan dat klopt</p><p class="muted klein">Van meekijken tot een heel plan. Soms heb je geen ontwerp nodig, maar iemand die meekijkt. Ik kom langs en zeg eerlijk wat ik zou doen. Elk ontwerp krijgt een eigen offerte: je betaalt voor het denkwerk.</p>
+            <ul class="regels">
+              <li><a href="/wireframes/oud-diensten"><strong>Ecologische watersystemen</strong><span>Water dat zijn weg vindt</span></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Regeneratief tuinontwerp</strong><span>De hele tuin, doordacht</span></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Beplantings- en habitatontwerp</strong><span>Beplanting die iets voedt</span></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Tuintransformatie</strong><span>Van gazon en tegels naar een tuin die leeft</span></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Ecologisch advies</strong><span>Een tweede paar ogen</span></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Vijverdoorlichting</strong><span>Gemeten, niet geraden</span><em class="lbl muted">vanaf € 175</em></a></li>
+            </ul>
+          </div>
+          <div><p class="lbl muted">Handen in de grond</p><p class="muted klein">Het plan wordt een tuin. Ik leg aan wat getekend is, waar het kan met een vaste datum en een vaste prijs.</p>
+            <ul class="regels"><li><a href="/wireframes/oud-diensten"><strong>Uitvoering</strong><span>Aangelegd zoals getekend</span></a></li></ul>
+            <p class="lbl muted" style="margin-top:28px">Het hele jaar door</p><p class="muted klein">Een vijver of tuin is nooit af. Met een beetje aandacht per seizoen blijft hij gezond, waar het kan met een vaste datum en een vaste prijs.</p>
+            <ul class="regels">
+              <li><a href="/wireframes/oud-diensten"><strong>Bladnet plaatsen</strong><span>Vóór de bladval</span><em class="lbl muted">vanaf € 125</em></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Najaarsbeurt vijver</strong><span>De volledige reset voor de winter</span><em class="lbl muted">vanaf € 250</em></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Winterklaar maken</strong><span>Veilig door de vorst</span><em class="lbl muted">vanaf € 95</em></a></li>
+              <li><a href="/wireframes/oud-diensten"><strong>Onderhoudsabonnement</strong><span>Vier bezoeken, één systeem</span><em class="lbl muted">€ 45/mnd</em></a></li>
+            </ul>
+          </div>
+          <div><p class="lbl muted">Nu actueel</p>
+            <div class="ph" style="aspect-ratio:16/10;margin-top:12px">Foto van de dienst in seizoen</div>
+            <p style="margin:12px 0 4px"><strong>[dienst die nu in seizoen is]</strong></p>
+            <p class="muted klein">[samenvatting van die dienst]</p>
+          </div>
+        </div>
+        <p class="paneel-voet"><a class="lnk" href="/wireframes/oud-diensten">Alle diensten →</a></p>
+      </div>
+      <p class="live">de kaart ‘Nu actueel’ toont de dienst met een seizoensdatum waarvan het venster op dat moment open is (anders de eerste van het jaar), met foto, titel en samenvatting; welke dat is hangt van de datum af.</p>
+
+      <h3 class="kop3 syne" style="margin-top:48px">Paneel Projecten</h3>
+      <div class="paneel">
+        <div class="r2">
+          <div><p class="lbl muted">Het werk</p><p class="muted klein">Echt werk, stap voor stap verteld</p>
+            <ul class="regels">
+              <li><a href="/wireframes/oud-project-vijver"><strong>Twee vijvers. Eén samenhangend watersysteem.</strong></a></li>
+              <li><a href="/wireframes/oud-project-terras"><strong>Een terras van 24 m², gelegd in twee dagen.</strong></a></li>
+            </ul>
+          </div>
+          <div><p class="lbl muted">Uitgelicht project</p><a class="kaart" href="/wireframes/oud-project-vijver" style="display:block;margin-top:12px;text-decoration:none"><strong class="syne">Twee vijvers. Eén samenhangend watersysteem.</strong></a></div>
+        </div>
+        <p class="paneel-voet"><a class="lnk" href="/wireframes/oud-projecten">Alle projecten →</a></p>
+      </div>
+      <p class="live">panelen openen na 120 ms aanwijzen of met een klik, sluiten na 200 ms of met Escape; er staat er altijd maar één open. De uitgelichte kaart heeft geen foto (bewust: alleen echte foto’s).</p>
+    </section>
+
+    <!-- ── 2. Zoeken ───────────────────────────── -->
+    <section class="sectie" aria-label="Zoekvenster">
+      <div class="blok"><p class="lbl muted">02 · Zoeken (⌘K)</p><div><h2 class="kop2 syne">Zoek op deze site</h2></div></div>
+      <div class="zoekvenster" role="presentation">
+        <div class="zoekveld">⌕ <span class="muted">Zoek diensten, projecten, het journaal…</span></div>
+        <p class="muted klein" style="padding:18px 20px;margin:0">Typ om te zoeken — of druk overal ⌘K.</p>
+        <div class="groepen">
+          <p class="lbl muted">Dienst</p><p class="lbl muted">Project</p><p class="lbl muted">Vraag</p><p class="lbl muted">Pagina</p>
+        </div>
+        <p class="lbl muted zoekvoet"><span>↑↓ kiezen</span><span>↵ openen</span></p>
+      </div>
+      <p class="muted klein" style="margin-top:16px">Zonder resultaat: “Daar past nog niets bij. Probeer een dienst, een plaats of een plant.”</p>
+      <div class="tip"><span>Tip: druk</span> <kbd>⌘K</kbd> <span>om te zoeken</span></div>
+      <p class="live">het venster opent met ⌘K / Ctrl K, ‘/’ (als Sneltoetsen aan staan), de knop Zoeken in de balk of het vergrootglas in de telefoon-dock. Suggesties verschijnen tijdens het typen, gegroepeerd per soort (Dienst, Project, Vraag, Pagina; diensten met hun vanaf-prijs). De tip ‘Tip: druk ⌘K om te zoeken’ verschijnt één keer per browser.</p>
+    </section>
+
+    <!-- ── 3. Telefoon ───────────────────────────── -->
+    <section class="sectie" aria-label="Telefoon">
+      <div class="blok"><p class="lbl muted">03 · Telefoon (onder 768 px)</p><div><h2 class="kop2 syne">Bovenbalk en dock</h2></div></div>
+      <div class="telefoons">
+        <div class="telefoon">
+          <div class="t-boven"><span class="syne" style="font-size:20px">GRØNN</span><span style="display:flex;gap:6px"><span class="rond" title="Weergave en toegankelijkheid">◎</span><span class="rond" title="Kleur en taal">◐</span></span></div>
+          <div class="t-midden lbl muted">Pagina</div>
+          <nav class="t-dock" aria-label="Hoofdmenu (voorbeeld)">
+            <span class="vak actief"><i>⌂</i>Home</span><span class="vak"><i>✿</i>Diensten</span><span class="vak"><i>▣</i>Projecten</span><span class="vak"><i>△</i>Studio</span><span class="vak"><i>➤</i>Contact</span>
+          </nav>
+          <p class="lbl muted onder">Stand 1 · bovenaan de pagina</p>
+        </div>
+        <div class="telefoon">
+          <div class="t-boven"><span class="syne" style="font-size:20px">GRØNN</span><span style="display:flex;gap:6px"><span class="rond">◎</span><span class="rond">◐</span></span></div>
+          <div class="t-midden lbl muted">Tijdens het lezen</div>
+          <nav class="t-dock" aria-label="Leesstand (voorbeeld)">
+            <span class="vak"><i>⌂</i>Home</span><span class="vak"><i>⌕</i>Zoeken</span><span class="vak"><i>✆</i>WhatsApp</span><span class="vak"><i>⇪</i>Delen</span><span class="vak"><i>↑</i>Omhoog</span>
+          </nav>
+          <p class="lbl muted onder">Stand 2 · leesstand</p>
+        </div>
+      </div>
+      <p class="live">de dock is een witte pil (op Donker #2e2e2e) met vijf vakken, elk een icoon met een klein label eronder (Montserrat, ING-app-stijl); het actieve vak draagt een zachte grijze pil en een oranje icoon; er loopt een ‘komeet’ (oranje lichtstreep) langs de rand. Tijdens het lezen wordt het één pil met Home, Zoeken, WhatsApp, Delen en Omhoog; terugscrollen of toetsenbordfocus haalt de volle dock terug. Delen opent het deelvenster van de telefoon, of kopieert de link (‘Link gekopieerd’). De bovenbalk blijft staan: logo links, rechts twee ronde knoppen.</p>
+
+      <div class="r2" style="margin-top:40px">
+        <div class="kaart">
+          <p class="lbl muted" style="margin:0 0 6px">Paneel ◎</p>
+          <h3 class="kop3 syne">Weergave en toegankelijkheid</h3>
+          <p class="lbl muted vk">Tekstgrootte</p>
+          <ul class="keuzes"><li><strong>Normaal</strong> <span>standaard</span> ✓</li><li><strong>Groot</strong> <span>12,5 % groter</span></li><li><strong>Groter</strong> <span>25 % groter</span></li></ul>
+          <p class="lbl muted vk">Lezen</p>
+          <ul class="keuzes"><li><strong>Extra contrast</strong> <span>sterkere lijnen en bijtekst</span></li><li><strong>Minder beweging</strong> <span>animaties staan stil</span></li><li><strong>Links onderstrepen</strong> <span>een streep onder elke link in de tekst</span></li><li><strong>Sneltoetsen</strong> <span>/ voor zoeken, ? voor de lijst</span></li></ul>
+          <p class="lbl muted vk">Navigeren</p>
+          <ul class="keuzes"><li><strong>Pijlen voor terug en verder</strong> <span>halverwege de schermrand</span></li><li><strong>Verder lezen waar je was</strong> <span>onthoudt het hoofdstuk, alleen op dit toestel</span></li></ul>
+          <p style="margin:16px 0 0"><span class="pil-lijn">Alles terugzetten</span></p>
+          <p class="muted klein" style="margin-top:14px">Deze site is gebouwd om ook te werken met je eigen instellingen: zoomen, een schermlezer, of alleen het toetsenbord. Lukt er iets niet, dan horen we dat graag.</p>
+          <p class="live">vraagt het toestel zelf om minder beweging, dan staat er ‘Minder beweging staat aan’ met ‘Je toestel vraagt hier zelf om. De site volgt dat.’ en de keuze ‘Toch beweging tonen’ (overrulet je toestel, alleen hier). Op desktop opent hetzelfde paneel via het laatste icoon in de balk.</p>
+        </div>
+        <div class="kaart">
+          <p class="lbl muted" style="margin:0 0 6px">Paneel ◐</p>
+          <h3 class="kop3 syne">Kleur en taal</h3>
+          <p class="lbl muted vk">Licht en donker</p>
+          <ul class="keuzes"><li><strong>Automatisch</strong> <span>volgt de klok</span> ✓</li><li><strong>Licht</strong></li><li><strong>Donker</strong></li></ul>
+          <p class="lbl muted vk">Taal</p>
+          <p style="margin:0"><span class="pil-lijn">NL</span> <span class="pil-lijn">EN</span></p>
+          <p class="live">Automatisch kiest Licht van 07:00 tot 19:00 en Donker daarbuiten, op de klok van de bezoeker. Een eigen keuze blijft bewaard tot je weer Automatisch kiest. De taal is twee vlaggen die naar dezelfde pagina in de andere taal gaan.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 4. Randen ───────────────────────────── -->
+    <section class="sectie" aria-label="Zijbubbels en terug naar boven">
+      <div class="blok"><p class="lbl muted">04 · Randen van het scherm</p><div><h2 class="kop2 syne">Zijbubbels, Omhoog en de leesdraad</h2></div></div>
+      <div class="r3" style="margin-top:32px">
+        <div class="kaart"><p class="lbl muted" style="margin:0 0 10px">Links · Snel contact</p><p style="margin:0"><span class="pil-lijn">WhatsApp</span> <span class="pil-lijn">Instagram</span></p><p class="muted klein" style="margin-top:12px">Chat via WhatsApp (opent in nieuw tabblad) · GRØNN Studio op Instagram (opent in nieuw tabblad)</p></div>
+        <div class="kaart"><p class="lbl muted" style="margin:0 0 10px">Rechts · Vandaag in Stein</p><p style="margin:0"><span class="pil-lijn">Tuinkalender</span> <span class="pil-lijn">☼ zon</span> <span class="pil-lijn">☾ maan</span></p><p class="muted klein" style="margin-top:12px">[datum, tijden van zon op en onder, maanfase: uitgerekend voor Stein op het moment van bezoek]</p></div>
+        <div class="kaart"><p class="lbl muted" style="margin:0 0 10px">Rechtsonder · Omhoog</p><p style="margin:0"><span class="rond groot">↑</span></p><p class="muted klein" style="margin-top:12px">Ronde knop ‘Omhoog’ met een voortgangsring.</p></div>
+      </div>
+      <p class="live">de zijbubbels staan vanaf 1280 px links en rechts onderaan; daaronder staat de hemelregel in de voet. Kalender, zon en maan zijn elk een link naar de <a href="/wireframes/oud-tuinkalender">Tuinkalender</a> (/calendar). ‘Omhoog’ staat vanaf 768 px rechtsonder; de ring om de knop vult zich met het scrollen. Een dunne leesdraad bovenaan elke pagina toont hoe ver je bent.</p>
+    </section>
+
+    <section class="sectie" aria-label="De voet">
+      <div class="blok"><p class="lbl muted">05 · De voet</p><div><h2 class="kop2 syne">Onder elke pagina</h2><p class="lead">Het slot ‘Zullen we eens naar jouw tuin kijken?’ en de voet staan hieronder, precies zoals op elke pagina van de oude site.</p></div></div>
+    </section>
+
+    <footer>
+      <section class="slot donker" aria-label="Kennismaken">
+        <div class="rij">
+          <h2 class="kop2 syne" style="max-width:16ch">Zullen we eens naar jouw tuin kijken?</h2>
+          <div class="knoppen"><a class="oranje" href="/wireframes/oud-contact">Plan een kennismaking →</a><a class="pil-lijn" href="https://wa.me/31618118014">WhatsApp</a><a class="pil-lijn" href="https://instagram.com/gronn.studio">Instagram</a></div>
+        </div>
+        <div class="voet-raster">
+          <div>
+            <p class="syne" style="font-size:26px;margin:0">GRØNN</p>
+            <p class="lbl" style="margin:8px 0 0">Rooted in nature.</p>
+            <p class="muted" style="margin:12px 0 0;line-height:1.6;font-size:14px;max-width:30ch">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p>
+          </div>
+          <nav aria-label="Voettekst"><p class="lbl muted" style="margin:0">Site</p><ul><li><a href="/wireframes/oud-diensten">Diensten</a></li><li><a href="/wireframes/oud-projecten">Projecten</a></li><li><a href="/wireframes/oud-studio">Over mij</a></li><li><a href="/wireframes/oud-faq">Veelgestelde vragen</a></li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></nav>
+          <div><p class="lbl muted" style="margin:0">Contact</p><ul><li><a href="/wireframes/oud-contact">Contactformulier</a></li><li><a href="https://instagram.com/gronn.studio">Instagram</a></li><li><a href="/wireframes/oud-colofon">Adres en gegevens</a></li><li><span class="pil-lijn" style="min-height:34px">Dashboard →</span></li></ul></div>
+          <nav aria-label="Juridisch"><p class="lbl muted" style="margin:0">Juridisch</p><ul><li><a href="/wireframes/privacy">Privacy</a></li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></nav>
+        </div>
+        <div class="voet-onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+        <p class="live">KVK en BTW zijn kopieerknoppen. Onder 1280 px staat in de voet ook de hemelregel (Tuinkalender: vandaag, zon en maan voor Stein, link naar de <a href="/wireframes/oud-tuinkalender">Tuinkalender</a>). Dashboard heeft geen wireframe.</p>
+      </section>
+    </footer>
+  </main>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>
