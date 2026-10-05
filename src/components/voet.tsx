@@ -47,14 +47,14 @@ export function Voet() {
               <li>
                 {/* als iconen in hun eigen merkkleur, naast elkaar (eigenaar, 5 okt 2026) */}
                 <span className="mt-1 flex gap-3">
-                  <a href={BUSINESS.instagram} aria-label="Instagram" className="grid size-11 place-items-center rounded-full bg-[#833AB4] text-white transition-transform hover:-translate-y-0.5">
+                  <a href={BUSINESS.instagram} aria-label="Instagram" className="grid size-11 place-items-center rounded-full bg-[radial-gradient(circle_at_30%_107%,#fdf497_0%,#fdf497_5%,#fd5949_45%,#d6249f_60%,#285AEB_90%)] text-white transition-transform hover:-translate-y-0.5">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
                       <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
                       <circle cx="12" cy="12" r="4" />
                       <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
                     </svg>
                   </a>
-                  <a href={BUSINESS.whatsapp} aria-label="WhatsApp" className="grid size-11 place-items-center rounded-full bg-[#25D366] text-[#0b3d1f] transition-transform hover:-translate-y-0.5">
+                  <a href={BUSINESS.whatsapp} aria-label="WhatsApp" className="grid size-11 place-items-center rounded-full bg-[#25D366] text-white transition-transform hover:-translate-y-0.5">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true">
                       <path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.1A8.8 8.8 0 1 0 12 3.2Z" />
                       <path d="M9.1 8.2c-.5.3-.8.9-.7 1.5.4 2.6 2.4 4.6 5 5 .6.1 1.2-.2 1.5-.7l.5-.9-2-1-.9.9a5.6 5.6 0 0 1-2.4-2.4l.9-.9-1-2-.9.5Z" fill="currentColor" stroke="none" />
