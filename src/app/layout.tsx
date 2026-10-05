@@ -20,6 +20,16 @@ export const metadata: Metadata = {
   title: { default: `${BUSINESS.name} · Vijvers en tuinen in Stein en omgeving`, template: `%s · ${BUSINESS.name}` },
   description:
     "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
+  // Elke pagina zijn eigen canonieke adres, en een deelbeeld voor WhatsApp en
+  // sociale media als een pagina er zelf geen heeft (audit 5 okt 2026).
+  alternates: { canonical: "./" },
+  openGraph: {
+    type: "website",
+    locale: "nl_NL",
+    siteName: BUSINESS.name,
+    images: [{ url: "/projecten/vijverrenovatie/F08-2.jpg", alt: "Nick Peters aan het werk bij de vijverrenovatie." }],
+  },
+  twitter: { card: "summary_large_image" },
 }
 
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de

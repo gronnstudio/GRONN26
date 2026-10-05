@@ -20,6 +20,7 @@ const Pijl = () => <span aria-hidden className="self-end text-[18px] transition-
 export default function Links() {
   return (
     <div data-links className="mx-auto max-w-[760px] px-4 pt-[clamp(24px,6vw,64px)] pb-12">
+      <h1 className="sr-only">GRØNN Studio · Links</h1>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="col-span-2 flex items-center gap-4 rounded-[6px] bg-antraciet p-5 text-gebroken-wit md:col-span-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
