@@ -61,18 +61,19 @@ export function Voet() {
           </nav>
           <div>
             <p className="lbl m-0 text-gedempt">Klein</p>
-            <div className="mt-4 flex flex-col items-start gap-2 text-sm">
-              <Kopieer label="KVK" waarde={BUSINESS.kvk} />
-              <Kopieer label="BTW" waarde={BUSINESS.btw} />
-            </div>
             <p className="mt-4 mb-0 leading-[1.75]">
               <Link href="/privacy" className="w-lijnlink text-inkt">Privacy</Link>
             </p>
           </div>
         </div>
 
-        <div className="mt-[clamp(56px,8vw,120px)] border-t border-lijn pt-[clamp(28px,4vw,48px)]">
-          <Logo className="h-auto w-full max-w-[1100px]" />
+        {/* het reuzenwoordmerk, met rechts in de lege ruimte KVK en BTW om te kopiëren (eigenaar, 5 okt 2026) */}
+        <div className="mt-[clamp(56px,8vw,120px)] flex flex-wrap items-end justify-between gap-x-10 gap-y-6 border-t border-lijn pt-[clamp(28px,4vw,48px)]">
+          <Logo className="h-auto w-full max-w-[1100px] lg:w-[68%]" />
+          <div className="flex flex-col items-start gap-2 text-sm lg:items-end lg:pb-[1%]">
+            <Kopieer label="KVK" waarde={BUSINESS.kvk} />
+            <Kopieer label="BTW" waarde={BUSINESS.btw} />
+          </div>
         </div>
       </div>
     </footer>

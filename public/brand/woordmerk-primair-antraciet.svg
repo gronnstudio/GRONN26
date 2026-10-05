@@ -20,6 +20,14 @@
 <path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,91,4); fill-rule: nonzero; opacity: 1;" transform=" translate(-94.0858, -100)" d="M 120.0082 80.8425 C 120.0082 89.6055 113.4391 96.8212 104.9594 97.8687 C 108.9574 96.6821 111.9408 92.3106 111.9408 88.0223 C 111.9408 83.0023 107.8576 77.8529 102.8375 77.8529 L 84.1478 77.8529 L 84.1478 136 L 68.1635 136 L 68.1635 64.0001 L 84.1476 64.0001 L 84.1476 64 L 102.8375 64 L 102.8375 64.0001 C 104.6632 64.0001 106.442 64.1823 108.1581 64.5222 C 115.0346 66.7631 120.0082 73.218 120.0082 80.8425 Z" stroke-linecap="round"/>
 </g>
 		<g transform="matrix(1 0 0 1 2.078 -19.0657)">
+<linearGradient id="SVGID_5392" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1 0 0 1 0 0)" x1="84.1476" y1="80.93433" x2="120.00819" y2="80.93433">
+<stop offset="0%" style="stop-color:#ababab;stop-opacity: 0"/>
+<stop offset="36.142%" style="stop-color:#ababab;stop-opacity: 0.32528"/>
+<stop offset="66.685%" style="stop-color:#ababab;stop-opacity: 0.60017"/>
+<stop offset="95.116%" style="stop-color:#ababab;stop-opacity: 0.85604"/>
+<stop offset="100%" style="stop-color:#ababab;stop-opacity: 0.9"/>
+</linearGradient>
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: url(#SVGID_5392); fill-rule: nonzero; opacity: 1;" transform=" translate(-102.0779, -80.9343)" d="M 84.1476 64 L 102.8375 64 L 102.8375 64.0001 C 104.6632 64.0001 106.442 64.1823 108.1581 64.5222 C 115.0346 66.7631 120.0082 73.218 120.0082 80.8425 C 120.0082 89.6055 113.4391 96.8212 104.9594 97.8686 C 108.9574 96.6821 111.9408 92.3106 111.9408 88.0223 C 111.9408 83.0022 107.8576 77.8529 102.8375 77.8529 L 84.1478 77.8529 L 84.1476 64 Z" stroke-linecap="round"/>
 </g>
 </g>
 </g>
