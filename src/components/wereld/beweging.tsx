@@ -1,6 +1,5 @@
 "use client"
 
-import { lichtLetters } from "./letters"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
@@ -36,7 +35,7 @@ export function WereldBeweging() {
         g.style.setProperty("--s", String(s ? 1 : Math.min(1, 0.7 + (0.3 * p) / (vh * 1.29))))
       }
       zij.forEach((l) => l.classList.toggle("weg", y > 80))
-      lichtLetters(woorden, vh, s, "0.12")
+      for (const w of woorden) w.style.opacity = s || w.getBoundingClientRect().top < vh * 0.7 ? "" : "0.12"
       for (const el of stukken) {
         const v = Number(el.dataset.v)
         if (s || !v) { el.style.transform = ""; continue }

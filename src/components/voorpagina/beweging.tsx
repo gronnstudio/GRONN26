@@ -1,6 +1,5 @@
 "use client"
 
-import { lichtLetters } from "@/components/wereld/letters"
 import { useEffect } from "react"
 
 // De beweging van de voorpagina, nagebouwd uit de scripts van WF-058, WF-059
@@ -35,8 +34,8 @@ export function Beweging() {
       const basis = breed() ? 0.7 : 0.8
       foto?.style.setProperty("--s", String(s ? basis : Math.min(1, basis + ((1 - basis) * y) / (vh * (breed() ? 1.29 : 0.6)))))
       labels.forEach((l) => l.classList.toggle("vp-weg", y > 80))
-      // letter voor letter oplichten, de rest staat op 0,1
-      lichtLetters(woorden, vh, s, "0.1")
+      // woorden boven 70 % van het scherm lichten op, de rest staat op 0,1
+      for (const w of woorden) w.style.opacity = s || w.getBoundingClientRect().top < vh * 0.7 ? "" : "0.1"
       // reuzenwoord schuift 0,5px naar rechts per gescrolde px, eindeloos
       if (spoor) {
         const set = (spoor.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0
