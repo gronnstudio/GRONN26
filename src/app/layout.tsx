@@ -3,6 +3,8 @@ import { Syne, Montserrat, Geist_Mono } from "next/font/google"
 import { Kop } from "@/components/kop"
 import { Dock } from "@/components/dock"
 import { Voet } from "@/components/voet"
+import { Overgang } from "@/components/overgang/overgang"
+import { INTRO_VOORVERF } from "@/components/overgang/voorverf"
 import { BUSINESS } from "@/lib/business"
 import "./globals.css"
 
@@ -26,12 +28,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="nl" className={`${syne.variable} ${montserrat.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
+        <script dangerouslySetInnerHTML={{ __html: INTRO_VOORVERF }} />
       </head>
       <body>
         <Kop />
         <main>{children}</main>
         <Voet />
         <Dock />
+        <Overgang />
       </body>
     </html>
   )

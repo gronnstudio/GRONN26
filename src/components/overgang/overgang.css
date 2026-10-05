@@ -1,0 +1,40 @@
+/* Het doek van de opening en de paginawissel (WF-055, naar LayoutIntro en
+   LayoutTransition van bartoszkolenda.com). Zonder JS, met minder beweging of
+   html.stil blijft het verborgen: alleen html.intro (gezet door het
+   voorverf-script) of data-actief (gezet bij een wissel) laat het zien. */
+.og { position: fixed; inset: 0; z-index: 1001; display: none; pointer-events: none; }
+html.intro .og, .og[data-actief] { display: block; pointer-events: auto; }
+html.intro:not(.intro-los) { overflow: hidden; }
+
+.og-laad { position: absolute; left: 0; top: 0; height: 8px; width: 0; background: #db6923; z-index: 1005; }
+.og-grond { position: absolute; inset: 0; background: #202020; }
+.og-verloop { position: absolute; inset: 0; background: linear-gradient(to bottom, #23483a, #202020); opacity: 0; }
+.og-laad, .og-grond, .og-merk { display: none; }
+html.intro .og-laad, html.intro .og-grond { display: block; }
+html.intro .og-merk { display: flex; }
+
+.og-blokken { position: fixed; inset: 0; z-index: 1002; pointer-events: none; transform: translateY(100%); visibility: hidden; will-change: transform; }
+.og-blokken span { position: absolute; top: -1px; height: calc(100% + 2px); background: #202020; transform: translateY(100%); will-change: transform; }
+.og-b1 { width: 30%; left: 35%; }
+.og-b2 { width: 65%; left: 17.5%; }
+.og-b3 { width: 100%; left: 0; }
+
+.og-zin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; max-width: 955px; margin: 0 auto; padding-bottom: 48px; z-index: 1005; }
+.og-zin p {
+  margin: 0; padding-inline: 40px; text-align: center; color: #efeeea;
+  font-family: var(--font-syne), sans-serif; font-weight: 600;
+  font-size: clamp(28px, 3.4vw, 52px); line-height: 1.2; letter-spacing: -0.02em;
+}
+.og-zin em { font-style: normal; color: #b8c5a8; }
+.og-merk { position: absolute; left: 0; right: 0; bottom: 94px; justify-content: center; opacity: 0; z-index: 1005; }
+
+@media (max-width: 1023px) {
+  .og-zin { max-width: 640px; padding-bottom: 32px; }
+  .og-zin p { padding-inline: 20px; }
+  .og-merk { bottom: 80px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .og { display: none !important; }
+  html.intro { overflow: visible; }
+}
+html.stil .og { display: none !important; }
