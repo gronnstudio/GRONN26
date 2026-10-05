@@ -20,7 +20,7 @@
     let html = el ? el.outerHTML : `<p style="padding:24px;font-family:monospace">Niet gevonden: ${steen.bron} → ${steen.kies}</p>`
     if (steen.wrap) html = `<div class="wrap">${html}</div>`
     const extra = `<style>
-      body{padding:0!important;margin:0!important;min-height:0!important}
+      body{display:flow-root!important;padding:0!important;margin:0!important;min-height:0!important}
       .wv-paneel{display:none!important}
       ${steen.vast ? 'nav.dock,nav.km,.km-hoeken,header.balk,.vast{position:relative!important;inset:auto!important;bottom:auto!important;top:auto!important;margin:0 auto!important}body{padding:16px 0!important;overflow:hidden}nav.km{transform:none!important;width:max-content!important;left:auto!important;right:auto!important}nav.km:not(.licht) .km-pil a{color:#202020}' : ''}
     </style>`
