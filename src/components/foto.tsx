@@ -34,6 +34,8 @@ export function Foto({
 
 /** Een foto die er nog niet is: een vlak met wat er moet komen. */
 export function GeenFoto({ wat, className = "" }: { wat: string; className?: string }) {
+  // Alleen tijdens het bouwen zichtbaar; bezoekers zien een lege plek niet (audit 5 okt 2026).
+  if (process.env.NODE_ENV === "production") return null
   return (
     <div className={`flex items-end bg-vlak p-3 text-[11px] font-semibold tracking-[.08em] text-gedempt uppercase ${className}`}>
       [NOG AANLEVEREN: {wat}]
