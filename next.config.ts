@@ -13,6 +13,10 @@ const WIREFRAMES = readdirSync(join(process.cwd(), "public/wireframes"))
 const ECHTE_PAGINAS = new Set(["vijvers", "tuinen", "werk", "over", "kennismaken", "faq", "privacy", "404"])
 
 const nextConfig: NextConfig = {
+  // De wireframes zijn werkmateriaal: nooit in zoekmachines.
+  async headers() {
+    return [{ source: "/wireframes/:pad*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }]
+  },
   async rewrites() {
     return [
       { source: "/wireframes", destination: "/wireframes/index.html" },
