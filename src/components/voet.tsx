@@ -70,6 +70,8 @@ export function Voet() {
               <Link href="/herroeping" className="w-lijnlink text-inkt"><T t={{ nl: "Herroeping", en: "Withdrawal" }} /></Link>
               <br />
               <Link href="/colofon" className="w-lijnlink text-inkt"><T t={{ nl: "Colofon", en: "Colophon" }} /></Link>
+              <br />
+              <Link href="/merk" className="w-lijnlink text-inkt"><T t={{ nl: "Merk", en: "Brand" }} /></Link>
             </p>
           </div>
         </div>
