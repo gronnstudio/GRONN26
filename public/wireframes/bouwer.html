@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Bouwer — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<style>
+/* De bouwer: een hele site wireframen uit de bouwstenen van onze wireframes.
+   Links de bibliotheek (zoeken, groepen, voorbeeld, +), midden de pagina,
+   rechts de opbouw. Elke bouwsteen staat in een eigen kader met de opmaak
+   van zijn bronwireframe, zodat opmaak van twee wireframes nooit botst. */
+:root{--grond:#EFEEEA;--inkt:#202020;--gedempt:#5E5E5B;--lijn:rgba(32,32,32,.16);--vlak:#E3E1DB;--oranje:#DB6923}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--grond);color:var(--inkt);font:14px/1.45 Montserrat,sans-serif;display:grid;grid-template-rows:auto 1fr;overflow:hidden}
+button,input,select{font:inherit;color:inherit}
+.mono{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.knop{all:unset;box-sizing:border-box;cursor:pointer;border:1px solid var(--lijn);border-radius:999px;padding:6px 12px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.knop:hover{background:var(--vlak)}
+.knop:focus-visible,.icoon:focus-visible{outline:2px solid var(--inkt);outline-offset:2px}
+.knop.aan{background:var(--inkt);color:var(--grond);border-color:var(--inkt)}
+.knop.oranje{background:var(--oranje);border-color:var(--oranje);color:var(--inkt)}
+
+/* bovenbalk */
+.balk{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--lijn);flex-wrap:wrap}
+.balk h1{margin:0;font:600 18px Syne,sans-serif}
+.balk a{color:inherit}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.tab{all:unset;cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid transparent}
+.tab[aria-selected="true"]{background:var(--inkt);color:var(--grond)}
+.tab:focus-visible{outline:2px solid var(--inkt)}
+.rek{flex:1}
+.toestel{display:flex;border:1px solid var(--lijn);border-radius:999px;padding:3px}
+.toestel button{all:unset;cursor:pointer;padding:5px 12px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.toestel button[aria-pressed="true"]{background:var(--inkt);color:var(--grond)}
+
+/* drie kolommen */
+.werkblad{display:grid;grid-template-columns:340px 1fr 280px;min-height:0}
+.kolom{min-height:0;overflow:auto}
+.bieb{border-right:1px solid var(--lijn);display:flex;flex-direction:column}
+.bieb-kop{position:sticky;top:0;background:var(--grond);z-index:2;padding:14px 14px 10px;border-bottom:1px solid var(--lijn)}
+.zoek{width:100%;border:1px solid var(--lijn);border-radius:999px;padding:9px 14px;background:#fff;outline:none}
+.zoek:focus{border-color:var(--inkt)}
+.groepen{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.kaarten{padding:14px;display:grid;gap:14px}
+.groep-titel{margin:8px 0 -4px}
+.kaart{border:1px solid var(--lijn);background:#fff;border-radius:10px;overflow:hidden}
+.voorbeeld{position:relative;height:170px;overflow:hidden;background:var(--grond);border-bottom:1px solid var(--lijn)}
+.voorbeeld iframe{position:absolute;top:0;left:0;width:1440px;height:820px;border:0;transform-origin:0 0;pointer-events:none}
+.kaart-voet{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.kaart-voet strong{display:block;font-weight:600;font-size:13px}
+.kaart-voet small{color:var(--gedempt)}
+.plus{all:unset;cursor:pointer;margin-left:auto;flex:none;width:34px;height:34px;border-radius:999px;background:var(--inkt);color:var(--grond);display:grid;place-items:center;font-size:20px;line-height:1}
+.plus:hover{background:var(--oranje);color:var(--inkt)}
+.plus:focus-visible{outline:2px solid var(--oranje);outline-offset:2px}
+
+.doek{background:#d6d4cd;padding:20px;display:flex;justify-content:center}
+.doek-binnen{background:var(--grond);box-shadow:0 20px 60px -30px rgba(0,0,0,.45);transform-origin:top left}
+.blok{position:relative;display:block}
+.blok iframe{display:block;width:100%;border:0}
+.blok.gekozen{outline:3px solid var(--oranje);outline-offset:-3px}
+.leeg{padding:80px 40px;text-align:center;color:var(--gedempt)}
+.leeg strong{display:block;font:600 22px Syne,sans-serif;color:var(--inkt);margin-bottom:8px}
+
+.opbouw{border-left:1px solid var(--lijn);padding:14px}
+.opbouw h2{margin:0 0 10px}
+.lijst{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.lijst li{display:grid;grid-template-columns:22px 1fr auto;gap:6px;align-items:center;border:1px solid var(--lijn);background:#fff;border-radius:8px;padding:6px 8px}
+.lijst li.gekozen{border-color:var(--oranje)}
+.lijst .naam{all:unset;cursor:pointer;font-size:13px;line-height:1.3}
+.lijst .naam small{display:block;color:var(--gedempt)}
+.acties{display:flex;gap:2px}
+.icoon{all:unset;cursor:pointer;width:24px;height:24px;display:grid;place-items:center;border-radius:6px;font-size:13px}
+.icoon:hover{background:var(--vlak)}
+.icoon:disabled{opacity:.25;cursor:default}
+.opbouw .rij{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.noot{color:var(--gedempt);font-size:12px;margin-top:14px}
+
+@media (max-width:1100px){.werkblad{grid-template-columns:300px 1fr}.opbouw{grid-column:1 / -1;border-left:0;border-top:1px solid var(--lijn)}body{overflow:auto}.werkblad{min-height:auto}}
+@media (max-width:760px){.werkblad{grid-template-columns:1fr}.bieb{border-right:0;max-height:60vh}.doek{padding:10px}}
+</style>
+</head>
+<body>
+<header class="balk">
+  <a href="/wireframes/" class="mono">← Wireframes</a>
+  <h1>Bouwer</h1>
+  <div class="tabs" role="tablist" aria-label="Pagina's" id="tabs"></div>
+  <button class="knop" id="nieuw-pagina" type="button">＋ Pagina</button>
+  <span class="rek"></span>
+  <div class="toestel" role="group" aria-label="Toestel">
+    <button type="button" data-b="1440" aria-pressed="true">Desktop</button>
+    <button type="button" data-b="834" aria-pressed="false">Tablet</button>
+    <button type="button" data-b="390" aria-pressed="false">Telefoon</button>
+  </div>
+  <button class="knop" id="los" type="button">Open los ↗</button>
+</header>
+
+<div class="werkblad">
+  <aside class="kolom bieb" aria-label="Bibliotheek">
+    <div class="bieb-kop">
+      <input class="zoek" id="zoek" type="search" placeholder="Zoek bouwstenen…  (/)" aria-label="Zoek bouwstenen">
+      <div class="groepen" id="groepen"></div>
+    </div>
+    <div class="kaarten" id="kaarten"></div>
+  </aside>
+
+  <main class="kolom doek" id="doek" aria-label="Pagina">
+    <div class="doek-binnen" id="doek-binnen"></div>
+  </main>
+
+  <aside class="kolom opbouw" aria-label="Opbouw van de pagina">
+    <h2 class="mono">Op deze pagina</h2>
+    <ol class="lijst" id="lijst"></ol>
+    <div class="rij">
+      <button class="knop" id="hernoem" type="button">Hernoem pagina</button>
+      <button class="knop" id="dupliceer-pagina" type="button">Dupliceer pagina</button>
+      <button class="knop" id="wis-pagina" type="button">Verwijder pagina</button>
+    </div>
+    <h2 class="mono" style="margin-top:22px">Hele site</h2>
+    <div class="rij">
+      <button class="knop" id="sjabloon" type="button">Begin met het prototype</button>
+      <button class="knop" id="exporteer" type="button">Exporteer</button>
+      <label class="knop" for="importeer">Importeer</label>
+      <input id="importeer" type="file" accept="application/json" hidden>
+      <button class="knop" id="alles-wissen" type="button">Alles wissen</button>
+    </div>
+    <p class="noot">Bewaard in deze browser. Effecten (animaties, scrollen) zie je in het bronwireframe; in de bouwer staat alles stil. Klik een onderdeel om ernaartoe te gaan.</p>
+  </aside>
+</div>
+
+<script src="/wireframes/bouwstenen/prototype.js"></script>
+<script src="/wireframes/bouwstenen/alternatieven.js" onerror="this.remove()"></script>
+<script src="/wireframes/bouwstenen/uncode-kolenda.js" onerror="this.remove()"></script>
+<script src="/wireframes/bouwstenen/live-archief.js" onerror="this.remove()"></script>
+<script src="/wireframes/bouwer-kern.js"></script>
+<script src="/wireframes/bouwer.js"></script>
+</body>
+</html>

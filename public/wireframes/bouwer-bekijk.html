@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Pagina uit de bouwer — GRØNN wireframes</title>
+<style>
+/* Eén pagina uit de bouwer, los en op ware grootte. Pijltjes links/rechts of
+   de knoppen onderaan: vorige en volgende pagina van de site. */
+body{margin:0;background:#EFEEEA;font:13px Montserrat,sans-serif}
+iframe{display:block;width:100%;border:0}
+.nav{position:fixed;left:16px;bottom:16px;z-index:10;display:flex;gap:6px;align-items:center;background:#202020;color:#EFEEEA;border-radius:999px;padding:6px 8px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.nav a,.nav button{all:unset;cursor:pointer;padding:6px 10px;border-radius:999px;color:inherit}
+.nav a:hover,.nav button:hover{background:#3a3a38}
+.nav :focus-visible{outline:2px solid #DB6923}
+.leeg{padding:80px 24px;text-align:center}
+</style>
+</head>
+<body>
+<div id="pagina"></div>
+<nav class="nav" aria-label="Pagina's"><a href="/wireframes/bouwer">← Bouwer</a><button id="vorige" type="button">‹</button><span id="naam"></span><button id="volgende" type="button">›</button></nav>
+<script src="/wireframes/bouwstenen/prototype.js"></script>
+<script src="/wireframes/bouwstenen/alternatieven.js" onerror="this.remove()"></script>
+<script src="/wireframes/bouwstenen/uncode-kolenda.js" onerror="this.remove()"></script>
+<script src="/wireframes/bouwstenen/live-archief.js" onerror="this.remove()"></script>
+<script src="/wireframes/bouwer-kern.js"></script>
+<script>
+(() => {
+  const PER_ID = Object.fromEntries((window.BOUWSTENEN || []).map((s) => [s.id, s]))
+  let staat = { paginas: [] }
+  try { staat = JSON.parse(localStorage.getItem('gronn-bouwer')) || staat } catch {}
+  let i = Math.min(+(new URLSearchParams(location.search).get('p') || 0), Math.max(0, staat.paginas.length - 1))
+  const toon = () => {
+    const doel = document.getElementById('pagina'); doel.innerHTML = ''
+    const p = staat.paginas[i]
+    document.getElementById('naam').textContent = p ? `${p.naam} · ${i + 1}/${staat.paginas.length}` : 'Geen pagina'
+    if (!p || !p.blokken.length) { doel.innerHTML = '<p class="leeg">Deze pagina is leeg. Voeg in de bouwer bouwstenen toe.</p>'; return }
+    const w = innerWidth >= 1100 ? 1440 : innerWidth >= 700 ? 834 : 390
+    p.blokken.forEach((id) => PER_ID[id] && doel.appendChild(window.GRONN_KERN.kader(PER_ID[id], w)))
+    document.title = `${p.naam} — Bouwer`
+    history.replaceState(null, '', `?p=${i}`); scrollTo(0, 0)
+  }
+  const naar = (d) => { if (!staat.paginas.length) return; i = (i + d + staat.paginas.length) % staat.paginas.length; toon() }
+  document.getElementById('vorige').onclick = () => naar(-1)
+  document.getElementById('volgende').onclick = () => naar(1)
+  addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') naar(-1); if (e.key === 'ArrowRight') naar(1) })
+  toon()
+})()
+</script>
+</body>
+</html>
