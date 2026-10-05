@@ -23,7 +23,7 @@ export function Beweging() {
     const spoor = wortel.querySelector<HTMLElement>("[data-spoor]")
     const stukken = [...wortel.querySelectorAll<HTMLElement>("[data-v]")]
     const vak = wortel.querySelector<HTMLElement>("[data-diensten]")
-    const namen = [...wortel.querySelectorAll<HTMLElement>(".vp-namen li")]
+    const namen = [...wortel.querySelectorAll<HTMLElement>(".vp-zin-item")]
     const muis = matchMedia("(hover: hover) and (pointer: fine)").matches && innerWidth >= 768
 
     function frame() {

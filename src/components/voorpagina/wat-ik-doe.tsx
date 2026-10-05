@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react"
 import Link from "next/link"
 import { Foto, GeenFoto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
@@ -42,28 +41,37 @@ export function WatIkDoe() {
         <h2 className="lbl" id="h-diensten">
           Wat ik doe · {DIENSTEN.length} diensten
         </h2>
-        <ul className="vp-namen">
-          {DIENSTEN.map((d, n) => (
-            <li key={d.slug} className="vp-op" data-zie style={{ "--i": n % 2 } as CSSProperties}>
-              <Link className="syne" href={d.href} data-naam={n}>
-                <span className="vp-naam">
-                  {d.dienst.title.nl}
-                  <wbr />
-                  <sup>{nr(n)}</sup>
-                </span>
-                <span className="vp-uitleg">{d.dienst.summary.nl}</span>
-              </Link>
-              {/* touch: de foto klapt open als deze dienst in het midden van het scherm staat */}
-              <span className="vp-inline" aria-hidden="true">
-                {typeof d.beeld === "string" ? (
-                  <GeenFoto wat={d.beeld} className="vp-inline-foto" />
-                ) : (
-                  <Foto foto={d.beeld} sizes="90vw" className="vp-inline-foto" />
-                )}
-              </span>
-            </li>
-          ))}
-        </ul>
+        {/* Zoals oudolf.com: de diensten als één lopende zin, gescheiden door
+            komma's, met het nummer klein ervoor en een punt aan het eind.
+            Twee zinnen: vijvers en tuinen (eigenaar, 5 okt 2026: "speelser"). */}
+        {(["/vijvers", "/tuinen"] as const).map((groep) => {
+          const rij = DIENSTEN.filter((d) => d.href === groep)
+          return (
+            <div key={groep} className="vp-zin-lijst syne" data-zie>
+              <span className="lbl vp-zin-kop">{groep === "/vijvers" ? "Vijvers" : "Tuinen"}</span>
+              {rij.map((d, k) => {
+                const n = DIENSTEN.indexOf(d)
+                return (
+                  <span key={d.slug} className="vp-zin-item">
+                    <Link href={d.href} data-naam={n}>
+                      <sup>{nr(n)}</sup>
+                      {d.dienst.title.nl}
+                      <span className="vp-uitleg">{d.dienst.summary.nl}</span>
+                    </Link>
+                    <span className="vp-komma">{k < rij.length - 1 ? "," : "."}</span>{" "}
+                    <span className="vp-inline" aria-hidden="true">
+                      {typeof d.beeld === "string" ? (
+                        <GeenFoto wat={d.beeld} className="vp-inline-foto" />
+                      ) : (
+                        <Foto foto={d.beeld} sizes="90vw" className="vp-inline-foto" />
+                      )}
+                    </span>
+                  </span>
+                )
+              })}
+            </div>
+          )
+        })}
         <div className="vp-terzijde">
           <Link className="lnk" href="/vijvers">
             Alles over vijvers →

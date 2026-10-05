@@ -280,45 +280,43 @@
   font-weight: 400;
   color: var(--gedempt);
 }
-/* twee vaste kolommen (vijvers links, tuinen rechts), zodat er geen losse
-   gaten vallen zoals bij doorlopende tekst (eigenaar, 5 okt 2026) */
-.vp-namen {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-flow: column;
-  grid-template-rows: repeat(6, auto);
-  column-gap: clamp(32px, 6.5vw, 96px);
-  row-gap: clamp(4px, 1vw, 16px);
-}
-.vp-namen li {
-  position: relative;
-  z-index: 2;
-}
-.vp-namen a {
-  display: inline-flex;
-  text-decoration: none;
+/* Oudolf-stijl: de diensten als lopende zin met komma's. */
+.vp-zin-lijst {
+  margin: 0 0 clamp(24px, 3vw, 40px);
   font-size: clamp(28px, 4.2vw, 60px);
-  line-height: 1.2;
+  line-height: 1.25;
   letter-spacing: -0.035em;
+  text-wrap: pretty;
+}
+.vp-zin-kop {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--gedempt);
+}
+.vp-zin-item {
+  position: relative;
+  display: inline;
+}
+.vp-zin-item a {
+  text-decoration: none;
   transition: opacity 0.25s ease-out;
+  background: linear-gradient(currentColor, currentColor) 0 92% / 0 2px no-repeat;
+  transition: opacity 0.25s ease-out, background-size 0.45s var(--vp-ease);
 }
-.vp-naam {
-  display: inline-flex;
-  align-items: flex-start;
+.vp-zin-item a:hover,
+.vp-zin-item a:focus-visible {
+  background-size: 100% 2px;
 }
-.vp-namen sup {
-  font-family: var(--font-mono);
-  font-size: max(11px, 0.18em);
+.vp-komma {
+  color: var(--gedempt);
+}
+.vp-zin-item sup {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: max(11px, 0.22em);
   letter-spacing: 0.04em;
-  font-weight: 400;
-  margin-left: 0.45em;
-  margin-top: 0.35em;
-  line-height: 1;
-  vertical-align: baseline;
-  position: static;
+  margin-right: 0.3em;
+  vertical-align: super;
   color: var(--gedempt);
 }
 /* met een muis: de uitleg loopt mee in het beeld; voor schermlezers blijft hij in de link */
@@ -330,7 +328,7 @@
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-.vp-diensten.actief .vp-namen a:not(:hover) {
+.vp-diensten.actief .vp-zin-item a:not(:hover) {
   opacity: 0.35;
 }
 .vp-terzijde {
@@ -387,18 +385,7 @@
   .vp-zwerf {
     display: none;
   }
-  .vp-namen {
-    display: block;
-  }
-  .vp-namen li {
-    border-top: 1px solid var(--lijn);
-    padding: 14px 0;
-    transition: opacity 0.35s var(--vp-ease);
-  }
-  .vp-diensten.actief .vp-namen li:not(.midden) {
-    opacity: 0.35;
-  }
-  .vp-diensten.actief .vp-namen a:not(:hover) {
+  .vp-diensten.actief .vp-zin-item a:not(:hover) {
     opacity: 1;
   }
   .vp-inline {
@@ -410,17 +397,14 @@
     min-height: 0;
     overflow: hidden;
   }
-  .vp-namen li.midden .vp-inline {
+  .vp-zin-item.midden .vp-inline {
     grid-template-rows: 1fr;
   }
   .vp-inline-foto {
     aspect-ratio: 4 / 3;
     margin-top: 14px;
   }
-  .vp-namen li:last-child {
-    border-bottom: 1px solid var(--lijn);
-  }
-  .vp-namen a {
+  .vp-zin-item a {
     display: block;
   }
   .vp-uitleg {
@@ -441,17 +425,8 @@
   }
 }
 @media (max-width: 767px) {
-  .vp-namen a {
+  .vp-zin-lijst {
     font-size: clamp(26px, 7.4vw, 32px);
-  }
-  /* een lang woord plus nummer past niet altijd op 390: het nummer mag dan
-     naar de volgende regel (<wbr> ervoor) */
-  .vp-naam {
-    display: inline;
-  }
-  .vp-namen sup {
-    vertical-align: super;
-    margin-left: 0.3em;
   }
 }
 
