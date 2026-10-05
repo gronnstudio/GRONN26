@@ -304,7 +304,7 @@ export function Overgang() {
       <div className="og-zin">
         <p ref={zin} />
       </div>
-      <div className="og-merk donker">
+      <div className="og-merk">
         <Logo className="h-[28px] w-auto" />
       </div>
     </div>

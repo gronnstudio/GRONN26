@@ -6,7 +6,7 @@ import { OVER_MIJ } from "@/lib/data/teksten"
 import { F01, F04_2, F05, F07_1, F08_2, F10, F11, T01, T02 } from "./beelden"
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
-// van de fotocollage. Altijd donker. De beweging zit in beweging.tsx; zonder
+// van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
 // JS of met minder beweging staat alles stil en is alles zichtbaar.
 
 export const KOP = "Een vijver en tuin die gezond blijven."

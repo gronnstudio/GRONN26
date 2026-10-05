@@ -4,7 +4,7 @@ import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
 /**
  * De opening van elke pagina (behalve de voorpagina, die zijn eigen WF-058
- * heeft): donker, een label, een reuzenkop die regel voor regel omhoog komt,
+ * heeft): in de kleur van het thema, een label, een reuzenkop die regel voor regel omhoog komt,
  * één zin, en eventueel een foto die groeit terwijl je scrolt. De sitekop
  * ligt eroverheen. `titel` is de h1 van de pagina.
  */
@@ -26,7 +26,7 @@ export function Opening({
 }) {
   const regels = titel.split("\n")
   return (
-    <section className="w-opening donker" aria-labelledby="pagina-titel" data-opening>
+    <section className="w-opening" aria-labelledby="pagina-titel" data-opening>
       <p className="lbl w-label">{label}</p>
       <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={titel.replace(/\n/g, " ")}>
         {regels.map((r, n) => (

@@ -19,10 +19,10 @@
   text-transform: uppercase;
 }
 
-/* ── WF-058: altijd donker ─────────────────────────────────────────── */
+/* ── WF-058: volgt licht/donker (eigenaar, 5 okt 2026) ─────────────────────────────────────────── */
 .vp-atelier {
-  background: #202020;
-  color: #efeeea;
+  background: var(--grond);
+  color: var(--inkt);
   overflow: clip;
 }
 
@@ -190,6 +190,7 @@
     position: relative;
     top: auto;
     mix-blend-mode: normal;
+    color: var(--inkt);
   }
   .vp-held-foto {
     margin: 24px 0 0;
@@ -204,7 +205,7 @@
     display: block;
     text-align: center;
     margin: 20px var(--vp-rand) 0;
-    color: #a9a8a3;
+    color: var(--gedempt);
   }
   .vp-onthul {
     padding-top: 72px;
@@ -368,8 +369,8 @@
 }
 .vp-bijschrift {
   margin: 0;
-  background: #efeeea;
-  color: #202020;
+  background: var(--grond);
+  color: var(--inkt);
   padding: 14px 16px;
   font-size: 14px;
   line-height: 1.5;

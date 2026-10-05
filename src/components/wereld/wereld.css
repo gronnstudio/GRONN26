@@ -12,14 +12,14 @@
 /* ── de opening van elke pagina ─────────────────────────────────────── */
 .w-opening {
   position: relative;
-  background: #202020;
-  color: #efeeea;
+  background: var(--grond);
+  color: var(--inkt);
   padding: clamp(120px, 14vw, 200px) var(--w-rand) clamp(64px, 8vw, 120px);
   overflow: clip;
 }
 .w-opening .w-label {
   margin: 0 0 clamp(20px, 2.5vw, 36px);
-  color: #a9a8a3;
+  color: var(--gedempt);
 }
 .w-reus {
   margin: 0;
@@ -44,7 +44,7 @@
   max-width: 46ch;
   font-size: clamp(18px, 1.6vw, 24px);
   line-height: 1.5;
-  color: #e3e1db;
+  color: var(--gedempt);
 }
 .w-groei {
   margin-top: clamp(48px, 6vw, 96px);
@@ -63,7 +63,7 @@
   font-size: 18px;
   letter-spacing: -0.02em;
   writing-mode: vertical-rl;
-  color: #a9a8a3;
+  color: var(--gedempt);
   transition: opacity 0.4s;
 }
 .w-zij.links { left: 20px; transform: rotate(180deg); }
