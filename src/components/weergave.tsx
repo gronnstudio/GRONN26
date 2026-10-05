@@ -174,7 +174,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                   <label
                     key={k}
                     lang={k}
-                    className="cursor-pointer rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
+                    className="relative flex cursor-pointer items-center justify-center rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
                   >
                     <input
                       type="radio"
