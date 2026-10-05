@@ -184,22 +184,28 @@
   .vp-held {
     padding-top: 96px;
   }
-  /* op de telefoon is er te weinig hoogte voor kop-over-foto: de kop scrolt
-     mee en de foto staat er direct onder, groot (groeit nog wel) */
+  /* hetzelfde effect als op desktop (eigenaar, 5 okt 2026): de kop blijft
+     plakken, de foto begint klein eronder en groeit terwijl hij onder de kop
+     doorschuift */
   .vp-held-titel {
-    position: relative;
-    top: auto;
-    mix-blend-mode: normal;
-    color: var(--inkt);
+    top: 72px;
+    font-size: 15vw;
   }
   .vp-held-foto {
-    margin: 24px 0 0;
+    margin: 32px 0 0;
+    transform: scale(var(--s, 0.7));
   }
   .vp-held-beeld {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 4;
+  }
+  .vp-held {
+    padding-bottom: 0;
   }
   .vp-verticaal {
     display: none;
+  }
+  .vp-onthul {
+    padding-top: 56px;
   }
   .vp-lbl-tel {
     display: block;
