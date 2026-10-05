@@ -94,6 +94,7 @@ export default function Merk() {
               ["#elementen", { nl: "Elementen", en: "Elements" }],
               ["#beweging", { nl: "Beweging", en: "Motion" }],
               ["#h-regels", { nl: "Regels", en: "Rules" }],
+              ["/downloads", { nl: "Downloads ↓", en: "Downloads ↓" }],
             ] as [string, L][]
           ).map(([href, naam], i) => (
             <a key={href} href={href} className="rounded-full border border-lijn px-4 py-2 text-[13px] font-medium no-underline transition-colors hover:border-inkt hover:bg-inkt hover:text-grond" data-zie style={{ "--i": i % 6 } as CSSProperties}>
