@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-082 Klantportaal (live) — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-082: live archief. Openbare inlogschermen plus de portaalvoorwaarden onder /portaal. Inhoud 1:1 van gronn.studio/nl/portaal + /clients/portaal + /clients/login (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
+
+.bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.oudnav{margin:8px 0 0;max-width:72ch}
+.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.kruimel{margin:clamp(40px,6vw,72px) 0 0}
+.kruimel span+span::before{content:" / ";color:var(--muted)}
+.kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
+.kaart.diep{background:#23483A;color:#EFEEEA;border-color:#23483A}
+.kaart.diep .muted{color:#C9D3C0}
+.oranje{display:inline-flex;align-items:center;gap:12px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 20px;font-size:14px;font-weight:600;text-decoration:none}
+.rand{display:inline-flex;align-items:center;gap:12px;border:1px solid currentColor;border-radius:999px;min-height:44px;padding:0 18px;font-size:14px;font-weight:600;text-decoration:none}
+.pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
+.prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
+.prijsrij:first-of-type{border-top:0}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
+.streep{list-style:none;margin:0;padding:0}
+.streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
+.streep li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+.streep.min li{color:var(--muted)}
+h2.kop2{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.02em;line-height:1.15;margin:0 0 16px}
+h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;margin:0 0 10px}
+.oudvoet{margin-top:clamp(96px,12vw,160px);background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:clamp(40px,6vw,72px) var(--goot) 24px}
+.oudvoet .muted{color:#B5B3AD}
+.oudvoet .cta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.18)}
+.oudvoet .cta h2{margin:0;font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.03em;max-width:16ch}
+.oudvoet .kol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 32px;padding-top:40px}
+.oudvoet .kol ul{list-style:none;margin:12px 0 0;padding:0;line-height:2}
+.oudvoet .onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:40px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18)}
+.lees{max-width:68ch;line-height:1.7;font-size:17px}
+.lees p{margin:0 0 14px}
+@media (max-width:767px){
+  .oudvoet .kol{grid-template-columns:1fr 1fr}
+  .lees{font-size:16px}
+}
+@media (max-width:479px){.oudvoet .kol{grid-template-columns:1fr}}
+
+
+.jkop h1{font-size:clamp(40px,6.5vw,88px);line-height:1;letter-spacing:-.04em;margin:16px 0 0;max-width:18ch}
+.jur{display:grid;grid-template-columns:3fr 9fr;column-gap:32px;margin-top:clamp(40px,6vw,72px);align-items:start}
+.inhoud{position:sticky;top:24px;max-height:calc(100vh - 140px);overflow:auto}
+.inhoud summary{list-style:none;cursor:default}
+.inhoud summary::-webkit-details-marker{display:none}
+.inhoud ol{list-style:none;margin:16px 0 0;padding:0;border-top:1px solid var(--lijn)}
+.inhoud li a{display:grid;grid-template-columns:28px minmax(0,1fr);padding:8px 0;font-size:14px;line-height:1.35;text-decoration:none;border-bottom:1px solid var(--lijn)}
+.inhoud li a span{font-family:'Geist Mono',monospace;font-size:11px;color:var(--muted);padding-top:2px}
+.lees .taal{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lees .concept{border:1px dashed var(--muted);border-radius:12px;padding:14px 16px;font-size:15px;color:var(--muted)}
+.lees .intro{font-size:clamp(18px,1.6vw,21px);line-height:1.55}
+.lees section{padding-top:44px;scroll-margin-top:24px}
+.lees h2{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.02em;line-height:1.2;margin:0 0 16px;display:grid;grid-template-columns:44px minmax(0,1fr)}
+.lees h2 span{font-family:'Geist Mono',monospace;font-size:12px;font-weight:400;color:var(--muted);padding-top:8px}
+.lees ul{margin:0 0 14px;padding:0;list-style:none}
+.lees ul li{padding:8px 0;border-top:1px solid var(--lijn)}
+.lees ul li:last-child{border-bottom:1px solid var(--lijn)}
+.lees .regel{font-family:'Geist Mono',monospace;font-size:13px;overflow-wrap:anywhere}
+.open{overflow-wrap:anywhere;font-family:'Geist Mono',monospace;font-size:13px;letter-spacing:.02em;border:1px dashed var(--muted);padding:1px 6px;color:var(--muted)}
+.formulier{border:1px solid var(--ink);border-radius:16px;padding:20px;margin:8px 0 14px}
+@media (max-width:1023px){
+  .jur{grid-template-columns:1fr;row-gap:24px}
+  .inhoud{position:static;max-height:none;border-top:1px solid var(--lijn);border-bottom:1px solid var(--lijn)}
+  .inhoud summary{cursor:pointer;padding:16px 0;display:flex;justify-content:space-between}
+  .inhoud summary::after{content:"+";font-family:'Geist Mono',monospace;color:var(--muted)}
+  .inhoud[open] summary::after{content:"−"}
+  .inhoud ol{margin:0 0 16px}
+}
+@media (max-width:767px){.lees h2{grid-template-columns:32px minmax(0,1fr)}}
+
+.inlog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:clamp(40px,6vw,72px);align-items:start}
+.scherm{border:1px solid var(--lijn);border-radius:16px;padding:clamp(20px,4vw,40px);background:#EFEEEA;text-align:center}
+.scherm .kaart{text-align:left;margin-top:12px}
+.veld{display:block;text-align:left;margin-top:14px}
+.veld span{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.veld i{display:block;height:44px;border:1px solid var(--lijn);border-radius:12px;background:#F7F6F2;margin-top:6px}
+.vol{display:flex;justify-content:center;align-items:center;min-height:44px;border-radius:999px;margin-top:14px;font-weight:600;font-size:14px}
+.vol.groen{background:#23483A;color:#EFEEEA}
+.vol.lijn{border:1px solid var(--lijn)}
+@media (max-width:900px){.inlog{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="lbl muted bron"><span>Live archief · WF-082</span><span>gronn.studio/nl/portaal + /clients/portaal + /clients/login</span><span>vastgelegd 5 oktober 2026</span></p>
+  <p class="lbl muted oudnav">Op de live site: bovenaan GRØNN-logo · Studio ▾ · Diensten ▾ · Projecten ▾ · [Start een project] · Zoeken ⌘K · Uren-schakelaar · taal (NL-vlag) · toegankelijkheid; op de telefoon de dock onderaan.</p>
+  <main>
+    <section class="jkop" style="padding-top:clamp(40px,6vw,72px)"><p class="lbl" style="margin:0;color:#A14312">Klantportaal · openbaar</p><h1 class="syne">Klantportaal</h1>
+      <p class="noot-live">Op de live site: de voetlink „Klantportaal” gaat naar /portaal, en daar staan de Voorwaarden klantenportaal (onderaan deze wireframe, volledig). Het eigenlijke inloggen zit op twee schermen zonder menu, dock of voet: /clients/portaal (keuze Klant of Studio) en /clients/login (inlogformulier voor klanten). Wat achter de inlog zit is niet openbaar en niet vastgelegd.</p>
+    </section>
+    <div class="inlog">
+      <div><p class="lbl muted">Scherm 1 · /clients/portaal</p>
+        <div class="scherm"><p class="syne" style="font-size:30px;margin:0">GRØNN</p><h2 class="syne" style="font-size:22px;margin:16px 0 8px">Inloggen</h2><p class="muted" style="margin:0 0 12px;font-size:14px">Dit paneel is niet openbaar en staat niet in zoekmachines.</p>
+          <div class="kaart"><p style="font-weight:600;margin:0">Klant</p><p class="muted" style="font-size:14px;margin:6px 0 0">Bekijk je tuin, je abonnement en je aanvragen.</p><span class="vol groen">Inloggen met e-mail</span></div>
+          <div class="kaart"><p style="font-weight:600;margin:0">Studio</p><p class="muted" style="font-size:14px;margin:6px 0 0">Alleen voor intern gebruik — het account van de studio zelf.</p><span class="vol lijn">Inloggen met Google</span></div>
+          <p class="muted" style="font-size:14px;margin:20px 0 0">Nog geen klantaccount? <u>Registreer je hier</u></p>
+          <p class="lbl muted" style="margin:20px 0 0">Terug naar gronn.studio</p></div>
+        <p class="noot-live">Op de live site: „Inloggen met e-mail” gaat naar scherm 2; „Inloggen met Google” is de inlog van de studio zelf (dashboard en editor).</p></div>
+      <div><p class="lbl muted">Scherm 2 · /clients/login</p>
+        <div class="scherm"><h2 class="syne" style="font-size:22px;margin:0 0 8px">Klantportaal</h2><p class="muted" style="margin:0;font-size:14px">Log in om je tuin, je afspraken en je abonnementen te bekijken.</p>
+          <label class="veld"><span>E-mailadres</span><i></i></label>
+          <label class="veld"><span>Wachtwoord</span><i></i></label>
+          <span class="vol groen">Inloggen</span>
+          <p class="muted" style="font-size:14px;margin:16px 0 0"><u>Wachtwoord vergeten?</u></p>
+          <p class="muted" style="font-size:14px;margin:8px 0 0">Nog geen account? <u>Registreer je hier</u></p>
+          <p class="lbl muted" style="margin:20px 0 0">Terug naar gronn.studio</p></div>
+        <p class="noot-live">Op de live site: inloggen via Supabase; „Wachtwoord vergeten?” en „Registreer je hier” openen eigen schermen (/clients/wachtwoord-vergeten, /clients/registreren).</p></div>
+    </div>
+    <section id="voorwaarden" class="jkop" style="margin-top:clamp(72px,9vw,128px);border-top:1px solid var(--ink);padding-top:24px"><p class="lbl muted" style="margin:0">gronn.studio/nl/portaal</p><p class="lbl" style="margin:16px 0 0;color:#A14312">Juridisch</p><h1 class="syne">Voorwaarden klantenportaal</h1></section>
+    <div class="jur"><details class="inhoud" open><summary class="lbl">Inhoud</summary><ol><li><a href="#a01"><span>01</span>Wat het portaal is</a></li><li><a href="#a02"><span>02</span>Je account</a></li><li><a href="#a03"><span>03</span>Wat je met de inhoud mag</a></li><li><a href="#a04"><span>04</span>Beschikbaarheid</a></li><li><a href="#a05"><span>05</span>Wat niet mag</a></li><li><a href="#a06"><span>06</span>Einde van je toegang</a></li><li><a href="#a07"><span>07</span>Persoonsgegevens</a></li></ol></details><div class="lees"><p class="taal">DIT DOCUMENT IS IN HET NEDERLANDS; DE NEDERLANDSE TEKST IS BINDEND.</p><p class="concept">Conceptversie — dit document is een werkdocument en wordt definitief gemaakt na toetsing door een Nederlandse jurist. Tot die tijd gelden de wettelijke regels onverkort en kan deze tekst je geen recht ontnemen.</p><p class="intro">Deze voorwaarden gelden voor het gebruik van het klantenportaal van GRØNN Studio. Ze staan naast de algemene voorwaarden die op je opdracht van toepassing zijn; bij tegenstrijdigheid gaan die laatste voor.</p><section id="a01"><h2 class="syne"><span>01</span>Wat het portaal is</h2><p>Het klantenportaal is een besloten omgeving waarin je je eigen projectgegevens kunt bekijken: het traject, de planning, wat wij van je nodig hebben, de termijnen en de documenten die bij je opdracht horen.</p><p>Het portaal is een gemak, geen zelfstandige dienst. Wat er staat, komt uit je dossier; wat rechtens geldt, staat in je offerte en in de algemene voorwaarden.</p><p>Toegang is op uitnodiging. Je kunt je niet zelf aanmelden voor een project dat niet van jou is.</p></section><section id="a02"><h2 class="syne"><span>02</span>Je account</h2><p>Wij maken een account aan op het e-mailadres dat je ons hebt gegeven. Je kiest zelf een wachtwoord; wij slaan dat versleuteld op en kunnen het niet lezen.</p><p>Het account is persoonlijk. Deel je inloggegevens niet. Vermoed je dat iemand anders erbij kan, laat het ons dan weten — wij zetten het account dan stil en helpen je met een nieuw wachtwoord.</p><p>Je ziet uitsluitend het dossier dat bij jou hoort. Dat is niet alleen een afspraak: de database controleert bij elke opvraging of je de eigenaar van het dossier bent, en weigert de rest.</p><p>Je bent zelf verantwoordelijk voor wat er onder jouw account gebeurt, tenzij je ons tijdig hebt gemeld dat het misbruikt wordt.</p></section><section id="a03"><h2 class="syne"><span>03</span>Wat je met de inhoud mag</h2><p>Documenten die in je portaal staan — offertes, facturen, planningen — mag je downloaden, bewaren, printen en delen met wie je wilt: je partner, je aannemer, je boekhouder. Het zijn jouw documenten.</p><p>Ontwerpen, tekeningen en beplantingsplannen blijven ons intellectueel eigendom. Je mag ze gebruiken voor je eigen project; ze door een ander laten uitvoeren of publiceren mag alleen met onze toestemming. Dit staat ook in de algemene voorwaarden en is hier herhaald omdat het portaal de plek is waar je ze tegenkomt.</p></section><section id="a04"><h2 class="syne"><span>04</span>Beschikbaarheid</h2><p>Wij doen ons best het portaal beschikbaar te houden, maar kunnen geen ononderbroken beschikbaarheid garanderen. Onderhoud, storingen bij onze leveranciers of een internetprobleem kunnen het portaal tijdelijk onbereikbaar maken.</p><p>Is het portaal onbereikbaar en heb je iets nodig, vraag het dan gewoon: wij sturen elk document dat in je portaal staat ook per e-mail. Het portaal is nooit de enige weg naar je eigen stukken.</p><p>Wij kunnen het portaal wijzigen of stoppen. Stoppen wij ermee, dan laten wij dat ruim vooraf weten en krijg je je documenten op een andere manier.</p></section><section id="a05"><h2 class="syne"><span>05</span>Wat niet mag</h2><ul><li>proberen toegang te krijgen tot gegevens die niet van jou zijn;</li><li>het portaal geautomatiseerd uitlezen of belasten op een manier die de dienst hindert;</li><li>beveiligingsmaatregelen omzeilen of testen zonder onze toestemming.</li></ul><p>Vind je iets dat niet klopt — een dossier dat niet van jou is, een pagina die te veel toont — meld het dan via hello@gronn.studio. Wij zijn je dankbaar en rekenen het je niet aan.</p></section><section id="a06"><h2 class="syne"><span>06</span>Einde van je toegang</h2><p>Je kunt op elk moment vragen om je account te sluiten.</p><p>Wij sluiten een account <span class="open">[[termijn sluiten account na afronding]]</span> na afronding van je opdracht, tenzij je klant blijft via een onderhoudsabonnement. Voordat wij dat doen, laten wij het je weten zodat je kunt bewaren wat je wilt bewaren.</p><p>Bij misbruik kunnen wij een account direct stilzetten. Wij melden dat en leggen uit waarom.</p><p>Het sluiten van je account is niet hetzelfde als het wissen van je gegevens: wat wij fiscaal moeten bewaren, blijft bestaan. Wat wij daarover bewaren en hoe lang, staat in de privacyverklaring.</p></section><section id="a07"><h2 class="syne"><span>07</span>Persoonsgegevens</h2><p>Welke gegevens wij in het portaal verwerken, waarom, met wie wij ze delen en hoe lang wij ze bewaren, staat in de privacyverklaring.</p><p>Het portaal gebruikt één cookie, om je ingelogd te houden. Die is noodzakelijk voor de dienst en vereist geen toestemming.</p></section><p class="lbl muted" style="margin-top:48px">LAATST GEWIJZIGD 2026-09-07 · PRINTBAAR VIA JE BROWSER</p></div></div>
+
+  </main>
+  <footer class="oudvoet" aria-label="Voet van de live site">
+    <div class="cta">
+      <h2 class="syne">Zullen we eens naar jouw tuin kijken?</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="oranje" href="/wireframes/kennismaken">Plan een kennismaking <span aria-hidden="true">→</span></a><span class="rand">WhatsApp</span><span class="rand">Instagram</span></div>
+    </div>
+    <div class="kol">
+      <div><p class="syne" style="font-size:26px;margin:0">GRØNN</p><p class="lbl" style="margin:8px 0 0">Rooted in nature.</p><p class="muted" style="line-height:1.6">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p></div>
+      <div><p class="lbl muted" style="margin:0">Site</p><ul><li>Diensten</li><li>Projecten</li><li>Over mij</li><li>Veelgestelde vragen</li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></div>
+      <div><p class="lbl muted" style="margin:0">Contact</p><ul><li>Contactformulier</li><li>Instagram</li><li>Adres en gegevens</li><li><span class="rand" style="min-height:36px">Dashboard →</span></li></ul></div>
+      <div><p class="lbl muted" style="margin:0">Juridisch</p><ul><li>Privacy</li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></div>
+    </div>
+    <div class="onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+    <p class="lbl muted" style="margin:16px 0 0">Op de live site: dit is de voet onder elke pagina; KVK en BTW zijn kopieerknoppen.</p>
+  </footer>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

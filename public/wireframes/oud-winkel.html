@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-075 Winkel (live, concept) — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-075: live archief. Conceptwinkel met plaatshouders in vier groepen. Inhoud 1:1 van gronn.studio/nl/winkel (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
+
+.bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.oudnav{margin:8px 0 0;max-width:72ch}
+.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.kruimel{margin:clamp(40px,6vw,72px) 0 0}
+.kruimel span+span::before{content:" / ";color:var(--muted)}
+.kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
+.kaart.diep{background:#23483A;color:#EFEEEA;border-color:#23483A}
+.kaart.diep .muted{color:#C9D3C0}
+.oranje{display:inline-flex;align-items:center;gap:12px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 20px;font-size:14px;font-weight:600;text-decoration:none}
+.rand{display:inline-flex;align-items:center;gap:12px;border:1px solid currentColor;border-radius:999px;min-height:44px;padding:0 18px;font-size:14px;font-weight:600;text-decoration:none}
+.pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
+.prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
+.prijsrij:first-of-type{border-top:0}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
+.streep{list-style:none;margin:0;padding:0}
+.streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
+.streep li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+.streep.min li{color:var(--muted)}
+h2.kop2{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.02em;line-height:1.15;margin:0 0 16px}
+h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;margin:0 0 10px}
+.oudvoet{margin-top:clamp(96px,12vw,160px);background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:clamp(40px,6vw,72px) var(--goot) 24px}
+.oudvoet .muted{color:#B5B3AD}
+.oudvoet .cta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.18)}
+.oudvoet .cta h2{margin:0;font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.03em;max-width:16ch}
+.oudvoet .kol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 32px;padding-top:40px}
+.oudvoet .kol ul{list-style:none;margin:12px 0 0;padding:0;line-height:2}
+.oudvoet .onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:40px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18)}
+.lees{max-width:68ch;line-height:1.7;font-size:17px}
+.lees p{margin:0 0 14px}
+@media (max-width:767px){
+  .oudvoet .kol{grid-template-columns:1fr 1fr}
+  .lees{font-size:16px}
+}
+@media (max-width:479px){.oudvoet .kol{grid-template-columns:1fr}}
+
+
+.banner{background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:10px var(--goot);font-family:'Geist Mono',monospace;font-size:12px}
+.hoe{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:32px;list-style:none;padding:0}
+.hoe li{border:1px solid var(--lijn);border-radius:16px;padding:18px;font-family:Syne,sans-serif;font-weight:600;font-size:20px}
+.hoe li span{font-family:'Geist Mono',monospace;font-weight:400;font-size:11px;color:var(--muted);margin-right:8px}
+.wgroep{margin-top:clamp(72px,9vw,120px)}
+.wgroep header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;align-items:baseline}
+.producten{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px;align-items:start}
+.product{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;overflow:hidden}
+.product .ph{aspect-ratio:16/9;position:relative}
+.product .plh{position:absolute;top:10px;left:10px;background:#202020;color:#EFEEEA;border-radius:999px;padding:3px 9px;font-size:10px}
+.product .in{padding:18px}
+.product ul{list-style:none;padding:0;margin:8px 0 0;font-family:'Geist Mono',monospace;font-size:12px;line-height:1.8}
+.product .boek{display:flex;justify-content:center;border:1px solid var(--lijn);border-radius:999px;padding:10px;margin-top:14px;font-size:14px;font-weight:600}
+@media (max-width:1000px){.producten{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.producten,.hoe{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="lbl muted bron"><span>Live archief · WF-075</span><span>gronn.studio/nl/winkel</span><span>vastgelegd 5 oktober 2026</span></p>
+  <p class="lbl muted oudnav">Op de live site: bovenaan GRØNN-logo · Studio ▾ · Diensten ▾ · Projecten ▾ · [Start een project] · Zoeken ⌘K · Uren-schakelaar · taal (NL-vlag) · toegankelijkheid; op de telefoon de dock onderaan.</p>
+  <main>
+    <p class="banner">Concept — nog niet te koop. Prijzen, producten en foto's zijn plaatshouders.</p>
+    <section style="padding-top:clamp(40px,6vw,72px)">
+      <p class="lbl" style="margin:0;color:#A14312">Winkel · Concept</p>
+      <h1 class="syne" style="font-size:clamp(48px,7.5vw,104px);line-height:1;letter-spacing:-.04em;margin:16px 0 0">Winkel</h1>
+      <p class="lees" style="margin:24px 0 0;color:var(--muted);font-size:clamp(17px,1.6vw,21px)">Een schets van hoe de winkel eruit kan zien: vaste diensten, digitale en fysieke producten, en cadeaubonnen.</p>
+      <p class="lbl muted" style="margin:32px 0 0">Hoe het werkt</p>
+      <ol class="hoe"><li><span>01</span>Kies</li><li><span>02</span>Betaal via iDEAL</li><li><span>03</span>Ontvang of plan</li></ol>
+      <p class="noot-live">Op de live site: de knoppen „Direct boeken (concept)” en „Bestellen (concept)” doen niets; er is niets te koop. De foto's zijn plaatshouderbeelden uit /ph, geen werk van GRØNN.</p>
+    </section>
+    <section class="wgroep"><header><div><p class="lbl muted" style="margin:0">01 / Vaste diensten</p><h2 class="syne kop2" style="margin:8px 0 0">Vaste diensten</h2></div><p class="muted" style="margin:0">Na betaling kies je een datum.</p></header><div class="producten"><article class="product"><div class="ph">Plaatshouderfoto /ph/10.jpg<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Vijverdoorlichting</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Een betaald diagnosebezoek voor een vijver die groen is, lekt, stinkt of waar niets in leeft. Gemeten, niet geraden, en op papier.</p><p style="font-weight:600;margin:16px 0 0">Vaste prijs, incl. btw</p><ul><li>Vijverdoorlichting · € 195</li><li>Tuinscan · € 175</li><li>Beide · € 295</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Direct boeken (concept)</span></div></article><article class="product"><div class="ph">Plaatshouderfoto /ph/18.jpg<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Bladnet plaatsen</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Een net over de vijver vóór de bladval, en er in december weer af. De enige vijverklus met een absolute deadline.</p><p style="font-weight:600;margin:16px 0 0">Vaste prijs, incl. btw</p><ul><li>Tot 15 m² · € 125</li><li>15 tot 35 m² · € 175</li><li>Meer dan 35 m² · € 250</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Direct boeken (concept)</span></div></article><article class="product"><div class="ph">Plaatshouderfoto /ph/28.jpg<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Najaarsbeurt vijver</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Slib afgezogen, afgestorven groei teruggeknipt, filter gereinigd, water gemeten vóór en na. De volledige reset voor de winter.</p><p style="font-weight:600;margin:16px 0 0">Vaste prijs, incl. btw</p><ul><li>Klein, licht onderhouden · € 250</li><li>Gemiddeld · € 350</li><li>Verwaarloosd · € 450 – € 650</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Direct boeken (concept)</span></div></article><article class="product"><div class="ph">Plaatshouderfoto /ph/12.jpg<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Winterklaar maken</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Techniek eruit, ijsvrijhouder erin, de vijver zo ingericht dat hij de kou doorkomt zonder pomp die ertegenin werkt.</p><p style="font-weight:600;margin:16px 0 0">Vaste prijs, incl. btw</p><ul><li>Basis · € 95</li><li>Met bladnet ophalen · € 135</li><li>Met ijsvrijhouder · € 150</li><li>Alles · € 185</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Direct boeken (concept)</span></div></article><article class="product"><div class="ph">Plaatshouderfoto /ph/33.jpg<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Onderhoudsabonnement</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Een vijver is geen apparaat dat je installeert en vergeet. Hij verandert elk jaar, en een vijver waar lang niemand naar omkijkt, raakt uit balans.</p><p style="font-weight:600;margin:16px 0 0">Per maand, incl. btw</p><ul><li>Basis · € 45</li><li>Standaard · € 85</li><li>Compleet · € 165</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Direct boeken (concept)</span></div></article></div></section>
+    <section class="wgroep"><header><div><p class="lbl muted" style="margin:0">02 / Digitale producten</p><h2 class="syne kop2" style="margin:8px 0 0">Digitale producten</h2></div><p class="muted" style="margin:0">Download na betaling.</p></header><div class="producten"><article class="product"><div class="ph">Icoon: document<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Plantplan-sjabloon (plaatshouder)</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Plaatshoudertekst: hier komt een korte omschrijving van het product.</p><p style="font-weight:600;margin:16px 0 0">Prijs volgt</p><ul><li>Download na betaling</li><li>Prijs incl. btw: volgt</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Bestellen (concept)</span></div></article><article class="product"><div class="ph">Icoon: kiemplant<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Zaaikalender (plaatshouder)</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Plaatshoudertekst: hier komt een korte omschrijving van het product.</p><p style="font-weight:600;margin:16px 0 0">Prijs volgt</p><ul><li>Download na betaling</li><li>Prijs incl. btw: volgt</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Bestellen (concept)</span></div></article></div></section>
+    <section class="wgroep"><header><div><p class="lbl muted" style="margin:0">03 / Fysieke producten</p><h2 class="syne kop2" style="margin:8px 0 0">Fysieke producten</h2></div><p class="muted" style="margin:0">Alleen afhalen in Stein of meeleveren bij een klus.</p></header><div class="producten"><article class="product"><div class="ph">Plaatshouderfoto /ph/33.jpg<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Plant (plaatshouder)</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Plaatshoudertekst: hier komt een korte omschrijving van het product.</p><p style="font-weight:600;margin:16px 0 0">Prijs volgt</p><ul><li>Alleen afhalen in Stein of meeleveren bij een klus</li><li>Prijs incl. btw: volgt</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Bestellen (concept)</span></div></article><article class="product"><div class="ph">Icoon: blad<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Zaden (plaatshouder)</h3><p class="muted" style="font-size:14px;line-height:1.55;margin:0">Plaatshoudertekst: hier komt een korte omschrijving van het product.</p><p style="font-weight:600;margin:16px 0 0">Prijs volgt</p><ul><li>Alleen afhalen in Stein of meeleveren bij een klus</li><li>Prijs incl. btw: volgt</li><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Bestellen (concept)</span></div></article></div></section>
+    <section class="wgroep"><header><div><p class="lbl muted" style="margin:0">04 / Cadeaubonnen</p><h2 class="syne kop2" style="margin:8px 0 0">Cadeaubonnen</h2></div><p class="muted" style="margin:0">Een bon als pdf, met een eigen code.</p></header><div class="producten"><article class="product"><div class="ph">Icoon: bon<span class="plh lbl">Plaatshouder</span></div><div class="in"><h3 class="syne kop3">Cadeaubon (plaatshouder)</h3><div style="font-size:14px"><div class="prijsrij" style="padding:8px 0"><span>Bon 1</span><span class="lbl muted">Bedrag volgt</span></div><div class="prijsrij" style="padding:8px 0;border-top:1px solid var(--lijn)"><span>Bon 2</span><span class="lbl muted">Bedrag volgt</span></div></div><p style="font-weight:600;margin:16px 0 0">Bedrag volgt</p><ul><li>Levertijd: volgt</li><li>Herroeping: voorwaarden volgen</li></ul><span class="boek">Bestellen (concept)</span></div></article></div></section>
+    <p class="lbl muted" style="margin-top:64px">Nog niets te koop</p>
+
+  </main>
+  <footer class="oudvoet" aria-label="Voet van de live site">
+    <div class="cta">
+      <h2 class="syne">Zullen we eens naar jouw tuin kijken?</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="oranje" href="/wireframes/kennismaken">Plan een kennismaking <span aria-hidden="true">→</span></a><span class="rand">WhatsApp</span><span class="rand">Instagram</span></div>
+    </div>
+    <div class="kol">
+      <div><p class="syne" style="font-size:26px;margin:0">GRØNN</p><p class="lbl" style="margin:8px 0 0">Rooted in nature.</p><p class="muted" style="line-height:1.6">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p></div>
+      <div><p class="lbl muted" style="margin:0">Site</p><ul><li>Diensten</li><li>Projecten</li><li>Over mij</li><li>Veelgestelde vragen</li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></div>
+      <div><p class="lbl muted" style="margin:0">Contact</p><ul><li>Contactformulier</li><li>Instagram</li><li>Adres en gegevens</li><li><span class="rand" style="min-height:36px">Dashboard →</span></li></ul></div>
+      <div><p class="lbl muted" style="margin:0">Juridisch</p><ul><li>Privacy</li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></div>
+    </div>
+    <div class="onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+    <p class="lbl muted" style="margin:16px 0 0">Op de live site: dit is de voet onder elke pagina; KVK en BTW zijn kopieerknoppen.</p>
+  </footer>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

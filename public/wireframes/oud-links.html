@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-080 Linkpagina (live) — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-080: live archief. Bento-linkpagina zonder menu, ook links.gronn.studio. Inhoud 1:1 van gronn.studio/links (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
+
+.bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.oudnav{margin:8px 0 0;max-width:72ch}
+.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.kruimel{margin:clamp(40px,6vw,72px) 0 0}
+.kruimel span+span::before{content:" / ";color:var(--muted)}
+.kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
+.kaart.diep{background:#23483A;color:#EFEEEA;border-color:#23483A}
+.kaart.diep .muted{color:#C9D3C0}
+.oranje{display:inline-flex;align-items:center;gap:12px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 20px;font-size:14px;font-weight:600;text-decoration:none}
+.rand{display:inline-flex;align-items:center;gap:12px;border:1px solid currentColor;border-radius:999px;min-height:44px;padding:0 18px;font-size:14px;font-weight:600;text-decoration:none}
+.pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
+.prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
+.prijsrij:first-of-type{border-top:0}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
+.streep{list-style:none;margin:0;padding:0}
+.streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
+.streep li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+.streep.min li{color:var(--muted)}
+h2.kop2{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.02em;line-height:1.15;margin:0 0 16px}
+h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;margin:0 0 10px}
+.oudvoet{margin-top:clamp(96px,12vw,160px);background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:clamp(40px,6vw,72px) var(--goot) 24px}
+.oudvoet .muted{color:#B5B3AD}
+.oudvoet .cta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.18)}
+.oudvoet .cta h2{margin:0;font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.03em;max-width:16ch}
+.oudvoet .kol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 32px;padding-top:40px}
+.oudvoet .kol ul{list-style:none;margin:12px 0 0;padding:0;line-height:2}
+.oudvoet .onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:40px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18)}
+.lees{max-width:68ch;line-height:1.7;font-size:17px}
+.lees p{margin:0 0 14px}
+@media (max-width:767px){
+  .oudvoet .kol{grid-template-columns:1fr 1fr}
+  .lees{font-size:16px}
+}
+@media (max-width:479px){.oudvoet .kol{grid-template-columns:1fr}}
+
+
+.bento{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;max-width:912px;margin:clamp(24px,5vw,56px) auto 0}
+.tegel{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:20px;min-width:0;position:relative;text-decoration:none;display:flex;flex-direction:column;justify-content:flex-end;min-height:160px}
+.tegel .hoekpijl{position:absolute;top:16px;right:16px;font-size:13px}
+.tegel h2{margin:4px 0;font-size:clamp(20px,2.2vw,28px);letter-spacing:-.02em;line-height:1.15}
+.tegel.oranje-t{background:#DB6923;border-color:#DB6923;color:#202020}
+.tegel.groen{background:#23483A;border-color:#23483A;color:#EFEEEA}
+.tegel.foto{padding:0;overflow:hidden;justify-content:flex-start}
+.tegel.foto img{width:100%;height:220px;object-fit:cover;display:block}
+.tegel.foto .in{padding:16px 20px}
+.t-nick{grid-row:span 2;justify-content:space-between}
+.t-contact{grid-column:span 2}
+.t-diensten{grid-column:1 / -1;min-height:0}
+.diensten3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.diensten3 div{border-left:1px solid var(--lijn);padding-left:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.diensten3 div:first-child{border-left:0;padding-left:0}
+.portret{width:72px;height:72px;border-radius:50%;object-fit:cover}
+@media (max-width:767px){
+  .bento{grid-template-columns:1fr 1fr}
+  .t-nick,.t-contact,.t-diensten,.t-vijver{grid-column:1 / -1;grid-row:auto}
+  .diensten3{grid-template-columns:1fr}
+  .diensten3 div{border-left:0;padding-left:0;border-top:1px solid var(--lijn);padding-top:10px}
+}
+
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="lbl muted bron"><span>Live archief · WF-080</span><span>gronn.studio/links</span><span>vastgelegd 5 oktober 2026</span></p>
+  
+  <main>
+    <p class="lbl muted" style="margin:24px 0 0">Verborgen kop (voor schermlezers): GRØNN Studio · Nick Peters · links</p>
+    <p class="noot-live">Op de live site: deze pagina staat BUITEN het menu: geen kop, dock of voet van de site, alleen rechtsboven een taal- en een Uren-knop. Ook bereikbaar als links.gronn.studio. Niet in zoekmachines, niet in de sitemap. De tegels linken absoluut naar gronn.studio.</p>
+    <div class="bento">
+      <div class="tegel t-nick"><p class="syne" style="font-size:28px;margin:0;text-align:center">GRØNN</p>
+        <div style="display:flex;gap:14px;align-items:center;margin:24px 0"><img class="portret" src="/nick/portret-espresso.jpg" alt="Nick Peters met een espressokopje op een terras in een Maastrichtse straat, kijkend in de camera."><div><h1 class="syne" style="font-size:20px;margin:0">Nick Peters</h1><p class="lbl muted" style="margin:4px 0 0">Stein, Limburg</p></div></div>
+        <p class="muted" style="line-height:1.6;margin:0">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p></div>
+      <a class="tegel oranje-t t-contact" href="/wireframes/kennismaken"><span class="hoekpijl">↗</span><p class="lbl" style="margin:0">Contact</p><h2 class="syne">Plan een kennismaking</h2><p class="lbl" style="margin:0">Vrijblijvend</p></a>
+      <a class="tegel" href="#"><span class="hoekpijl">↗</span><p class="lbl muted" style="margin:0 0 auto">Icoon WhatsApp</p><h2 class="syne">WhatsApp</h2><p class="lbl muted" style="margin:0">Stuur een bericht</p></a>
+      <a class="tegel" href="mailto:hello@gronn.studio"><span class="hoekpijl">↗</span><p class="lbl muted" style="margin:0 0 auto">Icoon e-mail</p><h2 class="syne">E-mail</h2><p class="lbl muted" style="margin:0;overflow-wrap:anywhere">hello@gronn.studio</p></a>
+      <a class="tegel foto t-vijver" href="/wireframes/project-vijverrenovatie"><img src="/projecten/vijverrenovatie/F10.jpg" alt="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter."><div class="in"><p class="lbl" style="margin:0;color:#A14312">Project · In afronding</p><h2 class="syne" style="font-size:22px">Twee vijvers. Eén samenhangend watersysteem.</h2></div></a>
+      <a class="tegel foto" href="/wireframes/project-terras"><img src="/projecten/terras-geulle/T01.jpg" alt="Het nieuwe terras van lichte betontegels onder de overkapping, met de opsluitband langs de rand van het zandbed."><div class="in"><p class="lbl" style="margin:0;color:#A14312">Project · Afgerond</p><h2 style="font-size:17px;font-weight:600;margin:4px 0">Een terras van 24 m², gelegd in twee dagen.</h2></div></a>
+      <div style="display:grid;gap:12px">
+        <a class="tegel" href="#"><p class="lbl muted" style="margin:0 0 auto">Icoon visitekaartje</p><h2 class="syne">Visitekaartje</h2><p class="lbl muted" style="margin:0">Zet in je contacten</p></a>
+        <a class="tegel groen" href="/wireframes/voorpagina"><span class="hoekpijl">↗</span><p class="lbl" style="margin:0 0 auto">Website</p><h2 class="syne">gronn.studio</h2></a>
+      </div>
+      <div class="tegel t-diensten"><p class="lbl" style="margin:0;color:#A14312">Diensten</p>
+        <div class="diensten3">
+          <div><span><span class="lbl muted">Ontwerp</span><br><b>Een plan dat klopt</b></span><span class="lbl">Op maat</span></div>
+          <div><span><span class="lbl muted">Aanleg</span><br><b>Handen in de grond</b></span><span class="lbl">Op maat</span></div>
+          <div><span><span class="lbl muted">Onderhoud</span><br><b>Het hele jaar door</b></span><span class="lbl">Vanaf € 95</span></div>
+        </div></div>
+    </div>
+    <p class="lbl muted" style="text-align:center;margin-top:32px">GRØNN Studio · Stein, Limburg</p>
+    <p class="noot-live" style="margin-inline:auto">Op de live site: WhatsApp opent een chat met Nick, Visitekaartje downloadt contact.vcf, de projecttegels gaan naar de projectpagina's, Website naar de voorpagina. Elke tegel met ↗ opent een link.</p>
+
+  </main>
+
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>

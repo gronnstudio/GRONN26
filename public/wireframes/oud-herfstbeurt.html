@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>WF-073 Vijver winterklaar (live) — GRØNN wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600&family=Montserrat:wght@400;500;600&family=Geist+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/wireframes/wf.css">
+<style>
+/* WF-073: live archief. De najaarspagina: drie klussen met vaste prijzen, stappen, abonnement en tips. Inhoud 1:1 van gronn.studio/nl/herfstbeurt (NL), vastgelegd 5 oktober 2026; vorm in de wireframe-taal. */
+
+.bron{margin:0;padding-top:8px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.oudnav{margin:8px 0 0;max-width:72ch}
+.noot-live{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.02em;line-height:1.55;color:var(--muted);border-left:2px solid var(--muted);padding:2px 0 2px 12px;margin:16px 0;max-width:68ch}
+.kruimel{margin:clamp(40px,6vw,72px) 0 0}
+.kruimel span+span::before{content:" / ";color:var(--muted)}
+.kaart{background:#F7F6F2;border:1px solid var(--lijn);border-radius:16px;padding:24px;min-width:0}
+.kaart.diep{background:#23483A;color:#EFEEEA;border-color:#23483A}
+.kaart.diep .muted{color:#C9D3C0}
+.oranje{display:inline-flex;align-items:center;gap:12px;background:#DB6923;color:#202020;border-radius:999px;min-height:48px;padding:0 20px;font-size:14px;font-weight:600;text-decoration:none}
+.rand{display:inline-flex;align-items:center;gap:12px;border:1px solid currentColor;border-radius:999px;min-height:44px;padding:0 18px;font-size:14px;font-weight:600;text-decoration:none}
+.pijl{font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px}
+.prijsrij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--lijn);align-items:baseline}
+.prijsrij:first-of-type{border-top:0}
+.prijsrij .bedrag{font-family:Syne,sans-serif;font-weight:600;font-size:20px;white-space:nowrap}
+.prijsrij small{grid-column:1;color:var(--muted);font-size:13px;line-height:1.5}
+.streep{list-style:none;margin:0;padding:0}
+.streep li{padding:7px 0 7px 22px;position:relative;line-height:1.5}
+.streep li::before{content:"—";position:absolute;left:0;color:var(--muted)}
+.streep.min li{color:var(--muted)}
+h2.kop2{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.02em;line-height:1.15;margin:0 0 16px}
+h3.kop3{font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em;line-height:1.2;margin:0 0 10px}
+.oudvoet{margin-top:clamp(96px,12vw,160px);background:#202020;color:#EFEEEA;margin-inline:calc(var(--goot) * -1);padding:clamp(40px,6vw,72px) var(--goot) 24px}
+.oudvoet .muted{color:#B5B3AD}
+.oudvoet .cta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:center;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.18)}
+.oudvoet .cta h2{margin:0;font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.03em;max-width:16ch}
+.oudvoet .kol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 32px;padding-top:40px}
+.oudvoet .kol ul{list-style:none;margin:12px 0 0;padding:0;line-height:2}
+.oudvoet .onder{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:40px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18)}
+.lees{max-width:68ch;line-height:1.7;font-size:17px}
+.lees p{margin:0 0 14px}
+@media (max-width:767px){
+  .oudvoet .kol{grid-template-columns:1fr 1fr}
+  .lees{font-size:16px}
+}
+@media (max-width:479px){.oudvoet .kol{grid-template-columns:1fr}}
+
+
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:48px}
+.duo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px;display:block;background:var(--ph)}
+.drie{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:32px;align-items:start}
+.vlak{background:#F7F6F2;margin-inline:calc(var(--goot) * -1);padding:clamp(56px,7vw,96px) var(--goot);margin-top:clamp(72px,9vw,128px)}
+.stapjes{list-style:none;margin:24px 0 32px;padding:0}
+.stapjes li{display:grid;grid-template-columns:44px minmax(0,1fr);padding:14px 0;border-top:1px solid var(--lijn);font-family:Syne,sans-serif;font-weight:600;font-size:clamp(19px,2vw,26px);line-height:1.25}
+.stapjes li span{font-family:'Geist Mono',monospace;font-weight:400;font-size:12px;color:var(--muted);padding-top:6px}
+.abo{display:grid;grid-template-columns:6fr 5fr;gap:32px;align-items:start;margin-top:24px}
+.tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:32px}
+@media (max-width:900px){.drie,.tips{grid-template-columns:1fr}.abo{grid-template-columns:1fr}}
+@media (max-width:600px){.duo{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<a class="terug" href="/wireframes/">← Alle wireframes</a>
+<div class="wrap">
+  <header class="kop">
+    <a class="logo syne" href="/wireframes/voorpagina">GRØNN</a>
+    <span style="display:flex;gap:10px;align-items:center"><a class="knop" href="/wireframes/kennismaken">KENNISMAKEN</a><button data-weergave-knop>Weergave</button></span>
+  </header>
+  <p class="lbl muted bron"><span>Live archief · WF-073</span><span>gronn.studio/nl/herfstbeurt</span><span>vastgelegd 5 oktober 2026</span></p>
+  <p class="lbl muted oudnav">Op de live site: bovenaan GRØNN-logo · Studio ▾ · Diensten ▾ · Projecten ▾ · [Start een project] · Zoeken ⌘K · Uren-schakelaar · taal (NL-vlag) · toegankelijkheid; op de telefoon de dock onderaan.</p>
+  <main>
+<p class="lbl kruimel"><span>Home</span><span>Diensten</span><span>Vijver winterklaar</span></p>
+    <section style="padding-top:24px">
+      <p class="lbl" style="margin:0;color:#A14312">Najaar · Vaste prijzen incl. btw</p>
+      <h1 class="syne" style="font-size:clamp(40px,6.5vw,92px);line-height:1;letter-spacing:-.04em;margin:16px 0 0;max-width:16ch">Je vijver winterklaar, vóór de vorst</h1>
+      <p class="lees" style="margin:24px 0 0;color:var(--muted);font-size:clamp(17px,1.6vw,21px)">Blad dat nu in je vijver valt, is in het voorjaar slib en algen. Ik zet je vijver deze herfst winterklaar, met een prijs die je vooraf kent. Stuur een foto via WhatsApp en je hoort wat het kost en wanneer ik kan.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;margin-top:28px"><a class="oranje" href="/wireframes/kennismaken">Stuur een foto via WhatsApp <span aria-hidden="true">→</span></a><a class="pijl" href="#prijzen">Bekijk de prijzen →</a></div>
+      <p class="noot-live">Op de live site: „Stuur een foto via WhatsApp” opent WhatsApp met Nick (+316 181 180 14); „Bekijk de prijzen” springt naar de prijzen hieronder.</p>
+      <div class="duo">
+        <figure style="margin:0"><img src="/projecten/vijverrenovatie/F02-1.jpg" alt="De bestaande vijver vóór de renovatie, afgedekt met een net, met een rand van natuursteen langs het klinkerpad." loading="lazy"><figcaption class="lbl muted" style="margin-top:8px">Voor: de vijver onder een net</figcaption></figure>
+        <figure style="margin:0"><img src="/projecten/vijverrenovatie/F10.jpg" alt="De waterval stroomt over natuursteen de vijver in, met een rood bloeiende canna ervoor en de leidingen met een kogelkraan erachter." loading="lazy"><figcaption class="lbl muted" style="margin-top:8px">Na: dezelfde tuin, september</figcaption></figure>
+      </div>
+    </section>
+    <section class="sectie" id="prijzen" style="padding-top:clamp(72px,9vw,128px)">
+      <p class="lbl muted" style="margin:0 0 8px">Drie klussen, één seizoen</p>
+      <h2 class="syne kop2">Wat het kost</h2>
+      <p class="muted" style="margin:0;line-height:1.6">Alles incl. btw. Het meeste valt samen op één dag, dan is het ook één keer voorrijden.</p>
+      <div class="drie">
+        <div><h3 class="syne kop3">Bladnet</h3><p class="muted" style="line-height:1.55">Erop vóórdat het blad valt, in december haal ik het er weer af.</p><div class="kaart"><p class="lbl" style="margin:0 0 8px;color:#A14312">Vaste prijs · incl. btw</p><div class="prijsrij"><span>Tot 15 m²</span><span class="bedrag">€ 125</span></div><div class="prijsrij"><span>15 tot 35 m²</span><span class="bedrag">€ 175</span></div><div class="prijsrij"><span>Meer dan 35 m²</span><span class="bedrag">€ 250</span></div><p class="muted" style="font-size:14px;line-height:1.6;margin:14px 0 0">Inclusief het ophalen in december — meteen ingepland op de dag dat het net erop gaat, niet als “ik bel nog”. Wil je het elk jaar? Dan staat het vast in de agenda: elk najaar erop, in december eraf, voor dezelfde prijs. Opzeggen kan elk jaar tot 1 september.</p></div><p style="margin:16px 0 0"><a class="pijl" href="/wireframes/oud-dienstpaginas#leaf-net">Wat je precies krijgt →</a></p></div>
+        <div><h3 class="syne kop3">Najaarsbeurt</h3><p class="muted" style="line-height:1.55">Slib en afgestorven blad eruit, planten terugsnoeien, filter nakijken.</p><div class="kaart"><p class="lbl" style="margin:0 0 8px;color:#A14312">Vaste prijs · incl. btw</p><div class="prijsrij"><span>Klein, licht onderhouden</span><span class="bedrag">€ 250</span></div><div class="prijsrij"><span>Gemiddeld</span><span class="bedrag">€ 350</span></div><div class="prijsrij"><span>Verwaarloosd</span><span class="bedrag">€ 450 – € 650</span><small>Prijs pas na een blik ter plaatse, nooit blind — een vijver waar jaren niets aan gedaan is, is precies het geval waarin een gegokte prijs iemand een dag kost.</small></div></div><p style="margin:16px 0 0"><a class="pijl" href="/wireframes/oud-dienstpaginas#pond-autumn-service">Wat je precies krijgt →</a></p></div>
+        <div><h3 class="syne kop3">Winterklaar maken</h3><p class="muted" style="line-height:1.55">Pomp en leidingen vorstvrij, zodat er in het voorjaar niets gebarsten is.</p><div class="kaart"><p class="lbl" style="margin:0 0 8px;color:#A14312">Vaste prijs · incl. btw</p><div class="prijsrij"><span>Basis</span><span class="bedrag">€ 95</span></div><div class="prijsrij"><span>Met bladnet ophalen</span><span class="bedrag">€ 135</span></div><div class="prijsrij"><span>Met ijsvrijhouder</span><span class="bedrag">€ 150</span></div><div class="prijsrij"><span>Alles</span><span class="bedrag">€ 185</span></div></div><p style="margin:16px 0 0"><a class="pijl" href="/wireframes/oud-dienstpaginas#winterising">Wat je precies krijgt →</a></p></div>
+      </div>
+    </section>
+    <section class="vlak">
+      <p class="lbl muted" style="margin:0 0 8px">Zo werkt het</p>
+      <h2 class="syne kop2">Een foto is genoeg om te beginnen</h2>
+      <ol class="stapjes">
+        <li><span>01</span>Je stuurt een foto van je vijver en je postcode via WhatsApp.</li>
+        <li><span>02</span>Je krijgt een prijs en een datum terug. Is de vijver lang niet onderhouden, dan kom ik eerst kijken.</li>
+        <li><span>03</span>Ik kom, doe het werk en laat zien wat ik tegenkwam.</li>
+      </ol>
+      <a class="oranje" href="/wireframes/kennismaken">Stuur een foto via WhatsApp <span aria-hidden="true">→</span></a>
+    </section>
+    <section class="sectie" style="padding-top:clamp(72px,9vw,128px)">
+      <p class="lbl muted" style="margin:0 0 8px">Daarna</p>
+      <h2 class="syne kop2">Liever het hele jaar geregeld?</h2>
+      <p class="muted" style="margin:0;line-height:1.6;max-width:62ch">Met een onderhoudsabonnement kom ik vanzelf langs: in het voorjaar om op te starten, in het najaar om af te sluiten. Je hoeft er niet meer aan te denken.</p>
+      <div class="abo">
+        <div class="kaart"><p class="lbl" style="margin:0 0 8px;color:#A14312">Per maand · incl. btw</p><div class="prijsrij"><span>Basis</span><span class="bedrag">€ 45</span><small>Twee bezoeken per jaar — voorjaar opstarten, najaar afsluiten.</small></div><div class="prijsrij"><span>Standaard</span><span class="bedrag">€ 85</span><small>Vier bezoeken per jaar. Voor de meeste vijvers is dit de juiste.</small></div><div class="prijsrij"><span>Compleet</span><span class="bedrag">€ 165</span><small>Zes bezoeken per jaar, inclusief tuinonderhoud.</small></div></div>
+        <div><p style="line-height:1.6;margin:0 0 16px">Wat ik doe, zie je bij de vijverrenovatie: twee vijvers, een waterval en een beekloop, van de eerste schop tot de laatste plant.</p>
+          <p style="margin:0 0 12px"><a class="pijl" href="/wireframes/project-vijverrenovatie" style="color:#A14312">Bekijk de vijverrenovatie →</a></p>
+          <p style="margin:0"><a class="pijl" href="/wireframes/oud-dienstpaginas#maintenance-subscription">Alles over het abonnement →</a></p></div>
+      </div>
+    </section>
+    <section class="sectie" style="padding-top:clamp(72px,9vw,128px)">
+      <p class="lbl muted" style="margin:0 0 8px">Zelf doen</p>
+      <h2 class="syne kop2">Drie dingen die je zelf kunt doen.</h2>
+      <p class="muted" style="margin:0;line-height:1.6;max-width:62ch">Liever zelf aan de slag? Met deze drie regels kom je met je tuin en vijver goed de herfst door.</p>
+      <div class="tips">
+        <div style="border-top:1px solid var(--lijn);padding-top:16px"><p class="lbl muted" style="margin:0 0 8px">01 · Vóór half september</p><h3 class="syne kop3">Een bladnet werkt alleen op tijd.</h3><p class="muted" style="line-height:1.6">Half september begint de bladval, half november ligt het blad al op de bodem. Leg het net strak óver het water, niet erin: een net dat in de vijver hangt vangt niets. Het vangt wat van boven valt, niet wat er zijwaarts in waait.</p></div>
+        <div style="border-top:1px solid var(--lijn);padding-top:16px"><p class="lbl muted" style="margin:0 0 8px">02 · September of oktober</p><h3 class="syne kop3">Haal niet al het slib weg.</h3><p class="muted" style="line-height:1.6">Bij een najaarsbeurt haal ik bewust maar 60 tot 70 % weg. Zuig je alles weg, dan gooi je de biologie weg. Spoel filtermedia in vijverwater, nooit onder de kraan, en het slib gaat de border in. Onder 10 °C zijn de vissen in winterrust.</p></div>
+        <div style="border-top:1px solid var(--lijn);padding-top:16px"><p class="lbl muted" style="margin:0 0 8px">03 · Oktober</p><h3 class="syne kop3">Laat het blad liggen in de border.</h3><p class="muted" style="line-height:1.6">Het beschermt de bodem tegen de vorst en is voer en schuilplek voor wat er in je tuin leeft. Alleen uit de vijver moet het eruit.</p></div>
+      </div>
+    </section>
+    <section class="sectie" style="padding-top:clamp(72px,9vw,128px)">
+      <h2 class="syne kop2">Liever bellen of mailen?</h2>
+      <p class="muted" style="margin:0 0 16px">Nick Peters, GRØNN Studio, Stein.</p>
+      <p style="margin:0;line-height:2"><a class="pijl" href="mailto:hello@gronn.studio">hello@gronn.studio</a><br><a class="pijl" href="tel:+31618118014">+316 181 180 14</a><br><span class="pijl">WhatsApp</span></p>
+    </section>
+
+  </main>
+  <footer class="oudvoet" aria-label="Voet van de live site">
+    <div class="cta">
+      <h2 class="syne">Zullen we eens naar jouw tuin kijken?</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="oranje" href="/wireframes/kennismaken">Plan een kennismaking <span aria-hidden="true">→</span></a><span class="rand">WhatsApp</span><span class="rand">Instagram</span></div>
+    </div>
+    <div class="kol">
+      <div><p class="syne" style="font-size:26px;margin:0">GRØNN</p><p class="lbl" style="margin:8px 0 0">Rooted in nature.</p><p class="muted" style="line-height:1.6">Ecologische tuinen en vijvers. Ontwerp, aanleg en onderhoud vanuit Stein, Limburg.</p></div>
+      <div><p class="lbl muted" style="margin:0">Site</p><ul><li>Diensten</li><li>Projecten</li><li>Over mij</li><li>Veelgestelde vragen</li><li><a href="/wireframes/oud-techniek">Techniek</a></li></ul></div>
+      <div><p class="lbl muted" style="margin:0">Contact</p><ul><li>Contactformulier</li><li>Instagram</li><li>Adres en gegevens</li><li><span class="rand" style="min-height:36px">Dashboard →</span></li></ul></div>
+      <div><p class="lbl muted" style="margin:0">Juridisch</p><ul><li>Privacy</li><li><a href="/wireframes/oud-voorwaarden">Voorwaarden</a></li><li><a href="/wireframes/oud-voorwaarden-zakelijk">Zakelijke voorwaarden</a></li><li><a href="/wireframes/oud-herroeping">Herroeping</a></li><li><a href="/wireframes/oud-portaal">Klantportaal</a></li></ul></div>
+    </div>
+    <div class="onder lbl muted"><span>© 2026 GRØNN Studio. Pixels en code beschermd door pure wilskracht.</span><span>KVK 42072154</span><span>BTW NL005473265B04</span></div>
+    <p class="lbl muted" style="margin:16px 0 0">Op de live site: dit is de voet onder elke pagina; KVK en BTW zijn kopieerknoppen.</p>
+  </footer>
+</div>
+<nav class="dock" aria-label="Hoofdmenu"><a class="cta" href="/wireframes/kennismaken">KENNISMAKEN</a><div class="pil"><a href="/wireframes/vijvers" aria-current="page">VIJVERS</a><a href="/wireframes/tuinen">TUINEN</a><a href="/wireframes/werk">WERK</a><a href="/wireframes/over">OVER</a></div><span class="pijl" aria-hidden="true">↓</span></nav>
+<script src="/wireframes/wf-weergave.js" defer></script>
+</body>
+</html>
