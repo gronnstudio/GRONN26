@@ -138,3 +138,44 @@
   from { transform: translate3d(0, 105%, 0); }
   to { transform: none; }
 }
+
+/* ── het slot van elke pagina: kop + omlijnde pijl (Kolenda) ──────────── */
+.w-verder {
+  padding: clamp(120px, 14vw, 220px) var(--w-rand) clamp(96px, 12vw, 180px);
+  text-align: center;
+}
+.w-verder-kop {
+  margin: 0 auto;
+  max-width: 14ch;
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 96px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+.w-verder-kop em {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  color: var(--mos);
+}
+.w-cirkel {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-top: clamp(28px, 3vw, 44px);
+  border: 1px solid var(--oranje-tekst);
+  border-radius: 999px;
+  color: var(--oranje-tekst);
+  transition: background-color 0.3s, color 0.3s;
+}
+.w-cirkel:hover,
+.w-cirkel:focus-visible {
+  background: var(--oranje);
+  color: #202020;
+  border-color: var(--oranje);
+}
+.w-cirkel svg { transition: transform 0.3s; }
+.w-cirkel:hover svg { transform: translate(2px, -2px); }

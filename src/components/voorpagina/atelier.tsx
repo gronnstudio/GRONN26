@@ -120,23 +120,6 @@ export function Atelier() {
       </section>
       <Collage stukken={COLLAGE_B} klasse="vp-b" />
 
-      {/* Kolenda: "Interested in Seeing More Projects?" met een omlijnde
-          pijlknop, en het reuzenwoordmerk dat uit de onderrand opkomt. Geen
-          projecten op de voorpagina: alleen de weg naar Werk. */}
-      <section className="vp-meerwerk" aria-labelledby="h-meerwerk">
-        <h2 id="h-meerwerk" className="vp-meerwerk-kop" data-zie>
-          Benieuwd naar <em>het werk</em> zelf?
-        </h2>
-        <Link href="/werk" className="vp-cirkel" aria-label="Naar Werk" data-zie style={i(1)}>
-          <svg viewBox="0 0 11 14" width="12" height="15" aria-hidden="true">
-            <path d="M0 12.0593L7.504 4.60687L1.00002 4.51248V2.5H11V12.5624H9L8.93581 6.04761L1.4318 13.5L0 12.0593Z" fill="currentColor" />
-          </svg>
-        </Link>
-        <div className="vp-reusmerk" data-merk aria-hidden="true">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair.svg" alt="" />
-        </div>
-      </section>
     </div>
   )
 }

@@ -23,7 +23,6 @@ export function Beweging() {
     const spoor = wortel.querySelector<HTMLElement>("[data-spoor]")
     const stukken = [...wortel.querySelectorAll<HTMLElement>("[data-v]")]
     const vak = wortel.querySelector<HTMLElement>("[data-diensten]")
-    const merk = wortel.querySelector<HTMLElement>("[data-merk]")
     const namen = [...wortel.querySelectorAll<HTMLElement>(".vp-namen li")]
     const muis = matchMedia("(hover: hover) and (pointer: fine)").matches && innerWidth >= 768
 
@@ -51,12 +50,6 @@ export function Beweging() {
         }
         const midden = ouder.getBoundingClientRect().top + el.offsetTop + el.offsetHeight / 2
         el.style.transform = `translate3d(0,${((midden - vh / 2) * v * (breed() ? 0.065 : 0.04)).toFixed(1)}px,0)`
-      }
-      // reuzenwoordmerk komt op uit de onderrand (Kolenda: translateY 20 % → 0)
-      if (merk) {
-        const r = merk.getBoundingClientRect()
-        const p = Math.min(1, Math.max(0, (vh - r.top) / (r.height + vh * 0.25)))
-        merk.style.setProperty("--merk", s ? "0" : `${((1 - p) * 20).toFixed(2)}%`)
       }
       // Touch (eigenaar: "dezelfde effecten ook op mobiel"): geen muis, dus
       // wordt de dienst in het midden van het scherm actief: de rest dimt en

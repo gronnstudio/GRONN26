@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import type { CSSProperties } from "react"
 import { Foto } from "@/components/foto"
-import { Einde } from "@/components/over/einde"
+import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
 import { Werkwijze } from "@/components/voorpagina/werkwijze"
 import "@/components/voorpagina/voorpagina.css"
@@ -62,7 +62,7 @@ export default function Over() {
         <Werkwijze />
       </div>
 
-      <Einde />
+      <Verder voor="Zullen we" nadruk="kennismaken" na="?" href="/kennismaken" label="Naar Kennismaken" />
     </>
   )
 }

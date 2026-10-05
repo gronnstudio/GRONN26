@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { DienstRij } from "@/components/diensten/dienst-rij"
-import { Einde } from "@/components/diensten/einde"
+import { Verder } from "@/components/wereld/verder"
 import { aantalDiensten, diensten, eersteZin } from "@/components/diensten/kies"
 import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
@@ -72,7 +72,7 @@ export default function TuinenPagina() {
         </section>
       </div>
 
-      <Einde />
+      <Verder voor="Benieuwd naar" nadruk="het werk" na="zelf?" href="/werk" label="Naar Werk" />
     </>
   )
 }

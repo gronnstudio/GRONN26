@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { faqSchema, faqVragen } from "@/components/faq/vragen"
 import { VraagRegel } from "@/components/faq/vraag-regel"
-import { Einde } from "@/components/over/einde"
+import { Verder } from "@/components/wereld/verder"
 import { Opening } from "@/components/wereld/opening"
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default function FaqPagina() {
         <p className="lbl mt-4 max-w-[60ch] text-gedempt">Alle prijzen inclusief btw</p>
       </div>
 
-      <Einde />
+      <Verder voor="Staat je vraag" nadruk="er niet bij" na="?" href="/kennismaken" label="Naar Kennismaken" />
     </>
   )
 }

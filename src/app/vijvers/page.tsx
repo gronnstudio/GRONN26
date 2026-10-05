@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { DienstKolommen, DienstRij } from "@/components/diensten/dienst-rij"
-import { Einde } from "@/components/diensten/einde"
+import { Verder } from "@/components/wereld/verder"
 import { aantalDiensten, diensten, eersteZin, nr } from "@/components/diensten/kies"
 import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
@@ -85,7 +85,7 @@ export default function VijversPagina() {
         </section>
       </div>
 
-      <Einde />
+      <Verder voor="Ook" nadruk="de tuin" na="eromheen?" href="/tuinen" label="Naar Tuinen" />
     </>
   )
 }

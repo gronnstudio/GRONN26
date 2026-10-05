@@ -20,7 +20,7 @@ const PAGINAS: [string, string][] = [
 export function Voet() {
   const a = BUSINESS.address
   return (
-    <footer className="donker border-t border-lijn mt-[clamp(96px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt [main:has(#h-kennis)+&]:mt-0">
+    <footer className="donker border-t border-lijn mt-[clamp(96px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
       <div className="wrap">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-8">
           <div>

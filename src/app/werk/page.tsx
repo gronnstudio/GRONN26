@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Opening } from "@/components/wereld/opening"
-import { Kennismaken } from "@/components/werk/kennismaken"
+import { Verder } from "@/components/wereld/verder"
 import { WERK } from "@/components/werk/projecten"
 import { WerkOverzicht } from "@/components/werk/werk-overzicht"
 
@@ -26,7 +26,7 @@ export default function WerkPagina() {
       <div className="wrap">
         <WerkOverzicht />
       </div>
-      <Kennismaken />
+      <Verder voor="Wie is" nadruk="de persoon" na="erachter?" href="/over" label="Naar Over" />
     </>
   )
 }

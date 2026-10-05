@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Citaat, Fiche, Figuur, Kopregel, Lees, Paar, Slot, Volgende } from "@/components/werk/delen"
-import { Kennismaken } from "@/components/werk/kennismaken"
+import { Verder } from "@/components/wereld/verder"
 import "@/components/werk/werk.css"
 import { TERRAS, TERRAS_CITAAT, TERRAS_FOTOS, TERRAS_SLOT, TERRAS_STAPPEN } from "@/lib/data/terras-geulle"
 
@@ -92,7 +92,7 @@ export default function TerrasGeulle() {
         <Slot kop={TERRAS_SLOT.kop} alineas={TERRAS_SLOT.alineas} knop={TERRAS.contactknop} />
         <Volgende hier="/werk/terras-geulle" />
       </div>
-      <Kennismaken />
+      <Verder voor="Zoiets voor" nadruk="jouw tuin" na="?" href="/kennismaken" label="Naar Kennismaken" />
     </article>
   )
 }

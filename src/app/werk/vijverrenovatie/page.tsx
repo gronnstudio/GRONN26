@@ -3,7 +3,7 @@ import { GeenFoto } from "@/components/foto"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Cijfer, Citaat, Clip, Doorkijk, Fiche, FotoReeks, Kopregel, Lees, Slot, Volgende } from "@/components/werk/delen"
-import { Kennismaken } from "@/components/werk/kennismaken"
+import { Verder } from "@/components/wereld/verder"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
 import {
@@ -207,7 +207,7 @@ export default function Vijverrenovatie() {
         <Slot kop={SLOT.kop} alineas={[...SLOT.alineas, SLOT.oproep]} knop={VIJVER.contactknop} />
         <Volgende hier="/werk/vijverrenovatie" />
       </div>
-      <Kennismaken />
+      <Verder voor="Zoiets voor" nadruk="jouw tuin" na="?" href="/kennismaken" label="Naar Kennismaken" />
     </article>
   )
 }

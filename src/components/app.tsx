@@ -102,7 +102,7 @@ export function App() {
           onClick={wisselVol}
           aria-label={vol ? "Volledig scherm verlaten" : "Volledig scherm"}
           title={vol ? "Volledig scherm verlaten (Esc)" : "Volledig scherm (F11)"}
-          className="fixed top-5 right-[var(--goot)] z-[60] hidden size-10 cursor-pointer place-items-center rounded-full bg-[rgba(32,32,32,.55)] text-gebroken-wit backdrop-blur-md transition-colors hover:bg-gebroken-wit hover:text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 lg:grid"
+          className="fixed top-5 right-[var(--goot)] z-[60] hidden size-10 opacity-60 hover:opacity-100 cursor-pointer place-items-center rounded-full bg-[rgba(32,32,32,.55)] text-gebroken-wit backdrop-blur-md transition-colors hover:bg-gebroken-wit hover:text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 lg:grid"
         >
           {vol ? (
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden><path d="M6 1v5H1M10 1v5h5M6 15v-5H1M10 15v-5h5" /></svg>
