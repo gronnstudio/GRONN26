@@ -385,6 +385,18 @@
   .vp-zwerf {
     display: none;
   }
+  .vp-komma { display: none; }
+  .vp-zin-item {
+    display: block;
+    border-top: 1px solid var(--lijn);
+    padding: 14px 0;
+    transition: opacity 0.35s var(--vp-ease);
+  }
+  .vp-zin-item:last-child { border-bottom: 1px solid var(--lijn); }
+  .vp-zin-item a { display: block; }
+  .vp-diensten.actief .vp-zin-item:not(.midden) {
+    opacity: 0.35;
+  }
   .vp-diensten.actief .vp-zin-item a:not(:hover) {
     opacity: 1;
   }
