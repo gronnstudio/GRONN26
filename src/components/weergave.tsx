@@ -29,7 +29,7 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur">, string][] = [
   ["groot", "Grotere tekst"],
   ["contrast", "Meer contrast"],
   ["onderstreep", "Links onderstrepen"],
-  ["geluid", "Geluid bij paginawissel"],
+  ["geluid", "Geluid bij het doek"],
 ];
 
 function pasToe(s: Stand) {
