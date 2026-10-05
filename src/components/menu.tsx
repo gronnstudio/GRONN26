@@ -10,7 +10,8 @@ import { Weergave } from "./weergave"
 // oranje:
 // - midden onderaan een donkere glazen pil met lichte woorden; hover = wit
 //   vlak met donkere tekst;
-//   de huidige pagina licht niet op; het woordmerk is de weg naar huis, de
+//   de huidige pagina krijgt een vlak in de grondkleur (wit op licht, zwart
+//   op donker, eigenaar 5 okt 2026: "just like kolenda"); het woordmerk is de weg naar huis, de
 //   regelaar zit achteraan;
 // - linksonder (vanaf 1024px) Kennismaken ↗ in oranje;
 // - rechtsonder de ronde pijl (omlaag bovenaan, omhoog tijdens het lezen) die
@@ -25,7 +26,7 @@ const MENU = [
 ]
 
 const ITEM = "flex items-center rounded-full py-3 text-[12px] leading-4 font-bold tracking-[-.01em] uppercase no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet"
+const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-grond aria-[current=page]:text-inkt dark:aria-[current=page]:bg-antraciet dark:aria-[current=page]:ring-1 dark:aria-[current=page]:ring-gebroken-wit/30"
 
 /** Helderheid van de grond onder een punt: 0 donker … 1 licht; een foto telt als donker. */
 function grondOnder(x: number, y: number): number {
