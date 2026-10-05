@@ -207,7 +207,6 @@ export function Overgang() {
 
       try {
         el.setAttribute("data-actief", "")
-        toon()
         const regels = zetZin(zinVoor(normaal(url.pathname)))
         const zinWeg = gsap.timeline({ paused: true }).to(regels, { y: "-75%", opacity: 0 })
         let op = true
@@ -239,6 +238,7 @@ export function Overgang() {
               requestAnimationFrame(() =>
                 requestAnimationFrame(() => {
                   klaarzetten()
+                  toon() // het geluid op het moment dat het doek opengaat
                   wegTl.resume()
                 }),
               )
