@@ -7,6 +7,8 @@ import { flushSync } from "react-dom"
 import { BUSINESS } from "@/lib/business"
 import { CONTACT_BUDGETTEN } from "@/lib/data/teksten"
 import type { L } from "@/lib/i18n"
+import { T, kies, type Tekst } from "@/components/taal"
+import { useTaal } from "@/components/taal-klant"
 import { focusEerste, useVeldControle } from "./controle"
 import { CONTACT_REGELS } from "./invulvelden"
 
@@ -21,18 +23,17 @@ import { CONTACT_REGELS } from "./invulvelden"
 
 const ENDPOINT = `https://formsubmit.co/ajax/${BUSINESS.email}`
 
-const SOORTEN: { id: string; label: string }[] = [
-  { id: "ontwerp", label: "Ontwerp — meekijken of een plan" },
-  { id: "aanleg", label: "Aanleg — leg de tuin aan" },
-  { id: "onderhoud", label: "Onderhoud — per seizoen" },
-  { id: "vijver", label: "Vijver of watersysteem" },
-  { id: "anders", label: "Weet ik nog niet" },
+const SOORTEN: { id: string; label: L }[] = [
+  { id: "ontwerp", label: { nl: "Ontwerp — meekijken of een plan", en: "Design — a second look or a plan" } },
+  { id: "aanleg", label: { nl: "Aanleg — leg de tuin aan", en: "Build — build the garden" } },
+  { id: "onderhoud", label: { nl: "Onderhoud — per seizoen", en: "Care — season by season" } },
+  { id: "vijver", label: { nl: "Vijver of watersysteem", en: "Pond or water system" } },
+  { id: "anders", label: { nl: "Weet ik nog niet", en: "Not sure yet" } },
 ]
 
-const nl = (v: L) => v.nl
-
 type Status = "invullen" | "bezig" | "verzonden" | "terugval"
-type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: string; budget: string; bericht: string }
+// soort en budget in beide talen: de samenvatting volgt de taal, de mail naar mij blijft Nederlands.
+type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: L; budget: L; bericht: string }
 
 /* ---------- velden als regels op papier: label, lijn, geen kaders ---------- */
 
@@ -48,7 +49,7 @@ function Veld({
   regels,
   ...rest
 }: {
-  label: string
+  label: Tekst
   optioneel?: boolean
   naam: string
   voorbeeld?: string
@@ -85,8 +86,8 @@ function Veld({
         }`}
       >
         <label htmlFor={veldId} className={`lbl ${regels ? "md:self-start md:pt-2" : ""}`}>
-          {label}
-          {optioneel ? <span className="text-gedempt"> · optioneel</span> : null}
+          <T t={label} />
+          {optioneel ? <span className="text-gedempt"> · <T t={{ nl: "optioneel", en: "optional" }} /></span> : null}
         </label>
         {regels ? (
           <textarea rows={regels} {...gedeeld} className={`${gedeeld.className} min-h-[120px] resize-y`} />
@@ -112,9 +113,9 @@ function Keuzes({
   verplicht,
   fout,
 }: {
-  legenda: string
+  legenda: Tekst
   naam: string
-  keuzes: { id: string; label: string }[]
+  keuzes: { id: string; label: Tekst }[]
   gekozen: string
   onKies: (id: string) => void
   verplicht?: boolean
@@ -123,7 +124,7 @@ function Keuzes({
   const foutId = `${naam}-fout`
   return (
     <fieldset className="m-0 border-0 p-0">
-      <legend className="lbl mb-3 p-0">{legenda}</legend>
+      <legend className="lbl mb-3 p-0"><T t={legenda} /></legend>
       <div className="flex flex-wrap gap-2">
         {keuzes.map((k) => (
           <label key={k.id} className="cursor-pointer">
@@ -138,7 +139,7 @@ function Keuzes({
               className="peer sr-only"
             />
             <span className="inline-flex min-h-[44px] items-center rounded-full border border-lijn px-3.5 py-2 text-[14px] leading-[1.3] peer-checked:border-inkt peer-checked:bg-inkt peer-checked:text-grond peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-inkt">
-              {k.label}
+              <T t={k.label} />
             </span>
           </label>
         ))}
@@ -154,13 +155,13 @@ function Keuzes({
 
 /* ---------- na verzenden (WF-034) ---------- */
 
-function Staat({ kopRef, kop, sub, children }: { kopRef: RefObject<HTMLHeadingElement | null>; kop: string; sub: ReactNode; children: ReactNode }) {
+function Staat({ kopRef, kop, sub, children }: { kopRef: RefObject<HTMLHeadingElement | null>; kop: Tekst; sub: ReactNode; children: ReactNode }) {
   return (
     <section aria-labelledby="staat-kop" className="mt-[clamp(56px,7vw,96px)] grid md:grid-cols-[3fr_9fr] md:gap-x-8">
       <div className="md:col-start-2">
         <div role="status" className="max-w-[40ch]">
           <h2 id="staat-kop" ref={kopRef} tabIndex={-1} className="syne m-0 text-[clamp(32px,4.4vw,60px)] leading-[1.05] tracking-[-.035em] outline-none">
-            {kop}
+            <T t={kop} />
           </h2>
           <p className="mt-5 mb-0 text-[clamp(17px,1.5vw,21px)] leading-[1.5] text-gedempt">{sub}</p>
         </div>
@@ -171,25 +172,25 @@ function Staat({ kopRef, kop, sub, children }: { kopRef: RefObject<HTMLHeadingEl
 }
 
 function Samenvatting({ v }: { v: Velden }) {
-  const rijen: [string, string][] = [
-    ["Vraag", v.soort],
-    ["Budget", v.budget],
-    ["Naam", v.naam],
-    ["E-mail", v.email],
-    ["Telefoon", v.telefoon],
-    ["Plaats of postcode", v.plaats],
-    ["Bericht", v.bericht],
+  const rijen: [L, Tekst][] = [
+    [{ nl: "Vraag", en: "Question" }, v.soort],
+    [{ nl: "Budget", en: "Budget" }, v.budget],
+    [{ nl: "Naam", en: "Name" }, v.naam],
+    [{ nl: "E-mail", en: "E-mail" }, v.email],
+    [{ nl: "Telefoon", en: "Phone" }, v.telefoon],
+    [{ nl: "Plaats of postcode", en: "Town or postcode" }, v.plaats],
+    [{ nl: "Bericht", en: "Message" }, v.bericht],
   ]
   return (
     <>
-      <p className="lbl mt-12 mb-0 text-gedempt">Wat je hebt ingevuld</p>
+      <p className="lbl mt-12 mb-0 text-gedempt"><T t={{ nl: "Wat je hebt ingevuld", en: "What you filled in" }} /></p>
       <dl className="mt-10 mb-0 max-w-[640px] border-t border-inkt">
         {rijen
-          .filter(([, w]) => w)
+          .filter(([, w]) => kies(w, "nl"))
           .map(([k, w]) => (
-            <div key={k} className="grid gap-y-0.5 border-b border-lijn py-3 text-[15px] leading-[1.55] md:grid-cols-[200px_minmax(0,1fr)] md:gap-x-6">
-              <dt className="lbl pt-1 text-gedempt">{k}</dt>
-              <dd className="m-0 whitespace-pre-line [overflow-wrap:anywhere]">{w}</dd>
+            <div key={k.nl} className="grid gap-y-0.5 border-b border-lijn py-3 text-[15px] leading-[1.55] md:grid-cols-[200px_minmax(0,1fr)] md:gap-x-6">
+              <dt className="lbl pt-1 text-gedempt"><T t={k} /></dt>
+              <dd className="m-0 whitespace-pre-line [overflow-wrap:anywhere]"><T t={w} /></dd>
             </div>
           ))}
       </dl>
@@ -205,7 +206,8 @@ export function KennismakenFormulier() {
   const [budget, setBudget] = useState("")
   const [budgetFout, setBudgetFout] = useState(false)
   const [verstuurd, setVerstuurd] = useState<{ velden: Velden; onderwerp: string; mailto: string } | null>(null)
-  const { veld, controleerAlles } = useVeldControle(CONTACT_REGELS, nl)
+  const taal = useTaal()
+  const { veld, controleerAlles } = useVeldControle(CONTACT_REGELS, (v: L) => kies(v, taal))
   const kopRef = useRef<HTMLHeadingElement>(null)
 
   // ?dienst=<soort> kiest het juiste soort vraag, als het er een van is.
@@ -242,12 +244,12 @@ export function KennismakenFormulier() {
       telefoon: String(data.get("telefoon") ?? "").trim(),
       plaats: String(data.get("plaats") ?? "").trim(),
       soort: SOORTEN.find((s) => s.id === data.get("soort"))?.label ?? SOORTEN[4].label,
-      budget: CONTACT_BUDGETTEN.find((b) => b.id === data.get("budget"))?.label.nl ?? "",
+      budget: CONTACT_BUDGETTEN.find((b) => b.id === data.get("budget"))?.label ?? { nl: "", en: "" },
       bericht: String(data.get("bericht") ?? "").trim(),
     }
     const tekst = [
-      `Vraag: ${velden.soort}`,
-      `Budget: ${velden.budget}`,
+      `Vraag: ${velden.soort.nl}`,
+      `Budget: ${velden.budget.nl}`,
       `Naam: ${velden.naam}`,
       `E-mail: ${velden.email}`,
       velden.telefoon ? `Telefoon: ${velden.telefoon}` : null,
@@ -257,7 +259,7 @@ export function KennismakenFormulier() {
     ]
       .filter((r): r is string => typeof r === "string")
       .join("\n")
-    const onderwerp = `Kennismaking — ${velden.soort}`
+    const onderwerp = `Kennismaking — ${velden.soort.nl}`
     const mailto = `${BUSINESS.emailHref}?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(tekst)}`
     setVerstuurd({ velden, onderwerp, mailto })
     setStatus("bezig")
@@ -271,7 +273,7 @@ export function KennismakenFormulier() {
           _captcha: "false",
           name: velden.naam,
           email: velden.email,
-          budget: velden.budget,
+          budget: velden.budget.nl,
           message: tekst,
         }),
       })
@@ -288,11 +290,15 @@ export function KennismakenFormulier() {
 
   if (status === "verzonden") {
     return (
-      <Staat kopRef={kopRef} kop="Dank je, je bericht is binnen." sub="Ik reageer meestal binnen twee werkdagen.">
+      <Staat
+        kopRef={kopRef}
+        kop={{ nl: "Dank je, je bericht is binnen.", en: "Thank you, your message has arrived." }}
+        sub={<T t={{ nl: "Ik reageer meestal binnen twee werkdagen.", en: "I usually reply within two working days." }} />}
+      >
         {verstuurd ? <Samenvatting v={verstuurd.velden} /> : null}
         <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-          <Link href="/" className="lnk">Terug naar de voorpagina</Link>
-          <Link href="/werk" className="lnk">Bekijk mijn werk</Link>
+          <Link href="/" className="lnk"><T t={{ nl: "Terug naar de voorpagina", en: "Back to the home page" }} /></Link>
+          <Link href="/werk" className="lnk"><T t={{ nl: "Bekijk mijn werk", en: "See my work" }} /></Link>
         </div>
       </Staat>
     )
@@ -302,47 +308,54 @@ export function KennismakenFormulier() {
     return (
       <Staat
         kopRef={kopRef}
-        kop="Verzenden lukte niet — er staat een e-mail voor je klaar."
-        sub={`Je e-mailprogramma is geopend met dezelfde tekst. Verstuur hem daar, of mail naar ${BUSINESS.email}.`}
+        kop={{ nl: "Verzenden lukte niet — er staat een e-mail voor je klaar.", en: "Sending failed — an e-mail is ready for you." }}
+        sub={
+          <T
+            t={{
+              nl: `Je e-mailprogramma is geopend met dezelfde tekst. Verstuur hem daar, of mail naar ${BUSINESS.email}.`,
+              en: `Your e-mail app opened with the same text. Send it from there, or write to ${BUSINESS.email}.`,
+            }}
+          />
+        }
       >
         <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
           <a
             href={verstuurd.mailto}
             className="inline-flex h-[52px] items-center rounded-full bg-oranje px-6 text-[12px] font-semibold tracking-[.1em] text-antraciet uppercase no-underline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
           >
-            Open de e-mail opnieuw
+            <T t={{ nl: "Open de e-mail opnieuw", en: "Open the e-mail again" }} />
           </a>
-          <a href={BUSINESS.phoneHref} className="lnk">Of bel {BUSINESS.phone}</a>
+          <a href={BUSINESS.phoneHref} className="lnk"><T t={{ nl: "Of bel", en: "Or call" }} /> {BUSINESS.phone}</a>
         </div>
-        <p className="lbl mt-4 mb-0 max-w-[60ch] text-gedempt">Onderwerp: {verstuurd.onderwerp}</p>
+        <p className="lbl mt-4 mb-0 max-w-[60ch] text-gedempt"><T t={{ nl: "Onderwerp", en: "Subject" }} />: {verstuurd.onderwerp}</p>
       </Staat>
     )
   }
 
   return (
     <div className="mt-[clamp(64px,8vw,120px)] grid items-start gap-y-14 md:grid-cols-[7fr_1fr_4fr]">
-      <form onSubmit={verstuur} noValidate aria-label="Kennismaken" className="relative flex flex-col gap-7">
+      <form onSubmit={verstuur} noValidate aria-label={kies({ nl: "Kennismaken", en: "Get in touch" }, taal)} className="relative flex flex-col gap-7">
         {/* E-mail is type="text" met inputMode="email" (zelfde toetsenbord):
             type="email" haalt spaties stil weg vóór de controle ze ziet. */}
-        <Veld label="Naam" {...veld("naam")} verplicht autoComplete="name" />
+        <Veld label={{ nl: "Naam", en: "Name" }} {...veld("naam")} verplicht autoComplete="name" />
         <Veld label="E-mail" {...veld("email")} inputMode="email" verplicht autoComplete="email" />
-        <Veld label="Telefoon" optioneel {...veld("telefoon")} type="tel" inputMode="tel" autoComplete="tel" />
-        <Veld label="Plaats of postcode" {...veld("plaats")} autoComplete="postal-code" />
-        <Keuzes legenda="Waar gaat het over?" naam="soort" keuzes={SOORTEN} gekozen={soort} onKies={setSoort} />
+        <Veld label={{ nl: "Telefoon", en: "Phone" }} optioneel {...veld("telefoon")} type="tel" inputMode="tel" autoComplete="tel" />
+        <Veld label={{ nl: "Plaats of postcode", en: "Town or postcode" }} {...veld("plaats")} autoComplete="postal-code" />
+        <Keuzes legenda={{ nl: "Waar gaat het over?", en: "What is it about?" }} naam="soort" keuzes={SOORTEN} gekozen={soort} onKies={setSoort} />
         <Keuzes
-          legenda="Wat is je budget?"
+          legenda={{ nl: "Wat is je budget?", en: "What is your budget?" }}
           naam="budget"
           // "€ 15.000" breekt nooit tussen teken en bedrag.
-          keuzes={CONTACT_BUDGETTEN.map((b) => ({ id: b.id, label: b.label.nl.replace(/€ /g, "€ ") }))}
+          keuzes={CONTACT_BUDGETTEN.map((b) => ({ id: b.id, label: { nl: b.label.nl.replace(/€ /g, "€ "), en: b.label.en } }))}
           gekozen={budget}
           onKies={(id) => {
             setBudget(id)
             setBudgetFout(false)
           }}
           verplicht
-          fout={budgetFout ? "Kies je budget." : undefined}
+          fout={budgetFout ? kies({ nl: "Kies je budget.", en: "Choose your budget." }, taal) : undefined}
         />
-        <Veld label="Vertel kort over je tuin of vijver" {...veld("bericht")} verplicht regels={5} />
+        <Veld label={{ nl: "Vertel kort over je tuin of vijver", en: "Tell me briefly about your garden or pond" }} {...veld("bericht")} verplicht regels={5} />
         {/* Het verborgen honeypotveld: mensen zien het niet, bots vullen het in. */}
         <div aria-hidden className="absolute left-[-9999px]">
           <label>
@@ -355,19 +368,19 @@ export function KennismakenFormulier() {
           disabled={status === "bezig"}
           className="inline-flex h-[52px] cursor-pointer items-center self-start rounded-full border-0 bg-oranje px-7 text-[12px] font-semibold tracking-[.1em] text-antraciet uppercase transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt disabled:cursor-wait disabled:opacity-60"
         >
-          {status === "bezig" ? "Versturen…" : "Verstuur →"}
+          {status === "bezig" ? <T t={{ nl: "Versturen…", en: "Sending…" }} /> : <T t={{ nl: "Verstuur →", en: "Send →" }} />}
         </button>
         <p className="lbl m-0 text-gedempt">
-          Je bericht gaat via FormSubmit naar mijn mailbox. ·{" "}
+          <T t={{ nl: "Je bericht gaat via FormSubmit naar mijn mailbox.", en: "Your message reaches my inbox via FormSubmit." }} /> ·{" "}
           <Link href="/privacy" className="underline underline-offset-4">Privacy</Link>
         </p>
       </form>
 
-      <aside aria-label="Contactgegevens" className="flex flex-col gap-5 border-t border-lijn pt-4 md:col-start-3">
-        <p className="lbl m-0 text-gedempt">Liever direct?</p>
+      <aside aria-label={kies({ nl: "Contactgegevens", en: "Contact details" }, taal)} className="flex flex-col gap-5 border-t border-lijn pt-4 md:col-start-3">
+        <p className="lbl m-0 text-gedempt"><T t={{ nl: "Liever direct?", en: "Rather direct?" }} /></p>
         <a href={BUSINESS.emailHref} className="w-lijnlink self-start text-[18px] [overflow-wrap:anywhere]">{BUSINESS.email}</a>
         <a href={BUSINESS.phoneHref} className="w-lijnlink self-start text-[18px] tabular-nums">{BUSINESS.phone}</a>
-        <a href="/contact.vcf" download="gronn-studio.vcf" className="w-lijnlink self-start text-[15px]">Visitekaartje bewaren</a>
+        <a href="/contact.vcf" download="gronn-studio.vcf" className="w-lijnlink self-start text-[15px]"><T t={{ nl: "Visitekaartje bewaren", en: "Save business card" }} /></a>
         <a href={BUSINESS.whatsapp} className="w-lijnlink self-start text-[18px]">WhatsApp</a>
         <p className="lbl mt-4 mb-0 text-gedempt">
           {BUSINESS.address.street} · {BUSINESS.address.postalCode} {BUSINESS.address.city}

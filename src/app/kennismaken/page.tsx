@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { KennismakenFormulier } from "@/components/kennismaken/formulier"
 import { Opening } from "@/components/wereld/opening"
+import { T } from "@/components/taal"
 import { KENNISMAKING_VRIJBLIJVEND } from "@/lib/data/teksten"
 
 // WF-023 Kennismaken, met de staten na verzenden uit WF-034. De opening in
@@ -15,7 +16,11 @@ export default function Kennismaken() {
     <>
       {/* Eén lang woord: op de telefoon iets kleiner, zodat het past. */}
       <div className="max-md:[&_.w-reus]:text-[12vw]!">
-        <Opening label="Contact" titel="Kennismaken" zin="Ik reageer meestal binnen twee werkdagen." />
+        <Opening
+          label="Contact"
+          titel={{ nl: "Kennismaken", en: "Get in touch" }}
+          zin={<T t={{ nl: "Ik reageer meestal binnen twee werkdagen.", en: "I usually reply within two working days." }} />}
+        />
       </div>
       <div className="wrap">
         <KennismakenFormulier />

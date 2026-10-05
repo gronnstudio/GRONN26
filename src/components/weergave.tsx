@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { toon } from "@/lib/geluid";
-import { T } from "@/components/taal";
+import { T, type Tekst } from "@/components/taal";
+import { useTaal } from "@/components/taal-klant";
 
 // WF-026: één knop met een regelaar-icoon opent Kleur (Auto · Licht · Donker;
 // Auto = licht van 07.00 tot 19.00) en Toegankelijkheid. Bewaard in deze
@@ -27,12 +28,17 @@ const STANDAARD: Stand = {
   onderstreep: false,
   geluid: false,
 };
-const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, string][] = [
-  ["beweging", "Minder beweging"],
-  ["groot", "Grotere tekst"],
-  ["contrast", "Meer contrast"],
-  ["onderstreep", "Links onderstrepen"],
-  ["geluid", "Geluid bij het doek"],
+const KLEUREN: Record<Stand["kleur"], Tekst> = {
+  auto: "Auto",
+  licht: { nl: "Licht", en: "Light" },
+  donker: { nl: "Donker", en: "Dark" },
+};
+const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
+  ["beweging", { nl: "Minder beweging", en: "Less motion" }],
+  ["groot", { nl: "Grotere tekst", en: "Larger text" }],
+  ["contrast", { nl: "Meer contrast", en: "More contrast" }],
+  ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
+  ["geluid", { nl: "Geluid bij het doek", en: "Sound with the curtain" }],
 ];
 
 function pasToe(s: Stand) {
@@ -56,6 +62,7 @@ function pasToe(s: Stand) {
 
 export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   const [open, setOpen] = useState(false);
+  const taal = useTaal();
   const [gereed, setGereed] = useState(false);
   const [stand, setStand] = useState<Stand>(STANDAARD);
   const paneel = useRef<HTMLDivElement>(null);
@@ -113,7 +120,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
       <button
         ref={knop}
         type="button"
-        aria-label="Weergave en toegankelijkheid"
+        aria-label={taal === "en" ? "Display and accessibility" : "Weergave en toegankelijkheid"}
         aria-expanded={open}
         aria-controls="weergave-paneel"
         onClick={() => setOpen(!open)}
@@ -141,17 +148,17 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
             ref={paneel}
             id="weergave-paneel"
             role="dialog"
-            aria-label="Weergave en toegankelijkheid"
+            aria-label={taal === "en" ? "Display and accessibility" : "Weergave en toegankelijkheid"}
             hidden={!open}
             className="fixed inset-0 z-[1100] overflow-y-auto overscroll-contain bg-grond px-5 pb-[max(24px,env(safe-area-inset-bottom))] pt-[max(20px,env(safe-area-inset-top))] text-sm text-inkt md:inset-auto md:bottom-[84px] md:left-1/2 md:z-[200] md:w-80 md:-translate-x-1/2 md:overflow-visible md:rounded-2xl md:border md:border-lijn md:p-5 md:shadow-2xl lg:bottom-[110px]"
           >
             <div className="mb-8 flex items-center justify-between md:mb-4">
               <strong className="syne text-[28px] md:text-[17px]">
-                Weergave
+                <T t={{ nl: "Weergave", en: "Display" }} />
               </strong>
               <button
                 type="button"
-                aria-label="Sluiten"
+                aria-label={taal === "en" ? "Close" : "Sluiten"}
                 onClick={() => setOpen(false)}
                 className="grid size-12 cursor-pointer place-items-center rounded-full border border-lijn md:size-8 md:border-0"
               >
@@ -183,7 +190,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
               </div>
             </fieldset>
             <fieldset className="m-0 mb-4 border-0 p-0">
-              <legend className="lbl mb-2.5 p-0 opacity-70">Kleur</legend>
+              <legend className="lbl mb-2.5 p-0 opacity-70"><T t={{ nl: "Kleur", en: "Colour" }} /></legend>
               <div className="grid grid-cols-3 rounded-full border border-lijn p-[3px]">
                 {(["auto", "licht", "donker"] as const).map((k) => (
                   <label
@@ -198,24 +205,24 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                       onChange={() => zet({ ...stand, kleur: k })}
                       className="sr-only"
                     />
-                    {k[0].toUpperCase() + k.slice(1)}
+                    <T t={KLEUREN[k]} />
                   </label>
                 ))}
               </div>
               <p className="mt-2 text-xs opacity-70">
-                Auto: licht overdag, donker vanaf 19.00 uur.
+                <T t={{ nl: "Auto: licht overdag, donker vanaf 19.00 uur.", en: "Auto: light by day, dark from 7 pm." }} />
               </p>
             </fieldset>
             <fieldset className="m-0 border-0 p-0">
               <legend className="lbl mb-2.5 p-0 opacity-70">
-                Toegankelijkheid
+                <T t={{ nl: "Toegankelijkheid", en: "Accessibility" }} />
               </legend>
               {SCHAKELAARS.map(([k, t]) => (
                 <label
                   key={k}
                   className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5 last:border-b"
                 >
-                  <span>{t}</span>
+                  <span><T t={t} /></span>
                   <input
                     type="checkbox"
                     role="switch"
@@ -231,7 +238,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
               onClick={() => zet(STANDAARD)}
               className="lbl mt-3 cursor-pointer border-b border-current"
             >
-              Standaard herstellen
+              <T t={{ nl: "Standaard herstellen", en: "Restore defaults" }} />
             </button>
           </div>,
           document.body,

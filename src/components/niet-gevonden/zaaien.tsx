@@ -1,12 +1,15 @@
 "use client"
 
 import { useState } from "react"
+import { T } from "@/components/taal"
+import { useTaal } from "@/components/taal-klant"
 
 type Plant = { id: number; x: number; h: number; s: number }
 
 // Bij de 404: een lege strook grond. Tik en er groeit een plantje, in lijnwerk.
 // Niets wordt bewaard; herladen is een nieuw seizoen.
 export function Zaaien() {
+  const en = useTaal() === "en"
   const [planten, setPlanten] = useState<Plant[]>([])
   const zaai = (x: number) =>
     setPlanten((p) => [...p.slice(-39), { id: Date.now() + Math.random(), x, h: 50 + Math.random() * 70, s: Math.random() < 0.5 ? -1 : 1 }])
@@ -19,9 +22,9 @@ export function Zaaien() {
           zaai(e.detail === 0 ? 0.1 + Math.random() * 0.8 : (e.clientX - r.left) / r.width)
         }}
         className="relative block h-[180px] w-full cursor-pointer overflow-hidden border-0 border-b-2 border-solid border-inkt bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-4"
-        aria-label="Zaai een plantje"
+        aria-label={en ? "Sow a little plant" : "Zaai een plantje"}
       >
-        {planten.length === 0 && <span className="lbl absolute inset-x-0 bottom-4 text-center text-gedempt">Tik op de grond om te zaaien</span>}
+        {planten.length === 0 && <span className="lbl absolute inset-x-0 bottom-4 text-center text-gedempt"><T t={{ nl: "Tik op de grond om te zaaien", en: "Tap the ground to sow" }} /></span>}
         {planten.map((p) => (
           <svg key={p.id} aria-hidden viewBox="-30 -130 60 130" className="zaai absolute bottom-0 h-[130px] w-[60px] -translate-x-1/2 overflow-visible" style={{ left: `${p.x * 100}%` }}>
             <path pathLength={1} d={`M0 0 C ${4 * p.s} ${-p.h / 3} ${-6 * p.s} ${(-2 * p.h) / 3} 0 ${-p.h}`} />
@@ -31,7 +34,7 @@ export function Zaaien() {
           </svg>
         ))}
       </button>
-      <p className="lbl mt-3 text-gedempt" aria-live="polite">{planten.length > 0 ? `${planten.length} gezaaid` : " "}</p>
+      <p className="lbl mt-3 text-gedempt" aria-live="polite">{planten.length > 0 ? (en ? `${planten.length} sown` : `${planten.length} gezaaid`) : " "}</p>
     </div>
   )
 }

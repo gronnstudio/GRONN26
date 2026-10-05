@@ -1,11 +1,14 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { T } from "@/components/taal"
+import { useTaal } from "@/components/taal-klant"
 
 // De inhoudsopgave (WF-033): vanaf 1024px altijd open en vast in beeld,
 // daaronder een dichte regel die je open tikt.
 export function Inhoud({ koppen }: { koppen: string[] }) {
   const ref = useRef<HTMLDetailsElement>(null)
+  const taal = useTaal()
   useEffect(() => {
     const d = ref.current
     if (!d) return
@@ -30,9 +33,9 @@ export function Inhoud({ koppen }: { koppen: string[] }) {
           if (matchMedia("(min-width: 1024px)").matches) e.preventDefault()
         }}
       >
-        Inhoud
+        <T t={{ nl: "Inhoud", en: "Contents" }} />
       </summary>
-      <nav aria-label="Inhoud van de privacyverklaring">
+      <nav aria-label={taal === "en" ? "Contents of this document" : "Inhoud van dit document"}>
         <ol className="mt-0 mb-4 list-none border-t border-lijn p-0 lg:mt-4 lg:mb-0">
           {koppen.map((kop, i) => (
             <li key={kop}>

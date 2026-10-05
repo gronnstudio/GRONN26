@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Foto, GeenFoto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 import { SERVICES, type Service } from "@/lib/data/services"
+import { Beide, T } from "@/components/taal"
 import { F01, F05, F07_2, F10, SFEER_WEIDE, T01 } from "./beelden"
 
 // WF-057 (Uncode "Creative Persona"): de diensten als grote namen met kleine
@@ -39,7 +40,7 @@ export function WatIkDoe() {
     <section className="vp-diensten-blok" aria-labelledby="h-diensten">
       <div className="vp-kolom vp-diensten" data-diensten>
         <h2 className="lbl" id="h-diensten">
-          Wat ik doe · {DIENSTEN.length} diensten
+          <Beide nl={`Wat ik doe · ${DIENSTEN.length} diensten`} en={`What I do · ${DIENSTEN.length} services`} />
         </h2>
         {/* Zoals oudolf.com: de diensten als één lopende zin, gescheiden door
             komma's, met het nummer klein ervoor en een punt aan het eind.
@@ -48,15 +49,15 @@ export function WatIkDoe() {
           const rij = DIENSTEN.filter((d) => d.href === groep)
           return (
             <div key={groep} className="vp-zin-lijst syne" data-zie>
-              <span className="lbl vp-zin-kop">{groep === "/vijvers" ? "Vijvers" : "Tuinen"}</span>
+              <span className="lbl vp-zin-kop"><T t={groep === "/vijvers" ? { nl: "Vijvers", en: "Ponds" } : { nl: "Tuinen", en: "Gardens" }} /></span>
               {rij.map((d, k) => {
                 const n = DIENSTEN.indexOf(d)
                 return (
                   <span key={d.slug} className="vp-zin-item">
                     <Link href={d.href} data-naam={n}>
                       <sup>{nr(n)}</sup>
-                      {d.dienst.title.nl}
-                      <span className="vp-uitleg">{d.dienst.summary.nl}</span>
+                      <T t={d.dienst.title} />
+                      <span className="vp-uitleg"><T t={d.dienst.summary} /></span>
                     </Link>
                     <span className="vp-komma">{k < rij.length - 1 ? "," : "."}</span>{" "}
                     <span className="vp-inline" aria-hidden="true">
@@ -74,10 +75,10 @@ export function WatIkDoe() {
         })}
         <div className="vp-terzijde">
           <Link className="lnk" href="/vijvers">
-            Alles over vijvers →
+            <T t={{ nl: "Alles over vijvers →", en: "All about ponds →" }} />
           </Link>
           <Link className="lnk" href="/tuinen">
-            Alles over tuinen →
+            <T t={{ nl: "Alles over tuinen →", en: "All about gardens →" }} />
           </Link>
         </div>
       </div>
@@ -89,7 +90,7 @@ export function WatIkDoe() {
             ) : (
               <Foto foto={d.beeld} sizes="360px" className="vp-zwerf-foto" />
             )}
-            <p className="vp-bijschrift">{d.dienst.summary.nl}</p>
+            <p className="vp-bijschrift"><T t={d.dienst.summary} /></p>
           </div>
         ))}
       </div>

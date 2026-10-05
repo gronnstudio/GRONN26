@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { GeenFoto } from "@/components/foto"
+import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Cijfer, Citaat, Clip, Doorkijk, Fiche, FotoReeks, Kopregel, Lees, Slot, Volgende } from "@/components/werk/delen"
@@ -49,18 +50,23 @@ const nr = (i: number) => String(i + 1).padStart(2, "0")
 
 // De titel uit de data, in regels voor de reuzenkop; de zachte koppeltekens
 // laten de twee lange woorden op de telefoon netjes afbreken.
-const REUSTITEL = "Twee vijvers.\nEén samen\u00adhangend\nwater\u00adsysteem."
+const REUSTITEL = {
+  nl: "Twee vijvers.\nEén samen\u00adhangend\nwater\u00adsysteem.",
+  en: "Two ponds.\nOne connected\nwater system.",
+}
+const EN = VIJVER.en
+const nlEn = (nl: string, en: string) => ({ nl, en })
 
 export default function Vijverrenovatie() {
   return (
     <article>
       <div className="wk-opening wk-lang">
         <Opening
-          label={`GR / 001 · ${VIJVER.categorie}`}
+          label={{ nl: `GR / 001 · ${VIJVER.categorie}`, en: `GR / 001 · ${EN.categorie}` }}
           titel={REUSTITEL}
-          zin={VIJVER.ondertitel}
+          zin={<T t={nlEn(VIJVER.ondertitel, EN.ondertitel)} />}
           foto={HELD}
-          zij={[VIJVER.categorie, VIJVER.status]}
+          zij={[nlEn(VIJVER.categorie, EN.categorie), nlEn(VIJVER.status, EN.status)]}
         />
       </div>
 
@@ -68,18 +74,19 @@ export default function Vijverrenovatie() {
         <Fiche
           kolommen="md:grid-cols-6"
           regels={[
-            ["Code", "GR / 001"],
-            ["Type", VIJVER.categorie],
-            ["Jaar", "2026"],
-            ["Status", VIJVER.status],
-            ["Tijd", "circa 120 uur"],
-            ["Water", "circa 5.000 l"],
+            [nlEn("Code", "Code"), "GR / 001"],
+            [nlEn("Type", "Type"), nlEn(VIJVER.categorie, EN.categorie)],
+            [nlEn("Jaar", "Year"), "2026"],
+            [nlEn("Status", "Status"), nlEn(VIJVER.status, EN.status)],
+            [nlEn("Tijd", "Time"), nlEn("circa 120 uur", "about 120 hours")],
+            [nlEn("Water", "Water"), nlEn("circa 5.000 l", "about 5,000 l")],
           ]}
         />
 
-        <section aria-label="Inleiding" className="w-sectie">
-          {VIJVER.intro.map((t) => (
-            <Oplichten key={t.slice(0, 40)} tekst={t} className="m-0 mb-[1em]" />
+        <section aria-labelledby="inleiding-kop" className="w-sectie">
+          <span id="inleiding-kop" className="sr-only"><T t={nlEn("Inleiding", "Introduction")} /></span>
+          {VIJVER.intro.map((t, i) => (
+            <Oplichten key={t.slice(0, 40)} tekst={nlEn(t, EN.intro[i])} className="m-0 mb-[1em]" />
           ))}
           <Lees className="mt-[clamp(24px,3vw,40px)]">
             <p className="lbl m-0 mt-6 text-gedempt">{VIJVER.auteur}</p>
@@ -87,13 +94,14 @@ export default function Vijverrenovatie() {
         </section>
 
         <nav aria-labelledby="inhoud-kop" className="w-sectie">
-          <Kopregel id="inhoud-kop" links="Het hele verhaal" rechts={`${HOOFDSTUKKEN.length} hoofdstukken`} />
+          <Kopregel id="inhoud-kop" links={<T t={nlEn("Het hele verhaal", "The whole story")} />}
+            rechts={<T t={nlEn(`${HOOFDSTUKKEN.length} hoofdstukken`, `${HOOFDSTUKKEN.length} chapters`)} />} />
           <ol className="m-0 list-none columns-1 gap-x-8 p-0 md:columns-2">
             {HOOFDSTUKKEN.map((h, i) => (
               <li key={h.id} className="break-inside-avoid border-t border-lijn">
                 <a href={`#${h.id}`} className="flex min-h-11 items-baseline gap-4 py-3 no-underline">
                   <span className="lbl tabular-nums text-gedempt">{nr(i)}</span>
-                  <span className="w-lijnlink text-[17px] font-medium">{h.kort}</span>
+                  <span className="w-lijnlink text-[17px] font-medium"><T t={h.kort} /></span>
                 </a>
               </li>
             ))}
@@ -107,14 +115,14 @@ export default function Vijverrenovatie() {
               <section id={h.id} aria-labelledby={`${h.id}-kop`} className="w-sectie scroll-mt-6">
                 <div className="w-kopregel">
                   <p className="lbl m-0">
-                    {nr(i)} · {h.kort}
+                    {nr(i)} · <T t={h.kort} />
                   </p>
                   <span className="lbl tabular-nums text-gedempt">
                     {nr(i)} / {nr(HOOFDSTUKKEN.length - 1)}
                   </span>
                 </div>
                 <h2 id={`${h.id}-kop`} className="w-titel syne max-w-[22ch] [overflow-wrap:anywhere]" data-zie>
-                  {h.kop}
+                  <T t={h.kop} />
                 </h2>
                 <Lees className="mt-[clamp(32px,4vw,56px)]">
                   <Alineas teksten={h.alineas} />
@@ -122,20 +130,20 @@ export default function Vijverrenovatie() {
                     <>
                       <div className="my-8 overflow-x-auto">
                         <table className="w-full border-collapse text-left tabular-nums">
-                          <caption className="lbl pb-3 text-left text-gedempt">Oorspronkelijk beplantingsplan</caption>
+                          <caption className="lbl pb-3 text-left text-gedempt"><T t={nlEn("Oorspronkelijk beplantingsplan", "Original planting plan")} /></caption>
                           <thead>
                             <tr className="lbl text-gedempt">
-                              <th scope="col" className="border-t border-lijn py-3 pr-3 font-normal">Zone</th>
-                              <th scope="col" className="border-t border-lijn py-3 pr-3 font-normal">Soorten</th>
-                              <th scope="col" className="border-t border-lijn py-3 pr-3 text-right font-normal">Manden</th>
-                              <th scope="col" className="border-t border-lijn py-3 text-right font-normal">Planten</th>
+                              <th scope="col" className="border-t border-lijn py-3 pr-3 font-normal"><T t={nlEn("Zone", "Zone")} /></th>
+                              <th scope="col" className="border-t border-lijn py-3 pr-3 font-normal"><T t={nlEn("Soorten", "Species")} /></th>
+                              <th scope="col" className="border-t border-lijn py-3 pr-3 text-right font-normal"><T t={nlEn("Manden", "Baskets")} /></th>
+                              <th scope="col" className="border-t border-lijn py-3 text-right font-normal"><T t={nlEn("Planten", "Plants")} /></th>
                             </tr>
                           </thead>
                           <tbody>
                             {PLANTTABEL.rijen.map((r) => (
-                              <tr key={r.zone}>
-                                <th scope="row" className="border-t border-lijn py-3 pr-3 align-top font-normal">{r.zone}</th>
-                                <td className="border-t border-lijn py-3 pr-3 align-top">{r.soorten.join(", ")}</td>
+                              <tr key={r.zone.nl}>
+                                <th scope="row" className="border-t border-lijn py-3 pr-3 align-top font-normal"><T t={r.zone} /></th>
+                                <td className="border-t border-lijn py-3 pr-3 align-top"><T t={nlEn(r.soorten.map((x) => x.nl).join(", "), r.soorten.map((x) => x.en).join(", "))} /></td>
                                 <td className="border-t border-lijn py-3 pr-3 text-right align-top">{r.manden}</td>
                                 <td className="border-t border-lijn py-3 text-right align-top">{r.planten}</td>
                               </tr>
@@ -143,8 +151,8 @@ export default function Vijverrenovatie() {
                           </tbody>
                           <tfoot>
                             <tr className="font-semibold">
-                              <th scope="row" className="border-y border-lijn py-3 pr-3 text-left">Totaal</th>
-                              <td className="border-y border-lijn py-3 pr-3">{PLANTTABEL.totaal.soorten}</td>
+                              <th scope="row" className="border-y border-lijn py-3 pr-3 text-left"><T t={nlEn("Totaal", "Total")} /></th>
+                              <td className="border-y border-lijn py-3 pr-3"><T t={PLANTTABEL.totaal.soorten} /></td>
                               <td className="border-y border-lijn py-3 pr-3 text-right">{PLANTTABEL.totaal.manden}</td>
                               <td className="border-y border-lijn py-3 text-right">{PLANTTABEL.totaal.planten}</td>
                             </tr>
@@ -167,16 +175,25 @@ export default function Vijverrenovatie() {
                     <FotoReeks fotos={fotos} />
                   </div>
                 ) : h.foto ? (
-                  <GeenFoto wat={`foto ${h.foto} · ${h.kort.toLowerCase()}`} className="mt-[clamp(48px,6vw,96px)] aspect-[4/3] w-full max-w-[560px]" />
+                  <GeenFoto wat={`foto ${h.foto} · ${h.kort.nl.toLowerCase()}`} className="mt-[clamp(48px,6vw,96px)] aspect-[4/3] w-full max-w-[560px]" />
                 ) : null}
 
                 {h.video ? <Clip video={VIDEOS[h.video]} className="mt-[clamp(32px,4vw,56px)]" /> : null}
               </section>
 
               {h.id === "denkwerk" ? (
-                <Cijfer getal="120" wat="uur, circa" uitleg="inclusief voorbereiding en denkwerk; ongeveer vijftien werkdagen" />
+                <Cijfer
+                  getal="120"
+                  wat={nlEn("uur, circa", "hours, approx.")}
+                  uitleg={nlEn(
+                    "inclusief voorbereiding en denkwerk; ongeveer vijftien werkdagen",
+                    "including preparation and thinking time; about fifteen working days",
+                  )}
+                />
               ) : null}
-              {h.id === "waterroute" ? <Cijfer getal="2" wat="vijvers" uitleg="verbonden binnen één watersysteem" /> : null}
+              {h.id === "waterroute" ? (
+                <Cijfer getal="2" wat={nlEn("vijvers", "ponds")} uitleg={nlEn("verbonden binnen één watersysteem", "connected within one water system")} />
+              ) : null}
             </div>
           )
         })}
@@ -187,16 +204,17 @@ export default function Vijverrenovatie() {
         </Lees>
 
         <section aria-labelledby="cijfers-kop" className="w-sectie">
-          <Kopregel id="cijfers-kop" links="Het project in cijfers" rechts={`${CIJFERS.length} feiten`} />
+          <Kopregel id="cijfers-kop" links={<T t={nlEn("Het project in cijfers", "The project in numbers")} />}
+            rechts={<T t={nlEn(`${CIJFERS.length} feiten`, `${CIJFERS.length} facts`)} />} />
           <dl className="m-0">
             {CIJFERS.map(([k, v]) => (
-              <div key={k} className="grid grid-cols-1 gap-x-8 gap-y-1 border-t border-lijn py-3 last:border-b md:grid-cols-[3fr_9fr]">
-                <dt className="lbl text-gedempt">{k}</dt>
-                <dd className="m-0 tabular-nums">{v}</dd>
+              <div key={k.nl} className="grid grid-cols-1 gap-x-8 gap-y-1 border-t border-lijn py-3 last:border-b md:grid-cols-[3fr_9fr]">
+                <dt className="lbl text-gedempt"><T t={k} /></dt>
+                <dd className="m-0 tabular-nums"><T t={v} /></dd>
               </div>
             ))}
           </dl>
-          <p className="mt-4 mb-0 text-sm text-gedempt">{CIJFERS_NOOT}</p>
+          <p className="mt-4 mb-0 text-sm text-gedempt"><T t={CIJFERS_NOOT} /></p>
         </section>
       </div>
 
@@ -205,10 +223,16 @@ export default function Vijverrenovatie() {
       </div>
 
       <div className="wrap">
-        <Slot kop={SLOT.kop} alineas={[...SLOT.alineas, SLOT.oproep]} knop={VIJVER.contactknop} />
+        <Slot kop={SLOT.kop} alineas={[...SLOT.alineas, SLOT.oproep]} knop={nlEn(VIJVER.contactknop, EN.contactknop)} />
         <Volgende hier="/werk/vijverrenovatie" />
       </div>
-      <Verder voor="Zoiets voor" nadruk="jouw tuin" na="?" href="/kennismaken" label="Naar Kennismaken" />
+      <Verder
+        voor={nlEn("Zoiets voor", "Something like this for")}
+        nadruk={nlEn("jouw tuin", "your garden")}
+        na="?"
+        href="/kennismaken"
+        label={nlEn("Naar Kennismaken", "To Get in touch")}
+      />
     </article>
   )
 }

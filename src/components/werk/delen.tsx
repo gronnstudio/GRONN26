@@ -1,4 +1,8 @@
+"use client"
+
 import { Woorden } from "@/components/wereld/oplichten"
+import { kies, T, type Tekst } from "@/components/taal"
+import { useTaal } from "@/components/taal-klant"
 import type { CSSProperties, ReactNode } from "react"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
@@ -9,18 +13,19 @@ import { volgende } from "./projecten"
 // de vijver en het terras hetzelfde systeem delen. De opening is de gedeelde
 // <Opening> uit src/components/wereld; hier staat wat daarna komt, in de taal
 // van de voorpagina (kopregel, Syne-titels, blokken die zacht opkomen). De
-// leeskolom zelf beweegt niet.
+// leeskolom zelf beweegt niet. Een clientcomponent alleen voor de
+// aria-labels in de gekozen taal; de tekst zelf staat in beide talen.
 
 const volg = (n: number) => ({ "--i": n }) as CSSProperties
 
 /** De fiche: korte feiten als labels onder een lijn. */
-export function Fiche({ regels, kolommen }: { regels: [string, string][]; kolommen: string }) {
+export function Fiche({ regels, kolommen }: { regels: [Tekst, Tekst][]; kolommen: string }) {
   return (
     <dl className={`m-0 mt-[clamp(48px,6vw,80px)] grid grid-cols-2 gap-x-6 border-t border-lijn ${kolommen}`}>
       {regels.map(([k, v], i) => (
-        <div key={k} className="flex flex-col gap-1 py-3" data-zie style={volg(i % 6)}>
-          <dt className="lbl text-gedempt">{k}</dt>
-          <dd className="m-0 text-[15px] font-medium tabular-nums">{v}</dd>
+        <div key={kies(k, "nl")} className="flex flex-col gap-1 py-3" data-zie style={volg(i % 6)}>
+          <dt className="lbl text-gedempt"><T t={k} /></dt>
+          <dd className="m-0 text-[15px] font-medium tabular-nums"><T t={v} /></dd>
         </div>
       ))}
     </dl>
@@ -46,11 +51,11 @@ export function Lees({ children, className = "" }: { children: ReactNode; classN
   )
 }
 
-export function Alineas({ teksten }: { teksten: readonly string[] }) {
+export function Alineas({ teksten }: { teksten: readonly Tekst[] }) {
   return (
     <>
       {teksten.map((t) => (
-        <p key={t.slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]" data-onthul>
+        <p key={kies(t, "nl").slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]" data-onthul>
           <Woorden tekst={t} />
         </p>
       ))}
@@ -58,12 +63,13 @@ export function Alineas({ teksten }: { teksten: readonly string[] }) {
   )
 }
 
-export function Citaat({ tekst, bron }: { tekst: string; bron: string }) {
+export function Citaat({ tekst, bron }: { tekst: Tekst; bron: string }) {
+  const taal = useTaal()
   return (
-    <section aria-label="Citaat" className="w-sectie">
+    <section aria-label={taal === "en" ? "Quote" : "Citaat"} className="w-sectie">
       <figure className="m-0 max-w-[1100px]" data-zie>
         <blockquote className="syne m-0 text-[clamp(30px,4.4vw,64px)] leading-[1.1] tracking-[-.03em]">
-          <p className="m-0">“{tekst}”</p>
+          <p className="m-0">“<T t={tekst} />”</p>
         </blockquote>
         <figcaption className="lbl mt-8 text-gedempt">{bron}</figcaption>
       </figure>
@@ -71,13 +77,21 @@ export function Citaat({ tekst, bron }: { tekst: string; bron: string }) {
   )
 }
 
+/** De fasen uit de data in het Engels. */
+const FASE_EN: Record<NonNullable<FotoData["fase"]>, string> = {
+  "bestaande situatie": "existing situation",
+  uitvoering: "construction",
+  proces: "process",
+  eindresultaat: "final result",
+}
+
 /** Bijschrift onder een beeld: fase en/of bijschrift uit de data. */
 function Onderschrift({ foto }: { foto: FotoData }) {
   if (!foto.fase && !foto.bijschrift) return null
   return (
     <figcaption className="mt-3 flex flex-wrap gap-x-3 text-[13px] text-gedempt">
-      {foto.fase ? <span className="lbl">{foto.fase}</span> : null}
-      {foto.bijschrift ? <span>{foto.bijschrift}</span> : null}
+      {foto.fase ? <span className="lbl"><T t={{ nl: foto.fase, en: FASE_EN[foto.fase] }} /></span> : null}
+      {foto.bijschrift ? <span><T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} /></span> : null}
     </figcaption>
   )
 }
@@ -192,6 +206,7 @@ export function Figuur({ foto, sizes, className = "" }: { foto: FotoData; sizes:
  * met de bediening. Zo is er geen beweging zonder vraag, en geen extra code.
  */
 export function Clip({ video, className = "" }: { video: VideoData; className?: string }) {
+  const taal = useTaal()
   return (
     <figure className={`m-0 w-full max-w-[360px] ${className}`} data-zie>
       <video
@@ -199,29 +214,30 @@ export function Clip({ video, className = "" }: { video: VideoData; className?: 
         poster={video.poster}
         width={video.width}
         height={video.height}
-        aria-label={video.beschrijving}
+        aria-label={kies(video.beschrijving, taal)}
         muted
         playsInline
         controls
         preload="none"
         className="block h-auto w-full bg-vlak"
       />
-      {video.bijschrift ? <figcaption className="mt-3 text-[13px] text-gedempt">{video.bijschrift}</figcaption> : null}
+      {video.bijschrift ? <figcaption className="mt-3 text-[13px] text-gedempt"><T t={video.bijschrift} /></figcaption> : null}
     </figure>
   )
 }
 
 /** Een cijfer als moment: groot getal links, wat het is rechts. */
-export function Cijfer({ getal, wat, uitleg }: { getal: string; wat: string; uitleg: string }) {
+export function Cijfer({ getal, wat, uitleg }: { getal: string; wat: Tekst; uitleg: Tekst }) {
+  const taal = useTaal()
   return (
-    <section aria-label={`${getal} ${wat}`} className="w-sectie">
+    <section aria-label={`${getal} ${kies(wat, taal)}`} className="w-sectie">
       <div className="grid grid-cols-1 items-end gap-x-8 border-t border-lijn pt-3.5 md:grid-cols-12">
         <p aria-hidden="true" className="syne m-0 text-[clamp(120px,22vw,320px)] leading-[.85] tracking-[-.06em] tabular-nums md:col-span-7" data-zie>
           {getal}
         </p>
         <div className="mt-4 md:col-span-5 md:mt-0" data-zie style={volg(1)}>
-          <p className="lbl m-0">{wat}</p>
-          <p className="mt-2 mb-0 text-gedempt">{uitleg}</p>
+          <p className="lbl m-0"><T t={wat} /></p>
+          <p className="mt-2 mb-0 text-gedempt"><T t={uitleg} /></p>
         </div>
       </div>
     </section>
@@ -229,19 +245,19 @@ export function Cijfer({ getal, wat, uitleg }: { getal: string; wat: string; uit
 }
 
 /** Slot: kop, tekst en de weg naar een kennismaking als tekstlink. */
-export function Slot({ kop, alineas, knop }: { kop: string; alineas: readonly string[]; knop: string }) {
+export function Slot({ kop, alineas, knop }: { kop: Tekst; alineas: readonly Tekst[]; knop: Tekst }) {
   return (
     <section aria-labelledby="slot-kop" className="w-sectie">
       <div className="w-kopregel">
-        <p className="lbl m-0">Tot slot</p>
+        <p className="lbl m-0"><T t={{ nl: "Tot slot", en: "In closing" }} /></p>
       </div>
       <h2 id="slot-kop" className="w-titel syne max-w-[16ch]" data-zie>
-        {kop}
+        <T t={kop} />
       </h2>
       <Lees className="mt-[clamp(32px,4vw,56px)]">
         <Alineas teksten={alineas} />
         <Link href="/kennismaken" className="lnk w-lijnlink mt-4 inline-block">
-          {knop} →
+          <T t={knop} /> →
         </Link>
       </Lees>
     </section>
@@ -251,15 +267,16 @@ export function Slot({ kop, alineas, knop }: { kop: string; alineas: readonly st
 /** Het volgende project, groot en met zijn beeld. */
 export function Volgende({ hier }: { hier: string }) {
   const p = volgende(hier)
+  const taal = useTaal()
   return (
-    <section aria-label="Volgend project" className="w-sectie">
+    <section aria-label={taal === "en" ? "Next project" : "Volgend project"} className="w-sectie">
       <div className="w-kopregel">
-        <p className="lbl m-0">Volgend project</p>
+        <p className="lbl m-0"><T t={{ nl: "Volgend project", en: "Next project" }} /></p>
         <span className="lbl tabular-nums text-gedempt">{p.code}</span>
       </div>
       <Link href={p.href} className="group grid grid-cols-1 items-end gap-x-8 gap-y-6 no-underline md:grid-cols-12" data-zie>
         <span className="syne min-w-0 text-[clamp(36px,5vw,72px)] leading-[1] tracking-[-.035em] [overflow-wrap:anywhere] md:col-span-7">
-          <span className="w-lijnlink">{p.naam}</span> →
+          <span className="w-lijnlink"><T t={p.naam} /></span> →
         </span>
         <Doorkijk foto={p.foto} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/3] w-full md:col-span-5" eigen={false} />
       </Link>

@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { SplitText } from "gsap/SplitText"
 import { Logo } from "@/components/logo"
-import { OPENINGSZIN, zinVoor } from "./zinnen"
+import { openingszin, zinVoor } from "./zinnen"
 import "./overgang.css"
 
 // WF-055: de opening van bartoszkolenda.com (LayoutIntro) als intro van de
@@ -122,7 +122,7 @@ export function Overgang() {
           bezig = true
           timers.push(window.setTimeout(rust, MAX_TOTAAL))
           if (!location.hash) scrollTo(0, 0)
-          const regels = zetZin(OPENINGSZIN)
+          const regels = zetZin(openingszin())
           tijdlijnen.push(gsap.to(regels, { y: "0%", opacity: 1, ease: "power2.out", stagger: 0.1 }))
           const zinWeg = gsap.timeline({ paused: true }).to(regels, { y: "-75%", opacity: 0 })
           let op = true

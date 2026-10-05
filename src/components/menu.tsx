@@ -4,6 +4,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Weergave } from "./weergave"
+import { T } from "./taal"
+import { useTaal } from "./taal-klant"
 
 // Het menu van bartoszkolenda.com, één op één (eigenaar, 5 okt 2026: "mimiek
 // dit helemaal uit bartoszkolenda site"), met hun lichtgroen als ons ene
@@ -19,10 +21,10 @@ import { Weergave } from "./weergave"
 // Op de telefoon draagt elk woord een lijnicoon met een klein label eronder
 // (eigenaar, 5 okt 2026); vanaf 1024px blijft het tekst.
 const MENU = [
-  { href: "/vijvers", label: "Vijvers", icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
-  { href: "/tuinen", label: "Tuinen", icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
-  { href: "/werk", label: "Werk", icoon: "M3 5h16v12H3zM3 14l5-4 4 3 3-2 4 3" },
-  { href: "/over", label: "Over", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
+  { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
+  { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
+  { href: "/werk", label: { nl: "Werk", en: "Work" }, icoon: "M3 5h16v12H3zM3 14l5-4 4 3 3-2 4 3" },
+  { href: "/over", label: { nl: "Over", en: "About" }, icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
 ]
 
 const ITEM = "flex items-center rounded-full py-3 text-[12px] leading-4 font-bold tracking-[-.01em] uppercase no-underline transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
@@ -44,6 +46,7 @@ function grondOnder(x: number, y: number): number {
 
 export function Menu() {
   const pad = usePathname()
+  const taal = useTaal()
   const [boven, setBoven] = useState(true)
   const [pijlOpLicht, setPijlOpLicht] = useState(false)
 
@@ -73,12 +76,12 @@ export function Menu() {
 
   return (
     <>
-      <nav aria-label="Hoofdmenu" data-menu className="fixed bottom-5 left-3 z-[101] max-lg:right-[68px] lg:left-1/2 lg:-translate-x-1/2 lg:bottom-10">
+      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu className="fixed bottom-5 left-3 z-[101] max-lg:right-[68px] lg:left-1/2 lg:-translate-x-1/2 lg:bottom-10">
         <ul className="relative m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
           <li aria-hidden className="komeet" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
-            <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="flex items-center rounded-full px-2 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
+            <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"} className="flex items-center rounded-full px-2 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/woordmerk-primair.svg" alt="" className="h-[11px] w-auto min-[421px]:h-[13px]" />
             </Link>
@@ -91,7 +94,7 @@ export function Menu() {
                   <svg viewBox="0 0 22 22" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="lg:hidden">
                     <path d={m.icoon} />
                   </svg>
-                  <span className="max-lg:sr-only">{m.label}</span>
+                  <span className="max-lg:sr-only"><T t={m.label} /></span>
                 </Link>
               </li>
             )
@@ -108,8 +111,8 @@ export function Menu() {
         className="group fixed bottom-10 left-10 z-[99] hidden items-center gap-9 rounded-full bg-oranje py-[15px] pr-5 pl-6 text-[13px] leading-4 font-bold tracking-[-.01em] text-antraciet uppercase no-underline shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3 lg:inline-flex"
       >
         <span className="block h-4 overflow-hidden">
-          <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full">Kennismaken</span>
-          <span aria-hidden className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full">Kennismaken</span>
+          <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
+          <span aria-hidden className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
         </span>
         <svg viewBox="0 0 11 14" width="11" height="14" aria-hidden className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
           <path d="M0 12.0593L7.504 4.60687L1.00002 4.51248V2.5H11V12.5624H9L8.93581 6.04761L1.4318 13.5L0 12.0593Z" fill="currentColor" />
@@ -122,7 +125,7 @@ export function Menu() {
         type="button"
         onClick={pijl}
         data-menu
-        aria-label={boven ? "Naar beneden" : "Terug naar boven"}
+        aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
         className="fixed right-3 bottom-5 z-[101] grid size-12 cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
       >
         <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
@@ -135,7 +138,7 @@ export function Menu() {
         onClick={pijl}
         data-menu
         data-pijl
-        aria-label={boven ? "Naar beneden" : "Terug naar boven"}
+        aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
         className={`fixed right-10 bottom-10 z-[99] hidden size-[52px] cursor-pointer place-items-center rounded-full shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3 lg:grid ${
           pijlOpLicht ? "bg-antraciet text-oranje" : "bg-oranje text-antraciet"
         }`}

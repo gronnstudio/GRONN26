@@ -1,4 +1,6 @@
 import type { Service } from "@/lib/data/services"
+import { T, type Tekst } from "@/components/taal"
+import type { L } from "@/lib/i18n"
 import { kortePrijs, prijsblok } from "./prijs"
 
 // Rij-raster uit WF-019/WF-031: nr · dienst · wat · prijs · +/−.
@@ -15,22 +17,28 @@ export function DienstKolommen() {
   return (
     <div aria-hidden="true" className={`${RIJ} lbl hidden py-[10px] text-gedempt md:grid`}>
       <span>Nr</span>
-      <span>Dienst</span>
-      <span>Wat</span>
-      <span className="text-right">Prijs incl. btw</span>
+      <span>
+        <T t={{ nl: "Dienst", en: "Service" }} />
+      </span>
+      <span>
+        <T t={{ nl: "Wat", en: "What" }} />
+      </span>
+      <span className="text-right">
+        <T t={{ nl: "Prijs incl. btw", en: "Price incl. VAT" }} />
+      </span>
       <span />
     </div>
   )
 }
 
-function Lijst({ kop, items, gedempt = false }: { kop: string; items: string[]; gedempt?: boolean }) {
+function Lijst({ kop, items, gedempt = false }: { kop: Tekst; items: L[]; gedempt?: boolean }) {
   return (
     <div className="min-w-0">
-      <h3 className="lbl m-0 mb-[12px] font-normal text-gedempt">{kop}</h3>
+      <h3 className="lbl m-0 mb-[12px] font-normal text-gedempt"><T t={kop} /></h3>
       <ul className="m-0 list-none p-0">
         {items.map((i) => (
-          <li key={i} className={`border-t border-lijn py-[8px] text-[15px] leading-normal ${gedempt ? "text-gedempt" : ""}`}>
-            {i}
+          <li key={i.nl} className={`border-t border-lijn py-[8px] text-[15px] leading-normal ${gedempt ? "text-gedempt" : ""}`}>
+            <T t={i} />
           </li>
         ))}
       </ul>
@@ -52,10 +60,10 @@ export function DienstRij({ nr, dienst }: { nr: string; dienst: Service }) {
       >
         <span className="lbl">{nr}</span>
         <span className="syne col-start-2 row-start-1 min-w-0 text-[clamp(22px,2.3vw,32px)] leading-[1.1] tracking-[-.02em] [overflow-wrap:anywhere]">
-          {afbreekbaar(dienst.title.nl)}
+          <T t={{ nl: afbreekbaar(dienst.title.nl), en: dienst.title.en }} />
         </span>
-        <span className="col-start-2 row-start-2 leading-[1.6] text-gedempt md:col-start-3 md:row-start-1">{dienst.summary.nl}</span>
-        <span className="lbl col-start-2 row-start-3 tabular-nums md:col-start-4 md:row-start-1 md:text-right">{kortePrijs(dienst)}</span>
+        <span className="col-start-2 row-start-2 leading-[1.6] text-gedempt md:col-start-3 md:row-start-1"><T t={dienst.summary} /></span>
+        <span className="lbl col-start-2 row-start-3 tabular-nums md:col-start-4 md:row-start-1 md:text-right"><T t={kortePrijs(dienst)} /></span>
         <span aria-hidden="true" className="col-start-3 row-start-1 text-right text-gedempt md:col-start-5">
           <span className="group-open:hidden">+</span>
           <span className="hidden group-open:inline">−</span>
@@ -63,20 +71,22 @@ export function DienstRij({ nr, dienst }: { nr: string; dienst: Service }) {
       </summary>
       <div className="pb-[28px] pl-[44px] md:grid md:grid-cols-[60px_minmax(0,1fr)] md:gap-x-[32px] md:pb-[36px] md:pl-0">
         <div className="grid gap-[32px] md:col-start-2 md:grid-cols-2 lg:grid-cols-3">
-          <Lijst kop="Wat erbij hoort" items={dienst.includes.map((i) => i.nl)} />
-          {dienst.excludes?.length ? <Lijst kop="Wat niet" items={dienst.excludes.map((i) => i.nl)} gedempt /> : null}
+          <Lijst kop={{ nl: "Wat erbij hoort", en: "What it includes" }} items={dienst.includes} />
+          {dienst.excludes?.length ? <Lijst kop={{ nl: "Wat niet", en: "What it doesn’t" }} items={dienst.excludes} gedempt /> : null}
           <div className="min-w-0">
-            <h3 className="lbl m-0 mb-[12px] font-normal text-gedempt">{prijs.kop}</h3>
+            <h3 className="lbl m-0 mb-[12px] font-normal text-gedempt"><T t={prijs.kop} /></h3>
             <ul className="m-0 list-none p-0">
               {prijs.regels.map((r) => (
-                <li key={r.label} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-[16px] border-t border-lijn py-[8px] text-[15px] leading-normal">
-                  <span>{r.label}</span>
-                  <span className="lbl tabular-nums">{r.prijs}</span>
-                  {r.noot ? <span className="col-span-2 mt-[4px] text-[13px] text-gedempt">{r.noot}</span> : null}
+                <li key={r.label.nl} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-[16px] border-t border-lijn py-[8px] text-[15px] leading-normal">
+                  <span>
+                    <T t={r.label} />
+                  </span>
+                  <span className="lbl tabular-nums"><T t={r.prijs} /></span>
+                  {r.noot ? <span className="col-span-2 mt-[4px] text-[13px] text-gedempt"><T t={r.noot} /></span> : null}
                 </li>
               ))}
             </ul>
-            {prijs.verreken ? <p className="m-0 mt-[12px] text-[13px] leading-[1.6] text-gedempt">{prijs.verreken}</p> : null}
+            {prijs.verreken ? <p className="m-0 mt-[12px] text-[13px] leading-[1.6] text-gedempt"><T t={prijs.verreken} /></p> : null}
           </div>
         </div>
       </div>

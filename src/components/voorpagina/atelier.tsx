@@ -3,21 +3,32 @@ import Link from "next/link"
 import { Foto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 import { OVER_MIJ } from "@/lib/data/teksten"
+import { Beide, T, type Tekst } from "@/components/taal"
+import type { L } from "@/lib/i18n"
 import { F01, F04_2, F05, F07_1, F08_2, F10, F11, T01, T02 } from "./beelden"
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
 // van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
 // JS of met minder beweging staat alles stil en is alles zichtbaar.
 
-export const KOP = "Een vijver en tuin die gezond blijven."
-export const ZIN =
-  "Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf."
-const LABEL = "Vijvers en tuinen · Stein en omgeving"
+export const KOP: L = {
+  nl: "Een vijver en tuin die gezond blijven.",
+  en: "A pond and garden that stay healthy.",
+}
+export const ZIN: L = {
+  nl: "Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.",
+  en: "I’m Nick. I renovate and maintain ponds and build natural gardens, for homeowners in Stein and the surrounding area. Where possible with a fixed price agreed up front.",
+}
+const LABEL: L = {
+  nl: "Vijvers en tuinen · Stein en omgeving",
+  en: "Ponds and gardens · Stein and surrounding area",
+}
 
 const i = (n: number) => ({ "--i": n }) as CSSProperties
 
 /** Tekst in losse woorden, zodat ze één voor één kunnen oplichten. */
-function Woorden({ tekst }: { tekst: string }) {
+function Woorden({ tekst }: { tekst: Tekst }) {
+  if (typeof tekst !== "string") return <Beide nl={<Woorden tekst={tekst.nl} />} en={<Woorden tekst={tekst.en} />} />
   return (
     <>
       {tekst
@@ -69,7 +80,7 @@ function Collage({ stukken, klasse }: { stukken: Stuk[]; klasse: string }) {
 export function Atelier() {
   return (
     <div className="vp-atelier">
-      <section className="vp-held" aria-label="Opening">
+      <section className="vp-held" aria-labelledby="kop">
         <p className="vp-held-titel vp-licht" aria-hidden="true">
           <span className="vp-r">
             <span className="vp-w" style={i(0)}>
@@ -82,29 +93,29 @@ export function Atelier() {
             </span>
           </span>
         </p>
-        <p className="lbl vp-lbl-tel">{LABEL}</p>
+        <p className="lbl vp-lbl-tel"><T t={LABEL} /></p>
         <div className="vp-held-foto" data-held-foto>
           <Foto foto={F08_2} priority sizes="100vw" className="vp-held-beeld" />
         </div>
         <p className="vp-verticaal vp-links" data-verticaal aria-hidden="true">
-          Vijvers en tuinen
+          <T t={{ nl: "Vijvers en tuinen", en: "Ponds and gardens" }} />
         </p>
         <p className="vp-verticaal vp-rechts" data-verticaal aria-hidden="true">
-          Stein en omgeving
+          <T t={{ nl: "Stein en omgeving", en: "Stein and surrounding area" }} />
         </p>
       </section>
 
       <section className="vp-onthul" data-onthul aria-labelledby="kop">
-        <p className="sr-only">{LABEL}</p>
+        <p className="sr-only"><T t={LABEL} /></p>
         <h1 id="kop">
           <Woorden tekst={KOP} />
         </h1>{" "}
         <p>
-          <Woorden tekst={`${ZIN} ${OVER_MIJ[1].nl}`} />
+          <Woorden tekst={{ nl: `${ZIN.nl} ${OVER_MIJ[1].nl}`, en: `${ZIN.en} ${OVER_MIJ[1].en}` }} />
         </p>
         <br />
         <Link className="lnk vp-meer" href="/over">
-          Meer over mij →
+          <T t={{ nl: "Meer over mij →", en: "More about me →" }} />
         </Link>
       </section>
 
@@ -112,7 +123,7 @@ export function Atelier() {
         <p className="vp-reuswoord vp-licht" aria-hidden="true">
           <span className="vp-spoor" data-spoor>
             {[0, 1, 2].map((n) => (
-              <span key={n}>Vijvers&nbsp;&nbsp;Tuinen&nbsp;&nbsp;</span>
+              <span key={n}><T t={{ nl: "Vijvers\u00a0\u00a0Tuinen\u00a0\u00a0", en: "Ponds\u00a0\u00a0Gardens\u00a0\u00a0" }} /></span>
             ))}
           </span>
         </p>

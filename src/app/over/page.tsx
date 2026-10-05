@@ -4,6 +4,7 @@ import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
 import { Werkwijze } from "@/components/voorpagina/werkwijze"
 import "@/components/voorpagina/voorpagina.css"
+import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { OVER_MIJ } from "@/lib/data/teksten"
@@ -21,7 +22,7 @@ export default function Over() {
   const [eerste, ...rest] = OVER_MIJ
   return (
     <>
-      <Opening label="Hovenier en ecologisch ontwerper" titel="Over mij">
+      <Opening label={{ nl: "Hovenier en ecologisch ontwerper", en: "Gardener and ecological designer" }} titel={{ nl: "Over mij", en: "About me" }}>
         {/* Het portret staat rechtop; daarom een eigen kader (3:2, op de
             telefoon 4:5) met het gezicht in beeld, in plaats van 16:9. */}
         <figure className="w-groei m-0" data-groei>
@@ -41,7 +42,7 @@ export default function Over() {
           <span className="lbl text-gedempt">GRØNN Studio</span>
         </div>
         {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
-        <Oplichten tekst={eerste.nl} className="m-0" />
+        <Oplichten tekst={eerste} className="m-0" />
         <div className="mt-[clamp(40px,5vw,72px)] grid md:grid-cols-[5fr_7fr] md:gap-x-8">
           {/* de lege kolom krijgt een echte foto uit de moestuin (van de oude Studio-pagina) */}
           <figure className="m-0 mb-10 md:sticky md:top-[12vh] md:mb-0 md:self-start" data-zie>
@@ -52,11 +53,11 @@ export default function Over() {
               loading="lazy"
               className="aspect-[4/5] w-full object-cover md:max-w-[440px]"
             />
-            <figcaption className="lbl mt-3 text-gedempt">In de moestuin</figcaption>
+            <figcaption className="lbl mt-3 text-gedempt"><T t={{ nl: "In de moestuin", en: "In the vegetable garden" }} /></figcaption>
           </figure>
           <div>
             {rest.map((alinea, i) => (
-              <Oplichten key={i} tekst={alinea.nl} className="m-0 mb-[1.2em] text-[clamp(18px,1.5vw,24px)]" />
+              <Oplichten key={i} tekst={alinea} className="m-0 mb-[1.2em] text-[clamp(18px,1.5vw,24px)]" />
             ))}
           </div>
         </div>
@@ -66,7 +67,13 @@ export default function Over() {
         <Werkwijze />
       </div>
 
-      <Verder voor="Zullen we" nadruk="kennismaken" na="?" href="/kennismaken" label="Naar Kennismaken" />
+      <Verder
+        voor={{ nl: "Zullen we", en: "Shall we" }}
+        nadruk={{ nl: "kennismaken", en: "meet" }}
+        na="?"
+        href="/kennismaken"
+        label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
+      />
     </>
   )
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
 import { WERK } from "@/components/werk/projecten"
@@ -19,14 +20,30 @@ export const metadata: Metadata = {
   },
 }
 
+const ZIN = {
+  nl: BESCHRIJVING,
+  en: "Real work by GRØNN Studio: a pond renovation with two ponds, a waterfall and a stream, and a 24\u00a0m² patio in Geulle.",
+}
+
 export default function WerkPagina() {
   return (
     <>
-      <Opening label={`Werk · ${WERK.length} projecten`} titel="Werk" zin={BESCHRIJVING} zij={["Vijvers", "Tuinen"]} />
+      <Opening
+        label={{ nl: `Werk · ${WERK.length} projecten`, en: `Work · ${WERK.length} projects` }}
+        titel={{ nl: "Werk", en: "Work" }}
+        zin={<T t={ZIN} />}
+        zij={[{ nl: "Vijvers", en: "Ponds" }, { nl: "Tuinen", en: "Gardens" }]}
+      />
       <div className="wrap">
         <WerkOverzicht />
       </div>
-      <Verder voor="Wie is" nadruk="de persoon" na="erachter?" href="/over" label="Naar Over" />
+      <Verder
+        voor={{ nl: "Wie is", en: "Who is" }}
+        nadruk={{ nl: "de persoon", en: "the person" }}
+        na={{ nl: "erachter?", en: "behind it?" }}
+        href="/over"
+        label={{ nl: "Naar Over", en: "To About" }}
+      />
     </>
   )
 }

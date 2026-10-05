@@ -2,14 +2,15 @@ import Link from "next/link"
 import { BUSINESS } from "@/lib/business"
 import { Logo } from "./logo"
 import { Kopieer } from "./kopieer"
+import { T, type Tekst } from "./taal"
 
-const PAGINAS: [string, string][] = [
-  ["/vijvers", "Vijvers"],
-  ["/tuinen", "Tuinen"],
-  ["/werk", "Werk"],
-  ["/over", "Over"],
-  ["/kennismaken", "Kennismaken"],
-  ["/faq", "Veelgestelde vragen"],
+const PAGINAS: [string, Tekst][] = [
+  ["/vijvers", { nl: "Vijvers", en: "Ponds" }],
+  ["/tuinen", { nl: "Tuinen", en: "Gardens" }],
+  ["/werk", { nl: "Werk", en: "Work" }],
+  ["/over", { nl: "Over", en: "About" }],
+  ["/kennismaken", { nl: "Kennismaken", en: "Get in touch" }],
+  ["/faq", { nl: "Veelgestelde vragen", en: "FAQ" }],
 ]
 
 // Voet A uit de wireframes (WF-027, colofon in vier kolommen), in de taal van
@@ -49,26 +50,26 @@ export function Voet() {
               </li>
             </ul>
           </div>
-          <nav aria-label="Pagina's">
-            <p className="lbl m-0 text-gedempt">Pagina&apos;s</p>
+          <nav aria-labelledby="voet-paginas">
+            <p id="voet-paginas" className="lbl m-0 text-gedempt"><T t={{ nl: "Pagina’s", en: "Pages" }} /></p>
             <ul className="mt-4 mb-0 list-none space-y-1.5 p-0 leading-[1.6]">
               {PAGINAS.map(([h, t]) => (
                 <li key={h}>
-                  <Link href={h} className="w-lijnlink">{t}</Link>
+                  <Link href={h} className="w-lijnlink"><T t={t} /></Link>
                 </li>
               ))}
             </ul>
           </nav>
           <div>
-            <p className="lbl m-0 text-gedempt">Klein</p>
+            <p className="lbl m-0 text-gedempt"><T t={{ nl: "Klein", en: "Small print" }} /></p>
             <p className="mt-4 mb-0 leading-[1.75]">
               <Link href="/privacy" className="w-lijnlink text-inkt">Privacy</Link>
               <br />
-              <Link href="/voorwaarden" className="w-lijnlink text-inkt">Voorwaarden</Link>
+              <Link href="/voorwaarden" className="w-lijnlink text-inkt"><T t={{ nl: "Voorwaarden", en: "Terms" }} /></Link>
               <br />
-              <Link href="/herroeping" className="w-lijnlink text-inkt">Herroeping</Link>
+              <Link href="/herroeping" className="w-lijnlink text-inkt"><T t={{ nl: "Herroeping", en: "Withdrawal" }} /></Link>
               <br />
-              <Link href="/colofon" className="w-lijnlink text-inkt">Colofon</Link>
+              <Link href="/colofon" className="w-lijnlink text-inkt"><T t={{ nl: "Colofon", en: "Colophon" }} /></Link>
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import Link from "next/link"
 import type { CSSProperties } from "react"
 import { Opening } from "@/components/wereld/opening"
 import { Zaaien } from "@/components/niet-gevonden/zaaien"
+import { T } from "@/components/taal"
 
 export const metadata: Metadata = {
   title: "Pagina niet gevonden",
@@ -10,9 +11,9 @@ export const metadata: Metadata = {
 }
 
 const WEGEN = [
-  { href: "/", naam: "Naar de voorpagina" },
-  { href: "/werk", naam: "Werk" },
-  { href: "/kennismaken", naam: "Kennismaken" },
+  { href: "/", naam: { nl: "Naar de voorpagina", en: "To the home page" } },
+  { href: "/werk", naam: { nl: "Werk", en: "Work" } },
+  { href: "/kennismaken", naam: { nl: "Kennismaken", en: "Get in touch" } },
 ]
 
 // WF-035 met de donkere opening van de site: één zin en drie wegen terug.
@@ -20,11 +21,14 @@ const WEGEN = [
 export default function NietGevonden() {
   return (
     <>
-      <Opening label="404 · Pagina niet gevonden" titel={"Hier groeit\nnog niets."} />
+      <Opening
+        label={{ nl: "404 · Pagina niet gevonden", en: "404 · Page not found" }}
+        titel={{ nl: "Hier groeit\nnog niets.", en: "Nothing grows\nhere yet." }}
+      />
 
       <div className="wrap">
         <Zaaien />
-        <nav aria-label="De weg terug" className="mt-[clamp(64px,8vw,120px)] max-w-[900px] border-t border-lijn">
+        <nav aria-labelledby="pagina-titel" className="mt-[clamp(64px,8vw,120px)] max-w-[900px] border-t border-lijn">
           {WEGEN.map((w, i) => (
             <Link
               key={w.href}
@@ -35,7 +39,7 @@ export default function NietGevonden() {
             >
               <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")}</span>
               <span className="syne text-[clamp(22px,2.3vw,32px)] tracking-[-.02em] underline-offset-[6px] group-hover:underline group-focus-visible:underline">
-                {w.naam}
+                <T t={w.naam} />
               </span>
               <span className="text-[20px] text-gedempt transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
                 →

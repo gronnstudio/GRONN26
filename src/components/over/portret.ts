@@ -7,4 +7,5 @@ export const PORTRET: Foto = {
   width: 1932,
   height: 2576,
   alt: "Nick Peters met een espressokopje op een terras in een Maastrichtse straat, kijkend in de camera.",
+  en: { alt: "Nick Peters holding an espresso cup at a café table on a Maastricht street, looking into the camera." },
 }

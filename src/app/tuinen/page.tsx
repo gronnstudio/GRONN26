@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import { DienstRij } from "@/components/diensten/dienst-rij"
 import { Verder } from "@/components/wereld/verder"
-import { aantalDiensten, diensten, eersteZin } from "@/components/diensten/kies"
+import { aantalDiensten, diensten, eersteZinL } from "@/components/diensten/kies"
 import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
+import { T } from "@/components/taal"
 import { SFEER_WEIDE } from "@/components/voorpagina/beelden"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
@@ -12,15 +13,15 @@ import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 // WF-020 Tuinen: de rijen per fase (kijken, ontwerpen, aanleggen), die
 // openklappen zoals op Vijvers (WF-031), in de taal van de voorpagina.
 const FASEN = [
-  { id: "fase-kijken", kop: "A · Kijken", diensten: diensten("consultancy") },
-  { id: "fase-ontwerpen", kop: "B · Ontwerpen", diensten: diensten("garden-design", "planting-habitat") },
-  { id: "fase-aanleggen", kop: "C · Aanleggen", diensten: diensten("garden-transformation", "implementation") },
+  { id: "fase-kijken", kop: { nl: "A · Kijken", en: "A · Looking" }, diensten: diensten("consultancy") },
+  { id: "fase-ontwerpen", kop: { nl: "B · Ontwerpen", en: "B · Designing" }, diensten: diensten("garden-design", "planting-habitat") },
+  { id: "fase-aanleggen", kop: { nl: "C · Aanleggen", en: "C · Building" }, diensten: diensten("garden-transformation", "implementation") },
 ]
 
 // De inleiding is de samenvatting van Tuinontwerp: de eerste zin in de
 // opening, de rest licht op.
 const INLEIDING = FASEN[1].diensten[0].summary.nl
-const [ZIN, VERVOLG] = eersteZin(INLEIDING)
+const [ZIN, VERVOLG] = eersteZinL(FASEN[1].diensten[0].summary)
 
 export const metadata: Metadata = {
   title: "Tuinen",
@@ -36,10 +37,10 @@ export default function TuinenPagina() {
   return (
     <>
       {/* Tuinen heeft nog geen eigen foto: het sfeerbeeld draagt zijn label. */}
-      <Opening label="Diensten · tuin" titel="Tuinen" zin={ZIN} foto={SFEER_WEIDE} />
+      <Opening label={{ nl: "Diensten · tuin", en: "Services · garden" }} titel={{ nl: "Tuinen", en: "Gardens" }} zin={<T t={ZIN} />} foto={SFEER_WEIDE} />
 
       <div className="wrap">
-        {VERVOLG ? <Oplichten tekst={VERVOLG} className="m-0 pt-[clamp(64px,8vw,120px)]" /> : null}
+        {VERVOLG.nl ? <Oplichten tekst={VERVOLG} className="m-0 pt-[clamp(64px,8vw,120px)]" /> : null}
 
         {FASEN.map((f, i) => (
           <section key={f.id} aria-labelledby={f.id} className={i === 0 ? "w-sectie" : "pt-[clamp(56px,7vw,96px)]"}>
@@ -51,17 +52,23 @@ export default function TuinenPagina() {
             </div>
           </section>
         ))}
-        <p className="lbl m-0 mt-[16px] max-w-[60ch] text-gedempt">Tik op een dienst: wat erbij hoort, wat niet, en de prijs.</p>
+        <p className="lbl m-0 mt-[16px] max-w-[60ch] text-gedempt">
+          <T t={{ nl: "Tik op een dienst: wat erbij hoort, wat niet, en de prijs.", en: "Tap a service: what it includes, what it doesn’t, and the price." }} />
+        </p>
 
         <section aria-labelledby="tuin-werk" className="w-sectie">
-          <WerkKop id="tuin-werk">Tuinwerk</WerkKop>
+          <WerkKop id="tuin-werk">
+            <T t={{ nl: "Tuinwerk", en: "Garden work" }} />
+          </WerkKop>
           <WerkBlok href="/werk/terras-geulle">
             <div className="md:col-span-6 md:col-start-1 md:row-start-1">
               <p className="lbl m-0 text-gedempt">
-                GR / 002 · {TERRAS.categorie} · {PLAATS}
+                GR / 002 · <T t={TERRAS.categorie} /> · {PLAATS}
               </p>
-              <p className="syne m-0 mt-[16px] text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]">{TERRAS.titel}</p>
-              <p className="w-lijnlink mt-[28px] mb-0 inline-block">Bekijk het project →</p>
+              <p className="syne m-0 mt-[16px] text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={TERRAS.titel} /></p>
+              <p className="w-lijnlink mt-[28px] mb-0 inline-block">
+                <T t={{ nl: "Bekijk het project →", en: "View the project →" }} />
+              </p>
             </div>
             <div className="relative aspect-[3/4] overflow-hidden md:col-span-5 md:col-start-8 md:row-start-1">
               <div data-v="0.5" className="absolute inset-x-0 -inset-y-[48px]">
@@ -72,7 +79,11 @@ export default function TuinenPagina() {
         </section>
       </div>
 
-      <Verder voor="Benieuwd naar" nadruk="het werk" na="zelf?" href="/werk" label="Naar Werk" />
+      <Verder voor={{ nl: "Benieuwd naar", en: "Curious about" }}
+        nadruk={{ nl: "het werk", en: "the work" }}
+        na={{ nl: "zelf?", en: "itself?" }}
+        href="/werk"
+        label={{ nl: "Naar Werk", en: "To Work" }} />
     </>
   )
 }

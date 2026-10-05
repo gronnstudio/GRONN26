@@ -3,6 +3,7 @@ import Link from "next/link"
 import { BUSINESS } from "@/lib/business"
 import { VIJVER } from "@/lib/data/vijverrenovatie"
 import { TERRAS } from "@/lib/data/terras-geulle"
+import { T } from "@/components/taal"
 
 export const metadata: Metadata = {
   title: "Links",
@@ -26,24 +27,24 @@ export default function Links() {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="mb-2 h-[15px] w-auto" />
-            <p className="m-0 text-[14px] leading-[1.5] opacity-80">Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.</p>
+            <p className="m-0 text-[14px] leading-[1.5] opacity-80"><T t={{ nl: "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.", en: "I build and maintain ponds and natural gardens for homeowners in Stein and the surrounding area, with a fixed price agreed up front." }} /></p>
           </div>
         </div>
 
         <Link href="/kennismaken" className={`${TEGEL} col-span-2 border-0 bg-oranje! text-antraciet!`}>
-          <span className="lbl">Vrijblijvend</span>
-          <span className={NAAM}>Kennismaken</span>
+          <span className="lbl"><T t={{ nl: "Vrijblijvend", en: "No obligation" }} /></span>
+          <span className={NAAM}><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
           <Pijl />
         </Link>
-        <a href={BUSINESS.whatsapp} className={TEGEL}><span className="lbl text-gedempt">Bericht</span><span className={NAAM}>WhatsApp</span></a>
-        <a href={BUSINESS.emailHref} className={TEGEL}><span className="lbl text-gedempt">Mail</span><span className={`${NAAM} break-all text-[16px]!`}>{BUSINESS.email}</span></a>
+        <a href={BUSINESS.whatsapp} className={TEGEL}><span className="lbl text-gedempt"><T t={{ nl: "Bericht", en: "Message" }} /></span><span className={NAAM}>WhatsApp</span></a>
+        <a href={BUSINESS.emailHref} className={TEGEL}><span className="lbl text-gedempt"><T t={{ nl: "Mail", en: "Email" }} /></span><span className={`${NAAM} break-all text-[16px]!`}>{BUSINESS.email}</span></a>
 
         <Link href="/werk/vijverrenovatie" className={`${TEGEL} col-span-2 min-h-[220px] border-0 p-0 text-gebroken-wit! md:row-span-2`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/projecten/vijverrenovatie/F01.jpg" alt="" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
           <span className="absolute inset-x-0 bottom-0 rounded-b-[6px] bg-gradient-to-t from-black/75 to-transparent p-5 pt-16">
-            <span className="lbl block opacity-80">Project · Vijverrenovatie</span>
-            <span className={`${NAAM} block`}>{VIJVER.titel}</span>
+            <span className="lbl block opacity-80"><T t={{ nl: "Project · Vijverrenovatie", en: "Project · Pond renovation" }} /></span>
+            <span className={`${NAAM} block`}><T t={VIJVER.titel} /></span>
           </span>
         </Link>
         <Link href="/werk/terras-geulle" className={`${TEGEL} col-span-2 min-h-[160px] border-0 p-0 text-gebroken-wit!`}>
@@ -51,18 +52,18 @@ export default function Links() {
           <img src="/projecten/terras-geulle/T01.jpg" alt="" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
           <span className="absolute inset-x-0 bottom-0 rounded-b-[6px] bg-gradient-to-t from-black/75 to-transparent p-5 pt-16">
             <span className="lbl block opacity-80">Project · Geulle</span>
-            <span className={`${NAAM} block`}>{TERRAS.titel}</span>
+            <span className={`${NAAM} block`}><T t={TERRAS.titel} /></span>
           </span>
         </Link>
-        <a href={BUSINESS.phoneHref} className={TEGEL}><span className="lbl text-gedempt">Bellen</span><span className={`${NAAM} text-[17px]!`}>{BUSINESS.phone}</span></a>
-        <a href={BUSINESS.instagram} className={TEGEL}><span className="lbl text-gedempt">Volgen</span><span className={NAAM}>Instagram</span></a>
+        <a href={BUSINESS.phoneHref} className={TEGEL}><span className="lbl text-gedempt"><T t={{ nl: "Bellen", en: "Call" }} /></span><span className={`${NAAM} text-[17px]!`}>{BUSINESS.phone}</span></a>
+        <a href={BUSINESS.instagram} className={TEGEL}><span className="lbl text-gedempt"><T t={{ nl: "Volgen", en: "Follow" }} /></span><span className={NAAM}>Instagram</span></a>
 
         <a href="/contact.vcf" download="gronn-studio.vcf" className={`${TEGEL} col-span-2 md:col-span-4 md:min-h-0 md:flex-row md:items-center`}>
-          <span className="lbl text-gedempt">Visitekaartje</span>
-          <span className={NAAM}>Bewaar in je contacten</span>
+          <span className="lbl text-gedempt"><T t={{ nl: "Visitekaartje", en: "Business card" }} /></span>
+          <span className={NAAM}><T t={{ nl: "Bewaar in je contacten", en: "Save to your contacts" }} /></span>
         </a>
         <Link href="/" className={`${TEGEL} col-span-2 border-0 bg-antraciet! text-gebroken-wit! md:col-span-4 md:min-h-0 md:flex-row md:items-center`}>
-          <span className={NAAM}>Naar de website</span>
+          <span className={NAAM}><T t={{ nl: "Naar de website", en: "To the website" }} /></span>
           <Pijl />
         </Link>
       </div>

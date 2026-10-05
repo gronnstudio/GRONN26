@@ -3,12 +3,15 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { Logo } from "./logo"
+import { T } from "./taal"
+import { useTaal } from "./taal-klant"
 
 // Geen bovenbalk (eigenaar, 5 okt 2026). Vanaf 1024px zit het woordmerk in
 // de menupil en Kennismaken linksonder; op de telefoon is daar geen plek, dus
 // staan het woordmerk (de weg naar huis) en Kennismaken bovenaan. Ze scrollen
 // mee weg en komen terug zodra je omhoog scrolt, in een glazen laag.
 export function Kop() {
+  const taal = useTaal()
   const [stand, setStand] = useState<"boven" | "weg" | "terug">("boven")
   useEffect(() => {
     let vorige = scrollY, wacht = 0
@@ -31,14 +34,14 @@ export function Kop() {
       } ${stand === "terug" ? "bg-grond/85 backdrop-blur-md" : ""}`}
     >
       <div className="wrap flex items-center justify-between py-4">
-        <Link href="/" aria-label="GRØNN Studio, naar de voorpagina">
+        <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"}>
           <Logo className="h-[18px] w-auto" />
         </Link>
         <Link
           href="/kennismaken"
           className="inline-flex h-9 items-center rounded-full bg-oranje px-3 text-[11px] font-bold tracking-[.06em] text-antraciet uppercase no-underline"
         >
-          Kennismaken
+          <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
         </Link>
       </div>
     </div>

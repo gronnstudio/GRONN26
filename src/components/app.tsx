@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { T } from "./taal"
+import { useTaal } from "./taal-klant"
 
 // Overgenomen van gronn.studio (eigenaar, 5 okt 2026): de site als app, en
 // volledig scherm.
@@ -33,6 +35,8 @@ export function App() {
   const [vol, setVol] = useState(false)
   const [kanVol, setKanVol] = useState(false)
   const uitgesteld = useRef<InstallEvent | null>(null)
+  const taal = useTaal()
+  const en = taal === "en"
 
   useEffect(() => {
     if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {})
@@ -102,8 +106,8 @@ export function App() {
         <button
           type="button"
           onClick={wisselVol}
-          aria-label={vol ? "Volledig scherm verlaten" : "Volledig scherm"}
-          title={vol ? "Volledig scherm verlaten (Esc)" : "Volledig scherm (F11)"}
+          aria-label={en ? (vol ? "Exit full screen" : "Full screen") : (vol ? "Volledig scherm verlaten" : "Volledig scherm")}
+          title={en ? (vol ? "Exit full screen (Esc)" : "Full screen (F11)") : (vol ? "Volledig scherm verlaten (Esc)" : "Volledig scherm (F11)")}
           className="fixed top-5 right-[var(--goot)] z-[60] hidden size-10 opacity-60 hover:opacity-100 cursor-pointer place-items-center rounded-full bg-[rgba(32,32,32,.55)] text-gebroken-wit backdrop-blur-md transition-colors hover:bg-gebroken-wit hover:text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 lg:grid"
         >
           {vol ? (
@@ -119,21 +123,21 @@ export function App() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/icons/icon-192.png" alt="" width={44} height={44} className="size-11 shrink-0 rounded-xl border border-lijn" />
             <div className="min-w-0 flex-1">
-              <p id="app-titel" className="syne m-0 text-[17px] leading-tight">GRØNN als app</p>
+              <p id="app-titel" className="syne m-0 text-[17px] leading-tight"><T t={{ nl: "GRØNN als app", en: "GRØNN as an app" }} /></p>
               <p className="mt-1 mb-0 text-sm leading-relaxed text-gedempt">
-                {soort === "installeer" && "Installeer de site als app: met één klik open, zonder browserbalk."}
-                {soort === "ios" && "Tik onderin op Deel en kies ‘Zet op beginscherm’."}
-                {soort === "menu" && "Open het menu van je browser (⋮) en kies ‘App installeren’."}
+                {soort === "installeer" && <T t={{ nl: "Installeer de site als app: met één klik open, zonder browserbalk.", en: "Install the site as an app: open in one click, without the browser bar." }} />}
+                {soort === "ios" && <T t={{ nl: "Tik onderin op Deel en kies ‘Zet op beginscherm’.", en: "Tap Share at the bottom and choose ‘Add to Home Screen’." }} />}
+                {soort === "menu" && <T t={{ nl: "Open het menu van je browser (⋮) en kies ‘App installeren’.", en: "Open your browser menu (⋮) and choose ‘Install app’." }} />}
               </p>
             </div>
           </div>
           <div className="mt-3 flex justify-end gap-2">
             <button type="button" onClick={weg} className="inline-flex min-h-11 cursor-pointer items-center rounded-full border border-lijn px-[18px] text-sm font-semibold">
-              Niet nu
+              <T t={{ nl: "Niet nu", en: "Not now" }} />
             </button>
             {soort === "installeer" && (
               <button type="button" onClick={installeer} className="inline-flex min-h-11 cursor-pointer items-center rounded-full bg-oranje px-[18px] text-sm font-bold text-antraciet">
-                Installeer
+                <T t={{ nl: "Installeer", en: "Install" }} />
               </button>
             )}
           </div>

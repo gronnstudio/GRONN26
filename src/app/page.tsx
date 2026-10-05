@@ -28,7 +28,13 @@ export default function Voorpagina() {
         <WatIkDoe />
       </div>
 
-      <Verder voor="Benieuwd naar" nadruk="het werk" na="zelf?" href="/werk" label="Naar Werk" />
+      <Verder
+        voor={{ nl: "Benieuwd naar", en: "Curious about" }}
+        nadruk={{ nl: "het werk", en: "the work" }}
+        na={{ nl: "zelf?", en: "itself?" }}
+        href="/werk"
+        label={{ nl: "Naar Werk", en: "To Work" }}
+      />
       <Beweging />
     </>
   )

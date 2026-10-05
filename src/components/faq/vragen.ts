@@ -1,5 +1,6 @@
 import { SERVICES } from "@/lib/data/services"
 import { VIJVER_SLUG } from "@/lib/data/vijverrenovatie"
+import type { Locale } from "@/lib/i18n"
 import { vragen, vragenSchema, type Vraag } from "@/lib/data/vragen-lijst"
 
 // De vragen voor /faq, uit dezelfde bron als de oude site
@@ -29,9 +30,9 @@ export function nieuweRoute(href: string): string {
 
 export const FAQ_URL = "https://gronn.studio/faq"
 
-/** Alle vragen in het Nederlands, met links naar de nieuwe routes. */
-export function faqVragen(): Vraag[] {
-  return vragen(SERVICES, "nl").map((v) => (v.verder ? { ...v, verder: { ...v.verder, href: nieuweRoute(v.verder.href) } } : v))
+/** Alle vragen in één taal (standaard Nederlands), met links naar de nieuwe routes. */
+export function faqVragen(locale: Locale = "nl"): Vraag[] {
+  return vragen(SERVICES, locale).map((v) => (v.verder ? { ...v, verder: { ...v.verder, href: nieuweRoute(v.verder.href) } } : v))
 }
 
 /** FAQPage-JSON-LD uit precies dezelfde vragen als de pagina toont. */

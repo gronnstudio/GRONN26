@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 }
 
 export default function Pagina() {
-  return <JuridischDocument doc={HERROEPING} titel={"Herroeping"} />
+  return <JuridischDocument doc={HERROEPING} titel={{ nl: "Herroeping", en: "Withdrawal" }} />
 }

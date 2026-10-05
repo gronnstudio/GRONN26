@@ -4,7 +4,7 @@ import { BUSINESS } from "@/lib/business"
 // Lopende tekst uit de vragenlijst: bedragen in Montserrat met
 // gelijke cijferbreedte, telefoon en e-mail als link. De tekst zelf blijft letterlijk.
 const DELEN = new RegExp(
-  `(€\\s?\\d[\\d.]*(?:–€\\s?\\d[\\d.]*)?|${BUSINESS.phone.replace(/[+]/g, "\\+")}|${BUSINESS.email.replace(/[.]/g, "\\.")})`,
+  `(€\\s?\\d(?:[.,]\\d+)*(?:–€\\s?\\d(?:[.,]\\d+)*)?|${BUSINESS.phone.replace(/[+]/g, "\\+")}|${BUSINESS.email.replace(/[.]/g, "\\.")})`,
   "g"
 )
 

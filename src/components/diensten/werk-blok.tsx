@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { T, type Tekst } from "@/components/taal"
 
 /** Kop boven een werkblok, als de sectiekoppen van de voorpagina: "Vijverwerk" links, "Alle werk →" rechts. */
 export function WerkKop({ id, children }: { id: string; children: React.ReactNode }) {
@@ -8,7 +9,7 @@ export function WerkKop({ id, children }: { id: string; children: React.ReactNod
         {children}
       </h2>
       <Link href="/werk" className="lbl w-lijnlink">
-        Alle werk →
+        <T t={{ nl: "Alle werk →", en: "All work →" }} />
       </Link>
     </div>
   )
@@ -31,13 +32,15 @@ export function WerkBlok({ href, children }: { href: string; children: React.Rea
 }
 
 /** Sectiekop als op de voorpagina: lijn, label links, aantal rechts. */
-export function KopRegel({ id, label, aantal }: { id: string; label: string; aantal: string }) {
+export function KopRegel({ id, label, aantal }: { id: string; label: Tekst; aantal: Tekst }) {
   return (
     <div className="w-kopregel">
       <h2 id={id} className="lbl m-0">
-        {label}
+        <T t={label} />
       </h2>
-      <span className="lbl text-gedempt tabular-nums">{aantal}</span>
+      <span className="lbl text-gedempt tabular-nums">
+        <T t={aantal} />
+      </span>
     </div>
   )
 }

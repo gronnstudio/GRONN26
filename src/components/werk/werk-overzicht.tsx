@@ -3,6 +3,8 @@
 import type { CSSProperties } from "react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { T } from "@/components/taal"
+import { useTaal } from "@/components/taal-klant"
 import { Doorkijk } from "./delen"
 import { WERK } from "./projecten"
 
@@ -20,6 +22,7 @@ const volg = (n: number) => ({ "--i": n }) as CSSProperties
 
 export function WerkOverzicht() {
   const [weergave, setWeergave] = useState<Weergave>("lijst")
+  const en = useTaal() === "en"
 
   // Bewaarde keuze ophalen ná de eerste render (hydration-veilig): de server
   // kent localStorage niet, dus de lijst is altijd de eerste stand.
@@ -44,8 +47,8 @@ export function WerkOverzicht() {
   return (
     <div className="pt-[clamp(56px,7vw,112px)]">
       <div className="w-kopregel">
-        <h2 className="lbl m-0">Alle projecten</h2>
-        <div className="lbl -my-3 flex gap-6" role="group" aria-label="Weergave van het werk">
+        <h2 className="lbl m-0"><T t={{ nl: "Alle projecten", en: "All projects" }} /></h2>
+        <div className="lbl -my-3 flex gap-6" role="group" aria-label={en ? "How to show the work" : "Weergave van het werk"}>
           {(["lijst", "raster"] as const).map((w) => (
             <button
               key={w}
@@ -56,13 +59,13 @@ export function WerkOverzicht() {
                 weergave === w ? "text-inkt underline underline-offset-4" : "text-gedempt"
               }`}
             >
-              {w === "lijst" ? "Lijst" : "Raster"}
+              {w === "lijst" ? <T t={{ nl: "Lijst", en: "List" }} /> : <T t={{ nl: "Raster", en: "Grid" }} />}
             </button>
           ))}
         </div>
       </div>
 
-      <section aria-label="Werk als lijst" hidden={weergave !== "lijst"}>
+      <section aria-label={en ? "Work as a list" : "Werk als lijst"} hidden={weergave !== "lijst"}>
         <ul className="m-0 list-none p-0">
           {WERK.map((p, i) => (
             <li key={p.href} className="border-b border-lijn first:border-t" data-zie style={volg(i)}>
@@ -76,11 +79,11 @@ export function WerkOverzicht() {
                     <span>{p.code}</span>
                   </span>
                   <span className="syne text-[clamp(32px,4.4vw,64px)] leading-[1.02] tracking-[-.035em] [overflow-wrap:anywhere]">
-                    <span className="w-lijnlink">{p.titel}</span>
+                    <span className="w-lijnlink"><T t={p.titel} /></span>
                   </span>
                   <span className="lbl text-gedempt">
-                    {p.type} · {p.plaats !== "—" ? `${p.plaats} · ` : ""}
-                    {p.status}
+                    <T t={p.type} /> · {p.plaats !== "—" ? `${p.plaats} · ` : ""}
+                    <T t={p.status} />
                   </span>
                 </span>
                 <Doorkijk
@@ -96,7 +99,7 @@ export function WerkOverzicht() {
       </section>
 
       <section
-        aria-label="Werk als raster"
+        aria-label={en ? "Work as a grid" : "Werk als raster"}
         hidden={weergave !== "raster"}
         className="grid grid-cols-12 items-start gap-x-3 gap-y-14 md:gap-x-8"
       >
@@ -123,11 +126,11 @@ export function WerkOverzicht() {
               {String(i + 1).padStart(2, "0")} — {p.code}
             </span>
             <span className="syne text-[clamp(28px,3vw,44px)] leading-[1.05] tracking-[-.03em]">
-              <span className="w-lijnlink">{p.naam}</span>
+              <span className="w-lijnlink"><T t={p.naam} /></span>
             </span>
             <span className="lbl text-gedempt">
               {p.plaats !== "—" ? `${p.plaats} · ` : ""}
-              {p.jaar} · {p.status}
+              {p.jaar} · <T t={p.status} />
             </span>
           </Link>
         ))}
