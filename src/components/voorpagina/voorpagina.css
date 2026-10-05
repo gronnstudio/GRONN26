@@ -5,6 +5,7 @@
    mag: zonder JS, met prefers-reduced-motion of html.stil is alles zichtbaar. */
 
 .vp-wortel {
+  overflow-x: clip;
   --vp-rand: max(20px, 2.5vw);
   --vp-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
   --vp-regel: cubic-bezier(0.25, 1, 0.5, 1);
@@ -538,4 +539,8 @@ html.stil .vp-zwerf {
   width: 100%;
   height: auto;
   margin-bottom: -2%;
+}
+
+@media (max-width: 360px) {
+  .vp-namen a { font-size: 24px; }
 }

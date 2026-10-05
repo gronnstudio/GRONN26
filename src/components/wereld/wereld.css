@@ -6,7 +6,7 @@
    en alleen als beweging mag; zonder JS staat alles er gewoon. */
 :root {
   --w-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
-  --w-rand: clamp(20px, 5vw, 72px);
+  --w-rand: var(--goot);
 }
 
 /* ── de opening van elke pagina ─────────────────────────────────────── */
@@ -25,7 +25,8 @@
   margin: 0;
   font-family: var(--font-syne);
   font-weight: 700;
-  font-size: clamp(56px, 11vw, 190px);
+  font-size: clamp(44px, 11vw, 190px);
+  overflow-wrap: anywhere;
   line-height: 1.02;
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -71,6 +72,7 @@
 @media (max-width: 1100px) { .w-zij { display: none; } }
 @media (max-width: 767px) {
   .w-opening { padding-top: 112px; }
+  .w-reus { font-size: clamp(40px, 12vw, 56px); }
   .w-groei .w-beeld { aspect-ratio: 4 / 3; }
 }
 

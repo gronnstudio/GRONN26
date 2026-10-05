@@ -11,7 +11,7 @@ export function Stappen() {
             <span className="lbl">{String(i + 1).padStart(2, "0")}</span>
             <span className="syne text-[clamp(22px,2.3vw,32px)] tracking-[-.02em]">{s.titel.nl}</span>
             <span className="hidden leading-relaxed text-gedempt md:block">{s.tekst.nl}</span>
-            <span aria-hidden className="font-mono text-gedempt md:hidden">
+            <span aria-hidden className="text-gedempt md:hidden">
               <span className="group-open:hidden">+</span>
               <span className="hidden group-open:inline">−</span>
             </span>

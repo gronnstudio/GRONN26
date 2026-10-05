@@ -74,16 +74,16 @@ export function Menu() {
         <ul className="m-0 flex list-none items-center gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
           <li className="flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026) */}
-            <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="flex items-center rounded-full px-3 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
+            <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="flex items-center rounded-full px-2 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[13px] w-auto min-[421px]:h-[15px]" />
+              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[9px] w-auto min-[421px]:h-[10px]" />
             </Link>
           </li>
           {MENU.map((m) => {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex">
-                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} px-2.5 min-[421px]:px-3.5 min-[421px]:text-[13px] lg:px-5 ${RUST}`}>
+                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} px-2 text-[11px] min-[421px]:px-3.5 min-[421px]:text-[13px] lg:px-5 ${RUST}`}>
                   {m.label}
                 </Link>
               </li>

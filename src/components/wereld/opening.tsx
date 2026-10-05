@@ -28,7 +28,7 @@ export function Opening({
   return (
     <section className="w-opening donker" aria-labelledby="pagina-titel" data-opening>
       <p className="lbl w-label">{label}</p>
-      <h1 id="pagina-titel" className="w-reus" tabIndex={-1}>
+      <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={titel.replace(/\n/g, " ")}>
         {regels.map((r, n) => (
           <span key={n} className="w-r">
             <span className="w-w" style={{ "--i": n } as CSSProperties}>
