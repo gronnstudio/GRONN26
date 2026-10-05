@@ -143,7 +143,8 @@ export const PRICING: Record<string, Pricing> = {
       },
     ],
   },
-  // Vanafprijzen voor de tuindiensten (5 okt 2026; eigenaar: "bedenk zelf
+  // Vanafprijzen voor de tuindiensten (5 okt 2026; aanleggen € 3.000 en omvormen
+  // € 5.000 van de eigenaar; de rest voorgesteld na "bedenk zelf
   // prijzen" op basis van de echte offertes in Drive): offerte achtertuin Stein
   // (GR-O 202609140002: € 9.895 incl. btw voor ~50 m²; borders ~€ 75/m²) en de
   // offerte Fase 1 consult (€ 175 excl. btw). Alle bedragen incl. btw.
@@ -169,12 +170,12 @@ export const PRICING: Record<string, Pricing> = {
   "garden-transformation": {
     basis: "from",
     vatIncluded: true,
-    tiers: [{ label: { en: "Reworking part of a garden", nl: "Een deel van de tuin omvormen" }, amount: 2500 }],
+    tiers: [{ label: { en: "Reworking part of a garden", nl: "Een deel van de tuin omvormen" }, amount: 5000 }],
   },
   implementation: {
     basis: "from",
     vatIncluded: true,
-    tiers: [{ label: { en: "Building a small garden or terrace", nl: "Een kleine tuin of terras aanleggen" }, amount: 1500 }],
+    tiers: [{ label: { en: "Building a small garden or terrace", nl: "Een kleine tuin of terras aanleggen" }, amount: 3000 }],
   },
 }
 
