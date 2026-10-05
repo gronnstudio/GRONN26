@@ -117,3 +117,8 @@ html.stil .zaai path, html.stil .zaai-bloem { animation-duration: 1ms; animation
 
 /* Foto's net iets zachter: 6px, niet rond (eigenaar, 5 okt 2026). */
 main img:not([src*="/brand/"]):not(.rounded-full), main video { border-radius: 6px; }
+
+/* Twee talen: beide staan in de pagina, de andere is verborgen (src/components/taal.tsx). */
+.t-nl, .t-en { display: contents; }
+.t-en, html.en .t-nl { display: none; }
+html.en .t-en { display: contents; }

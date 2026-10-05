@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react"
 import { Foto } from "@/components/foto"
+import { Beide, T, type Tekst } from "@/components/taal"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
 /**
@@ -16,26 +17,27 @@ export function Opening({
   zij,
   children,
 }: {
-  label: string
-  titel: string
+  label: Tekst
+  titel: Tekst
   zin?: ReactNode
   foto?: FotoData
   /** Twee korte woorden voor de verticale labels in de marge (vanaf 1100px). */
-  zij?: [string, string]
+  zij?: [Tekst, Tekst]
   children?: ReactNode
 }) {
-  const regels = titel.split("\n")
+  const regels = (t: string) =>
+    t.split("\n").map((r, n) => (
+      <span key={n} className="w-r">
+        <span className="w-w" style={{ "--i": n } as CSSProperties}>
+          {r}
+        </span>
+      </span>
+    ))
   return (
     <section className="w-opening" aria-labelledby="pagina-titel" data-opening>
-      <p className="lbl w-label">{label}</p>
-      <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={titel.replace(/\n/g, " ")}>
-        {regels.map((r, n) => (
-          <span key={n} className="w-r">
-            <span className="w-w" style={{ "--i": n } as CSSProperties}>
-              {r}
-            </span>
-          </span>
-        ))}
+      <p className="lbl w-label"><T t={label} /></p>
+      <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={typeof titel === "string" ? titel.replace(/\n/g, " ") : undefined}>
+        {typeof titel === "string" ? regels(titel) : <Beide nl={regels(titel.nl)} en={regels(titel.en)} />}
       </h1>
       {zin ? <p className="w-zin">{zin}</p> : null}
       {children}
@@ -47,10 +49,10 @@ export function Opening({
       {zij ? (
         <>
           <p className="w-zij links" data-zij aria-hidden="true">
-            {zij[0]}
+            <T t={zij[0]} />
           </p>
           <p className="w-zij rechts" data-zij aria-hidden="true">
-            {zij[1]}
+            <T t={zij[1]} />
           </p>
         </>
       ) : null}

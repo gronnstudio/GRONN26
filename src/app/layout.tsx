@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // klok: donker vóór 07.00 en vanaf 19.00), zodat er geen flits is.
-const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),u=new Date().getHours(),k=s.kleur||'auto',d=k==='donker'||(k==='auto'&&(u<7||u>=19)),c=document.documentElement.classList;c.toggle('donker',d);c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);c.toggle('geluid',!!s.geluid)}catch(e){}`
+const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),u=new Date().getHours(),k=s.kleur||'auto',d=k==='donker'||(k==='auto'&&(u<7||u>=19)),c=document.documentElement.classList;c.toggle('donker',d);c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);c.toggle('geluid',!!s.geluid);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

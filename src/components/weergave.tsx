@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { toon } from "@/lib/geluid";
+import { T } from "@/components/taal";
 
 // WF-026: één knop met een regelaar-icoon opent Kleur (Auto · Licht · Donker;
 // Auto = licht van 07.00 tot 19.00) en Toegankelijkheid. Bewaard in deze
 // browser; het voorverf-script in layout.tsx past het toe vóór de eerste verf.
 type Stand = {
   kleur: "auto" | "licht" | "donker";
+  taal: "nl" | "en";
   beweging: boolean;
   groot: boolean;
   contrast: boolean;
@@ -18,13 +20,14 @@ type Stand = {
 const KEY = "gronn-weergave";
 const STANDAARD: Stand = {
   kleur: "auto",
+  taal: "nl",
   beweging: false,
   groot: false,
   contrast: false,
   onderstreep: false,
   geluid: false,
 };
-const SCHAKELAARS: [keyof Omit<Stand, "kleur">, string][] = [
+const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, string][] = [
   ["beweging", "Minder beweging"],
   ["groot", "Grotere tekst"],
   ["contrast", "Meer contrast"],
@@ -44,6 +47,8 @@ function pasToe(s: Stand) {
   c.toggle("contrast", s.contrast);
   c.toggle("onderstreep", s.onderstreep);
   c.toggle("geluid", s.geluid);
+  c.toggle("en", s.taal === "en");
+  document.documentElement.lang = s.taal;
   try {
     localStorage.setItem(KEY, JSON.stringify(s));
   } catch {}
@@ -153,6 +158,30 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                 ✕
               </button>
             </div>
+            <fieldset className="m-0 mb-4 border-0 p-0">
+              <legend className="lbl mb-2.5 p-0 opacity-70">
+                <T t={{ nl: "Taal", en: "Language" }} />
+              </legend>
+              <div className="grid grid-cols-2 rounded-full border border-lijn p-[3px]">
+                {([["nl", "Nederlands"], ["en", "English"]] as const).map(([k, naam]) => (
+                  <label
+                    key={k}
+                    lang={k}
+                    className="cursor-pointer rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
+                  >
+                    <input
+                      type="radio"
+                      name="taal"
+                      value={k}
+                      checked={stand.taal === k}
+                      onChange={() => zet({ ...stand, taal: k })}
+                      className="sr-only"
+                    />
+                    {naam}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
             <fieldset className="m-0 mb-4 border-0 p-0">
               <legend className="lbl mb-2.5 p-0 opacity-70">Kleur</legend>
               <div className="grid grid-cols-3 rounded-full border border-lijn p-[3px]">
