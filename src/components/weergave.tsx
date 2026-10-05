@@ -112,11 +112,11 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
         aria-expanded={open}
         aria-controls="weergave-paneel"
         onClick={() => setOpen(!open)}
-        className={`flex h-12 w-full cursor-pointer flex-col items-center justify-center gap-[4px] rounded-full px-1.5 lg:grid lg:size-10 lg:min-w-0 lg:place-items-center lg:px-0 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 ${knopKlasse}`}
+        className={`flex h-10 w-full cursor-pointer flex-col items-center justify-center gap-[4px] rounded-full px-1.5 lg:grid lg:size-10 lg:min-w-0 lg:place-items-center lg:px-0 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 ${knopKlasse}`}
       >
         <svg
-          width="24"
-          height="24"
+          width="22"
+          height="22"
           viewBox="0 0 20 20"
           aria-hidden
           fill="none"
