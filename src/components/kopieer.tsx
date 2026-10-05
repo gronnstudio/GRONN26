@@ -7,7 +7,7 @@ import { useTaal } from "./taal-klant"
 // een KVK- of BTW-nummer wordt niet gelezen maar overgetypt, en daar gaat
 // een cijfer verloren. Elk nummer is zijn eigen knop; het nummer blijft
 // gewoon staan en selecteerbaar als het klembord er niet is.
-export function Kopieer({ label, waarde }: { label: string; waarde: string }) {
+export function Kopieer({ label, waarde, kaal = false }: { label: string; waarde: string; kaal?: boolean }) {
   const [stand, setStand] = useState<"rust" | "gekopieerd" | "mislukt">("rust")
   const en = useTaal() === "en"
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -29,11 +29,15 @@ export function Kopieer({ label, waarde }: { label: string; waarde: string }) {
       type="button"
       onClick={kopieer}
       aria-label={en ? `Copy ${label} ${waarde}` : `${label} ${waarde} kopiëren`}
-      className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-lijn py-1.5 pr-2.5 pl-3 text-left leading-none transition-colors hover:border-inkt focus-visible:outline-2 focus-visible:outline-offset-2"
+      className={
+        kaal
+          ? "group inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-transparent p-0 text-left leading-none text-inherit focus-visible:outline-2 focus-visible:outline-offset-2"
+          : "group inline-flex cursor-pointer items-center gap-2 rounded-full border border-lijn py-1.5 pr-2.5 pl-3 text-left leading-none transition-colors hover:border-inkt focus-visible:outline-2 focus-visible:outline-offset-2"
+      }
     >
-      <span className="text-gedempt">{label}</span>
-      <span className="text-inkt tabular-nums">{waarde}</span>
-      <span aria-live="polite" className="grid size-4 place-items-center text-gedempt group-hover:text-inkt">
+      {label ? <span className={kaal ? "opacity-70" : "text-gedempt"}>{label}</span> : null}
+      <span className={kaal ? "tabular-nums" : "text-inkt tabular-nums"}>{waarde}</span>
+      <span aria-live="polite" className={kaal ? "grid size-4 place-items-center opacity-70 group-hover:opacity-100" : "grid size-4 place-items-center text-gedempt group-hover:text-inkt"}>
         {stand === "gekopieerd" ? (
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-label={en ? "Copied" : "Gekopieerd"}><path d="M3 8.5 6.5 12 13 4.5" /></svg>
         ) : stand === "mislukt" ? (

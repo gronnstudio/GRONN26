@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react"
 import { T } from "@/components/taal"
+import { Kopieer } from "@/components/kopieer"
 import type { L } from "@/lib/i18n"
 import {
   DIENST_ICONEN,
@@ -81,8 +82,8 @@ export function MerkGids() {
           {SCHAAL.map((k, i) => (
             <div key={k.vol} className="overflow-hidden rounded-2xl ring-1 ring-lijn" data-zie style={{ "--i": i } as CSSProperties}>
               {[k.vol, k.midden, k.licht].filter(Boolean).map((c) => (
-                <div key={c} className="flex h-16 items-end p-2 text-[11px] font-semibold tabular-nums" style={{ background: c, color: contrast(c!, "#202020") >= 4.5 ? "#202020" : "#EFEEEA" }}>
-                  {c}
+                <div key={c} className="flex h-16 items-end p-2 text-[11px] font-semibold" style={{ background: c, color: contrast(c!, "#202020") >= 4.5 ? "#202020" : "#EFEEEA" }}>
+                  <Kopieer label="" waarde={c!} kaal />
                 </div>
               ))}
               <p className="m-0 p-3 font-semibold">

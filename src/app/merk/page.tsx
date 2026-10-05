@@ -6,6 +6,7 @@ import { BUSINESS } from "@/lib/business"
 import { MERKBASIS, MERKBELOFTE } from "@/lib/data/plekken"
 import type { L } from "@/lib/i18n"
 import { MerkGids } from "@/components/merk/gids"
+import { Kopieer } from "@/components/kopieer"
 
 export const metadata: Metadata = {
   title: "Merk",
@@ -133,7 +134,7 @@ export default function Merk() {
                 <div className="h-24" style={{ background: k.hex }} />
                 <div className="p-4">
                   <p className="m-0 font-semibold"><T t={k.naam} /></p>
-                  <p className="m-0 mt-1 text-[14px] tabular-nums">{k.hex}</p>
+                  <p className="m-0 mt-2 text-[14px]"><Kopieer label="HEX" waarde={k.hex} /></p>
                   <p className="lbl m-0 mt-2 text-gedempt"><T t={k.rol} /></p>
                 </div>
               </li>
@@ -160,6 +161,20 @@ export default function Merk() {
           </div>
           <p className="mt-6 max-w-[66ch] text-[16px] leading-[1.6] text-gedempt">
             <T t={{ nl: "Alleen deze twee. Koppen in Syne Bold, al het andere in Montserrat: lopende tekst licht, labels in kleine hoofdletters met wat ruimte ertussen, knoppen vet.", en: "Only these two. Headings in Syne Bold, everything else in Montserrat: running text light, labels in small spaced capitals, buttons bold." }} />
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {[
+              ["Syne", "https://fonts.google.com/specimen/Syne"],
+              ["Montserrat", "https://fonts.google.com/specimen/Montserrat"],
+            ].map(([naam, url]) => (
+              <a key={naam} href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-lijn px-5 text-[13px] font-bold tracking-[.06em] uppercase no-underline hover:border-inkt">
+                <T t={{ nl: `Download ${naam}`, en: `Download ${naam}` }} />
+                <span aria-hidden="true">↓</span>
+              </a>
+            ))}
+          </div>
+          <p className="mt-3 text-[14px] text-gedempt">
+            <T t={{ nl: "Beide letters zijn vrij te gebruiken (SIL Open Font License) en komen van Google Fonts.", en: "Both typefaces are free to use (SIL Open Font License) and come from Google Fonts." }} />
           </p>
         </section>
 
