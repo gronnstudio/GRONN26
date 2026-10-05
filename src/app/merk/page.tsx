@@ -5,6 +5,7 @@ import { Beide, T } from "@/components/taal"
 import { BUSINESS } from "@/lib/business"
 import { MERKBASIS, MERKBELOFTE } from "@/lib/data/plekken"
 import type { L } from "@/lib/i18n"
+import { MerkGids } from "@/components/merk/gids"
 
 export const metadata: Metadata = {
   title: "Merk",
@@ -161,6 +162,8 @@ export default function Merk() {
             <T t={{ nl: "Alleen deze twee. Koppen in Syne Bold, al het andere in Montserrat: lopende tekst licht, labels in kleine hoofdletters met wat ruimte ertussen, knoppen vet.", en: "Only these two. Headings in Syne Bold, everything else in Montserrat: running text light, labels in small spaced capitals, buttons bold." }} />
           </p>
         </section>
+
+        <MerkGids />
 
         <section aria-labelledby="h-regels" className="w-sectie">
           <Kop id="h-regels" label={{ nl: "Vorm en gebruik", en: "Form and use" }} aantal={{ nl: `${REGELS.length} regels`, en: `${REGELS.length} rules` }} />
