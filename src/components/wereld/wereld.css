@@ -85,7 +85,7 @@
   max-width: 1100px;
 }
 .w-onthul .w-wd, .vp-onthul .vp-wd { white-space: nowrap; }
-.w-lt { transition: opacity 0.2s; }
+.w-lt, .w-onthul .w-wd, .vp-onthul .vp-wd { transition: opacity 0.2s; }
 
 /* ── sectiekop zoals op de voorpagina: label · aantal ───────────────── */
 .w-sectie {

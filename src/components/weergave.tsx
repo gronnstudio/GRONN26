@@ -184,7 +184,10 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                       onChange={() => zet({ ...stand, taal: k })}
                       className="sr-only"
                     />
-                    {naam}
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Vlag taal={k} />
+                      {naam}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -245,4 +248,30 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
         )}
     </>
   );
+}
+
+/** Twee ronde vlagjes voor de taalkeuze (eigenaar, 5 okt 2026). Puur versiering. */
+function Vlag({ taal }: { taal: "nl" | "en" }) {
+  return (
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" className="shrink-0 rounded-full ring-1 ring-black/10">
+      <clipPath id={`vlag-${taal}`}>
+        <circle cx="10" cy="10" r="10" />
+      </clipPath>
+      {taal === "nl" ? (
+        <g clipPath="url(#vlag-nl)">
+          <rect width="20" height="7" fill="#AE1C28" />
+          <rect y="6.67" width="20" height="6.67" fill="#fff" />
+          <rect y="13.33" width="20" height="6.67" fill="#21468B" />
+        </g>
+      ) : (
+        <g clipPath="url(#vlag-en)">
+          <rect width="20" height="20" fill="#012169" />
+          <path d="M0 0L20 20M20 0L0 20" stroke="#fff" strokeWidth="4" />
+          <path d="M0 0L20 20M20 0L0 20" stroke="#C8102E" strokeWidth="1.5" />
+          <path d="M10 0V20M0 10H20" stroke="#fff" strokeWidth="6" />
+          <path d="M10 0V20M0 10H20" stroke="#C8102E" strokeWidth="3.4" />
+        </g>
+      )}
+    </svg>
+  )
 }
