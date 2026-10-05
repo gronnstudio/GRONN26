@@ -72,8 +72,8 @@ export function Menu() {
     <>
       <nav aria-label="Hoofdmenu" data-menu className="fixed bottom-5 left-1/2 z-[101] -translate-x-1/2 lg:bottom-10">
         <ul className="m-0 flex list-none items-center gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
-          <li className="flex">
-            {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026) */}
+          <li className="hidden lg:flex">
+            {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
             <Link href="/" aria-label="GRØNN Studio, naar de voorpagina" className="flex items-center rounded-full px-2 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit min-[421px]:px-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/woordmerk-primair.svg" alt="" className="h-[11px] w-auto min-[421px]:h-[13px]" />

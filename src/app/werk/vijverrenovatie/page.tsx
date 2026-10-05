@@ -78,9 +78,10 @@ export default function Vijverrenovatie() {
         />
 
         <section aria-label="Inleiding" className="w-sectie">
-          <Oplichten tekst={VIJVER.intro[0]} />
-          <Lees className="mt-[clamp(40px,5vw,72px)]">
-            <Alineas teksten={VIJVER.intro.slice(1)} />
+          {VIJVER.intro.map((t) => (
+            <Oplichten key={t.slice(0, 40)} tekst={t} className="m-0 mb-[1em]" />
+          ))}
+          <Lees className="mt-[clamp(24px,3vw,40px)]">
             <p className="lbl m-0 mt-6 text-gedempt">{VIJVER.auteur}</p>
           </Lees>
         </section>

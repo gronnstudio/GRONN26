@@ -1,3 +1,4 @@
+import { Woorden } from "@/components/wereld/oplichten"
 import type { CSSProperties, ReactNode } from "react"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
@@ -49,8 +50,8 @@ export function Alineas({ teksten }: { teksten: readonly string[] }) {
   return (
     <>
       {teksten.map((t) => (
-        <p key={t.slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]">
-          {t}
+        <p key={t.slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]" data-onthul>
+          <Woorden tekst={t} />
         </p>
       ))}
     </>

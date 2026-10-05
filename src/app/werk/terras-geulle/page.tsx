@@ -53,9 +53,10 @@ export default function TerrasGeulle() {
         />
 
         <section aria-label="Inleiding" className="w-sectie">
-          <Oplichten tekst={TERRAS.intro[0]} />
-          <Lees className="mt-[clamp(40px,5vw,72px)]">
-            <Alineas teksten={TERRAS.intro.slice(1)} />
+          {TERRAS.intro.map((t) => (
+            <Oplichten key={t.slice(0, 40)} tekst={t} className="m-0 mb-[1em]" />
+          ))}
+          <Lees className="mt-[clamp(24px,3vw,40px)]">
             <p className="lbl m-0 mt-6 text-gedempt">{TERRAS.auteur}</p>
           </Lees>
         </section>

@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import type { CSSProperties } from "react"
 import { Foto } from "@/components/foto"
 import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
@@ -41,18 +40,12 @@ export default function Over() {
           <h2 id="h-verhaal" className="lbl m-0 font-normal">Nick Peters</h2>
           <span className="lbl text-gedempt">GRØNN Studio</span>
         </div>
+        {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
         <Oplichten tekst={eerste.nl} className="m-0" />
-        <div className="mt-[clamp(56px,7vw,112px)] grid md:grid-cols-[5fr_7fr] md:gap-x-8">
-          <div className="max-w-[62ch] md:col-start-2">
+        <div className="mt-[clamp(40px,5vw,72px)] grid md:grid-cols-[5fr_7fr] md:gap-x-8">
+          <div className="md:col-start-2">
             {rest.map((alinea, i) => (
-              <p
-                key={i}
-                data-zie
-                style={{ "--i": 0 } as CSSProperties}
-                className="mt-0 mb-[1.2em] text-[clamp(17px,1.25vw,19px)] leading-[1.75]"
-              >
-                {alinea.nl}
-              </p>
+              <Oplichten key={i} tekst={alinea.nl} className="m-0 mb-[1.2em] text-[clamp(18px,1.5vw,24px)]" />
             ))}
           </div>
         </div>
