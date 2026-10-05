@@ -1,16 +1,18 @@
 import type { Metadata } from "next"
-import { Syne, Montserrat, Geist_Mono } from "next/font/google"
+import { Syne, Montserrat } from "next/font/google"
 import { Kop } from "@/components/kop"
-import { Dock } from "@/components/dock"
+import { Menu } from "@/components/menu"
+import { Bekijk } from "@/components/bekijk"
+import { WereldBeweging } from "@/components/wereld/beweging"
+import "@/components/wereld/wereld.css"
 import { Voet } from "@/components/voet"
 import { Overgang } from "@/components/overgang/overgang"
 import { INTRO_VOORVERF } from "@/components/overgang/voorverf"
 import { BUSINESS } from "@/lib/business"
 import "./globals.css"
 
-const syne = Syne({ subsets: ["latin"], weight: ["600"], variable: "--font-syne" })
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-montserrat" })
-const geistMono = Geist_Mono({ subsets: ["latin"], weight: ["400"], variable: "--font-geist-mono" })
+const syne = Syne({ subsets: ["latin"], weight: ["700"], variable: "--font-syne" })
+const montserrat = Montserrat({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-montserrat" })
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gronn.studio"),
@@ -25,7 +27,7 @@ const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${syne.variable} ${montserrat.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="nl" className={`${syne.variable} ${montserrat.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
         <script dangerouslySetInnerHTML={{ __html: INTRO_VOORVERF }} />
@@ -34,7 +36,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Kop />
         <main>{children}</main>
         <Voet />
-        <Dock />
+        <Menu />
+        <Bekijk />
+        <WereldBeweging />
         <Overgang />
       </body>
     </html>

@@ -28,7 +28,7 @@ function pasToe(s: Stand) {
   } catch {}
 }
 
-export function Weergave() {
+export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   const [open, setOpen] = useState(false)
   const [stand, setStand] = useState<Stand>(STANDAARD)
   const paneel = useRef<HTMLDivElement>(null)
@@ -68,13 +68,13 @@ export function Weergave() {
         aria-expanded={open}
         aria-controls="weergave-paneel"
         onClick={() => setOpen(!open)}
-        className="grid size-11 cursor-pointer place-items-center rounded-full hover:bg-inkt/10 aria-expanded:bg-inkt/15"
+        className={`grid size-10 cursor-pointer place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 ${knopKlasse}`}
       >
         <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4">
           <path d="M3 5h14M3 10h14M3 15h14" />
-          <circle cx="7" cy="5" r="2" fill="var(--grond)" />
-          <circle cx="13" cy="10" r="2" fill="var(--grond)" />
-          <circle cx="9" cy="15" r="2" fill="var(--grond)" />
+          <circle cx="7" cy="5" r="2" fill="none" />
+          <circle cx="13" cy="10" r="2" fill="none" />
+          <circle cx="9" cy="15" r="2" fill="none" />
         </svg>
       </button>
       <div
@@ -83,7 +83,7 @@ export function Weergave() {
         role="dialog"
         aria-label="Weergave en toegankelijkheid"
         hidden={!open}
-        className="fixed inset-x-3 bottom-[84px] z-[200] border border-lijn bg-grond p-5 text-sm shadow-2xl md:inset-x-auto md:top-[72px] md:right-[var(--goot)] md:bottom-auto md:w-80"
+        className="fixed inset-x-3 bottom-[84px] z-[200] rounded-2xl border border-lijn bg-grond p-5 text-sm text-inkt shadow-2xl md:inset-x-auto md:left-1/2 md:w-80 md:-translate-x-1/2 lg:bottom-[110px]"
       >
         <div className="mb-4 flex items-center justify-between">
           <strong className="text-[15px] font-semibold">Weergave</strong>

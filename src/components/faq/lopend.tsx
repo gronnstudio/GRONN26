@@ -1,8 +1,8 @@
 import { Fragment } from "react"
 import { BUSINESS } from "@/lib/business"
 
-// Lopende tekst uit de vragenlijst: bedragen in Geist Mono (zoals het
-// wireframe), telefoon en e-mail als link. De tekst zelf blijft letterlijk.
+// Lopende tekst uit de vragenlijst: bedragen in Montserrat met
+// gelijke cijferbreedte, telefoon en e-mail als link. De tekst zelf blijft letterlijk.
 const DELEN = new RegExp(
   `(€\\s?\\d[\\d.]*(?:–€\\s?\\d[\\d.]*)?|${BUSINESS.phone.replace(/[+]/g, "\\+")}|${BUSINESS.email.replace(/[.]/g, "\\.")})`,
   "g"
@@ -26,7 +26,7 @@ export function Lopend({ tekst }: { tekst: string }) {
             </a>
           )
         return (
-          <span key={i} className="font-mono text-[.92em] whitespace-nowrap">
+          <span key={i} className="font-medium whitespace-nowrap tabular-nums">
             {deel}
           </span>
         )

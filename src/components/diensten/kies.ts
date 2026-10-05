@@ -10,3 +10,11 @@ export function diensten(...slugs: string[]): Service[] {
 }
 
 export const nr = (i: number) => String(i + 1).padStart(2, "0")
+
+/** Splitst een samenvatting na de eerste zin: de opening krijgt de eerste, de rest licht op. */
+export function eersteZin(tekst: string): [string, string] {
+  const i = tekst.indexOf(". ")
+  return i < 0 ? [tekst, ""] : [tekst.slice(0, i + 1), tekst.slice(i + 2)]
+}
+
+export const aantalDiensten = (n: number) => `${n} ${n === 1 ? "dienst" : "diensten"}`

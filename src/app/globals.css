@@ -19,7 +19,8 @@
   --salie: #b8c5a8;
   --goot: clamp(20px, 4vw, 56px);
 }
-html.donker {
+/* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
+html.donker, .donker {
   --grond: #202020;
   --inkt: #efeeea;
   --gedempt: #a9a8a3;
@@ -48,7 +49,9 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-gebroken-wit: #efeeea;
   --font-syne: var(--font-syne), sans-serif;
   --font-sans: var(--font-montserrat), sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  /* Brand Guide: alleen Syne Bold en Montserrat (eigenaar, 5 okt 2026:
+     "schrap mono geist"). font-mono blijft als naam, maar is Montserrat. */
+  --font-mono: var(--font-montserrat), sans-serif;
 }
 
 body {
@@ -61,8 +64,8 @@ body {
 
 /* Bouwstenen uit de wireframes (wf.css), één keer gedefinieerd */
 @utility wrap { max-width: 1440px; margin-inline: auto; padding-inline: var(--goot); }
-@utility lbl { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
-@utility syne { font-family: var(--font-syne); font-weight: 600; }
+@utility lbl { font-family: var(--font-sans); font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+@utility syne { font-family: var(--font-syne); font-weight: 700; }
 @utility lnk {
   font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
   text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px;

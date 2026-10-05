@@ -26,7 +26,7 @@ function inhoud(tekst: string) {
 
 function Open({ wat }: { wat: string }) {
   return (
-    <span className="border border-dashed border-gedempt px-1.5 py-px font-mono text-[13px] font-normal tracking-[.02em] text-gedempt [overflow-wrap:anywhere]">
+    <span className="border border-dashed border-gedempt px-1.5 py-px text-[13px] font-medium tracking-[.02em] text-gedempt [overflow-wrap:anywhere]">
       [NOG AANLEVEREN: {wat}]
     </span>
   )

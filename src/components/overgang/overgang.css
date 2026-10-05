@@ -10,8 +10,8 @@ html.intro:not(.intro-los) { overflow: hidden; }
 .og-grond { position: absolute; inset: 0; background: #202020; }
 .og-verloop { position: absolute; inset: 0; background: linear-gradient(to bottom, #23483a, #202020); opacity: 0; }
 .og-laad, .og-grond, .og-merk { display: none; }
-html.intro .og-laad, html.intro .og-grond { display: block; }
-html.intro .og-merk { display: flex; }
+html.intro .og-laad, html.intro .og-grond, .og[data-actief] .og-laad, .og[data-actief] .og-grond { display: block; }
+html.intro .og-merk, .og[data-actief] .og-merk { display: flex; }
 
 .og-blokken { position: fixed; inset: 0; z-index: 1002; pointer-events: none; transform: translateY(100%); visibility: hidden; will-change: transform; }
 .og-blokken span { position: absolute; top: -1px; height: calc(100% + 2px); background: #202020; transform: translateY(100%); will-change: transform; }
@@ -22,7 +22,7 @@ html.intro .og-merk { display: flex; }
 .og-zin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; max-width: 955px; margin: 0 auto; padding-bottom: 48px; z-index: 1005; }
 .og-zin p {
   margin: 0; padding-inline: 40px; text-align: center; color: #efeeea;
-  font-family: var(--font-syne), sans-serif; font-weight: 600;
+  font-family: var(--font-syne), sans-serif; font-weight: 700;
   font-size: clamp(28px, 3.4vw, 52px); line-height: 1.2; letter-spacing: -0.02em;
 }
 .og-zin em { font-style: normal; color: #b8c5a8; }

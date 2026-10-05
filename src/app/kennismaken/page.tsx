@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import { KennismakenFormulier } from "@/components/kennismaken/formulier"
-import { PaginaKop } from "@/components/over/pagina-kop"
+import { Opening } from "@/components/wereld/opening"
 import { KENNISMAKING_VRIJBLIJVEND } from "@/lib/data/teksten"
 
-// WF-023 Kennismaken, met de staten na verzenden uit WF-034.
+// WF-023 Kennismaken, met de staten na verzenden uit WF-034. De opening in
+// de taal van de voorpagina; het formulier zelf blijft rustig.
 export const metadata: Metadata = {
   title: "Kennismaken",
   description: KENNISMAKING_VRIJBLIJVEND.nl,
@@ -11,9 +12,11 @@ export const metadata: Metadata = {
 
 export default function Kennismaken() {
   return (
-    <div className="wrap">
-      <PaginaKop label="Contact" titel="Kennismaken" inleiding="Ik reageer meestal binnen twee werkdagen." />
-      <KennismakenFormulier />
-    </div>
+    <>
+      <Opening label="Contact" titel="Kennismaken" zin="Ik reageer meestal binnen twee werkdagen." />
+      <div className="wrap">
+        <KennismakenFormulier />
+      </div>
+    </>
   )
 }

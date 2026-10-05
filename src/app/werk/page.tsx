@@ -1,8 +1,11 @@
 import type { Metadata } from "next"
+import { Opening } from "@/components/wereld/opening"
+import { Kennismaken } from "@/components/werk/kennismaken"
+import { WERK } from "@/components/werk/projecten"
 import { WerkOverzicht } from "@/components/werk/werk-overzicht"
 
 const BESCHRIJVING =
-  "Echt werk van GRØNN Studio: een vijverrenovatie met twee vijvers, een waterval en een beekloop, en een terras van 24 m² in Geulle."
+  "Echt werk van GRØNN Studio: een vijverrenovatie met twee vijvers, een waterval en een beekloop, en een terras van 24\u00a0m² in Geulle."
 
 export const metadata: Metadata = {
   title: "Werk",
@@ -18,8 +21,12 @@ export const metadata: Metadata = {
 
 export default function WerkPagina() {
   return (
-    <div className="wrap">
-      <WerkOverzicht />
-    </div>
+    <>
+      <Opening label={`Werk · ${WERK.length} projecten`} titel="Werk" zin={BESCHRIJVING} zij={["Vijvers", "Tuinen"]} />
+      <div className="wrap">
+        <WerkOverzicht />
+      </div>
+      <Kennismaken />
+    </>
   )
 }

@@ -166,6 +166,10 @@ export function Overgang() {
     }
 
     // ── Paginawissel ──
+    // Precies de intro, alleen met de naam van de bestemming als zin (eigenaar,
+    // 5 okt 2026: "de overgang tussen subpagina's is zelfde als intro animatie
+    // maar de tekst verschilt enkel"). Het enige extra: de grond vaagt eerst op
+    // over de huidige pagina, want bij de intro is er nog geen pagina.
     const wissel = (url: URL) => {
       bezig = true
       const href = url.pathname + url.search + url.hash
@@ -181,72 +185,87 @@ export function Overgang() {
         }
       }
       // Vangnetten: de pagina gaat altijd door, het doek gaat altijd weg.
-      timers.push(window.setTimeout(ga, 2000))
+      timers.push(window.setTimeout(ga, 4000))
       timers.push(window.setTimeout(rust, MAX_TOTAAL))
       try {
         routerRef.current.prefetch(href)
       } catch {}
 
-      const onthul = () => {
-        aankomst.current = null
+      /** Nieuwe pagina staat klaar onder het doek: bovenaan zetten en focus geven. */
+      const klaarzetten = () => {
         if (!url.hash) scrollTo(0, 0)
         else document.getElementById(decodeURIComponent(url.hash.slice(1)))?.scrollIntoView()
-        // Focus naar de nieuwe pagina (de titel kondigt Next zelf aan).
         const m = main()
+        if (m) gsap.set(m, { opacity: 0 })
         const kop = (m?.querySelector("h1") as HTMLElement | null) ?? m
         if (kop) {
           if (!kop.hasAttribute("tabindex")) kop.setAttribute("tabindex", "-1")
           kop.focus({ preventScroll: true })
-        }
-        try {
-          const regels = split?.lines ?? []
-          if (m) gsap.set(m, { opacity: 0 })
-          let op = true
-          const t = gsap.timeline({
-            onUpdate: () => {
-              if (t.progress() > 0.75 && op) {
-                op = false
-                paginaOp()
-              }
-            },
-            onComplete: rust,
-          })
-          t.addLabel("fifth")
-            .to($(".og-blokken"), { y: "-100%", ease: "power3.inOut", duration: 1 }, "fifth")
-            .to(regels, { y: "-75%", opacity: 0 }, "fifth+=0.1")
-          tijdlijnen.push(t)
-        } catch {
-          rust()
         }
       }
 
       try {
         el.setAttribute("data-actief", "")
         const regels = zetZin(zinVoor(normaal(url.pathname)))
-        const dek = gsap.timeline({
-          onComplete: () => {
-            // Wacht op de nieuwe route (usePathname), maar nooit langer dan MAX_WACHTEN.
-            let klaar = false
-            const verder = () => {
-              if (klaar) return
-              klaar = true
-              requestAnimationFrame(() => requestAnimationFrame(onthul))
+        const zinWeg = gsap.timeline({ paused: true }).to(regels, { y: "-75%", opacity: 0 })
+        let op = true
+        const wegTl = gsap.timeline({
+          paused: true,
+          onUpdate: () => {
+            if (wegTl.progress() > 0.75 && op) {
+              op = false
+              paginaOp()
             }
-            aankomst.current = () => {
-              if (location.pathname !== vertrek) verder()
-            }
-            timers.push(window.setTimeout(verder, MAX_WACHTEN))
-            ga()
           },
+          onComplete: rust,
         })
-        dek
+        wegTl
           .addLabel("start")
+          .call(ga, [], "start")
           .to($(".og-blokken"), { y: 0, ease: "power2.inOut", visibility: "visible" }, "start")
           .to($(".og-b1"), { y: 0, ease: "power2.inOut", duration: 1 }, "start")
           .to($(".og-b2"), { y: 0, ease: "power2.inOut", duration: 1.1 }, "start")
           .to($(".og-b3"), { y: 0, ease: "power2.inOut", duration: 1.2 }, "start")
-          .to(regels, { y: "0%", opacity: 1, ease: "power2.out", stagger: 0.1 }, "start+=0.6")
-        tijdlijnen.push(dek)
+          .addLabel("fifth")
+          // Wacht hier op de nieuwe route (usePathname), nooit langer dan MAX_WACHTEN.
+          .addPause("fifth", () => {
+            let klaar = false
+            const verder = () => {
+              if (klaar) return
+              klaar = true
+              aankomst.current = null
+              requestAnimationFrame(() =>
+                requestAnimationFrame(() => {
+                  klaarzetten()
+                  wegTl.resume()
+                }),
+              )
+            }
+            if (location.pathname !== vertrek) verder()
+            else {
+              aankomst.current = () => {
+                if (location.pathname !== vertrek) verder()
+              }
+              timers.push(window.setTimeout(verder, MAX_WACHTEN))
+            }
+          })
+          .to($(".og-blokken"), { y: "-100%", ease: "power3.inOut", duration: 1 }, "fifth")
+          .to($(".og-grond"), { opacity: 0, ease: "power2.inOut", duration: 0.8 }, "fifth")
+          .call(() => void zinWeg.play(), [], "fifth+=0.1")
+          .to($(".og-merk"), { opacity: 0, ease: "power2.inOut", duration: 0.5 }, "fifth")
+          .to($(".og-laad"), { opacity: 0, duration: 0.3 }, "fifth")
+        const begin = gsap
+          .timeline()
+          .addLabel("dek")
+          .fromTo($(".og-grond"), { opacity: 0 }, { opacity: 1, ease: "power2.inOut", duration: 0.4 }, "dek")
+          .addLabel("start")
+          .to(regels, { y: "0%", opacity: 1, ease: "power2.out", stagger: 0.1 }, "start")
+          .to($(".og-verloop"), { opacity: 1, ease: "power2.inOut" }, "start")
+          .to($(".og-merk"), { opacity: 1, ease: "power2.inOut", duration: 0.8 }, "start")
+          .to($(".og-laad"), { width: "25%", duration: 0.5, ease: "power2.out" }, "start")
+          .to($(".og-laad"), { width: "70%", duration: 0.8, ease: "power3.inOut", onComplete: () => void wegTl.play() })
+          .to($(".og-laad"), { width: "100%", duration: 1, ease: "power4.out" })
+        tijdlijnen.push(zinWeg, wegTl, begin)
       } catch {
         rust()
         ga()

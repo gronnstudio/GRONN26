@@ -53,6 +53,14 @@ export function WatIkDoe() {
                 </span>
                 <span className="vp-uitleg">{d.dienst.summary.nl}</span>
               </Link>
+              {/* touch: de foto klapt open als deze dienst in het midden van het scherm staat */}
+              <span className="vp-inline" aria-hidden="true">
+                {typeof d.beeld === "string" ? (
+                  <GeenFoto wat={d.beeld} className="vp-inline-foto" />
+                ) : (
+                  <Foto foto={d.beeld} sizes="90vw" className="vp-inline-foto" />
+                )}
+              </span>
             </li>
           ))}
         </ul>

@@ -12,9 +12,9 @@
   --vp-kolom: min(1068px, 100% - 2 * var(--goot));
 }
 .vp-licht {
-  font-family: var(--vp-montserrat-licht), var(--font-sans);
-  font-weight: 300;
-  letter-spacing: -0.02em;
+  font-family: var(--font-syne);
+  font-weight: 700;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 
@@ -22,7 +22,7 @@
 .vp-atelier {
   background: #202020;
   color: #efeeea;
-  padding-bottom: clamp(96px, 12vw, 180px);
+  overflow: clip;
 }
 
 /* 1 · opening: reuzenkop blijft staan, de foto groeit eronder van 70 % naar vol.
@@ -30,7 +30,7 @@
    site erboven, dus begint de opening 108px − de hoogte van die kop lager. */
 .vp-held {
   position: relative;
-  padding-top: 16px;
+  padding-top: 108px; /* de sitekop ligt eroverheen, zoals in de demo */
 }
 .vp-held-titel {
   position: sticky;
@@ -82,10 +82,10 @@
 /* verticale labels in de marge; verdwijnen na 80px scrollen */
 .vp-verticaal {
   position: absolute;
-  top: calc(100vh - 140px - 92px);
+  top: calc(100vh - 140px);
   z-index: 10;
   margin: 0;
-  font: 300 20px/24px var(--vp-montserrat-licht), var(--font-sans);
+  font: 300 20px/24px var(--font-sans);
   letter-spacing: -0.02em;
   writing-mode: vertical-rl;
   transition: opacity 0.4s;
@@ -107,7 +107,7 @@
   padding: calc(144 / 1440 * 100vw) var(--vp-rand) 0;
   font-size: max(20px, 2.373vw);
   line-height: 1.5;
-  font-family: var(--vp-montserrat-licht), var(--font-sans);
+  font-family: var(--font-sans);
   font-weight: 300;
   letter-spacing: -0.02em;
 }
@@ -131,6 +131,7 @@
 /* 3 · reuzenwoord dat opzij schuift, met de fotocollage eroverheen */
 .vp-vel {
   position: relative;
+  overflow-x: clip;
   margin-top: calc(144 / 1440 * 100vw);
 }
 .vp-reuswoord {
@@ -180,15 +181,12 @@
 
 @media (max-width: 767px) {
   .vp-held {
-    padding-top: 8px;
+    padding-top: 96px;
   }
   .vp-held-titel {
-    position: relative;
-    top: auto;
-    mix-blend-mode: normal;
+    top: 88px;
   }
   .vp-held-foto {
-    transform: none;
     margin: 32px var(--vp-rand) 0;
   }
   .vp-held-beeld {
@@ -367,7 +365,12 @@
   line-height: 1.5;
 }
 
-/* telefoon en touch: een lijst met de uitleg eronder, geen meelopend beeld */
+/* de foto die op touch openklapt; met een muis bestaat hij niet */
+.vp-inline {
+  display: none;
+}
+/* telefoon en touch: een lijst met de uitleg eronder; de dienst in het
+   midden van het scherm wordt actief (de rest dimt) en toont zijn foto */
 @media (max-width: 767px), (hover: none), (pointer: coarse) {
   .vp-zwerf {
     display: none;
@@ -378,6 +381,29 @@
   .vp-namen li {
     border-top: 1px solid var(--lijn);
     padding: 14px 0;
+    transition: opacity 0.35s var(--vp-ease);
+  }
+  .vp-diensten.actief .vp-namen li:not(.midden) {
+    opacity: 0.35;
+  }
+  .vp-diensten.actief .vp-namen a:not(:hover) {
+    opacity: 1;
+  }
+  .vp-inline {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.6s var(--vp-ease);
+  }
+  .vp-inline > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .vp-namen li.midden .vp-inline {
+    grid-template-rows: 1fr;
+  }
+  .vp-inline-foto {
+    aspect-ratio: 4 / 3;
+    margin-top: 14px;
   }
   .vp-namen li:last-child {
     border-bottom: 1px solid var(--lijn);
@@ -460,8 +486,56 @@
 html.stil .vp-zwerf {
   display: none;
 }
-@media (prefers-reduced-motion: reduce) and (max-width: 767px) {
-  .vp-held-foto {
-    transform: none;
-  }
+
+
+/* ── Kolenda: kop met cursieve woorden, omlijnde pijl, reuzenwoordmerk ── */
+.vp-meerwerk {
+  position: relative;
+  padding: clamp(120px, 14vw, 220px) var(--vp-rand) 0;
+  text-align: center;
+}
+.vp-meerwerk-kop {
+  margin: 0 auto;
+  max-width: 12ch;
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(44px, 6vw, 96px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+.vp-meerwerk-kop em {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  color: #b8c5a8;
+}
+.vp-cirkel {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-top: clamp(28px, 3vw, 44px);
+  border: 1px solid #db6923;
+  border-radius: 999px;
+  color: #db6923;
+  transition: background-color 0.3s, color 0.3s;
+}
+.vp-cirkel:hover,
+.vp-cirkel:focus-visible {
+  background: #db6923;
+  color: #202020;
+}
+.vp-cirkel svg { transition: transform 0.3s; }
+.vp-cirkel:hover svg { transform: translate(2px, -2px); }
+.vp-reusmerk {
+  margin-top: clamp(64px, 8vw, 120px);
+  transform: translate3d(0, var(--merk, 0), 0);
+  will-change: transform;
+}
+.vp-reusmerk img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: -2%;
 }

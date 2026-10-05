@@ -25,7 +25,7 @@ export function Inhoud({ koppen }: { koppen: string[] }) {
       className="group static max-h-none overflow-auto border-y border-lijn lg:sticky lg:top-6 lg:max-h-[calc(100vh-140px)] lg:border-0"
     >
       <summary
-        className="lbl flex cursor-pointer list-none justify-between py-4 after:font-mono after:text-gedempt after:content-['+'] group-open:after:content-['−'] lg:cursor-default lg:py-0 lg:after:content-none lg:group-open:after:content-none [&::-webkit-details-marker]:hidden"
+        className="lbl flex cursor-pointer list-none justify-between py-4 after:text-[16px] after:font-light after:text-gedempt after:content-['+'] group-open:after:content-['−'] lg:cursor-default lg:py-0 lg:after:content-none lg:group-open:after:content-none [&::-webkit-details-marker]:hidden"
         onClick={(e) => {
           if (matchMedia("(min-width: 1024px)").matches) e.preventDefault()
         }}
@@ -40,7 +40,7 @@ export function Inhoud({ koppen }: { koppen: string[] }) {
                 href={`#s${i + 1}`}
                 className="grid grid-cols-[28px_minmax(0,1fr)] border-b border-lijn py-2 text-sm leading-[1.35] no-underline hover:underline"
               >
-                <span className="pt-0.5 font-mono text-[11px] text-gedempt">{String(i + 1).padStart(2, "0")}</span>
+                <span className="pt-0.5 text-[11px] font-semibold text-gedempt tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                 {kop}
               </a>
             </li>

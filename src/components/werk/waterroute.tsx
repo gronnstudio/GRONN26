@@ -19,7 +19,7 @@ export function Waterroute() {
         viewBox="0 0 640 460"
         role="img"
         aria-label="De waterroute: van vijver B via pomp en filter naar vijver A en de waterval, en via de beekloop terug naar vijver B."
-        className="mx-auto block h-auto w-full max-w-[900px] font-mono text-inkt"
+        className="mx-auto block h-auto w-full max-w-[900px] font-sans text-inkt"
       >
         <g className="fill-none stroke-current" strokeWidth={1}>
           <path d="M120 380 V300 H200" />

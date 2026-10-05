@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Montserrat } from "next/font/google"
 import { Atelier } from "@/components/voorpagina/atelier"
 import { Beweging } from "@/components/voorpagina/beweging"
 import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
@@ -17,13 +16,11 @@ export const metadata: Metadata = {
     "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
 }
 
-// WF-058 zet de grote tekst in Montserrat 300; de layout laadt 400–600.
-const licht = Montserrat({ subsets: ["latin"], weight: ["300"], variable: "--vp-montserrat-licht" })
 
 export default function Voorpagina() {
   return (
     <>
-      <div data-voorpagina className={`vp-wortel ${licht.variable}`}>
+      <div data-voorpagina className="vp-wortel">
         <Atelier />
         <Werkwijze />
         <WatIkDoe />

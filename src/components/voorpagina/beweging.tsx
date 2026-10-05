@@ -22,13 +22,17 @@ export function Beweging() {
     const woorden = [...wortel.querySelectorAll<HTMLElement>("[data-onthul] .vp-wd")]
     const spoor = wortel.querySelector<HTMLElement>("[data-spoor]")
     const stukken = [...wortel.querySelectorAll<HTMLElement>("[data-v]")]
+    const vak = wortel.querySelector<HTMLElement>("[data-diensten]")
+    const merk = wortel.querySelector<HTMLElement>("[data-merk]")
+    const namen = [...wortel.querySelectorAll<HTMLElement>(".vp-namen li")]
+    const muis = matchMedia("(hover: hover) and (pointer: fine)").matches && innerWidth >= 768
 
     function frame() {
       const y = scrollY
       const vh = innerHeight
       const s = stil()
       // foto groeit van 0,7 naar 1 over ~1,29 schermhoogte (gemeten: 1160px bij 900 hoog)
-      foto?.style.setProperty("--s", String(s || !breed() ? 0.7 : Math.min(1, 0.7 + (0.3 * y) / (vh * 1.29))))
+      foto?.style.setProperty("--s", String(s ? 0.7 : Math.min(1, 0.7 + (0.3 * y) / (vh * 1.29))))
       labels.forEach((l) => l.classList.toggle("vp-weg", y > 80))
       // woorden boven 70 % van het scherm lichten op, de rest staat op 0,1
       for (const w of woorden) w.style.opacity = s || w.getBoundingClientRect().top < vh * 0.7 ? "" : "0.1"
@@ -41,12 +45,32 @@ export function Beweging() {
       for (const el of stukken) {
         const v = Number(el.dataset.v)
         const ouder = el.offsetParent as HTMLElement | null
-        if (s || !v || !breed() || !ouder) {
+        if (s || !v || !ouder) {
           el.style.transform = ""
           continue
         }
         const midden = ouder.getBoundingClientRect().top + el.offsetTop + el.offsetHeight / 2
-        el.style.transform = `translate3d(0,${((midden - vh / 2) * v * 0.065).toFixed(1)}px,0)`
+        el.style.transform = `translate3d(0,${((midden - vh / 2) * v * (breed() ? 0.065 : 0.04)).toFixed(1)}px,0)`
+      }
+      // reuzenwoordmerk komt op uit de onderrand (Kolenda: translateY 20 % → 0)
+      if (merk) {
+        const r = merk.getBoundingClientRect()
+        const p = Math.min(1, Math.max(0, (vh - r.top) / (r.height + vh * 0.25)))
+        merk.style.setProperty("--merk", s ? "0" : `${((1 - p) * 20).toFixed(2)}%`)
+      }
+      // Touch (eigenaar: "dezelfde effecten ook op mobiel"): geen muis, dus
+      // wordt de dienst in het midden van het scherm actief: de rest dimt en
+      // zijn foto klapt open onder de naam.
+      if (namen.length && !muis) {
+        let beste: HTMLElement | null = null, afstand = Infinity
+        for (const li of namen) {
+          const r = li.getBoundingClientRect()
+          const d = Math.abs(r.top + r.height / 2 - vh * 0.5)
+          if (d < afstand && r.bottom > 0 && r.top < vh) { afstand = d; beste = li }
+        }
+        const raak = !s && beste && afstand < vh * 0.3 ? beste : null
+        namen.forEach((li) => li.classList.toggle("midden", li === raak))
+        vak?.classList.toggle("actief", !!raak)
       }
     }
     let wacht = 0
@@ -77,9 +101,8 @@ export function Beweging() {
 
     // ── WF-057: een beeld van 360 × 480 loopt met de muis mee ───────────
     const opruimen: (() => void)[] = []
-    const vak = wortel.querySelector<HTMLElement>("[data-diensten]")
     const zwerf = wortel.querySelector<HTMLElement>("[data-zwerf]")
-    if (vak && zwerf && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    if (vak && zwerf && muis) {
       let mx = 0, my = 0, x = 0, yy = 0, loopt = false
       const volg = () => {
         x += (mx - x) * 0.18

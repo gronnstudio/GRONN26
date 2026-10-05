@@ -10,7 +10,8 @@ import type { L } from "@/lib/i18n"
 import { focusEerste, useVeldControle } from "./controle"
 import { CONTACT_REGELS } from "./invulvelden"
 
-// Het kennismakingsformulier (WF-023) met de staten van WF-034. Transport,
+// Het kennismakingsformulier (WF-023) met de staten van WF-034. Vormgeving
+// in de taal van de site (5 okt 2026): Montserrat, ronde oranje knop. Transport,
 // velden, controle en meldingen letterlijk uit de oude site
 // (src/components/gronn/contact-formulier.tsx): rechtstreeks vanuit de
 // browser naar FormSubmit's AJAX-endpoint (FormSubmit blokkeert
@@ -186,8 +187,8 @@ function Samenvatting({ v }: { v: Velden }) {
         {rijen
           .filter(([, w]) => w)
           .map(([k, w]) => (
-            <div key={k} className="grid gap-y-0.5 border-b border-lijn py-3 font-mono text-[13px] leading-[1.5] md:grid-cols-[200px_minmax(0,1fr)] md:gap-x-6">
-              <dt className="tracking-[.06em] text-gedempt uppercase">{k}</dt>
+            <div key={k} className="grid gap-y-0.5 border-b border-lijn py-3 text-[15px] leading-[1.55] md:grid-cols-[200px_minmax(0,1fr)] md:gap-x-6">
+              <dt className="lbl pt-1 text-gedempt">{k}</dt>
               <dd className="m-0 whitespace-pre-line [overflow-wrap:anywhere]">{w}</dd>
             </div>
           ))}
@@ -318,7 +319,7 @@ export function KennismakenFormulier() {
   }
 
   return (
-    <div className="mt-[clamp(48px,6vw,96px)] grid items-start gap-y-14 md:grid-cols-[7fr_1fr_4fr]">
+    <div className="mt-[clamp(64px,8vw,120px)] grid items-start gap-y-14 md:grid-cols-[7fr_1fr_4fr]">
       <form onSubmit={verstuur} noValidate aria-label="Kennismaken" className="relative flex flex-col gap-7">
         {/* E-mail is type="text" met inputMode="email" (zelfde toetsenbord):
             type="email" haalt spaties stil weg vóór de controle ze ziet. */}
@@ -351,9 +352,9 @@ export function KennismakenFormulier() {
         <button
           type="submit"
           disabled={status === "bezig"}
-          className="min-h-[44px] cursor-pointer self-start border-0 bg-transparent px-0 text-[13px] font-semibold tracking-[.12em] text-inkt uppercase disabled:opacity-60"
+          className="inline-flex h-[52px] cursor-pointer items-center self-start rounded-full border-0 bg-oranje px-7 text-[12px] font-semibold tracking-[.1em] text-antraciet uppercase transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt disabled:cursor-wait disabled:opacity-60"
         >
-          <span className="border-b border-inkt pb-1">{status === "bezig" ? "Versturen…" : "Verstuur →"}</span>
+          {status === "bezig" ? "Versturen…" : "Verstuur →"}
         </button>
         <p className="lbl m-0 text-gedempt">
           Je bericht gaat via FormSubmit naar mijn mailbox. ·{" "}
@@ -363,9 +364,9 @@ export function KennismakenFormulier() {
 
       <aside aria-label="Contactgegevens" className="flex flex-col gap-5 border-t border-lijn pt-4 md:col-start-3">
         <p className="lbl m-0 text-gedempt">Liever direct?</p>
-        <a href={BUSINESS.emailHref} className="text-[18px] no-underline">{BUSINESS.email}</a>
-        <a href={BUSINESS.phoneHref} className="text-[18px] no-underline">{BUSINESS.phone}</a>
-        <a href={BUSINESS.whatsapp} className="text-[18px] no-underline">WhatsApp</a>
+        <a href={BUSINESS.emailHref} className="w-lijnlink self-start text-[18px] [overflow-wrap:anywhere]">{BUSINESS.email}</a>
+        <a href={BUSINESS.phoneHref} className="w-lijnlink self-start text-[18px] tabular-nums">{BUSINESS.phone}</a>
+        <a href={BUSINESS.whatsapp} className="w-lijnlink self-start text-[18px]">WhatsApp</a>
         <p className="lbl mt-4 mb-0 text-gedempt">
           {BUSINESS.address.street} · {BUSINESS.address.postalCode} {BUSINESS.address.city}
           <br />

@@ -1,13 +1,13 @@
 import Link from "next/link"
 
-/** Kop boven een werkblok: "Vijverwerk" links, "Alle werk →" rechts. */
+/** Kop boven een werkblok, als de sectiekoppen van de voorpagina: "Vijverwerk" links, "Alle werk →" rechts. */
 export function WerkKop({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between border-t border-lijn pt-[14px]">
-      <h2 id={id} className="lbl m-0 font-normal">
+    <div className="w-kopregel">
+      <h2 id={id} className="lbl m-0">
         {children}
       </h2>
-      <Link href="/werk" className="lnk">
+      <Link href="/werk" className="lbl w-lijnlink">
         Alle werk →
       </Link>
     </div>
@@ -22,9 +22,22 @@ export function WerkBlok({ href, children }: { href: string; children: React.Rea
   return (
     <Link
       href={href}
-      className="mt-[32px] grid grid-cols-1 items-end gap-y-[20px] no-underline md:grid-cols-12 md:gap-x-[32px] md:gap-y-0"
+      data-zie
+      className="grid grid-cols-1 items-end gap-y-[20px] no-underline md:grid-cols-12 md:gap-x-[32px] md:gap-y-0"
     >
       {children}
     </Link>
+  )
+}
+
+/** Sectiekop als op de voorpagina: lijn, label links, aantal rechts. */
+export function KopRegel({ id, label, aantal }: { id: string; label: string; aantal: string }) {
+  return (
+    <div className="w-kopregel">
+      <h2 id={id} className="lbl m-0">
+        {label}
+      </h2>
+      <span className="lbl text-gedempt tabular-nums">{aantal}</span>
+    </div>
   )
 }

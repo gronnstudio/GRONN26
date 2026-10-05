@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Opening } from "@/components/wereld/opening"
 import { Inhoud } from "@/components/juridisch/inhoud"
 import { SectieBody, Alinea } from "@/components/juridisch/alinea"
 import { BUSINESS } from "@/lib/business"
@@ -16,22 +17,23 @@ function datum(iso: string) {
   )
 }
 
-// WF-033: smalle leeskolom, links de inhoudsopgave. Tekst letterlijk uit
+// WF-033 met de donkere opening van de site: smalle leeskolom, links de inhoudsopgave. Tekst letterlijk uit
 // src/lib/data/legal/privacy.ts.
 export default function PrivacyPagina() {
   const doc = PRIVACY
   const a = BUSINESS.address
   return (
-    <div className="wrap">
-      <section className="grid grid-cols-1 gap-y-4 pt-[clamp(56px,9vw,140px)] md:grid-cols-[3fr_9fr] md:gap-x-8 md:gap-y-0">
-        <p className="lbl m-0 text-gedempt">Juridisch</p>
-        <h1 className="syne m-0 text-[clamp(42px,7.5vw,104px)] leading-none tracking-[-.04em] break-words hyphens-auto">{doc.title}</h1>
-        <div className="flex flex-wrap gap-x-6 gap-y-2 md:col-start-2 md:mt-7">
-          <p className="lbl m-0 text-gedempt">Laatst bijgewerkt · {datum(doc.updated)}</p>
-          <p className="lbl m-0 text-gedempt">Status · {doc.status === "concept" ? "Concept" : "Vastgesteld"}</p>
+    <>
+      {/* Eén lang woord per regel: op de telefoon iets kleiner, zodat het past. */}
+      <div className="max-md:[&_.w-reus]:text-[13vw]!">
+      <Opening label="Juridisch" titel={"Privacy-\nverklaring"}>
+        <div className="mt-[clamp(28px,3vw,48px)] flex flex-wrap gap-x-6 gap-y-2 text-[#a9a8a3]">
+          <p className="lbl m-0">Laatst bijgewerkt · {datum(doc.updated)}</p>
+          <p className="lbl m-0">Status · {doc.status === "concept" ? "Concept" : "Vastgesteld"}</p>
         </div>
-      </section>
-
+      </Opening>
+      </div>
+      <div className="wrap">
       <div className="mt-[clamp(56px,7vw,96px)] grid grid-cols-1 items-start gap-y-8 lg:grid-cols-[3fr_9fr] lg:gap-x-8">
         <Inhoud koppen={doc.sections.map((s) => s.heading)} />
 
@@ -43,7 +45,7 @@ export default function PrivacyPagina() {
           {doc.sections.map((s, i) => (
             <section key={s.heading} id={`s${i + 1}`} className="scroll-mt-6 pt-12">
               <h2 className="syne mt-0 mb-4 grid grid-cols-[32px_minmax(0,1fr)] text-[clamp(22px,2.2vw,28px)] leading-[1.2] tracking-[-.02em] md:grid-cols-[44px_minmax(0,1fr)]">
-                <span className="pt-2 font-mono text-xs font-normal text-gedempt">{String(i + 1).padStart(2, "0")}</span>
+                <span className="lbl pt-2 font-semibold text-gedempt">{String(i + 1).padStart(2, "0")}</span>
                 {s.heading}
               </h2>
               <SectieBody body={s.body} />
@@ -82,6 +84,7 @@ export default function PrivacyPagina() {
           </nav>
         </article>
       </div>
-    </div>
+      </div>
+    </>
   )
 }

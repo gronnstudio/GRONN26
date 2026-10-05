@@ -1,0 +1,11 @@
+/* Alleen voor /werk en de projectpagina's (voorvoegsel wk-). */
+
+/* Het terras (T01) is staand; in het brede vak van de opening de vloer laten zien. */
+.wk-opening-terras .w-beeld img { object-position: 50% 65%; }
+
+/* Lange woorden in de reuzenkop mogen op de telefoon afbreken (zachte koppeltekens). */
+.wk-opening .w-reus { hyphens: manual; overflow-wrap: break-word; }
+
+/* De vijvertitel is lang (vier regels in de reuzenmaat): iets kleiner, zodat
+   "Eén samenhangend" op het brede scherm op één regel past. */
+.wk-lang .w-reus { font-size: clamp(48px, 8vw, 132px); }
