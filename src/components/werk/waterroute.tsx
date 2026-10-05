@@ -84,7 +84,7 @@ export function Waterroute() {
           <text x="462" y="226"><W nl="REGELBAAR" en="ADJUSTABLE" /></text>
         </g>
       </svg>
-      <figcaption className="mx-auto mt-8 max-w-[900px]">
+      <figcaption className="mt-8 max-w-[900px]">
         <ol className="lbl m-0 list-none p-0 normal-case">
           {STAPPEN.map((s, i) => (
             <li key={s.nl} className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-3 border-t border-lijn py-2.5 last:border-b md:grid-cols-[60px_minmax(0,1fr)] md:gap-x-8">

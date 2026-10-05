@@ -110,7 +110,7 @@ export function Menu() {
       <Link
         href="/kennismaken"
         data-menu
-        className="group fixed bottom-10 left-10 z-[99] hidden items-center gap-9 rounded-full bg-oranje py-[15px] pr-5 pl-6 text-[13px] leading-4 font-bold tracking-[-.01em] text-white dark:text-antraciet uppercase no-underline shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3 lg:inline-flex"
+        className="group fixed bottom-10 left-[var(--goot)] z-[99] hidden items-center gap-9 rounded-full bg-oranje py-[15px] pr-5 pl-6 text-[13px] leading-4 font-bold tracking-[-.01em] text-white dark:text-antraciet uppercase no-underline shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3 lg:inline-flex"
       >
         <span className="block h-4 overflow-hidden">
           <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
@@ -141,7 +141,7 @@ export function Menu() {
         data-menu
         data-pijl
         aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
-        className={`fixed right-10 bottom-10 z-[99] hidden size-[52px] cursor-pointer place-items-center rounded-full shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3 lg:grid ${
+        className={`fixed right-[var(--goot)] bottom-10 z-[99] hidden size-[52px] cursor-pointer place-items-center rounded-full shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3 lg:grid ${
           pijlOpLicht ? "bg-antraciet text-oranje" : "bg-oranje text-white dark:text-antraciet"
         }`}
       >

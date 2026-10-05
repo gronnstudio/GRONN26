@@ -70,7 +70,7 @@ type Stuk = {
 
 // Posities en snelheden zoals in het wireframe (gemeten op de demo).
 const COLLAGE_A: Stuk[] = [
-  { foto: F01, vorm: "staand", v: 0.5, top: "0", left: "5%" },
+  { foto: F01, vorm: "staand", v: 0.5, top: "0", left: "0%" },
   { foto: T02, vorm: "vierkant", v: 3, top: "10.61%", left: "56.74%" },
   { foto: F10, vorm: "liggend", v: 0, top: "39.21%", left: "20.83%" },
   { foto: F05, vorm: "staand", v: 0.5, top: "70.51%", left: "52.5%" },
@@ -78,7 +78,7 @@ const COLLAGE_A: Stuk[] = [
 const COLLAGE_B: Stuk[] = [
   { foto: F11, vorm: "vierkant", v: 3, top: "0", left: "9.24%" },
   { foto: F04_2, vorm: "liggend", v: 0, top: "31.95%", left: "20.83%" },
-  { foto: T01, vorm: "staand", v: 0.5, top: "66.97%", left: "5%" },
+  { foto: T01, vorm: "staand", v: 0.5, top: "66.97%", left: "0%" },
   { foto: F07_1, vorm: "vierkant", v: 3, top: "78.89%", left: "56.74%" },
 ];
 

@@ -6,7 +6,7 @@
 
 .vp-wortel {
   overflow-x: clip;
-  --vp-rand: max(20px, 2.5vw);
+  --vp-rand: var(--goot); /* dezelfde marge als de rest van de site (audit 5 okt 2026) */
   --vp-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
   --vp-regel: cubic-bezier(0.25, 1, 0.5, 1);
   --vp-inhoud: min(1440px, 100% - 2 * var(--goot)); /* volle breedte: de zes stappen stonden te smal (eigenaar, 5 okt 2026) */
@@ -149,7 +149,8 @@
 .vp-collage {
   position: relative;
   z-index: 1;
-  width: 100%;
+  /* binnen de paginamarge, zodat de eerste foto op dezelfde lijn staat als de tekst */
+  margin-inline: var(--goot);
 }
 .vp-collage.vp-a {
   aspect-ratio: 1440 / 2591;

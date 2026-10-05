@@ -4,6 +4,7 @@ import { Kop } from "@/components/kop"
 import { Menu } from "@/components/menu"
 import { Bekijk } from "@/components/bekijk"
 import { App } from "@/components/app"
+import { PullToRefresh } from "@/components/vernieuw"
 import { WereldBeweging } from "@/components/wereld/beweging"
 import "@/components/wereld/wereld.css"
 import { Voet } from "@/components/voet"
@@ -50,6 +51,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Menu />
         <Bekijk />
         <App />
+        {/* alleen in de app-weergave: daar is geen browser om te verversen */}
+        <PullToRefresh />
         <WereldBeweging />
         <Overgang />
       </body>
