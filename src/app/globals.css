@@ -75,3 +75,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Na een paginawissel krijgt de h1 focus (voor schermlezers). Dat is geen
+   toetsenbordfocus, dus geen zichtbare ring; Tab-focus houdt zijn ring. */
+h1[tabindex="-1"]:focus:not(:focus-visible),
+h1[tabindex="-1"]:focus-visible {
+  outline: none;
+}
