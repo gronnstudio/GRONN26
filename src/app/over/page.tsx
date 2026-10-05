@@ -43,7 +43,18 @@ export default function Over() {
         {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
         <Oplichten tekst={eerste.nl} className="m-0" />
         <div className="mt-[clamp(40px,5vw,72px)] grid md:grid-cols-[5fr_7fr] md:gap-x-8">
-          <div className="md:col-start-2">
+          {/* de lege kolom krijgt een echte foto uit de moestuin (van de oude Studio-pagina) */}
+          <figure className="m-0 mb-10 md:sticky md:top-[12vh] md:mb-0 md:self-start" data-zie>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/studio/moestuin/M01.jpg"
+              alt="Nick gehurkt in de moestuin, lachend, met een handvol pas gerooide aardappels."
+              loading="lazy"
+              className="aspect-[4/5] w-full object-cover md:max-w-[440px]"
+            />
+            <figcaption className="lbl mt-3 text-gedempt">In de moestuin</figcaption>
+          </figure>
+          <div>
             {rest.map((alinea, i) => (
               <Oplichten key={i} tekst={alinea.nl} className="m-0 mb-[1.2em] text-[clamp(18px,1.5vw,24px)]" />
             ))}
