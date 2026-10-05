@@ -1,0 +1,467 @@
+/* De voorpagina (5 okt 2026): WF-058 + WF-059 + WF-057. Maten, easings en
+   snelheden uit de wireframes (nagemeten op de Uncode-demo's). Alles met het
+   voorvoegsel vp-, zodat niets elders geraakt wordt. Bewegende begintoestanden
+   staan alleen onder .vp-fx (gezet door beweging.tsx) en alleen als beweging
+   mag: zonder JS, met prefers-reduced-motion of html.stil is alles zichtbaar. */
+
+.vp-wortel {
+  --vp-rand: max(20px, 2.5vw);
+  --vp-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
+  --vp-regel: cubic-bezier(0.25, 1, 0.5, 1);
+  --vp-inhoud: min(1032px, 100% - 2 * var(--goot));
+  --vp-kolom: min(1068px, 100% - 2 * var(--goot));
+}
+.vp-licht {
+  font-family: var(--vp-montserrat-licht), var(--font-sans);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* ── WF-058: altijd donker ─────────────────────────────────────────── */
+.vp-atelier {
+  background: #202020;
+  color: #efeeea;
+  padding-bottom: clamp(96px, 12vw, 180px);
+}
+
+/* 1 · opening: reuzenkop blijft staan, de foto groeit eronder van 70 % naar vol.
+   Het wireframe legt de kop (108px) over de pagina; hier staat de kop van de
+   site erboven, dus begint de opening 108px − de hoogte van die kop lager. */
+.vp-held {
+  position: relative;
+  padding-top: 16px;
+}
+.vp-held-titel {
+  position: sticky;
+  top: max(24px, 7.5vw);
+  z-index: 3;
+  text-align: center;
+  margin: 0;
+  font-size: 14vw;
+  line-height: 1.2;
+  mix-blend-mode: difference;
+  color: #efeeea;
+  pointer-events: none;
+}
+.vp-r {
+  display: block;
+  overflow: hidden;
+  padding-inline: 0.04em;
+}
+.vp-w {
+  display: inline-block;
+  animation: vp-btt 1s var(--vp-ease) both;
+  animation-delay: calc(200ms + var(--i) * 100ms);
+}
+@keyframes vp-btt {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+.vp-held-foto {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(707 / 1440 * 100% - 108px - 2 * 14vw * 1.2);
+  transform: scale(var(--s, 0.7));
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+.vp-held-beeld {
+  aspect-ratio: 16 / 10;
+}
+.vp-held-beeld img {
+  object-position: 50% 25%;
+}
+.vp-lbl-tel {
+  display: none;
+}
+/* verticale labels in de marge; verdwijnen na 80px scrollen */
+.vp-verticaal {
+  position: absolute;
+  top: calc(100vh - 140px - 92px);
+  z-index: 10;
+  margin: 0;
+  font: 300 20px/24px var(--vp-montserrat-licht), var(--font-sans);
+  letter-spacing: -0.02em;
+  writing-mode: vertical-rl;
+  transition: opacity 0.4s;
+}
+.vp-verticaal.vp-links {
+  left: 60px;
+  transform: translateY(-100%) rotate(180deg);
+}
+.vp-verticaal.vp-rechts {
+  right: 60px;
+  transform: translateY(-100%);
+}
+.vp-verticaal.vp-weg {
+  opacity: 0;
+}
+
+/* 2 · tekst die woord voor woord oplicht */
+.vp-onthul {
+  padding: calc(144 / 1440 * 100vw) var(--vp-rand) 0;
+  font-size: max(20px, 2.373vw);
+  line-height: 1.5;
+  font-family: var(--vp-montserrat-licht), var(--font-sans);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+.vp-onthul h1,
+.vp-onthul p {
+  display: inline;
+  font: inherit;
+  margin: 0;
+}
+.vp-onthul .vp-wd {
+  transition: opacity 0.2s;
+}
+.vp-onthul .vp-meer {
+  display: inline-block;
+  margin-top: 32px;
+  font-family: var(--font-sans);
+  letter-spacing: 0.12em;
+  color: inherit;
+}
+
+/* 3 · reuzenwoord dat opzij schuift, met de fotocollage eroverheen */
+.vp-vel {
+  position: relative;
+  margin-top: calc(144 / 1440 * 100vw);
+}
+.vp-reuswoord {
+  position: sticky;
+  top: 30vh;
+  z-index: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14vw;
+  line-height: 0.85;
+  margin: 0;
+}
+.vp-spoor {
+  display: inline-block;
+  will-change: transform;
+}
+.vp-collage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+.vp-collage.vp-a {
+  aspect-ratio: 1440 / 2591;
+  margin-top: calc(180 / 1440 * 100%);
+}
+.vp-collage.vp-b {
+  aspect-ratio: 1440 / 2316;
+  margin-top: calc(-488 / 1440 * 100%);
+}
+.vp-stuk {
+  position: absolute;
+  margin: 0;
+  will-change: transform;
+}
+.vp-stuk.vp-staand {
+  width: 42.5%;
+  aspect-ratio: 612 / 764;
+}
+.vp-stuk.vp-vierkant {
+  width: 34.03%;
+  aspect-ratio: 1;
+}
+.vp-stuk.vp-liggend {
+  width: 58.33%;
+  aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 767px) {
+  .vp-held {
+    padding-top: 8px;
+  }
+  .vp-held-titel {
+    position: relative;
+    top: auto;
+    mix-blend-mode: normal;
+  }
+  .vp-held-foto {
+    transform: none;
+    margin: 32px var(--vp-rand) 0;
+  }
+  .vp-held-beeld {
+    aspect-ratio: 4 / 3;
+  }
+  .vp-verticaal {
+    display: none;
+  }
+  .vp-lbl-tel {
+    display: block;
+    text-align: center;
+    margin: 20px var(--vp-rand) 0;
+    color: #a9a8a3;
+  }
+  .vp-onthul {
+    padding-top: 72px;
+  }
+}
+
+/* ── WF-059: Zo werk ik, raster van 3×2 ─────────────────────────────── */
+.vp-blok {
+  padding-block: clamp(72px, 10vw, 144px);
+}
+.vp-inhoud {
+  width: var(--vp-inhoud);
+  margin-inline: auto;
+}
+.vp-zes-kop {
+  margin: 0 0 clamp(40px, 5vw, 72px);
+  font-weight: 400;
+}
+.vp-zes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(24px, 5vw, 72px);
+  row-gap: clamp(48px, 6vw, 80px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vp-zes .lbl {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--gedempt);
+}
+.vp-zes h3 {
+  margin: 0;
+  font-size: clamp(26px, 3.1vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.vp-zes p {
+  margin: clamp(18px, 2.4vw, 36px) 0 0;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.75;
+  color: var(--gedempt);
+}
+@media (max-width: 959px) {
+  .vp-zes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .vp-zes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── WF-057: Wat ik doe ─────────────────────────────────────────────── */
+.vp-diensten-blok {
+  padding-top: clamp(72px, 8vw, 118px);
+}
+.vp-kolom {
+  width: var(--vp-kolom);
+  margin-inline: auto;
+}
+.vp-diensten {
+  position: relative;
+}
+.vp-diensten h2 {
+  display: block;
+  margin: 0 0 24px;
+  font-weight: 400;
+  color: var(--gedempt);
+}
+.vp-namen {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: clamp(32px, 6.5vw, 96px);
+  row-gap: clamp(4px, 1vw, 16px);
+}
+.vp-namen li {
+  position: relative;
+  z-index: 2;
+}
+.vp-namen a {
+  display: inline-flex;
+  text-decoration: none;
+  font-size: clamp(28px, 4.2vw, 60px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  transition: opacity 0.25s ease-out;
+}
+.vp-naam {
+  display: inline-flex;
+  align-items: flex-start;
+}
+.vp-namen sup {
+  font-family: var(--font-mono);
+  font-size: max(11px, 0.18em);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  margin-left: 0.45em;
+  margin-top: 0.35em;
+  line-height: 1;
+  vertical-align: baseline;
+  position: static;
+  color: var(--gedempt);
+}
+/* met een muis: de uitleg loopt mee in het beeld; voor schermlezers blijft hij in de link */
+.vp-uitleg {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.vp-diensten.actief .vp-namen a:not(:hover) {
+  opacity: 0.35;
+}
+.vp-terzijde {
+  margin-top: clamp(40px, 5vw, 64px);
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.vp-zwerf {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 360px;
+  height: 480px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+}
+.vp-zwerf.zichtbaar {
+  opacity: 1;
+}
+.vp-zwerf-item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+}
+.vp-zwerf-item.aan {
+  visibility: visible;
+}
+.vp-zwerf-foto {
+  flex: 1;
+  min-height: 0;
+}
+.vp-bijschrift {
+  margin: 0;
+  background: #efeeea;
+  color: #202020;
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* telefoon en touch: een lijst met de uitleg eronder, geen meelopend beeld */
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
+  .vp-zwerf {
+    display: none;
+  }
+  .vp-namen {
+    display: block;
+  }
+  .vp-namen li {
+    border-top: 1px solid var(--lijn);
+    padding: 14px 0;
+  }
+  .vp-namen li:last-child {
+    border-bottom: 1px solid var(--lijn);
+  }
+  .vp-namen a {
+    display: block;
+  }
+  .vp-uitleg {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    display: block;
+    margin-top: 6px;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    letter-spacing: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--gedempt);
+  }
+}
+@media (max-width: 767px) {
+  .vp-namen a {
+    font-size: clamp(26px, 7.4vw, 32px);
+  }
+  /* een lang woord plus nummer past niet altijd op 390: het nummer mag dan
+     naar de volgende regel (<wbr> ervoor) */
+  .vp-naam {
+    display: inline;
+  }
+  .vp-namen sup {
+    vertical-align: super;
+    margin-left: 0.3em;
+  }
+}
+
+/* ── begintoestanden, alleen als beweging mag ───────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  /* WF-059: zachte opkomst (Uncode alpha-anim, 1s), per kolom 200 ms later */
+  html:not(.stil) .vp-fx .vp-alpha {
+    opacity: 0;
+  }
+  html:not(.stil) .vp-fx .vp-alpha.aan {
+    animation: vp-alpha 1s ease both;
+    animation-delay: calc(var(--i, 0) * 200ms);
+  }
+  /* WF-057: blokken 100px omhoog, 600 ms, 100 ms na elkaar */
+  html:not(.stil) .vp-fx .vp-op {
+    opacity: 0;
+    transform: translate3d(0, 100px, 0);
+    transition:
+      opacity 600ms var(--vp-ease),
+      transform 600ms var(--vp-ease);
+    transition-delay: calc(var(--i, 0) * 100ms);
+  }
+  html:not(.stil) .vp-fx .vp-op.aan {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vp-alpha {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vp-held-foto {
+    transform: scale(0.7);
+  }
+  .vp-zwerf {
+    display: none;
+  }
+}
+html.stil .vp-zwerf {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 767px) {
+  .vp-held-foto {
+    transform: none;
+  }
+}
