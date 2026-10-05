@@ -92,9 +92,9 @@ h1[tabindex="-1"]:focus-visible {
   transform: translate(-50%, -50%); animation: komeet 10s linear infinite; }
 @keyframes komeet { to { transform: translate(-50%, -50%) rotate(1turn); } }
 
-/* Voortgangsring om de pijl: loopt vol met het scrollen van de pagina. */
-.ring-voortgang { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); transform: rotate(-90deg); pointer-events: none; overflow: visible; }
-.ring-voortgang circle { fill: none; stroke: #db6923; stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 1; }
+/* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
+.ring-voortgang { position: absolute; inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); transform: rotate(-90deg); pointer-events: none; overflow: visible; }
+.ring-voortgang circle { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 1; }
 @supports (animation-timeline: scroll()) {
   .ring-voortgang circle { animation: ring-vol linear both; animation-timeline: scroll(root); }
 }
