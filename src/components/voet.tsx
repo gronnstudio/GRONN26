@@ -105,7 +105,22 @@ export function Voet() {
           <Logo className="h-auto w-full max-w-[1100px] lg:w-[68%]" />
           <div className="flex flex-col items-start gap-2 text-sm lg:items-end lg:pb-[1%]">
             {/* Alleen voor de eigenaar: Google-login, daarna de offertemaker (zie src/proxy.ts). */}
-            <a href="/offertes" rel="nofollow" className="w-lijnlink mb-2 text-gedempt"><T t={{ nl: "Inloggen", en: "Log in" }} /></a>
+            <a
+              href="/offertes"
+              rel="nofollow"
+              className="mb-2 inline-flex items-center gap-2.5 rounded-full border border-dashed border-lijn px-3.5 py-1.5 text-gedempt transition-colors hover:border-inkt hover:text-inkt"
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
+                <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+              </svg>
+              <span>
+                <T t={{ nl: "Inloggen", en: "Log in" }} />
+                <span className="ml-2 text-[11px] uppercase tracking-[.12em] opacity-70">
+                  <T t={{ nl: "alleen eigenaar", en: "owner only" }} />
+                </span>
+              </span>
+            </a>
             <Kopieer label="KVK" waarde={BUSINESS.kvk} />
             <Kopieer label="BTW" waarde={BUSINESS.btw} />
           </div>
