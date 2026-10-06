@@ -285,6 +285,14 @@ export function OfferteMaker() {
           >
             {intern ? "Intern overzicht printen" : "Offerte printen of opslaan als PDF"}
           </button>
+          {/* Alle vaste bijlagen voor een particulier in één zip (public/documenten). */}
+          <a
+            href="/documenten/GRONN-bijlagen-particulier.zip"
+            download
+            className="cursor-pointer rounded-full border border-lijn px-3 py-1.5 text-inkt"
+          >
+            Bijlagen downloaden (zip)
+          </a>
           <Knop onClick={() => setIntern(!intern)}>{intern ? "Terug naar de offerte" : "Wat houd ik over? (GR-N)"}</Knop>
           <Knop
             onClick={() => {
