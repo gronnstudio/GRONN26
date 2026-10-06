@@ -147,3 +147,11 @@ html.en .t-en { display: contents; }
 @media (prefers-reduced-motion: reduce) { .kern-draai, .kern-puls { animation: none; } }
 html.stil .kern-draai, html.stil .kern-puls { animation: none; }
 body:has(.beheer-donker) { background: #161616; }
+
+/* De kern reageert op de assistent: luisteren pulseert, denken draait sneller, praten ademt. */
+html[data-assistent="luistert"] .kern-draai { animation-duration: 30s; }
+html[data-assistent="denkt"] .kern-draai { animation-duration: 6s; }
+html[data-assistent="praat"] .kern { animation: kern-adem 1.2s ease-in-out infinite; }
+html[data-assistent="luistert"] .kern circle:first-of-type { stroke: #DB6923; stroke-opacity: .7; }
+@keyframes kern-adem { 50% { transform: scale(1.015); } }
+@media (prefers-reduced-motion: reduce) { html[data-assistent] .kern { animation: none; } }

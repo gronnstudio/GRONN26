@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Assistent } from "@/components/beheer/assistent"
 import { Kern } from "@/components/beheer/kern"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
 import { KOPPELINGEN, PROJECTEN, TODOS } from "@/lib/beheer/data"
@@ -81,6 +82,7 @@ export default function Beheer() {
               ))}
             </ul>
           </div>
+          <Assistent />
           <Link
             href="/offertes"
             className="group flex items-center justify-between rounded-full bg-[#DB6923] px-6 py-4 font-semibold text-[#202020]"
