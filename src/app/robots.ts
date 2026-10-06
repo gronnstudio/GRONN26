@@ -6,7 +6,7 @@ const BASIS = "https://gronn.studio"
 // geen pagina's voor bezoekers (ze dragen zelf ook <meta name="robots" content="noindex">).
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/wireframes", "/offline"] },
+    rules: { userAgent: "*", allow: "/", disallow: ["/wireframes", "/offline", "/offertes"] },
     sitemap: `${BASIS}/sitemap.xml`,
     host: BASIS,
   }
