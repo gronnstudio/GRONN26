@@ -133,3 +133,17 @@ html.en .t-en { display: contents; }
   .offerte-blad { max-width: none !important; border-radius: 0 !important; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 @media print { .drukwerk { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+/* Beheer: de kern (src/components/beheer/kern.tsx). */
+.kern-label { font: 600 9.5px var(--font-montserrat, Montserrat), sans-serif; letter-spacing: .16em; fill: #EFEEEA; fill-opacity: .55; }
+.kern-naam { font: 600 13px var(--font-montserrat, Montserrat), sans-serif; fill: #EFEEEA; }
+.kern-sub { font: 500 11px var(--font-montserrat, Montserrat), sans-serif; fill: #EFEEEA; fill-opacity: .6; }
+.kern-merk { font: 700 30px var(--font-syne, Syne), sans-serif; fill: #EFEEEA; letter-spacing: .02em; }
+.kern-getal { font: 700 22px var(--font-syne, Syne), sans-serif; fill: #DB6923; }
+.kern-draai { transform-origin: 300px 300px; animation: kern-draai 120s linear infinite; }
+.kern-puls { transform-box: fill-box; transform-origin: center; animation: kern-puls 2.4s ease-in-out infinite; }
+@keyframes kern-draai { to { transform: rotate(360deg); } }
+@keyframes kern-puls { 50% { transform: scale(1.25); opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { .kern-draai, .kern-puls { animation: none; } }
+html.stil .kern-draai, html.stil .kern-puls { animation: none; }
+body:has(.beheer-donker) { background: #161616; }
