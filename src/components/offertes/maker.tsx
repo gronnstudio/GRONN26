@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BUSINESS } from "@/lib/business";
 import { euro } from "@/lib/format";
@@ -97,6 +98,10 @@ export function OfferteMaker() {
   return (
     <div className="offertes grid min-h-svh gap-8 bg-grond p-4 text-inkt lg:grid-cols-[420px_1fr] lg:p-8">
       <form data-geen-print className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
+        <div className="flex justify-between text-[13px]">
+          <Link href="/" className="w-lijnlink text-gedempt">← Terug naar de site</Link>
+          <a href="/api/uitloggen" className="w-lijnlink text-gedempt">Uitloggen</a>
+        </div>
         <div>
           <p className="lbl m-0 text-oranje-tekst">GRØNN · offertes</p>
           <h1 className="syne m-0 text-[32px] tracking-[-.02em]">Offerte maken</h1>
