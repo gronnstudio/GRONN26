@@ -104,6 +104,8 @@ export function Voet() {
         <div className="mt-[clamp(56px,8vw,120px)] flex flex-wrap items-end justify-between gap-x-10 gap-y-6 border-t border-lijn pt-[clamp(28px,4vw,48px)]">
           <Logo className="h-auto w-full max-w-[1100px] lg:w-[68%]" />
           <div className="flex flex-col items-start gap-2 text-sm lg:items-end lg:pb-[1%]">
+            {/* Alleen voor de eigenaar: Google-login, daarna de offertemaker (zie src/proxy.ts). */}
+            <a href="/offertes" rel="nofollow" className="w-lijnlink mb-2 text-gedempt"><T t={{ nl: "Inloggen", en: "Log in" }} /></a>
             <Kopieer label="KVK" waarde={BUSINESS.kvk} />
             <Kopieer label="BTW" waarde={BUSINESS.btw} />
           </div>
