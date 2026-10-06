@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { DUUR, KOEKJE, maakKoekje, toegestaan } from "@/lib/eigenaar"
 
+// Zelfde terugkeeradres als NextAuth op de oude site, zodat de bestaande
+// Google-client zonder wijziging werkt.
+//
 // Google stuurt de eigenaar hier terug met een code. Die ruilen we server-side
 // (rechtstreeks bij Google, over TLS) voor een id_token; alleen een
 // geverifieerd adres dat gelijk is aan EDITOR_ALLOWED_EMAIL krijgt het koekje.
@@ -15,7 +18,7 @@ export async function GET(request: NextRequest) {
       code: p.get("code")!,
       client_id: process.env.GOOGLE_CLIENT_ID ?? "",
       client_secret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-      redirect_uri: new URL("/api/inloggen/terug", request.nextUrl.origin).toString(),
+      redirect_uri: new URL("/api/auth/callback/google", request.nextUrl.origin).toString(),
       grant_type: "authorization_code",
     }),
   })
@@ -33,8 +36,8 @@ export async function GET(request: NextRequest) {
   const terug = request.cookies.get("gronn-terug")?.value ?? "/offertes"
   const res = NextResponse.redirect(new URL(terug, request.nextUrl.origin))
   res.cookies.set(KOEKJE, await maakKoekje(info.email), { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: DUUR })
-  res.cookies.delete({ name: "gronn-state", path: "/api/inloggen" })
-  res.cookies.delete({ name: "gronn-terug", path: "/api/inloggen" })
+  res.cookies.delete({ name: "gronn-state", path: "/api" })
+  res.cookies.delete({ name: "gronn-terug", path: "/api" })
   return res
 }
 
