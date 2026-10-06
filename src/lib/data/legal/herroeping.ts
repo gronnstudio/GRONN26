@@ -62,8 +62,8 @@ export const HERROEPING: LegalDocument = {
   title: "Modelformulier voor ontbinding / herroeping",
   kind: "formulier",
   audience: "consument",
-  updated: "2026-09-08",
-  status: "concept",
+  updated: "2026-10-06",
+  status: "vastgesteld",
   intro:
     "Wilt u de overeenkomst binnen de bedenktijd ontbinden, dan kunt u dit formulier gebruiken. Het hoeft niet — een duidelijke mededeling per e-mail of brief volstaat ook. Wij bevestigen de ontvangst.",
   sections: [
@@ -82,8 +82,5 @@ export const HERROEPING: LegalDocument = {
       ],
     },
   ],
-  open: [
-    "Dit formulier meesturen bij ELKE offerte aan een particulier, samen met de algemene voorwaarden. Zonder verstrekking rekt de bedenktijd op naar twaalf maanden — dat is de enige fout in dit dossier die je direct geld kan kosten.",
-    "Publicatie 12753 van de ACM (de modelinstructie) naast artikel 03 van de consumentenvoorwaarden leggen. Dat artikel doet de informatieplicht; dit formulier de verstrekkingsplicht. De twee horen hetzelfde te zeggen.",
-  ],
+  open: [],
 }

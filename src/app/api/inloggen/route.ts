@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from "next/server"
 export function GET(request: NextRequest) {
   const id = process.env.GOOGLE_CLIENT_ID
   if (!id) return new NextResponse("Niet gevonden", { status: 404 })
-  const terug = request.nextUrl.searchParams.get("terug") ?? "/offertes"
+  const terug = request.nextUrl.searchParams.get("terug") ?? "/beheer"
   const state = crypto.randomUUID()
   const url = new URL("https://accounts.google.com/o/oauth2/v2/auth")
   url.search = new URLSearchParams({
@@ -19,6 +19,6 @@ export function GET(request: NextRequest) {
   const res = NextResponse.redirect(url)
   const opties = { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/api", maxAge: 600 }
   res.cookies.set("gronn-state", state, opties)
-  res.cookies.set("gronn-terug", terug.startsWith("/") && !terug.startsWith("//") ? terug : "/offertes", opties)
+  res.cookies.set("gronn-terug", terug.startsWith("/") && !terug.startsWith("//") ? terug : "/beheer", opties)
   return res
 }

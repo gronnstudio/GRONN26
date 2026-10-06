@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
 
-// De offertemaker (/offertes) is alleen voor de eigenaar: inloggen met Google
+// Het beheer (/beheer, /offertes) is alleen voor de eigenaar: inloggen met Google
 // (zie src/lib/eigenaar.ts). Zonder Google-instellingen bestaat de pagina niet
 // (404). Er wordt niets opgeslagen op de server; een concept blijft in de
 // browser van de eigenaar.
@@ -13,4 +13,4 @@ export async function proxy(request: NextRequest) {
   return NextResponse.redirect(url)
 }
 
-export const config = { matcher: ["/offertes", "/offertes/:path*"] }
+export const config = { matcher: ["/beheer", "/beheer/:path*", "/offertes", "/offertes/:path*"] }

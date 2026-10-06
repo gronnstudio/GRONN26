@@ -132,3 +132,4 @@ html.en .t-en { display: contents; }
   .offertes [data-geen-print] { display: none !important; }
   .offerte-blad { max-width: none !important; border-radius: 0 !important; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+@media print { .drukwerk { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }

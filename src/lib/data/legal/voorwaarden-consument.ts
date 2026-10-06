@@ -1,3 +1,6 @@
+// 6 okt 2026 vastgesteld door de eigenaar: klachttermijn twee maanden, geen eigen
+// garantie bovenop de wet, geen genoemde verzekeraar, abonnement één jaar per
+// maand gefactureerd, geen geschillencommissie.
 import { BUSINESS } from "@/lib/business"
 import { HERROEPING_REGELS } from "./herroeping"
 import type { LegalDocument } from "./types"
@@ -45,8 +48,8 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
   title: "Algemene voorwaarden voor particuliere opdrachtgevers",
   kind: "voorwaarden",
   audience: "consument",
-  updated: "2026-09-24",
-  status: "concept",
+  updated: "2026-10-06",
+  status: "vastgesteld",
   intro:
     `Deze voorwaarden gelden voor alle offertes, opdrachten en overeenkomsten tussen ${BUSINESS.name} en particuliere opdrachtgevers. Ze zijn geschreven om leesbaar te zijn. Waar de wet de klant meer rechten geeft dan hieronder staat, geldt de wet — een voorwaarde kan een wettelijk consumentenrecht niet wegnemen.`,
   sections: [
@@ -168,9 +171,8 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
       heading: "Klachten, herstel en garantie",
       body: [
         "Wij staan in voor een vaktechnisch correcte uitvoering van het overeengekomen werk. Dat is een wettelijke verplichting en die kan niet worden weggeschreven.",
-        "Zichtbare gebreken meldt de opdrachtgever bij oplevering of zo snel mogelijk daarna. Andere gebreken meldt de opdrachtgever binnen [[klachttermijn]] na ontdekking. Wij reageren binnen vijf dagen en zoeken samen naar een oplossing.",
+        "Zichtbare gebreken meldt de opdrachtgever bij oplevering of zo snel mogelijk daarna. Andere gebreken meldt de opdrachtgever binnen twee maanden na ontdekking. Wij reageren binnen vijf dagen en zoeken samen naar een oplossing.",
         "Een melding buiten die termijn nemen wij nog steeds in behandeling wanneer de opdrachtgever het gebrek redelijkerwijs niet eerder kon ontdekken. De termijn is bedoeld om ons in staat te stellen iets te herstellen, niet om een klacht af te wijzen.",
-        "Garantie die wij zelf geven bovenop de wet: [[eigen garantietermijnen per onderdeel: bestrating, constructiewerk, beplanting]].",
         "Normale zetting, natuurlijke veroudering, mosvorming, vervuiling, materiaaltypische kleur- en maatvariaties en gevolgen van weersinvloeden zijn geen gebrek.",
         "Bij nieuw aangebrachte grond kan natuurlijke inklinking optreden. Een absolute garantie tegen latere zetting is niet te geven; grond aanvullen na natuurlijke zetting valt buiten de aanneemsom tenzij schriftelijk anders is afgesproken.",
         "Werk nabij bestaande bomen voeren wij zorgvuldig uit. Zonder specifiek boomtechnisch onderzoek kunnen wij niet instaan voor reeds bestaande wortelschade of toekomstige vitaliteitsproblemen.",
@@ -182,7 +184,6 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
       body: [
         "Onze aansprakelijkheid voor schade is beperkt tot het bedrag dat onze aansprakelijkheidsverzekering in het betreffende geval uitkeert. Keert de verzekering niet uit, dan is de aansprakelijkheid beperkt tot het factuurbedrag van de betreffende opdracht.",
         "Deze beperking geldt niet bij opzet of bewuste roekeloosheid van onze kant, en niet bij schade door dood of lichamelijk letsel. Die uitzonderingen zijn dwingend recht.",
-        "Wij zijn verzekerd bij [[verzekeraar]] met een dekking van [[dekkingsbedrag]] per gebeurtenis.",
         "Wij zijn niet aansprakelijk voor schade door niet vooraf zichtbare gebreken in bestaande constructies, lekkages, leidingen, dieren, of gebruik waarvoor het aangelegde onderdeel niet is ontworpen.",
         "Schakelen wij voor een deel van het werk een ander in, dan zijn wij voor diens werk aansprakelijk alsof wij het zelf hadden uitgevoerd.",
       ],
@@ -201,10 +202,10 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
     {
       heading: "Onderhoudsabonnementen",
       body: [
-        "Een onderhoudsabonnement wordt aangegaan voor [[looptijd van het abonnement]] en gefactureerd per [[factuurritme]].",
+        "Een onderhoudsabonnement wordt aangegaan voor één jaar en gefactureerd per maand.",
         "Na afloop van de eerste termijn loopt het abonnement door voor onbepaalde tijd. De opdrachtgever kan het vanaf dat moment op elk gewenst moment opzeggen, met een opzegtermijn van ten hoogste één maand. Dat volgt uit de wet en wij kunnen daar niet van afwijken.",
         "Opzeggen kan op dezelfde manier als het abonnement is aangegaan: een bericht per e-mail is voldoende. Wij bevestigen de opzegging.",
-        "Het maandbedrag kan jaarlijks per 1 januari worden geïndexeerd volgens de prijsindex van het CBS. Een verhoging boven die index melden wij ten minste [[aankondigingstermijn prijswijziging]] vooraf; de opdrachtgever kan het abonnement dan opzeggen tegen de datum waarop de verhoging ingaat.",
+        "Het maandbedrag kan jaarlijks per 1 januari worden geïndexeerd volgens de prijsindex van het CBS. Een verhoging boven die index melden wij ten minste één maand vooraf; de opdrachtgever kan het abonnement dan opzeggen tegen de datum waarop de verhoging ingaat.",
         "Seizoensbezoeken zijn afhankelijk van het weer en het seizoen. Waar omstandigheden een gepland bezoek zinloos of schadelijk maken, verschuiven wij het in overleg in plaats van het uit te voeren omdat de agenda dat zegt.",
         "Voorrang bij een storing betekent voorrang bij het inplannen. Een reparatie wordt apart geoffreerd.",
       ],
@@ -240,7 +241,7 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
           " of " +
           BUSINESS.phone +
           "; wij reageren binnen vijf dagen.",
-        "Komen wij er samen niet uit, dan kan de opdrachtgever het geschil voorleggen aan de bevoegde Nederlandse rechter. [[Deelname aan een geschillencommissie — invullen of schrappen]].",
+        "Komen wij er samen niet uit, dan kan de opdrachtgever het geschil voorleggen aan de bevoegde Nederlandse rechter.",
         "Op alle overeenkomsten is Nederlands recht van toepassing. Deze rechtskeuze ontneemt een consument niet de bescherming van dwingend recht van het land waar hij woont.",
       ],
     },
@@ -264,15 +265,7 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
     },
   ],
   open: [
-    "Rechtsvorm invullen (eenmanszaak, vof of bv) — bepaalt de tenaamstelling en de aansprakelijkheid.",
-    "Verzekeraar en dekkingsbedrag van de bedrijfsaansprakelijkheidsverzekering opvragen en invullen. De aansprakelijkheidsbeperking verwijst nu naar een polis die niet is benoemd.",
-    "Klachttermijn en reactietermijn kiezen. Het oude concept zei 14 dagen voor beide; dat is verdedigbaar maar het is een keuze, geen wet.",
-    "Eigen garantietermijnen per onderdeel vaststellen: bestrating, constructiewerk, beplanting. Nu een open plek.",
-    "Looptijd, factuurritme en aankondigingstermijn voor prijswijziging van het onderhoudsabonnement invullen.",
-    "Beslissen of je je aansluit bij een geschillencommissie of branchevereniging (VHG). Zo niet: die zin schrappen in plaats van leeg laten.",
-    "Het modelformulier staat nu als bijlage in dit document én als los vel (slug herroeping), dus het reist mee met de voorwaarden. Blijft te doen: het ook daadwerkelijk meesturen bij elke offerte aan een particulier — een bijlage die in de map blijft liggen verstrekt niets.",
-    "Vastgelegd op 7 sep 2026: offerte 30 dagen geldig, factuur 14 dagen betaaltermijn. De offerte voor Clannad & Stijn zegt nog 14 dagen geldig — die moet naar 30, of hij moet uitdrukkelijk als afwijking worden benoemd.",
-    "In de offertesjabloon een vakje opnemen waarin de opdrachtgever uitdrukkelijk verzoekt om aanvang binnen de bedenktijd, met de verklaring dat het herroepingsrecht vervalt bij volledige uitvoering. Zonder dat vakje is de 50%-aanbetaling een risico voor eigen rekening.",
-    "Laten toetsen door een Nederlandse jurist voordat dit de status 'vastgesteld' krijgt — in het bijzonder het artikel over bedenktijd en de aansprakelijkheidsbeperking.",
+    "Je hebt nog geen bedrijfsaansprakelijkheidsverzekering (in je mail staat alleen een fietsverzekering bij Alteos). Sluit er een af vóór je graaft of een keermuur bouwt: voor een zzp-hovenier vanaf ongeveer € 150 per jaar, vaak € 30–60 per maand.",
+    "Eén keer laten toetsen door een jurist, vooral de bedenktijd en de aansprakelijkheidsbeperking.",
   ],
 }

@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
   }
   if (info.aud !== process.env.GOOGLE_CLIENT_ID || !info.email_verified || info.email?.toLowerCase() !== toegestaan())
     return weiger()
-  const terug = request.cookies.get("gronn-terug")?.value ?? "/offertes"
+  const terug = request.cookies.get("gronn-terug")?.value ?? "/beheer"
   const res = NextResponse.redirect(new URL(terug, request.nextUrl.origin))
   res.cookies.set(KOEKJE, await maakKoekje(info.email), { httpOnly: true, secure: true, sameSite: "lax", path: "/", maxAge: DUUR })
   res.cookies.delete({ name: "gronn-state", path: "/api" })
