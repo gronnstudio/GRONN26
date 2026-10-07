@@ -85,4 +85,8 @@ export const KOPPELINGEN = [
   { naam: "DigiBoox", uitleg: "Facturen en btw", href: "https://account.digiboox.app" },
   { naam: "Vercel", uitleg: "De site", href: "https://vercel.com/gronn/gronn26" },
   { naam: "Website", uitleg: "gronn.studio", href: "/" },
+  // Zakelijke accounts bij leveranciers (uit de mail, 7 okt 2026).
+  { naam: "Bomenbezorgd", uitleg: "Bomen · actief", href: "https://www.bomenbezorgdtobusiness.nl/inloggen" },
+  { naam: "Fenceweb", uitleg: "Hekwerk · in controle", href: "https://www.fenceweb.com/nl/customer/account/login/" },
+  { naam: "Wovar", uitleg: "IJzerwaren · bevestigen", href: "https://www.wovar.nl/Customer/Login/" },
 ] as const
