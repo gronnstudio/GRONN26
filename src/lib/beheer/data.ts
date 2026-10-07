@@ -56,9 +56,9 @@ export type Todo = { wat: string; waarom: string; kosten: string; dringend?: boo
 // Nederland, de rest een gangbare marktprijs. Controleer vóór je beslist.
 export const TODOS: Todo[] = [
   {
-    wat: "Bedrijfsaansprakelijkheidsverzekering afsluiten",
-    waarom: "Vóór je bij Clannad & Stijn graaft en de keermuur bouwt. Nu heb je er geen.",
-    kosten: "± € 150–700 per jaar",
+    wat: "Aansprakelijkheidsverzekering: acceptatie afwachten",
+    waarom: "Aangevraagd bij NN via Zicht (7 okt). Dekking pas na acceptatie, antwoord rond 21 okt; niet graven vóór die tijd.",
+    kosten: "€ 33,06 per maand",
     dringend: true,
   },
   {
@@ -98,3 +98,26 @@ export const LEVERANCIERS = [
   { naam: "Fenceweb", uitleg: "Hekwerk · in controle", href: "https://www.fenceweb.com/nl/customer/account/login/" },
   { naam: "Wovar", uitleg: "IJzerwaren · bevestigen", href: "https://www.wovar.nl/Customer/Login/" },
 ] as const
+
+// Facturen uit de mail (7 okt 2026). "Te ontvangen" = mijn facturen via DigiBoox;
+// betaald zie ik alleen als Mollie het uitbetaalt (online betaald). Een
+// overschrijving naar de bank zie ik niet: die vink je in DigiBoox af.
+export type Factuur = { nummer: string; aan: string; bedrag?: number; vervalt: string; stand: string; betaald?: boolean }
+
+export const TE_ONTVANGEN: Factuur[] = [
+  { nummer: "GR-F // 2026-0908-0010", aan: "Clannad & Stijn, 1e termijn", bedrag: 3737.5, vervalt: "2026-09-22", stand: "Geen betaling gezien" },
+  { nummer: "GR-F // 2026-0923-0009", aan: "Vijverrenovatie, laatste factuur", bedrag: 485, vervalt: "2026-10-07", stand: "Betaald via Mollie (uitbetaald 24 sep)", betaald: true },
+  { nummer: "GR-F // 2026-0930-0011", aan: "Minigraver en dumper", bedrag: 325, vervalt: "2026-10-14", stand: "Open; lijkt dubbel met GR-F // 2026-1006-01" },
+  { nummer: "GR-F // 2026-1006-0001", aan: "Elektra, materiaal en 2 uur", bedrag: 320, vervalt: "2026-10-20", stand: "Open" },
+  { nummer: "GR-F // 2026-1006-01", aan: "Minigraver en dumper", bedrag: 325, vervalt: "2026-10-20", stand: "Open" },
+]
+
+export const TE_BETALEN: Factuur[] = [
+  { nummer: "in3 · Deryan", aan: "Termijnbetaling", vervalt: "2026-10-03", stand: "Derde herinnering" },
+  { nummer: "Billink · Jorny", aan: "Vijverspullen", vervalt: "2026-10-01", stand: "Aanmaning" },
+  { nummer: "Elektramat 110682614", aan: "Bestelling", vervalt: "2026-10-06", stand: "Nog niet betaald" },
+  { nummer: "TransIP F0000.2609.0006.4951", aan: "Domein en hosting", bedrag: 73.8, vervalt: "2026-09-23", stand: "Incasso mislukt" },
+  { nummer: "Simpel F2611494739", aan: "Telefoon", bedrag: 5, vervalt: "2026-10-02", stand: "Incasso mislukt" },
+  { nummer: "Vercel", aan: "Hosting", vervalt: "2026-09-29", stand: "Kaart geweigerd" },
+  { nummer: "DigiBoox 202608-030244", aan: "Boekhouding augustus", bedrag: 19.97, vervalt: "2026-09-16", stand: "Achterstand" },
+]

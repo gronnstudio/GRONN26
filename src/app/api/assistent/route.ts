@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import { NextResponse, type NextRequest } from "next/server"
 import { geheugen } from "@/lib/beheer/geheugen"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
+import { ZONDER_CLAUDE, zelfAntwoord } from "@/lib/beheer/zelf"
 
 // De assistent "Grønn" (spreek uit: greun): Nicks vraag (getypt of ingesproken) naar Claude, met het geheugen van
 // GRØNN als context. Alleen voor de ingelogde eigenaar; de sleutel staat in
@@ -13,9 +14,11 @@ type Beurt = { rol: "nick" | "grønn"; tekst: string }
 
 export async function POST(request: NextRequest) {
   if (!(await isEigenaar(request.cookies.get(KOEKJE)?.value))) return new NextResponse("Niet ingelogd", { status: 401 })
-  if (!process.env.ANTHROPIC_API_KEY) return NextResponse.json({ antwoord: "Ik heb nog geen sleutel, Nick. Zet ANTHROPIC_API_KEY in Vercel." })
   const { vraag, eerder = [] } = (await request.json()) as { vraag?: string; eerder?: Beurt[] }
   if (!vraag?.trim()) return NextResponse.json({ antwoord: "Ik hoorde niets." })
+  const zelf = zelfAntwoord(vraag)
+  if (zelf) return NextResponse.json({ antwoord: zelf })
+  if (!process.env.ANTHROPIC_API_KEY) return NextResponse.json({ antwoord: ZONDER_CLAUDE })
 
   const client = new Anthropic()
   try {
@@ -36,7 +39,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ antwoord: tekst || "Ik heb even geen antwoord." })
   } catch (fout) {
     if (fout instanceof Anthropic.RateLimitError) return NextResponse.json({ antwoord: "Even te druk, probeer het zo nog eens." })
-    if (fout instanceof Anthropic.APIError) return NextResponse.json({ antwoord: `Er ging iets mis bij Claude (${fout.status}).` })
+    if (fout instanceof Anthropic.APIError) return NextResponse.json({ antwoord: ZONDER_CLAUDE })
     throw fout
   }
 }
