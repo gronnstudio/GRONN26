@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Assistent } from "@/components/beheer/assistent"
+import { Facturen } from "@/components/beheer/facturen"
 import { Kern } from "@/components/beheer/kern"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
-import { KOPPELINGEN, LEVERANCIERS, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS, type Factuur } from "@/lib/beheer/data"
+import { KOPPELINGEN, LEVERANCIERS, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { euro } from "@/lib/format"
 
@@ -119,42 +120,7 @@ export default function Beheer() {
         </section>
 
         {/* facturen */}
-        <section className="grid gap-x-10 gap-y-8 md:grid-cols-2 lg:col-span-2">
-          {([
-            ["Te ontvangen", TE_ONTVANGEN],
-            ["Te betalen", TE_BETALEN],
-          ] as [string, Factuur[]][]).map(([titel, lijst]) => {
-            const open = lijst.filter((f) => !f.betaald)
-            const som = open.reduce((s, f) => s + (f.bedrag ?? 0), 0)
-            return (
-              <div key={titel}>
-                <div className="flex items-baseline justify-between gap-4">
-                  <p className={`${lbl} m-0 opacity-60`}>Facturen · {titel}</p>
-                  {som > 0 && <p className="m-0 text-[13px] font-semibold">{euro(som)} open</p>}
-                </div>
-                <ul className="m-0 mt-3 list-none p-0">
-                  {lijst.map((f) => {
-                    const telaat = !f.betaald && new Date(f.vervalt) < new Date()
-                    return (
-                      <li key={f.nummer} className={`flex items-start justify-between gap-4 border-t border-lijn py-3 ${f.betaald ? "opacity-50" : ""}`}>
-                        <div className="min-w-0">
-                          <b className="block font-semibold [overflow-wrap:anywhere]">{f.nummer}</b>
-                          <span className="text-[13px] opacity-70">{f.aan} · {f.stand}</span>
-                        </div>
-                        <div className="shrink-0 text-right">
-                          <span className="block font-semibold tabular-nums">{f.bedrag ? euro(f.bedrag) : "—"}</span>
-                          <span className={`text-[12px] ${telaat ? "text-oranje-tekst" : "opacity-60"}`}>
-                            {f.betaald ? "betaald" : `${telaat ? "verlopen" : "vervalt"} ${datum(f.vervalt)}`}
-                          </span>
-                        </div>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )
-          })}
-        </section>
+        <Facturen ontvangen={TE_ONTVANGEN} betalen={TE_BETALEN} />
 
         {/* kleine letters */}
         <section className="lg:col-span-2">
