@@ -21,12 +21,12 @@ export function Kern() {
   const waarde = open.reduce((s, p) => s + (p.bedrag ?? 0), 0)
   const actief = PROJECTEN.filter((p) => p.fase !== "Opgeleverd").length
   return (
-    <svg viewBox="-110 0 820 600" className="kern h-auto w-full max-w-[860px]" role="img" aria-label="Projecten per fase">
+    <svg viewBox="-110 0 820 600" className="kern h-auto w-full text-inkt max-w-[860px]" role="img" aria-label="Projecten per fase">
       <g className="kern-draai">
         {Array.from({ length: 120 }, (_, i) => {
           const [x1, y1] = polar(272, i * 3)
           const [x2, y2] = polar(i % 10 ? 266 : 258, i * 3)
-          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#EFEEEA" strokeOpacity={i % 10 ? 0.18 : 0.45} />
+          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeOpacity={i % 10 ? 0.18 : 0.45} />
         })}
       </g>
       {FASEN.map((f, i) => {
@@ -36,15 +36,15 @@ export function Kern() {
         const [lx, ly] = polar(196, i * sector + 16)
         return (
           <g key={f}>
-            <path d={boog(220, van, tot)} fill="none" stroke={telt ? "#DB6923" : "#EFEEEA"} strokeOpacity={telt ? 0.9 : 0.2} strokeWidth="2" />
+            <path d={boog(220, van, tot)} fill="none" stroke={telt ? "var(--oranje)" : "currentColor"} strokeOpacity={telt ? 0.9 : 0.2} strokeWidth="2" />
             <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" className="kern-label">
               {f.toUpperCase()} {telt}
             </text>
           </g>
         )
       })}
-      <circle cx={C} cy={C} r={150} fill="none" stroke="#EFEEEA" strokeOpacity="0.12" />
-      <circle cx={C} cy={C} r={112} fill="none" stroke="#EFEEEA" strokeOpacity="0.08" strokeDasharray="2 6" />
+      <circle cx={C} cy={C} r={150} fill="none" stroke="currentColor" strokeOpacity="0.12" />
+      <circle cx={C} cy={C} r={112} fill="none" stroke="currentColor" strokeOpacity="0.08" strokeDasharray="2 6" />
       {PROJECTEN.map((p) => {
         const i = FASEN.indexOf(p.fase)
         const zelfde = PROJECTEN.filter((q) => q.fase === p.fase)
@@ -56,9 +56,9 @@ export function Kern() {
         const rechts = tx >= C
         return (
           <g key={p.naam}>
-            {p.aandacht && <circle cx={x} cy={y} r={r + 7} fill="none" stroke="#DB6923" strokeOpacity="0.6" className="kern-puls" />}
-            <line x1={polar(220 + r + 4, hoek)[0]} y1={polar(220 + r + 4, hoek)[1]} x2={polar(284, hoek)[0]} y2={polar(284, hoek)[1]} stroke="#EFEEEA" strokeOpacity="0.3" />
-            <circle cx={x} cy={y} r={r} fill={p.fase === "Opgeleverd" ? "#5c5b57" : p.aandacht ? "#DB6923" : "#B8C5A8"} />
+            {p.aandacht && <circle cx={x} cy={y} r={r + 7} fill="none" stroke="var(--oranje)" strokeOpacity="0.6" className="kern-puls" />}
+            <line x1={polar(220 + r + 4, hoek)[0]} y1={polar(220 + r + 4, hoek)[1]} x2={polar(284, hoek)[0]} y2={polar(284, hoek)[1]} stroke="currentColor" strokeOpacity="0.3" />
+            <circle cx={x} cy={y} r={r} fill={p.fase === "Opgeleverd" ? "var(--gedempt)" : p.aandacht ? "var(--oranje)" : "var(--salie)"} />
             <text x={tx} y={ty - 4} textAnchor={rechts ? "start" : "end"} className="kern-naam">
               {p.naam}
             </text>

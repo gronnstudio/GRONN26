@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Assistent } from "@/components/beheer/assistent"
 import { Kern } from "@/components/beheer/kern"
+import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
 import { KOPPELINGEN, PROJECTEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
@@ -23,18 +24,21 @@ export default function Beheer() {
   const aandacht = PROJECTEN.filter((p) => p.aandacht)
   const lopend = PROJECTEN.filter((p) => p.fase !== "Opgeleverd")
   return (
-    <div data-links className="beheer-donker min-h-svh bg-[#161616] text-[#EFEEEA]">
+    <div data-links className="min-h-svh bg-grond text-inkt">
       {/* bovenbalk */}
-      <header className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-4 md:px-8">
+      <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b border-lijn px-5 py-4 md:px-8">
         <div className="flex items-center gap-6">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[22px] w-auto" />
-          <span className={`${lbl} hidden text-[#DB6923] sm:inline`}>Beheer · alleen eigenaar</span>
+          <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="hidden h-[22px] w-auto dark:block" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="h-[22px] w-auto dark:hidden" />
+          <span className={`${lbl} hidden text-oranje-tekst sm:inline`}>Beheer · alleen eigenaar</span>
         </div>
-        <div className="flex items-center gap-5 text-[13px]">
-          <span className="font-semibold tabular-nums">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
+          <span className="hidden font-semibold tabular-nums sm:inline">
             <Klok />
           </span>
+          <KleurKeuze />
           <Link href="/" className="opacity-70 hover:opacity-100">Site</Link>
           <a href="/api/uitloggen" className="opacity-70 hover:opacity-100">Uitloggen</a>
         </div>
@@ -56,14 +60,14 @@ export default function Beheer() {
               <Groet />
             </h1>
           </div>
-          <dl className="m-0 grid grid-cols-3 border-y border-white/10">
+          <dl className="m-0 grid grid-cols-3 border-y border-lijn">
             {[
               [String(lopend.length).padStart(2, "0"), "lopend"],
               [String(aandacht.length).padStart(2, "0"), "aandacht"],
               [String(TODOS.length).padStart(2, "0"), "te doen"],
             ].map(([n, t], i) => (
-              <div key={t} className={`py-4 ${i ? "border-l border-white/10 pl-4" : ""}`}>
-                <dd className={`syne m-0 text-[30px] ${t === "aandacht" && n !== "00" ? "text-[#DB6923]" : ""}`}>{n}</dd>
+              <div key={t} className={`py-4 ${i ? "border-l border-lijn pl-4" : ""}`}>
+                <dd className={`syne m-0 text-[30px] ${t === "aandacht" && n !== "00" ? "text-oranje-tekst" : ""}`}>{n}</dd>
                 <dt className={`${lbl} opacity-60`}>{t}</dt>
               </div>
             ))}
@@ -72,7 +76,7 @@ export default function Beheer() {
             <p className={`${lbl} m-0 opacity-60`}>Volgende stap</p>
             <ul className="m-0 mt-3 list-none space-y-4 p-0">
               {lopend.map((p) => (
-                <li key={p.naam} className="border-l-2 pl-4" style={{ borderColor: p.aandacht ? "#DB6923" : "rgba(255,255,255,.15)" }}>
+                <li key={p.naam} className="border-l-2 pl-4" style={{ borderColor: p.aandacht ? "var(--oranje)" : "var(--lijn)" }}>
                   <div className="flex justify-between gap-3">
                     <b className="font-semibold">{p.naam}</b>
                     <span className={`${lbl} shrink-0 opacity-60`}>{p.fase}</span>
@@ -85,7 +89,7 @@ export default function Beheer() {
           <Assistent />
           <Link
             href="/offertes"
-            className="group flex items-center justify-between rounded-full bg-[#DB6923] px-6 py-4 font-semibold text-[#202020]"
+            className="group flex items-center justify-between rounded-full bg-oranje px-6 py-4 font-semibold text-[#202020]"
           >
             Nieuwe offerte maken <span className="transition-transform group-hover:translate-x-1">→</span>
           </Link>
@@ -101,14 +105,14 @@ export default function Beheer() {
             {TODOS.map((t) => (
               <li
                 key={t.wat}
-                className={`rounded-[18px] border p-5 ${t.dringend ? "border-[#DB6923]/60 bg-[#DB6923]/10" : "border-white/10 bg-white/[.03]"}`}
+                className={`rounded-[18px] border p-5 ${t.dringend ? "border-oranje/60 bg-oranje/10" : "border-lijn bg-inkt/[.03]"}`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <b className="font-semibold hyphens-auto [overflow-wrap:anywhere]" lang="nl">{t.wat}</b>
-                  {t.dringend && <span className={`${lbl} shrink-0 text-[#DB6923]`}>Eerst</span>}
+                  {t.dringend && <span className={`${lbl} shrink-0 text-oranje-tekst`}>Eerst</span>}
                 </div>
                 <p className="m-0 mt-1.5 text-[13px] opacity-70">{t.waarom}</p>
-                <p className="syne m-0 mt-3 text-[17px] text-[#DB6923]">{t.kosten}</p>
+                <p className="syne m-0 mt-3 text-[17px] text-oranje-tekst">{t.kosten}</p>
               </li>
             ))}
           </ul>
@@ -118,7 +122,7 @@ export default function Beheer() {
         <section className="lg:col-span-2">
           <div className="flex items-baseline justify-between gap-4">
             <p className={`${lbl} m-0 opacity-60`}>Kleine letters</p>
-            <a href="/documenten/GRONN-bijlagen-particulier.zip" download className="text-[13px] text-[#DB6923]">
+            <a href="/documenten/GRONN-bijlagen-particulier.zip" download className="text-[13px] text-oranje-tekst">
               Bijlagen voor een particuliere offerte (zip) ↓
             </a>
           </div>
@@ -132,16 +136,16 @@ export default function Beheer() {
               })),
               { titel: "Fototoestemming", sub: "Leeg formulier", pagina: "", pdf: "GRONN-fototoestemming.pdf" },
             ].map((d) => (
-              <li key={d.titel} className="flex flex-col justify-between gap-4 rounded-[18px] border border-white/10 p-5">
+              <li key={d.titel} className="flex flex-col justify-between gap-4 rounded-[18px] border border-lijn p-5">
                 <div>
                   <b className="font-semibold leading-[1.3]">{d.titel}</b>
                   <span className="mt-1 block text-[12px] opacity-60">{d.sub}</span>
                 </div>
                 <div className="flex gap-2 text-[12px]">
                   {d.pagina && (
-                    <Link href={d.pagina} className="rounded-full border border-white/20 px-3 py-1">Bekijk</Link>
+                    <Link href={d.pagina} className="rounded-full border border-lijn px-3 py-1">Bekijk</Link>
                   )}
-                  <a href={`/documenten/${d.pdf}`} download className="rounded-full bg-[#EFEEEA] px-3 py-1 text-[#202020]">PDF</a>
+                  <a href={`/documenten/${d.pdf}`} download className="rounded-full bg-inkt px-3 py-1 text-grond">PDF</a>
                 </div>
               </li>
             ))}
@@ -157,7 +161,7 @@ export default function Beheer() {
                 <a
                   href={k.href}
                   {...(k.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-white/10 p-4 transition-colors hover:border-[#DB6923]"
+                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
                 >
                   <span className="syne text-[17px]">{k.naam}</span>
                   <span className="flex items-center justify-between text-[12px] opacity-60">
