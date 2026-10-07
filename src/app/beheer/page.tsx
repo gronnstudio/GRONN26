@@ -4,7 +4,7 @@ import { Assistent } from "@/components/beheer/assistent"
 import { Kern } from "@/components/beheer/kern"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
-import { KOPPELINGEN, PROJECTEN, TODOS } from "@/lib/beheer/data"
+import { KOPPELINGEN, LEVERANCIERS, PROJECTEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { euro } from "@/lib/format"
 
@@ -157,6 +157,26 @@ export default function Beheer() {
           <p className={`${lbl} m-0 opacity-60`}>Alles op één plek</p>
           <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-6">
             {KOPPELINGEN.map((k) => (
+              <li key={k.naam}>
+                <a
+                  href={k.href}
+                  {...(k.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
+                >
+                  <span className="syne text-[17px]">{k.naam}</span>
+                  <span className="flex items-center justify-between text-[12px] opacity-60">
+                    {k.uitleg} <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+        {/* leveranciers */}
+        <section className="lg:col-span-2">
+          <p className={`${lbl} m-0 opacity-60`}>Leveranciers · zakelijke accounts</p>
+          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-4">
+            {LEVERANCIERS.map((k) => (
               <li key={k.naam}>
                 <a
                   href={k.href}

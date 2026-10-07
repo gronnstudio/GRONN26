@@ -85,8 +85,16 @@ export const KOPPELINGEN = [
   { naam: "DigiBoox", uitleg: "Facturen en btw", href: "https://account.digiboox.app" },
   { naam: "Vercel", uitleg: "De site", href: "https://vercel.com/gronn/gronn26" },
   { naam: "Website", uitleg: "gronn.studio", href: "/" },
-  // Zakelijke accounts bij leveranciers (uit de mail, 7 okt 2026).
+] as const
+
+// Zakelijke accounts bij leveranciers, met de stand uit de mail (7 okt 2026).
+export const LEVERANCIERS = [
+  { naam: "Directplant", uitleg: "Planten · actief, 20% korting", href: "https://www.directplant.nl/customer/account/login/" },
   { naam: "Bomenbezorgd", uitleg: "Bomen · actief", href: "https://www.bomenbezorgdtobusiness.nl/inloggen" },
+  { naam: "Biovijver", uitleg: "Vijver · actief", href: "https://biovijver.nl/" },
+  { naam: "ToolMax", uitleg: "Gereedschap · actief", href: "https://www.toolmax.nl/" },
+  { naam: "Wildkamp", uitleg: "Tuinmaterialen · account", href: "https://www.wildkamp.nl/" },
+  { naam: "Hekwerkonline", uitleg: "Hekwerk · account", href: "https://www.hekwerkonline.nl/customer/account/login/" },
   { naam: "Fenceweb", uitleg: "Hekwerk · in controle", href: "https://www.fenceweb.com/nl/customer/account/login/" },
   { naam: "Wovar", uitleg: "IJzerwaren · bevestigen", href: "https://www.wovar.nl/Customer/Login/" },
 ] as const
