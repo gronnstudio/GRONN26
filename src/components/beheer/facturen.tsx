@@ -4,14 +4,18 @@ import { useEffect, useState } from "react";
 import type { Factuur } from "@/lib/beheer/data";
 import { euro } from "@/lib/format";
 
-// Facturen met een verwijderknop (eigenaar, 7 okt 2026). Verwijderen verbergt
+// Facturen en offertes met een verwijderknop (eigenaar, 7 okt 2026). Verwijderen verbergt
 // de factuur in deze browser; "Toon alles" haalt ze terug. De lijst zelf staat
 // in src/lib/beheer/data.ts.
 const KEY = "gronn-facturen-weg";
 const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]";
 const datum = (d: string) => new Date(d).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" });
 
-export function Facturen({ ontvangen, betalen }: { ontvangen: Factuur[]; betalen: Factuur[] }) {
+// Een groep: titel, lijst en de woorden voor "klaar" en "vervalt" (bij een
+// offerte: geaccepteerd en geldig tot).
+export type Groep = { titel: string; lijst: Factuur[]; klaar?: string; vervalt?: string }
+
+export function Facturen({ groepen }: { groepen: Groep[] }) {
   const [weg, setWeg] = useState<string[]>([]);
 
   useEffect(() => {
@@ -32,17 +36,14 @@ export function Facturen({ ontvangen, betalen }: { ontvangen: Factuur[]; betalen
 
   return (
     <section className="grid gap-x-10 gap-y-8 md:grid-cols-2 lg:col-span-2">
-      {([
-        ["Te ontvangen", ontvangen],
-        ["Te betalen", betalen],
-      ] as const).map(([titel, alle]) => {
+      {groepen.map(({ titel, lijst: alle, klaar = "betaald", vervalt = "vervalt" }) => {
         const lijst = alle.filter((f) => !weg.includes(f.nummer));
         const som = lijst.filter((f) => !f.betaald).reduce((s, f) => s + (f.bedrag ?? 0), 0);
         const verborgen = alle.length - lijst.length;
         return (
           <div key={titel}>
             <div className="flex items-baseline justify-between gap-4">
-              <p className={`${lbl} m-0 opacity-60`}>Facturen · {titel}</p>
+              <p className={`${lbl} m-0 opacity-60`}>{titel}</p>
               {som > 0 && <p className="m-0 text-[13px] font-semibold">{euro(som)} open</p>}
             </div>
             <ul className="m-0 mt-3 list-none p-0">
@@ -57,7 +58,7 @@ export function Facturen({ ontvangen, betalen }: { ontvangen: Factuur[]; betalen
                     <div className="shrink-0 text-right">
                       <span className="block font-semibold tabular-nums">{f.bedrag ? euro(f.bedrag) : "—"}</span>
                       <span className={`text-[12px] ${telaat ? "text-oranje-tekst" : "opacity-60"}`}>
-                        {f.betaald ? "betaald" : `${telaat ? "verlopen" : "vervalt"} ${datum(f.vervalt)}`}
+                        {f.betaald ? klaar : `${telaat ? "verlopen" : vervalt} ${datum(f.vervalt)}`}
                       </span>
                     </div>
                     <button

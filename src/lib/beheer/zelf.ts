@@ -1,5 +1,5 @@
 import { euro } from "@/lib/format"
-import { PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "./data"
+import { OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "./data"
 
 // Grønn zonder Claude (eigenaar, 7 okt 2026: "laten praten zonder API"). Vaste
 // vragen over het dashboard beantwoordt hij zelf uit data.ts: gratis, direct en
@@ -22,9 +22,9 @@ export function zelfAntwoord(vraag: string): string | null {
   }
 
   if (heeft(v, "offerte", "openstaand", "open staat", "staat er open")) {
-    const open = PROJECTEN.filter((p) => p.fase === "Offerte")
-    const som = open.reduce((s, p) => s + (p.bedrag ?? 0), 0)
-    return `Er staan ${open.length} offertes open, samen ${euro(som)}: ${open.map((p) => `${p.naam} (${euro(p.bedrag)})`).join(" en ")}.`
+    const open = OFFERTES.filter((o) => !o.betaald)
+    const som = open.reduce((s, o) => s + (o.bedrag ?? 0), 0)
+    return `Er staan ${open.length} offertes open, samen ${euro(som)}: ${open.map((o) => `${o.aan} (${euro(o.bedrag ?? 0)}), ${o.stand.toLowerCase()}`).join("; ")}.`
   }
 
   if (heeft(v, "dringend", "eerst", "belangrijk", "aandacht")) {

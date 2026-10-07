@@ -5,7 +5,15 @@ import { Facturen } from "@/components/beheer/facturen"
 import { Kern } from "@/components/beheer/kern"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
-import { KOPPELINGEN, LEVERANCIERS, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
+import { KOPPELINGEN, LEVERANCIERS, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
+
+// Stand van een leveranciersaccount (eigenaar, 7 okt 2026): groen vinkje,
+// geel vraagteken, rood kruis. Het woord ernaast blijft voor wie geen kleur ziet.
+const STAND = {
+  actief: { naam: "Actief", teken: "✓", bol: "bg-[#2f7d3b] text-white" },
+  wacht: { naam: "In afwachting", teken: "?", bol: "bg-[#f2c230] text-[#202020]" },
+  uit: { naam: "Niet actief", teken: "✕", bol: "bg-[#c0392b] text-white" },
+} as const
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { euro } from "@/lib/format"
 
@@ -120,7 +128,13 @@ export default function Beheer() {
         </section>
 
         {/* facturen */}
-        <Facturen ontvangen={TE_ONTVANGEN} betalen={TE_BETALEN} />
+        <Facturen
+          groepen={[
+            { titel: "Facturen · Te ontvangen", lijst: TE_ONTVANGEN },
+            { titel: "Facturen · Te betalen", lijst: TE_BETALEN },
+            { titel: "Offertes", lijst: OFFERTES, klaar: "geaccepteerd", vervalt: "geldig tot" },
+          ]}
+        />
 
         {/* kleine letters */}
         <section className="lg:col-span-2">
@@ -188,8 +202,17 @@ export default function Beheer() {
                   className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
                 >
                   <span className="syne text-[17px]">{k.naam}</span>
-                  <span className="flex items-center justify-between text-[12px] opacity-60">
-                    {k.uitleg} <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+                  <span className="flex items-end justify-between gap-2 text-[12px]">
+                    <span>
+                      <span className="flex items-center gap-1.5 font-semibold">
+                        <span aria-hidden className={`grid size-[18px] place-items-center rounded-full text-[11px] font-bold ${STAND[k.stand].bol}`}>
+                          {STAND[k.stand].teken}
+                        </span>
+                        {STAND[k.stand].naam}
+                      </span>
+                      <span className="mt-1 block opacity-60">{k.uitleg}</span>
+                    </span>
+                    <span className="opacity-60 transition-transform group-hover:translate-x-0.5">↗</span>
                   </span>
                 </a>
               </li>

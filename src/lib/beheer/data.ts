@@ -23,7 +23,7 @@ export const PROJECTEN: Project[] = [
     plaats: "Stein",
     fase: "Offerte",
     bedrag: 11495,
-    volgende: "Offerte GR-O // 2026-1006-01 versturen met voorwaarden en herroepingsformulier. Geldig t/m 31 oktober.",
+    volgende: "Nieuwe offerte versturen met voorwaarden en herroepingsformulier, geldig t/m 31 oktober. Let op: nummer GR-O // 2026-1006-01 is al gebruikt (Steffie).",
     aandacht: true,
   },
   {
@@ -88,16 +88,16 @@ export const KOPPELINGEN = [
 ] as const
 
 // Zakelijke accounts bij leveranciers, met de stand uit de mail (7 okt 2026).
-export const LEVERANCIERS = [
-  { naam: "Directplant", uitleg: "Planten · actief, 20% korting", href: "https://www.directplant.nl/customer/account/login/" },
-  { naam: "Bomenbezorgd", uitleg: "Bomen · actief", href: "https://www.bomenbezorgdtobusiness.nl/inloggen" },
-  { naam: "Biovijver", uitleg: "Vijver · actief", href: "https://biovijver.nl/" },
-  { naam: "ToolMax", uitleg: "Gereedschap · actief", href: "https://www.toolmax.nl/" },
-  { naam: "Wildkamp", uitleg: "Tuinmaterialen · account", href: "https://www.wildkamp.nl/" },
-  { naam: "Hekwerkonline", uitleg: "Hekwerk · account", href: "https://www.hekwerkonline.nl/customer/account/login/" },
-  { naam: "Fenceweb", uitleg: "Hekwerk · in controle", href: "https://www.fenceweb.com/nl/customer/account/login/" },
-  { naam: "Wovar", uitleg: "IJzerwaren · bevestigen", href: "https://www.wovar.nl/Customer/Login/" },
-] as const
+export type Stand = "actief" | "wacht" | "uit"
+export const LEVERANCIERS: { naam: string; uitleg: string; stand: Stand; href: string }[] = [
+  { naam: "Directplant", uitleg: "Planten · 20% korting", stand: "actief", href: "https://www.directplant.nl/customer/account/login/" },
+  { naam: "Bomenbezorgd", uitleg: "Bomen", stand: "actief", href: "https://www.bomenbezorgdtobusiness.nl/inloggen" },
+  { naam: "Biovijver", uitleg: "Vijver", stand: "actief", href: "https://biovijver.nl/" },
+  { naam: "ToolMax", uitleg: "Gereedschap", stand: "actief", href: "https://www.toolmax.nl/" },
+  { naam: "Wovar", uitleg: "IJzerwaren · B2B", stand: "actief", href: "https://www.wovar.nl/Customer/Login/" },
+  { naam: "Wildkamp", uitleg: "Tuinmaterialen · zakelijk niet bevestigd", stand: "wacht", href: "https://www.wildkamp.nl/" },
+  { naam: "Fenceweb", uitleg: "Hekwerk · in controle", stand: "wacht", href: "https://www.fenceweb.com/nl/customer/account/login/" },
+]
 
 // Facturen uit de mail (7 okt 2026). "Te ontvangen" = mijn facturen via DigiBoox;
 // betaald zie ik alleen als Mollie het uitbetaalt (online betaald). Een
@@ -120,4 +120,12 @@ export const TE_BETALEN: Factuur[] = [
   { nummer: "Simpel F2611494739", aan: "Telefoon", bedrag: 5, vervalt: "2026-10-02", stand: "Incasso mislukt" },
   { nummer: "Vercel", aan: "Hosting", vervalt: "2026-09-29", stand: "Kaart geweigerd" },
   { nummer: "DigiBoox 202608-030244", aan: "Boekhouding augustus", bedrag: 19.97, vervalt: "2026-09-16", stand: "Achterstand" },
+]
+
+// Offertes uit de mail (DigiBoox, 7 okt 2026). "betaald" betekent hier
+// geaccepteerd; "vervalt" is geldig tot.
+export const OFFERTES: Factuur[] = [
+  { nummer: "GR-O // 2026-0905-0001", aan: "Clannad & Stijn, achtertuin", bedrag: 11495, vervalt: "2026-10-05", stand: "Herzien 14 sep, nog geen akkoord; zij willen maart 2027" },
+  { nummer: "GR-O // 2026-1006-02", aan: "Noah Goffin, 6 opbouwstopcontacten", bedrag: 331.28, vervalt: "2026-11-06", stand: "Verstuurd 6 okt, akkoord afwachten" },
+  { nummer: "GR-O // 2026-1006-01", aan: "Steffie, minigraver en dumper", bedrag: 325, vervalt: "2026-11-06", stand: "Geaccepteerd 6 okt, gefactureerd", betaald: true },
 ]
