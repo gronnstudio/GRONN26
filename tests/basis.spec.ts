@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
@@ -104,4 +104,23 @@ test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --kno
       expect(afwijkend, `${route} @${b}`).toEqual([])
     }
   }
+})
+
+test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ page }) => {
+  await zonderIntro(page)
+  let body = ""
+  await page.route("**/formsubmit.co/**", (r) => { body = r.request().postData() ?? ""; r.fulfill({ status: 200, contentType: "application/json", body: '{"success":"true"}' }) })
+  await page.goto("/tuinen/borderpakketten")
+  await page.click('a[href="/kennismaken?pakket=plukborder"]')
+  await expect(page).toHaveURL(/pakket=plukborder/)
+  await expect(page.locator('input[name="pakket"][value="plukborder"]')).toBeChecked()
+  await page.fill('input[name="naam"]', "Test Persoon")
+  await page.fill('input[name="email"]', "test@voorbeeld.nl")
+  await page.fill('input[name="plaats"]', "6171 Stein")
+  await page.click('label:has(input[name="budget"]) >> nth=0')
+  await page.fill('textarea[name="bericht"]', "Een strook van zes meter langs het terras.")
+  await page.click('button[type="submit"]')
+  await expect(page.getByRole("heading", { name: /Dank je/ })).toBeVisible()
+  expect(body).toContain("Borderpakket: Plukborder")
+  expect(body).toContain("Pakket: Plukborder")
 })

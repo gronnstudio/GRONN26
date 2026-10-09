@@ -5,6 +5,7 @@ import { useEffect, useId, useRef, useState, type FocusEvent, type FormEvent, ty
 import { flushSync } from "react-dom"
 
 import { BUSINESS } from "@/lib/business"
+import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
 import { CONTACT_BUDGETTEN } from "@/lib/data/teksten"
 import type { L } from "@/lib/i18n"
 import { T, kies, type Tekst } from "@/components/taal"
@@ -28,12 +29,20 @@ const SOORTEN: { id: string; label: L }[] = [
   { id: "aanleg", label: { nl: "Aanleg — leg de tuin aan", en: "Build — build the garden" } },
   { id: "onderhoud", label: { nl: "Onderhoud — per seizoen", en: "Care — season by season" } },
   { id: "vijver", label: { nl: "Vijver of watersysteem", en: "Pond or water system" } },
+  { id: "border", label: { nl: "Borderpakket", en: "Border package" } },
   { id: "anders", label: { nl: "Weet ik nog niet", en: "Not sure yet" } },
+]
+
+// ?pakket=<slug> komt van de knop bij elk borderpakket (/tuinen/borderpakketten):
+// het pakket staat dan al gekozen, en de mail zegt welk pakket iemand zoekt.
+const PAKKETTEN: { id: string; label: L }[] = [
+  ...BORDERPAKKETTEN.map((p) => ({ id: p.slug, label: p.naam })),
+  { id: "op-maat", label: { nl: "Op maat", en: "Made to measure" } },
 ]
 
 type Status = "invullen" | "bezig" | "verzonden" | "terugval"
 // soort en budget in beide talen: de samenvatting volgt de taal, de mail naar mij blijft Nederlands.
-type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: L; budget: L; bericht: string }
+type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: L; pakket: L; budget: L; bericht: string }
 
 /* ---------- velden: label erboven, een licht vlak met rand om te typen ---------- */
 // Eigenaar, 9 okt 2026: alleen een lijn met het label ver links was niet
@@ -175,6 +184,7 @@ function Staat({ kopRef, kop, sub, children }: { kopRef: RefObject<HTMLHeadingEl
 function Samenvatting({ v }: { v: Velden }) {
   const rijen: [L, Tekst][] = [
     [{ nl: "Vraag", en: "Question" }, v.soort],
+    [{ nl: "Pakket", en: "Package" }, v.pakket],
     [{ nl: "Budget", en: "Budget" }, v.budget],
     [{ nl: "Naam", en: "Name" }, v.naam],
     [{ nl: "E-mail", en: "E-mail" }, v.email],
@@ -204,6 +214,7 @@ function Samenvatting({ v }: { v: Velden }) {
 export function KennismakenFormulier() {
   const [status, setStatus] = useState<Status>("invullen")
   const [soort, setSoort] = useState("anders")
+  const [pakket, setPakket] = useState("")
   const [budget, setBudget] = useState("")
   const [budgetFout, setBudgetFout] = useState(false)
   const [verstuurd, setVerstuurd] = useState<{ velden: Velden; onderwerp: string; mailto: string } | null>(null)
@@ -216,6 +227,11 @@ export function KennismakenFormulier() {
     const id = new URLSearchParams(window.location.search).get("dienst")
     // eslint-disable-next-line react-hooks/set-state-in-effect -- eenmalig uit de URL, na hydratie
     if (id && SOORTEN.some((s) => s.id === id)) setSoort(id)
+    const p = new URLSearchParams(window.location.search).get("pakket")
+    if (p && PAKKETTEN.some((k) => k.id === p)) {
+      setSoort("border")
+      setPakket(p)
+    }
   }, [])
 
   // Na verzenden komt de melding op de plek van het formulier: focus erheen.
@@ -244,12 +260,14 @@ export function KennismakenFormulier() {
       email: String(data.get("email") ?? "").trim(),
       telefoon: String(data.get("telefoon") ?? "").trim(),
       plaats: String(data.get("plaats") ?? "").trim(),
-      soort: SOORTEN.find((s) => s.id === data.get("soort"))?.label ?? SOORTEN[4].label,
+      soort: SOORTEN.find((s) => s.id === data.get("soort"))?.label ?? SOORTEN[5].label,
+      pakket: (data.get("soort") === "border" && PAKKETTEN.find((k) => k.id === data.get("pakket"))?.label) || { nl: "", en: "" },
       budget: CONTACT_BUDGETTEN.find((b) => b.id === data.get("budget"))?.label ?? { nl: "", en: "" },
       bericht: String(data.get("bericht") ?? "").trim(),
     }
     const tekst = [
       `Vraag: ${velden.soort.nl}`,
+      velden.pakket.nl ? `Pakket: ${velden.pakket.nl}` : null,
       `Budget: ${velden.budget.nl}`,
       `Naam: ${velden.naam}`,
       `E-mail: ${velden.email}`,
@@ -260,7 +278,7 @@ export function KennismakenFormulier() {
     ]
       .filter((r): r is string => typeof r === "string")
       .join("\n")
-    const onderwerp = `Kennismaking — ${velden.soort.nl}`
+    const onderwerp = `Kennismaking — ${velden.soort.nl}${velden.pakket.nl ? `: ${velden.pakket.nl}` : ""}`
     const mailto = `${BUSINESS.emailHref}?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(tekst)}`
     setVerstuurd({ velden, onderwerp, mailto })
     setStatus("bezig")
@@ -343,6 +361,9 @@ export function KennismakenFormulier() {
         <Veld label={{ nl: "Telefoon", en: "Phone" }} optioneel {...veld("telefoon")} type="tel" inputMode="tel" autoComplete="tel" />
         <Veld label={{ nl: "Plaats of postcode", en: "Town or postcode" }} {...veld("plaats")} autoComplete="postal-code" />
         <Keuzes legenda={{ nl: "Waar gaat het over?", en: "What is it about?" }} naam="soort" keuzes={SOORTEN} gekozen={soort} onKies={setSoort} />
+        {soort === "border" ? (
+          <Keuzes legenda={{ nl: "Welk pakket?", en: "Which package?" }} naam="pakket" keuzes={PAKKETTEN} gekozen={pakket} onKies={setPakket} />
+        ) : null}
         <Keuzes
           legenda={{ nl: "Wat is je budget?", en: "What is your budget?" }}
           naam="budget"
