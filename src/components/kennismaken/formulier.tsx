@@ -35,7 +35,10 @@ type Status = "invullen" | "bezig" | "verzonden" | "terugval"
 // soort en budget in beide talen: de samenvatting volgt de taal, de mail naar mij blijft Nederlands.
 type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: L; budget: L; bericht: string }
 
-/* ---------- velden als regels op papier: label, lijn, geen kaders ---------- */
+/* ---------- velden: label erboven, een licht vlak met rand om te typen ---------- */
+// Eigenaar, 9 okt 2026: alleen een lijn met het label ver links was niet
+// duidelijk genoeg. Nu staat het label direct boven een omrand veld en is
+// het voorbeeld lichter dan wat je zelf typt.
 
 function Veld({
   label,
@@ -76,16 +79,14 @@ function Veld({
     "aria-describedby": fout || opmerking ? meldingId : undefined,
     onBlur,
     onInput,
-    className: "w-full min-w-0 border-0 bg-transparent py-1 text-[18px] text-inkt outline-none placeholder:text-gedempt",
+    className: `block w-full min-w-0 rounded-[12px] border bg-veld px-4 py-3 text-[18px] text-inkt outline-none placeholder:text-voorbeeld focus:shadow-[0_0_0_1px_var(--inkt)] ${
+      fout ? "border-oranje-tekst shadow-[0_0_0_1px_var(--oranje-tekst)]" : "border-gedempt focus:border-inkt"
+    }`,
   }
   return (
     <div>
-      <div
-        className={`grid gap-y-1.5 border-b pb-2.5 md:grid-cols-[180px_minmax(0,1fr)] md:items-end md:gap-x-6 ${
-          fout ? "border-oranje-tekst shadow-[0_1px_0_var(--oranje-tekst)]" : "border-inkt focus-within:shadow-[0_1px_0_var(--inkt)]"
-        }`}
-      >
-        <label htmlFor={veldId} className={`lbl ${regels ? "md:self-start md:pt-2" : ""}`}>
+      <div className="flex flex-col gap-2">
+        <label htmlFor={veldId} className="lbl">
           <T t={label} />
           {optioneel ? <span className="text-gedempt"> · <T t={{ nl: "optioneel", en: "optional" }} /></span> : null}
         </label>
@@ -138,7 +139,7 @@ function Keuzes({
               aria-describedby={fout ? foutId : undefined}
               className="peer sr-only"
             />
-            <span className="inline-flex min-h-[44px] items-center rounded-full border border-lijn px-3.5 py-2 text-[14px] leading-[1.3] peer-checked:border-inkt peer-checked:bg-inkt peer-checked:text-grond peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-inkt">
+            <span className="inline-flex min-h-[44px] items-center rounded-full border border-gedempt px-3.5 py-2 text-[14px] leading-[1.3] peer-checked:border-inkt peer-checked:bg-inkt peer-checked:text-grond peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-inkt">
               <T t={k.label} />
             </span>
           </label>
@@ -334,7 +335,7 @@ export function KennismakenFormulier() {
 
   return (
     <div className="mt-[clamp(64px,8vw,120px)] grid items-start gap-y-14 md:grid-cols-[7fr_1fr_4fr]">
-      <form onSubmit={verstuur} noValidate aria-label={kies({ nl: "Kennismaken", en: "Get in touch" }, taal)} className="relative flex flex-col gap-7">
+      <form onSubmit={verstuur} noValidate aria-label={kies({ nl: "Kennismaken", en: "Get in touch" }, taal)} className="relative flex flex-col gap-6">
         {/* E-mail is type="text" met inputMode="email" (zelfde toetsenbord):
             type="email" haalt spaties stil weg vóór de controle ze ziet. */}
         <Veld label={{ nl: "Naam", en: "Name" }} {...veld("naam")} verplicht autoComplete="name" />
