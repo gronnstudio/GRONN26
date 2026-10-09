@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Verder } from "@/components/wereld/verder"
 import { Atelier } from "@/components/voorpagina/atelier"
 import { Beweging } from "@/components/voorpagina/beweging"
+import { Maandbalk } from "@/components/voorpagina/maandbalk"
 import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
 import { Werkwijze } from "@/components/voorpagina/werkwijze"
 import "@/components/voorpagina/voorpagina.css"
@@ -26,6 +27,7 @@ export default function Voorpagina() {
         <Atelier />
         <Werkwijze />
         <WatIkDoe />
+        <Maandbalk />
       </div>
 
       <Verder
