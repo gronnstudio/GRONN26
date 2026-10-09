@@ -101,7 +101,7 @@ export function MerkElementen() {
         <Kop id="h-elementen" label={{ nl: "Website-elementen", en: "Website elements" }} aantal={{ nl: "echt, niet nagemaakt", en: "real, not mocked up" }} />
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           <Vak titel={{ nl: "Hoofdknop · één per scherm", en: "Primary button · one per screen" }}>
-            <a href="/kennismaken" className="group inline-flex items-center gap-9 rounded-full bg-oranje py-[15px] pr-5 pl-6 text-[13px] leading-4 font-bold tracking-[-.01em] text-white uppercase no-underline dark:text-antraciet">
+            <a href="/kennismaken" className="group knop gap-9 bg-oranje text-antraciet">
               <span className="block h-4 overflow-hidden">
                 <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
                 <span aria-hidden className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
@@ -110,7 +110,7 @@ export function MerkElementen() {
             </a>
           </Vak>
           <Vak titel={{ nl: "Tweede knop · omlijnd", en: "Secondary button · outlined" }} i={1}>
-            <a href="/werk" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-lijn px-5 text-[13px] font-bold tracking-[.06em] uppercase no-underline transition-colors hover:border-inkt">
+            <a href="/werk" className="knop border border-lijn transition-colors hover:border-inkt">
               <T t={{ nl: "Bekijk het werk", en: "See the work" }} /> <span aria-hidden>→</span>
             </a>
           </Vak>
@@ -132,7 +132,7 @@ export function MerkElementen() {
             </div>
           </Vak>
           <Vak titel={{ nl: "Pijl met voortgangsring", en: "Arrow with progress ring" }} i={2}>
-            <span className="merk-pijl relative grid size-[52px] place-items-center rounded-full bg-oranje text-white dark:text-antraciet" aria-hidden="true">
+            <span className="merk-pijl relative grid size-[var(--knop)] place-items-center rounded-full bg-oranje text-antraciet" aria-hidden="true">
               <svg viewBox="0 0 40 40" className="ring-voortgang merk-ring"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
               <svg viewBox="0 0 16 16" width="16" height="16"><path d="M8 1.5v12M2.5 8 8 13.5 13.5 8" fill="none" stroke="currentColor" strokeWidth="1.9" /></svg>
             </span>

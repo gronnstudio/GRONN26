@@ -97,7 +97,7 @@ export default function Merk() {
               ["/downloads", { nl: "Downloads ↓", en: "Downloads ↓" }],
             ] as [string, L][]
           ).map(([href, naam], i) => (
-            <a key={href} href={href} className="rounded-full border border-lijn px-4 py-2 text-[13px] font-medium no-underline transition-colors hover:border-inkt hover:bg-inkt hover:text-grond" data-zie style={{ "--i": i % 6 } as CSSProperties}>
+            <a key={href} href={href} className="knop-klein border border-lijn transition-colors hover:border-inkt hover:bg-inkt hover:text-grond" data-zie style={{ "--i": i % 6 } as CSSProperties}>
               <T t={naam} />
             </a>
           ))}
@@ -195,7 +195,7 @@ export default function Merk() {
               ["Syne", "https://fonts.google.com/specimen/Syne"],
               ["Montserrat", "https://fonts.google.com/specimen/Montserrat"],
             ].map(([naam, url]) => (
-              <a key={naam} href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-lijn px-5 text-[13px] font-bold tracking-[.06em] uppercase no-underline hover:border-inkt">
+              <a key={naam} href={url} target="_blank" rel="noopener noreferrer" className="knop border border-lijn hover:border-inkt">
                 <T t={{ nl: `Download ${naam}`, en: `Download ${naam}` }} />
                 <span aria-hidden="true">↓</span>
               </a>

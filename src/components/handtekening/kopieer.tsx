@@ -32,7 +32,7 @@ export function KopieerHandtekening({ html }: { html: string }) {
       <button
         type="button"
         onClick={kopieer}
-        className="inline-flex min-h-[44px] cursor-pointer items-center rounded-full bg-oranje px-[24px] text-[13px] font-bold tracking-[.06em] text-antraciet uppercase"
+        className="knop bg-oranje text-antraciet"
       >
         Kopieer handtekening
       </button>

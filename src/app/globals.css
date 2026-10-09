@@ -29,6 +29,18 @@
      fixed). */
   --breedte: 1440px;
   --rand: max(var(--goot), calc((100% - var(--breedte)) / 2 + var(--goot)));
+  /* Knoppen: één lijst maten (eigenaar, 9 okt 2026: "Leg een lijstje met
+     variabelen vast"). Een knop met tekst is `knop` of `knop-klein`, een
+     ronde knop is size-[var(--knop)]. Nooit een eigen hoogte of tekstmaat;
+     een test in tests/basis.spec.ts bewaakt dat. */
+  --knop: 48px;              /* elke actieknop: Kennismaken, Verstuur, menupil, pijl, iconen */
+  --knop-klein: 36px;        /* kleine knoppen en chips: kopiëren, tabs, telefoonkop */
+  --knop-groot: 64px;        /* alleen de omlijnde pijl onderaan een pagina */
+  --knop-tekst: 13px;
+  --knop-tekst-klein: 11px;
+  --knop-letter: 0.06em;
+  --knop-binnen: 24px;       /* ruimte links en rechts van de tekst */
+  --knop-binnen-klein: 14px;
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
@@ -84,6 +96,18 @@ body {
 @utility lnk {
   font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
   text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 4px;
+}
+@utility knop {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  height: var(--knop); padding-inline: var(--knop-binnen); border-radius: 9999px;
+  font-family: var(--font-sans); font-size: var(--knop-tekst); font-weight: 700; line-height: 1;
+  letter-spacing: var(--knop-letter); text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+@utility knop-klein {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: var(--knop-klein); padding-inline: var(--knop-binnen-klein); border-radius: 9999px;
+  font-family: var(--font-sans); font-size: var(--knop-tekst-klein); font-weight: 700; line-height: 1;
+  letter-spacing: var(--knop-letter); text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer;
 }
 @utility sectie { padding-top: clamp(96px, 12vw, 180px); }
 

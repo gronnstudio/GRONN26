@@ -164,8 +164,8 @@
 .w-cirkel {
   display: inline-grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: var(--knop-groot);
+  height: var(--knop-groot);
   margin-top: clamp(28px, 3vw, 44px);
   border: 1px solid var(--oranje-tekst);
   border-radius: 999px;

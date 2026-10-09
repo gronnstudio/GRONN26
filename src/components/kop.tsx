@@ -39,7 +39,7 @@ export function Kop() {
         </Link>
         <Link
           href="/kennismaken"
-          className="inline-flex h-9 items-center rounded-full bg-oranje px-3 text-[11px] font-bold tracking-[.06em] text-white uppercase dark:text-antraciet no-underline"
+          className="knop-klein bg-oranje text-antraciet"
         >
           <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
         </Link>
