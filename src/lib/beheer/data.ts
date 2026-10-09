@@ -80,6 +80,7 @@ export const TODOS: Todo[] = [
 
 export const KOPPELINGEN = [
   { naam: "Offertes", uitleg: "GR-O en GR-N", href: "/offertes" },
+  { naam: "Social", uitleg: "Instagram-feed", href: "/beheer/social" },
   { naam: "Gmail", uitleg: "hello@gronn.studio", href: "https://mail.google.com" },
   { naam: "Drive", uitleg: "Kleine letters", href: "https://drive.google.com/drive/folders/1HoVxEuLOvKWKrYLGKMj9IGkpr0WW6v5S" },
   { naam: "DigiBoox", uitleg: "Facturen en btw", href: "https://account.digiboox.app" },
