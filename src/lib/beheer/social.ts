@@ -54,7 +54,13 @@ export const VASTGEZET: Post[] = [
 
 /** In de volgorde van posten: de eerste staat hier bovenaan. */
 export const POSTS: Post[] = [
-  { titel: "Waarom ik dit werk doe", nodig: "Een paar zinnen van Nick; foto IMG_8150." },
+  {
+    map: "01-persoonlijk-luisteren",
+    slides: 1,
+    titel: "Waarom ik dit werk doe",
+    caption:
+      "Waarom ik dit werk doe?\n\nHet vaderschap maakte voor mij nog duidelijker wat belangrijk is: aandacht geven, verantwoordelijkheid nemen en een omgeving creëren waarin iemand zich veilig voelt. Dat neem ik mee in mijn werk. Ik luister, kijk zorgvuldig en wil begrijpen wat een plek voor iemand moet betekenen.\n\nIk wil tuinen ontwerpen en aanleggen waarin mensen zich thuis voelen en waarin ook ruimte is voor ander leven. Dat begint bij de bodem, bij hoe water zijn weg vindt en bij planten die passen bij de plek.\n\nVertel me gerust over jouw plek.",
+  },
   {
     map: "02-winterklaar-1",
     slides: 5,
