@@ -96,6 +96,7 @@ export const LEVERANCIERS: { naam: string; uitleg: string; stand: Stand; href: s
   { naam: "ToolMax", uitleg: "Gereedschap", stand: "actief", href: "https://www.toolmax.nl/" },
   { naam: "Wovar", uitleg: "IJzerwaren · B2B", stand: "actief", href: "https://www.wovar.nl/Customer/Login/" },
   { naam: "Wildkamp", uitleg: "Tuinmaterialen · zakelijk niet bevestigd", stand: "wacht", href: "https://www.wildkamp.nl/" },
+  { naam: "Dutch Paving Tools", uitleg: "Bestratingsgereedschap · nog geen account", stand: "uit", href: "https://www.dutchpavingtools.com/my-account/" },
   { naam: "Fenceweb", uitleg: "Hekwerk · in controle", stand: "wacht", href: "https://www.fenceweb.com/nl/customer/account/login/" },
 ]
 
