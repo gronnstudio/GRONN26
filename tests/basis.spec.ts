@@ -87,3 +87,21 @@ test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scher
     expect([h1, kennis, pijl], route).toEqual([voet, voet, voet])
   }
 })
+
+test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --knop-groot)", async ({ page }) => {
+  await zonderIntro(page)
+  for (const b of [1440, 390]) {
+    await page.setViewportSize({ width: b, height: 900 })
+    for (const route of ["/", "/vijvers", "/werk", "/kennismaken", "/merk"]) {
+      await page.goto(route, { waitUntil: "domcontentloaded" })
+      const afwijkend = await page.evaluate(() =>
+        [...document.querySelectorAll("a, button")].flatMap((e) => {
+          const cs = getComputedStyle(e), h = Math.round(e.getBoundingClientRect().height)
+          const knop = h > 0 && parseFloat(cs.borderTopLeftRadius) >= 16 && (!/rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) || parseFloat(cs.borderTopWidth) > 0)
+          return knop && !e.closest("nav[data-menu]") && ![36, 48, 64].includes(h) ? [`${(e.textContent || "").trim().slice(0, 30)}: ${h}px`] : []
+        }),
+      )
+      expect(afwijkend, `${route} @${b}`).toEqual([])
+    }
+  }
+})

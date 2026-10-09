@@ -160,7 +160,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                 type="button"
                 aria-label={taal === "en" ? "Close" : "Sluiten"}
                 onClick={() => setOpen(false)}
-                className="grid size-12 cursor-pointer place-items-center rounded-full border border-lijn md:size-8 md:border-0"
+                className="grid size-[var(--knop)] cursor-pointer place-items-center rounded-full border border-lijn md:size-[var(--knop-klein)] md:border-0"
               >
                 ✕
               </button>

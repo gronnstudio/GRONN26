@@ -506,7 +506,7 @@ html.stil .vp-zwerf {
 }
 .vp-maand-knop {
   position: relative;
-  min-height: 44px;
+  min-height: var(--knop);
   border-radius: 999px;
   font: 600 14px/1 var(--font-sans);
   color: var(--inkt);

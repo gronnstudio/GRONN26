@@ -104,7 +104,7 @@ export default function Downloads() {
                 <span className="mt-2 mb-6 block text-[15px] leading-[1.55] text-gedempt">
                   <T t={s.uitleg} />
                 </span>
-                <span className="mt-auto inline-flex items-center gap-2 self-start rounded-full bg-oranje px-4 py-2 pt-2 text-[12px] font-bold tracking-[.06em] text-antraciet uppercase">
+                <span className="mt-auto knop-klein self-start bg-oranje text-antraciet">
                   <T t={s.label} /> <span aria-hidden="true">{intern ? "→" : "↓"}</span>
                 </span>
               </>

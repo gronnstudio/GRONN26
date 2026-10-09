@@ -110,9 +110,9 @@ export function Menu() {
       <Link
         href="/kennismaken"
         data-menu
-        className="group fixed bottom-10 left-[var(--rand)] z-[99] hidden items-center gap-9 rounded-full bg-oranje py-[15px] pr-5 pl-6 text-[13px] leading-4 font-bold tracking-[-.01em] text-white dark:text-antraciet uppercase no-underline shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3 lg:inline-flex"
+        className="group knop fixed bottom-10 left-[var(--rand)] z-[99] gap-9 bg-oranje text-antraciet max-lg:hidden shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3"
       >
-        <span className="block h-4 overflow-hidden">
+        <span className="block h-4 overflow-hidden leading-4">
           <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
           <span aria-hidden className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
         </span>
@@ -128,7 +128,7 @@ export function Menu() {
         onClick={pijl}
         data-menu
         aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
-        className="fixed right-[var(--goot)] bottom-5 z-[101] grid size-12 cursor-pointer place-items-center rounded-full bg-oranje text-white shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-antraciet lg:hidden"
+        className="fixed right-[var(--goot)] bottom-5 z-[101] grid size-[var(--knop)] cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2 lg:hidden"
       >
         <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
         <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden className={`transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${boven ? "" : "rotate-180"}`}>
@@ -141,8 +141,8 @@ export function Menu() {
         data-menu
         data-pijl
         aria-label={taal === "en" ? (boven ? "Scroll down" : "Back to top") : (boven ? "Naar beneden" : "Terug naar boven")}
-        className={`fixed right-[var(--rand)] bottom-10 z-[99] hidden size-[52px] cursor-pointer place-items-center rounded-full shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3 lg:grid ${
-          pijlOpLicht ? "bg-antraciet text-oranje" : "bg-oranje text-white dark:text-antraciet"
+        className={`fixed right-[var(--rand)] bottom-10 z-[99] hidden size-[var(--knop)] cursor-pointer place-items-center rounded-full shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-3 lg:grid ${
+          pijlOpLicht ? "bg-antraciet text-oranje" : "bg-oranje text-antraciet"
         }`}
       >
         <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>

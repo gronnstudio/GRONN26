@@ -32,7 +32,7 @@ export function Kopieer({ label, waarde, kaal = false }: { label: string; waarde
       className={
         kaal
           ? "group inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-transparent p-0 text-left leading-none text-inherit focus-visible:outline-2 focus-visible:outline-offset-2"
-          : "group inline-flex cursor-pointer items-center gap-2 rounded-full border border-lijn py-1.5 pr-2.5 pl-3 text-left leading-none transition-colors hover:border-inkt focus-visible:outline-2 focus-visible:outline-offset-2"
+          : "group inline-flex cursor-pointer items-center gap-2 h-[var(--knop-klein)] rounded-full border border-lijn px-[var(--knop-binnen-klein)] text-left leading-none transition-colors hover:border-inkt focus-visible:outline-2 focus-visible:outline-offset-2"
       }
     >
       {label ? <span className={kaal ? "opacity-70" : "text-gedempt"}>{label}</span> : null}

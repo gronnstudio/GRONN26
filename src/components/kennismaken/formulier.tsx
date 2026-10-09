@@ -139,7 +139,7 @@ function Keuzes({
               aria-describedby={fout ? foutId : undefined}
               className="peer sr-only"
             />
-            <span className="inline-flex min-h-[44px] items-center rounded-full border border-gedempt px-3.5 py-2 text-[14px] leading-[1.3] peer-checked:border-inkt peer-checked:bg-inkt peer-checked:text-grond peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-inkt">
+            <span className="inline-flex min-h-[var(--knop)] items-center rounded-full border border-gedempt px-3.5 py-2 text-[14px] leading-[1.3] peer-checked:border-inkt peer-checked:bg-inkt peer-checked:text-grond peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-inkt">
               <T t={k.label} />
             </span>
           </label>
@@ -322,7 +322,7 @@ export function KennismakenFormulier() {
         <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
           <a
             href={verstuurd.mailto}
-            className="inline-flex h-[52px] items-center rounded-full bg-oranje px-6 text-[12px] font-semibold tracking-[.1em] text-antraciet uppercase no-underline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
+            className="knop bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
           >
             <T t={{ nl: "Open de e-mail opnieuw", en: "Open the e-mail again" }} />
           </a>
@@ -367,7 +367,7 @@ export function KennismakenFormulier() {
         <button
           type="submit"
           disabled={status === "bezig"}
-          className="inline-flex h-[52px] cursor-pointer items-center self-start rounded-full border-0 bg-oranje px-7 text-[12px] font-semibold tracking-[.1em] text-antraciet uppercase transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt disabled:cursor-wait disabled:opacity-60"
+          className="knop self-start border-0 bg-oranje text-antraciet transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt disabled:cursor-wait disabled:opacity-60"
         >
           {status === "bezig" ? <T t={{ nl: "Versturen…", en: "Sending…" }} /> : <T t={{ nl: "Verstuur →", en: "Send →" }} />}
         </button>
