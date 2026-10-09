@@ -15,7 +15,8 @@ for (const route of ROUTES) {
     page.on("pageerror", (e) => fouten.push(e.message))
     for (const b of BREEDTES) {
       await page.setViewportSize({ width: b, height: 900 })
-      const r = await page.goto(route)
+      // "load" wacht op elke foto en video; op CI liep dat over de 30 s (3 breedtes)
+      const r = await page.goto(route, { waitUntil: "domcontentloaded" })
       expect(r?.status(), `${route} @${b}`).toBe(200)
       await page.waitForTimeout(400)
       const overloop = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
