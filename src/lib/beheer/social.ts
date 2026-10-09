@@ -20,6 +20,8 @@ export type Post = {
   /** Map onder /public/social met 1.jpg, 2.jpg, … */
   map?: string
   slides?: number
+  /** Een reel: 1.jpg is de cover, reel.mp4 de video. */
+  reel?: boolean
   titel: string
   caption?: string
   /** Wat er nog nodig is, als de post niet klaar is. */
@@ -68,7 +70,14 @@ export const POSTS: Post[] = [
     caption:
       "Hoe lang voer jij je vissen nog door?\n\nOnder 10 °C gaan ze in winterrust en valt hun spijsvertering bijna stil. Voer dat ze dan nog eten, blijft in hun darmen liggen. Wat ze laten liggen, rot op de bodem en wordt voeding voor de algen van volgend voorjaar.\n\nHang een thermometer op zo’n 50 cm diepte. Tussen 15 en 10 °C geef je weinig en licht verteerbaar voer, en onder 10 °C stop je. Ook op een zonnige winterdag.\n\nDit is deel 1 van 5 van Vijver winterklaar. Volgende keer: pomp en filter in de winter.",
   },
-  { titel: "Een vijverrand leggen", nodig: "Clips IMG_2889 en IMG_2890 uit de beeldbank." },
+  {
+    map: "03-beekloop",
+    slides: 1,
+    reel: true,
+    titel: "Een beekloop bouwen",
+    caption:
+      "Een beekloop begint als een sleuf in de grond.\n\nFolie, grind en keien. Dan de rand, waar water en tuin elkaar raken. Oeverplanten tussen de stenen. En dan loopt het: van de waterval via de beekloop terug naar de vijver.\n\nHet hele project staat op gronn.studio.",
+  },
   {
     map: "04-quote-op-gang",
     slides: 1,
@@ -83,9 +92,22 @@ export const POSTS: Post[] = [
     caption:
       "Een border die vanaf dag één klopt.\n\nJe staat in het tuincentrum, je kiest wat mooi bloeit, en een jaar later staat de helft op de verkeerde plek. Daarom heb ik acht borderpakketten gemaakt: voor zon, schaduw, de vijverrand of droge grond. Bij elk pakket hoort een plan van boven met elke plant, het aantal en de afstand.\n\nIk plant hem aan in Stein en omgeving, of je krijgt planten en plan thuisbezorgd. Past geen pakket? Dan stel ik er een op maat samen.\n\nStuur \"border\" in een DM en vertel waar hij komt.",
   },
-  { titel: "Wat ik zelf eet uit mijn tuin", nodig: "Een paar zinnen van Nick; foto IMG_1779." },
+  {
+    map: "06-modder",
+    slides: 5,
+    titel: "Vaak ook modder",
+    caption:
+      "Thuis en in mijn werk zijn er altijd planten, ideeën en projecten. Vaak ook modder.\n\nMet mijn vader verbouwde ik huizen. Daar leerde ik werken met mijn handen, oplossingen zoeken en doorzetten wanneer iets anders loopt dan bedacht. Buiten de opdrachten moestuinier ik, in de eigen tuin en op een vakantiepark in Beringe.\n\nAls ik naar een tuin kijk, ben ik benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? Met die aandacht werk ik ook aan jouw tuin.",
+  },
   { titel: "Winterklaar 2/5: pomp en filter", nodig: "Wordt gemaakt." },
-  { titel: "Wat er onder een vijver zit", nodig: "Wordt gemaakt." },
+  {
+    map: "08-plantmanden",
+    slides: 1,
+    reel: true,
+    titel: "Waarom oeverplanten in een mand",
+    caption:
+      "Waarom zet ik oeverplanten in een mand?\n\n1. De wortels blijven waar ze horen.\n2. Er komt geen losse aarde in het water.\n3. Uitnemen en scheuren gaat makkelijk.\n\nHet plan voor deze vijver: 11 manden, 44 planten en 7 soorten. Volgend voorjaar plant ik verder aan.\n\nBewaar dit als je zelf een vijver beplant.",
+  },
   {
     map: "09-quote-voed-de-bodem",
     slides: 1,
@@ -93,12 +115,38 @@ export const POSTS: Post[] = [
     caption:
       "Voed de bodem, niet de plant.\n\nGezonde grond vol leven voedt je planten vanzelf. Daarom geen kunstmest, maar compost en mulch, en het blad mag in de borders blijven liggen. De bodem doet de rest, jaar na jaar.",
   },
-  { titel: "Najaarsbeurt vijver", nodig: "Wordt gemaakt." },
-  { titel: "Een dag in Geulle", nodig: "Een paar zinnen van Nick; foto IMG_3571." },
+  {
+    map: "10-winterklaar-prijs",
+    slides: 1,
+    reel: true,
+    titel: "Winterklaar met een vaste prijs",
+    caption:
+      "Wat kost het om je vijver winterklaar te maken? Dat weet je vooraf.\n\n1. Stuur één foto via WhatsApp.\n2. Je krijgt een vaste prijs: basis € 95, met bladnet ophalen € 135, met ijsvrijhouder € 150, alles € 185. Incl. btw.\n3. We prikken een datum en ik kom langs.\n\nWhatsApp: 06 181 180 14. Stein en omgeving.",
+  },
+  {
+    map: "11-buiten",
+    slides: 1,
+    titel: "Buiten vond ik rust",
+    caption:
+      "Buiten vond ik rust: in tuinieren, dieren, observeren en bezig zijn. De natuur is altijd een plek geweest waar ik me thuis voel.\n\nDaarom maak ik tuinen waarin mensen zich thuis voelen, en waarin ook ruimte is voor ander leven.",
+  },
   { titel: "Winterklaar 3/5: knippen of laten staan", nodig: "Wordt gemaakt." },
-  { titel: "Tussen keien en folie", nodig: "Clip IMG_2891 uit de beeldbank." },
+  {
+    map: "13-terras",
+    slides: 1,
+    reel: true,
+    titel: "Terras Geulle in twee dagen",
+    caption:
+      "24 m² betontegels in twee dagen, in Geulle.\n\nDag 1: ontgraven, ophogen en verdichten, zandbed afrijen, banden stellen en uitlijnen.\nDag 2: tegels van 60 × 60 × 4 cm leggen, op afschot richting het gras, en alles nog eens controleren.\n\nEen goed terras ziet er niet alleen waterpas uit. Het weet ook waar het water heen moet.",
+  },
   { titel: "Leave the leaves.", nodig: "Wordt gemaakt." },
-  { titel: "Vijverdoorlichting € 195", nodig: "Wordt gemaakt." },
+  {
+    map: "15-bladnet",
+    slides: 4,
+    titel: "Bladnet met een vaste prijs",
+    caption:
+      "Blad in de vijver rot en wordt slib. Een net erover voorkomt dat. Het is de enige vijverklus met een deadline: vóór de bladval.\n\nVaste prijs, incl. btw:\nTot 15 m²: € 125\n15 tot 35 m²: € 175\nMeer dan 35 m²: € 250\n\nHet net wordt op maat gesneden en de randen om de 60–80 cm vastgezet. In december haal ik het er weer af; die datum plannen we meteen in.\n\nStuur een foto van je vijver via WhatsApp: 06 181 180 14. Stein en omgeving.",
+  },
 ]
 
 export const tegelVan = (n: number): Tegel => VOLGORDE[(n - 1) % VOLGORDE.length]

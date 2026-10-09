@@ -35,7 +35,14 @@ function Kaart({ p, id, kop }: { p: Post; id: string; kop: string }) {
               </li>
             ))}
           </ul>
-          <p className="m-0 mt-1 text-[11px] opacity-50">Tik op een slide om hem te downloaden.</p>
+          <p className="m-0 mt-1 text-[11px] opacity-50">
+            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te downloaden."}
+            {p.reel && (
+              <a href={`/social/${p.map}/reel.mp4`} download={`${p.map}.mp4`} className="font-semibold text-oranje-tekst opacity-100">
+                Download de reel ↓
+              </a>
+            )}
+          </p>
         </>
       ) : (
         <p className="m-0 mt-3 text-[13px] opacity-70">Nog niet klaar. {p.nodig}</p>
