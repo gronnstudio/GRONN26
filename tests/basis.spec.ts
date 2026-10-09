@@ -71,3 +71,19 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
+
+test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scherm", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 1920, height: 900 })
+  for (const route of ["/", "/vijvers", "/over"]) {
+    await page.goto(route, { waitUntil: "domcontentloaded" })
+    const [h1, voet, kennis, pijl] = await page.evaluate(() => {
+      const iw = document.documentElement.clientWidth
+      const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
+      const wrap = document.querySelector("footer .wrap")!
+      const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
+      return [links("main h1"), voet, links('a[href="/kennismaken"].fixed'), Math.round(iw - document.querySelector("[data-pijl]")!.getBoundingClientRect().right)]
+    })
+    expect([h1, kennis, pijl], route).toEqual([voet, voet, voet])
+  }
+})

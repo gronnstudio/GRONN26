@@ -22,6 +22,13 @@
   --mos: #607a59;
   --salie: #b8c5a8;
   --goot: clamp(20px, 4vw, 56px);
+  /* Eén paginabreedte voor alles (uitlijning, 9 okt 2026): tekst, voet en
+     menu-hoeken staan op dezelfde lijn. --breedte is de kolom inclusief de
+     goot; --rand is de afstand van de schermrand tot de tekst, op een breed
+     scherm groter dan de goot. Werkt op elk vlak dat schermbreed is (ook
+     fixed). */
+  --breedte: 1440px;
+  --rand: max(var(--goot), calc((100% - var(--breedte)) / 2 + var(--goot)));
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
@@ -71,7 +78,7 @@ body {
 }
 
 /* Bouwstenen uit de wireframes (wf.css), één keer gedefinieerd */
-@utility wrap { max-width: 1440px; margin-inline: auto; padding-inline: var(--goot); }
+@utility wrap { max-width: var(--breedte); margin-inline: auto; padding-inline: var(--goot); }
 @utility lbl { font-family: var(--font-sans); font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
 @utility syne { font-family: var(--font-syne); font-weight: 700; }
 @utility lnk {

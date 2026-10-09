@@ -6,7 +6,7 @@
    en alleen als beweging mag; zonder JS staat alles er gewoon. */
 :root {
   --w-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
-  --w-rand: var(--goot);
+  --w-rand: var(--rand);
 }
 
 /* ── de opening van elke pagina ─────────────────────────────────────── */
