@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { DienstRij } from "@/components/diensten/dienst-rij"
 import { Verder } from "@/components/wereld/verder"
 import { aantalDiensten, diensten, eersteZinL } from "@/components/diensten/kies"
@@ -9,6 +10,7 @@ import { SFEER_WEIDE } from "@/components/voorpagina/beelden"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
+import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
 
 // WF-020 Tuinen: de rijen per fase (kijken, ontwerpen, aanleggen), die
 // openklappen zoals op Vijvers (WF-031), in de taal van de voorpagina.
@@ -29,6 +31,14 @@ export const metadata: Metadata = {
 }
 
 const T02 = TERRAS_FOTOS.reeks[0]
+const BORDER_FOTO = {
+  src: "/borderpakketten/plukborder.jpg",
+  width: 1600,
+  height: 1200,
+  alt: BORDERPAKKETTEN[5].alt.nl,
+  label: "Sfeerbeeld",
+  en: { alt: BORDERPAKKETTEN[5].alt.en, label: "Mood image" },
+}
 const PLAATS = TERRAS.plaats.split(",")[0]
 
 export default function TuinenPagina() {
@@ -55,6 +65,22 @@ export default function TuinenPagina() {
         <p className="lbl m-0 mt-[16px] max-w-[60ch] text-gedempt">
           <T t={{ nl: "Tik op een dienst: wat erbij hoort, wat niet, en de prijs.", en: "Tap a service: what it includes, what it doesn’t, and the price." }} />
         </p>
+
+        <section aria-labelledby="tuin-borders" className="w-sectie">
+          <Link href="/tuinen/borderpakketten" className="group grid gap-x-8 gap-y-6 md:grid-cols-12">
+            <div className="md:col-span-6">
+              <p className="lbl m-0 text-gedempt"><T t={{ nl: `Nieuw · ${BORDERPAKKETTEN.length} pakketten`, en: `New · ${BORDERPAKKETTEN.length} packages` }} /></p>
+              <h2 id="tuin-borders" className="syne mt-4 mb-0 text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={{ nl: "Borderpakketten", en: "Border packages" }} /></h2>
+              <p className="mt-5 mb-0 max-w-[48ch] text-[17px] leading-[1.55]">
+                <T t={{ nl: "Een kant-en-klare border voor zon, schaduw, vijverrand of droge grond. Aangeplant of opgestuurd, met het plan erbij.", en: "A ready-made border for sun, shade, a pond edge or dry soil. Planted or shipped, with the plan included." }} />
+              </p>
+              <p className="w-lijnlink mt-[28px] mb-0 inline-block"><T t={{ nl: "Bekijk de pakketten →", en: "See the packages →" }} /></p>
+            </div>
+            <div className="md:col-span-5 md:col-start-8">
+              <Foto foto={BORDER_FOTO} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/3] rounded-[16px]" />
+            </div>
+          </Link>
+        </section>
 
         <section aria-labelledby="tuin-werk" className="w-sectie">
           <WerkKop id="tuin-werk">
