@@ -69,9 +69,10 @@ function Pakket({ p, nr }: { p: BorderPakket; nr: number }) {
           <Prijzen p={p} />
           <Link
             href={`/kennismaken?pakket=${p.slug}`}
+            aria-describedby={id}
             className="knop self-start bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
           >
-            <T t={{ nl: `Vraag de ${p.naam.nl.toLowerCase()} aan →`, en: `Ask about the ${p.naam.en.toLowerCase()} →` }} />
+            <T t={{ nl: "Vraag dit pakket aan →", en: "Ask about this package →" }} />
           </Link>
         </div>
       </div>
