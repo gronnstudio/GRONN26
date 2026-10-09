@@ -173,7 +173,7 @@ export default function Beheer() {
         {/* koppelingen */}
         <section className="lg:col-span-2">
           <p className={`${lbl} m-0 opacity-60`}>Alles op één plek</p>
-          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-6">
+          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-7">
             {KOPPELINGEN.map((k) => (
               <li key={k.naam}>
                 <a
