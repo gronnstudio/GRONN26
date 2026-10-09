@@ -12,6 +12,10 @@
   --gedempt: #5e5e5b;
   --lijn: rgba(32, 32, 32, 0.18);
   --vlak: #dcd9d2;
+  /* Invulvelden: een eigen lichte vlak, zodat je ziet waar je typt, en een
+     voorbeeld dat duidelijk lichter is dan ingevulde tekst. */
+  --veld: #fbfbf9;
+  --voorbeeld: #8a8984;
   --oranje: #db6923;
   --oranje-tekst: #a14312;
   --bos: #23483a;
@@ -26,6 +30,8 @@ html.donker, .donker {
   --gedempt: #a9a8a3;
   --lijn: rgba(239, 238, 234, 0.18);
   --vlak: #333331;
+  --veld: #2b2b29;
+  --voorbeeld: #8c8b86;
   --oranje-tekst: #db6923;
   color-scheme: dark;
 }
@@ -40,6 +46,8 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-gedempt: var(--gedempt);
   --color-lijn: var(--lijn);
   --color-vlak: var(--vlak);
+  --color-veld: var(--veld);
+  --color-voorbeeld: var(--voorbeeld);
   --color-oranje: var(--oranje);
   --color-oranje-tekst: var(--oranje-tekst);
   --color-bos: var(--bos);
