@@ -129,7 +129,7 @@ test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --kno
         [...document.querySelectorAll("a, button")].flatMap((e) => {
           const cs = getComputedStyle(e), h = Math.round(e.getBoundingClientRect().height)
           const knop = h > 0 && parseFloat(cs.borderTopLeftRadius) >= 16 && (!/rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) || parseFloat(cs.borderTopWidth) > 0)
-          return knop && !e.closest("nav[data-menu]") && ![36, 48, 64].includes(h) ? [`${(e.textContent || "").trim().slice(0, 30)}: ${h}px`] : []
+          return knop && ![36, 48, 64].includes(h) ? [`${(e.textContent || "").trim().slice(0, 30)}: ${h}px`] : []
         }),
       )
       expect(afwijkend, `${route} @${b}`).toEqual([])

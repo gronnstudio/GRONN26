@@ -15,9 +15,12 @@ html.intro .og-merk, .og[data-actief] .og-merk { display: flex; }
 
 .og-blokken { position: fixed; inset: 0; z-index: 1002; pointer-events: none; transform: translateY(100%); visibility: hidden; will-change: transform; }
 .og-blokken span { position: absolute; top: -1px; height: calc(100% + 2px); background: var(--grond); transform: translateY(100%); will-change: transform; }
-.og-b1 { width: 30%; left: 35%; }
-.og-b2 { width: 65%; left: 17.5%; }
-.og-b3 { width: 100%; left: 0; }
+
+/* De komeet om het hele scherm tijdens de wissel (eigenaar, 10 okt 2026). Op
+   de telefoon met ronde hoeken, zoals het scherm zelf. */
+.og .komeet-scherm { z-index: 1006; inset: 1px; }
+.og .komeet-scherm rect { rx: 0; ry: 0; stroke-width: 3; animation-duration: 2.4s; }
+@media (max-width: 1023px) { .og .komeet-scherm rect { rx: 44px; ry: 44px; } }
 
 .og-zin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; max-width: 955px; margin: 0 auto; padding-bottom: 48px; z-index: 1005; }
 .og-zin p {

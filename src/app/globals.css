@@ -139,7 +139,7 @@ h1[tabindex="-1"]:focus-visible {
    streepjes op de rand (komeet.tsx) in plaats van een draaiend kegelverloop:
    dat viel in de brede pil uiteen in twee stukken (eigenaar, 10 okt 2026).
    De hoeken (24px) horen bij de pil van 48 hoog. Puur versiering. */
-.komeet { position: absolute; inset: 0; pointer-events: none; }
+.komeet { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .komeet svg { display: block; overflow: visible; }
 .komeet rect { rx: 24px; ry: 24px; fill: none; stroke: #db6923; stroke-width: 1.5; animation: komeet 6s linear infinite; }
 @keyframes komeet { to { stroke-dashoffset: -1; } }

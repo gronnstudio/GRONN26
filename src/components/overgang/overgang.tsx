@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { SplitText } from "gsap/SplitText"
+import { Komeet } from "@/components/komeet"
 import { Logo } from "@/components/logo"
 import { openingszin, zinVoor } from "./zinnen"
 import "./overgang.css"
@@ -17,6 +18,10 @@ import "./overgang.css"
 //
 // Uitwegen: geen JS, prefers-reduced-motion of html.stil = geen doek. De
 // navigatie hangt nooit aan de animatie: elke stap heeft een vangnet.
+
+// De trap: van smal in het midden naar schermbreed (eigenaar, 10 okt 2026:
+// "meer kolommen"; eerst drie, 30/65/100).
+const KOLOMMEN = [12, 30, 48, 65, 82, 100]
 
 const MAX_WACHTEN = 6000 // ms op de nieuwe route; daarna onthullen we toch
 const MAX_TOTAAL = 10000 // ms voor een hele wissel; daarna gaat het doek weg
@@ -90,6 +95,12 @@ export function Overgang() {
       return split.lines
     }
 
+    /** De kolommen schuiven als een trap omhoog: de smalste eerst. */
+    const kolommen = (tl: gsap.core.Timeline) =>
+      el.querySelectorAll(".og-blokken span").forEach((k, i) =>
+        tl.to(k, { y: 0, ease: "power2.inOut", duration: 1 + i * 0.05 }, "start"),
+      )
+
     /** De pagina komt op (bij 75 % van het wegschuiven, zoals de hero op kolenda). */
     const paginaOp = () => {
       const m = main()
@@ -142,9 +153,8 @@ export function Overgang() {
           weg
             .addLabel("start")
             .to($(".og-blokken"), { y: 0, ease: "power2.inOut", visibility: "visible" }, "start")
-            .to($(".og-b1"), { y: 0, ease: "power2.inOut", duration: 1 }, "start")
-            .to($(".og-b2"), { y: 0, ease: "power2.inOut", duration: 1.1 }, "start")
-            .to($(".og-b3"), { y: 0, ease: "power2.inOut", duration: 1.2 }, "start")
+          kolommen(weg)
+          weg
             .addLabel("fifth")
             .to($(".og-blokken"), { y: "-100%", ease: "power3.inOut", duration: 1 }, "fifth")
             .to($(".og-grond"), { opacity: 0, ease: "power2.inOut", duration: 0.8 }, "fifth")
@@ -224,9 +234,8 @@ export function Overgang() {
           .addLabel("start")
           .call(ga, [], "start")
           .to($(".og-blokken"), { y: 0, ease: "power2.inOut", visibility: "visible" }, "start")
-          .to($(".og-b1"), { y: 0, ease: "power2.inOut", duration: 1 }, "start")
-          .to($(".og-b2"), { y: 0, ease: "power2.inOut", duration: 1.1 }, "start")
-          .to($(".og-b3"), { y: 0, ease: "power2.inOut", duration: 1.2 }, "start")
+        kolommen(wegTl)
+        wegTl
           .addLabel("fifth")
           // Wacht hier op de nieuwe route (usePathname), nooit langer dan MAX_WACHTEN.
           .addPause("fifth", () => {
@@ -299,10 +308,11 @@ export function Overgang() {
         <div className="og-verloop" />
       </div>
       <div className="og-blokken">
-        <span className="og-b1" />
-        <span className="og-b2" />
-        <span className="og-b3" />
+        {KOLOMMEN.map((b) => (
+          <span key={b} style={{ width: `${b}%`, left: `${(100 - b) / 2}%` }} />
+        ))}
       </div>
+      <Komeet scherm />
       <div className="og-zin">
         <p ref={zin} />
       </div>
