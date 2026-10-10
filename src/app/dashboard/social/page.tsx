@@ -65,6 +65,7 @@ function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepos
       ) : (
         <p className="m-0 mt-3 text-[13px] opacity-70">Nog niet klaar. {p.nodig}</p>
       )}
+      {p.muziek && <p className="m-0 mt-3 text-[13px]">🎵 Muziek: zoek in Instagram op “{p.muziek}”</p>}
       {p.caption && (
         <details className="mt-4">
           <summary className="cursor-pointer text-[13px] font-semibold">Caption</summary>
