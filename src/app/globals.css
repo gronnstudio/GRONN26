@@ -7,18 +7,18 @@
 @custom-variant dark (&:where(.donker, .donker *));
 
 :root {
-  /* Palet van de eigenaar (10 okt 2026): warm crèmewit en een warme
-     antracietopbouw. Grond = pagina, veld = kaarten en invulvelden, vlak =
-     het afwisselende vlak, mos = het botanische accent. */
-  --grond: #f7f5ef;
-  --inkt: #20201e;
-  --gedempt: #66645d;
-  --lijn: #dad7cd;
-  --vlak: #ece9e0;
-  /* Invulvelden: een eigen lichte vlak, zodat je ziet waar je typt, en een
-     voorbeeld dat duidelijk lichter is dan ingevulde tekst. */
-  --veld: #fdfcf8;
-  --voorbeeld: #8a8984;
+  /* Licht en Donker volgens Material (dark theme) en Apple (Dark Mode),
+     eigenaar 10 okt 2026. Licht: witte basis met het gegroepeerde grijs
+     van Apple als tweede vlak; tekst in de Material-niveaus (87 % en 60 %
+     zwart). Grond = pagina, veld = kaarten en invulvelden, vlak = het
+     afwisselende vlak, mos = het botanische accent. */
+  --grond: #ffffff;
+  --inkt: #212121;
+  --gedempt: #666666;
+  --lijn: #e0e0e0;
+  --vlak: #f2f2f7;
+  --veld: #f2f2f7;
+  --voorbeeld: #8a8a8e;
   --oranje: #db6923;
   --oranje-tekst: #a14312;
   --bos: #23483a;
@@ -47,15 +47,18 @@
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
-  --grond: #1c1c1b;
-  --inkt: #f5f3ec;
-  --gedempt: #b7b5ac;
-  --lijn: #41413c;
-  --vlak: #30302e;
-  --veld: #262625;
+  /* Material: #121212 als basis, hoogte als lichter grijs (1dp kaarten
+     #1e1e1e, 2dp vlak #222222), tekst 87 % en 60 % wit, randen 12 % wit,
+     accenten minder verzadigd. */
+  --grond: #121212;
+  --inkt: #e0e0e0;
+  --gedempt: #a0a0a0;
+  --lijn: #2e2e2e;
+  --vlak: #222222;
+  --veld: #1e1e1e;
   --mos: #a5b58d;
-  --voorbeeld: #8c8b86;
-  --oranje-tekst: #db6923;
+  --voorbeeld: #8c8c8c;
+  --oranje-tekst: #e8935a;
   color-scheme: dark;
 }
 /* Bosgroen vlak: de donkere tokens op bosgroen, samen met .donker (de voet,
