@@ -6,7 +6,9 @@
 html.intro .og, .og[data-actief] { display: block; pointer-events: auto; }
 html.intro:not(.intro-los) { overflow: hidden; }
 
-.og-laad { position: absolute; left: 0; top: 0; height: 8px; width: 0; background: #db6923; z-index: 1005; }
+/* De laadlijn is een komeet: een felle kop rechts met een staart die naar
+   links uitdooft (eigenaar, 10 okt 2026: "maak de lijn bovenin een komeet"). */
+.og-laad { position: absolute; left: 0; top: 0; height: 4px; width: 0; border-radius: 0 9999px 9999px 0; background: linear-gradient(to right, rgb(219 105 35 / 0), rgb(219 105 35 / .35) 55%, #db6923); z-index: 1005; }
 .og-grond { position: absolute; inset: 0; background: var(--grond); }
 .og-verloop { position: absolute; inset: 0; background: linear-gradient(to bottom, var(--vlak), var(--grond)); opacity: 0; }
 .og-laad, .og-grond, .og-merk { display: none; }
@@ -16,11 +18,6 @@ html.intro .og-merk, .og[data-actief] .og-merk { display: flex; }
 .og-blokken { position: fixed; inset: 0; z-index: 1002; pointer-events: none; transform: translateY(100%); visibility: hidden; will-change: transform; }
 .og-blokken span { position: absolute; top: -1px; height: calc(100% + 2px); background: var(--grond); transform: translateY(100%); will-change: transform; }
 
-/* De komeet om het hele scherm tijdens de wissel (eigenaar, 10 okt 2026). Op
-   de telefoon met ronde hoeken, zoals het scherm zelf. */
-.og .komeet-scherm { z-index: 1006; inset: 1px; }
-.og .komeet-scherm rect { rx: 0; ry: 0; stroke-width: 3; animation-duration: 2.4s; }
-@media (max-width: 1023px) { .og .komeet-scherm rect { rx: 44px; ry: 44px; } }
 
 .og-zin { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; max-width: 955px; margin: 0 auto; padding-bottom: 48px; z-index: 1005; }
 .og-zin p {

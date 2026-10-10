@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { SplitText } from "gsap/SplitText"
-import { Komeet } from "@/components/komeet"
 import { Logo } from "@/components/logo"
 import { openingszin, zinVoor } from "./zinnen"
 import "./overgang.css"
@@ -19,9 +18,10 @@ import "./overgang.css"
 // Uitwegen: geen JS, prefers-reduced-motion of html.stil = geen doek. De
 // navigatie hangt nooit aan de animatie: elke stap heeft een vangnet.
 
-// De trap: van smal in het midden naar schermbreed (eigenaar, 10 okt 2026:
-// "meer kolommen"; eerst drie, 30/65/100).
-const KOLOMMEN = [12, 30, 48, 65, 82, 100]
+// De trap: van smal in het midden naar schermbreed. Eerst drie (30/65/100),
+// toen zes, nu vier (eigenaar, 10 okt 2026: "iets meer dan voorheen maar
+// minder dan nu").
+const KOLOMMEN = [28, 52, 76, 100]
 
 const MAX_WACHTEN = 6000 // ms op de nieuwe route; daarna onthullen we toch
 const MAX_TOTAAL = 10000 // ms voor een hele wissel; daarna gaat het doek weg
@@ -312,7 +312,6 @@ export function Overgang() {
           <span key={b} style={{ width: `${b}%`, left: `${(100 - b) / 2}%` }} />
         ))}
       </div>
-      <Komeet scherm />
       <div className="og-zin">
         <p ref={zin} />
       </div>
