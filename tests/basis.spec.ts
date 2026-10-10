@@ -77,7 +77,7 @@ test("menu: vijf ronde iconen; bij scrollen alleen Weergave links en Omhoog rech
   await zonderIntro(page)
   for (const b of [390, 1440]) {
     await page.setViewportSize({ width: b, height: 800 })
-    await page.goto("/over")
+    await page.goto("/over", { waitUntil: "domcontentloaded" })
     const nav = page.locator("nav[data-menu]")
     const links = ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"].map((naam) => nav.getByRole("link", { name: naam, exact: true }))
     const weergave = page.getByRole("button", { name: "Weergave en toegankelijkheid" })
