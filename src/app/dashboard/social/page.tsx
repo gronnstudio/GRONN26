@@ -38,7 +38,7 @@ function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepos
           <ul className="m-0 mt-4 flex list-none gap-2 overflow-x-auto p-0">
             {Array.from({ length: p.slides ?? 1 }, (_, i) => (
               <li key={i} className="shrink-0">
-                <a href={beeld(p, i + 1)} download={`${p.map}-${i + 1}.jpg`} title="Download">
+                <a href={beeld(p, i + 1)} target="_blank" rel="noopener" title="Openen">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={beeld(p, i + 1)} alt={`Slide ${i + 1}`} loading="lazy" className="h-[150px] w-[120px] rounded-[10px] object-cover" />
                 </a>
@@ -46,10 +46,10 @@ function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepos
             ))}
           </ul>
           <p className="m-0 mt-1 text-[11px] opacity-50">
-            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te downloaden."}
+            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te openen, houd hem dan vast om te bewaren."}
             {p.reel && (
-              <a href={`/social/${p.map}/reel.mp4`} download={`${p.map}.mp4`} className="font-semibold text-oranje-tekst opacity-100">
-                Download de reel ↓
+              <a href={`/social/${p.map}/reel.mp4`} target="_blank" rel="noopener" className="font-semibold text-oranje-tekst opacity-100">
+                Open de reel ↗
               </a>
             )}
           </p>
