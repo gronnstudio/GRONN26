@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { Komeet } from "./komeet"
 import { Weergave } from "./weergave"
 import { T } from "./taal"
 import { useTaal } from "./taal-klant"
@@ -15,13 +16,14 @@ import { useTaal } from "./taal-klant"
 //   ⭕   ⭕⭕⭕⭕⭕   ⭕  bij omlaag scrollen: de pil krimpt (op de telefoon) en
 //   links Weergave en rechts Omhoog verschijnen, rond en oranje.
 // De pil is bijna dicht antraciet, op elke grond even donker; de huidige
-// pagina is een licht rondje. Linksonder staat vanaf 1024px Kennismaken ↗.
+// pagina is een licht rondje. De iconen bewegen om de beurt even (golf,
+// groei, spit, knik, plop; globals.css). Linksonder staat vanaf 1024px Kennismaken ↗.
 const MENU = [
-  { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
-  { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
-  { href: "/werk", label: { nl: "Projecten", en: "Projects" }, icoon: "M3 5h16v12H3zM3 14l5-4 4 3 3-2 4 3" },
-  { href: "/over", label: { nl: "Over", en: "About" }, icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
-  { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.8M11 15.6v.1" },
+  { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, beweging: "golf", icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
+  { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, beweging: "groei", icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
+  { href: "/werk", label: { nl: "Projecten", en: "Projects" }, beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
+  { href: "/over", label: { nl: "Over", en: "About" }, beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
+  { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, beweging: "plop", icoon: "M5 4h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9.2 8.4a1.8 1.8 0 1 1 2.6 1.6c-.5.2-.8.6-.8 1.1v.3M11 13.2v.1" },
 ]
 
 const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-gebroken-wit aria-[current=page]:text-antraciet"
@@ -60,8 +62,8 @@ export function Menu() {
       <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu className={`fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
         boven ? "inset-x-[var(--goot)]" : "inset-x-[calc(50%-110px)]"
       }`}>
-        <ul className="relative m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(38,38,37,.92)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
-          <li aria-hidden className="komeet" />
+        <ul className="relative m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(38,38,37,.6)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-xl backdrop-saturate-150">
+          <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
             <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"} className="flex h-10 items-center rounded-full px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit">
@@ -73,7 +75,7 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} className={`grid size-10 place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-10 place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                     <path d={m.icoon} />
                   </svg>

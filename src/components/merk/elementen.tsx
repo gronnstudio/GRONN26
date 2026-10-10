@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react"
 import { Beide, T } from "@/components/taal"
 import { Kopieer } from "@/components/kopieer"
+import { Komeet } from "@/components/komeet"
 import { Oplichten } from "@/components/wereld/oplichten"
 import type { L } from "@/lib/i18n"
 
@@ -124,7 +125,7 @@ export function MerkElementen() {
           </Vak>
           <Vak titel={{ nl: "Menu · glazen pil met komeet", en: "Menu · glass pill with comet" }} i={1}>
             <div className="relative flex items-center gap-1 rounded-full bg-[rgba(32,32,32,.55)] p-1 ring-1 ring-gebroken-wit/10" aria-hidden="true">
-              <span className="komeet" />
+              <Komeet />
               {["Vijvers", "Tuinen"].map((w) => (
                 <span key={w} className="rounded-full px-3 py-2.5 text-[11px] font-bold text-gebroken-wit uppercase">{w}</span>
               ))}
