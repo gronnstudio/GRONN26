@@ -7,7 +7,10 @@ import { Weergave } from "./weergave"
 import { T } from "./taal"
 import { useTaal } from "./taal-klant"
 
-// Het menu (eigenaar, 10 okt 2026, als schets):
+// Het menu (eigenaar, 10 okt 2026, als schets; op de telefoon is de pil even
+// breed als de twee cirkels samen, en bij scrollen krimpt hij naar het midden
+// zoals bij Instagram). De pil is altijd bijna dicht antraciet, op elke grond
+// even donker (eigenaar, 10 okt 2026); de huidige pagina is een licht rondje.
 //   ⭕⭕⭕⭕⭕  normaal: midden onderaan een donkere glazen pil met vijf ronde
 //              iconen, Vijvers, Tuinen, Projecten, Over en FAQ, zonder woorden
 //              (het woord blijft voor schermlezers en als tooltip); vanaf
@@ -23,7 +26,7 @@ const MENU = [
   { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.8M11 15.6v.1" },
 ]
 
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-antraciet aria-[current=page]:text-gebroken-wit dark:aria-[current=page]:bg-white dark:aria-[current=page]:text-antraciet"
+const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-gebroken-wit aria-[current=page]:text-antraciet"
 
 export function Menu() {
   const pad = usePathname()
@@ -46,8 +49,10 @@ export function Menu() {
 
   return (
     <>
-      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu inert={!boven} className={`fixed bottom-5 left-1/2 z-[101] -translate-x-1/2 lg:bottom-10 ${toon(boven)}`}>
-        <ul className="relative m-0 flex list-none items-center gap-[3px] rounded-full bg-[rgba(32,32,32,.55)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
+      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu inert={!boven} className={`fixed inset-x-[var(--goot)] bottom-5 z-[101] [transition:clip-path_.5s_cubic-bezier(.22,1,.36,1),opacity_.2s_.3s] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
+        boven ? "opacity-100 [clip-path:inset(0_0_0_0_round_24px)]" : "pointer-events-none opacity-0 [clip-path:inset(0_50%_0_50%_round_24px)]"
+      }`}>
+        <ul className="relative m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(32,32,32,.92)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
           <li aria-hidden className="komeet" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -59,7 +64,7 @@ export function Menu() {
           {MENU.map((m) => {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
-              <li key={m.href} className="flex">
+              <li key={m.href} className="flex justify-center max-lg:flex-1">
                 <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} className={`grid size-10 place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                     <path d={m.icoon} />
