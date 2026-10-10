@@ -7,19 +7,22 @@
 @custom-variant dark (&:where(.donker, .donker *));
 
 :root {
-  --grond: #efeeea;
-  --inkt: #202020;
-  --gedempt: #5e5e5b;
-  --lijn: rgba(32, 32, 32, 0.18);
-  --vlak: #dcd9d2;
+  /* Palet van de eigenaar (10 okt 2026): warm crèmewit en een warme
+     antracietopbouw. Grond = pagina, veld = kaarten en invulvelden, vlak =
+     het afwisselende vlak, mos = het botanische accent. */
+  --grond: #f7f5ef;
+  --inkt: #20201e;
+  --gedempt: #66645d;
+  --lijn: #dad7cd;
+  --vlak: #ece9e0;
   /* Invulvelden: een eigen lichte vlak, zodat je ziet waar je typt, en een
      voorbeeld dat duidelijk lichter is dan ingevulde tekst. */
-  --veld: #fbfbf9;
+  --veld: #fdfcf8;
   --voorbeeld: #8a8984;
   --oranje: #db6923;
   --oranje-tekst: #a14312;
   --bos: #23483a;
-  --mos: #607a59;
+  --mos: #526747;
   --salie: #b8c5a8;
   --goot: clamp(20px, 4vw, 56px);
   /* Eén paginabreedte voor alles (uitlijning, 9 okt 2026): tekst, voet en
@@ -44,12 +47,13 @@
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
-  --grond: #202020;
-  --inkt: #efeeea;
-  --gedempt: #a9a8a3;
-  --lijn: rgba(239, 238, 234, 0.18);
-  --vlak: #333331;
-  --veld: #2b2b29;
+  --grond: #1c1c1b;
+  --inkt: #f5f3ec;
+  --gedempt: #b7b5ac;
+  --lijn: #41413c;
+  --vlak: #30302e;
+  --veld: #262625;
+  --mos: #a5b58d;
   --voorbeeld: #8c8b86;
   --oranje-tekst: #db6923;
   color-scheme: dark;
@@ -248,10 +252,12 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 .leliblad {
   position: absolute;
   top: 14px;
-  left: 68%;
+  left: calc(50% - 40px);
   pointer-events: none;
   animation: leli-drijf 11s ease-in-out infinite;
 }
+/* Het tweede, kleinere blad aan de andere kant van de kring (eigenaar, 10 okt 2026). */
+.leliblad-klein { top: 20px; left: calc(50% + 100px); animation-duration: 9s; animation-delay: -4s; }
 .leliblad path { fill: var(--mos); }
 .leliblad .bloem { fill: var(--salie); }
 html.donker .lisdodde path, html.donker .lisdodde rect { fill: var(--mos); }
@@ -262,8 +268,8 @@ html.donker .lisdodde .steel { fill: none; stroke: var(--mos); }
 }
 .kring {
   position: absolute;
-  top: 17px;
-  left: calc(68% + 40px);
+  top: 19px;
+  left: calc(50% + 70px);
   width: 120px;
   height: 18px;
   margin-left: -60px;

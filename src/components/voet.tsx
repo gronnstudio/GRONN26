@@ -24,7 +24,7 @@ export function Voet() {
   return (
     <footer className="donker bos-vlak relative border-t border-lijn mt-[clamp(40px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
       {/* de voet is het water van een vijver (eigenaar, 10 okt 2026: eigen beeld in plaats van de worm van grnfix):
-          lisdodde aan de rand, een leliblad dat drijft en af en toe een kring in het water; stil bij minder beweging */}
+          lisdodde aan de rand, twee lelibladen met een kring in het water ertussen; stil bij minder beweging */}
       <span className="lisdodde" aria-hidden>
         <svg viewBox="0 0 120 150" width="120" height="150">
             <g className="lis-1">
@@ -51,13 +51,18 @@ export function Voet() {
             </g>
         </svg>
       </span>
+      <span className="kring" aria-hidden />
       <span className="leliblad" aria-hidden>
         <svg viewBox="0 0 80 24" width="80" height="24">
           <path d="M40 12 77.6 10A38 10 0 1 0 77.6 14Z" />
           <path className="bloem" d="M52 9c-2-4-1-7 1-8 2 1 3 4 1 8Zm-1 0c-4-1-6-3-6-5 2-1 5 0 7 4Zm3 0c2-4 5-5 7-4 0 2-2 4-6 5Z" />
         </svg>
       </span>
-      <span className="kring" aria-hidden />
+      <span className="leliblad leliblad-klein" aria-hidden>
+        <svg viewBox="0 0 80 24" width="48" height="14">
+          <path d="M40 12 2.4 10A38 10 0 1 1 2.4 14Z" />
+        </svg>
+      </span>
       <div className="wrap">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-8">
           <div>
