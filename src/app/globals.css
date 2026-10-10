@@ -233,3 +233,29 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 }
 @media (prefers-reduced-motion: reduce) { .worm svg, .worm-kop { animation: none; } .worm svg { transform: none; } }
 html.stil .worm svg { transform: none; }
+
+/* Siergras op de rand van de voet (10 okt 2026), links van de worm: een pol
+   in hetzelfde bosgroen, drie groepjes halmen die elk in hun eigen tempo
+   wuiven. Alleen draaien vanaf de voet, geen layout. */
+.gras {
+  position: absolute;
+  bottom: 100%;
+  left: 10%;
+  width: 140px;
+  height: 120px;
+  margin-bottom: -2px;
+  pointer-events: none;
+}
+.gras svg { display: block; overflow: visible; }
+.gras path, .gras ellipse { fill: var(--bos); }
+.gras .halm { fill: none; stroke: var(--bos); stroke-width: 1.4; }
+.gras .pluim { opacity: 0.8; }
+.gras g { transform-box: view-box; transform-origin: 70px 122px; animation: gras-wuif 7s ease-in-out infinite; }
+.gras .gras-2 { animation-duration: 8.5s; animation-delay: -2s; }
+.gras .gras-3 { animation-duration: 6s; animation-delay: -4s; }
+@keyframes gras-wuif {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+@media (prefers-reduced-motion: reduce) { .gras g { animation: none; } }
+html.stil .gras g { animation: none; }
