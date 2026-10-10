@@ -134,16 +134,15 @@ h1[tabindex="-1"]:focus-visible {
   outline: none;
 }
 
-/* De komeet om de pil, zoals op de oude site (gronn-studio `orbit-ring`;
-   eigenaar, 10 okt 2026: "look on the old site for the comet ember ring").
-   Een ring van 1,5px, gemaskerd tot de rand, waarachter een kegelverloop
-   draait. Puur versiering; de vorm zit hier, komeet.tsx is alleen het element. */
-.komeet { position: absolute; inset: 0; border-radius: 9999px; padding: 1.5px; overflow: hidden; pointer-events: none;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
-.komeet::before { content: ""; position: absolute; top: 50%; left: 50%; width: 150%; aspect-ratio: 1;
-  background: conic-gradient(transparent 0turn .78turn, #db6923 .92turn, transparent .98turn 1turn);
-  transform: translate(-50%, -50%); will-change: transform; animation: komeet 6s linear infinite; }
-@keyframes komeet { from { transform: translate(-50%, -50%) rotate(0turn); } to { transform: translate(-50%, -50%) rotate(1turn); } }
+/* De komeet om de pil: een felle oranje kop met een uitdovende staart, in
+   zes seconden langs de rand, zoals de emberboog van de oude site. Gestapelde
+   streepjes op de rand (komeet.tsx) in plaats van een draaiend kegelverloop:
+   dat viel in de brede pil uiteen in twee stukken (eigenaar, 10 okt 2026).
+   De hoeken (24px) horen bij de pil van 48 hoog. Puur versiering. */
+.komeet { position: absolute; inset: 0; pointer-events: none; }
+.komeet svg { display: block; overflow: visible; }
+.komeet rect { rx: 24px; ry: 24px; fill: none; stroke: #db6923; stroke-width: 1.5; animation: komeet 6s linear infinite; }
+@keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
 .ring-voortgang { position: absolute; inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); transform: rotate(-90deg); pointer-events: none; overflow: visible; }
@@ -171,9 +170,8 @@ h1[tabindex="-1"]:focus-visible {
 @keyframes icoon-spit { 4% { rotate: -14deg; translate: 0 2px; } 7% { rotate: 6deg; translate: 0 0; } 10%, 100% { rotate: 0deg; } }
 @keyframes icoon-knik { 3% { translate: 0 2px; } 6%, 100% { translate: 0 0; } }
 @keyframes icoon-plop { 0% { scale: 1; } 3% { scale: .7; } 6% { scale: 1.15; } 9%, 100% { scale: 1; } }
-@media (prefers-reduced-motion: reduce) { .komeet { opacity: .6; } .komeet::before, .menu-icoon svg { animation: none !important; } }
-html.stil .komeet { opacity: .6; }
-html.stil .komeet::before, html.stil .menu-icoon svg { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .komeet rect, .menu-icoon svg { animation: none !important; } }
+html.stil .komeet rect, html.stil .menu-icoon svg { animation: none !important; }
 
 /* De linkpagina staat zonder menu, kop en voet. */
 body:has([data-links]) > :not(main, .og) { display: none !important; }
