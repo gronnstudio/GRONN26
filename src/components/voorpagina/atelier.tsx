@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Foto } from "@/components/foto";
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie";
-import { OVER_MIJ } from "@/lib/data/teksten";
 import { Beide, T, type Tekst } from "@/components/taal";
 import type { L } from "@/lib/i18n";
 import { F01, F04_2, F05, F07_1, F08_2, F10, F11, T01, T02 } from "./beelden";
@@ -147,8 +146,8 @@ export function Atelier() {
         <p>
           <Woorden
             tekst={{
-              nl: `${ZIN.nl} ${OVER_MIJ[1].nl}`,
-              en: `${ZIN.en} ${OVER_MIJ[1].en}`,
+              nl: ZIN.nl,
+              en: ZIN.en,
             }}
           />
         </p>
