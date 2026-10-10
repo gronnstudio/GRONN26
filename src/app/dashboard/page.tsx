@@ -6,7 +6,7 @@ import { Kern } from "@/components/beheer/kern"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
 import { Kopieer } from "@/components/beheer/kopieer"
-import { POSTS, TEGELS, tegelVan } from "@/lib/beheer/social"
+import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { KOPPELINGEN, LEVERANCIERS, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 
 // Stand van een leveranciersaccount (eigenaar, 7 okt 2026): groen vinkje,
@@ -172,12 +172,12 @@ export default function Dashboard() {
               className="group flex flex-col justify-between gap-4 rounded-[18px] border border-lijn p-5 transition-colors hover:border-oranje"
             >
               <span className={`${lbl} opacity-60`}>Daarna</span>
-              <ol className="m-0 grid list-none gap-1.5 p-0 text-[13px]">
+              <ol className="m-0 grid min-w-0 list-none gap-1.5 p-0 text-[13px]">
                 {open.filter((o) => o !== volgende).slice(0, 4).map(({ p, n, t }) => (
-                  <li key={n} className="flex gap-2">
+                  <li key={n} className="flex min-w-0 gap-2">
                     <span className="w-[22px] shrink-0 tabular-nums opacity-50">{n}</span>
                     <span aria-hidden>{t.emoji}</span>
-                    <span className="truncate">{p.titel}</span>
+                    <span className="min-w-0 truncate">{p.titel}</span>
                     {!p.map && <span className="ml-auto shrink-0 opacity-50">te maken</span>}
                   </li>
                 ))}
@@ -187,6 +187,16 @@ export default function Dashboard() {
               </span>
             </Link>
           </div>
+          <p className={`${lbl} m-0 mt-5 opacity-60`}>Wanneer posten</p>
+          <ul className="m-0 mt-3 grid list-none grid-cols-3 gap-3 p-0">
+            {POSTTIJDEN.map((t) => (
+              <li key={t.dag} className="rounded-[18px] border border-lijn p-4">
+                <span className={`${lbl} opacity-60`}>{t.dag}</span>
+                <b className="syne mt-1 block text-[22px] tabular-nums">{t.tijd}</b>
+                <span className="mt-1 block text-[12px] leading-[1.4] opacity-60">{t.waarom}</span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* facturen */}

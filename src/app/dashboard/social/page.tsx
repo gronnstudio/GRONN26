@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Kopieer } from "@/components/beheer/kopieer"
-import { POSTS, TEGELS, VASTGEZET, VOLGORDE, tegelVan, type Post } from "@/lib/beheer/social"
+import { POSTS, POSTTIJDEN, TEGELS, VASTGEZET, VOLGORDE, tegelVan, type Post } from "@/lib/beheer/social"
 
 // De Instagram-feed vanuit het dashboard (eigenaar, 9 okt 2026). Bewust geen
 // koppeling met Instagram zelf: posten via de API vraagt een Meta-zakelijk
@@ -117,6 +117,17 @@ export default function Social() {
             })}
           </div>
           <p className="m-0 mt-2 text-[11px] opacity-50">Nieuwste linksboven. Tik op een vak voor beelden en caption.</p>
+          <p className={`${lbl} m-0 mt-8 opacity-60`}>Wanneer posten</p>
+          <ul className="m-0 mt-3 grid list-none grid-cols-3 gap-3 p-0">
+            {POSTTIJDEN.map((t) => (
+              <li key={t.dag} className="rounded-[18px] border border-lijn p-4">
+                <span className={`${lbl} opacity-60`}>{t.dag}</span>
+                <b className="syne mt-1 block text-[22px] tabular-nums">{t.tijd}</b>
+                <span className="mt-1 block text-[12px] leading-[1.4] opacity-60">{t.waarom}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="m-0 mt-2 text-[11px] opacity-50">Gemiddelden. Kijk in Instagram Insights wanneer jouw volgers online zijn zodra je die data hebt.</p>
         </section>
         <section>
           <p className={`${lbl} m-0 opacity-60`}>Vastgezet · zet eerst 03 vast, dan 02, dan 01</p>

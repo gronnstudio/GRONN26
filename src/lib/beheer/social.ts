@@ -151,3 +151,12 @@ export const POSTS: Post[] = [
 ]
 
 export const tegelVan = (n: number): Tegel => VOLGORDE[(n - 1) % VOLGORDE.length]
+
+// Wanneer posten (10 okt 2026). Gemiddelden uit onderzoek (Buffer, 9,6 mln posts;
+// voor Nederland ligt de avondpiek rond 19–21 uur). Drie vaste momenten per week;
+// Instagram Insights → Volgers → "Meest actieve tijden" gaat voor zodra er data is.
+export const POSTTIJDEN = [
+  { dag: "Di", tijd: "19:30", waarom: "Na het eten, op de bank" },
+  { dag: "Do", tijd: "12:00", waarom: "Lunchpauze" },
+  { dag: "Za", tijd: "09:30", waarom: "Koffie, tijd voor de tuin" },
+]
