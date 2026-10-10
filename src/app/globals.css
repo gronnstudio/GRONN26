@@ -11,9 +11,7 @@
   --inkt: #202020;
   --gedempt: #5e5e5b;
   --lijn: rgba(32, 32, 32, 0.18);
-  /* Lichte vlakken met een zweem salie (eigenaar, 10 okt 2026: "geen groene
-     elementen meer ... voelt niet als een hoveniers website"). */
-  --vlak: #dde3d4;
+  --vlak: #dcd9d2;
   /* Invulvelden: een eigen lichte vlak, zodat je ziet waar je typt, en een
      voorbeeld dat duidelijk lichter is dan ingevulde tekst. */
   --veld: #fbfbf9;
