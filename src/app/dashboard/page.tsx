@@ -6,7 +6,9 @@ import { Kern } from "@/components/beheer/kern"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
 import { Kopieer } from "@/components/beheer/kopieer"
-import { POSTS, TEGELS, tegelVan } from "@/lib/beheer/social"
+import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
+import { leesStand, opslagAan } from "@/lib/beheer/stand"
+import { aanvraagKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { KOPPELINGEN, LEVERANCIERS, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 
 // Stand van een leveranciersaccount (eigenaar, 7 okt 2026): groen vinkje,
@@ -31,13 +33,20 @@ export const metadata: Metadata = {
 const datum = (d: string) => new Date(d).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })
 const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
 
-export default function Dashboard() {
+export const dynamic = "force-dynamic"
+
+const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2 text-[14px]"
+const dag = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" })
+const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
+
+export default async function Dashboard() {
+  const stand = await leesStand()
   const aandacht = PROJECTEN.filter((p) => p.aandacht)
   const lopend = PROJECTEN.filter((p) => p.fase !== "Opgeleverd")
   // Social (eigenaar, 10 okt 2026: "maak in dashboard een special stuk voor social
   // media"): de eerstvolgende post om te plaatsen, en wat daarna komt.
   const posts = POSTS.map((p, i) => ({ p, n: i + 1, t: TEGELS[tegelVan(i + 1)] }))
-  const open = posts.filter(({ p }) => !p.gepost)
+  const open = posts.filter(({ p }) => !p.gepost && !(p.map && stand.gepost[p.map]))
   const volgende = open.find(({ p }) => p.map)
   return (
     <div data-links className="min-h-svh bg-grond text-inkt">
@@ -139,7 +148,7 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <p className={`${lbl} m-0 opacity-60`}>Social · The KNIGHT move</p>
             <p className="m-0 text-[12px] opacity-60">
-              {posts.filter(({ p }) => p.gepost).length} gepost · {open.filter(({ p }) => p.map).length} klaar ·{" "}
+              {posts.length - open.length} gepost · {open.filter(({ p }) => p.map).length} klaar ·{" "}
               {open.filter(({ p }) => !p.map).length} nog te maken
             </p>
           </div>
@@ -160,6 +169,11 @@ export default function Dashboard() {
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
                     {volgende.p.caption && <Kopieer tekst={volgende.p.caption} />}
+                    {opslagAan() && (
+                      <form action={zetGepost.bind(null, volgende.p.map!, true)}>
+                        <button className="knop-klein border border-inkt/30">Gepost ✓</button>
+                      </form>
+                    )}
                     <a href={`/dashboard/social#post-${volgende.n}`} className="text-[13px] font-semibold">Beelden ↓</a>
                   </div>
                 </div>
@@ -172,12 +186,12 @@ export default function Dashboard() {
               className="group flex flex-col justify-between gap-4 rounded-[18px] border border-lijn p-5 transition-colors hover:border-oranje"
             >
               <span className={`${lbl} opacity-60`}>Daarna</span>
-              <ol className="m-0 grid list-none gap-1.5 p-0 text-[13px]">
+              <ol className="m-0 grid min-w-0 list-none gap-1.5 p-0 text-[13px]">
                 {open.filter((o) => o !== volgende).slice(0, 4).map(({ p, n, t }) => (
-                  <li key={n} className="flex gap-2">
+                  <li key={n} className="flex min-w-0 gap-2">
                     <span className="w-[22px] shrink-0 tabular-nums opacity-50">{n}</span>
                     <span aria-hidden>{t.emoji}</span>
-                    <span className="truncate">{p.titel}</span>
+                    <span className="min-w-0 truncate">{p.titel}</span>
                     {!p.map && <span className="ml-auto shrink-0 opacity-50">te maken</span>}
                   </li>
                 ))}
@@ -187,6 +201,85 @@ export default function Dashboard() {
               </span>
             </Link>
           </div>
+          <p className={`${lbl} m-0 mt-5 opacity-60`}>Wanneer posten</p>
+          <ul className="m-0 mt-3 grid list-none grid-cols-3 gap-3 p-0">
+            {POSTTIJDEN.map((t) => (
+              <li key={t.dag} className="rounded-[18px] border border-lijn p-4">
+                <span className={`${lbl} opacity-60`}>{t.dag}</span>
+                <b className="syne mt-1 block text-[22px] tabular-nums">{t.tijd}</b>
+                <span className="mt-1 block text-[12px] leading-[1.4] opacity-60">{t.waarom}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+
+        {/* aanvragen */}
+        <section className="min-w-0">
+          <div className="flex items-baseline justify-between gap-4">
+            <p className={`${lbl} m-0 opacity-60`}>Aanvragen · terugbellen</p>
+            <p className="m-0 text-[12px] opacity-60">{stand.aanvragen.filter((a) => !a.klaar).length} open</p>
+          </div>
+          <ul className="m-0 mt-4 grid list-none gap-3 p-0">
+            {stand.aanvragen.map((a) => (
+              <li key={a.id} className={`rounded-[18px] border p-4 ${a.klaar ? "border-lijn opacity-50" : "border-oranje/60 bg-oranje/10"}`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <b className="font-semibold">{a.naam}</b>
+                    <span className="mt-0.5 block text-[12px] opacity-60">
+                      {a.bron} · {dag(a.datum.slice(0, 10))}
+                    </span>
+                  </div>
+                  <form action={aanvraagKlaar.bind(null, a.id, !a.klaar)}>
+                    <button className="knop-klein shrink-0 border border-inkt/30">{a.klaar ? "Terugzetten" : "Gebeld ✓"}</button>
+                  </form>
+                </div>
+                {a.contact && (
+                  <a href={/^[\d\s+()-]+$/.test(a.contact) ? `tel:${a.contact.replace(/\s/g, "")}` : `mailto:${a.contact}`} className="mt-2 block break-all text-[14px] font-semibold text-oranje-tekst">
+                    {a.contact}
+                  </a>
+                )}
+                {a.wat && <p className="m-0 mt-2 whitespace-pre-line text-[13px] leading-[1.5] opacity-75">{a.wat}</p>}
+              </li>
+            ))}
+            {!stand.aanvragen.length && <li className="text-[13px] opacity-60">Nog geen aanvragen. Het formulier op de site komt hier vanzelf binnen.</li>}
+          </ul>
+          <details className="mt-3 rounded-[18px] border border-lijn p-4">
+            <summary className="cursor-pointer text-[13px] font-semibold">+ WhatsApp of telefoontje toevoegen</summary>
+            <form action={nieuweAanvraag} className="mt-3 grid gap-2">
+              <input name="naam" required placeholder="Naam" className={veld} />
+              <input name="contact" placeholder="Telefoon of e-mail" className={veld} />
+              <textarea name="wat" rows={2} placeholder="Waar gaat het over?" className={veld} />
+              <div className="flex gap-2">
+                <select name="bron" className={veld} defaultValue="WhatsApp">
+                  <option>WhatsApp</option><option>Telefoon</option><option>Anders</option>
+                </select>
+                <button className="knop-klein bg-oranje text-[#202020]">Toevoegen</button>
+              </div>
+            </form>
+          </details>
+        </section>
+
+        {/* planning */}
+        <section className="min-w-0">
+          <p className={`${lbl} m-0 opacity-60`}>Planning · komende weken</p>
+          <ul className="m-0 mt-4 list-none p-0">
+            {stand.planning.filter((p) => p.datum >= vandaag()).map((p) => (
+              <li key={p.id} className="flex items-center gap-3 border-b border-lijn py-3">
+                <span className={`${lbl} w-[92px] shrink-0 ${p.datum === vandaag() ? "text-oranje-tekst" : "opacity-60"}`}>{dag(p.datum)}</span>
+                <span className="min-w-0 flex-1 text-[14px]">{p.wat}</span>
+                <form action={planWeg.bind(null, p.id)}>
+                  <button aria-label={`${p.wat} weghalen`} className="grid size-[32px] place-items-center rounded-full border border-lijn text-[13px]">✕</button>
+                </form>
+              </li>
+            ))}
+            {!stand.planning.some((p) => p.datum >= vandaag()) && <li className="py-3 text-[13px] opacity-60">Nog niets gepland.</li>}
+          </ul>
+          <form action={nieuwPlan} className="mt-3 flex flex-wrap gap-2">
+            <input type="date" name="datum" required defaultValue={vandaag()} className={`${veld} w-full sm:w-auto`} />
+            <input name="wat" required placeholder="Wat en waar" className={`${veld} min-w-[160px] flex-1`} />
+            <button className="knop-klein bg-oranje text-[#202020]">Plannen</button>
+          </form>
         </section>
 
         {/* facturen */}
