@@ -28,7 +28,7 @@ const MENU = [
 
 // de huidige pagina: een brede, zachtgrijze pil achter een wit icoon, zoals
 // Instagram (eigenaar, 10 okt 2026: "vind ik mooier")
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit/10 aria-[current=page]:bg-gebroken-wit/20"
+const RUST = "text-gebroken-wit hover:bg-gebroken-wit/10 aria-[current=page]:bg-gebroken-wit/25"
 
 export function Menu() {
   const pad = usePathname()
@@ -64,7 +64,7 @@ export function Menu() {
       <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu className={`fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
         boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-96px),calc(var(--goot)+var(--knop)+6px))]"
       }`}>
-        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(38,38,37,.6)] p-[6px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-xl backdrop-saturate-150">
+        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(22,22,21,.72)] p-[6px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-xl backdrop-saturate-150">
           <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -77,8 +77,8 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[56px] max-lg:w-full max-lg:max-w-[56px] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
-                  <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[64px] max-lg:w-full max-lg:max-w-[64px] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                  <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d={m.icoon} />
                   </svg>
                   <span className="sr-only"><T t={m.label} /></span>
@@ -97,7 +97,7 @@ export function Menu() {
           className={rond}
         >
           <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
-          <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+          <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M11 18V4M5 10l6-6 6 6" />
           </svg>
         </button>
