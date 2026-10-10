@@ -5,6 +5,8 @@ import { Facturen } from "@/components/beheer/facturen"
 import { Kern } from "@/components/beheer/kern"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { Datum, Groet, Klok } from "@/components/beheer/klok"
+import { Kopieer } from "@/components/beheer/kopieer"
+import { POSTS, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { KOPPELINGEN, LEVERANCIERS, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 
 // Stand van een leveranciersaccount (eigenaar, 7 okt 2026): groen vinkje,
@@ -22,16 +24,21 @@ import { euro } from "@/lib/format"
 // gronnstudio/gronncore, maar met alleen echte gegevens (src/lib/beheer/data.ts).
 // Alleen voor de eigenaar: src/proxy.ts laat hier niemand anders in.
 export const metadata: Metadata = {
-  title: { absolute: "Beheer · GRØNN Studio" },
+  title: { absolute: "Dashboard · GRØNN Studio" },
   robots: { index: false, follow: false },
 }
 
 const datum = (d: string) => new Date(d).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })
 const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
 
-export default function Beheer() {
+export default function Dashboard() {
   const aandacht = PROJECTEN.filter((p) => p.aandacht)
   const lopend = PROJECTEN.filter((p) => p.fase !== "Opgeleverd")
+  // Social (eigenaar, 10 okt 2026: "maak in dashboard een special stuk voor social
+  // media"): de eerstvolgende post om te plaatsen, en wat daarna komt.
+  const posts = POSTS.map((p, i) => ({ p, n: i + 1, t: TEGELS[tegelVan(i + 1)] }))
+  const open = posts.filter(({ p }) => !p.gepost)
+  const volgende = open.find(({ p }) => p.map)
   return (
     <div data-links className="min-h-svh bg-grond text-inkt">
       {/* bovenbalk */}
@@ -41,7 +48,7 @@ export default function Beheer() {
           <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="hidden h-[22px] w-auto dark:block" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="h-[22px] w-auto dark:hidden" />
-          <span className={`${lbl} hidden text-oranje-tekst sm:inline`}>Beheer · alleen eigenaar</span>
+          <span className={`${lbl} hidden text-oranje-tekst sm:inline`}>Dashboard · alleen eigenaar</span>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
           <span className="hidden font-semibold tabular-nums sm:inline">
@@ -127,6 +134,61 @@ export default function Beheer() {
           </ul>
         </section>
 
+        {/* social */}
+        <section className="lg:col-span-2">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <p className={`${lbl} m-0 opacity-60`}>Social · The KNIGHT move</p>
+            <p className="m-0 text-[12px] opacity-60">
+              {posts.filter(({ p }) => p.gepost).length} gepost · {open.filter(({ p }) => p.map).length} klaar ·{" "}
+              {open.filter(({ p }) => !p.map).length} nog te maken
+            </p>
+          </div>
+          <div className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            {volgende ? (
+              <div className="flex gap-5 rounded-[18px] border border-oranje/60 bg-oranje/10 p-5">
+                <a href={`/dashboard/social#post-${volgende.n}`} className="shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/social/${volgende.p.map}/1.jpg`} alt={volgende.p.titel} className="h-[150px] w-[120px] rounded-[10px] object-cover" />
+                </a>
+                <div className="flex min-w-0 flex-col justify-between gap-3">
+                  <div>
+                    <span className={`${lbl} text-oranje-tekst`}>Nu posten · {volgende.n}</span>
+                    <b className="syne mt-1 block text-[19px] leading-[1.2]">{volgende.p.titel}</b>
+                    <span className="mt-1 block text-[12px] opacity-70">
+                      {volgende.t.emoji} {volgende.t.naam} · {volgende.p.reel ? "Reel" : `${volgende.p.slides ?? 1} beeld${(volgende.p.slides ?? 1) > 1 ? "en" : ""}`}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {volgende.p.caption && <Kopieer tekst={volgende.p.caption} />}
+                    <a href={`/dashboard/social#post-${volgende.n}`} className="text-[13px] font-semibold">Beelden ↓</a>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="m-0 rounded-[18px] border border-lijn p-5 text-[14px] opacity-70">Alles wat klaar is, staat online.</p>
+            )}
+            <Link
+              href="/dashboard/social"
+              className="group flex flex-col justify-between gap-4 rounded-[18px] border border-lijn p-5 transition-colors hover:border-oranje"
+            >
+              <span className={`${lbl} opacity-60`}>Daarna</span>
+              <ol className="m-0 grid list-none gap-1.5 p-0 text-[13px]">
+                {open.filter((o) => o !== volgende).slice(0, 4).map(({ p, n, t }) => (
+                  <li key={n} className="flex gap-2">
+                    <span className="w-[22px] shrink-0 tabular-nums opacity-50">{n}</span>
+                    <span aria-hidden>{t.emoji}</span>
+                    <span className="truncate">{p.titel}</span>
+                    {!p.map && <span className="ml-auto shrink-0 opacity-50">te maken</span>}
+                  </li>
+                ))}
+              </ol>
+              <span className="flex items-center justify-between text-[13px] font-semibold">
+                Raster, alle posts en captions <span className="transition-transform group-hover:translate-x-1">→</span>
+              </span>
+            </Link>
+          </div>
+        </section>
+
         {/* facturen */}
         <Facturen
           groepen={[
@@ -173,7 +235,7 @@ export default function Beheer() {
         {/* koppelingen */}
         <section className="lg:col-span-2">
           <p className={`${lbl} m-0 opacity-60`}>Alles op één plek</p>
-          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-7">
+          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-6">
             {KOPPELINGEN.map((k) => (
               <li key={k.naam}>
                 <a

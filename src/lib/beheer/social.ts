@@ -1,4 +1,4 @@
-// De Instagram-feed in /beheer/social (eigenaar, 9 okt 2026: "een social media
+// De Instagram-feed in /dashboard/social (eigenaar, 9 okt 2026: "een social media
 // manager, vanaf de achterkant van de site"). The KNIGHT move: vijf tegels in
 // een vaste volgorde. Op een raster van drie kolommen staat dezelfde tegel dan
 // altijd een paardensprong verder. Nick post zelf; hier staan de beelden en

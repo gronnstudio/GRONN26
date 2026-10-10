@@ -3,12 +3,12 @@ import Link from "next/link"
 import { Kopieer } from "@/components/beheer/kopieer"
 import { POSTS, TEGELS, VASTGEZET, VOLGORDE, tegelVan, type Post } from "@/lib/beheer/social"
 
-// De Instagram-feed vanuit het beheer (eigenaar, 9 okt 2026). Bewust geen
+// De Instagram-feed vanuit het dashboard (eigenaar, 9 okt 2026). Bewust geen
 // koppeling met Instagram zelf: posten via de API vraagt een Meta-zakelijk
 // account en een app-keuring, en Nick wil elke post zelf plaatsen. Hier staan
 // het raster, de beelden en de captions klaar om te downloaden en te kopiëren.
 export const metadata: Metadata = {
-  title: { absolute: "Social · Beheer · GRØNN Studio" },
+  title: { absolute: "Social · Dashboard · GRØNN Studio" },
   robots: { index: false, follow: false },
 }
 
@@ -66,8 +66,8 @@ export default function Social() {
   return (
     <div data-links className="min-h-svh bg-grond text-inkt">
       <header className="flex items-center justify-between gap-4 border-b border-lijn px-5 py-4 md:px-8">
-        <span className={`${lbl} text-oranje-tekst`}>Beheer · Social</span>
-        <Link href="/beheer" className="text-[13px] opacity-70 hover:opacity-100">← Beheer</Link>
+        <span className={`${lbl} text-oranje-tekst`}>Dashboard · Social</span>
+        <Link href="/dashboard" className="text-[13px] opacity-70 hover:opacity-100">← Dashboard</Link>
       </header>
       <main className="mx-auto grid max-w-[1200px] gap-10 px-5 py-8 md:px-8 lg:grid-cols-[420px_minmax(0,1fr)]">
         <section>
