@@ -252,10 +252,12 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 .leliblad {
   position: absolute;
   top: 14px;
-  left: 68%;
+  left: calc(50% - 40px);
   pointer-events: none;
   animation: leli-drijf 11s ease-in-out infinite;
 }
+/* Het tweede, kleinere blad aan de andere kant van de kring (eigenaar, 10 okt 2026). */
+.leliblad-klein { top: 20px; left: calc(50% + 100px); animation-duration: 9s; animation-delay: -4s; }
 .leliblad path { fill: var(--mos); }
 .leliblad .bloem { fill: var(--salie); }
 html.donker .lisdodde path, html.donker .lisdodde rect { fill: var(--mos); }
@@ -266,8 +268,8 @@ html.donker .lisdodde .steel { fill: none; stroke: var(--mos); }
 }
 .kring {
   position: absolute;
-  top: 17px;
-  left: calc(68% + 40px);
+  top: 19px;
+  left: calc(50% + 70px);
   width: 120px;
   height: 18px;
   margin-left: -60px;
