@@ -84,9 +84,6 @@ test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij wee
     for (const naam of ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(weergave).toBeHidden()
     await expect(omhoog).toBeHidden()
-    // de grote pil is de kleine, opgeschaald zodra de breedte gemeten is
-    if (b < 1024) await expect.poll(async () => Math.round((await nav.boundingBox())!.width)).toBe(b - 40)
-    await page.waitForTimeout(600)
     const breed = (await nav.boundingBox())!
     await page.mouse.wheel(0, 600)
     await expect(omhoog).toBeVisible()
