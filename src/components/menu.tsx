@@ -60,9 +60,9 @@ export function Menu() {
   return (
     <>
       <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu className={`fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
-        boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-120px),calc(var(--goot)+var(--knop)+6px))]"
+        boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-96px),calc(var(--goot)+var(--knop)+6px))]"
       }`}>
-        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(38,38,37,.6)] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-xl backdrop-saturate-150">
+        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(38,38,37,.6)] p-[6px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-xl backdrop-saturate-150">
           <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -75,7 +75,7 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop)] w-[var(--knop)] max-lg:w-full max-lg:max-w-[var(--knop)] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                     <path d={m.icoon} />
                   </svg>

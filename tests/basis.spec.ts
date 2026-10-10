@@ -96,6 +96,9 @@ test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij wee
     if (b < 1024) {
       // breed: van de buitenrand van Weergave tot die van Omhoog
       expect([Math.round(breed.x), Math.round(breed.x + breed.width)]).toEqual([Math.round(w!.x), Math.round(o!.x + o!.width)])
+      // Weergave en Omhoog staan op het midden van de pil
+      expect(Math.round(w!.y + w!.height / 2)).toBe(Math.round(p!.y + p!.height / 2))
+      expect(Math.round(o!.y + o!.height / 2)).toBe(Math.round(p!.y + p!.height / 2))
       expect(p!.width).toBeLessThan(breed.width)
     }
     await page.mouse.wheel(0, -100)
