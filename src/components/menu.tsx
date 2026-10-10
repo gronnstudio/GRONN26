@@ -26,8 +26,9 @@ const MENU = [
   { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, beweging: "plop", icoon: "M5 4h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9.2 8.4a1.8 1.8 0 1 1 2.6 1.6c-.5.2-.8.6-.8 1.1v.3M11 13.2v.1" },
 ]
 
-// de huidige pagina: een brede, zachtgrijze pil achter een wit icoon, zoals
-// Instagram (eigenaar, 10 okt 2026: "vind ik mooier")
+// de huidige pagina: een zachtgrijs rondje achter een wit icoon, zoals
+// Instagram; overal 36 rond, zoals in de kleine pil (eigenaar, 10 okt 2026:
+// "de verhoudingen van het kleine menu zijn beter, pas dit ook op grote toe")
 const RUST = "text-gebroken-wit hover:bg-gebroken-wit/10 aria-[current=page]:bg-gebroken-wit/25"
 
 export function Menu() {
@@ -77,7 +78,7 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[64px] max-lg:w-full max-lg:max-w-[64px] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d={m.icoon} />
                   </svg>
