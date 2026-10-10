@@ -7,17 +7,15 @@ import { Weergave } from "./weergave"
 import { T } from "./taal"
 import { useTaal } from "./taal-klant"
 
-// Het menu (eigenaar, 10 okt 2026, als schets; op de telefoon is de pil even
-// breed als de twee cirkels samen, en bij scrollen krimpt hij naar het midden
-// zoals bij Instagram). De pil is altijd bijna dicht antraciet, op elke grond
-// even donker (eigenaar, 10 okt 2026); de huidige pagina is een licht rondje.
-//   ⭕⭕⭕⭕⭕  normaal: midden onderaan een donkere glazen pil met vijf ronde
-//              iconen, Vijvers, Tuinen, Projecten, Over en FAQ, zonder woorden
-//              (het woord blijft voor schermlezers en als tooltip); vanaf
-//              1024px staat het woordmerk voorop als de weg naar huis;
-//   ⭕      ⭕  zodra je scrolt: de pil verdwijnt, links Weergave en rechts
-//              Omhoog, twee ronde oranje knoppen in de hoeken.
-// Linksonder (vanaf 1024px) staat daarnaast altijd Kennismaken ↗ in oranje.
+// Het menu (eigenaar, 10 okt 2026, als schets):
+//   bovenaan en bij omhoog scrollen: midden onderaan een donkere pil met vijf
+//   ronde iconen, Vijvers, Tuinen, Projecten, Over en FAQ, zonder woorden (het
+//   woord blijft voor schermlezers en als tooltip); op de telefoon even breed
+//   als de rij hieronder, vanaf 1024px met het woordmerk voorop;
+//   ⭕   ⭕⭕⭕⭕⭕   ⭕  bij omlaag scrollen: de pil krimpt (op de telefoon) en
+//   links Weergave en rechts Omhoog verschijnen, rond en oranje.
+// De pil is bijna dicht antraciet, op elke grond even donker; de huidige
+// pagina is een licht rondje. Linksonder staat vanaf 1024px Kennismaken ↗.
 const MENU = [
   { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
   { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
@@ -31,13 +29,23 @@ const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-
 export function Menu() {
   const pad = usePathname()
   const taal = useTaal()
+  // boven = de pil staat er: bovenaan de pagina, en zodra je een stukje
+  // omhoog scrollt (zoals Instagram; eigenaar, 10 okt 2026)
   const [boven, setBoven] = useState(true)
 
   useEffect(() => {
-    const meet = () => setBoven(scrollY < 48)
-    meet()
+    let vorige = 0
+    const meet = () => {
+      const y = scrollY
+      if (y < 48) setBoven(true)
+      else if (y - vorige > 6) setBoven(false)
+      else if (vorige - y > 6) setBoven(true)
+      else return
+      vorige = y
+    }
+    const t = setTimeout(meet, 0) // ook als de pagina al gescrold opent
     addEventListener("scroll", meet, { passive: true })
-    return () => removeEventListener("scroll", meet)
+    return () => { clearTimeout(t); removeEventListener("scroll", meet) }
   }, [pad])
 
   const stil = () => document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -49,8 +57,8 @@ export function Menu() {
 
   return (
     <>
-      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu inert={!boven} className={`fixed inset-x-[var(--goot)] bottom-5 z-[101] [transition:clip-path_.5s_cubic-bezier(.22,1,.36,1),opacity_.2s_.3s] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
-        boven ? "opacity-100 [clip-path:inset(0_0_0_0_round_24px)]" : "pointer-events-none opacity-0 [clip-path:inset(0_50%_0_50%_round_24px)]"
+      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu className={`fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
+        boven ? "inset-x-[var(--goot)]" : "inset-x-[calc(50%-110px)]"
       }`}>
         <ul className="relative m-0 flex list-none items-center justify-between gap-[3px] rounded-full bg-[rgba(32,32,32,.92)] p-[4px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/10 backdrop-blur-md">
           <li aria-hidden className="komeet" />

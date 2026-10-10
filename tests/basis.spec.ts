@@ -73,29 +73,34 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-test("menu: vijf ronde iconen; bij scrollen krimpt de pil en blijven Weergave links en Omhoog rechts", async ({ page }) => {
+test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij weer breed", async ({ page }) => {
   await zonderIntro(page)
   for (const b of [390, 1440]) {
     await page.setViewportSize({ width: b, height: 800 })
     await page.goto("/over", { waitUntil: "domcontentloaded" })
     const nav = page.locator("nav[data-menu]")
-    const links = ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"].map((naam) => nav.getByRole("link", { name: naam, exact: true }))
     const weergave = page.getByRole("button", { name: "Weergave en toegankelijkheid" })
     const omhoog = page.getByRole("button", { name: "Terug naar boven" })
-    for (const l of links) await expect(l).toBeVisible()
+    for (const naam of ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(weergave).toBeHidden()
     await expect(omhoog).toBeHidden()
-    const pil = (await nav.boundingBox())!
+    const breed = (await nav.boundingBox())!
     await page.mouse.wheel(0, 600)
     await expect(omhoog).toBeVisible()
     await expect(weergave).toBeVisible()
-    await expect(nav).toHaveCSS("opacity", "0")
     await expect.poll(async () => (await omhoog.boundingBox())?.height).toBe(48)
-    const [w, o] = await Promise.all([weergave.boundingBox(), omhoog.boundingBox()])
-    expect(w!.x + w!.width, `@${b}`).toBeLessThan(b / 2)
-    expect(o!.x, `@${b}`).toBeGreaterThan(b / 2)
-    // op de telefoon is de pil even breed als de twee cirkels van buitenrand tot buitenrand
-    if (b < 1024) expect([Math.round(pil.x), Math.round(pil.x + pil.width)]).toEqual([Math.round(w!.x), Math.round(o!.x + o!.width)])
+    await page.waitForTimeout(600)
+    const [w, p, o] = await Promise.all([weergave.boundingBox(), nav.boundingBox(), omhoog.boundingBox()])
+    expect(w!.x + w!.width, `@${b}`).toBeLessThanOrEqual(p!.x)
+    expect(o!.x, `@${b}`).toBeGreaterThanOrEqual(p!.x + p!.width)
+    if (b < 1024) {
+      // breed: van de buitenrand van Weergave tot die van Omhoog
+      expect([Math.round(breed.x), Math.round(breed.x + breed.width)]).toEqual([Math.round(w!.x), Math.round(o!.x + o!.width)])
+      expect(p!.width).toBeLessThan(breed.width)
+    }
+    await page.mouse.wheel(0, -100)
+    await expect(omhoog).toBeHidden()
+    await expect.poll(async () => Math.round((await nav.boundingBox())!.width)).toBe(Math.round(breed.width))
   }
 })
 
