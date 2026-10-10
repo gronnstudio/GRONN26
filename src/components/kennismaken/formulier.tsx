@@ -282,6 +282,13 @@ export function KennismakenFormulier() {
     const mailto = `${BUSINESS.emailHref}?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(tekst)}`
     setVerstuurd({ velden, onderwerp, mailto })
     setStatus("bezig")
+    // Kopie voor het dashboard van de eigenaar; mislukt dit, dan komt de mail nog steeds.
+    fetch("/api/aanvraag", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ naam: velden.naam, contact: velden.telefoon || velden.email, wat: tekst }),
+      keepalive: true,
+    }).catch(() => {})
     try {
       const res = await fetch(ENDPOINT, {
         method: "POST",

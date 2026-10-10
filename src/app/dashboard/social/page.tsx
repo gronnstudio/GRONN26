@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Kopieer } from "@/components/beheer/kopieer"
+import { leesStand, opslagAan } from "@/lib/beheer/stand"
+import { zetGepost } from "../acties"
 import { POSTS, POSTTIJDEN, TEGELS, VASTGEZET, VOLGORDE, tegelVan, type Post } from "@/lib/beheer/social"
 
 // De Instagram-feed vanuit het dashboard (eigenaar, 9 okt 2026). Bewust geen
@@ -15,12 +17,20 @@ export const metadata: Metadata = {
 const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
 const beeld = (p: Post, i = 1) => `/social/${p.map}/${i}.jpg`
 
-function Kaart({ p, id, kop }: { p: Post; id: string; kop: string }) {
+function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepost?: string }) {
   return (
     <li id={id} className="scroll-mt-6 rounded-[18px] border border-lijn p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <span className={`${lbl} opacity-70`}>{kop}</span>
-        {p.gepost && <span className={`${lbl} text-oranje-tekst`}>Gepost {p.gepost}</span>}
+        {p.map && opslagAan() ? (
+          <form action={zetGepost.bind(null, p.map, !gepost)}>
+            <button className={`knop-klein border ${gepost ? "border-oranje text-oranje-tekst" : "border-inkt/30"}`}>
+              {gepost ? `Gepost ${gepost} ✓` : "Gepost?"}
+            </button>
+          </form>
+        ) : (
+          (gepost ?? p.gepost) && <span className={`${lbl} text-oranje-tekst`}>Gepost {gepost ?? p.gepost}</span>
+        )}
       </div>
       <h2 className="syne m-0 mt-2 text-[22px] leading-[1.15]">{p.titel}</h2>
       {p.map ? (
@@ -60,7 +70,10 @@ function Kaart({ p, id, kop }: { p: Post; id: string; kop: string }) {
   )
 }
 
-export default function Social() {
+export const dynamic = "force-dynamic"
+
+export default async function Social() {
+  const stand = await leesStand()
   // Op Instagram staat de nieuwste linksboven.
   const raster = POSTS.map((p, i) => ({ p, n: i + 1 })).reverse()
   return (
@@ -133,14 +146,14 @@ export default function Social() {
           <p className={`${lbl} m-0 opacity-60`}>Vastgezet · zet eerst 03 vast, dan 02, dan 01</p>
           <ul className="m-0 mt-3 grid list-none gap-3 p-0">
             {VASTGEZET.map((p, i) => (
-              <Kaart key={p.titel} p={p} id={`vast-${i + 1}`} kop="📌 Vastgezet" />
+              <Kaart key={p.titel} p={p} id={`vast-${i + 1}`} kop="📌 Vastgezet" gepost={p.map ? stand.gepost[p.map] : undefined} />
             ))}
           </ul>
           <p className={`${lbl} m-0 mt-10 opacity-60`}>In volgorde van posten</p>
           <ul className="m-0 mt-3 grid list-none gap-3 p-0">
             {POSTS.map((p, i) => {
               const t = TEGELS[tegelVan(i + 1)]
-              return <Kaart key={i} p={p} id={`post-${i + 1}`} kop={`${i + 1} · ${t.emoji} ${t.naam} · ${t.vorm}`} />
+              return <Kaart key={i} p={p} id={`post-${i + 1}`} kop={`${i + 1} · ${t.emoji} ${t.naam} · ${t.vorm}`} gepost={p.map ? stand.gepost[p.map] : undefined} />
             })}
           </ul>
         </section>

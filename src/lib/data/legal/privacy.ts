@@ -38,7 +38,7 @@ export const PRIVACY: LegalDocument = {
   title: "Privacyverklaring",
   kind: "privacy",
   audience: "iedereen",
-  updated: "2026-10-06",
+  updated: "2026-10-10",
   status: "vastgesteld",
   intro:
     "Korte versie: wij gebruiken wat je ons stuurt om je te antwoorden en je project uit te voeren, wij volgen je niet over het web, en wij verkopen niets door. De lange versie staat hieronder, per soort gegeven.",
@@ -59,7 +59,7 @@ export const PRIVACY: LegalDocument = {
         "Waarvoor: om je aanvraag te beoordelen, je te antwoorden en waar dat volgt een offerte te maken.",
         "Grondslag: uitvoering van een overeenkomst, of stappen die daaraan voorafgaan op jouw verzoek (art. 6 lid 1 sub b AVG).",
         "Hoe lang: aanvragen waar niets uit voortkomt bewaren wij 30 dagen. Wordt het een opdracht, dan gaan de gegevens over in het klantdossier.",
-        "Het kennismakingsformulier stuurt zijn inhoud rechtstreeks vanuit je browser naar FormSubmit (zie hieronder), dat het als e-mail bij ons bezorgt.",
+        "Het kennismakingsformulier stuurt zijn inhoud rechtstreeks vanuit je browser naar FormSubmit (zie hieronder), dat het als e-mail bij ons bezorgt. Een kopie komt in onze eigen afgeschermde opslag bij Vercel, zodat wij je aanvraag kunnen opvolgen; die wordt na 30 dagen automatisch verwijderd.",
         "Liever niet via het formulier? Mail of app ons dan gewoon.",
       ],
     },
@@ -92,7 +92,7 @@ export const PRIVACY: LegalDocument = {
       heading: "Met wie wij gegevens delen",
       body: [
         "Wij verkopen je gegevens niet en delen ze niet voor commerciële doelen van anderen. Wij schakelen wel partijen in die voor ons gegevens verwerken:",
-        "· **Vercel Inc.** — hosting van de website.",
+        "· **Vercel Inc.** — hosting van de website en afgeschermde opslag van aanvragen.",
         "· **FormSubmit (formsubmit.co)** — bezorgt de ingevulde formuliervelden per e-mail bij ons. Het formulier post rechtstreeks vanuit je browser naar deze dienst.",
         "· **Google (Google Workspace)** — onze mailbox, agenda en bestandsopslag.",
         "· **DigiBoox** — offertes, facturen en boekhouding.",
