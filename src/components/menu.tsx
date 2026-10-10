@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Komeet } from "./komeet"
 import { Weergave } from "./weergave"
 import { T } from "./taal"
@@ -27,7 +27,7 @@ const MENU = [
 ]
 
 // de huidige pagina: een zachtgrijs rondje achter een wit icoon, zoals
-// Instagram; 36 rond in de kleine pil, en in de grote pil mee opgeschaald
+// Instagram; 36 rond in de kleine pil, 48 in de grote
 const RUST = "text-gebroken-wit hover:bg-gebroken-wit/10 aria-[current=page]:bg-gebroken-wit/25"
 
 export function Menu() {
@@ -52,21 +52,6 @@ export function Menu() {
     return () => { clearTimeout(t); removeEventListener("scroll", meet) }
   }, [pad])
 
-  // de kleine pil: 192 breed, of smaller als hij anders Weergave en Omhoog
-  // raakt; de schaal maakt hem zo breed als de rij van goot tot goot
-  const [maat, setMaat] = useState<{ breed: number; schaal: number } | null>(null)
-  useEffect(() => {
-    const meet = () => {
-      if (innerWidth >= 1024) return setMaat(null)
-      const goot = links.current?.getBoundingClientRect().left ?? 20
-      const breed = Math.min(192, innerWidth - 2 * (goot + 48 + 6))
-      setMaat({ breed, schaal: Math.min(2, (innerWidth - 2 * goot) / breed) })
-    }
-    meet()
-    addEventListener("resize", meet)
-    return () => removeEventListener("resize", meet)
-  }, [])
-  const links = useRef<HTMLDivElement>(null)
 
   const stil = () => document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches
   // wat bij de stand hoort is zichtbaar; de rest krimpt weg en is onbereikbaar
@@ -77,14 +62,13 @@ export function Menu() {
 
   return (
     <>
-      {/* onder 1024px is de pil altijd de kleine pil; bovenaan en bij omhoog
-          scrollen wordt die als geheel opgeschaald tot de volle breedte,
-          rondjes en iconen mee (eigenaar, 10 okt 2026: "schaal de kleine pil
-          op tot de breedte van de grote") */}
-      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu
-        style={maat ? { width: maat.breed, scale: boven ? maat.schaal : 1 } : undefined}
-        className="fixed bottom-5 left-1/2 z-[101] w-[192px] origin-bottom -translate-x-1/2 transition-[scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:bottom-10 lg:w-auto">
-        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(22,22,21,.45)] p-[6px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-[6px] backdrop-saturate-[1.8]">
+      {/* onder 1024px: de grote pil is 64 hoog met rondjes van 48 en iconen van
+          32, de kleine 48 hoog met 36 en 20 (eigenaar, 10 okt 2026: "de
+          iconen is top op mobiel maar pil is erg hoog") */}
+      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-groot={boven || undefined} className={`group fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
+        boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-96px),calc(var(--goot)+var(--knop)+6px))]"
+      }`}>
+        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(22,22,21,.45)] p-[6px] transition-[padding] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:p-[8px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-[6px] backdrop-saturate-[1.8]">
           <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -97,8 +81,8 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
-                  <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] max-lg:group-data-[groot]:h-[var(--knop)] max-lg:group-data-[groot]:max-w-[var(--knop)] place-items-center rounded-full transition-[background-color,color,height,max-width] duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:size-[32px]">
                     <path d={m.icoon} />
                   </svg>
                   <span className="sr-only"><T t={m.label} /></span>
@@ -124,7 +108,7 @@ export function Menu() {
       </div>
 
       {/* links: Kennismaken (vanaf 1024px) en, tijdens het lezen, Weergave */}
-      <div ref={links} data-menu className="pointer-events-none fixed bottom-5 left-[var(--goot)] z-[101] flex items-center gap-2 lg:bottom-10 lg:left-[var(--rand)] [&>*]:pointer-events-auto">
+      <div data-menu className="pointer-events-none fixed bottom-5 left-[var(--goot)] z-[101] flex items-center gap-2 lg:bottom-10 lg:left-[var(--rand)] [&>*]:pointer-events-auto">
         <Link
           href="/kennismaken"
           className="group knop gap-9 bg-oranje text-antraciet max-lg:hidden shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3"
