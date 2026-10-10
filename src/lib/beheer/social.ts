@@ -60,95 +60,113 @@ export const VASTGEZET: Post[] = [
 /** In de volgorde van posten: de eerste staat hier bovenaan. */
 export const POSTS: Post[] = [
   {
-    map: "01-wie-ik-ben",
+    map: "01-hoi-ik-ben-nick",
     slides: 3,
     titel: "Hoi, ik ben Nick", muziek: "acoustic morning",
     caption:
-      "Eén persoon, van de eerste foto tot de laatste plant.\n\nHoi, ik ben Nick van GRØNN. Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving. Water, planten en bodem zie ik als één systeem, zodat alles gezond blijft met weinig ingrijpen.\n\nJe spreekt mij, geen tussenpersoon. En je weet vooraf wat het kost.\n\nKen je iemand in de buurt met een vijver of een tuin die beter kan? Stuur dit even door.",
+      "Je belt mij, en ik sta ook in je tuin.\n\nIk ben Nick van GRØNN. Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving. Van de eerste foto die je stuurt tot de laatste plant die de grond in gaat, werk je met één persoon.\n\nVoordat ik begin, weet je wat het kost. Een vaste prijs, geen verrassingen achteraf.\n\nKen je iemand in de buurt die over zijn tuin of vijver twijfelt? Stuur dit even door.",
   },
   {
-    map: "02-winterklaar-1",
+    map: "02-winterklaar-1-voeren",
     slides: 5,
     titel: "Winterklaar 1/5: stop met voeren", muziek: "calm piano",
     caption:
-      "Stop met voeren, ook al zwemmen je vissen nog.\n\nOnder 10 °C gaan vijvervissen in winterrust en valt hun spijsvertering bijna stil. Voer dat ze dan nog eten, blijft in hun darmen liggen. Wat ze laten liggen, rot op de bodem en wordt voeding voor de algen van volgend voorjaar.\n\nHang een thermometer op zo’n 50 cm diepte. Tussen 15 en 10 °C geef je weinig en licht verteerbaar voer, onder 10 °C stop je. Ook op een zonnige winterdag.\n\nDeel 1 van 5 van Vijver winterklaar. Volgende keer: pomp en filter in de winter.\n\nBewaar dit voor als het kouder wordt, en stuur het naar wie ook vissen heeft.",
+      "Je vissen zwemmen nog, maar je voert ze beter niet meer.\n\nZakt het vijverwater onder de 10 °C, dan gaan vissen in winterrust en verteren ze bijna niets meer. Voer blijft in hun darmen zitten of rot op de bodem, en daar groeien in het voorjaar de algen van.\n\nMeet op zo'n 50 cm diepte. Tussen 15 en 10 °C geef je weinig en licht verteerbaar voer. Onder 10 °C stop je, ook als de zon schijnt.\n\nDit is deel 1 van 5 van Vijver winterklaar. Bewaar de post, dan heb je hem bij de hand als het kouder wordt.",
   },
   {
     map: "03-beekloop",
     slides: 1,
     reel: true,
-    titel: "Een beekloop bouwen", muziek: "cinematic instrumental",
+    titel: "Van sleuf tot stromend water", muziek: "cinematic instrumental",
     caption:
-      "Zo bouw je een beekloop die echt natuurlijk oogt.\n\nHet begint als een sleuf in de grond. Dan folie, grind en keien. Dan de rand, waar water en tuin elkaar raken, met oeverplanten tussen de stenen. En dan loopt het: van de waterval via de beekloop terug naar de vijver.\n\nVijverrenovatie in Stein. Het hele project staat op gronn.studio.\n\nDroom jij ook van stromend water in je tuin? Stuur dit naar wie het mee moet betalen.",
+      "Een beekloop begint als een kale sleuf. Zo wordt het stromend water.\n\nFolie erin, grind en keien erop, en dan de rand: daar planten de oeverplanten zich tussen de stenen. Als de pomp aangaat, loopt het water van de waterval via de beek terug naar de vijver.\n\nEchte beelden van een vijverrenovatie in Stein.\n\nDroom je van stromend water in je eigen tuin? Stuur dit naar wie mee moet beslissen.",
   },
   {
     map: "04-quote-op-gang",
     slides: 1,
-    titel: "You don’t build a garden. You set it in motion.", muziek: "ambient nature",
+    titel: "You don't build a garden. You set it in motion.", muziek: "ambient nature",
     caption:
-      "Een tuin leg je niet aan, je zet hem op gang.\n\nIk zorg voor de bodem, het water en de juiste plant op de juiste plek. Daarna doet de tuin het meeste werk zelf, en wordt hij elk jaar mooier.\n\nStuur dit naar iemand die elk weekend in de tuin staat te ploeteren.",
+      "Een tuin is nooit af, en dat is precies goed.\n\nIk leg de basis: gezonde grond, water dat zijn weg vindt en planten die bij de plek passen. Daarna neemt de tuin het werk zelf over en wordt hij elk jaar voller.\n\nStuur dit naar iemand die elk weekend in zijn tuin loopt te zwoegen.",
   },
   {
     map: "05-borderpakketten",
     slides: 7,
     titel: "Borderpakketten", muziek: "upbeat acoustic",
     caption:
-      "Waarom de helft van je nieuwe border na een jaar verkeerd staat.\n\nJe kiest in het tuincentrum wat mooi bloeit, en een jaar later staat de helft op de verkeerde plek. Daarom heb ik acht borderpakketten gemaakt: voor zon, schaduw, de vijverrand of droge grond. Bij elk pakket hoort een plan van boven met elke plant, het aantal en de afstand.\n\nIk plant hem aan in Stein en omgeving, of je krijgt planten en plan thuisbezorgd. Past geen pakket? Dan stel ik er een op maat samen.\n\nStuur \"border\" in een DM en vertel waar hij komt.",
+      "Waarom de helft van een nieuwe border na een jaar verkeerd staat.\n\nIn het tuincentrum kies je wat nu bloeit. Een jaar later is de ene plant de andere voorbij gegroeid en staat de helft in de verkeerde zon. Daarom heb ik acht borderpakketten samengesteld: voor zon, schaduw, de vijverrand of droge grond, elk met een plan van boven met soort, aantal en afstand.\n\nIk plant hem aan in Stein en omgeving, of je krijgt planten en plan thuisbezorgd. Past er geen? Dan maak ik er een op maat.\n\nStuur \"border\" in een DM en vertel waar hij moet komen.",
   },
   {
-    map: "06-modder",
-    slides: 5,
-    titel: "Vaak ook modder", muziek: "lofi chill",
+    map: "06-graafmachine",
+    slides: 4,
+    titel: "Elke steen leg ik zelf", muziek: "lofi chill",
     caption:
-      "Ik leerde het vak niet uit een boek, maar met modder aan mijn handen.\n\nMet mijn vader verbouwde ik huizen. Daar leerde ik werken met mijn handen, oplossingen zoeken en doorzetten wanneer iets anders loopt dan bedacht. Buiten de opdrachten moestuinier ik, in de eigen tuin en op een vakantiepark in Beringe.\n\nAls ik naar een tuin kijk, ben ik benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? Met die aandacht werk ik ook aan jouw tuin.\n\nWaar drink jij je koffie in de tuin? Vertel het in de reacties.",
+      "Eerst rijdt de minigraver je tuin in. Dan wordt het mooi.\n\nEen tuin omvormen ziet er een paar dagen uit als een bouwplaats. Grond eruit, nieuwe grond erin, leidingen in de sleuf. Daarna leg ik elke steen met de hand, tot het lijkt alsof hij er altijd lag.\n\nHet zware werk zie je straks niet meer. Wat blijft is een tuin in Stein en omgeving die klopt: water dat zijn weg vindt en planten op hun plek.\n\nPlan je zelf iets groots in je tuin? Stuur me een DM met een foto.",
   },
-  { titel: "Winterklaar 2/5: pomp en filter", muziek: "calm piano", nodig: "Wordt gemaakt." },
+  {
+    map: "07-winterklaar-2-pomp",
+    slides: 5,
+    titel: "Winterklaar 2/5: pomp en filter", muziek: "calm piano",
+    caption:
+      "Pomp uit in de winter? Dat hangt af van één vraag: zitten er vissen in?\n\nMaak het filter schoon voordat het koud wordt en laat het daarna met rust. Met vissen laat je de pomp draaien, maar hang hem hoger, zo'n 30 cm onder het wateroppervlak. Zo blijft het warmere water onderin staan, waar je vissen overwinteren.\n\nDe UV-lamp doet in de winter niets: uitzetten en droog wegzetten.\n\nDeel 2 van 5 van Vijver winterklaar. Stuur dit naar wie ook een vijver met vissen heeft.",
+  },
   {
     map: "08-plantmanden",
     slides: 1,
     reel: true,
-    titel: "Waarom oeverplanten in een mand", muziek: "soft acoustic",
+    titel: "Oeverplanten nooit los in de vijver", muziek: "soft acoustic",
     caption:
-      "Zet oeverplanten nooit los in je vijver. Hierom.\n\n1. De wortels blijven waar ze horen.\n2. Er komt geen losse aarde in het water.\n3. Uitnemen en scheuren gaat makkelijk.\n\nHet plan voor deze vijver in Stein: 11 manden, 44 planten en 7 soorten. Volgend voorjaar plant ik verder aan.\n\nBewaar dit voor je vijver beplant, of stuur het naar wie dat dit voorjaar gaat doen.",
+      "Zet oeverplanten nooit los in je vijver. Drie redenen.\n\n1. De wortels blijven waar ze horen.\n2. Er spoelt geen losse aarde in het water.\n3. Uitnemen en scheuren gaat in een paar minuten.\n\nMand, grind, plant. In deze vijver in Stein gingen er 11 manden in.\n\nBewaar dit voor als je je vijver gaat beplanten.",
   },
   {
     map: "09-quote-voed-de-bodem",
     slides: 1,
     titel: "Feed the soil, not the plant.", muziek: "ambient piano",
     caption:
-      "Voed de bodem, niet de plant.\n\nGezonde grond vol leven voedt je planten vanzelf. Daarom werk ik zonder kunstmest, met compost en mulch, en mag het blad in de borders blijven liggen. De bodem doet de rest, jaar na jaar.\n\nStuur dit naar wie nog elk voorjaar kunstmest strooit.",
+      "Wie de bodem voedt, hoeft de plant niet te voeren.\n\nIn gezonde grond leeft van alles, en dat leven houdt je planten sterk. Daarom werk ik in de tuinen in Stein en omgeving zonder kunstmest, met compost en mulch.\n\nStuur dit naar wie elk voorjaar weer met de korrels in de weer is.",
   },
   {
     map: "10-winterklaar-prijs",
     slides: 1,
     reel: true,
-    titel: "Winterklaar met een vaste prijs", muziek: "lofi instrumental",
+    titel: "Winterklaar vanaf € 95", muziek: "lofi instrumental",
     caption:
-      "Je vijver winterklaar, en je weet vooraf wat het kost.\n\n1. Stuur één foto via WhatsApp.\n2. Je krijgt een vaste prijs: basis € 95, met bladnet ophalen € 135, met ijsvrijhouder € 150, alles € 185. Incl. btw.\n3. We prikken een datum en ik kom langs.\n\nVijveronderhoud in Stein en omgeving. WhatsApp: 06 181 180 14.\n\nKen je iemand die zijn vijver dit jaar laat versloffen? Stuur dit door.",
+      "Wat kost het om je vijver winterklaar te laten maken? Dat weet je vooraf.\n\n1. Stuur één foto via WhatsApp.\n2. Kies wat je nodig hebt: basis € 95, met bladnet ophalen € 135, met ijsvrijhouder € 150, alles € 185. Incl. btw.\n3. We prikken een datum en ik kom langs.\n\nVijveronderhoud in Stein en omgeving.\n\nApp je foto naar 06 181 180 14.",
   },
   {
     map: "11-buiten",
     slides: 1,
-    titel: "Buiten vond ik rust", muziek: "peaceful piano",
+    titel: "Buiten vond ik altijd rust", muziek: "peaceful piano",
     caption:
-      "Buiten vond ik altijd rust. Daar komt GRØNN vandaan.\n\nIn tuinieren, dieren, observeren en bezig zijn. De natuur is altijd een plek geweest waar ik me thuis voel.\n\nDaarom maak ik tuinen in Stein en omgeving waarin mensen zich thuis voelen, en waarin ook ruimte is voor ander leven.\n\nWaar vind jij rust? Vertel het me in de reacties.",
+      "Buiten vond ik altijd rust. Daar komt GRØNN vandaan.\n\nAls kind al zat ik tussen de planten en de dieren, kijken wat er gebeurt. Dat gevoel wil ik terugbrengen in de tuinen die ik maak in Stein en omgeving: een plek waar jij tot rust komt, en waar ook ruimte is voor vogels, insecten en kikkers.\n\nWaar kom jij tot rust? Vertel het in de reacties.",
   },
-  { titel: "Winterklaar 3/5: knippen of laten staan", muziek: "calm piano", nodig: "Wordt gemaakt." },
+  {
+    map: "12-winterklaar-3-knippen",
+    slides: 5,
+    titel: "Winterklaar 3/5: knippen of laten staan", muziek: "calm piano",
+    caption:
+      "Je oeverplanten worden bruin. Toch hoeft niet alles weg.\n\nRiet, lisdodde en biezen hebben holle stengels. Ze brengen zuurstof naar de bodem en houden bij ijs een opening voor gassen. Die knip je pas in het voorjaar.\n\nZacht blad dat in het water hangt, rot snel en wordt slib. Dat knip je een handbreedte boven het water af. Wat boven de rand blijft staan, is in de winter een schuilplek voor insecten.\n\nDeel 3 van 5 van Vijver winterklaar. Bewaar dit voor je volgende rondje langs de vijver.",
+  },
   {
     map: "13-terras",
     slides: 1,
     reel: true,
-    titel: "Terras Geulle in twee dagen", muziek: "timelapse instrumental",
+    titel: "24 m² terras in twee dagen", muziek: "timelapse instrumental",
     caption:
-      "24 m² terras in twee dagen. Dit zie je er straks niet meer van.\n\nDag 1: ontgraven, ophogen en verdichten, zandbed afrijen, banden stellen en uitlijnen.\nDag 2: tegels van 60 × 60 × 4 cm leggen, op afschot richting het gras, en alles nog eens controleren.\n\nEen goed terras ziet er niet alleen waterpas uit. Het weet ook waar het water heen moet. Terras aanleggen in Geulle, Stein en omgeving.\n\nBewaar dit als je zelf een terras gaat leggen.",
+      "Waterpas is niet genoeg voor een terras. Het moet ook weten waar het water heen moet.\n\nDag 1: ontgraven, ophogen, verdichten en het zandbed afrijen.\nDag 2: tegels van 60 × 60 leggen, op afschot richting het gras.\n\n24 m² terras in Geulle, in twee dagen. Terras aanleggen in Stein en omgeving.\n\nBewaar dit als je zelf een terras gaat leggen.",
   },
-  { titel: "Leave the leaves.", muziek: "autumn ambient", nodig: "Wordt gemaakt." },
+  {
+    map: "14-quote-leave-the-leaves",
+    slides: 1,
+    titel: "Leave the leaves.", muziek: "autumn ambient",
+    caption:
+      "Laat het blad liggen. Het is de grond van volgend jaar.\n\nIn de borders is blad geen afval. Egels en insecten overwinteren eronder, en wat vergaat wordt humus. Alleen uit de vijver en van het gras haal je het weg.\n\nStuur dit naar wie dit weekend weer met de bladblazer klaarstaat.",
+  },
   {
     map: "15-bladnet",
     slides: 4,
     titel: "Bladnet met een vaste prijs", muziek: "autumn lofi",
     caption:
-      "De enige vijverklus met een deadline: vóór de bladval.\n\nBlad in de vijver rot en wordt slib. Een bladnet erover voorkomt dat.\n\nVaste prijs, incl. btw:\nTot 15 m²: € 125\n15 tot 35 m²: € 175\nMeer dan 35 m²: € 250\n\nHet net wordt op maat gesneden en de randen om de 60–80 cm vastgezet. In december haal ik het er weer af; die datum plannen we meteen in.\n\nVijver in Stein en omgeving? Stuur een foto via WhatsApp: 06 181 180 14.",
+      "Er is één vijverklus met een deadline: het net moet erop vóór de bladval.\n\nBlad dat in het water valt, zinkt, rot en voedt de algen. Een bladnet vangt het op.\n\nVaste prijs, incl. btw:\nTot 15 m²: € 125\n15 tot 35 m²: € 175\nMeer dan 35 m²: € 250\n\nOp maat gesneden, randen om de 60–80 cm vast, en in december haal ik het weer weg. Voor vijvers in Stein en omgeving.\n\nStuur een foto van je vijver via WhatsApp: 06 181 180 14.",
   },
 ]
 
