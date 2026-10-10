@@ -37,21 +37,21 @@ export const VASTGEZET: Post[] = [
     slides: 1,
     titel: "01 · Waarom ik dit werk doe",
     caption:
-      "Waarom ik dit werk doe?\n\nHet vaderschap maakte voor mij nog duidelijker wat belangrijk is: aandacht geven, verantwoordelijkheid nemen en een omgeving creëren waarin iemand zich veilig voelt. Dat neem ik mee in mijn werk. Ik luister, kijk zorgvuldig en wil begrijpen wat een plek voor iemand moet betekenen.\n\nIk wil tuinen ontwerpen en aanleggen waarin mensen zich thuis voelen en waarin ook ruimte is voor ander leven. Dat begint bij de bodem, bij hoe water zijn weg vindt en bij planten die passen bij de plek.\n\nVertel me gerust over jouw plek.",
+      "Waarom een hovenier eerst naar jou kijkt, en dan pas naar je tuin.\n\nHet vaderschap maakte voor mij nog duidelijker wat belangrijk is: aandacht geven, verantwoordelijkheid nemen en een omgeving creëren waarin iemand zich veilig voelt. Dat neem ik mee in mijn werk. Ik luister, kijk zorgvuldig en wil begrijpen wat een plek voor iemand moet betekenen.\n\nIk ben Nick van GRØNN. Ik maak en onderhoud vijvers en natuurlijke tuinen in Stein en omgeving. Dat begint bij de bodem, bij hoe water zijn weg vindt en bij planten die passen bij de plek.\n\nVertel me in een DM over jouw plek.",
   },
   {
     map: "vast-2",
     slides: 5,
     titel: "02 · Echt werk",
     caption:
-      "Twee vijvers, een waterval en een beekloop, verbonden tot één watersysteem.\n\nEerst lag hier een vijver onder een net, tegen een oude muur. Ik heb leidingen en een filter ingegraven, natuursteen gelegd en de beplanting gezet. Het plan telt 44 planten van 7 soorten. Het ging om zo’n 5.000 liter water en zo’n 120 uur werk.\n\nHet project is nog in afronding. In het voorjaar van 2027 komt de rest van de beplanting erbij. Het hele verhaal staat op gronn.studio.\n\nHeb jij ook zo’n vijver in gedachten? Stuur me een foto.",
+      "Van een vijver onder een net naar één levend watersysteem.\n\nTwee vijvers, een waterval en een beekloop in één tuin. Ik heb leidingen en een filter ingegraven, natuursteen gelegd en de beplanting gezet: 44 planten van 7 soorten, zo’n 5.000 liter water en zo’n 120 uur werk.\n\nHet project is nog in afronding; in het voorjaar van 2027 komt de rest van de beplanting erbij. Het hele verhaal staat op gronn.studio.\n\nVijverrenovatie in Stein en omgeving? Stuur me een foto van je vijver.",
   },
   {
     map: "vast-3",
     slides: 4,
     titel: "03 · Samenwerken",
     caption:
-      "Zo werk ik, in vier stappen.\n\n1. Je stuurt een foto van je vijver of tuin.\n2. Ik kom kijken en we lopen samen door wat je wilt.\n3. Je krijgt vooraf een vaste prijs.\n4. Ik maak het, en houd het bij als je dat wilt.\n\nVijvers: renoveren, waterval, filter, beekloop, najaarsbeurt en onderhoud. Tuinen: aanleggen, omvormen, borderpakketten en onderhoud. Voor huiseigenaren in Stein en omgeving.\n\nStuur een WhatsApp naar 06 181 180 14 of een DM.",
+      "Zo krijg je een vijver of tuin met een vaste prijs, in vier stappen.\n\n1. Je stuurt een foto van je vijver of tuin.\n2. Ik kom kijken en we lopen samen door wat je wilt.\n3. Je krijgt vooraf een vaste prijs.\n4. Ik maak het, en houd het bij als je dat wilt.\n\nVijvers: renoveren, waterval, filter, beekloop, najaarsbeurt en onderhoud. Tuinen: aanleggen, omvormen, borderpakketten en onderhoud. Voor huiseigenaren in Stein en omgeving.\n\nWhatsApp 06 181 180 14 of stuur een DM.",
   },
 ]
 
@@ -62,14 +62,14 @@ export const POSTS: Post[] = [
     slides: 3,
     titel: "Hoi, ik ben Nick",
     caption:
-      "Hoi, ik ben Nick, de man achter GRØNN.\n\nIk maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving. Water, planten en bodem zie ik als één systeem, zodat alles gezond blijft met weinig ingrijpen.\n\nJe spreekt mij, van de eerste foto tot de laatste plant. En je weet vooraf wat het kost.\n\nZeg gerust hoi in een DM.",
+      "Eén persoon, van de eerste foto tot de laatste plant.\n\nHoi, ik ben Nick van GRØNN. Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving. Water, planten en bodem zie ik als één systeem, zodat alles gezond blijft met weinig ingrijpen.\n\nJe spreekt mij, geen tussenpersoon. En je weet vooraf wat het kost.\n\nKen je iemand in de buurt met een vijver of een tuin die beter kan? Stuur dit even door.",
   },
   {
     map: "02-winterklaar-1",
     slides: 5,
     titel: "Winterklaar 1/5: stop met voeren",
     caption:
-      "Hoe lang voer jij je vissen nog door?\n\nOnder 10 °C gaan ze in winterrust en valt hun spijsvertering bijna stil. Voer dat ze dan nog eten, blijft in hun darmen liggen. Wat ze laten liggen, rot op de bodem en wordt voeding voor de algen van volgend voorjaar.\n\nHang een thermometer op zo’n 50 cm diepte. Tussen 15 en 10 °C geef je weinig en licht verteerbaar voer, en onder 10 °C stop je. Ook op een zonnige winterdag.\n\nDit is deel 1 van 5 van Vijver winterklaar. Volgende keer: pomp en filter in de winter.",
+      "Stop met voeren, ook al zwemmen je vissen nog.\n\nOnder 10 °C gaan vijvervissen in winterrust en valt hun spijsvertering bijna stil. Voer dat ze dan nog eten, blijft in hun darmen liggen. Wat ze laten liggen, rot op de bodem en wordt voeding voor de algen van volgend voorjaar.\n\nHang een thermometer op zo’n 50 cm diepte. Tussen 15 en 10 °C geef je weinig en licht verteerbaar voer, onder 10 °C stop je. Ook op een zonnige winterdag.\n\nDeel 1 van 5 van Vijver winterklaar. Volgende keer: pomp en filter in de winter.\n\nBewaar dit voor als het kouder wordt, en stuur het naar wie ook vissen heeft.",
   },
   {
     map: "03-beekloop",
@@ -77,28 +77,28 @@ export const POSTS: Post[] = [
     reel: true,
     titel: "Een beekloop bouwen",
     caption:
-      "Een beekloop begint als een sleuf in de grond.\n\nFolie, grind en keien. Dan de rand, waar water en tuin elkaar raken. Oeverplanten tussen de stenen. En dan loopt het: van de waterval via de beekloop terug naar de vijver.\n\nHet hele project staat op gronn.studio.",
+      "Zo bouw je een beekloop die echt natuurlijk oogt.\n\nHet begint als een sleuf in de grond. Dan folie, grind en keien. Dan de rand, waar water en tuin elkaar raken, met oeverplanten tussen de stenen. En dan loopt het: van de waterval via de beekloop terug naar de vijver.\n\nVijverrenovatie in Stein. Het hele project staat op gronn.studio.\n\nDroom jij ook van stromend water in je tuin? Stuur dit naar wie het mee moet betalen.",
   },
   {
     map: "04-quote-op-gang",
     slides: 1,
     titel: "You don’t build a garden. You set it in motion.",
     caption:
-      "Een tuin leg je niet aan, je zet hem op gang.\n\nIk zorg voor de bodem, het water en de juiste plant op de juiste plek. Daarna doet de tuin het meeste werk zelf, en wordt hij elk jaar mooier.",
+      "Een tuin leg je niet aan, je zet hem op gang.\n\nIk zorg voor de bodem, het water en de juiste plant op de juiste plek. Daarna doet de tuin het meeste werk zelf, en wordt hij elk jaar mooier.\n\nStuur dit naar iemand die elk weekend in de tuin staat te ploeteren.",
   },
   {
     map: "05-borderpakketten",
     slides: 7,
     titel: "Borderpakketten",
     caption:
-      "Een border die vanaf dag één klopt.\n\nJe staat in het tuincentrum, je kiest wat mooi bloeit, en een jaar later staat de helft op de verkeerde plek. Daarom heb ik acht borderpakketten gemaakt: voor zon, schaduw, de vijverrand of droge grond. Bij elk pakket hoort een plan van boven met elke plant, het aantal en de afstand.\n\nIk plant hem aan in Stein en omgeving, of je krijgt planten en plan thuisbezorgd. Past geen pakket? Dan stel ik er een op maat samen.\n\nStuur \"border\" in een DM en vertel waar hij komt.",
+      "Waarom de helft van je nieuwe border na een jaar verkeerd staat.\n\nJe kiest in het tuincentrum wat mooi bloeit, en een jaar later staat de helft op de verkeerde plek. Daarom heb ik acht borderpakketten gemaakt: voor zon, schaduw, de vijverrand of droge grond. Bij elk pakket hoort een plan van boven met elke plant, het aantal en de afstand.\n\nIk plant hem aan in Stein en omgeving, of je krijgt planten en plan thuisbezorgd. Past geen pakket? Dan stel ik er een op maat samen.\n\nStuur \"border\" in een DM en vertel waar hij komt.",
   },
   {
     map: "06-modder",
     slides: 5,
     titel: "Vaak ook modder",
     caption:
-      "Thuis en in mijn werk zijn er altijd planten, ideeën en projecten. Vaak ook modder.\n\nMet mijn vader verbouwde ik huizen. Daar leerde ik werken met mijn handen, oplossingen zoeken en doorzetten wanneer iets anders loopt dan bedacht. Buiten de opdrachten moestuinier ik, in de eigen tuin en op een vakantiepark in Beringe.\n\nAls ik naar een tuin kijk, ben ik benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? Met die aandacht werk ik ook aan jouw tuin.",
+      "Ik leerde het vak niet uit een boek, maar met modder aan mijn handen.\n\nMet mijn vader verbouwde ik huizen. Daar leerde ik werken met mijn handen, oplossingen zoeken en doorzetten wanneer iets anders loopt dan bedacht. Buiten de opdrachten moestuinier ik, in de eigen tuin en op een vakantiepark in Beringe.\n\nAls ik naar een tuin kijk, ben ik benieuwd naar wie er leeft. Waar drink je ’s ochtends je koffie? Waar spelen de kinderen? Met die aandacht werk ik ook aan jouw tuin.\n\nWaar drink jij je koffie in de tuin? Vertel het in de reacties.",
   },
   { titel: "Winterklaar 2/5: pomp en filter", nodig: "Wordt gemaakt." },
   {
@@ -107,14 +107,14 @@ export const POSTS: Post[] = [
     reel: true,
     titel: "Waarom oeverplanten in een mand",
     caption:
-      "Waarom zet ik oeverplanten in een mand?\n\n1. De wortels blijven waar ze horen.\n2. Er komt geen losse aarde in het water.\n3. Uitnemen en scheuren gaat makkelijk.\n\nHet plan voor deze vijver: 11 manden, 44 planten en 7 soorten. Volgend voorjaar plant ik verder aan.\n\nBewaar dit als je zelf een vijver beplant.",
+      "Zet oeverplanten nooit los in je vijver. Hierom.\n\n1. De wortels blijven waar ze horen.\n2. Er komt geen losse aarde in het water.\n3. Uitnemen en scheuren gaat makkelijk.\n\nHet plan voor deze vijver in Stein: 11 manden, 44 planten en 7 soorten. Volgend voorjaar plant ik verder aan.\n\nBewaar dit voor je vijver beplant, of stuur het naar wie dat dit voorjaar gaat doen.",
   },
   {
     map: "09-quote-voed-de-bodem",
     slides: 1,
     titel: "Feed the soil, not the plant.",
     caption:
-      "Voed de bodem, niet de plant.\n\nGezonde grond vol leven voedt je planten vanzelf. Daarom geen kunstmest, maar compost en mulch, en het blad mag in de borders blijven liggen. De bodem doet de rest, jaar na jaar.",
+      "Voed de bodem, niet de plant.\n\nGezonde grond vol leven voedt je planten vanzelf. Daarom werk ik zonder kunstmest, met compost en mulch, en mag het blad in de borders blijven liggen. De bodem doet de rest, jaar na jaar.\n\nStuur dit naar wie nog elk voorjaar kunstmest strooit.",
   },
   {
     map: "10-winterklaar-prijs",
@@ -122,14 +122,14 @@ export const POSTS: Post[] = [
     reel: true,
     titel: "Winterklaar met een vaste prijs",
     caption:
-      "Wat kost het om je vijver winterklaar te maken? Dat weet je vooraf.\n\n1. Stuur één foto via WhatsApp.\n2. Je krijgt een vaste prijs: basis € 95, met bladnet ophalen € 135, met ijsvrijhouder € 150, alles € 185. Incl. btw.\n3. We prikken een datum en ik kom langs.\n\nWhatsApp: 06 181 180 14. Stein en omgeving.",
+      "Je vijver winterklaar, en je weet vooraf wat het kost.\n\n1. Stuur één foto via WhatsApp.\n2. Je krijgt een vaste prijs: basis € 95, met bladnet ophalen € 135, met ijsvrijhouder € 150, alles € 185. Incl. btw.\n3. We prikken een datum en ik kom langs.\n\nVijveronderhoud in Stein en omgeving. WhatsApp: 06 181 180 14.\n\nKen je iemand die zijn vijver dit jaar laat versloffen? Stuur dit door.",
   },
   {
     map: "11-buiten",
     slides: 1,
     titel: "Buiten vond ik rust",
     caption:
-      "Buiten vond ik rust: in tuinieren, dieren, observeren en bezig zijn. De natuur is altijd een plek geweest waar ik me thuis voel.\n\nDaarom maak ik tuinen waarin mensen zich thuis voelen, en waarin ook ruimte is voor ander leven.",
+      "Buiten vond ik altijd rust. Daar komt GRØNN vandaan.\n\nIn tuinieren, dieren, observeren en bezig zijn. De natuur is altijd een plek geweest waar ik me thuis voel.\n\nDaarom maak ik tuinen in Stein en omgeving waarin mensen zich thuis voelen, en waarin ook ruimte is voor ander leven.\n\nWaar vind jij rust? Vertel het me in de reacties.",
   },
   { titel: "Winterklaar 3/5: knippen of laten staan", nodig: "Wordt gemaakt." },
   {
@@ -138,7 +138,7 @@ export const POSTS: Post[] = [
     reel: true,
     titel: "Terras Geulle in twee dagen",
     caption:
-      "24 m² betontegels in twee dagen, in Geulle.\n\nDag 1: ontgraven, ophogen en verdichten, zandbed afrijen, banden stellen en uitlijnen.\nDag 2: tegels van 60 × 60 × 4 cm leggen, op afschot richting het gras, en alles nog eens controleren.\n\nEen goed terras ziet er niet alleen waterpas uit. Het weet ook waar het water heen moet.",
+      "24 m² terras in twee dagen. Dit zie je er straks niet meer van.\n\nDag 1: ontgraven, ophogen en verdichten, zandbed afrijen, banden stellen en uitlijnen.\nDag 2: tegels van 60 × 60 × 4 cm leggen, op afschot richting het gras, en alles nog eens controleren.\n\nEen goed terras ziet er niet alleen waterpas uit. Het weet ook waar het water heen moet. Terras aanleggen in Geulle, Stein en omgeving.\n\nBewaar dit als je zelf een terras gaat leggen.",
   },
   { titel: "Leave the leaves.", nodig: "Wordt gemaakt." },
   {
@@ -146,7 +146,7 @@ export const POSTS: Post[] = [
     slides: 4,
     titel: "Bladnet met een vaste prijs",
     caption:
-      "Blad in de vijver rot en wordt slib. Een net erover voorkomt dat. Het is de enige vijverklus met een deadline: vóór de bladval.\n\nVaste prijs, incl. btw:\nTot 15 m²: € 125\n15 tot 35 m²: € 175\nMeer dan 35 m²: € 250\n\nHet net wordt op maat gesneden en de randen om de 60–80 cm vastgezet. In december haal ik het er weer af; die datum plannen we meteen in.\n\nStuur een foto van je vijver via WhatsApp: 06 181 180 14. Stein en omgeving.",
+      "De enige vijverklus met een deadline: vóór de bladval.\n\nBlad in de vijver rot en wordt slib. Een bladnet erover voorkomt dat.\n\nVaste prijs, incl. btw:\nTot 15 m²: € 125\n15 tot 35 m²: € 175\nMeer dan 35 m²: € 250\n\nHet net wordt op maat gesneden en de randen om de 60–80 cm vastgezet. In december haal ik het er weer af; die datum plannen we meteen in.\n\nVijver in Stein en omgeving? Stuur een foto via WhatsApp: 06 181 180 14.",
   },
 ]
 
