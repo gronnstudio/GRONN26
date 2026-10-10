@@ -106,7 +106,7 @@ export function Voet() {
           <div className="flex flex-col items-start gap-2 text-sm lg:items-end lg:pb-[1%]">
             {/* Alleen voor de eigenaar: Google-login, daarna het dashboard (zie src/proxy.ts). */}
             <a
-              href="/beheer"
+              href="/dashboard"
               rel="nofollow"
               className="mb-2 inline-flex items-center gap-2.5 h-[var(--knop-klein)] rounded-full border border-dashed border-lijn px-[var(--knop-binnen-klein)] text-gedempt transition-colors hover:border-inkt hover:text-inkt"
             >

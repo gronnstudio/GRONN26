@@ -61,7 +61,12 @@ const nextConfig: NextConfig = {
       // overige /nl/… en /en/… (faq, privacy, voorwaarden, …) bestaan zonder voorvoegsel
       { source: "/:taal(nl|en)/:pad*", destination: "/:pad*", permanent: true },
     ]
-    return [...oud, ...talen, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
+    // Beheer heet sinds 10 okt 2026 Dashboard (eigenaar: "maak van beheer dashboard").
+    const dashboard = [
+      { source: "/beheer", destination: "/dashboard", permanent: true },
+      { source: "/beheer/:pad*", destination: "/dashboard/:pad*", permanent: true },
+    ]
+    return [...oud, ...talen, ...dashboard, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
       source: `/${n}`,
       destination: `/wireframes/${n}`,
       permanent: false,

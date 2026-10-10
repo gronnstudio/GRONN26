@@ -1,4 +1,4 @@
-// De Instagram-feed in /beheer/social (eigenaar, 9 okt 2026: "een social media
+// De Instagram-feed in /dashboard/social (eigenaar, 9 okt 2026: "een social media
 // manager, vanaf de achterkant van de site"). The KNIGHT move: vijf tegels in
 // een vaste volgorde. Op een raster van drie kolommen staat dezelfde tegel dan
 // altijd een paardensprong verder. Nick post zelf; hier staan de beelden en
@@ -30,13 +30,14 @@ export type Post = {
   gepost?: string
 }
 
+// Sinds 10 okt 2026 is 01 het espresso-portret; de oude 01 (Wie ik ben) is feedpost 1.
 export const VASTGEZET: Post[] = [
   {
     map: "vast-1",
-    slides: 4,
-    titel: "01 · Wie ik ben",
+    slides: 1,
+    titel: "01 · Waarom ik dit werk doe",
     caption:
-      "Hoi, ik ben Nick, de man achter GRØNN.\n\nIk maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving. Water, planten en bodem zie ik als één systeem, zodat alles gezond blijft met weinig ingrijpen.\n\nJe spreekt mij, van de eerste foto tot de laatste plant. En je weet vooraf wat het kost.\n\nZeg gerust hoi in een DM.",
+      "Waarom ik dit werk doe?\n\nHet vaderschap maakte voor mij nog duidelijker wat belangrijk is: aandacht geven, verantwoordelijkheid nemen en een omgeving creëren waarin iemand zich veilig voelt. Dat neem ik mee in mijn werk. Ik luister, kijk zorgvuldig en wil begrijpen wat een plek voor iemand moet betekenen.\n\nIk wil tuinen ontwerpen en aanleggen waarin mensen zich thuis voelen en waarin ook ruimte is voor ander leven. Dat begint bij de bodem, bij hoe water zijn weg vindt en bij planten die passen bij de plek.\n\nVertel me gerust over jouw plek.",
   },
   {
     map: "vast-2",
@@ -57,11 +58,11 @@ export const VASTGEZET: Post[] = [
 /** In de volgorde van posten: de eerste staat hier bovenaan. */
 export const POSTS: Post[] = [
   {
-    map: "01-persoonlijk-luisteren",
-    slides: 1,
-    titel: "Waarom ik dit werk doe",
+    map: "01-wie-ik-ben",
+    slides: 3,
+    titel: "Hoi, ik ben Nick",
     caption:
-      "Waarom ik dit werk doe?\n\nHet vaderschap maakte voor mij nog duidelijker wat belangrijk is: aandacht geven, verantwoordelijkheid nemen en een omgeving creëren waarin iemand zich veilig voelt. Dat neem ik mee in mijn werk. Ik luister, kijk zorgvuldig en wil begrijpen wat een plek voor iemand moet betekenen.\n\nIk wil tuinen ontwerpen en aanleggen waarin mensen zich thuis voelen en waarin ook ruimte is voor ander leven. Dat begint bij de bodem, bij hoe water zijn weg vindt en bij planten die passen bij de plek.\n\nVertel me gerust over jouw plek.",
+      "Hoi, ik ben Nick, de man achter GRØNN.\n\nIk maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving. Water, planten en bodem zie ik als één systeem, zodat alles gezond blijft met weinig ingrijpen.\n\nJe spreekt mij, van de eerste foto tot de laatste plant. En je weet vooraf wat het kost.\n\nZeg gerust hoi in een DM.",
   },
   {
     map: "02-winterklaar-1",

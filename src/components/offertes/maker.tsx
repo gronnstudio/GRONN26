@@ -129,7 +129,7 @@ export function OfferteMaker() {
     <div className="offertes grid min-h-svh gap-8 bg-grond p-4 text-inkt lg:grid-cols-[420px_1fr] lg:p-8">
       <form data-geen-print className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
         <div className="flex justify-between text-[13px]">
-          <Link href="/beheer" className="w-lijnlink text-gedempt">← Dashboard</Link>
+          <Link href="/dashboard" className="w-lijnlink text-gedempt">← Dashboard</Link>
           <a href="/api/uitloggen" className="w-lijnlink text-gedempt">Uitloggen</a>
         </div>
         <div>
