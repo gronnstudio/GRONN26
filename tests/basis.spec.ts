@@ -88,7 +88,7 @@ test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij wee
     await page.mouse.wheel(0, 600)
     await expect(omhoog).toBeVisible()
     await expect(weergave).toBeVisible()
-    await expect.poll(async () => (await omhoog.boundingBox())?.height).toBe(48)
+    await expect.poll(async () => (await omhoog.boundingBox())?.height).toBe(40)
     await page.waitForTimeout(600)
     const [w, p, o] = await Promise.all([weergave.boundingBox(), nav.boundingBox(), omhoog.boundingBox()])
     expect(w!.x + w!.width, `@${b}`).toBeLessThanOrEqual(p!.x)
@@ -96,6 +96,9 @@ test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij wee
     if (b < 1024) {
       // breed: van de buitenrand van Weergave tot die van Omhoog
       expect([Math.round(breed.x), Math.round(breed.x + breed.width)]).toEqual([Math.round(w!.x), Math.round(o!.x + o!.width)])
+      // Weergave en Omhoog staan op het midden van de pil
+      expect(Math.round(w!.y + w!.height / 2)).toBe(Math.round(p!.y + p!.height / 2))
+      expect(Math.round(o!.y + o!.height / 2)).toBe(Math.round(p!.y + p!.height / 2))
       expect(p!.width).toBeLessThan(breed.width)
     }
     await page.mouse.wheel(0, -100)
@@ -119,7 +122,7 @@ test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scher
   }
 })
 
-test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --knop-groot)", async ({ page }) => {
+test("knoppen: elke ronde knop is 36, 40, 48 of 64 hoog (--knop-klein, --knop-menu, --knop, --knop-groot)", async ({ page }) => {
   await zonderIntro(page)
   for (const b of [1440, 390]) {
     await page.setViewportSize({ width: b, height: 900 })
@@ -129,7 +132,7 @@ test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --kno
         [...document.querySelectorAll("a, button")].flatMap((e) => {
           const cs = getComputedStyle(e), h = Math.round(e.getBoundingClientRect().height)
           const knop = h > 0 && parseFloat(cs.borderTopLeftRadius) >= 16 && (!/rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) || parseFloat(cs.borderTopWidth) > 0)
-          return knop && ![36, 48, 64].includes(h) ? [`${(e.textContent || "").trim().slice(0, 30)}: ${h}px`] : []
+          return knop && ![36, 40, 48, 64].includes(h) ? [`${(e.textContent || "").trim().slice(0, 30)}: ${h}px`] : []
         }),
       )
       expect(afwijkend, `${route} @${b}`).toEqual([])

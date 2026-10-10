@@ -38,6 +38,7 @@
      een test in tests/basis.spec.ts bewaakt dat. */
   --knop: 48px;              /* elke actieknop: Kennismaken, Verstuur, menupil, pijl, iconen */
   --knop-klein: 36px;        /* kleine knoppen en chips: kopiëren, tabs, telefoonkop */
+  --knop-menu: 40px;         /* de rondjes in de menupil, Weergave en Omhoog (eigenaar, 10 okt 2026) */
   --knop-groot: 64px;        /* alleen de omlijnde pijl onderaan een pagina */
   --knop-tekst: 13px;
   --knop-tekst-klein: 11px;
