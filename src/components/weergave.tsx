@@ -124,24 +124,14 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
         aria-expanded={open}
         aria-controls="weergave-paneel"
         onClick={() => setOpen(!open)}
-        className={`flex h-10 w-full cursor-pointer flex-col items-center justify-center gap-[3px] rounded-full px-1.5 lg:grid lg:size-10 lg:min-w-0 lg:place-items-center lg:px-0 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 ${knopKlasse}`}
+        className={knopKlasse}
       >
-        <svg
-          width="18"
-          height="18"
-          className="lg:size-[22px]"
-          viewBox="0 0 20 20"
-          aria-hidden
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.4"
-        >
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M3 5h14M3 10h14M3 15h14" />
-          <circle cx="7" cy="5" r="2" fill="none" />
-          <circle cx="13" cy="10" r="2" fill="none" />
-          <circle cx="9" cy="15" r="2" fill="none" />
+          <circle cx="7" cy="5" r="2" />
+          <circle cx="13" cy="10" r="2" />
+          <circle cx="9" cy="15" r="2" />
         </svg>
-        <span aria-hidden className="text-[9px] leading-[10px] font-medium max-[380px]:text-[8px] lg:hidden">{taal === "en" ? "Display" : "Weergave"}</span>
       </button>
       {gereed &&
         createPortal(

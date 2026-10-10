@@ -132,10 +132,15 @@
   overflow-x: clip;
   margin-top: calc(144 / 1440 * 100vw);
 }
+/* het effect van de herotitel (eigenaar, 10 okt 2026): de band loopt óver de
+   foto's en keert de kleuren eronder om, met dezelfde vaste lichte kleur */
 .vp-reuswoord {
   position: sticky;
   top: 30vh;
-  z-index: 0;
+  z-index: 2;
+  mix-blend-mode: difference;
+  color: #efeeea;
+  pointer-events: none;
   overflow: hidden;
   white-space: nowrap;
   font-size: 14vw;
