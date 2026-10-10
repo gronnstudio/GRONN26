@@ -130,15 +130,16 @@ h1[tabindex="-1"]:focus-visible {
   outline: none;
 }
 
-/* De komeet om de pil (uit gronn.studio, stiller): een oranje boog die in
-   tien seconden rondgaat; sinds 10 okt 2026 langer en iets dikker (eigenaar:
-   "maak de ember boog om de pil breder"). Puur versiering. */
-.komeet { position: absolute; inset: 0; border-radius: 9999px; padding: 1.5px; overflow: hidden; pointer-events: none; opacity: .9;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
-.komeet::before { content: ""; position: absolute; top: 50%; left: 50%; width: 150%; aspect-ratio: 1;
-  background: conic-gradient(transparent 0turn .6turn, #db6923 .94turn, transparent .99turn);
-  transform: translate(-50%, -50%); animation: komeet 10s linear infinite; }
-@keyframes komeet { to { transform: translate(-50%, -50%) rotate(1turn); } }
+/* De komeet om de pil (uit gronn.studio, stiller): één oranje boog van vaste
+   lengte die in tien seconden langs de rand rondloopt. Een streep op de rand
+   in plaats van een draaiend kegelverloop, zodat hij ook in de smalle pil één
+   boog blijft (eigenaar, 10 okt 2026: "langer", daarna "klopt niet meer").
+   Puur versiering; de vorm zit in komeet.tsx. */
+.komeet { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.komeet svg { display: block; overflow: visible; }
+.komeet rect { fill: none; stroke: #db6923; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: .22 .78; opacity: .9;
+  animation: komeet 10s linear infinite; }
+@keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
 .ring-voortgang { position: absolute; inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); transform: rotate(-90deg); pointer-events: none; overflow: visible; }
@@ -147,8 +148,27 @@ h1[tabindex="-1"]:focus-visible {
   .ring-voortgang circle { animation: ring-vol linear both; animation-timeline: scroll(root); }
 }
 @keyframes ring-vol { to { stroke-dashoffset: 0; } }
-@media (prefers-reduced-motion: reduce) { .komeet::before { animation: none; } }
-html.stil .komeet::before { animation: none; }
+/* De iconen in de pil bewegen altijd, om de beurt: elke acht seconden doet
+   elk icoon één korte beweging, de vijf na elkaar van links naar rechts
+   (eigenaar, 10 okt 2026: "de iconen een kleine animatie meegeven", "niet bij
+   aanraken, standaard"). Stil bij minder beweging. */
+.menu-icoon svg { transform-box: fill-box; transform-origin: 50% 100%; animation: 8s cubic-bezier(.22,1,.36,1) infinite var(--beweging); }
+.menu-icoon[data-beweging=golf] { --beweging: icoon-golf; }
+.menu-icoon[data-beweging=groei] { --beweging: icoon-groei; }
+.menu-icoon[data-beweging=spit] { --beweging: icoon-spit; }
+.menu-icoon[data-beweging=knik] { --beweging: icoon-knik; }
+.menu-icoon[data-beweging=plop] { --beweging: icoon-plop; }
+.menu-icoon[data-beweging=groei] svg { animation-delay: .6s; }
+.menu-icoon[data-beweging=spit] svg { animation-delay: 1.2s; }
+.menu-icoon[data-beweging=knik] svg { animation-delay: 1.8s; }
+.menu-icoon[data-beweging=plop] svg { animation-delay: 2.4s; }
+@keyframes icoon-golf { 3% { translate: -2px 0; } 6% { translate: 2px 0; } 9%, 100% { translate: 0 0; } }
+@keyframes icoon-groei { 0% { scale: 1 1; } 3% { scale: 1 .6; } 7% { scale: 1 1.12; } 10%, 100% { scale: 1 1; } }
+@keyframes icoon-spit { 4% { rotate: -14deg; translate: 0 2px; } 7% { rotate: 6deg; translate: 0 0; } 10%, 100% { rotate: 0deg; } }
+@keyframes icoon-knik { 3% { translate: 0 2px; } 6%, 100% { translate: 0 0; } }
+@keyframes icoon-plop { 0% { scale: 1; } 3% { scale: .7; } 6% { scale: 1.15; } 9%, 100% { scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .komeet rect, .menu-icoon svg { animation: none !important; } }
+html.stil :is(.komeet rect, .menu-icoon svg) { animation: none !important; }
 
 /* De linkpagina staat zonder menu, kop en voet. */
 body:has([data-links]) > :not(main, .og) { display: none !important; }
