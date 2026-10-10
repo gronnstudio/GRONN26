@@ -65,6 +65,7 @@ test("kennismaken: lege verzending toont fouten en verstuurt niets", async ({ pa
 test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/over")
+  await page.mouse.wheel(0, 600)
   await page.click('button[aria-label="Weergave en toegankelijkheid"]')
   await page.click('label:has(input[value="donker"])')
   await expect(page.locator("html")).toHaveClass(/donker/)
@@ -72,19 +73,40 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
+test("menu: de pil heeft vijf links; Weergave en Omhoog verschijnen pas bij scrollen", async ({ page }) => {
+  await zonderIntro(page)
+  for (const b of [390, 1440]) {
+    await page.setViewportSize({ width: b, height: 800 })
+    await page.goto("/over")
+    const nav = page.locator("nav[data-menu]")
+    for (const naam of ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+    const weergave = page.getByRole("button", { name: "Weergave en toegankelijkheid" })
+    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
+    await expect(weergave).toBeHidden()
+    await expect(omhoog).toBeHidden()
+    await page.mouse.wheel(0, 600)
+    await expect(weergave).toBeVisible()
+    await expect(omhoog).toBeVisible()
+    await expect.poll(async () => (await omhoog.boundingBox())?.height).toBe(48)
+    const [w, p, o] = await Promise.all([weergave, nav, omhoog].map((l) => l.boundingBox()))
+    expect(w!.x + w!.width, `@${b}`).toBeLessThanOrEqual(p!.x)
+    expect(o!.x, `@${b}`).toBeGreaterThanOrEqual(p!.x + p!.width)
+    expect([w!.height, o!.height], `@${b}`).toEqual([48, 48])
+  }
+})
+
 test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
-    const [h1, voet, kennis, pijl] = await page.evaluate(() => {
-      const iw = document.documentElement.clientWidth
+    const [h1, voet, kennis] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
       const wrap = document.querySelector("footer .wrap")!
       const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
-      return [links("main h1"), voet, links('a[href="/kennismaken"].fixed'), Math.round(iw - document.querySelector("[data-pijl]")!.getBoundingClientRect().right)]
+      return [links("main h1"), voet, links('a[href="/kennismaken"].fixed')]
     })
-    expect([h1, kennis, pijl], route).toEqual([voet, voet, voet])
+    expect([h1, kennis], route).toEqual([voet, voet])
   }
 })
 
