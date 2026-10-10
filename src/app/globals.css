@@ -205,26 +205,33 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 @media (prefers-reduced-motion: reduce) { html[data-assistent] .kern { animation: none; } }
 
 /* De worm in de voet (10 okt 2026, naar grnfix): de voet is de grond, en
-   eens in de veertien seconden steekt een regenworm daar zijn kop uit, als
-   silhouet in hetzelfde bosgroen. Het vak knipt alles onder de rand weg. */
+   eens in de veertien seconden komt een regenworm boven (kop en twee bogen,
+   zoals grnfix) en kijkt rond, als silhouet in hetzelfde bosgroen met
+   ringen in salie. Het vak knipt alles onder de rand weg. */
 .worm {
   position: absolute;
   bottom: 100%;
   left: 72%;
-  width: 64px;
-  height: 44px;
+  width: 88px;
+  height: 46px;
   overflow: hidden;
   pointer-events: none;
 }
 .worm svg { display: block; transform: translateY(100%); animation: worm-op 14s ease-in-out infinite; }
-.worm path { fill: none; stroke: var(--bos); stroke-width: 8; stroke-linecap: round; }
-.worm .worm-ring { stroke: var(--salie); stroke-width: 8; stroke-linecap: butt; stroke-dasharray: 1.2 5; opacity: 0.35; }
+.worm .lijf { fill: none; stroke: var(--bos); stroke-width: 10; stroke-linecap: round; }
+.worm .ring { fill: none; stroke: var(--salie); stroke-width: 10; stroke-dasharray: 1.6 4.4; opacity: 0.55; }
+.worm circle { fill: var(--salie); }
+.worm-kop { transform-box: view-box; transform-origin: 14px 46px; animation: worm-kop 14s ease-in-out infinite; }
 @keyframes worm-op {
   0%, 55%, 100% { transform: translateY(100%); }
-  64% { transform: translateY(8%) rotate(-4deg); }
-  72% { transform: translateY(4%) rotate(5deg); }
-  80% { transform: translateY(6%) rotate(-2deg); }
-  90% { transform: translateY(100%); }
+  63%, 84% { transform: translateY(0); }
+  92% { transform: translateY(100%); }
 }
-@media (prefers-reduced-motion: reduce) { .worm svg { animation: none; transform: translateY(10%); } }
-html.stil .worm svg { transform: translateY(10%); }
+@keyframes worm-kop {
+  0%, 63%, 84%, 100% { transform: rotate(0); }
+  68% { transform: rotate(-9deg); }
+  74% { transform: rotate(7deg); }
+  79% { transform: rotate(-4deg); }
+}
+@media (prefers-reduced-motion: reduce) { .worm svg, .worm-kop { animation: none; } .worm svg { transform: none; } }
+html.stil .worm svg { transform: none; }

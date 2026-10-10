@@ -25,9 +25,16 @@ export function Voet() {
     <footer className="donker bos-vlak relative border-t border-lijn mt-[clamp(40px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
       {/* een regenworm steekt af en toe zijn kop uit de grond (eigenaar, 10 okt 2026, naar grnfix); stil bij minder beweging */}
       <span className="worm" aria-hidden>
-        <svg viewBox="0 0 64 44" width="64" height="44">
-          <path d="M10 52C10 28 15 10 27 10c10 0 12 11 16 19 3.5 7 8 9 13 23" />
-          <path className="worm-ring" d="M10 52C10 28 15 10 27 10c10 0 12 11 16 19 3.5 7 8 9 13 23" />
+        <svg viewBox="0 0 88 46" width="88" height="46">
+          <g className="worm-kop">
+            <path className="lijf" d="M14 56V30c0-9 2-16 6-21" />
+            <path className="ring" d="M14 56V30c0-9 2-16 6-21" />
+            <circle cx="21.5" cy="12" r="1.3" />
+          </g>
+          <path className="lijf" d="M32 56c0-14 5-22 11-22s11 8 11 22" />
+          <path className="ring" d="M32 56c0-14 5-22 11-22s11 8 11 22" />
+          <path className="lijf" d="M62 56c0-8 3-13 7-13s7 5 7 13" />
+          <path className="ring" d="M62 56c0-8 3-13 7-13s7 5 7 13" />
         </svg>
       </span>
       <div className="wrap">
