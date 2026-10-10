@@ -73,7 +73,7 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-test("menu: vijf ronde iconen; bij scrollen alleen Weergave links en Omhoog rechts", async ({ page }) => {
+test("menu: vijf ronde iconen; bij scrollen krimpt de pil en blijven Weergave links en Omhoog rechts", async ({ page }) => {
   await zonderIntro(page)
   for (const b of [390, 1440]) {
     await page.setViewportSize({ width: b, height: 800 })
@@ -85,14 +85,17 @@ test("menu: vijf ronde iconen; bij scrollen alleen Weergave links en Omhoog rech
     for (const l of links) await expect(l).toBeVisible()
     await expect(weergave).toBeHidden()
     await expect(omhoog).toBeHidden()
+    const pil = (await nav.boundingBox())!
     await page.mouse.wheel(0, 600)
     await expect(omhoog).toBeVisible()
     await expect(weergave).toBeVisible()
-    await expect(nav).toBeHidden()
+    await expect(nav).toHaveCSS("opacity", "0")
     await expect.poll(async () => (await omhoog.boundingBox())?.height).toBe(48)
     const [w, o] = await Promise.all([weergave.boundingBox(), omhoog.boundingBox()])
     expect(w!.x + w!.width, `@${b}`).toBeLessThan(b / 2)
     expect(o!.x, `@${b}`).toBeGreaterThan(b / 2)
+    // op de telefoon is de pil even breed als de twee cirkels van buitenrand tot buitenrand
+    if (b < 1024) expect([Math.round(pil.x), Math.round(pil.x + pil.width)]).toEqual([Math.round(w!.x), Math.round(o!.x + o!.width)])
   }
 })
 
