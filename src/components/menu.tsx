@@ -16,7 +16,7 @@ import { useTaal } from "./taal-klant"
 //   ⭕   ⭕⭕⭕⭕⭕   ⭕  bij omlaag scrollen: de pil krimpt (op de telefoon) en
 //   links Weergave en rechts Omhoog verschijnen, rond en oranje.
 // De pil is bijna dicht antraciet, op elke grond even donker; de huidige
-// pagina is een licht rondje. De iconen bewegen om de beurt even (golf,
+// pagina is een zachtgrijze pil. De iconen bewegen om de beurt even (golf,
 // groei, spit, knik, plop; globals.css). Linksonder staat vanaf 1024px Kennismaken ↗.
 const MENU = [
   { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, beweging: "golf", icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
@@ -26,7 +26,9 @@ const MENU = [
   { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, beweging: "plop", icoon: "M5 4h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9.2 8.4a1.8 1.8 0 1 1 2.6 1.6c-.5.2-.8.6-.8 1.1v.3M11 13.2v.1" },
 ]
 
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-[current=page]:bg-gebroken-wit aria-[current=page]:text-antraciet"
+// de huidige pagina: een brede, zachtgrijze pil achter een wit icoon, zoals
+// Instagram (eigenaar, 10 okt 2026: "vind ik mooier")
+const RUST = "text-gebroken-wit hover:bg-gebroken-wit/10 aria-[current=page]:bg-gebroken-wit/20"
 
 export function Menu() {
   const pad = usePathname()
@@ -75,7 +77,7 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[56px] max-lg:w-full max-lg:max-w-[56px] place-items-center rounded-full transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                     <path d={m.icoon} />
                   </svg>
@@ -95,8 +97,8 @@ export function Menu() {
           className={rond}
         >
           <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
-          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden>
-            <path d="M8 14.5v-12M2.5 8 8 2.5 13.5 8" fill="none" stroke="currentColor" strokeWidth="1.9" />
+          <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 18V4M5 10l6-6 6 6" />
           </svg>
         </button>
       </div>

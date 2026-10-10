@@ -126,11 +126,10 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
         onClick={() => setOpen(!open)}
         className={knopKlasse}
       >
-        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6">
-          <path d="M3 5h14M3 10h14M3 15h14" />
-          <circle cx="7" cy="5" r="2" />
-          <circle cx="13" cy="10" r="2" />
-          <circle cx="9" cy="15" r="2" />
+        {/* zelfde maat en lijn als de iconen in de menupil: 20px op een raster van 22, lijn 1,4 */}
+        <svg width="20" height="20" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+          {/* schuiven met een streepje als knop, zonder bolletjes (eigenaar, 10 okt 2026) */}
+          <path d="M3 5.5h3M9 5.5h10M7.5 3v5M3 11h10M16 11h3M14.5 8.5v5M3 16.5h5.5M11.5 16.5H19M10 14v5" />
         </svg>
       </button>
       {gereed &&
