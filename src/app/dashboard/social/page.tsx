@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Bewaar } from "@/components/beheer/bewaar"
 import { Kopieer } from "@/components/beheer/kopieer"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { zetGepost } from "../acties"
@@ -42,19 +43,12 @@ function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepos
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={beeld(p, i + 1)} alt={`Slide ${i + 1}`} loading="lazy" className="h-[150px] w-[120px] rounded-[10px] object-cover" />
                 </a>
-                <a
-                  href={beeld(p, i + 1)}
-                  download={`${p.map}-${i + 1}.jpg`}
-                  className="absolute bottom-1.5 right-1.5 flex size-[36px] items-center justify-center rounded-full bg-[#202020]/80 text-[16px] font-bold text-white"
-                >
-                  <span aria-hidden>↓</span>
-                  <span className="sr-only">Download slide {i + 1}</span>
-                </a>
+                <Bewaar src={beeld(p, i + 1)} naam={`${p.map}-${i + 1}.jpg`} label={`Bewaar slide ${i + 1}`} />
               </li>
             ))}
           </ul>
           <p className="m-0 mt-1 text-[11px] opacity-50">
-            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te openen, of op ↓ om hem te downloaden."}
+            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te openen, of op ↓ om hem te bewaren."}
             {p.reel && (
               <a href={`/social/${p.map}/reel.mp4`} target="_blank" rel="noopener" className="font-semibold text-oranje-tekst opacity-100">
                 Open de reel ↗
