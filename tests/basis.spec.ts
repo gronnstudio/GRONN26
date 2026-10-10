@@ -84,6 +84,9 @@ test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij wee
     for (const naam of ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(weergave).toBeHidden()
     await expect(omhoog).toBeHidden()
+    // de grote pil is de kleine, opgeschaald zodra de breedte gemeten is
+    if (b < 1024) await expect.poll(async () => Math.round((await nav.boundingBox())!.width)).toBe(b - 40)
+    await page.waitForTimeout(600)
     const breed = (await nav.boundingBox())!
     await page.mouse.wheel(0, 600)
     await expect(omhoog).toBeVisible()
@@ -130,7 +133,8 @@ test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --kno
       await page.goto(route, { waitUntil: "domcontentloaded" })
       const afwijkend = await page.evaluate(() =>
         [...document.querySelectorAll("a, button")].flatMap((e) => {
-          const cs = getComputedStyle(e), h = Math.round(e.getBoundingClientRect().height)
+          // offsetHeight: de maat zelf, zonder schaal (de grote menupil is de kleine, opgeschaald)
+          const cs = getComputedStyle(e), h = (e as HTMLElement).offsetHeight
           const knop = h > 0 && parseFloat(cs.borderTopLeftRadius) >= 16 && (!/rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) || parseFloat(cs.borderTopWidth) > 0)
           return knop && ![36, 48, 64].includes(h) ? [`${(e.textContent || "").trim().slice(0, 30)}: ${h}px`] : []
         }),
