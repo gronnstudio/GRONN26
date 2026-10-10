@@ -203,60 +203,60 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 @keyframes kern-adem { 50% { transform: scale(1.015); } }
 @media (prefers-reduced-motion: reduce) { html[data-assistent] .kern { animation: none; } }
 
-/* De worm in de voet (10 okt 2026, naar grnfix): de voet is de grond, en
-   eens in de veertien seconden komt een regenworm boven (kop en twee bogen,
-   zoals grnfix) en kijkt rond, als silhouet in hetzelfde bosgroen met
-   ringen in salie. Het vak knipt alles onder de rand weg. */
-.worm {
+/* De voet als vijverrand (10 okt 2026, in plaats van worm en gras naar
+   grnfix): links een pol lisdodde die zacht wuift, rechts een leliblad dat
+   op de waterlijn deint en af en toe een kring die zich in het water
+   uitbreidt. Silhouetten in bosgroen (in Donker mos), blad in mos, alleen transform en opacity. */
+.lisdodde {
   position: absolute;
   bottom: 100%;
-  left: 72%;
-  width: 88px;
-  height: 46px;
-  overflow: hidden;
-  pointer-events: none;
-}
-.worm svg { display: block; transform: translateY(100%); animation: worm-op 14s ease-in-out infinite; }
-.worm .lijf { fill: none; stroke: var(--bos); stroke-width: 10; stroke-linecap: round; }
-.worm .ring { fill: none; stroke: var(--salie); stroke-width: 10; stroke-dasharray: 1.6 4.4; opacity: 0.55; }
-.worm circle { fill: var(--salie); }
-.worm-kop { transform-box: view-box; transform-origin: 14px 46px; animation: worm-kop 14s ease-in-out infinite; }
-@keyframes worm-op {
-  0%, 55%, 100% { transform: translateY(100%); }
-  63%, 84% { transform: translateY(0); }
-  92% { transform: translateY(100%); }
-}
-@keyframes worm-kop {
-  0%, 63%, 84%, 100% { transform: rotate(0); }
-  68% { transform: rotate(-9deg); }
-  74% { transform: rotate(7deg); }
-  79% { transform: rotate(-4deg); }
-}
-@media (prefers-reduced-motion: reduce) { .worm svg, .worm-kop { animation: none; } .worm svg { transform: none; } }
-html.stil .worm svg { transform: none; }
-
-/* Siergras op de rand van de voet (10 okt 2026), links van de worm: een pol
-   in hetzelfde bosgroen, drie groepjes halmen die elk in hun eigen tempo
-   wuiven. Alleen draaien vanaf de voet, geen layout. */
-.gras {
-  position: absolute;
-  bottom: 100%;
-  left: 10%;
-  width: 140px;
-  height: 120px;
+  left: 9%;
+  width: 120px;
+  height: 150px;
   margin-bottom: -2px;
   pointer-events: none;
 }
-.gras svg { display: block; overflow: visible; }
-.gras path, .gras ellipse { fill: var(--bos); }
-.gras .halm { fill: none; stroke: var(--bos); stroke-width: 1.4; }
-.gras .pluim { opacity: 0.8; }
-.gras g { transform-box: view-box; transform-origin: 70px 122px; animation: gras-wuif 7s ease-in-out infinite; }
-.gras .gras-2 { animation-duration: 8.5s; animation-delay: -2s; }
-.gras .gras-3 { animation-duration: 6s; animation-delay: -4s; }
-@keyframes gras-wuif {
-  0%, 100% { transform: rotate(-1.5deg); }
-  50% { transform: rotate(2.5deg); }
+.lisdodde svg, .leliblad svg { display: block; overflow: visible; }
+.lisdodde path, .lisdodde rect { fill: var(--bos); }
+.lisdodde .steel { fill: none; stroke: var(--bos); stroke-width: 2; stroke-linecap: round; }
+.lisdodde g { transform-box: view-box; transform-origin: 60px 152px; animation: lis-wuif 8s ease-in-out infinite; }
+.lisdodde .lis-2 { animation-duration: 6.5s; animation-delay: -3s; }
+@keyframes lis-wuif {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50% { transform: rotate(1.8deg); }
 }
-@media (prefers-reduced-motion: reduce) { .gras g { animation: none; } }
-html.stil .gras g { animation: none; }
+.leliblad {
+  position: absolute;
+  top: 14px;
+  left: 68%;
+  pointer-events: none;
+  animation: leli-drijf 11s ease-in-out infinite;
+}
+.leliblad path { fill: var(--mos); }
+.leliblad .bloem { fill: var(--salie); }
+html.donker .lisdodde path, html.donker .lisdodde rect { fill: var(--mos); }
+html.donker .lisdodde .steel { fill: none; stroke: var(--mos); }
+@keyframes leli-drijf {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(10px, 1px) rotate(1deg); }
+}
+.kring {
+  position: absolute;
+  top: 17px;
+  left: calc(68% + 40px);
+  width: 120px;
+  height: 18px;
+  margin-left: -60px;
+  border: 1.5px solid var(--salie);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: kring 9s ease-out infinite;
+}
+@keyframes kring {
+  0%, 60% { transform: scale(0.15); opacity: 0; }
+  64% { opacity: 0.7; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .lisdodde g, .leliblad { animation: none; } .kring { display: none; } }
+html.stil .kring { display: none; }
