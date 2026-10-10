@@ -14,7 +14,7 @@ const PAGINAS: [string, Tekst][] = [
 ]
 
 // Voet A uit de wireframes (WF-027, colofon in vier kolommen), in de taal van
-// de site: donker zoals de opening (de voet van Kolenda/Uncode), Montserrat
+// de site: bosgroen met de donkere tokens (eigenaar, 10 okt 2026), Montserrat
 // met Syne Bold alleen in het woordmerk, links die aangroeien. Sluit naadloos
 // aan op het bosgroene Kennismaken-vlak (#h-kennis); staat dat er niet, dan
 // komt er ruimte boven. De ruimte onder de body (voor het menu) valt binnen
@@ -22,7 +22,14 @@ const PAGINAS: [string, Tekst][] = [
 export function Voet() {
   const a = BUSINESS.address
   return (
-    <footer className="border-t border-lijn mt-[clamp(40px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
+    <footer className="donker bos-vlak relative border-t border-lijn mt-[clamp(40px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
+      {/* een regenworm steekt af en toe zijn kop uit de grond (eigenaar, 10 okt 2026, naar grnfix); stil bij minder beweging */}
+      <span className="worm" aria-hidden>
+        <svg viewBox="0 0 64 44" width="64" height="44">
+          <path d="M10 52C10 28 15 10 27 10c10 0 12 11 16 19 3.5 7 8 9 13 23" />
+          <path className="worm-ring" d="M10 52C10 28 15 10 27 10c10 0 12 11 16 19 3.5 7 8 9 13 23" />
+        </svg>
+      </span>
       <div className="wrap">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-8">
           <div>

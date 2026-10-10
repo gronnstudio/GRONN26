@@ -11,7 +11,9 @@
   --inkt: #202020;
   --gedempt: #5e5e5b;
   --lijn: rgba(32, 32, 32, 0.18);
-  --vlak: #dcd9d2;
+  /* Lichte vlakken met een zweem salie (eigenaar, 10 okt 2026: "geen groene
+     elementen meer ... voelt niet als een hoveniers website"). */
+  --vlak: #dde3d4;
   /* Invulvelden: een eigen lichte vlak, zodat je ziet waar je typt, en een
      voorbeeld dat duidelijk lichter is dan ingevulde tekst. */
   --veld: #fbfbf9;
@@ -53,6 +55,14 @@ html.donker, .donker {
   --voorbeeld: #8c8b86;
   --oranje-tekst: #db6923;
   color-scheme: dark;
+}
+/* Bosgroen vlak: de donkere tokens op bosgroen, samen met .donker (de voet,
+   10 okt 2026). Gedempt wordt salie, want #a9a8a3 haalt op bosgroen geen 4,5:1. */
+.bos-vlak {
+  --grond: var(--bos);
+  --vlak: #2d5646;
+  --gedempt: var(--salie);
+  --lijn: rgba(239, 238, 234, 0.2);
 }
 html.contrast { --gedempt: var(--inkt); --lijn: currentColor; }
 html.groot { font-size: 115%; }
@@ -193,3 +203,28 @@ html[data-assistent="praat"] .kern { animation: kern-adem 1.2s ease-in-out infin
 html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranje); stroke-opacity: .7; }
 @keyframes kern-adem { 50% { transform: scale(1.015); } }
 @media (prefers-reduced-motion: reduce) { html[data-assistent] .kern { animation: none; } }
+
+/* De worm in de voet (10 okt 2026, naar grnfix): de voet is de grond, en
+   eens in de veertien seconden steekt een regenworm daar zijn kop uit, als
+   silhouet in hetzelfde bosgroen. Het vak knipt alles onder de rand weg. */
+.worm {
+  position: absolute;
+  bottom: 100%;
+  left: 72%;
+  width: 64px;
+  height: 44px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.worm svg { display: block; transform: translateY(100%); animation: worm-op 14s ease-in-out infinite; }
+.worm path { fill: none; stroke: var(--bos); stroke-width: 8; stroke-linecap: round; }
+.worm .worm-ring { stroke: var(--salie); stroke-width: 8; stroke-linecap: butt; stroke-dasharray: 1.2 5; opacity: 0.35; }
+@keyframes worm-op {
+  0%, 55%, 100% { transform: translateY(100%); }
+  64% { transform: translateY(8%) rotate(-4deg); }
+  72% { transform: translateY(4%) rotate(5deg); }
+  80% { transform: translateY(6%) rotate(-2deg); }
+  90% { transform: translateY(100%); }
+}
+@media (prefers-reduced-motion: reduce) { .worm svg { animation: none; transform: translateY(10%); } }
+html.stil .worm svg { transform: translateY(10%); }

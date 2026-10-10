@@ -489,8 +489,15 @@ html.stil .vp-zwerf {
 
 /* ── Nu in de maand (9 okt 2026, naar chrisjanssenstein.com) ─────────────── */
 .vp-maand {
-  background: var(--vlak);
+  /* salie, de lichtste groen uit de gids (10 okt 2026); gedempt donkerder
+     zodat de labels 4,5:1 halen. In Donker wordt het bosgroen. */
+  --gedempt: #474a43;
+  background: var(--salie);
   padding-block: clamp(40px, 6vw, 72px);
+}
+.donker .vp-maand {
+  --gedempt: var(--salie);
+  background: var(--bos);
 }
 .vp-maand h2 {
   margin: 0 0 20px;
