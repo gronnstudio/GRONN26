@@ -130,12 +130,13 @@ h1[tabindex="-1"]:focus-visible {
   outline: none;
 }
 
-/* De komeet om de pil (uit gronn.studio, stiller): een dunne oranje boog
-   die in tien seconden rondgaat. Puur versiering. */
-.komeet { position: absolute; inset: 0; border-radius: 9999px; padding: 1px; overflow: hidden; pointer-events: none; opacity: .7;
+/* De komeet om de pil (uit gronn.studio, stiller): een oranje boog die in
+   tien seconden rondgaat; sinds 10 okt 2026 langer en iets dikker (eigenaar:
+   "maak de ember boog om de pil breder"). Puur versiering. */
+.komeet { position: absolute; inset: 0; border-radius: 9999px; padding: 1.5px; overflow: hidden; pointer-events: none; opacity: .9;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
 .komeet::before { content: ""; position: absolute; top: 50%; left: 50%; width: 150%; aspect-ratio: 1;
-  background: conic-gradient(transparent 0turn .84turn, #db6923 .95turn, transparent .99turn);
+  background: conic-gradient(transparent 0turn .6turn, #db6923 .94turn, transparent .99turn);
   transform: translate(-50%, -50%); animation: komeet 10s linear infinite; }
 @keyframes komeet { to { transform: translate(-50%, -50%) rotate(1turn); } }
 
