@@ -130,15 +130,16 @@ h1[tabindex="-1"]:focus-visible {
   outline: none;
 }
 
-/* De komeet om de pil (uit gronn.studio, stiller): één oranje boog van vaste
-   lengte die in tien seconden langs de rand rondloopt. Een streep op de rand
-   in plaats van een draaiend kegelverloop, zodat hij ook in de smalle pil één
-   boog blijft (eigenaar, 10 okt 2026: "langer", daarna "klopt niet meer").
-   Puur versiering; de vorm zit in komeet.tsx. */
+/* De komeet om de pil: een felle oranje kop met een staart die uitdooft, in
+   tien seconden langs de rand. Gestapelde streepjes op de rand in plaats van
+   een draaiend kegelverloop, zodat hij ook in de smalle pil één komeet blijft
+   (eigenaar, 10 okt 2026: "langer", "klopt niet meer", "weer een komeet ☄️").
+   Puur versiering; de staart zit in komeet.tsx. */
 .komeet { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 .komeet svg { display: block; overflow: visible; }
-.komeet rect { fill: none; stroke: #db6923; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: .22 .78; opacity: .9;
+.komeet rect { fill: none; stroke: #db6923; stroke-width: 1.5; stroke-linecap: round; opacity: .32;
   animation: komeet 10s linear infinite; }
+.komeet rect:first-child { stroke-width: 2.5; opacity: .9; }
 @keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
