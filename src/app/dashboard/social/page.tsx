@@ -37,16 +37,24 @@ function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepos
         <>
           <ul className="m-0 mt-4 flex list-none gap-2 overflow-x-auto p-0">
             {Array.from({ length: p.slides ?? 1 }, (_, i) => (
-              <li key={i} className="shrink-0">
+              <li key={i} className="relative shrink-0">
                 <a href={beeld(p, i + 1)} target="_blank" rel="noopener" title="Openen">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={beeld(p, i + 1)} alt={`Slide ${i + 1}`} loading="lazy" className="h-[150px] w-[120px] rounded-[10px] object-cover" />
+                </a>
+                <a
+                  href={beeld(p, i + 1)}
+                  download={`${p.map}-${i + 1}.jpg`}
+                  className="absolute bottom-1.5 right-1.5 flex size-[36px] items-center justify-center rounded-full bg-[#202020]/80 text-[16px] font-bold text-white"
+                >
+                  <span aria-hidden>↓</span>
+                  <span className="sr-only">Download slide {i + 1}</span>
                 </a>
               </li>
             ))}
           </ul>
           <p className="m-0 mt-1 text-[11px] opacity-50">
-            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te openen, houd hem dan vast om te bewaren."}
+            {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te openen, of op ↓ om hem te downloaden."}
             {p.reel && (
               <a href={`/social/${p.map}/reel.mp4`} target="_blank" rel="noopener" className="font-semibold text-oranje-tekst opacity-100">
                 Open de reel ↗
