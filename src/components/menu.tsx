@@ -20,7 +20,8 @@ import { useTaal } from "./taal-klant"
 // - rechtsonder de ronde pijl (omlaag bovenaan, omhoog tijdens het lezen) die
 //   omkeert met de grond eronder: oranje op donker, antraciet op licht.
 // Op de telefoon draagt elk woord een lijnicoon met een klein label eronder
-// (eigenaar, 5 okt 2026); vanaf 1024px blijft het tekst.
+// (eigenaar, 5 okt 2026; zichtbaar en heel klein sinds 10 okt 2026, "zonder
+// menu te veranderen": de pil blijft even hoog); vanaf 1024px blijft het tekst.
 const MENU = [
   { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
   { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
@@ -92,16 +93,16 @@ export function Menu() {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
               <li key={m.href} className="flex max-lg:min-w-0 max-lg:flex-1">
-                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} max-lg:h-10 max-lg:w-full max-lg:flex-col max-lg:justify-center max-lg:gap-[4px] max-lg:px-1.5 max-lg:py-0 lg:px-3.5 lg:text-[13px] xl:px-5 ${RUST}`}>
-                  <svg viewBox="0 0 22 22" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="lg:hidden">
+                <Link href={m.href} aria-current={actief ? "page" : undefined} className={`${ITEM} max-lg:h-10 max-lg:w-full max-lg:flex-col max-lg:justify-center max-lg:gap-[3px] max-lg:px-1.5 max-lg:py-0 lg:px-3.5 lg:text-[13px] xl:px-5 ${RUST}`}>
+                  <svg viewBox="0 0 22 22" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" className="lg:hidden">
                     <path d={m.icoon} />
                   </svg>
-                  <span className="max-lg:sr-only"><T t={m.label} /></span>
+                  <span className="max-lg:text-[9px] max-[380px]:text-[8px] max-lg:leading-[10px] max-lg:font-medium max-lg:tracking-normal max-lg:normal-case"><T t={m.label} /></span>
                 </Link>
               </li>
             )
           })}
-          <li className="flex max-lg:min-w-0 max-lg:flex-1">
+          <li className="flex max-lg:min-w-0 max-lg:flex-[1.3]">
             <Weergave knopKlasse="text-gebroken-wit hover:bg-gebroken-wit hover:text-antraciet aria-expanded:bg-gebroken-wit aria-expanded:text-antraciet" />
           </li>
         </ul>
