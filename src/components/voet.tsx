@@ -22,7 +22,7 @@ const PAGINAS: [string, Tekst][] = [
 export function Voet() {
   const a = BUSINESS.address
   return (
-    <footer className="donker bos-vlak relative border-t border-lijn mt-[clamp(40px,12vw,180px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
+    <footer className="donker bos-vlak relative border-t border-lijn mt-[clamp(210px,17vw,250px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
       {/* de voet is het water van een vijver (eigenaar, 10 okt 2026: eigen beeld in plaats van de worm van grnfix):
           lisdodde aan de rand, twee lelibladen met een kring in het water ertussen; stil bij minder beweging */}
       <span className="lisdodde" aria-hidden>
