@@ -14,7 +14,9 @@
      afwisselende vlak, mos = het botanische accent. */
   /* Aards (proef, 11 okt 2026, eigenaar: "the nature like earthy theme
      from grova with the beige and green"): zand als grond, een donkerder
-     zand voor vlakken en kaarten, olijfgroen als het diepe groen. */
+     zand voor vlakken en kaarten. Geen bosgroen of salie (eigenaar, 11 okt
+     2026: "ik hou niet van dat bosgroen, salie"): de diepe kleur is aarde,
+     de bijkleuren zijn klei en donker zand. */
   --grond: #f6f2e9;
   --inkt: #2b2a24;
   --gedempt: #615a4c;
@@ -24,9 +26,9 @@
   --voorbeeld: #8a8272;
   --oranje: #db6923;
   --oranje-tekst: #a14312;
-  --bos: #273623;
-  --mos: #526747;
-  --salie: #b8c5a8;
+  --bos: #2b2a24;
+  --mos: #6f6553;
+  --salie: #cbbfa8;
   --goot: clamp(20px, 4vw, 56px);
   /* Eén paginabreedte voor alles (uitlijning, 9 okt 2026): tekst, voet en
      menu-hoeken staan op dezelfde lijn. --breedte is de kolom inclusief de
@@ -53,13 +55,13 @@ html.donker, .donker {
   /* Material: #121212 als basis, hoogte als lichter grijs (1dp kaarten
      #1e1e1e, 2dp vlak #222222), tekst 87 % en 60 % wit, randen 12 % wit,
      accenten minder verzadigd. */
-  --grond: #273623;
+  --grond: #1d1b18;
   --inkt: #ece6da;
-  --gedempt: #c9c2b0;
-  --lijn: #3f5238;
-  --vlak: #33452d;
-  --veld: #2e3e29;
-  --mos: #a5b58d;
+  --gedempt: #b9b1a1;
+  --lijn: #3a362f;
+  --vlak: #2f2b25;
+  --veld: #27241f;
+  --mos: #b7a98f;
   --voorbeeld: #9d9a8a;
   /* Accent minder verzadigd op donker (Material): het oranje vlak en de
      oranje tekst worden lichter en zachter; antraciet blijft erop leesbaar. */
@@ -71,7 +73,7 @@ html.donker, .donker {
    10 okt 2026). Gedempt wordt salie, want #a9a8a3 haalt op bosgroen geen 4,5:1. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #33452d;
+  --vlak: #36342d;
   --gedempt: var(--salie);
   --lijn: rgba(239, 238, 234, 0.2);
 }
