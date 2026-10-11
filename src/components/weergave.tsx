@@ -37,6 +37,20 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
   ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
 ];
 
+// Muziek (eigenaar, 11 okt 2026, naar Grova): staat uit, speelt pas na een
+// tik zacht in een lus en wordt niet bewaard, zodat de site nooit vanzelf
+// geluid maakt. Eén speler voor de hele site.
+let speler: HTMLAudioElement | null = null;
+function muziek(aan: boolean) {
+  if (!speler) {
+    speler = new Audio("/muziek/achtergrond.mp3");
+    speler.loop = true;
+    speler.volume = 0.35;
+  }
+  if (aan) speler.play().catch(() => {});
+  else speler.pause();
+}
+
 function pasToe(s: Stand) {
   const c = document.documentElement.classList;
   // Auto volgt de instelling van het toestel, zoals Apple en Material het
@@ -61,6 +75,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   const taal = useTaal();
   const [gereed, setGereed] = useState(false);
   const [stand, setStand] = useState<Stand>(STANDAARD);
+  const [speelt, setSpeelt] = useState(false);
   const paneel = useRef<HTMLDivElement>(null);
   const knop = useRef<HTMLButtonElement>(null);
 
@@ -210,6 +225,19 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                 <T t={{ nl: "Auto: volgt de instelling van je telefoon of computer.", en: "Auto: follows your phone or computer setting." }} />
               </p>
             </fieldset>
+            <label className="mb-4 flex cursor-pointer items-center justify-between gap-3 border-y border-lijn py-2.5">
+              <span><T t={{ nl: "Muziek", en: "Music" }} /></span>
+              <input
+                type="checkbox"
+                role="switch"
+                checked={speelt}
+                onChange={(e) => {
+                  setSpeelt(e.target.checked);
+                  muziek(e.target.checked);
+                }}
+                className="size-5 cursor-pointer accent-[var(--inkt)]"
+              />
+            </label>
             <fieldset className="m-0 border-0 p-0">
               <legend className="lbl mb-2.5 p-0 opacity-70">
                 <T t={{ nl: "Toegankelijkheid", en: "Accessibility" }} />
@@ -232,7 +260,11 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
             </fieldset>
             <button
               type="button"
-              onClick={() => zet(STANDAARD)}
+              onClick={() => {
+                zet(STANDAARD);
+                setSpeelt(false);
+                muziek(false);
+              }}
               className="lbl mt-3 cursor-pointer border-b border-current"
             >
               <T t={{ nl: "Standaard herstellen", en: "Restore defaults" }} />
