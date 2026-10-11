@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
