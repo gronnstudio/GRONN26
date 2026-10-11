@@ -10,6 +10,9 @@ export default defineConfig({
   reporter: process.env.CI ? "github" : "list",
   use: {
     baseURL: "http://localhost:3210",
+    // De service worker staat niet onder test; op CI liet hij een tweede goto
+    // af en toe hangen (ERR_ABORTED na 30 s), 11 okt 2026.
+    serviceWorkers: "block",
     ...(process.env.CI ? {} : { launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM || "/opt/pw-browsers/chromium" } }),
   },
   webServer: {
