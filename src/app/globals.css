@@ -103,6 +103,12 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --font-mono: var(--font-montserrat), sans-serif;
 }
 
+/* Niets steekt opzij uit en de pagina zoomt niet (eigenaar, 11 okt 2026):
+   clip in plaats van hidden, zodat sticky blijft werken; pan-x pan-y laat
+   alleen scrollen toe, geen knijp- of dubbeltikzoom. */
+html, body { overflow-x: clip; }
+html { touch-action: pan-x pan-y; }
+
 body {
   margin: 0;
   background: var(--grond);
@@ -121,15 +127,15 @@ body {
 }
 @utility knop {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  height: var(--knop); padding-inline: var(--knop-binnen); border-radius: 9999px;
-  font-family: var(--font-sans); font-size: var(--knop-tekst); font-weight: 700; line-height: 1;
-  letter-spacing: var(--knop-letter); text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer;
+  min-height: var(--knop); max-width: 100%; flex-shrink: 0; padding: 8px var(--knop-binnen); border-radius: 9999px;
+  font-family: var(--font-sans); font-size: var(--knop-tekst); font-weight: 700;
+  letter-spacing: var(--knop-letter); line-height: 1.2; text-align: center; text-transform: uppercase; text-decoration: none; cursor: pointer;
 }
 @utility knop-klein {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  height: var(--knop-klein); padding-inline: var(--knop-binnen-klein); border-radius: 9999px;
-  font-family: var(--font-sans); font-size: var(--knop-tekst-klein); font-weight: 700; line-height: 1;
-  letter-spacing: var(--knop-letter); text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer;
+  min-height: var(--knop-klein); max-width: 100%; flex-shrink: 0; padding: 6px var(--knop-binnen-klein); border-radius: 9999px;
+  font-family: var(--font-sans); font-size: var(--knop-tekst-klein); font-weight: 700;
+  letter-spacing: var(--knop-letter); line-height: 1.2; text-align: center; text-transform: uppercase; text-decoration: none; cursor: pointer;
 }
 @utility sectie { padding-top: clamp(96px, 12vw, 180px); }
 
