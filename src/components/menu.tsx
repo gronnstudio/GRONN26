@@ -80,8 +80,12 @@ export function Menu() {
           {MENU.map((m) => {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
-              <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] max-lg:group-data-[groot]:h-[var(--knop)] max-lg:group-data-[groot]:max-w-[var(--knop)] place-items-center rounded-full transition-[background-color,color,height,max-width] duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+              // vaste rondjes, verdeeld met justify-between: het eerste en laatste
+              // rondje liggen zo concentrisch in de ronding van de pil, met de
+              // padding als rand rondom (eigenaar, 11 okt 2026: "de cirkel sluit
+              // niet netjes aan op de ronding")
+              <li key={m.href} className="flex min-w-0 justify-center">
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop-klein)] max-lg:group-data-[groot]:size-[var(--knop)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:size-[32px]">
                     <path d={m.icoon} />
                   </svg>

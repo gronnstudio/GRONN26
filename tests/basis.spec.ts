@@ -85,6 +85,13 @@ test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij wee
     await expect(weergave).toBeHidden()
     await expect(omhoog).toBeHidden()
     const breed = (await nav.boundingBox())!
+    if (b < 1024) {
+      // het eerste en laatste rondje liggen concentrisch in de ronding: even ver van de zijkant als van boven
+      const links = nav.getByRole("link")
+      const [l, r] = await Promise.all([links.first().boundingBox(), links.last().boundingBox()])
+      expect(Math.round(l!.x - breed.x)).toBe(Math.round(l!.y - breed.y))
+      expect(Math.round(breed.x + breed.width - r!.x - r!.width)).toBe(Math.round(r!.y - breed.y))
+    }
     await page.mouse.wheel(0, 600)
     await expect(omhoog).toBeVisible()
     await expect(weergave).toBeVisible()
