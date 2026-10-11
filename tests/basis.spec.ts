@@ -167,10 +167,12 @@ test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ p
   expect(body).toContain("Pakket: Plukborder")
 })
 
-test("tikvlak: tekstlinks, kleine knoppen en voetlinks raken op minstens --raak (44px)", async ({ page }) => {
-  await zonderIntro(page)
-  await page.setViewportSize({ width: 390, height: 900 })
-  for (const route of ["/", "/over"]) {
+// Elke route een eigen test (en dus een verse pagina): twee keer achter elkaar
+// goto op één pagina brak op CI af met ERR_ABORTED na de voorpagina.
+for (const route of ["/", "/over"]) {
+  test(`tikvlak ${route}: tekstlinks, kleine knoppen en voetlinks raken op minstens --raak (44px)`, async ({ page }) => {
+    await zonderIntro(page)
+    await page.setViewportSize({ width: 390, height: 900 })
     await page.goto(route, { waitUntil: "domcontentloaded" })
     const te_klein = await page.evaluate(() =>
       [...document.querySelectorAll<HTMLElement>(".lnk, .raak, .knop-klein")]
@@ -179,5 +181,5 @@ test("tikvlak: tekstlinks, kleine knoppen en voetlinks raken op minstens --raak 
         .filter((r) => r.h < 43.5),
     )
     expect(te_klein, route).toEqual([])
-  }
-})
+  })
+}
