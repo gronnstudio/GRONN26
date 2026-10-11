@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { toon } from "@/lib/geluid";
 import { T, type Tekst } from "@/components/taal";
 import { useTaal } from "@/components/taal-klant";
 
@@ -16,7 +15,6 @@ type Stand = {
   groot: boolean;
   contrast: boolean;
   onderstreep: boolean;
-  geluid: boolean;
 };
 const KEY = "gronn-weergave";
 const STANDAARD: Stand = {
@@ -26,7 +24,6 @@ const STANDAARD: Stand = {
   groot: false,
   contrast: false,
   onderstreep: false,
-  geluid: false,
 };
 const KLEUREN: Record<Stand["kleur"], Tekst> = {
   auto: "Auto",
@@ -38,7 +35,6 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
   ["groot", { nl: "Grotere tekst", en: "Larger text" }],
   ["contrast", { nl: "Meer contrast", en: "More contrast" }],
   ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
-  ["geluid", { nl: "Geluid bij het doek", en: "Sound with the curtain" }],
 ];
 
 function pasToe(s: Stand) {
@@ -53,7 +49,6 @@ function pasToe(s: Stand) {
   c.toggle("groot", s.groot);
   c.toggle("contrast", s.contrast);
   c.toggle("onderstreep", s.onderstreep);
-  c.toggle("geluid", s.geluid);
   c.toggle("en", s.taal === "en");
   document.documentElement.lang = s.taal;
   try {
@@ -122,7 +117,6 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   const zet = (s: Stand) => {
     setStand(s);
     pasToe(s);
-    if (s.geluid && !stand.geluid) toon(); // meteen laten horen hoe het klinkt
   };
 
   return (
