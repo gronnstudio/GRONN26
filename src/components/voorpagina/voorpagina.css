@@ -169,6 +169,9 @@
   position: absolute;
   margin: 0;
   will-change: transform;
+  /* een zachte schaduw geeft diepte boven het vel (eigenaar, 11 okt 2026) */
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.08), 0 24px 48px -20px rgb(0 0 0 / 0.4);
 }
 .vp-stuk.vp-staand {
   width: 42.5%;
