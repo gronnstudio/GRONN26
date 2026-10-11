@@ -22,14 +22,14 @@ export function Foto({
   className?: string
   priority?: boolean
   /** Water dat rimpelt onder muis of vinger (alleen voor echte vijverfoto's, nooit met label). */
-  rimpel?: boolean
+  rimpel?: boolean | "vanzelf"
 }) {
   const taal = useTaal()
   const alt = taal === "en" && foto.en ? foto.en.alt : foto.alt
   return (
     <div className={`relative overflow-hidden bg-vlak ${className}`}>
       <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover [filter:saturate(.88)_contrast(1.04)_brightness(.98)]" />
-      {rimpel && !foto.label ? <Rimpel src={foto.src} /> : null}
+      {rimpel && !foto.label ? <Rimpel src={foto.src} vanzelf={rimpel === "vanzelf"} /> : null}
       {foto.label ? (
         <span className="lbl absolute top-3 left-3 rounded-full bg-antraciet/85 px-2.5 py-1 text-gebroken-wit"><T t={foto.en?.label ? { nl: foto.label, en: foto.en.label } : foto.label} /></span>
       ) : null}

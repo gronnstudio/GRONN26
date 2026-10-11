@@ -17,6 +17,7 @@ export const F07_1 = v("F07", 0)
 export const F07_2 = v("F07", 1)
 export const F08_1 = v("F08", 0)
 export const F08_2 = v("F08", 1)
+export const F09_2 = v("F09", 1)
 export const F10 = v("F10")
 export const F11 = v("F11")
 export const T01 = TERRAS_FOTOS.hoofd

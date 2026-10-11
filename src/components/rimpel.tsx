@@ -27,7 +27,7 @@ void main(){
   gl_FragColor=vec4(k.rgb+licht,1.);
 }`
 
-export function Rimpel({ src, className = "" }: { src: string; className?: string }) {
+export function Rimpel({ src, className = "", vanzelf = false }: { src: string; className?: string; vanzelf?: boolean }) {
   const doek = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -88,6 +88,8 @@ export function Rimpel({ src, className = "" }: { src: string; className?: strin
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, beeld)
       klaar = true
       maat()
+      // vanzelf: een paar druppels bij het openen, zodat je ziet dat het water leeft
+      if (vanzelf) [[0.32, 0.84], [0.58, 0.9], [0.45, 0.78]].forEach(([x, y], n) => setTimeout(() => druppel(x, y), 500 + n * 450))
     }
 
     const teken = () => {
@@ -105,13 +107,10 @@ export function Rimpel({ src, className = "" }: { src: string; className?: strin
       }
     }
 
-    const raak = (e: PointerEvent) => {
+    const druppel = (x: number, y: number) => {
       if (!klaar || stil()) return
       const t = nu()
-      if (t - laatste < 0.07) return
-      laatste = t
-      const r = vak.getBoundingClientRect()
-      druppels.set([(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height, t], volgende * 3)
+      druppels.set([x, y, t], volgende * 3)
       volgende = (volgende + 1) % MAX
       c.style.transition = "none"
       c.style.opacity = "1"
@@ -119,6 +118,12 @@ export function Rimpel({ src, className = "" }: { src: string; className?: strin
         loopt = true
         requestAnimationFrame(teken)
       }
+    }
+    const raak = (e: PointerEvent) => {
+      if (nu() - laatste < 0.07) return
+      laatste = nu()
+      const r = vak.getBoundingClientRect()
+      druppel((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height)
     }
 
     const ro = new ResizeObserver(() => klaar && maat())
@@ -131,7 +136,7 @@ export function Rimpel({ src, className = "" }: { src: string; className?: strin
       vak.removeEventListener("pointerdown", raak)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
     }
-  }, [src])
+  }, [src, vanzelf])
 
   return (
     <canvas
