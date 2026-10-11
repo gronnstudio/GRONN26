@@ -7,7 +7,7 @@ import { T, type Tekst } from "@/components/taal";
 import { useTaal } from "@/components/taal-klant";
 
 // WF-026: één knop met een regelaar-icoon opent Kleur (Auto · Licht · Donker;
-// Auto = licht van 07.00 tot 19.00) en Toegankelijkheid. Bewaard in deze
+// Auto = de instelling van het toestel) en Toegankelijkheid. Bewaard in deze
 // browser; het voorverf-script in layout.tsx past het toe vóór de eerste verf.
 type Stand = {
   kleur: "auto" | "licht" | "donker";
@@ -42,11 +42,12 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
 ];
 
 function pasToe(s: Stand) {
-  const u = new Date().getHours();
   const c = document.documentElement.classList;
+  // Auto volgt de instelling van het toestel, zoals Apple en Material het
+  // voorschrijven (eigenaar, 11 okt 2026), niet meer de klok.
   c.toggle(
     "donker",
-    s.kleur === "donker" || (s.kleur === "auto" && (u < 7 || u >= 19)),
+    s.kleur === "donker" || (s.kleur === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches),
   );
   c.toggle("stil", s.beweging);
   c.toggle("groot", s.groot);
@@ -84,6 +85,15 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
     const t = setTimeout(() => setGereed(true), 0);
     return () => clearTimeout(t);
   }, []);
+  // Zet iemand zijn toestel tijdens het bezoek op licht of donker, dan volgt
+  // Auto meteen.
+  useEffect(() => {
+    if (stand.kleur !== "auto") return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const volg = () => document.documentElement.classList.toggle("donker", mq.matches);
+    mq.addEventListener("change", volg);
+    return () => mq.removeEventListener("change", volg);
+  }, [stand.kleur]);
   useEffect(() => {
     if (!open) return;
     const toets = (e: KeyboardEvent) =>
@@ -203,7 +213,7 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
                 ))}
               </div>
               <p className="mt-2 text-xs opacity-70">
-                <T t={{ nl: "Auto: licht overdag, donker vanaf 19.00 uur.", en: "Auto: light by day, dark from 7 pm." }} />
+                <T t={{ nl: "Auto: volgt de instelling van je telefoon of computer.", en: "Auto: follows your phone or computer setting." }} />
               </p>
             </fieldset>
             <fieldset className="m-0 border-0 p-0">

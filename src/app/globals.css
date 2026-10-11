@@ -58,6 +58,9 @@ html.donker, .donker {
   --veld: #1e1e1e;
   --mos: #a5b58d;
   --voorbeeld: #8c8c8c;
+  /* Accent minder verzadigd op donker (Material): het oranje vlak en de
+     oranje tekst worden lichter en zachter; antraciet blijft erop leesbaar. */
+  --oranje: #e8935a;
   --oranje-tekst: #e8935a;
   color-scheme: dark;
 }
