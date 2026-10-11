@@ -25,7 +25,7 @@ export function Uitgelicht() {
         </figure>
         <figure>
           <ViewTransition name="project-vijverrenovatie" share="morph" default="none">
-            <Foto foto={F10} sizes="(min-width: 768px) 45vw, 50vw" className="vp-voorna-foto" />
+            <Foto foto={F10} sizes="(min-width: 768px) 45vw, 50vw" className="vp-voorna-foto" rimpel />
           </ViewTransition>
           <figcaption className="lbl"><T t={{ nl: "Nu", en: "Now" }} /></figcaption>
         </figure>
