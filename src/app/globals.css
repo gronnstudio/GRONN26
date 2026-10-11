@@ -12,7 +12,7 @@
      van Apple als tweede vlak; tekst in de Material-niveaus (87 % en 60 %
      zwart). Grond = pagina, veld = kaarten en invulvelden, vlak = het
      afwisselende vlak, mos = het botanische accent. */
-  /* Aards (proef, 11 okt 2026, eigenaar: "the nature like earthy theme
+  /* Aards (11 okt 2026, eigenaar: "the nature like earthy theme
      from grova with the beige and green"): zand als grond, een donkerder
      zand voor vlakken en kaarten. Geen bosgroen of salie (eigenaar, 11 okt
      2026: "ik hou niet van dat bosgroen, salie"): de diepe kleur is aarde,
@@ -53,24 +53,23 @@
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
   /* Material: #121212 als basis, hoogte als lichter grijs (1dp kaarten
-     #1e1e1e, 2dp vlak #222222), tekst 87 % en 60 % wit, randen 12 % wit,
-     accenten minder verzadigd. */
-  --grond: #1d1b18;
-  --inkt: #ece6da;
-  --gedempt: #b9b1a1;
-  --lijn: #3a362f;
-  --vlak: #2f2b25;
-  --veld: #27241f;
+     #1e1e1e, 2dp vlak #222222), tekst 87 % en 60 % wit, randen 12 % wit. */
+  --grond: #121212;
+  --inkt: #e0e0e0;
+  --gedempt: #a0a0a0;
+  --lijn: #2e2e2e;
+  --vlak: #222222;
+  --veld: #1e1e1e;
   --mos: #b7a98f;
-  --voorbeeld: #9d9a8a;
-  /* Accent minder verzadigd op donker (Material): het oranje vlak en de
-     oranje tekst worden lichter en zachter; antraciet blijft erop leesbaar. */
-  --oranje: #eba06c;
-  --oranje-tekst: #eba06c;
+  --voorbeeld: #8c8c8c;
+  /* Het oranje blijft op donker even vol als op licht (eigenaar, 11 okt
+     2026: "oranje heb je vervaagt, dat wil ik niet"). */
+  --oranje: #db6923;
+  --oranje-tekst: #db6923;
   color-scheme: dark;
 }
-/* Bosgroen vlak: de donkere tokens op bosgroen, samen met .donker (de voet,
-   10 okt 2026). Gedempt wordt salie, want #a9a8a3 haalt op bosgroen geen 4,5:1. */
+/* Donker aardevlak (de voet; heette bosgroen tot 11 okt 2026): de donkere
+   tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
   --vlak: #36342d;
