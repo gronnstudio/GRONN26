@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Syne, Montserrat } from "next/font/google"
 import { Kop } from "@/components/kop"
 import { Menu } from "@/components/menu"
@@ -33,6 +33,11 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 }
 
+// Niet in- of uitzoomen (eigenaar, 11 okt 2026). iOS Safari negeert
+// user-scalable, daarom houdt ZOOMSLOT daar het knijpgebaar tegen.
+export const viewport: Viewport = { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false }
+const ZOOMSLOT = `document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false})`
+
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
 const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',d=k==='donker'||(k==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches),c=document.documentElement.classList;c.toggle('donker',d);c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
@@ -43,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
         <script dangerouslySetInnerHTML={{ __html: INTRO_VOORVERF }} />
+        <script dangerouslySetInnerHTML={{ __html: ZOOMSLOT }} />
       </head>
       <body>
         <Kop />

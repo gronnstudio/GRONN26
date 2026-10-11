@@ -156,7 +156,7 @@ export default function Merk() {
             <span className="w-[30%] bg-[#202020]" />
             <span className="w-[10%] bg-[#DB6923]" />
           </div>
-          <ul className="grid list-none grid-cols-2 gap-3 p-0 md:grid-cols-4">
+          <ul className="grid list-none grid-cols-1 gap-3 p-0 min-[400px]:grid-cols-2 md:grid-cols-4">
             {KLEUREN.map((k, i) => (
               <li key={k.hex} className="overflow-hidden rounded-2xl ring-1 ring-lijn" data-zie style={{ "--i": i % 4 } as CSSProperties}>
                 <div className="h-24" style={{ background: k.hex }} />
