@@ -52,16 +52,16 @@
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
-  /* Material: #121212 als basis, hoogte als lichter grijs (1dp kaarten
-     #1e1e1e, 2dp vlak #222222), tekst 87 % en 60 % wit, randen 12 % wit. */
-  --grond: #121212;
-  --inkt: #e0e0e0;
-  --gedempt: #a0a0a0;
-  --lijn: #2e2e2e;
-  --vlak: #222222;
-  --veld: #1e1e1e;
+  /* Warm aardebruin (eigenaar koos "Brown", 11 okt 2026): bruin in plaats
+     van grijs, hoogte als lichter bruin (veld, dan vlak), roomwitte tekst. */
+  --grond: #221c17;
+  --inkt: #f0e9dc;
+  --gedempt: #c8bca8;
+  --lijn: #4a3f33;
+  --vlak: #372e25;
+  --veld: #2e261f;
   --mos: #b7a98f;
-  --voorbeeld: #8c8c8c;
+  --voorbeeld: #9a8e7a;
   /* Het oranje blijft op donker even vol als op licht (eigenaar, 11 okt
      2026: "oranje heb je vervaagt, dat wil ik niet"). */
   --oranje: #db6923;
