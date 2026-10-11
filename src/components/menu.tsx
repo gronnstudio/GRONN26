@@ -68,7 +68,7 @@ export function Menu() {
       <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-groot={boven || undefined} className={`group fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
         boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-96px),calc(var(--goot)+var(--knop)+6px))]"
       }`}>
-        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(22,22,21,.45)] p-[6px] transition-[padding] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:p-[8px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-[6px] backdrop-saturate-[1.8]">
+        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(22,22,21,.45)] p-[6px] [--komeet-r:24px] transition-[padding] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:p-[8px] max-lg:group-data-[groot]:[--komeet-r:32px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-[6px] backdrop-saturate-[1.8]">
           <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -80,8 +80,12 @@ export function Menu() {
           {MENU.map((m) => {
             const actief = pad === m.href || pad.startsWith(m.href + "/")
             return (
-              <li key={m.href} className="flex min-w-0 justify-center max-lg:flex-1">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid h-[var(--knop-klein)] w-[var(--knop-klein)] max-lg:w-full max-lg:max-w-[var(--knop-klein)] max-lg:group-data-[groot]:h-[var(--knop)] max-lg:group-data-[groot]:max-w-[var(--knop)] place-items-center rounded-full transition-[background-color,color,height,max-width] duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+              // vaste rondjes, verdeeld met justify-between: het eerste en laatste
+              // rondje liggen zo concentrisch in de ronding van de pil, met de
+              // padding als rand rondom (eigenaar, 11 okt 2026: "de cirkel sluit
+              // niet netjes aan op de ronding")
+              <li key={m.href} className="flex min-w-0 justify-center">
+                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop-klein)] max-lg:group-data-[groot]:size-[var(--knop)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:size-[32px]">
                     <path d={m.icoon} />
                   </svg>

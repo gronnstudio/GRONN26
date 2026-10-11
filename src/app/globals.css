@@ -147,7 +147,8 @@ h1[tabindex="-1"]:focus-visible {
    De hoeken (24px) horen bij de pil van 48 hoog. Puur versiering. */
 .komeet { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .komeet svg { display: block; overflow: visible; }
-.komeet rect { rx: 24px; ry: 24px; fill: none; stroke: #db6923; stroke-width: 1.5; animation: komeet 6s linear infinite; }
+/* de komeet volgt de ronding van de pil: de helft van zijn hoogte (24 klein, 32 groot; menu.tsx zet --komeet-r) */
+.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #db6923; stroke-width: 1.5; animation: komeet 6s linear infinite; }
 @keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
@@ -265,8 +266,6 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 .leliblad-klein { top: 20px; left: calc(50% + 100px); animation-duration: 9s; animation-delay: -4s; }
 .leliblad path { fill: var(--mos); }
 .leliblad .bloem { fill: var(--salie); }
-html.donker .lisdodde path, html.donker .lisdodde rect { fill: var(--mos); }
-html.donker .lisdodde .steel { fill: none; stroke: var(--mos); }
 @keyframes leli-drijf {
   0%, 100% { transform: translate(0, 0) rotate(0deg); }
   50% { transform: translate(10px, 1px) rotate(1deg); }
