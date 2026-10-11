@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 import { BUSINESS } from "@/lib/business"
 import { VIJVER } from "@/lib/data/vijverrenovatie"
@@ -23,8 +24,7 @@ export default function Links() {
       <h1 className="sr-only">GRØNN Studio · Links</h1>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="col-span-2 flex items-center gap-4 rounded-[6px] bg-antraciet p-5 text-gebroken-wit md:col-span-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/nick/portret-espresso.jpg" alt="Nick Peters" className="size-[72px] shrink-0 rounded-full object-cover" />
+          <Image src="/nick/portret-espresso.jpg" alt="Nick Peters" width={72} height={72} className="size-[72px] shrink-0 rounded-full object-cover" />
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="mb-2 h-[15px] w-auto" />
@@ -41,16 +41,14 @@ export default function Links() {
         <a href={BUSINESS.emailHref} className={TEGEL}><span className="lbl text-gedempt"><T t={{ nl: "Mail", en: "Email" }} /></span><span className={`${NAAM} break-all text-[16px]!`}>{BUSINESS.email}</span></a>
 
         <Link href="/werk/vijverrenovatie" className={`${TEGEL} col-span-2 min-h-[220px] border-0 p-0 text-gebroken-wit! md:row-span-2`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/projecten/vijverrenovatie/F01.jpg" alt="" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+          <Image src="/projecten/vijverrenovatie/F01.jpg" alt="" fill sizes="(min-width: 768px) 380px, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
           <span className="absolute inset-x-0 bottom-0 rounded-b-[6px] bg-gradient-to-t from-black/75 to-transparent p-5 pt-16">
             <span className="lbl block opacity-80"><T t={{ nl: "Project · Vijverrenovatie", en: "Project · Pond renovation" }} /></span>
             <span className={`${NAAM} block`}><T t={VIJVER.titel} /></span>
           </span>
         </Link>
         <Link href="/werk/terras-geulle" className={`${TEGEL} col-span-2 min-h-[160px] border-0 p-0 text-gebroken-wit!`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/projecten/terras-geulle/T01.jpg" alt="" className="absolute inset-0 size-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+          <Image src="/projecten/terras-geulle/T01.jpg" alt="" fill sizes="(min-width: 768px) 380px, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
           <span className="absolute inset-x-0 bottom-0 rounded-b-[6px] bg-gradient-to-t from-black/75 to-transparent p-5 pt-16">
             <span className="lbl block opacity-80">Project · Geulle</span>
             <span className={`${NAAM} block`}><T t={TERRAS.titel} /></span>

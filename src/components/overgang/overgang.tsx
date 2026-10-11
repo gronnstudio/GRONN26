@@ -35,6 +35,9 @@ function doelVan(e: MouseEvent): URL | null {
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return null
   const a = (e.target as Element | null)?.closest?.("a")
   if (!a || !a.hasAttribute("href") || a.hasAttribute("download")) return null
+  // Een link met data-morph wisselt zonder doek: de browser laat de foto zelf
+  // naar de nieuwe pagina groeien (View Transition, 11 okt 2026).
+  if (a.hasAttribute("data-morph")) return null
   const target = a.getAttribute("target")
   if (target && target !== "_self") return null
   let url: URL

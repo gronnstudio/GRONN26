@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Syne, Montserrat } from "next/font/google"
 import { Kop } from "@/components/kop"
 import { Menu } from "@/components/menu"
@@ -55,6 +57,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PullToRefresh />
         <WereldBeweging />
         <Overgang />
+        {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
+            Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

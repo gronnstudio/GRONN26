@@ -34,7 +34,7 @@ export function Kop() {
       } ${stand === "terug" ? "bg-grond/85 backdrop-blur-md" : ""}`}
     >
       <div className="wrap flex items-center justify-between py-4">
-        <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"}>
+        <Link href="/" className="raak" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"}>
           <Logo className="h-[18px] w-auto" />
         </Link>
         <Link

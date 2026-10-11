@@ -19,6 +19,8 @@ export function WereldBeweging() {
     const mq = matchMedia("(prefers-reduced-motion: reduce)")
     const stil = () => mq.matches || html.classList.contains("stil")
     const breed = () => innerWidth >= 768
+    // Parallax doet CSS waar dat kan (globals.css); JS alleen als vangnet.
+    const parallaxInCss = CSS.supports("animation-timeline: view()")
     if (!stil()) html.classList.add("w-fx")
 
     const main = document.querySelector("main")
@@ -39,7 +41,7 @@ export function WereldBeweging() {
       lichtLetters(woorden, vh, s, "0.12")
       for (const el of stukken) {
         const v = Number(el.dataset.v)
-        if (s || !v) { el.style.transform = ""; continue }
+        if (s || !v || parallaxInCss) { el.style.transform = ""; continue }
         const r = el.getBoundingClientRect()
         el.style.transform = `translate3d(0,${((r.top + r.height / 2 - vh / 2) * v * (breed() ? 0.065 : 0.04)).toFixed(1)}px,0)`
       }

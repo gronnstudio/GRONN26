@@ -60,6 +60,7 @@ export const PRIVACY: LegalDocument = {
         "Grondslag: uitvoering van een overeenkomst, of stappen die daaraan voorafgaan op jouw verzoek (art. 6 lid 1 sub b AVG).",
         "Hoe lang: aanvragen waar niets uit voortkomt bewaren wij 30 dagen. Wordt het een opdracht, dan gaan de gegevens over in het klantdossier.",
         "Het kennismakingsformulier stuurt zijn inhoud rechtstreeks vanuit je browser naar FormSubmit (zie hieronder), dat het als e-mail bij ons bezorgt. Een kopie komt in onze eigen afgeschermde opslag bij Vercel, zodat wij je aanvraag kunnen opvolgen; die wordt na 30 dagen automatisch verwijderd.",
+        "Stuur je bij het formulier een foto van je vijver of tuin mee (optioneel), dan verkleint je browser die eerst. Wij bewaren de foto in dezelfde afgeschermde opslag bij Vercel, alleen zichtbaar voor ons, en verwijderen hem na 30 dagen tenzij er een opdracht uit voortkomt. Voor de eerste inschatting die je meteen te zien krijgt, gaat de foto naar Anthropic (Claude), dat er een paar zinnen over schrijft. Anthropic gebruikt die gegevens niet om zijn modellen te trainen.",
         "Liever niet via het formulier? Mail of app ons dan gewoon.",
       ],
     },
@@ -80,9 +81,10 @@ export const PRIVACY: LegalDocument = {
     {
       heading: "Bezoek aan de website",
       body: [
-        "Deze website plaatst geen tracking- of advertentiecookies, gebruikt geen advertentienetwerken en geen bezoekersstatistieken.",
+        "Deze website plaatst geen tracking- of advertentiecookies en gebruikt geen advertentienetwerken.",
+        "Wel tellen wij bezoeken met Vercel Web Analytics en meten wij de laadsnelheid met Vercel Speed Insights. Beide werken zonder cookies en zonder je over websites heen te volgen: ze zien welke pagina wordt bekeken, met wat voor apparaat en uit welk land, en niet wie je bent. Dat is een gerechtvaardigd belang (art. 6 lid 1 sub f AVG): weten welke pagina's werken en of de site snel genoeg is.",
         "Zoals elke host verwerkt Vercel technische verzoekgegevens, waaronder IP-adressen, in serverlogs. Dat is nodig om de site veilig en werkend te leveren.",
-        "Je browser bewaart je eigen voorkeuren lokaal: de kleur en taal die je koos, je instellingen voor tekstgrootte, beweging, contrast, onderstreepte links en geluid, of je de opening al hebt gezien en of je de installatiemelding hebt weggeklikt. Die gegevens verlaten je apparaat niet en vereisen geen toestemming.",
+        "Je browser bewaart je eigen voorkeuren lokaal: de kleur en taal die je koos, je instellingen voor tekstgrootte, beweging, contrast, onderstreepte links en geluid, en of je de opening al hebt gezien. Die gegevens verlaten je apparaat niet en vereisen geen toestemming.",
         "Bezoekers krijgen geen cookies. Alleen de eigenaar zet bij het inloggen in het beheergedeelte één noodzakelijk cookie om ingelogd te blijven.",
       ],
     },
@@ -92,7 +94,8 @@ export const PRIVACY: LegalDocument = {
       heading: "Met wie wij gegevens delen",
       body: [
         "Wij verkopen je gegevens niet en delen ze niet voor commerciële doelen van anderen. Wij schakelen wel partijen in die voor ons gegevens verwerken:",
-        "· **Vercel Inc.** — hosting van de website en afgeschermde opslag van aanvragen.",
+        "· **Vercel Inc.** — hosting van de website, afgeschermde opslag van aanvragen en foto's, en de bezoekers- en snelheidsmeting zonder cookies.",
+        "· **Anthropic PBC** — de eerste inschatting van een foto die je bij het formulier meestuurt.",
         "· **FormSubmit (formsubmit.co)** — bezorgt de ingevulde formuliervelden per e-mail bij ons. Het formulier post rechtstreeks vanuit je browser naar deze dienst.",
         "· **Google (Google Workspace)** — onze mailbox, agenda en bestandsopslag.",
         "· **DigiBoox** — offertes, facturen en boekhouding.",

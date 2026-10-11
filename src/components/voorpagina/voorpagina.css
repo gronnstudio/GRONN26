@@ -37,10 +37,15 @@
   position: sticky;
   top: max(24px, 7.5vw);
   z-index: 3;
-  text-align: center;
-  margin: 0;
-  font-size: 14vw;
-  line-height: 1.2;
+  /* links op de lijn van de rest van de site, zoals de kop op elke andere pagina */
+  text-align: left;
+  margin: 0 var(--rand);
+  /* de kop is de zin zelf (11 okt 2026), niet meer het woordmerk */
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 120px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
   mix-blend-mode: difference;
   color: #efeeea;
   pointer-events: none;
@@ -49,6 +54,9 @@
   display: block;
   overflow: hidden;
   padding-inline: 0.04em;
+}
+.vp-held-titel .vp-r {
+  padding-block: 0.06em; /* ruimte voor de staarten van j en g */
 }
 .vp-w {
   display: inline-block;
@@ -66,7 +74,7 @@
 .vp-held-foto {
   position: relative;
   z-index: 1;
-  margin-top: calc(707 / 1440 * 100% - 108px - 2 * 14vw * 1.2);
+  margin-top: clamp(48px, 6vw, 96px);
   transform: scale(var(--s, 0.7));
   transform-origin: 50% 0;
   will-change: transform;
@@ -124,6 +132,40 @@
   font-family: var(--font-sans);
   letter-spacing: 0.12em;
   color: inherit;
+}
+
+/* 2b · echt werk: de vijverrenovatie als ervoor en nu (11 okt 2026) */
+.vp-project {
+  padding: clamp(96px, 12vw, 180px) var(--vp-rand) 0;
+}
+.vp-project h2 {
+  margin: 16px 0 clamp(32px, 4vw, 56px);
+  max-width: 18ch;
+  font-size: clamp(32px, 4.4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+.vp-voorna {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 2vw, 32px);
+  color: inherit;
+  text-decoration: none;
+}
+.vp-voorna figure {
+  margin: 0;
+}
+.vp-voorna .vp-voorna-foto {
+  aspect-ratio: 4 / 5;
+  border-radius: 6px;
+}
+.vp-voorna figcaption {
+  margin-top: 12px;
+  color: var(--gedempt);
+}
+.vp-project .vp-meer {
+  display: inline-block;
+  margin-top: 32px;
 }
 
 /* 3 · reuzenwoord dat opzij schuift, met de fotocollage eroverheen */
@@ -195,7 +237,10 @@
      doorschuift */
   .vp-held-titel {
     top: 72px;
-    font-size: 15vw;
+    font-size: 11vw;
+  }
+  .vp-held-titel .vp-w {
+    text-wrap: balance;
   }
   .vp-held-foto {
     margin: 32px 0 0;

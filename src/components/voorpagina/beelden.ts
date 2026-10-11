@@ -2,7 +2,7 @@ import { TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { fotosVoor, type Foto, type FotoId } from "@/lib/data/vijverrenovatie"
 
 // De foto's van de voorpagina, uit de projectdata maar zonder projectnaam of
-// link: op de voorpagina staat geen werk (eigenaar, 4 okt 2026).
+// link; het uitgelichte project (uitgelicht.tsx) staat er sinds 11 okt 2026 apart boven.
 const v = (id: FotoId, n = 0): Foto => {
   const f = fotosVoor(id)[n]
   if (!f) throw new Error(`Foto ontbreekt: ${id}-${n + 1}`)
@@ -10,10 +10,12 @@ const v = (id: FotoId, n = 0): Foto => {
 }
 
 export const F01 = v("F01")
+export const F02_2 = v("F02", 1)
 export const F04_2 = v("F04", 1)
 export const F05 = v("F05")
 export const F07_1 = v("F07", 0)
 export const F07_2 = v("F07", 1)
+export const F08_1 = v("F08", 0)
 export const F08_2 = v("F08", 1)
 export const F10 = v("F10")
 export const F11 = v("F11")

@@ -39,6 +39,8 @@ const OUD: [string, string][] = [
 ]
 
 const nextConfig: NextConfig = {
+  // Foto's als AVIF waar de browser dat kan (kleiner bij dezelfde scherpte), anders WebP.
+  images: { formats: ["image/avif", "image/webp"] },
   // De wireframes zijn werkmateriaal: nooit in zoekmachines.
   async headers() {
     return [{ source: "/wireframes/:pad*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }]

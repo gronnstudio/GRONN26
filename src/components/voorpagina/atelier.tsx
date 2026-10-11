@@ -4,16 +4,13 @@ import { Foto } from "@/components/foto";
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie";
 import { Beide, T, type Tekst } from "@/components/taal";
 import type { L } from "@/lib/i18n";
-import { F01, F04_2, F05, F07_1, F08_2, F10, F11, T01, T02 } from "./beelden";
+import { F01, F04_2, F05, F07_1, F08_1, F08_2, F11, T01, T02 } from "./beelden";
+import { Uitgelicht } from "./uitgelicht";
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
 // van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
 // JS of met minder beweging staat alles stil en is alles zichtbaar.
 
-export const KOP: L = {
-  nl: "Een vijver en tuin die gezond blijven.",
-  en: "A pond and garden that stay healthy.",
-};
 export const ZIN: L = {
   nl: "Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.",
   en: "I’m Nick. I renovate and maintain ponds and build natural gardens, for homeowners in Stein and the surrounding area. Where possible with a fixed price agreed up front.",
@@ -59,6 +56,21 @@ function Woorden({ tekst }: { tekst: Tekst }) {
   );
 }
 
+function KopRegels({ regels }: { regels: string[] }) {
+  return (
+    <>
+      <span className="sr-only">{regels.join(" ")}</span>
+      {regels.map((r, n) => (
+        <span key={n} className="vp-r" aria-hidden="true">
+          <span className="vp-w" style={i(n)}>
+            {r}
+          </span>
+        </span>
+      ))}
+    </>
+  );
+}
+
 type Stuk = {
   foto: FotoData;
   vorm: "staand" | "vierkant" | "liggend";
@@ -71,7 +83,7 @@ type Stuk = {
 const COLLAGE_A: Stuk[] = [
   { foto: F01, vorm: "staand", v: 0.5, top: "0", left: "0%" },
   { foto: T02, vorm: "vierkant", v: 3, top: "10.61%", left: "56.74%" },
-  { foto: F10, vorm: "liggend", v: 0, top: "39.21%", left: "20.83%" },
+  { foto: F08_1, vorm: "liggend", v: 0, top: "39.21%", left: "20.83%" },
   { foto: F05, vorm: "staand", v: 0.5, top: "70.51%", left: "52.5%" },
 ];
 const COLLAGE_B: Stuk[] = [
@@ -108,18 +120,14 @@ export function Atelier() {
   return (
     <div className="vp-atelier">
       <section className="vp-held" aria-labelledby="kop">
-        <p className="vp-held-titel vp-licht" aria-hidden="true">
-          <span className="vp-r">
-            <span className="vp-w" style={i(0)}>
-              GRØNN
-            </span>
-          </span>
-          <span className="vp-r">
-            <span className="vp-w" style={i(1)}>
-              Studio
-            </span>
-          </span>
-        </p>
+        {/* De kop zegt meteen wat ik doe (11 okt 2026); het woordmerk staat al
+            in de menubalk. Twee regels die elk van onder opkomen. */}
+        <h1 id="kop" className="vp-held-titel">
+          <Beide
+            nl={<KopRegels regels={["Een vijver en tuin", "die gezond blijven."]} />}
+            en={<KopRegels regels={["A pond and garden", "that stay healthy."]} />}
+          />
+        </h1>
         <p className="lbl vp-lbl-tel">
           <T t={LABEL} />
         </p>
@@ -136,13 +144,10 @@ export function Atelier() {
         </p>
       </section>
 
-      <section className="vp-onthul" data-onthul aria-labelledby="kop">
+      <div className="vp-onthul" data-onthul>
         <p className="sr-only">
           <T t={LABEL} />
         </p>
-        <h1 id="kop">
-          <Woorden tekst={KOP} />
-        </h1>{" "}
         <p>
           <Woorden
             tekst={{
@@ -155,7 +160,9 @@ export function Atelier() {
         <Link className="lnk vp-meer" href="/over">
           <T t={{ nl: "Meer over mij →", en: "More about me →" }} />
         </Link>
-      </section>
+      </div>
+
+      <Uitgelicht />
 
       <section className="vp-vel" aria-label="Foto's">
         <p className="vp-reuswoord vp-licht" aria-hidden="true">

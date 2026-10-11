@@ -49,6 +49,7 @@
   --knop-letter: 0.06em;
   --knop-binnen: 24px;       /* ruimte links en rechts van de tekst */
   --knop-binnen-klein: 14px;
+  --raak: 44px;              /* minimale tikhoogte van elke link en knop; kleiner oogt, groter raakt (11 okt 2026) */
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
@@ -130,6 +131,21 @@ body {
   height: var(--knop-klein); padding-inline: var(--knop-binnen-klein); border-radius: 9999px;
   font-family: var(--font-sans); font-size: var(--knop-tekst-klein); font-weight: 700; line-height: 1;
   letter-spacing: var(--knop-letter); text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+/* Tikvlak (11 okt 2026): tekstlinks, kleine knoppen en de links in de voet
+   ogen klein maar raken op var(--raak) hoog. Een onzichtbare laag erachter
+   groeit boven en onder tot die hoogte; de opmaak verandert niet. In de
+   base-laag, zodat een positie-utility (fixed, absolute) altijd wint. */
+@layer base {
+  .lnk, .raak, .knop-klein { position: relative; }
+  .lnk::after, .raak::after, .knop-klein::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: min(0px, calc((100% - var(--raak)) / 2));
+    bottom: min(0px, calc((100% - var(--raak)) / 2));
+  }
 }
 @utility sectie { padding-top: clamp(96px, 12vw, 180px); }
 
@@ -294,3 +310,46 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 }
 @media (prefers-reduced-motion: reduce) { .lisdodde g, .leliblad { animation: none; } .kring { display: none; } }
 html.stil .kring { display: none; }
+
+/* View Transition (11 okt 2026): een projectfoto groeit van Werk naar de
+   grote foto bovenaan de projectpagina. Zonder ondersteuning wisselt de
+   pagina gewoon; met minder beweging ook. */
+::view-transition-group(.morph) {
+  animation-duration: 550ms;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Parallax in CSS (11 okt 2026): [data-v] schuift mee met een scroll-driven
+   animatie op de compositor in plaats van met JavaScript per scrollframe.
+   Zelfde rekensom als de JS (afstand tot het midden × v × 0,04 of 0,065);
+   browsers zonder animation-timeline houden de JS-versie in beweging.tsx. */
+[data-v="0.5"] { --v: 0.5; }
+[data-v="0.6"] { --v: 0.6; }
+[data-v="1"] { --v: 1; }
+[data-v="1.4"] { --v: 1.4; }
+[data-v="1.5"] { --v: 1.5; }
+[data-v="3"] { --v: 3; }
+@keyframes parallax {
+  from { translate: 0 calc((50vh + 50%) * var(--pk)); }
+  to { translate: 0 calc((50vh + 50%) * var(--pk) * -1); }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.stil) [data-v] {
+      --pk: calc(var(--v, 0) * 0.04);
+      animation: parallax linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+    @media (min-width: 768px) {
+      html:not(.stil) [data-v] { --pk: calc(var(--v, 0) * 0.065); }
+    }
+  }
+}

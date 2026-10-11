@@ -4,7 +4,7 @@ import { Foto, GeenFoto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 import { SERVICES, type Service } from "@/lib/data/services"
 import { Beide, T } from "@/components/taal"
-import { F01, F05, F07_2, F10, SFEER_WEIDE, T01 } from "./beelden"
+import { F05, F07_2, F10, T01 } from "./beelden"
 
 // WF-057 (Uncode "Creative Persona"): de diensten als grote namen met kleine
 // nummers; met een muis loopt er een beeld mee, op telefoon/touch staat de
@@ -13,18 +13,13 @@ import { F01, F05, F07_2, F10, SFEER_WEIDE, T01 } from "./beelden"
 
 type Rij = { slug: string; href: "/vijvers" | "/tuinen"; beeld: FotoData | string }
 
-// Volgorde zoals /vijvers en /tuinen. Een string = nog geen passende foto.
+// Alleen de kerndiensten (11 okt 2026, voorpagina korter); alle elf staan op
+// /vijvers en /tuinen. Een string = nog geen passende foto.
 const RIJEN: Rij[] = [
   { slug: "pond-survey", href: "/vijvers", beeld: F07_2 },
   { slug: "water-systems", href: "/vijvers", beeld: F10 },
   { slug: "pond-autumn-service", href: "/vijvers", beeld: F05 },
-  { slug: "leaf-net", href: "/vijvers", beeld: "foto bij Bladnet plaatsen" },
-  { slug: "winterising", href: "/vijvers", beeld: "foto bij Winterklaar maken" },
-  { slug: "maintenance-subscription", href: "/vijvers", beeld: F01 },
-  { slug: "consultancy", href: "/tuinen", beeld: "foto bij Advies op locatie" },
   { slug: "garden-design", href: "/tuinen", beeld: "foto bij Tuinontwerp" },
-  { slug: "planting-habitat", href: "/tuinen", beeld: SFEER_WEIDE },
-  { slug: "garden-transformation", href: "/tuinen", beeld: "foto bij Bestaande tuin omvormen" },
   { slug: "implementation", href: "/tuinen", beeld: T01 },
 ]
 
@@ -41,7 +36,7 @@ export function WatIkDoe() {
     <section className="vp-diensten-blok" aria-labelledby="h-diensten">
       <div className="vp-kolom vp-diensten" data-diensten>
         <h2 className="lbl" id="h-diensten">
-          <Beide nl={`Wat ik doe · ${DIENSTEN.length} diensten`} en={`What I do · ${DIENSTEN.length} services`} />
+          <Beide nl={`Wat ik doe · ${DIENSTEN.length} kerndiensten`} en={`What I do · ${DIENSTEN.length} core services`} />
         </h2>
         {/* Zoals oudolf.com: de diensten als één lopende zin, gescheiden door
             komma's, met het nummer klein ervoor en een punt aan het eind.

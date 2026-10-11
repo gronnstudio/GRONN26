@@ -12,6 +12,7 @@ import { T, kies, type Tekst } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import { focusEerste, useVeldControle } from "./controle"
 import { CONTACT_REGELS } from "./invulvelden"
+import { Vijverfoto, type FotoUitkomst } from "./vijverfoto"
 
 // Het kennismakingsformulier (WF-023) met de staten van WF-034. Vormgeving
 // in de taal van de site (5 okt 2026): Montserrat, ronde oranje knop. Transport,
@@ -217,6 +218,7 @@ export function KennismakenFormulier() {
   const [pakket, setPakket] = useState("")
   const [budget, setBudget] = useState("")
   const [budgetFout, setBudgetFout] = useState(false)
+  const [foto, setFoto] = useState<FotoUitkomst | null>(null)
   const [verstuurd, setVerstuurd] = useState<{ velden: Velden; onderwerp: string; mailto: string } | null>(null)
   const taal = useTaal()
   const { veld, controleerAlles } = useVeldControle(CONTACT_REGELS, (v: L) => kies(v, taal))
@@ -275,6 +277,8 @@ export function KennismakenFormulier() {
       velden.plaats ? `Plaats of postcode: ${velden.plaats}` : null,
       "",
       velden.bericht,
+      foto?.id ? `\nFoto: https://gronn.studio/api/vijverfoto?id=${foto.id} (alleen ingelogd te zien)` : null,
+      foto?.inschatting ? `Eerste inschatting (automatisch): ${foto.inschatting}` : null,
     ]
       .filter((r): r is string => typeof r === "string")
       .join("\n")
@@ -385,6 +389,7 @@ export function KennismakenFormulier() {
           fout={budgetFout ? kies({ nl: "Kies je budget.", en: "Choose your budget." }, taal) : undefined}
         />
         <Veld label={{ nl: "Vertel kort over je tuin of vijver", en: "Tell me briefly about your garden or pond" }} {...veld("bericht")} verplicht regels={5} />
+        <Vijverfoto onUitkomst={setFoto} />
         {/* Het verborgen honeypotveld: mensen zien het niet, bots vullen het in. */}
         <div aria-hidden className="absolute left-[-9999px]">
           <label>

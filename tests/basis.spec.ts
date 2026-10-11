@@ -166,3 +166,18 @@ test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ p
   expect(body).toContain("Borderpakket: Plukborder")
   expect(body).toContain("Pakket: Plukborder")
 })
+
+test("tikvlak: tekstlinks, kleine knoppen en voetlinks raken op minstens --raak (44px)", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 390, height: 900 })
+  for (const route of ["/", "/over"]) {
+    await page.goto(route, { waitUntil: "domcontentloaded" })
+    const te_klein = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>(".lnk, .raak, .knop-klein")]
+        .filter((el) => el.getClientRects().length)
+        .map((el) => ({ wat: (el.innerText || el.getAttribute("aria-label") || "").slice(0, 30), h: Math.max(el.getBoundingClientRect().height, parseFloat(getComputedStyle(el, "::after").height) || 0) }))
+        .filter((r) => r.h < 43.5),
+    )
+    expect(te_klein, route).toEqual([])
+  }
+})

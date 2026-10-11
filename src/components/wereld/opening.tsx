@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react"
+import { ViewTransition, type CSSProperties, type ReactNode } from "react"
 import { Foto } from "@/components/foto"
 import { Beide, T, type Tekst } from "@/components/taal"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
@@ -15,6 +15,7 @@ export function Opening({
   zin,
   foto,
   zij,
+  morph,
   children,
 }: {
   label: Tekst
@@ -23,6 +24,8 @@ export function Opening({
   foto?: FotoData
   /** Twee korte woorden voor de verticale labels in de marge (vanaf 1100px). */
   zij?: [Tekst, Tekst]
+  /** Naam van de View Transition: de foto groeit hierheen vanuit de lijst op Werk. */
+  morph?: string
   children?: ReactNode
 }) {
   const regels = (t: string) =>
@@ -43,7 +46,13 @@ export function Opening({
       {children}
       {foto ? (
         <div className="w-groei" data-groei>
-          <Foto foto={foto} priority sizes="100vw" className="w-beeld" />
+          {morph ? (
+            <ViewTransition name={morph} share="morph" default="none">
+              <Foto foto={foto} priority sizes="100vw" className="w-beeld" />
+            </ViewTransition>
+          ) : (
+            <Foto foto={foto} priority sizes="100vw" className="w-beeld" />
+          )}
         </div>
       ) : null}
       {zij ? (
