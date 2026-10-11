@@ -1,6 +1,5 @@
 "use client"
 
-import { toon } from "@/lib/geluid"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
@@ -247,7 +246,6 @@ export function Overgang() {
               requestAnimationFrame(() =>
                 requestAnimationFrame(() => {
                   klaarzetten()
-                  toon() // het geluid op het moment dat het doek opengaat
                   wegTl.resume()
                 }),
               )
