@@ -37,10 +37,15 @@
   position: sticky;
   top: max(24px, 7.5vw);
   z-index: 3;
-  text-align: center;
-  margin: 0;
-  font-size: 14vw;
-  line-height: 1.2;
+  /* links op de lijn van de rest van de site, zoals de kop op elke andere pagina */
+  text-align: left;
+  margin: 0 var(--rand);
+  /* de kop is de zin zelf (11 okt 2026), niet meer het woordmerk */
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 120px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
   mix-blend-mode: difference;
   color: #efeeea;
   pointer-events: none;
@@ -49,6 +54,9 @@
   display: block;
   overflow: hidden;
   padding-inline: 0.04em;
+}
+.vp-held-titel .vp-r {
+  padding-block: 0.06em; /* ruimte voor de staarten van j en g */
 }
 .vp-w {
   display: inline-block;
@@ -66,7 +74,7 @@
 .vp-held-foto {
   position: relative;
   z-index: 1;
-  margin-top: calc(707 / 1440 * 100% - 108px - 2 * 14vw * 1.2);
+  margin-top: clamp(48px, 6vw, 96px);
   transform: scale(var(--s, 0.7));
   transform-origin: 50% 0;
   will-change: transform;
@@ -124,6 +132,40 @@
   font-family: var(--font-sans);
   letter-spacing: 0.12em;
   color: inherit;
+}
+
+/* 2b · echt werk: de vijverrenovatie als ervoor en nu (11 okt 2026) */
+.vp-project {
+  padding: clamp(96px, 12vw, 180px) var(--vp-rand) 0;
+}
+.vp-project h2 {
+  margin: 16px 0 clamp(32px, 4vw, 56px);
+  max-width: 18ch;
+  font-size: clamp(32px, 4.4vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+.vp-voorna {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 2vw, 32px);
+  color: inherit;
+  text-decoration: none;
+}
+.vp-voorna figure {
+  margin: 0;
+}
+.vp-voorna .vp-voorna-foto {
+  aspect-ratio: 4 / 5;
+  border-radius: 6px;
+}
+.vp-voorna figcaption {
+  margin-top: 12px;
+  color: var(--gedempt);
+}
+.vp-project .vp-meer {
+  display: inline-block;
+  margin-top: 32px;
 }
 
 /* 3 · reuzenwoord dat opzij schuift, met de fotocollage eroverheen */
@@ -195,7 +237,10 @@
      doorschuift */
   .vp-held-titel {
     top: 72px;
-    font-size: 15vw;
+    font-size: 11vw;
+  }
+  .vp-held-titel .vp-w {
+    text-wrap: balance;
   }
   .vp-held-foto {
     margin: 32px 0 0;
@@ -492,3 +537,91 @@
 html.stil .vp-zwerf {
   display: none;
 }
+
+/* ── 1 · De vijver als opening (11 okt 2026) ─────────────────────────
+   De waterval schermvullend; het water rimpelt (Rimpel, vanzelf bij het
+   openen). Scrollend duik je erin: de foto groeit en lost op in de grond,
+   de kop schuift weg. Zonder scroll-timelines of met minder beweging staat
+   het stil op één scherm. */
+.vp-vijver {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+}
+.vp-vijver-plak {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+}
+.vp-vijver-beeld { position: absolute; inset: 0; }
+.vp-vijver-beeld img { object-position: 40% 60%; }
+.vp-vijver-waas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* een donkere rand onderaan voor de kop; de grond komt er pas bij het duiken bij */
+  background: linear-gradient(180deg, rgb(20 16 12 / .28) 0%, rgb(20 16 12 / 0) 28%, rgb(20 16 12 / 0) 45%, rgb(20 16 12 / .62) 100%);
+}
+.vp-vijver-waas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--grond);
+  opacity: 0;
+}
+.vp-vijver-tekst {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 16px;
+  padding: 0 var(--rand) clamp(120px, 16vh, 168px);
+  color: #fff;
+  pointer-events: none;
+}
+.vp-vijver-tekst .lbl { color: rgb(255 255 255 / .82); }
+.vp-vijver-titel {
+  margin: 0;
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(44px, 8vw, 136px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.vp-vijver-titel .vp-r { padding-block: 0.06em; }
+.vp-vijver-tip { display: inline-flex; align-items: center; gap: 10px; }
+.vp-vijver-tip::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+}
+@media (max-width: 767px) {
+  .vp-vijver-titel { font-size: 12.5vw; }
+  .vp-vijver-beeld img { object-position: 30% 60%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .vp-vijver-tip::before { animation: vp-druppel 2.4s ease-out infinite; }
+}
+@keyframes vp-druppel { 0% { box-shadow: 0 0 0 0 rgb(255 255 255 / .6); } 100% { box-shadow: 0 0 0 16px rgb(255 255 255 / 0); } }
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.stil) .vp-vijver { height: 170svh; }
+    html:not(.stil) .vp-vijver-beeld { animation: vp-duik linear both; animation-timeline: scroll(root); animation-range: 0 70svh; }
+    html:not(.stil) .vp-vijver-waas::after { animation: vp-oplos linear both; animation-timeline: scroll(root); animation-range: 25svh 70svh; }
+    html:not(.stil) .vp-vijver-tekst { animation: vp-weg linear both; animation-timeline: scroll(root); animation-range: 0 40svh; }
+  }
+}
+@keyframes vp-duik { to { transform: scale(1.3); } }
+@keyframes vp-oplos { to { opacity: 1; } }
+@keyframes vp-weg { to { transform: translate3d(0, -12vh, 0); opacity: 0; } }
+
+/* het portret staat nu naast "Ik ben Nick" */
+.vp-onthul { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; }
+@media (min-width: 1024px) { .vp-onthul { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); } }
+.vp-portret { aspect-ratio: 4 / 5; border-radius: 16px; max-width: 420px; width: 100%; }
+@media (max-width: 1023px) { .vp-portret { max-width: 280px; } }

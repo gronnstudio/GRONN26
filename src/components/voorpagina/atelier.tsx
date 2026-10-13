@@ -4,16 +4,13 @@ import { Foto } from "@/components/foto";
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie";
 import { Beide, T, type Tekst } from "@/components/taal";
 import type { L } from "@/lib/i18n";
-import { F01, F04_2, F05, F07_1, F08_2, F10, F11, T01, T02 } from "./beelden";
+import { F04_2, F05, F07_1, F08_1, F08_2, F09_2, F10, F11, T01, T02 } from "./beelden";
+import { Uitgelicht } from "./uitgelicht";
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
 // van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
 // JS of met minder beweging staat alles stil en is alles zichtbaar.
 
-export const KOP: L = {
-  nl: "Een vijver en tuin die gezond blijven.",
-  en: "A pond and garden that stay healthy.",
-};
 export const ZIN: L = {
   nl: "Ik ben Nick. Ik renoveer en onderhoud vijvers en leg natuurlijke tuinen aan, voor huiseigenaren in Stein en omgeving. Waar het kan met een vaste prijs vooraf.",
   en: "I’m Nick. I renovate and maintain ponds and build natural gardens, for homeowners in Stein and the surrounding area. Where possible with a fixed price agreed up front.",
@@ -59,6 +56,21 @@ function Woorden({ tekst }: { tekst: Tekst }) {
   );
 }
 
+function KopRegels({ regels }: { regels: string[] }) {
+  return (
+    <>
+      <span className="sr-only">{regels.join(" ")}</span>
+      {regels.map((r, n) => (
+        <span key={n} className="vp-r" aria-hidden="true">
+          <span className="vp-w" style={i(n)}>
+            {r}
+          </span>
+        </span>
+      ))}
+    </>
+  );
+}
+
 type Stuk = {
   foto: FotoData;
   vorm: "staand" | "vierkant" | "liggend";
@@ -69,9 +81,9 @@ type Stuk = {
 
 // Posities en snelheden zoals in het wireframe (gemeten op de demo).
 const COLLAGE_A: Stuk[] = [
-  { foto: F01, vorm: "staand", v: 0.5, top: "0", left: "0%" },
+  { foto: F09_2, vorm: "staand", v: 0.5, top: "0", left: "0%" },
   { foto: T02, vorm: "vierkant", v: 3, top: "10.61%", left: "56.74%" },
-  { foto: F10, vorm: "liggend", v: 0, top: "39.21%", left: "20.83%" },
+  { foto: F08_1, vorm: "liggend", v: 0, top: "39.21%", left: "20.83%" },
   { foto: F05, vorm: "staand", v: 0.5, top: "70.51%", left: "52.5%" },
 ];
 const COLLAGE_B: Stuk[] = [
@@ -107,55 +119,50 @@ function Collage({ stukken, klasse }: { stukken: Stuk[]; klasse: string }) {
 export function Atelier() {
   return (
     <div className="vp-atelier">
-      <section className="vp-held" aria-labelledby="kop">
-        <p className="vp-held-titel vp-licht" aria-hidden="true">
-          <span className="vp-r">
-            <span className="vp-w" style={i(0)}>
-              GRØNN
-            </span>
-          </span>
-          <span className="vp-r">
-            <span className="vp-w" style={i(1)}>
-              Studio
-            </span>
-          </span>
-        </p>
-        <p className="lbl vp-lbl-tel">
-          <T t={LABEL} />
-        </p>
-        <div className="vp-held-foto" data-held-foto>
-          <Foto foto={F08_2} priority sizes="100vw" className="vp-held-beeld" />
+      {/* De vijver als opening (eigenaar koos "Vijver als opening", 11 okt
+          2026): de waterval schermvullend, het water rimpelt onder je vinger,
+          en scrollend duik je erin (de foto groeit en lost op in de grond). */}
+      <section className="vp-vijver" aria-labelledby="kop">
+        <div className="vp-vijver-plak">
+          <Foto foto={F10} priority sizes="100vw" rimpel="vanzelf" className="vp-vijver-beeld" />
+          <div className="vp-vijver-waas" aria-hidden="true" />
+          <div className="vp-vijver-tekst">
+            <p className="lbl m-0"><T t={LABEL} /></p>
+            <h1 id="kop" className="vp-vijver-titel">
+              <Beide
+                nl={<KopRegels regels={["Een vijver en tuin", "die gezond blijven."]} />}
+                en={<KopRegels regels={["A pond and garden", "that stay healthy."]} />}
+              />
+            </h1>
+            <p className="lbl vp-vijver-tip m-0" aria-hidden="true">
+              <T t={{ nl: "Raak het water aan", en: "Touch the water" }} />
+            </p>
+          </div>
         </div>
-        <p className="vp-verticaal vp-links" data-verticaal aria-hidden="true">
-          <T t={{ nl: "Vijvers en tuinen", en: "Ponds and gardens" }} />
-        </p>
-        <p className="vp-verticaal vp-rechts" data-verticaal aria-hidden="true">
-          <T
-            t={{ nl: "Stein en omgeving", en: "Stein and surrounding area" }}
-          />
-        </p>
       </section>
 
-      <section className="vp-onthul" data-onthul aria-labelledby="kop">
-        <p className="sr-only">
-          <T t={LABEL} />
-        </p>
-        <h1 id="kop">
-          <Woorden tekst={KOP} />
-        </h1>{" "}
-        <p>
-          <Woorden
-            tekst={{
-              nl: ZIN.nl,
-              en: ZIN.en,
-            }}
-          />
-        </p>
-        <br />
-        <Link className="lnk vp-meer" href="/over">
-          <T t={{ nl: "Meer over mij →", en: "More about me →" }} />
-        </Link>
-      </section>
+      <div className="vp-onthul" data-onthul>
+        <div>
+          <p className="sr-only">
+            <T t={LABEL} />
+          </p>
+          <p>
+            <Woorden
+              tekst={{
+                nl: ZIN.nl,
+                en: ZIN.en,
+              }}
+            />
+          </p>
+          <br />
+          <Link className="lnk vp-meer" href="/over">
+            <T t={{ nl: "Meer over mij →", en: "More about me →" }} />
+          </Link>
+        </div>
+        <Foto foto={F08_2} sizes="(min-width: 1024px) 30vw, 60vw" className="vp-portret" />
+      </div>
+
+      <Uitgelicht />
 
       <section className="vp-vel" aria-label="Foto's">
         <p className="vp-reuswoord vp-licht" aria-hidden="true">

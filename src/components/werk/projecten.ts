@@ -16,11 +16,11 @@ export type WerkProject = {
   type: L
   plaats: string
   status: L
-  /** Groot beeld in het raster en bij hover in de lijst. */
+  /** Het beeld in lijst en raster: hetzelfde als bovenaan de projectpagina, zodat het ernaartoe kan groeien. */
   foto: Foto
+  /** Naam voor de View Transition tussen lijst en projectpagina. */
+  morph: string
 }
-
-const F01 = FOTOS.F01 as Foto
 
 export const WERK: WerkProject[] = [
   {
@@ -32,7 +32,8 @@ export const WERK: WerkProject[] = [
     type: { nl: VIJVER.categorie, en: VIJVER.en.categorie },
     plaats: "—",
     status: { nl: VIJVER.status, en: VIJVER.en.status },
-    foto: F01,
+    foto: FOTOS.F10 as Foto,
+    morph: "project-vijverrenovatie",
   },
   {
     href: "/werk/terras-geulle",
@@ -43,7 +44,8 @@ export const WERK: WerkProject[] = [
     type: { nl: TERRAS.categorie, en: TERRAS.en.categorie },
     plaats: "Geulle",
     status: { nl: TERRAS.status, en: TERRAS.en.status },
-    foto: TERRAS_FOTOS.reeks[0],
+    foto: TERRAS_FOTOS.hoofd,
+    morph: "project-terras-geulle",
   },
 ]
 

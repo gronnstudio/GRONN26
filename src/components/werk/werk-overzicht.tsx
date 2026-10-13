@@ -1,6 +1,6 @@
 "use client"
 
-import type { CSSProperties } from "react"
+import { ViewTransition, type CSSProperties } from "react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { T } from "@/components/taal"
@@ -14,7 +14,10 @@ import { WERK } from "./projecten"
 // `gronn-werk-weergave`). Beide weergaven staan in de HTML en de andere is
 // `hidden`, zodat de gedeelde beweging (WereldBeweging, die bij het laden van
 // de pagina zoekt) ook de weergave vindt die later gekozen wordt. Zonder
-// opgeslagen keuze, of zonder JS, staat de lijst er.
+// opgeslagen keuze, of zonder JS, staat de lijst er. De keuze blijft (Nick,
+// 13 okt 2026): er komen snel meer projecten bij.
+// In de lijst wisselt een klik zonder doek (data-morph): de foto groeit door
+// naar de grote foto bovenaan de projectpagina (View Transition met dezelfde naam).
 
 type Weergave = "lijst" | "raster"
 const SLEUTEL = "gronn-werk-weergave"
@@ -71,6 +74,7 @@ export function WerkOverzicht() {
             <li key={p.href} className="border-b border-lijn first:border-t" data-zie style={volg(i)}>
               <Link
                 href={p.href}
+                data-morph
                 className="group grid grid-cols-1 items-center gap-x-8 gap-y-5 py-[clamp(24px,3vw,40px)] no-underline md:grid-cols-12"
               >
                 <span className="flex flex-col gap-4 md:col-span-7">
@@ -86,12 +90,14 @@ export function WerkOverzicht() {
                     <T t={p.status} />
                   </span>
                 </span>
-                <Doorkijk
-                  foto={p.foto}
-                  sizes="(min-width: 768px) 40vw, 100vw"
-                  className="order-first aspect-[4/3] w-full md:order-none md:col-span-5"
-                  eigen={false}
-                />
+                <ViewTransition name={p.morph} share="morph" default="none">
+                  <Doorkijk
+                    foto={p.foto}
+                    sizes="(min-width: 768px) 40vw, 100vw"
+                    className="order-first aspect-[4/3] w-full md:order-none md:col-span-5"
+                    eigen={false}
+                  />
+                </ViewTransition>
               </Link>
             </li>
           ))}

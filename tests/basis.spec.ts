@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
@@ -129,11 +129,12 @@ test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scher
   }
 })
 
-test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --knop-groot)", async ({ page }) => {
-  await zonderIntro(page)
-  for (const b of [1440, 390]) {
-    await page.setViewportSize({ width: b, height: 900 })
-    for (const route of ["/", "/vijvers", "/werk", "/kennismaken", "/merk"]) {
+// Elke route een eigen pagina, zoals bij tikvlak hieronder.
+for (const route of ["/", "/vijvers", "/werk", "/kennismaken", "/merk"]) {
+  test(`knoppen ${route}: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --knop-groot)`, async ({ page }) => {
+    await zonderIntro(page)
+    for (const b of [1440, 390]) {
+      await page.setViewportSize({ width: b, height: 900 })
       await page.goto(route, { waitUntil: "domcontentloaded" })
       const afwijkend = await page.evaluate(() =>
         [...document.querySelectorAll("a, button")].flatMap((e) => {
@@ -145,8 +146,8 @@ test("knoppen: elke ronde knop is 36, 48 of 64 hoog (--knop-klein, --knop, --kno
       )
       expect(afwijkend, `${route} @${b}`).toEqual([])
     }
-  }
-})
+  })
+}
 
 test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ page }) => {
   await zonderIntro(page)
@@ -166,3 +167,20 @@ test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ p
   expect(body).toContain("Borderpakket: Plukborder")
   expect(body).toContain("Pakket: Plukborder")
 })
+
+// Elke route een eigen test (en dus een verse pagina): twee keer achter elkaar
+// goto op één pagina brak op CI af met ERR_ABORTED na de voorpagina.
+for (const route of ["/", "/over"]) {
+  test(`tikvlak ${route}: tekstlinks, kleine knoppen en voetlinks raken op minstens --raak (44px)`, async ({ page }) => {
+    await zonderIntro(page)
+    await page.setViewportSize({ width: 390, height: 900 })
+    await page.goto(route, { waitUntil: "domcontentloaded" })
+    const te_klein = await page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>(".lnk, .raak, .knop-klein")]
+        .filter((el) => el.getClientRects().length)
+        .map((el) => ({ wat: (el.innerText || el.getAttribute("aria-label") || "").slice(0, 30), h: Math.max(el.getBoundingClientRect().height, parseFloat(getComputedStyle(el, "::after").height) || 0) }))
+        .filter((r) => r.h < 43.5),
+    )
+    expect(te_klein, route).toEqual([])
+  })
+}

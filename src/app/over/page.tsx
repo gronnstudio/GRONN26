@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { Foto } from "@/components/foto"
 import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
@@ -46,13 +47,15 @@ export default function Over() {
         <div className="mt-[clamp(40px,5vw,72px)] grid md:grid-cols-[5fr_7fr] md:gap-x-8">
           {/* de lege kolom krijgt een echte foto uit de moestuin (van de oude Studio-pagina) */}
           <figure className="m-0 mb-10 md:sticky md:top-[12vh] md:mb-0 md:self-start" data-zie>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/studio/moestuin/M01.jpg"
-              alt="Nick gehurkt in de moestuin, lachend, met een handvol pas gerooide aardappels."
-              loading="lazy"
-              className="aspect-[4/5] w-full object-cover md:max-w-[440px]"
-            />
+            <div className="relative aspect-[4/5] w-full overflow-hidden md:max-w-[440px]">
+              <Image
+                src="/studio/moestuin/M01.jpg"
+                alt="Nick gehurkt in de moestuin, lachend, met een handvol pas gerooide aardappels."
+                fill
+                sizes="(min-width: 768px) 440px, 100vw"
+                className="object-cover"
+              />
+            </div>
             <figcaption className="lbl mt-3 text-gedempt"><T t={{ nl: "In de moestuin", en: "In the vegetable garden" }} /></figcaption>
           </figure>
           <div>

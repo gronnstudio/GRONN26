@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { LelieBloem, SCHUIF } from "@/components/lelie";
 import { createPortal } from "react-dom";
 import { T, type Tekst } from "@/components/taal";
 import { useTaal } from "@/components/taal-klant";
@@ -146,9 +147,11 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
         className={knopKlasse}
       >
         {/* zelfde maat en lijn als de iconen in de menupil: 20px op een raster van 22, lijn 1,8 */}
-        <svg width="20" height="20" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+        <svg width="20" height="20" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="lelie-knop">
           {/* schuiven met een streepje als knop, zonder bolletjes (eigenaar, 10 okt 2026) */}
-          <path d="M3 5.5h3M9 5.5h10M7.5 3v5M3 11h10M16 11h3M14.5 8.5v5M3 16.5h5.5M11.5 16.5H19M10 14v5" />
+          <path className="lelie-schuif" d={SCHUIF} />
+          {/* open = een waterlelie die opengaat (11 okt 2026): vijf bladen vanuit een knop, op het water */}
+          <LelieBloem />
         </svg>
       </button>
       {gereed &&
@@ -162,7 +165,11 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
             className="fixed inset-0 z-[1100] overflow-y-auto overscroll-contain bg-grond px-5 pb-[max(24px,env(safe-area-inset-bottom))] pt-[max(20px,env(safe-area-inset-top))] text-sm text-inkt md:inset-auto md:bottom-[84px] md:left-1/2 md:z-[200] md:w-80 md:-translate-x-1/2 md:overflow-visible md:rounded-2xl md:border md:border-lijn md:p-5 md:shadow-2xl lg:bottom-[110px]"
           >
             <div className="mb-8 flex items-center justify-between md:mb-4">
-              <strong className="syne text-[28px] md:text-[17px]">
+              <strong className="syne flex items-center gap-3 text-[28px] md:text-[17px]">
+                {/* op de telefoon dekt het paneel de knop af: hier bloeit de lelie open als het paneel verschijnt */}
+                <svg width="28" height="28" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="lelie-knop lelie-bloeit text-oranje md:hidden">
+                  <LelieBloem />
+                </svg>
                 <T t={{ nl: "Weergave", en: "Display" }} />
               </strong>
               <button

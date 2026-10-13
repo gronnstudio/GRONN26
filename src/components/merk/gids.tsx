@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react"
+import Image from "next/image"
 import { T } from "@/components/taal"
 import { Kopieer } from "@/components/kopieer"
 import type { L } from "@/lib/i18n"
@@ -213,8 +214,9 @@ export function MerkGids() {
             { src: "/sfeer/grashalm.jpg", alt: { nl: "Sfeerbeeld: een grashalm van dichtbij.", en: "Mood image: a blade of grass up close." } },
           ].map((b) => (
             <figure key={b.src} className="relative m-0" data-zie>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={b.src} alt={b.alt.nl} className="aspect-[4/3] w-full object-cover" loading="lazy" />
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image src={b.src} alt={b.alt.nl} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+              </div>
               <figcaption className="lbl absolute top-3 left-3 rounded-full bg-[#202020]/70 px-3 py-1 text-[#EFEEEA]">
                 <T t={{ nl: "Sfeerbeeld", en: "Mood image" }} />
               </figcaption>

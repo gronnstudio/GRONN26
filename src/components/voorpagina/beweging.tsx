@@ -15,6 +15,8 @@ export function Beweging() {
     const mq = matchMedia("(prefers-reduced-motion: reduce)")
     const stil = () => mq.matches || html.classList.contains("stil")
     const breed = () => innerWidth >= 768
+    // Parallax doet CSS waar dat kan (globals.css); JS alleen als vangnet.
+    const parallaxInCss = CSS.supports("animation-timeline: view()")
     wortel.classList.add("vp-fx")
 
     // ── WF-058 ────────────────────────────────────────────────────────
@@ -46,7 +48,7 @@ export function Beweging() {
       for (const el of stukken) {
         const v = Number(el.dataset.v)
         const ouder = el.offsetParent as HTMLElement | null
-        if (s || !v || !ouder) {
+        if (s || !v || !ouder || parallaxInCss) {
           el.style.transform = ""
           continue
         }

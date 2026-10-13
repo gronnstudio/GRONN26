@@ -66,6 +66,8 @@ export default function Vijverrenovatie() {
           titel={REUSTITEL}
           zin={<T t={nlEn(VIJVER.ondertitel, EN.ondertitel)} />}
           foto={HELD}
+          morph="project-vijverrenovatie"
+          rimpel
           zij={[nlEn(VIJVER.categorie, EN.categorie), nlEn(VIJVER.status, EN.status)]}
         />
       </div>

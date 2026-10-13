@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Logo } from "./logo"
 import { T } from "./taal"
@@ -12,6 +13,8 @@ import { useTaal } from "./taal-klant"
 // mee weg en komen terug zodra je omhoog scrolt, in een glazen laag.
 export function Kop() {
   const taal = useTaal()
+  // op de voorpagina ligt de kop boven de vijverfoto: dan het witte woordmerk
+  const opFoto = usePathname() === "/"
   const [stand, setStand] = useState<"boven" | "weg" | "terug">("boven")
   useEffect(() => {
     let vorige = scrollY, wacht = 0
@@ -31,10 +34,10 @@ export function Kop() {
     <div
       className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color] duration-300 lg:hidden ${
         stand === "weg" ? "-translate-y-full" : ""
-      } ${stand === "terug" ? "bg-grond/85 backdrop-blur-md" : ""}`}
+      } ${stand === "terug" ? "bg-grond/85 backdrop-blur-md" : ""} ${opFoto && stand === "boven" ? "donker" : ""}`}
     >
       <div className="wrap flex items-center justify-between py-4">
-        <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"}>
+        <Link href="/" className="raak" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"}>
           <Logo className="h-[18px] w-auto" />
         </Link>
         <Link
