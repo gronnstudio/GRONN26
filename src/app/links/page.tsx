@@ -5,6 +5,7 @@ import { BUSINESS } from "@/lib/business"
 import { VIJVER } from "@/lib/data/vijverrenovatie"
 import { TERRAS } from "@/lib/data/terras-geulle"
 import { T } from "@/components/taal"
+import { APPLE_PAD, appleKlaar, googleWalletLink } from "@/lib/wallet"
 
 export const metadata: Metadata = {
   title: "Links",
@@ -19,6 +20,7 @@ const Pijl = () => <span aria-hidden className="self-end text-[18px] transition-
 // De linkpagina (eigenaar: "een soort bentobox linktree"), in de taal van de
 // nieuwe site. Zonder menu en voet: zie [data-links] in globals.css.
 export default function Links() {
+  const google = googleWalletLink()
   return (
     <div data-links className="mx-auto max-w-[760px] px-4 pt-[clamp(24px,6vw,64px)] pb-12">
       <h1 className="sr-only">GRØNN Studio · Links</h1>
@@ -61,6 +63,12 @@ export default function Links() {
           <span className="lbl text-gedempt"><T t={{ nl: "Visitekaartje", en: "Business card" }} /></span>
           <span className={NAAM}><T t={{ nl: "Bewaar in je contacten", en: "Save to your contacts" }} /></span>
         </a>
+        {appleKlaar() && (
+          <a href={APPLE_PAD} className={`${TEGEL} min-h-0! md:col-span-2`}><span className="lbl text-gedempt"><T t={{ nl: "Visitekaartje in", en: "Business card in" }} /></span><span className={`${NAAM} text-[17px]!`}>Apple Wallet</span></a>
+        )}
+        {google && (
+          <a href={google} className={`${TEGEL} min-h-0! md:col-span-2`}><span className="lbl text-gedempt"><T t={{ nl: "Visitekaartje in", en: "Business card in" }} /></span><span className={`${NAAM} text-[17px]!`}>Google Wallet</span></a>
+        )}
         <Link href="/" className={`${TEGEL} col-span-2 border-0 bg-antraciet! text-gebroken-wit! md:col-span-4 md:min-h-0 md:flex-row md:items-center`}>
           <span className={NAAM}><T t={{ nl: "Naar de website", en: "To the website" }} /></span>
           <Pijl />

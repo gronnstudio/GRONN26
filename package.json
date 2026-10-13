@@ -18,6 +18,7 @@
     "@vercel/speed-insights": "^2.0.0",
     "gsap": "3.13",
     "next": "^16.3.8",
+    "passkit-generator": "^3.6.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
