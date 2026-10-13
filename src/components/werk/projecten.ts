@@ -16,7 +16,7 @@ export type WerkProject = {
   type: L
   plaats: string
   status: L
-  /** Het beeld in de lijst: hetzelfde als bovenaan de projectpagina, zodat het ernaartoe kan groeien. */
+  /** Het beeld in lijst en raster: hetzelfde als bovenaan de projectpagina, zodat het ernaartoe kan groeien. */
   foto: Foto
   /** Naam voor de View Transition tussen lijst en projectpagina. */
   morph: string
