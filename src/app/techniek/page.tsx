@@ -3,7 +3,7 @@ import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
 import { T } from "@/components/taal"
 import { AANTAL } from "@/lib/data/techniek"
-import { Doorsnede } from "@/components/techniek/doorsnede"
+import { Stapel } from "@/components/techniek/stapel"
 import { Filter } from "@/components/techniek/filter"
 import { Probeer } from "@/components/techniek/probeer"
 import { JouwBezoek } from "@/components/techniek/bezoek"
@@ -11,13 +11,13 @@ import "./techniek.css"
 
 export const metadata: Metadata = {
   title: "Techniek",
-  description: "De techniek achter GRØNN Studio, getekend als een vijver: van de camera op de oever tot het filter dat elke wijziging controleert.",
+  description: "De techniek achter de site van GRØNN Studio, laag voor laag: van je scherm tot de controle die elke wijziging doorloopt. Om zelf aan te raken.",
   alternates: { canonical: "/techniek" },
 }
 
-// /techniek, opnieuw op 11 okt 2026: de site als vijver in doorsnede, drie
-// dingen om aan te raken, het filter om zelf een wijziging door te sturen, en
-// de peilschaal van je eigen bezoek.
+// /techniek, 14 okt 2026 (eigenaar: "niet werk gerelateerd maar wel
+// interactief"): de site als stapel van vijf lagen, drie dingen om aan te
+// raken, de controle om zelf een wijziging door te sturen, en je eigen bezoek.
 
 function Kop({ id, label, rechts, zin }: { id: string; label: { nl: string; en: string }; rechts: { nl: string; en: string }; zin: { nl: string; en: string } }) {
   return (
@@ -36,13 +36,13 @@ export default function Techniek() {
     <>
       <Opening
         label={{ nl: `Techniek · ${AANTAL} onderdelen`, en: `Technology · ${AANTAL} parts` }}
-        titel={{ nl: "Gebouwd als\neen vijver", en: "Built like\na pond" }}
-        zin={<T t={{ nl: "Een vijver heeft een oever, water, een filter en een peilschaal. Deze site ook. Tik op een deel van de tekening.", en: "A pond has a bank, water, a filter and a gauge. So does this site. Tap a part of the drawing." }} />}
+        titel={{ nl: "Waar deze\nsite op draait", en: "What this\nsite runs on" }}
+        zin={<T t={{ nl: "Vijf lagen, van je scherm tot de controle achter elke wijziging. Tik op een laag, typ, schuif en stuur zelf iets door.", en: "Five layers, from your screen to the checks behind every change. Tap a layer, type, slide and send something through yourself." }} />}
       />
 
       <div className="wrap">
-        <section aria-label="Doorsnede" className="tk-blok tk-eerste">
-          <Doorsnede />
+        <section aria-label="De lagen van de site" className="tk-blok tk-eerste">
+          <Stapel />
         </section>
 
         <section aria-labelledby="tk-probeer" className="tk-blok">
@@ -51,12 +51,12 @@ export default function Techniek() {
         </section>
 
         <section aria-labelledby="tk-filter" className="tk-blok">
-          <Kop id="tk-filter" label={{ nl: "Het filter", en: "The filter" }} rechts={{ nl: "6 stappen · elke keer", en: "6 steps · every time" }} zin={{ nl: "Stuur zelf een wijziging door het filter.", en: "Send a change through the filter yourself." }} />
+          <Kop id="tk-filter" label={{ nl: "De controle", en: "The checks" }} rechts={{ nl: "6 stappen · elke keer", en: "6 steps · every time" }} zin={{ nl: "Stuur zelf een wijziging door de controle.", en: "Send a change through the checks yourself." }} />
           <Filter />
         </section>
 
         <section aria-labelledby="tk-peil" className="tk-blok">
-          <Kop id="tk-peil" label={{ nl: "De peilschaal", en: "The gauge" }} rechts={{ nl: "nu, op dit scherm", en: "now, on this screen" }} zin={{ nl: "Wat je eigen browser over dit bezoek weet.", en: "What your own browser knows about this visit." }} />
+          <Kop id="tk-peil" label={{ nl: "Jouw bezoek", en: "Your visit" }} rechts={{ nl: "nu, op dit scherm", en: "now, on this screen" }} zin={{ nl: "Wat je eigen browser over dit bezoek weet.", en: "What your own browser knows about this visit." }} />
           <JouwBezoek />
         </section>
       </div>

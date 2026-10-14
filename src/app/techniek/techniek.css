@@ -1,7 +1,6 @@
-/* /techniek (11 okt 2026): de site als vijver in doorsnede. Een lijntekening
-   als een bestek (gearceerde grond, peil, genummerde punten), het ene oranje
-   alleen op het gekozen deel. Daarna drie tegels om aan te raken, het filter
-   en de peilschaal. */
+/* /techniek (14 okt 2026): de site als stapel van vijf lagen, het ene oranje
+   alleen op de gekozen laag. Daarna drie tegels om aan te raken, de controle
+   en je eigen bezoek. */
 
 .tk-blok { padding-top: clamp(96px, 12vw, 180px); }
 .tk-eerste { padding-top: clamp(40px, 6vw, 96px); }
@@ -14,71 +13,69 @@
   text-wrap: balance;
 }
 
-/* ── Doorsnede ─────────────────────────────────────────────────── */
-.dz { display: grid; gap: clamp(20px, 3vw, 32px); }
-.dz-tekening {
+/* ── De stapel ─────────────────────────────────────────────────── */
+.st { display: grid; gap: clamp(32px, 4vw, 64px); }
+@media (min-width: 1024px) { .st { grid-template-columns: 5fr 7fr; align-items: start; } }
+.st-stapel { display: grid; gap: 0; padding-right: 48px; }
+.st-plaat {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+  margin-top: -10px;
+  padding: 18px 22px;
   border: 1px solid var(--lijn);
   border-radius: 16px;
-  padding: clamp(8px, 2vw, 24px);
-  overflow: hidden;
+  background: var(--grond);
+  color: var(--inkt);
+  text-align: left;
+  cursor: pointer;
+  z-index: calc(10 - var(--i));
+  transform: translateX(calc(var(--i) * 6px));
+  box-shadow: 0 6px 18px rgb(0 0 0 / .06);
+  transition: transform 0.4s cubic-bezier(.22, 1, .36, 1), background-color 0.25s, border-color 0.25s;
 }
-.dz-tekening svg { display: block; width: 100%; height: auto; color: var(--inkt); }
-.dz-arcering { stroke: var(--lijn); stroke-width: 1.5; }
-.dz-dun { stroke: var(--gedempt); stroke-width: 1; opacity: 0.6; }
-.dz-water { fill: var(--vlak); }
-.dz-vlak { fill: var(--grond); }
-.dz-water.dz-vlak { fill: var(--vlak); }
-.dz-tekst { font-family: var(--font-mono, ui-monospace, monospace); font-size: 13px; letter-spacing: 0.08em; fill: var(--gedempt); stroke: none; }
-.dz-vorm, .dz-vlak { transition: stroke 0.3s, fill 0.3s; }
-.dz g.aan .dz-vorm { stroke: var(--oranje); stroke-width: 2.5; }
-.dz g.aan .dz-vlak { fill: color-mix(in srgb, var(--oranje) 22%, var(--grond)); }
-.dz-punt { cursor: pointer; }
-.dz-punt circle { fill: var(--grond); stroke: var(--inkt); stroke-width: 1.5; transition: fill 0.25s, stroke 0.25s; }
-.dz-punt text { font-family: var(--font-mono, ui-monospace, monospace); font-size: 14px; font-weight: 500; fill: var(--inkt); stroke: none; }
-.dz-punt.aan circle { fill: var(--oranje); stroke: var(--oranje); }
-.dz-punt.aan text { fill: #202020; }
-@media (hover: hover) { .dz-punt:hover circle { stroke: var(--oranje); } }
-@media (prefers-reduced-motion: no-preference) {
-  html:not(.stil) .dz-rimpel { animation: dz-golf 3s ease-in-out infinite; }
-  html:not(.stil) .dz-punt.aan circle { animation: dz-puls 2s ease-out infinite; }
+.st-plaat:first-child { margin-top: 0; }
+.st-plaat-naam { font-size: clamp(22px, 2.4vw, 34px); line-height: 1.05; letter-spacing: -0.025em; }
+.st-plaat-aantal { opacity: 0.6; }
+.st-plaat[aria-pressed="true"] {
+  z-index: 11;
+  background: var(--oranje);
+  border-color: var(--oranje);
+  color: #202020;
+  transform: translateX(calc(var(--i) * 6px + 24px));
 }
-@keyframes dz-golf { 50% { transform: translateX(12px); } }
-@keyframes dz-puls { 0% { stroke-width: 1.5; stroke-opacity: 1; } 100% { stroke-width: 14; stroke-opacity: 0; } }
+.st-plaat[aria-pressed="true"] .st-plaat-aantal { opacity: 1; }
+@media (hover: hover) {
+  .st-plaat:not([aria-pressed="true"]):hover { border-color: var(--oranje); transform: translateX(calc(var(--i) * 6px + 10px)); }
+}
+.st-plaat:focus-visible { outline: 2px solid var(--inkt); outline-offset: 3px; }
+html.stil .st-plaat { transition: none; }
+@media (prefers-reduced-motion: reduce) { .st-plaat { transition: none; } }
 
-.dz-knoppen { display: flex; flex-wrap: wrap; gap: 8px; }
-.dz-knop { border: 1px solid var(--lijn); color: var(--inkt); background: transparent; transition: background-color 0.2s, border-color 0.2s; }
-.dz-knop[aria-pressed="true"] { background: var(--oranje); border-color: var(--oranje); color: #202020; }
-@media (hover: hover) { .dz-knop:not([aria-pressed="true"]):hover { border-color: var(--oranje); } }
-
-.dz-uitleg {
-  display: grid;
-  gap: clamp(24px, 3vw, 48px);
-  padding-top: clamp(16px, 2vw, 24px);
-}
-@media (min-width: 1024px) { .dz-uitleg { grid-template-columns: 5fr 7fr; align-items: start; } }
-.dz-uitleg-kop { display: grid; gap: 16px; }
-.dz-twee { display: grid; gap: 16px; margin: 8px 0 0; }
-.dz-twee div { display: grid; gap: 6px; padding-top: 14px; border-top: 1px solid var(--lijn); }
-.dz-twee dd { margin: 0; font-size: 17px; line-height: 1.55; max-width: 40ch; }
-.dz-delen { border-top: 1px solid var(--lijn); }
-.dz-delen li {
+.st-uitleg { display: grid; gap: 16px; }
+.st-zin { font-size: clamp(20px, 2vw, 26px); line-height: 1.35; max-width: 34ch; text-wrap: pretty; }
+.st-delen { margin-top: 8px; border-top: 1px solid var(--lijn); }
+.st-delen li {
   display: grid;
   gap: 6px 24px;
-  padding: clamp(16px, 1.8vw, 24px) 0;
+  padding: clamp(16px, 1.8vw, 22px) 0;
   border-bottom: 1px solid var(--lijn);
 }
 @media (min-width: 768px) {
-  .dz-delen li { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: baseline; }
-  .dz-delen .lbl { grid-column: 1; grid-row: 2; }
-  .dz-wat { grid-column: 2; grid-row: 1 / span 2; }
+  .st-delen li { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: baseline; }
+  .st-delen .lbl { grid-column: 1; grid-row: 2; }
+  .st-wat { grid-column: 2; grid-row: 1 / span 2; }
 }
-.dz-naam { font-size: clamp(24px, 2.6vw, 38px); line-height: 1.05; letter-spacing: -0.025em; }
-.dz-wat { font-size: 16px; line-height: 1.55; }
+.st-naam { font-size: clamp(22px, 2.2vw, 30px); line-height: 1.05; letter-spacing: -0.025em; }
+.st-wat { font-size: 16px; line-height: 1.55; }
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.stil) .dz-delen li { animation: dz-op 0.5s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 50ms); }
-  html:not(.stil) .dz-uitleg-kop { animation: dz-op 0.5s cubic-bezier(.22, 1, .36, 1) both; }
+  html:not(.stil) .st-delen li { animation: st-op 0.5s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 50ms); }
+  html:not(.stil) .st-zin { animation: st-op 0.5s cubic-bezier(.22, 1, .36, 1) both; }
 }
-@keyframes dz-op { from { opacity: 0; transform: translate3d(0, 14px, 0); } }
+@keyframes st-op { from { opacity: 0; transform: translate3d(0, 14px, 0); } }
 
 /* ── Probeer het ───────────────────────────────────────────────── */
 .pb { display: grid; gap: 20px; }
@@ -89,6 +86,21 @@
 .pb-naam { font-size: clamp(22px, 2vw, 28px); line-height: 1.1; letter-spacing: -0.02em; }
 .pb-lelie { display: grid; place-content: center; justify-items: center; gap: 14px; background: var(--vlak); }
 .pb-groei { background: var(--vlak); }
+.pb-letters { display: grid; grid-template-rows: 1fr auto; gap: 12px; padding: 20px; background: var(--vlak); }
+.pb-letters-woord { margin: 0; align-self: center; min-width: 0; line-height: 1; letter-spacing: -0.03em; overflow-wrap: anywhere; overflow: hidden; }
+.pb-letters-invoer { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; align-items: center; }
+.pb-letters-veld {
+  min-width: 0;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--lijn);
+  border-radius: 999px;
+  background: var(--grond);
+  color: var(--inkt);
+  font: 500 16px var(--font-sans);
+}
+.pb-letters-veld:focus-visible { outline: 2px solid var(--oranje); outline-offset: 2px; }
+.pb-letters-schuif { width: 100%; height: 44px; accent-color: var(--oranje); }
 .pb-groei-knop { position: absolute; inset: 0; display: block; padding: 0; border: 0; background: transparent; cursor: pointer; }
 .pb-groei-beeld {
   position: absolute;
@@ -98,10 +110,11 @@
   aspect-ratio: 4 / 3;
   border-radius: 10px;
   overflow: hidden;
+  background: var(--oranje);
 }
 .pb-groei[data-groot] .pb-groei-beeld { left: 0; bottom: 0; width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; }
 .pb-groei-tekst { position: absolute; top: 16px; left: 16px; color: var(--gedempt); pointer-events: none; }
-.pb-groei[data-groot] .pb-groei-tekst { color: #fff; z-index: 1; text-shadow: 0 1px 6px rgb(0 0 0 / .5); }
+.pb-groei[data-groot] .pb-groei-tekst { color: #202020; z-index: 1; }
 ::view-transition-group(tk-groei) { animation-duration: 0.55s; animation-timing-function: cubic-bezier(.22, 1, .36, 1); }
 
 /* ── Het filter ────────────────────────────────────────────────── */

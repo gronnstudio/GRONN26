@@ -2,22 +2,20 @@
 
 import { useState } from "react"
 import { flushSync } from "react-dom"
-import Image from "next/image"
-import { Foto } from "@/components/foto"
 import { LelieBloem, SCHUIF } from "@/components/lelie"
 import { T } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
-import { F08_2, F10 } from "@/components/voorpagina/beelden"
 
-// "Probeer het" op /techniek (11 okt 2026): drie stukken techniek van de site
-// die je zelf kunt aanraken, elk met de naam van wat erachter zit.
+// "Probeer het" op /techniek: drie stukken techniek van de site die je zelf
+// kunt aanraken, elk met de naam van wat erachter zit. Sinds 14 okt 2026
+// zonder projectfoto's (eigenaar: "niet werk gerelateerd").
 
 export function Probeer() {
   return (
     <ul className="pb m-0 list-none p-0">
       <li className="pb-tegel">
-        <Foto foto={F10} rimpel sizes="(min-width: 1024px) 33vw, 100vw" className="pb-vak" />
-        <Onderschrift naam="WebGL" doe={{ nl: "Beweeg over het water", en: "Move across the water" }} />
+        <Letters />
+        <Onderschrift naam="Syne · Montserrat" doe={{ nl: "Typ je eigen woord", en: "Type your own word" }} />
       </li>
       <li className="pb-tegel">
         <Lelie />
@@ -25,7 +23,7 @@ export function Probeer() {
       </li>
       <li className="pb-tegel">
         <Groei />
-        <Onderschrift naam="View Transitions" doe={{ nl: "Tik op de foto", en: "Tap the photo" }} />
+        <Onderschrift naam="View Transitions" doe={{ nl: "Tik op het blok", en: "Tap the block" }} />
       </li>
     </ul>
   )
@@ -75,14 +73,32 @@ function Groei() {
   }
   return (
     <div className="pb-vak pb-groei" data-groot={groot || undefined}>
-      <button type="button" onClick={wissel} aria-pressed={groot} className="pb-groei-knop" aria-label={taal === "en" ? "Grow the photo" : "Laat de foto groeien"}>
-        <span className="pb-groei-beeld" style={{ viewTransitionName: "tk-groei" }}>
-          <Image src={F08_2.src} alt="" fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
-        </span>
+      <button type="button" onClick={wissel} aria-pressed={groot} className="pb-groei-knop" aria-label={taal === "en" ? "Grow the block" : "Laat het blok groeien"}>
+        <span className="pb-groei-beeld" style={{ viewTransitionName: "tk-groei" }} />
       </button>
       <span className="lbl pb-groei-tekst" aria-hidden="true">
-        <T t={{ nl: "GR / 001 · Vijverrenovatie", en: "GR / 001 · Pond renovation" }} />
+        {groot ? <T t={{ nl: "Groot · tik om terug", en: "Big · tap to go back" }} /> : <T t={{ nl: "Klein · tik om te groeien", en: "Small · tap to grow" }} />}
       </span>
+    </div>
+  )
+}
+
+// Typ een woord en zie het in de letter van het merk; de schuif zet de maat.
+function Letters() {
+  const taal = useTaal()
+  const [woord, setWoord] = useState("")
+  const [maat, setMaat] = useState(56)
+  return (
+    <div className="pb-vak pb-letters">
+      <p className="syne pb-letters-woord" style={{ fontSize: maat }} aria-hidden="true">
+        {woord || "GRØNN"}
+      </p>
+      <div className="pb-letters-invoer">
+        <label className="sr-only" htmlFor="pb-woord">{taal === "en" ? "Your word" : "Jouw woord"}</label>
+        <input id="pb-woord" value={woord} onChange={(e) => setWoord(e.target.value.slice(0, 24))} placeholder={taal === "en" ? "Type a word" : "Typ een woord"} className="pb-letters-veld" autoComplete="off" />
+        <label className="sr-only" htmlFor="pb-maat">{taal === "en" ? "Size" : "Maat"}</label>
+        <input id="pb-maat" type="range" min={24} max={96} value={maat} onChange={(e) => setMaat(Number(e.target.value))} className="pb-letters-schuif" />
+      </div>
     </div>
   )
 }

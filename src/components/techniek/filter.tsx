@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { T } from "@/components/taal"
 import { STAPPEN } from "@/lib/data/techniek"
 
-// Het filter (/techniek, 11 okt 2026): stuur zelf een wijziging door de zes
+// De controle (/techniek, 11 okt 2026): stuur zelf een wijziging door de zes
 // controles die elke echte wijziging doorloopt. Een goede komt live; een met
 // een fout blijft hangen bij TypeScript, en er gaat niets live.
 
