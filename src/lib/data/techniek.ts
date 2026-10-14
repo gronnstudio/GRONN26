@@ -1,37 +1,25 @@
 import type { L } from "@/lib/i18n"
 
-// De techniek achter de site (/techniek). Opnieuw opgezet op 11 okt 2026
-// (eigenaar: "doe de pagina opnieuw, de wijzigingen zijn marginaal"): de site
-// als een vijver in doorsnede. Elk deel van de vijver is een laag van de site,
-// met wat het in een vijver doet en wat het op de site doet.
+// De techniek achter de site (/techniek). Sinds 14 okt 2026 zonder de vijver
+// (eigenaar: "niet werk gerelateerd maar wel interactief"): de site als een
+// stapel van vijf lagen, van je scherm tot de meting. Elke laag zegt in één
+// zin wat hij doet en welk gereedschap erbij hoort.
 // Alleen gereedschap dat echt gebruikt wordt; nieuw gereedschap komt van Nick.
 // Nooit zeggen dat een AI de site bouwt (eigenaar, 29 sep 2026).
 
 export type Onderdeel = { naam: string; soort: L; wat: L }
-export type Zone = { id: string; naam: L; vijver: L; site: L; delen: Onderdeel[] }
+export type Laag = { id: string; naam: L; zin: L; delen: Onderdeel[] }
 
-const HARDWARE: L = { nl: "Hardware", en: "Hardware" }
 const PAKKET: L = { nl: "Softwarepakket", en: "Software package" }
 const DIENST: L = { nl: "Dienst", en: "Service" }
 const BROWSER: L = { nl: "In de browser", en: "In the browser" }
 const EIGEN: L = { nl: "Eigen werk", en: "In-house" }
 
-export const ZONES: Zone[] = [
+export const LAGEN: Laag[] = [
   {
-    id: "oever",
-    naam: { nl: "Oever", en: "Bank" },
-    vijver: { nl: "Waar je staat en kijkt.", en: "Where you stand and look." },
-    site: { nl: "Waar ik het werk vastleg, op de bouwplaats.", en: "Where I capture the work, on site." },
-    delen: [
-      { naam: "iPhone 13", soort: HARDWARE, wat: { nl: "Mijn camera: ik film en fotografeer het werk tussen het werk door.", en: "My camera: I film and photograph the work in between the work itself." } },
-      { naam: "Ulanzi MA38", soort: HARDWARE, wat: { nl: "Het statiefje dat de telefoon vasthoudt, op een kei of waar het maar kan staan.", en: "The little stand that holds the phone, on a rock or wherever it will stand." } },
-    ],
-  },
-  {
-    id: "oppervlak",
-    naam: { nl: "Oppervlak", en: "Surface" },
-    vijver: { nl: "Wat je van een vijver ziet: licht, beweging, planten.", en: "What you see of a pond: light, movement, plants." },
-    site: { nl: "Alles wat in je browser aankomt: pagina's, letters, beweging en geluid.", en: "Everything that reaches your browser: pages, type, motion and sound." },
+    id: "scherm",
+    naam: { nl: "Op je scherm", en: "On your screen" },
+    zin: { nl: "Alles wat in je browser aankomt: pagina's, letters, beweging en geluid.", en: "Everything that reaches your browser: pages, type, motion and sound." },
     delen: [
       { naam: "Next.js 16", soort: PAKKET, wat: { nl: "Bouwt de pagina's en zet ze vooraf klaar, zodat ze meteen openen.", en: "Builds the pages and prepares them in advance, so they open instantly." } },
       { naam: "React 19", soort: PAKKET, wat: { nl: "De bouwstenen van elke pagina: menu, kaarten, formulier.", en: "The building blocks of every page: menu, cards, form." } },
@@ -45,10 +33,9 @@ export const ZONES: Zone[] = [
     ],
   },
   {
-    id: "water",
-    naam: { nl: "Waterkolom", en: "Water column" },
-    vijver: { nl: "Het water zelf: het draagt alles en is altijd in beweging.", en: "The water itself: it carries everything and is always moving." },
-    site: { nl: "Waar de site draait. Geen server in een kast, maar servers dicht bij jou.", en: "Where the site runs. No server in a cupboard, but servers close to you." },
+    id: "server",
+    naam: { nl: "Waar het draait", en: "Where it runs" },
+    zin: { nl: "Waar de site draait. Geen server in een kast, maar servers dicht bij jou.", en: "Where the site runs. No server in a cupboard, but servers close to you." },
     delen: [
       { naam: "Vercel", soort: DIENST, wat: { nl: "Bouwt de site bij elke wijziging en zet hem op servers dicht bij jou.", en: "Builds the site on every change and puts it on servers close to you." } },
       { naam: "GitHub", soort: DIENST, wat: { nl: "Waar de code staat, met de hele geschiedenis van elke wijziging.", en: "Where the code lives, with the full history of every change." } },
@@ -58,10 +45,9 @@ export const ZONES: Zone[] = [
     ],
   },
   {
-    id: "instroom",
-    naam: { nl: "Instroom", en: "Inflow" },
-    vijver: { nl: "Waar nieuw water binnenkomt.", en: "Where fresh water comes in." },
-    site: { nl: "Waar woorden binnenkomen: mijn teksten, en jouw aanvraag.", en: "Where words come in: my texts, and your enquiry." },
+    id: "post",
+    naam: { nl: "Wat binnenkomt", en: "What comes in" },
+    zin: { nl: "Waar woorden binnenkomen: mijn teksten, en jouw aanvraag.", en: "Where words come in: my texts, and your enquiry." },
     delen: [
       { naam: "Tekst in de code", soort: EIGEN, wat: { nl: "Geen CMS: elke zin staat in de code, in het Nederlands en het Engels.", en: "No CMS: every sentence lives in the code, in Dutch and English." } },
       { naam: "FormSubmit", soort: DIENST, wat: { nl: "Stuurt het kennismakingsformulier rechtstreeks vanuit je browser naar mijn mail.", en: "Sends the contact form straight from your browser to my email." } },
@@ -69,10 +55,9 @@ export const ZONES: Zone[] = [
     ],
   },
   {
-    id: "filter",
-    naam: { nl: "Filter", en: "Filter" },
-    vijver: { nl: "Houdt vuil tegen voordat het de vijver in gaat.", en: "Stops dirt before it reaches the pond." },
-    site: { nl: "Controleert elke wijziging. Faalt één controle, dan gaat er niets live.", en: "Checks every change. If one check fails, nothing goes live." },
+    id: "controle",
+    naam: { nl: "De controle", en: "The checks" },
+    zin: { nl: "Controleert elke wijziging. Faalt één controle, dan gaat er niets live.", en: "Checks every change. If one check fails, nothing goes live." },
     delen: [
       { naam: "TypeScript", soort: PAKKET, wat: { nl: "Controleert de code voordat hij draait: een typefout komt niet live.", en: "Checks the code before it runs: a typo does not go live." } },
       { naam: "ESLint", soort: PAKKET, wat: { nl: "Leest de code na op slordigheid en bekende valkuilen.", en: "Reads the code for sloppiness and known pitfalls." } },
@@ -80,10 +65,9 @@ export const ZONES: Zone[] = [
     ],
   },
   {
-    id: "peil",
-    naam: { nl: "Peilschaal", en: "Gauge" },
-    vijver: { nl: "Laat zien hoe het met het water gaat.", en: "Shows how the water is doing." },
-    site: { nl: "Meet hoeveel mensen komen en hoe snel de site bij ze laadt. Zonder cookies.", en: "Measures how many people visit and how fast the site loads for them. Without cookies." },
+    id: "meting",
+    naam: { nl: "De meting", en: "The measuring" },
+    zin: { nl: "Meet hoeveel mensen komen en hoe snel de site bij ze laadt. Zonder cookies.", en: "Measures how many people visit and how fast the site loads for them. Without cookies." },
     delen: [
       { naam: "Web Analytics", soort: DIENST, wat: { nl: "Telt bezoeken per pagina, zonder cookies en zonder je te volgen.", en: "Counts visits per page, without cookies and without following you." } },
       { naam: "Speed Insights", soort: DIENST, wat: { nl: "Meet hoe snel de site laadt bij echte bezoekers, op echte telefoons.", en: "Measures how fast the site loads for real visitors, on real phones." } },
@@ -91,9 +75,9 @@ export const ZONES: Zone[] = [
   },
 ]
 
-export const AANTAL = ZONES.reduce((n, z) => n + z.delen.length, 0)
+export const AANTAL = LAGEN.reduce((n, l) => n + l.delen.length, 0)
 
-// Het filter, stap voor stap: precies wat .github/workflows/quality.yml en Vercel doen.
+// De controle, stap voor stap: precies wat .github/workflows/quality.yml en Vercel doen.
 export const STAPPEN: { naam: string; wat: L; fout?: L }[] = [
   { naam: "GitHub", wat: { nl: "Vastgelegd: wie, wat en waarom.", en: "Recorded: who, what and why." } },
   { naam: "TypeScript", wat: { nl: "Elke waarde klopt.", en: "Every value adds up." }, fout: { nl: "Tegengehouden: een tekst staat waar een getal hoort.", en: "Stopped: a piece of text sits where a number belongs." } },
