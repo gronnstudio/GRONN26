@@ -8,6 +8,7 @@ import { Datum, Groet, Klok } from "@/components/beheer/klok"
 import { Kopieer } from "@/components/beheer/kopieer"
 import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
+import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
 import { aanvraagKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { KOPPELINGEN, LEVERANCIERS, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 
@@ -41,6 +42,7 @@ const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe
 
 export default async function Dashboard() {
   const stand = await leesStand()
+  const urenTotaal = RECONSTRUCTIE.reduce((t, r) => t + weekTotaal(r), 0) + (await leesUren()).filter((r) => r.datum.startsWith("2026")).reduce((t, r) => t + r.uren, 0)
   const aandacht = PROJECTEN.filter((p) => p.aandacht)
   const lopend = PROJECTEN.filter((p) => p.fase !== "Opgeleverd")
   // Social (eigenaar, 10 okt 2026: "maak in dashboard een special stuk voor social
@@ -97,6 +99,16 @@ export default async function Dashboard() {
               </div>
             ))}
           </dl>
+          <Link
+            href="/dashboard/uren"
+            className="group flex items-center justify-between gap-4 rounded-[18px] border border-lijn p-5 transition-colors hover:border-oranje"
+          >
+            <span>
+              <span className={`${lbl} block opacity-60`}>Urenregistratie</span>
+              <b className="syne mt-1 block text-[19px]">{urenTotaal.toLocaleString("nl-NL", { maximumFractionDigits: 1 })} van 1.225 uur</b>
+            </span>
+            <span className="text-[13px] font-semibold transition-transform group-hover:translate-x-1">Invullen →</span>
+          </Link>
           <div>
             <p className={`${lbl} m-0 opacity-60`}>Volgende stap</p>
             <ul className="m-0 mt-3 list-none space-y-4 p-0">
