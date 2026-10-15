@@ -68,7 +68,11 @@ const nextConfig: NextConfig = {
       { source: "/beheer", destination: "/dashboard", permanent: true },
       { source: "/beheer/:pad*", destination: "/dashboard/:pad*", permanent: true },
     ]
-    return [...oud, ...talen, ...dashboard, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
+    // De QR-code op het tuinbord wijst naar /bord (eigenaar, 15 okt 2026). Staat
+    // het bord bij een project, dan wijst deze regel naar dat project; tijdelijk,
+    // zodat browsers de bestemming niet onthouden.
+    const bord = [{ source: "/bord", destination: "/werk", permanent: false }]
+    return [...oud, ...talen, ...dashboard, ...bord, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
       source: `/${n}`,
       destination: `/wireframes/${n}`,
       permanent: false,
