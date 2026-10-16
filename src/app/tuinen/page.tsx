@@ -8,6 +8,7 @@ import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
 import { SFEER_WEIDE } from "@/components/voorpagina/beelden"
 import { Opening } from "@/components/wereld/opening"
+import { SnelContact } from "@/components/snel-contact"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
@@ -81,6 +82,7 @@ export default function TuinenPagina() {
       <Opening label={{ nl: "Diensten · tuin", en: "Services · garden" }} titel={{ nl: "Tuinen", en: "Gardens" }} zin={<T t={ZIN} />} foto={SFEER_WEIDE} />
 
       <div className="wrap">
+        <SnelContact className="pt-[48px]" />
         {VERVOLG.nl ? <Oplichten tekst={VERVOLG} className="m-0 pt-[clamp(64px,8vw,120px)]" /> : null}
 
         {FASEN.map((f, i) => (
