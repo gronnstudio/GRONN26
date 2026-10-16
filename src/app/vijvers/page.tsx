@@ -6,6 +6,7 @@ import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
+import { SnelContact } from "@/components/snel-contact"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { FOTOS, VIJVER, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
@@ -40,6 +41,7 @@ export default function VijversPagina() {
       <Opening label={{ nl: "Diensten · water", en: "Services · water" }} titel={{ nl: "Vijvers", en: "Ponds" }} zin={<T t={ZIN} />} foto={F01} />
 
       <div className="wrap">
+        <SnelContact className="pt-[48px]" />
         {VERVOLG.nl ? <Oplichten tekst={VERVOLG} className="m-0 pt-[clamp(64px,8vw,120px)]" /> : null}
 
         <section aria-labelledby="vijver-diensten" className="w-sectie">

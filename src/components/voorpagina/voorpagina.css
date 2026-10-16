@@ -227,6 +227,11 @@
   width: 58.33%;
   aspect-ratio: 3 / 2;
 }
+/* telefoon (16 okt 2026): één collage is genoeg, de tweede maakte de
+   voorpagina een scherm langer zonder iets nieuws te laten zien */
+@media (max-width: 767px) {
+  .vp-collage.vp-b { display: none; }
+}
 
 @media (max-width: 767px) {
   .vp-held {
