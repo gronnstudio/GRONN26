@@ -99,16 +99,16 @@ export default function TuinenPagina() {
 
         <section aria-labelledby="tuin-elementen" className="w-sectie">
           <KopRegel id="tuin-elementen" label={{ nl: "In een natuurlijke tuin", en: "In a natural garden" }} aantal={{ nl: `${ELEMENTEN.length} elementen`, en: `${ELEMENTEN.length} elements` }} />
-          <ul data-zie className="m-0 grid list-none grid-cols-1 gap-x-[32px] p-0 sm:grid-cols-2 lg:grid-cols-3">
+          <ul data-zie className="m-0 grid list-none grid-cols-2 gap-x-[16px] p-0 md:gap-x-[32px] lg:grid-cols-3">
             {ELEMENTEN.map((e) => {
               const inhoud = (
                 <>
-                  <span className="syne block text-[clamp(20px,1.8vw,24px)] leading-[1.15] tracking-[-.015em]"><T t={e.naam} />{e.href ? " →" : null}</span>
-                  <span className="mt-[8px] block max-w-[40ch] leading-[1.6] text-gedempt"><T t={e.zin} /></span>
+                  <span className="syne block text-[clamp(17px,1.8vw,24px)] leading-[1.15] tracking-[-.015em] [overflow-wrap:anywhere]"><T t={e.naam} />{e.href ? "\u00A0→" : null}</span>
+                  <span className="mt-[6px] block max-w-[40ch] text-[.875rem] leading-[1.5] text-gedempt md:mt-[8px] md:text-base md:leading-[1.6]"><T t={e.zin} /></span>
                 </>
               )
               return (
-                <li key={e.naam.nl} className="border-t border-lijn py-[20px] md:py-[24px]">
+                <li key={e.naam.nl} className="border-t border-lijn py-[16px] md:py-[24px]">
                   {e.href ? <Link href={e.href} className="block no-underline">{inhoud}</Link> : inhoud}
                 </li>
               )
