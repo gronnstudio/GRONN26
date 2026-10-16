@@ -7,6 +7,7 @@ import type { L } from "@/lib/i18n";
 import { F04_2, F05, F07_1, F08_1, F08_2, F09_2, F10, F11, T01, T02 } from "./beelden";
 import { Uitgelicht } from "./uitgelicht";
 import { SnelContact } from "@/components/snel-contact";
+import { Ingangen } from "./ingangen";
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
 // van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
@@ -142,6 +143,7 @@ export function Atelier() {
         </div>
       </section>
 
+      <Ingangen />
       <SnelContact className="px-[var(--vp-rand)] pt-[40px]" />
 
       <div className="vp-onthul" data-onthul>

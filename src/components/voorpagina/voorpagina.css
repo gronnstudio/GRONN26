@@ -231,6 +231,8 @@
    voorpagina een scherm langer zonder iets nieuws te laten zien */
 @media (max-width: 767px) {
   .vp-collage.vp-b { display: none; }
+  /* richting 1: de ingangen bovenaan vervangen "Wat ik doe" */
+  .vp-diensten-blok { display: none; }
 }
 
 @media (max-width: 767px) {
