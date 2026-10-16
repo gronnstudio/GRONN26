@@ -30,6 +30,37 @@ export const metadata: Metadata = {
   description: INLEIDING,
 }
 
+// Wat er in een natuurlijke tuin kan: alleen naam en één zin, geen beeld,
+// zolang er geen eigen foto's van elk element zijn.
+const ELEMENTEN: { naam: { nl: string; en: string }; zin: { nl: string; en: string }; href?: string }[] = [
+  {
+    naam: { nl: "Vijver of poel", en: "Pond" },
+    zin: { nl: "Water trekt binnen een seizoen kikkers, libellen en vogels.", en: "Within a season, water draws frogs, dragonflies and birds." },
+    href: "/vijvers",
+  },
+  {
+    naam: { nl: "Inheemse border", en: "Native border" },
+    zin: { nl: "Planten die hier thuishoren. Insecten kennen ze al.", en: "Plants that belong here. Insects already know them." },
+    href: "/tuinen/borderpakketten",
+  },
+  {
+    naam: { nl: "Bloemenweide", en: "Flower meadow" },
+    zin: { nl: "Eén of twee keer per jaar maaien in plaats van elke week.", en: "Mown once or twice a year instead of every week." },
+  },
+  {
+    naam: { nl: "Stapelmuurtje", en: "Dry stone wall" },
+    zin: { nl: "Losse stenen met planten in de kieren: hoogte en schuilplek in één.", en: "Loose stones with plants in the gaps: height and shelter in one." },
+  },
+  {
+    naam: { nl: "Gemengde haag", en: "Mixed hedge" },
+    zin: { nl: "Inheemse struiken in plaats van een schutting: bloesem, bessen en nestplek.", en: "Native shrubs instead of a fence: blossom, berries and nesting space." },
+  },
+  {
+    naam: { nl: "Grind en regenwater", en: "Gravel and rainwater" },
+    zin: { nl: "Minder tegels, zodat de regen in je eigen tuin wegzakt.", en: "Fewer tiles, so the rain soaks into your own garden." },
+  },
+]
+
 const T02 = TERRAS_FOTOS.reeks[0]
 const BORDER_FOTO = {
   src: "/borderpakketten/plukborder.jpg",
@@ -65,6 +96,25 @@ export default function TuinenPagina() {
         <p className="lbl m-0 mt-[16px] max-w-[60ch] text-gedempt">
           <T t={{ nl: "Tik op een dienst: wat erbij hoort, wat niet, en de prijs.", en: "Tap a service: what it includes, what it doesn’t, and the price." }} />
         </p>
+
+        <section aria-labelledby="tuin-elementen" className="w-sectie">
+          <KopRegel id="tuin-elementen" label={{ nl: "In een natuurlijke tuin", en: "In a natural garden" }} aantal={{ nl: `${ELEMENTEN.length} elementen`, en: `${ELEMENTEN.length} elements` }} />
+          <ul data-zie className="m-0 grid list-none grid-cols-1 gap-x-[32px] p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {ELEMENTEN.map((e) => {
+              const inhoud = (
+                <>
+                  <span className="syne block text-[clamp(20px,1.8vw,24px)] leading-[1.15] tracking-[-.015em]"><T t={e.naam} />{e.href ? " →" : null}</span>
+                  <span className="mt-[8px] block max-w-[40ch] leading-[1.6] text-gedempt"><T t={e.zin} /></span>
+                </>
+              )
+              return (
+                <li key={e.naam.nl} className="border-t border-lijn py-[20px] md:py-[24px]">
+                  {e.href ? <Link href={e.href} className="block no-underline">{inhoud}</Link> : inhoud}
+                </li>
+              )
+            })}
+          </ul>
+        </section>
 
         <section aria-labelledby="tuin-borders" className="w-sectie">
           <Link href="/tuinen/borderpakketten" className="group grid gap-x-8 gap-y-6 md:grid-cols-12">
