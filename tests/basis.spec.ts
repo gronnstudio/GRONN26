@@ -139,14 +139,19 @@ for (const route of ["/", "/vijvers", "/werk", "/kennismaken", "/merk"]) {
   })
 }
 
+test("borderpakket: plan en plantlijst staan verborgen tot je erom vraagt", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/tuinen/borderpakketten")
+  await expect(page.locator("#plan-plukborder")).toBeHidden()
+  await page.click('a[href="#plan-plukborder"]')
+  await expect(page.locator("#plan-plukborder")).toBeVisible()
+})
+
 test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ page }) => {
   await zonderIntro(page)
   let body = ""
   await page.route("**/formsubmit.co/**", (r) => { body = r.request().postData() ?? ""; r.fulfill({ status: 200, contentType: "application/json", body: '{"success":"true"}' }) })
   await page.goto("/tuinen/borderpakketten")
-  // De tegels tonen naam en foto; het pakket zelf verschijnt pas na een tik.
-  await expect(page.locator('a[href="/kennismaken?pakket=plukborder"]')).toBeHidden()
-  await page.click('a[href="#plukborder"]')
   await page.click('a[href="/kennismaken?pakket=plukborder"]')
   await expect(page).toHaveURL(/pakket=plukborder/)
   await expect(page.locator('input[name="pakket"][value="plukborder"]')).toBeChecked()

@@ -24,96 +24,77 @@ const PRIJSKAART = [
   { naam: { nl: "Op maat", en: "Custom" }, prijs: BORDER_PRIJS.opgestuurd, vanaf: true, kort: { nl: "Voor jouw plek", en: "For your spot" }, href: "#op-maat" },
 ]
 
-/** Een zacht afbreekstreepje vóór "border" ("Schaduw-border"): een smalle tegel breekt daar, niet midden in een woord. */
-const afbreek = (naam: string) => naam.replace(/(\p{L})border/u, "$1\u00adborder")
-
-function Prijzen({ p }: { p: BorderPakket }) {
+// Stapelkaarten (eigenaar, 18 okt 2026: "maak deze stapelbaar ... zodat de 8 kleine
+// tegels die dubbelop zijn weg kunnen"). Eén kaart per pakket die bij het scrollen
+// blijft plakken; de volgende schuift eroverheen. Een kaart past op één scherm, dus
+// plan en plantlijst staan los eronder en openen via de link (:target).
+function Kaart({ p, nr }: { p: BorderPakket; nr: number }) {
+  const id = `pakket-${p.slug}`
+  const m = BORDER_MATEN[0]
   return (
-    <table className="w-full border-collapse text-[15px] tabular-nums">
-      <caption className="sr-only">
-        <T t={{ nl: `Prijzen ${p.naam.nl}`, en: `Prices ${p.naam.en}` }} />
-      </caption>
-      <thead>
-        <tr className="border-b border-inkt">
-          <th scope="col" className="lbl py-2 text-left font-semibold text-gedempt"><T t={{ nl: "Maat", en: "Size" }} /></th>
-          <th scope="col" className="lbl py-2 text-right font-semibold text-gedempt"><T t={{ nl: "Opgestuurd", en: "Shipped" }} /></th>
-          <th scope="col" className="lbl py-2 text-right font-semibold text-gedempt"><T t={{ nl: "Aangeplant", en: "Planted" }} /></th>
-        </tr>
-      </thead>
-      <tbody>
-        {BORDER_MATEN.map((m) => (
-          <tr key={m} className="border-b border-lijn">
-            <th scope="row" className="py-3 text-left font-medium">{m} m²</th>
-            <td className="py-3 text-right">{priceLabel(m * BORDER_PRIJS.opgestuurd)}</td>
-            <td className="syne py-3 text-right text-[18px]">{priceLabel(m * BORDER_PRIJS.aangeplant)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <li
+      style={{ "--i": nr - 1 } as React.CSSProperties}
+      className="sticky top-[calc(16px+var(--i)*10px)] md:top-[calc(112px+var(--i)*12px)]"
+    >
+      <article aria-labelledby={id} className="grid overflow-hidden rounded-[16px] border border-lijn bg-vlak md:grid-cols-2">
+        <div className="flex min-w-0 flex-col gap-4 p-6 sm:p-10">
+          <p className="lbl m-0 text-oranje-tekst">{String(nr).padStart(2, "0")}</p>
+          <h3 id={id} className="syne m-0 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></h3>
+          <p className="lbl m-0 leading-[1.6] text-gedempt">{p.tags.map((t, i) => <span key={t.nl}>{i > 0 && " · "}<T t={t} /></span>)}</p>
+          <p className="m-0 max-w-[52ch] text-[16px] leading-[1.5] sm:text-[17px]"><T t={p.zin} /></p>
+          <p className="m-0 text-[15px] tabular-nums">
+            <T t={{ nl: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} opgestuurd · ${priceLabel(m * BORDER_PRIJS.aangeplant)} aangeplant`, en: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} shipped · ${priceLabel(m * BORDER_PRIJS.aangeplant)} planted` }} />
+          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <Link
+              href={`/kennismaken?pakket=${p.slug}`}
+              aria-describedby={id}
+              className="knop bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
+            >
+              <T t={{ nl: "Vraag aan →", en: "Ask about it →" }} />
+            </Link>
+            <a href={`#plan-${p.slug}`} className="lnk text-[15px]"><T t={{ nl: "Plan en plantlijst", en: "Plan and plant list" }} /></a>
+          </div>
+        </div>
+        <Foto
+          foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: p.alt.nl, label: "Sfeerbeeld", en: { alt: p.alt.en, label: "Mood image" } }}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="aspect-[16/9] md:aspect-auto md:h-full"
+        />
+      </article>
+    </li>
   )
 }
 
-function Pakket({ p, nr }: { p: BorderPakket; nr: number }) {
-  const id = `pakket-${p.slug}`
+function Plan({ p }: { p: BorderPakket }) {
+  const id = `plan-${p.slug}-kop`
   const totaal = p.planten.reduce((t, x) => t + x.aantal, 0)
   return (
-    <section id={p.slug} aria-labelledby={id} className="hidden scroll-mt-[96px] border-t border-lijn pt-[clamp(40px,5vw,72px)] target:block">
-      <div className="grid gap-x-8 gap-y-8 md:grid-cols-12">
-        <div className="md:col-span-6">
-          <Foto
-            foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: p.alt.nl, label: "Sfeerbeeld", en: { alt: p.alt.en, label: "Mood image" } }}
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="aspect-[4/3] rounded-[16px]"
-          />
-        </div>
-        <div className="flex min-w-0 flex-col gap-5 md:col-span-5 md:col-start-8">
-          <p className="lbl m-0 flex justify-between gap-4 text-gedempt">
-            <span><T t={{ nl: "Pakket", en: "Package" }} /> {String(nr).padStart(2, "0")}</span>
-            <a href="#pakketten" className="lnk"><T t={{ nl: "← Alle pakketten", en: "← All packages" }} /></a>
-          </p>
-          <h2 id={id} className="syne m-0 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></h2>
-          <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
-            {p.tags.map((t) => (
-              <li key={t.nl} className="lbl rounded-full border border-lijn px-3 py-1.5"><T t={t} /></li>
-            ))}
-          </ul>
-          <p className="m-0 max-w-[52ch] text-[17px] leading-[1.55]"><T t={p.zin} /></p>
-          <Prijzen p={p} />
-          <Link
-            href={`/kennismaken?pakket=${p.slug}`}
-            aria-describedby={id}
-            className="knop self-start bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
-          >
-            <T t={{ nl: "Vraag dit pakket aan →", en: "Ask about this package →" }} />
-          </Link>
+    <section id={`plan-${p.slug}`} aria-labelledby={id} className="hidden scroll-mt-[24px] border-t border-lijn pt-[clamp(40px,5vw,72px)] target:block md:scroll-mt-[112px]">
+      <p className="lbl m-0 flex justify-between gap-4 text-gedempt">
+        <span><T t={{ nl: `${totaal} planten per 5 m²`, en: `${totaal} plants per 5 m²` }} /></span>
+        <a href="#pakketten" className="lnk"><T t={{ nl: "← Alle pakketten", en: "← All packages" }} /></a>
+      </p>
+      <h3 id={id} className="syne mt-4 mb-0 text-[clamp(26px,3vw,40px)] leading-[1.05] tracking-[-.02em]"><T t={{ nl: `Plan ${p.naam.nl.toLowerCase()}`, en: `Plan ${p.naam.en.toLowerCase()}` }} /></h3>
+      <div className="mt-8 grid gap-8 md:grid-cols-12">
+        <ul className="m-0 list-none p-0 text-[15px] md:col-span-4">
+          {p.planten.map((x) => (
+            <li key={x.lat} className="flex justify-between gap-4 border-b border-lijn py-2.5">
+              <span>
+                <T t={x.naam} /> <i className="text-gedempt">{x.lat}</i>
+              </span>
+              <span className="tabular-nums">{x.aantal}×</span>
+            </li>
+          ))}
+        </ul>
+        <div className="flex min-w-0 flex-col gap-4 md:col-span-8">
+          {/* Tekeningen op licht papier: de lijnen zijn antraciet, ook in Donker. */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
+          <img src={`/borderpakketten/plan-${p.slug}.svg`} alt={`Beplantingsplan van boven, ${p.naam.nl}, 5 m²`} loading="lazy" className="block h-auto w-full rounded-[16px] bg-gebroken-wit p-3" />
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
+          <img src={`/borderpakketten/doorsnede-${p.slug}.svg`} alt={`Doorsnede van de ${p.naam.nl.toLowerCase()}: hoe hoog elke plant wordt`} loading="lazy" className="block h-auto w-full rounded-[16px] bg-gebroken-wit p-3" />
         </div>
       </div>
-
-      <details className="group mt-8">
-        <summary className="lbl cursor-pointer py-2 text-gedempt marker:content-none">
-          <span className="group-open:hidden"><T t={{ nl: `+ Plan en plantlijst · ${totaal} planten per 5 m²`, en: `+ Plan and plant list · ${totaal} plants per 5 m²` }} /></span>
-          <span className="hidden group-open:inline"><T t={{ nl: "− Plan en plantlijst", en: "− Plan and plant list" }} /></span>
-        </summary>
-        <div className="mt-4 grid gap-8 md:grid-cols-12">
-          <ul className="m-0 list-none p-0 text-[15px] md:col-span-4">
-            {p.planten.map((x) => (
-              <li key={x.lat} className="flex justify-between gap-4 border-b border-lijn py-2.5">
-                <span>
-                  <T t={x.naam} /> <i className="text-gedempt">{x.lat}</i>
-                </span>
-                <span className="tabular-nums">{x.aantal}×</span>
-              </li>
-            ))}
-          </ul>
-          <div className="flex min-w-0 flex-col gap-4 md:col-span-8">
-            {/* Tekeningen op licht papier: de lijnen zijn antraciet, ook in Donker. */}
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
-            <img src={`/borderpakketten/plan-${p.slug}.svg`} alt={`Beplantingsplan van boven, ${p.naam.nl}, 5 m²`} loading="lazy" className="block h-auto w-full rounded-[16px] bg-gebroken-wit p-3" />
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
-            <img src={`/borderpakketten/doorsnede-${p.slug}.svg`} alt={`Doorsnede van de ${p.naam.nl.toLowerCase()}: hoe hoog elke plant wordt`} loading="lazy" className="block h-auto w-full rounded-[16px] bg-gebroken-wit p-3" />
-          </div>
-        </div>
-      </details>
     </section>
   )
 }
@@ -168,29 +149,16 @@ export default function BorderpakkettenPagina() {
           />
         </p>
 
-        {/* Tegels (eigenaar, 18 okt 2026): twee naast elkaar op de telefoon, elk naar zijn uitleg verderop. */}
-        <h2 id="pakketten" className="lbl mt-[clamp(56px,7vw,96px)] mb-5 scroll-mt-[96px] text-gedempt"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
-        {/* Kaartstijl (eigenaar, 18 okt 2026: "beter verdeeld, meer negatieve ruimte"): tekst bovenin met ruime marge, foto tot de rand onderaan. */}
-        <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+        <h2 id="pakketten" className="lbl mt-[clamp(56px,7vw,96px)] mb-5 scroll-mt-[24px] text-gedempt md:scroll-mt-[112px]"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
+        <ul className="m-0 flex list-none flex-col gap-6 p-0">
           {BORDERPAKKETTEN.map((p, i) => (
-            // Alleen naam en foto (eigenaar, 18 okt 2026: "anders is het dubbelop"); de rest staat in het pakket zelf, na een tik.
-            // Subgrid: de namen en foto's van één rij staan op dezelfde lijn, ook als een naam op twee regels breekt.
-            <li key={p.slug} className="row-span-2 grid grid-rows-subgrid gap-0">
-              <a href={`#${p.slug}`} className="row-span-2 grid grid-rows-subgrid gap-0 overflow-hidden rounded-[16px] bg-vlak no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
-                <span className="syne block px-4 pt-4 pb-4 text-[clamp(17px,2.2vw,26px)] leading-[1.1] tracking-[-.015em] sm:px-6 sm:pt-6 sm:pb-6"><T t={{ nl: afbreek(p.naam.nl), en: afbreek(p.naam.en) }} /></span>
-                <Foto
-                  foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: "", label: "Sfeerbeeld", en: { alt: "", label: "Mood image" } }}
-                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                  className="aspect-[4/3]"
-                />
-              </a>
-            </li>
+            <Kaart key={p.slug} p={p} nr={i + 1} />
           ))}
         </ul>
 
-        <div className="mt-[clamp(64px,8vw,120px)]">
-          {BORDERPAKKETTEN.map((p, i) => (
-            <Pakket key={p.slug} p={p} nr={i + 1} />
+        <div className="mt-[clamp(48px,6vw,96px)]">
+          {BORDERPAKKETTEN.map((p) => (
+            <Plan key={p.slug} p={p} />
           ))}
         </div>
 
