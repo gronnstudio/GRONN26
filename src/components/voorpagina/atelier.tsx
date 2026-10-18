@@ -97,8 +97,6 @@ export function Atelier() {
         </div>
       </section>
 
-      <SnelContact className="px-[var(--vp-rand)] pt-[40px]" />
-
       <div className="vp-onthul" data-onthul>
         <div>
           <p className="sr-only">
@@ -119,6 +117,9 @@ export function Atelier() {
         </div>
         <Foto foto={F08_2} sizes="(min-width: 1024px) 30vw, 60vw" className="vp-portret" />
       </div>
+
+      {/* eerst wie, dan snel contact (eigenaar, 18 okt 2026) */}
+      <SnelContact className="px-[var(--vp-rand)] pt-[56px]" />
 
       <Uitgelicht />
 
