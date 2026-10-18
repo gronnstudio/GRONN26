@@ -38,7 +38,8 @@ test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  await page.click('nav[aria-label="Hoofdmenu"] a[href="/vijvers"]')
+  await page.click('nav[aria-label="Hoofdmenu"] button[aria-controls="megamenu"]')
+  await page.click('#megamenu a[href="/vijvers"]')
   await expect(page).toHaveURL(/\/vijvers$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toHaveText(/Vijvers/, { timeout: 10_000 })
   await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
@@ -65,54 +66,37 @@ test("kennismaken: lege verzending toont fouten en verstuurt niets", async ({ pa
 test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/over")
-  await page.mouse.wheel(0, 600)
-  await page.click('button[aria-label="Weergave en toegankelijkheid"]')
-  await page.click('label:has(input[value="donker"])')
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.click('#megamenu label:has(input[value="donker"])')
   await expect(page.locator("html")).toHaveClass(/donker/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-test("menu: omlaag krimpt de pil tussen Weergave en Omhoog, omhoog wordt hij weer breed", async ({ page }) => {
-  await zonderIntro(page)
-  for (const b of [390, 1440]) {
+// Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
+for (const b of [390, 1440]) {
+  test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
+    await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
-    await page.goto("/over", { waitUntil: "domcontentloaded" })
+    await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
     const nav = page.locator("nav[data-menu]")
-    const weergave = page.getByRole("button", { name: "Weergave en toegankelijkheid" })
-    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
-    for (const naam of ["Vijvers", "Tuinen", "Projecten", "Over", "FAQ"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
-    await expect(weergave).toBeHidden()
-    await expect(omhoog).toBeHidden()
-    const breed = (await nav.boundingBox())!
-    if (b < 1024) {
-      // het eerste en laatste rondje liggen concentrisch in de ronding: even ver van de zijkant als van boven
-      const links = nav.getByRole("link")
-      const [l, r] = await Promise.all([links.first().boundingBox(), links.last().boundingBox()])
-      expect(Math.round(l!.x - breed.x)).toBe(Math.round(l!.y - breed.y))
-      expect(Math.round(breed.x + breed.width - r!.x - r!.width)).toBe(Math.round(r!.y - breed.y))
-    }
-    await page.mouse.wheel(0, 600)
-    await expect(omhoog).toBeVisible()
-    await expect(weergave).toBeVisible()
-    await expect.poll(async () => (await omhoog.boundingBox())?.height).toBe(48)
-    await page.waitForTimeout(600)
-    const [w, p, o] = await Promise.all([weergave.boundingBox(), nav.boundingBox(), omhoog.boundingBox()])
-    expect(w!.x + w!.width, `@${b}`).toBeLessThanOrEqual(p!.x)
-    expect(o!.x, `@${b}`).toBeGreaterThanOrEqual(p!.x + p!.width)
-    if (b < 1024) {
-      // breed: van de buitenrand van Weergave tot die van Omhoog
-      expect([Math.round(breed.x), Math.round(breed.x + breed.width)]).toEqual([Math.round(w!.x), Math.round(o!.x + o!.width)])
-      // Weergave en Omhoog staan op het midden van de pil
-      expect(Math.round(w!.y + w!.height / 2)).toBe(Math.round(p!.y + p!.height / 2))
-      expect(Math.round(o!.y + o!.height / 2)).toBe(Math.round(p!.y + p!.height / 2))
-      expect(p!.width).toBeLessThan(breed.width)
-    }
-    await page.mouse.wheel(0, -100)
-    await expect(omhoog).toBeHidden()
-    await expect.poll(async () => Math.round((await nav.boundingBox())!.width)).toBe(Math.round(breed.width))
-  }
-})
+    for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+    await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
+    const vijvers = page.locator('#megamenu a[href="/vijvers"]')
+    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
+    // de pil blijft op het scherm, ook tijdens het lezen
+    await page.mouse.wheel(0, 800)
+    await page.waitForTimeout(300)
+    await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
+    await expect(page.getByRole("button", { name: "Terug naar boven" })).toBeVisible()
+    await page.getByRole("button", { name: "Menu" }).click()
+    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
+    await expect(vijvers).toBeVisible()
+    await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
+    await page.keyboard.press("Escape")
+    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
+  })
+}
 
 test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)

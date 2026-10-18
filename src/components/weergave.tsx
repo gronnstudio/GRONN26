@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { LelieBloem, SCHUIF } from "@/components/lelie";
-import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
 import { T, type Tekst } from "@/components/taal";
-import { useTaal } from "@/components/taal-klant";
 
-// WF-026: één knop met een regelaar-icoon opent Kleur (Auto · Licht · Donker;
+// WF-026: Kleur (Auto · Licht · Donker;
 // Auto = de instelling van het toestel) en Toegankelijkheid. Bewaard in deze
 // browser; het voorverf-script in layout.tsx past het toe vóór de eerste verf.
 type Stand = {
@@ -71,14 +68,12 @@ function pasToe(s: Stand) {
   } catch {}
 }
 
-export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
-  const [open, setOpen] = useState(false);
-  const taal = useTaal();
-  const [gereed, setGereed] = useState(false);
+// Sinds 18 okt 2026 geen eigen knop en paneel meer: de instellingen staan in
+// het hamburgermenu (eigenaar: "hierin breng je alles onder wat in menu niet
+// staat zoals weergave"). Altijd gemount, dus de muziek blijft spelen.
+export function Instellingen() {
   const [stand, setStand] = useState<Stand>(STANDAARD);
   const [speelt, setSpeelt] = useState(false);
-  const paneel = useRef<HTMLDivElement>(null);
-  const knop = useRef<HTMLButtonElement>(null);
 
   // Bewaarde stand ophalen ná de eerste render (hydration-veilig).
   useEffect(() => {
@@ -92,10 +87,6 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
     }, 0);
     return () => clearTimeout(t);
   }, []);
-  useEffect(() => {
-    const t = setTimeout(() => setGereed(true), 0);
-    return () => clearTimeout(t);
-  }, []);
   // Zet iemand zijn toestel tijdens het bezoek op licht of donker, dan volgt
   // Auto meteen.
   useEffect(() => {
@@ -105,30 +96,6 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
     mq.addEventListener("change", volg);
     return () => mq.removeEventListener("change", volg);
   }, [stand.kleur]);
-  useEffect(() => {
-    if (!open) return;
-    const toets = (e: KeyboardEvent) =>
-      e.key === "Escape" && (setOpen(false), knop.current?.focus());
-    const klik = (e: MouseEvent) => {
-      const t = e.target as Node;
-      if (!paneel.current?.contains(t) && !knop.current?.contains(t))
-        setOpen(false);
-    };
-    document.addEventListener("keydown", toets);
-    document.addEventListener("click", klik);
-    return () => {
-      document.removeEventListener("keydown", toets);
-      document.removeEventListener("click", klik);
-    };
-  }, [open]);
-  useEffect(() => {
-    if (!open || window.matchMedia("(min-width: 768px)").matches) return;
-    const oud = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = "hidden";
-    return () => {
-      document.documentElement.style.overflow = oud;
-    };
-  }, [open]);
 
   const zet = (s: Stand) => {
     setStand(s);
@@ -136,150 +103,100 @@ export function Weergave({ knopKlasse = "" }: { knopKlasse?: string }) {
   };
 
   return (
-    <>
-      <button
-        ref={knop}
-        type="button"
-        aria-label={taal === "en" ? "Display and accessibility" : "Weergave en toegankelijkheid"}
-        aria-expanded={open}
-        aria-controls="weergave-paneel"
-        onClick={() => setOpen(!open)}
-        className={knopKlasse}
-      >
-        {/* zelfde maat en lijn als de iconen in de menupil: 20px op een raster van 22, lijn 1,8 */}
-        <svg width="20" height="20" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="lelie-knop">
-          {/* schuiven met een streepje als knop, zonder bolletjes (eigenaar, 10 okt 2026) */}
-          <path className="lelie-schuif" d={SCHUIF} />
-          {/* open = een waterlelie die opengaat (11 okt 2026): vijf bladen vanuit een knop, op het water */}
-          <LelieBloem />
-        </svg>
-      </button>
-      {gereed &&
-        createPortal(
-          <div
-            ref={paneel}
-            id="weergave-paneel"
-            role="dialog"
-            aria-label={taal === "en" ? "Display and accessibility" : "Weergave en toegankelijkheid"}
-            hidden={!open}
-            className="fixed inset-0 z-[1100] overflow-y-auto overscroll-contain bg-grond px-5 pb-[max(24px,env(safe-area-inset-bottom))] pt-[max(20px,env(safe-area-inset-top))] text-sm text-inkt md:inset-auto md:bottom-[84px] md:left-1/2 md:z-[200] md:w-80 md:-translate-x-1/2 md:overflow-visible md:rounded-2xl md:border md:border-lijn md:p-5 md:shadow-2xl lg:bottom-[110px]"
-          >
-            <div className="mb-8 flex items-center justify-between md:mb-4">
-              <strong className="syne flex items-center gap-3 text-[28px] md:text-[17px]">
-                {/* op de telefoon dekt het paneel de knop af: hier bloeit de lelie open als het paneel verschijnt */}
-                <svg width="28" height="28" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="lelie-knop lelie-bloeit text-oranje md:hidden">
-                  <LelieBloem />
-                </svg>
-                <T t={{ nl: "Weergave", en: "Display" }} />
-              </strong>
-              <button
-                type="button"
-                aria-label={taal === "en" ? "Close" : "Sluiten"}
-                onClick={() => setOpen(false)}
-                className="grid size-[var(--knop)] cursor-pointer place-items-center rounded-full border border-lijn md:size-[var(--knop-klein)] md:border-0"
-              >
-                ✕
-              </button>
-            </div>
-            <fieldset className="m-0 mb-4 border-0 p-0">
-              <legend className="lbl mb-2.5 p-0 opacity-70">
-                <T t={{ nl: "Taal", en: "Language" }} />
-              </legend>
-              <div className="grid grid-cols-2 rounded-full border border-lijn p-[3px]">
-                {([["nl", "Nederlands"], ["en", "English"]] as const).map(([k, naam]) => (
-                  <label
-                    key={k}
-                    lang={k}
-                    className="relative flex cursor-pointer items-center justify-center rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
-                  >
-                    <input
-                      type="radio"
-                      name="taal"
-                      value={k}
-                      checked={stand.taal === k}
-                      onChange={() => zet({ ...stand, taal: k })}
-                      className="sr-only"
-                    />
-                    <span className="inline-flex items-center justify-center gap-2">
-                      <Vlag taal={k} />
-                      {naam}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-            <fieldset className="m-0 mb-4 border-0 p-0">
-              <legend className="lbl mb-2.5 p-0 opacity-70"><T t={{ nl: "Kleur", en: "Colour" }} /></legend>
-              <div className="grid grid-cols-3 rounded-full border border-lijn p-[3px]">
-                {(["auto", "licht", "donker"] as const).map((k) => (
-                  <label
-                    key={k}
-                    className="cursor-pointer rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
-                  >
-                    <input
-                      type="radio"
-                      name="kleur"
-                      value={k}
-                      checked={stand.kleur === k}
-                      onChange={() => zet({ ...stand, kleur: k })}
-                      className="sr-only"
-                    />
-                    <T t={KLEUREN[k]} />
-                  </label>
-                ))}
-              </div>
-              <p className="mt-2 text-xs opacity-70">
-                <T t={{ nl: "Auto: volgt de instelling van je telefoon of computer.", en: "Auto: follows your phone or computer setting." }} />
-              </p>
-            </fieldset>
-            <label className="mb-4 flex cursor-pointer items-center justify-between gap-3 border-y border-lijn py-2.5">
-              <span><T t={{ nl: "Muziek", en: "Music" }} /></span>
-              <input
-                type="checkbox"
-                role="switch"
-                checked={speelt}
-                onChange={(e) => {
-                  setSpeelt(e.target.checked);
-                  muziek(e.target.checked);
-                }}
-                className="size-5 cursor-pointer accent-[var(--inkt)]"
-              />
-            </label>
-            <fieldset className="m-0 border-0 p-0">
-              <legend className="lbl mb-2.5 p-0 opacity-70">
-                <T t={{ nl: "Toegankelijkheid", en: "Accessibility" }} />
-              </legend>
-              {SCHAKELAARS.map(([k, t]) => (
-                <label
-                  key={k}
-                  className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5 last:border-b"
-                >
-                  <span><T t={t} /></span>
-                  <input
-                    type="checkbox"
-                    role="switch"
-                    checked={stand[k]}
-                    onChange={(e) => zet({ ...stand, [k]: e.target.checked })}
-                    className="size-5 cursor-pointer accent-[var(--inkt)]"
-                  />
-                </label>
-              ))}
-            </fieldset>
-            <button
-              type="button"
-              onClick={() => {
-                zet(STANDAARD);
-                setSpeelt(false);
-                muziek(false);
-              }}
-              className="lbl mt-3 cursor-pointer border-b border-current"
+    <div className="text-sm lg:grid lg:grid-cols-[1fr_1fr_2fr] lg:items-start lg:gap-x-10">
+      <fieldset className="m-0 mb-4 border-0 p-0">
+        <legend className="lbl mb-2.5 p-0 opacity-70">
+          <T t={{ nl: "Taal", en: "Language" }} />
+        </legend>
+        <div className="grid grid-cols-2 rounded-full border border-lijn p-[3px]">
+          {([["nl", "Nederlands"], ["en", "English"]] as const).map(([k, naam]) => (
+            <label
+              key={k}
+              lang={k}
+              className="relative flex cursor-pointer items-center justify-center rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
             >
-              <T t={{ nl: "Standaard herstellen", en: "Restore defaults" }} />
-            </button>
-          </div>,
-          document.body,
-        )}
-    </>
+              <input
+                type="radio"
+                name="taal"
+                value={k}
+                checked={stand.taal === k}
+                onChange={() => zet({ ...stand, taal: k })}
+                className="sr-only"
+              />
+              <span className="inline-flex items-center justify-center gap-2">
+                <Vlag taal={k} />
+                {naam}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <fieldset className="m-0 mb-4 border-0 p-0">
+        <legend className="lbl mb-2.5 p-0 opacity-70"><T t={{ nl: "Kleur", en: "Colour" }} /></legend>
+        <div className="grid grid-cols-3 rounded-full border border-lijn p-[3px]">
+          {(["auto", "licht", "donker"] as const).map((k) => (
+            <label
+              key={k}
+              className="cursor-pointer rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
+            >
+              <input
+                type="radio"
+                name="kleur"
+                value={k}
+                checked={stand.kleur === k}
+                onChange={() => zet({ ...stand, kleur: k })}
+                className="sr-only"
+              />
+              <T t={KLEUREN[k]} />
+            </label>
+          ))}
+        </div>
+        <p className="mt-2 mb-0 text-xs opacity-70">
+          <T t={{ nl: "Auto: volgt de instelling van je telefoon of computer.", en: "Auto: follows your phone or computer setting." }} />
+        </p>
+      </fieldset>
+      <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
+      <label className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5">
+        <span><T t={{ nl: "Muziek", en: "Music" }} /></span>
+        <input
+          type="checkbox"
+          role="switch"
+          checked={speelt}
+          onChange={(e) => {
+            setSpeelt(e.target.checked);
+            muziek(e.target.checked);
+          }}
+          className="size-5 cursor-pointer accent-[var(--inkt)]"
+        />
+      </label>
+      {SCHAKELAARS.map(([k, t]) => (
+        <label
+          key={k}
+          className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5"
+        >
+          <span><T t={t} /></span>
+          <input
+            type="checkbox"
+            role="switch"
+            checked={stand[k]}
+            onChange={(e) => zet({ ...stand, [k]: e.target.checked })}
+            className="size-5 cursor-pointer accent-[var(--inkt)]"
+          />
+        </label>
+      ))}
+      <button
+        type="button"
+        onClick={() => {
+          zet(STANDAARD);
+          setSpeelt(false);
+          muziek(false);
+        }}
+        className="lbl mt-3 w-fit cursor-pointer self-start border-0 border-b border-current bg-transparent p-0 text-inherit lg:col-start-2 lg:mt-4"
+      >
+        <T t={{ nl: "Standaard herstellen", en: "Restore defaults" }} />
+      </button>
+      </div>
+    </div>
   );
 }
 
