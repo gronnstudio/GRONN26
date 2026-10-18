@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
+import { Stapel } from "@/components/stapel"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
-import { BORDER_MATEN, BORDER_PRIJS, BORDERPAKKETTEN, type BorderPakket } from "@/lib/data/borderpakketten"
+import { BODEMPAKKETTEN, BORDER_MATEN, BORDER_PRIJS, BORDERPAKKETTEN, type BorderPakket } from "@/lib/data/borderpakketten"
 import { priceLabel } from "@/lib/format"
+import "./stapel.css"
 
 export const metadata: Metadata = {
   title: "Borderpakketten",
@@ -26,75 +28,83 @@ const PRIJSKAART = [
 
 // Stapelkaarten (eigenaar, 18 okt 2026: "maak deze stapelbaar ... zodat de 8 kleine
 // tegels die dubbelop zijn weg kunnen"). Eén kaart per pakket die bij het scrollen
-// blijft plakken; de volgende schuift eroverheen. Een kaart past op één scherm, dus
-// plan en plantlijst staan los eronder en openen via de link (:target).
+// blijft plakken; de volgende schuift eroverheen. Dicht toont een kaart alleen
+// nummer, naam en foto ("To much text on cards, leave that for when people open
+// the cards"). Open gaat zo:
+// - telefoon en tablet: een tik op de kaart opent het pakket onder de stapel (:target);
+// - desktop met een muis: de kaart is groter en het pakket schuift over de foto
+//   zodra je eroverheen beweegt ("bij hover ofzo op desktop"). Zie stapel.css.
 function Kaart({ p, nr }: { p: BorderPakket; nr: number }) {
   const id = `pakket-${p.slug}`
-  const m = BORDER_MATEN[0]
   return (
-    <li
-      style={{ "--i": nr - 1 } as React.CSSProperties}
-      className="sticky top-[calc(16px+var(--i)*10px)] md:top-[calc(112px+var(--i)*12px)]"
-    >
-      <article aria-labelledby={id} className="grid overflow-hidden rounded-[16px] border border-lijn bg-vlak md:grid-cols-2">
-        <div className="flex min-w-0 flex-col gap-4 p-6 sm:p-10">
-          <p className="lbl m-0 text-oranje-tekst">{String(nr).padStart(2, "0")}</p>
-          <h3 id={id} className="syne m-0 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></h3>
-          <p className="lbl m-0 leading-[1.6] text-gedempt">{p.tags.map((t, i) => <span key={t.nl}>{i > 0 && " · "}<T t={t} /></span>)}</p>
-          <p className="m-0 max-w-[52ch] text-[16px] leading-[1.5] sm:text-[17px]"><T t={p.zin} /></p>
-          <p className="m-0 text-[15px] tabular-nums">
-            <T t={{ nl: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} opgestuurd · ${priceLabel(m * BORDER_PRIJS.aangeplant)} aangeplant`, en: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} shipped · ${priceLabel(m * BORDER_PRIJS.aangeplant)} planted` }} />
-          </p>
-          <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Link
-              href={`/kennismaken?pakket=${p.slug}`}
-              aria-describedby={id}
-              className="knop bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
-            >
-              <T t={{ nl: "Vraag aan →", en: "Ask about it →" }} />
-            </Link>
-            <a href={`#plan-${p.slug}`} className="lnk text-[15px]"><T t={{ nl: "Plan en plantlijst", en: "Plan and plant list" }} /></a>
-          </div>
+    <li>
+      <article aria-labelledby={id} className="bp-kaart relative overflow-hidden rounded-[16px] border border-lijn bg-vlak">
+        <a href={`#open-${p.slug}`} className="flex flex-col no-underline text-inherit focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-inkt lg:h-[min(640px,calc(100svh-160px))]">
+          <span className="flex items-baseline gap-4 p-5 sm:p-8">
+            <span className="lbl text-oranje-tekst">{String(nr).padStart(2, "0")}</span>
+            <span id={id} className="syne text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></span>
+          </span>
+          <Foto
+            foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: p.alt.nl, label: "Sfeerbeeld", en: { alt: p.alt.en, label: "Mood image" } }}
+            sizes="(min-width: 1024px) 1200px, 100vw"
+            className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:min-h-0 lg:flex-1"
+          />
+        </a>
+        <div className="bp-paneel absolute inset-x-0 bottom-0 top-[112px] bg-vlak px-8 pb-8">
+          <Inhoud p={p} />
         </div>
-        <Foto
-          foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: p.alt.nl, label: "Sfeerbeeld", en: { alt: p.alt.en, label: "Mood image" } }}
-          sizes="(min-width: 768px) 50vw, 100vw"
-          className="aspect-[16/9] md:aspect-auto md:h-full"
-        />
       </article>
     </li>
   )
 }
 
-function Plan({ p }: { p: BorderPakket }) {
-  const id = `plan-${p.slug}-kop`
+/** Alles wat bij een geopend pakket hoort: plek, zin, prijs, knop, plan en plantlijst. */
+function Inhoud({ p }: { p: BorderPakket }) {
+  const m = BORDER_MATEN[0]
   const totaal = p.planten.reduce((t, x) => t + x.aantal, 0)
   return (
-    <section id={`plan-${p.slug}`} aria-labelledby={id} className="hidden scroll-mt-[24px] border-t border-lijn pt-[clamp(40px,5vw,72px)] target:block md:scroll-mt-[112px]">
-      <p className="lbl m-0 flex justify-between gap-4 text-gedempt">
-        <span><T t={{ nl: `${totaal} planten per 5 m²`, en: `${totaal} plants per 5 m²` }} /></span>
-        <a href="#pakketten" className="lnk"><T t={{ nl: "← Alle pakketten", en: "← All packages" }} /></a>
-      </p>
-      <h3 id={id} className="syne mt-4 mb-0 text-[clamp(26px,3vw,40px)] leading-[1.05] tracking-[-.02em]"><T t={{ nl: `Plan ${p.naam.nl.toLowerCase()}`, en: `Plan ${p.naam.en.toLowerCase()}` }} /></h3>
-      <div className="mt-8 grid gap-8 md:grid-cols-12">
-        <ul className="m-0 list-none p-0 text-[15px] md:col-span-4">
-          {p.planten.map((x) => (
-            <li key={x.lat} className="flex justify-between gap-4 border-b border-lijn py-2.5">
-              <span>
-                <T t={x.naam} /> <i className="text-gedempt">{x.lat}</i>
-              </span>
-              <span className="tabular-nums">{x.aantal}×</span>
+    <div className="grid gap-8 lg:h-full lg:grid-cols-2 lg:gap-10">
+      <div className="flex min-w-0 flex-col gap-4">
+        <p className="lbl m-0 leading-[1.6] text-gedempt">{p.tags.map((t, i) => <span key={t.nl}>{i > 0 && " · "}<T t={t} /></span>)}</p>
+        <p className="m-0 max-w-[52ch] text-[16px] leading-[1.5] sm:text-[17px]"><T t={p.zin} /></p>
+        <p className="m-0 text-[15px] tabular-nums">
+          <T t={{ nl: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} opgestuurd · ${priceLabel(m * BORDER_PRIJS.aangeplant)} aangeplant`, en: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} shipped · ${priceLabel(m * BORDER_PRIJS.aangeplant)} planted` }} />
+        </p>
+        <Link
+          href={`/kennismaken?pakket=${p.slug}`}
+          className="knop mt-2 self-start bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
+        >
+          <T t={{ nl: `Vraag ${p.naam.nl.toLowerCase()} aan →`, en: `Ask about the ${p.naam.en.toLowerCase()} →` }} />
+        </Link>
+      </div>
+      <div className="flex min-w-0 flex-col gap-3">
+        {/* Tekening op licht papier: de lijnen zijn antraciet, ook in Donker. */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
+        <img src={`/borderpakketten/plan-${p.slug}.svg`} alt={`Beplantingsplan van boven, ${p.naam.nl}, 5 m²`} loading="lazy" className="block h-auto w-full rounded-[12px] bg-gebroken-wit p-2" />
+        <p className="lbl m-0 text-gedempt"><T t={{ nl: `${totaal} planten per 5 m²`, en: `${totaal} plants per 5 m²` }} /></p>
+        <ul className="m-0 grid list-none grid-cols-2 gap-x-6 p-0 text-[14px] leading-[1.35]">
+          {p.planten.map((x, n) => (
+            <li key={x.lat} style={{ "--n": n } as React.CSSProperties} className="bp-plant flex justify-between gap-2 border-b border-lijn py-2">
+              <span className="min-w-0 truncate"><T t={x.naam} /></span>
+              <span className="tabular-nums text-gedempt">{x.aantal}×</span>
             </li>
           ))}
         </ul>
-        <div className="flex min-w-0 flex-col gap-4 md:col-span-8">
-          {/* Tekeningen op licht papier: de lijnen zijn antraciet, ook in Donker. */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
-          <img src={`/borderpakketten/plan-${p.slug}.svg`} alt={`Beplantingsplan van boven, ${p.naam.nl}, 5 m²`} loading="lazy" className="block h-auto w-full rounded-[16px] bg-gebroken-wit p-3" />
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG-tekening, geen foto */}
-          <img src={`/borderpakketten/doorsnede-${p.slug}.svg`} alt={`Doorsnede van de ${p.naam.nl.toLowerCase()}: hoe hoog elke plant wordt`} loading="lazy" className="block h-auto w-full rounded-[16px] bg-gebroken-wit p-3" />
-        </div>
       </div>
+    </div>
+  )
+}
+
+/** Het geopende pakket onder de stapel, voor telefoon en tablet (en een klik op desktop). */
+function Open({ p }: { p: BorderPakket }) {
+  const id = `open-${p.slug}-kop`
+  return (
+    <section id={`open-${p.slug}`} aria-labelledby={id} className="hidden scroll-mt-[24px] border-t border-lijn pt-[clamp(40px,5vw,72px)] target:block">
+      <p className="lbl m-0 flex justify-end">
+        <a href="#pakketten" className="lnk text-gedempt"><T t={{ nl: "← Alle pakketten", en: "← All packages" }} /></a>
+      </p>
+      <h3 id={id} className="syne mt-2 mb-6 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></h3>
+      <Inhoud p={p} />
     </section>
   )
 }
@@ -150,17 +160,42 @@ export default function BorderpakkettenPagina() {
         </p>
 
         <h2 id="pakketten" className="lbl mt-[clamp(56px,7vw,96px)] mb-5 scroll-mt-[24px] text-gedempt md:scroll-mt-[112px]"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
-        <ul className="m-0 flex list-none flex-col gap-6 p-0">
+        <Stapel className="flex flex-col gap-6 [--stapel-top:16px] md:[--stapel-top:24px]">
           {BORDERPAKKETTEN.map((p, i) => (
             <Kaart key={p.slug} p={p} nr={i + 1} />
           ))}
-        </ul>
+        </Stapel>
 
         <div className="mt-[clamp(48px,6vw,96px)]">
           {BORDERPAKKETTEN.map((p) => (
-            <Plan key={p.slug} p={p} />
+            <Open key={p.slug} p={p} />
           ))}
         </div>
+
+        {/* Compost en schors (eigenaar, 18 okt 2026: "maak ook nog een custom pakket met compost
+            en houtschors in twee varianten, dennenschors en franse schors"). Prijs volgt van Nick. */}
+        <section id="bodem" aria-labelledby="bodem-kop" className="mt-[clamp(72px,9vw,140px)] scroll-mt-[96px]">
+          <p className="lbl m-0 text-gedempt"><T t={{ nl: "Bodempakket", en: "Soil package" }} /></p>
+          <h2 id="bodem-kop" className="syne mt-4 mb-0 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={{ nl: "Compost en schors", en: "Compost and bark" }} /></h2>
+          <p className="mt-5 mb-0 max-w-[60ch] text-[17px] leading-[1.55]">
+            <T t={{ nl: "Een laag compost voedt de bodem, een laag schors erover houdt vocht vast en onkruid weg. Bij een nieuwe border of los, voor een border die je al hebt.", en: "A layer of compost feeds the soil, a layer of bark on top keeps moisture in and weeds out. With a new border, or on its own for a border you already have." }} />
+          </p>
+          <ul className="mt-8 mb-0 grid list-none gap-4 p-0 sm:grid-cols-2 sm:gap-6">
+            {BODEMPAKKETTEN.map((b) => (
+              <li key={b.slug} className="flex flex-col gap-4 rounded-[16px] bg-vlak p-6 sm:p-8">
+                <h3 className="syne m-0 text-[clamp(22px,2.4vw,30px)] leading-[1.1] tracking-[-.015em]"><T t={b.naam} /></h3>
+                <p className="m-0 text-[16px] leading-[1.5]"><T t={b.zin} /></p>
+                <p className="m-0 text-[15px] text-gedempt"><T t={{ nl: "Prijs op aanvraag", en: "Price on request" }} /></p>
+                <Link
+                  href={`/kennismaken?pakket=${b.slug}`}
+                  className="knop mt-auto self-start bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
+                >
+                  <T t={{ nl: "Vraag aan →", en: "Ask about it →" }} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <section id="op-maat" aria-labelledby="op-maat-kop" className="mt-[clamp(72px,9vw,140px)] scroll-mt-[96px] rounded-[16px] bg-vlak p-[clamp(24px,4vw,56px)]">
           <p className="lbl m-0 text-gedempt"><T t={{ nl: "Op maat", en: "Made to measure" }} /></p>
