@@ -18,6 +18,12 @@ export const metadata: Metadata = {
 // Kennismaken, zodat Nick in de mail ziet welk pakket iemand zoekt.
 // Plan en doorsnede zijn tekeningen op licht papier, ook in Donker.
 
+const PRIJSKAART = [
+  { naam: { nl: "Opgestuurd", en: "Shipped" }, prijs: BORDER_PRIJS.opgestuurd, vanaf: false, kort: { nl: "Zelf planten", en: "You plant" } },
+  { naam: { nl: "Aangeplant", en: "Planted" }, prijs: BORDER_PRIJS.aangeplant, vanaf: false, kort: { nl: "Ik plant hem", en: "I plant it" } },
+  { naam: { nl: "Op maat", en: "Custom" }, prijs: BORDER_PRIJS.opgestuurd, vanaf: true, kort: { nl: "Voor jouw plek", en: "For your spot" }, href: "#op-maat" },
+]
+
 function Prijzen({ p }: { p: BorderPakket }) {
   return (
     <table className="w-full border-collapse text-[15px] tabular-nums">
@@ -123,28 +129,59 @@ export default function BorderpakkettenPagina() {
       />
 
       <div className="wrap mt-[clamp(64px,8vw,120px)]">
-        <dl className="m-0 grid gap-6 border-t border-inkt pt-6 text-[15px] leading-[1.55] md:grid-cols-3">
-          <div>
-            <dt className="lbl text-gedempt"><T t={{ nl: "Opgestuurd", en: "Shipped" }} /></dt>
-            <dd className="m-0 mt-2 max-w-[38ch]">
-              <T t={{ nl: `${priceLabel(BORDER_PRIJS.opgestuurd)} per m². De planten in P9-pot en het plan van boven, thuisbezorgd in Nederland en België. Zelf planten.`, en: `${priceLabel(BORDER_PRIJS.opgestuurd)} per m². The plants in 9 cm pots and the planting plan, delivered in the Netherlands and Belgium. You plant.` }} />
-            </dd>
-          </div>
-          <div>
-            <dt className="lbl text-gedempt"><T t={{ nl: "Aangeplant", en: "Planted" }} /></dt>
-            <dd className="m-0 mt-2 max-w-[38ch]">
-              <T t={{ nl: `${priceLabel(BORDER_PRIJS.aangeplant)} per m². Ik maak de grond los, plant volgens plan en leg er compost over. In Stein en omgeving.`, en: `${priceLabel(BORDER_PRIJS.aangeplant)} per m². I loosen the soil, plant to the plan and add a layer of compost. In and around Stein.` }} />
-            </dd>
-          </div>
-          <div>
-            <dt className="lbl text-gedempt"><T t={{ nl: "Op maat", en: "Made to measure" }} /></dt>
-            <dd className="m-0 mt-2 max-w-[38ch]">
-              <T t={{ nl: "Past geen pakket? Dan stel ik een border samen voor jouw plek, voor dezelfde prijs per m².", en: "No package fits? Then I put together a border for your spot, at the same price per m²." }} />{" "}
-              <a href="#op-maat" className="lnk"><T t={{ nl: "Lees meer", en: "Read more" }} /></a>
-            </dd>
-          </div>
-        </dl>
-        <p className="lbl mt-4 mb-0 text-gedempt"><T t={{ nl: "Alle prijzen inclusief btw · de foto's zijn sfeerbeelden", en: "All prices include VAT · the photos are mood images" }} /></p>
+        {/* Prijskaart (eigenaar, 18 okt 2026): drie vakken naast elkaar, ook op de telefoon. */}
+        <ul className="m-0 grid list-none grid-cols-3 gap-2 p-0 sm:gap-4">
+          {PRIJSKAART.map((k) => {
+            const binnen = (
+              <>
+                <span className="lbl block text-[10px] text-gedempt sm:text-[11px]"><T t={k.naam} /></span>
+                <span className="mt-3 block text-[13px] text-gedempt">{k.vanaf ? <T t={{ nl: "vanaf", en: "from" }} /> : "\u00a0"}</span>
+                <span className="syne block text-[clamp(24px,6vw,44px)] leading-none tracking-[-.02em] tabular-nums">{priceLabel(k.prijs)}</span>
+                <span className="mt-1 block text-[13px] text-gedempt"><T t={{ nl: "per m²", en: "per m²" }} /></span>
+                <span className="mt-3 block text-[13px] leading-[1.35] sm:text-[15px]"><T t={k.kort} /></span>
+              </>
+            )
+            const vak = "flex h-full flex-col rounded-[16px] bg-vlak p-3 sm:p-6"
+            return (
+              <li key={k.naam.nl}>
+                {k.href ? (
+                  <a href={k.href} className={`${vak} no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt`}>{binnen}</a>
+                ) : (
+                  <div className={vak}>{binnen}</div>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+        <p className="mt-4 mb-0 max-w-[70ch] text-[14px] leading-[1.55] text-gedempt">
+          <T
+            t={{
+              nl: "Opgestuurd: de planten in P9-pot met het plan van boven, thuisbezorgd in Nederland en België. Aangeplant: ik maak de grond los, plant volgens plan en leg er compost over, in Stein en omgeving. Alle prijzen inclusief btw; de foto’s zijn sfeerbeelden.",
+              en: "Shipped: the plants in 9 cm pots with the planting plan, delivered in the Netherlands and Belgium. Planted: I loosen the soil, plant to the plan and add compost, in and around Stein. All prices include VAT; the photos are mood images.",
+            }}
+          />
+        </p>
+
+        {/* Tegels (eigenaar, 18 okt 2026): twee naast elkaar op de telefoon, elk naar zijn uitleg verderop. */}
+        <h2 className="lbl mt-[clamp(56px,7vw,96px)] mb-5 text-gedempt"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
+        <ul className="m-0 grid list-none grid-cols-2 gap-x-3 gap-y-8 p-0 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
+          {BORDERPAKKETTEN.map((p) => (
+            <li key={p.slug}>
+              <a href={`#${p.slug}`} className="group flex h-full flex-col no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
+                <Foto
+                  foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: "", label: "Sfeerbeeld", en: { alt: "", label: "Mood image" } }}
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  className="aspect-square rounded-[16px]"
+                />
+                <span className="syne mt-3 block text-[clamp(17px,2vw,22px)] leading-[1.15] tracking-[-.01em]"><T t={p.naam} /></span>
+                <span className="mt-1 block text-[14px] leading-[1.4] text-gedempt"><T t={p.kort} /></span>
+                <span className="mt-auto block pt-2 text-[14px] font-medium tabular-nums">
+                  <T t={{ nl: `vanaf ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}`, en: `from ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}` }} />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
 
         <div className="mt-[clamp(64px,8vw,120px)]">
           {BORDERPAKKETTEN.map((p, i) => (
