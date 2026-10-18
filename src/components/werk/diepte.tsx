@@ -7,28 +7,21 @@ import { useTaal } from "@/components/taal-klant"
 import { DIEPTE } from "@/lib/data/vijverrenovatie"
 import "./diepte.css"
 
-// De foto's van het project komen op je af terwijl je scrolt (eigenaar, 18 okt
-// 2026, naar untamed.gallery). Untamed doet het in three.js en neemt het
-// scrollen over; hier is het CSS 3D en een paar regels script op de gewone
-// scroll. Elke foto blijft even vooraan staan met fase en bijschrift. Tab of
-// een tik brengt een foto naar voren. Met minder beweging (of html.stil) staan
-// dezelfde foto's als rustig raster; dat regelt diepte.css, het script doet dan niets.
+// De foto's van het project hangen als een tunnel achter elkaar, elk 100°
+// verder rond het midden, en je vliegt erdoorheen terwijl je scrolt (eigenaar,
+// 18 okt 2026: "ongeveer hetzelfde tunnel effect van untamed"). Untamed doet
+// het in three.js en neemt het scrollen over; hier is het CSS 3D en een paar
+// regels script op de gewone scroll. Tab of een tik vliegt naar een foto. Met
+// minder beweging (of html.stil) staan dezelfde foto's als rustig raster; dat
+// regelt diepte.css, het script doet dan niets.
 
-const AFSTAND = 700 // px diepte tussen twee foto's
-const VOOR = 220 // de foto vooraan staat iets dichter dan het scherm: groter
+const AFSTAND = 420 // px diepte tussen twee foto's
+const VOOR = 320 // waar de foto staat die je net passeert
+const ZICHT = 14 // over hoeveel foto's de tunnel uitdooft in de verte
 const n = DIEPTE.length
 
 const stil = () =>
   document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches
-
-// Elke foto blijft vooraan staan (eerste 35 % van zijn stuk), dan glijdt de volgende naar voren.
-function camera(p: number) {
-  const t = p * (n - 1)
-  const k = Math.floor(t)
-  const r = (t - k - 0.35) / 0.65
-  const e = r <= 0 ? 0 : r * r * (3 - 2 * r)
-  return Math.min(n - 1, k + e)
-}
 
 export function Diepte() {
   const sectie = useRef<HTMLElement>(null)
@@ -53,17 +46,15 @@ export function Diepte() {
     const teken = () => {
       nu += (doel - nu) * 0.14
       if (Math.abs(doel - nu) < 0.001) nu = doel
-      const straal = Math.min(innerWidth * 0.26, 400)
+      const r = Math.min(innerWidth * 0.3, 420) // straal van de tunnel
       kaarten.current.forEach((k, i) => {
         if (!k) return
-        const d = (nu - i) * AFSTAND // 0 = vooraan, negatief = verder weg
+        const d = (nu - i) * AFSTAND // 0 = je passeert hem nu, negatief = verder weg
         const hoek = (i * 100 * Math.PI) / 180
-        const vooraan = Math.max(0, 1 - Math.abs(nu - i))
-        const r = straal * (1 - 0.75 * vooraan) // de foto vooraan schuift naar het midden
-        const o = Math.max(0, Math.min(1, d <= 0 ? 1 + d / (AFSTAND * 9) : 1 - d / (AFSTAND * 0.35)))
-        k.style.transform = `translate(-50%, -50%) translate3d(${(Math.cos(hoek) * r).toFixed(1)}px, ${(Math.sin(hoek) * r * 0.55).toFixed(1)}px, ${(d + VOOR).toFixed(1)}px)`
+        const o = Math.max(0, Math.min(1, d <= 0 ? 1 + d / (AFSTAND * ZICHT) : 1 - d / (AFSTAND * 0.8)))
+        k.style.transform = `translate(-50%, -50%) translate3d(${(Math.cos(hoek) * r).toFixed(1)}px, ${(Math.sin(hoek) * r * 0.6).toFixed(1)}px, ${(d + VOOR).toFixed(1)}px)`
         k.style.opacity = o.toFixed(3)
-        k.style.zIndex = String(1000 - Math.round(Math.abs(nu - i) * 10) + (d > 0 ? 500 : 0))
+        k.style.zIndex = String(1000 + Math.round(d / 10))
         k.style.visibility = o < 0.01 ? "hidden" : "visible"
       })
       const i = Math.round(nu)
@@ -83,7 +74,7 @@ export function Diepte() {
         getoond = -1
         return
       }
-      doel = camera(voortgang())
+      doel = voortgang() * (n - 1)
       if (!frame) frame = requestAnimationFrame(teken)
     }
 
