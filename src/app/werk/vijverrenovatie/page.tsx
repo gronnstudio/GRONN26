@@ -5,6 +5,7 @@ import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Cijfer, Citaat, Clip, Doorkijk, Fiche, FotoReeks, Kopregel, Lees, Slot, Volgende } from "@/components/werk/delen"
 import { Verder } from "@/components/wereld/verder"
+import { Diepte } from "@/components/werk/diepte"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
 import {
@@ -84,7 +85,13 @@ export default function Vijverrenovatie() {
             [nlEn("Water", "Water"), nlEn("circa 5.000 l", "about 5,000 l")],
           ]}
         />
+      </div>
 
+      <div className="w-sectie">
+        <Diepte />
+      </div>
+
+      <div className="wrap">
         <section aria-labelledby="inleiding-kop" className="w-sectie">
           <span id="inleiding-kop" className="sr-only"><T t={nlEn("Inleiding", "Introduction")} /></span>
           {VIJVER.intro.map((t, i) => (

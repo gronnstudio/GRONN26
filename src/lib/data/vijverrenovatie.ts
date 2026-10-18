@@ -147,6 +147,38 @@ export const fotosVoor = (id: FotoId): Foto[] => {
 }
 
 /**
+ * De foto's die op de projectpagina op je af komen (`Diepte`), in de volgorde
+ * van het werk. Alleen echte foto's, geen AI-visualisaties. F10 en F01 zijn
+ * de afronding, niet het eindresultaat (de status rechtvaardigt dat nog niet).
+ */
+export const DIEPTE: { foto: Foto; fase: L; zin: L }[] = (
+  [
+    ["F02", 0, "bestaand", "De oude vijver, nog onder een net.", "The old pond, still under a net."],
+    ["F02", 1, "bestaand", "Tegen de muur, onder de boom.", "Against the wall, under the tree."],
+    ["F03", 0, "proces", "Folie uitrollen en op maat meten.", "Rolling out the liner and measuring it."],
+    ["F04", 0, "uitvoering", "Een sleuf langs de haag voor de leidingen.", "A trench along the hedge for the pipes."],
+    ["F05", 0, "uitvoering", "De filterbak met drie kamers.", "The three-chamber filter box."],
+    ["F07", 1, "proces", "Slib uit het oude filter.", "Sludge from the old filter."],
+    ["F08", 0, "uitvoering", "Keien op de folie, waar water tuin wordt.", "Boulders on the liner, where water becomes garden."],
+    ["F11", 0, "uitvoering", "De beekloop in aanbouw, juli.", "The stream under construction, July."],
+    ["F09", 0, "uitvoering", "Jonge vijverplanten in een mand met grind.", "Young pond plants in a basket of gravel."],
+    ["F08", 1, "uitvoering", "Nick aan het werk, september.", "Nick at work, September."],
+    ["F09", 1, "uitvoering", "Tussen de oeverplanten.", "Among the marginal plants."],
+    ["F10", 0, "afronding", "De waterval stroomt over natuursteen.", "The waterfall runs over natural stone."],
+    ["F01", 0, "afronding", "Twee vijvers, één watersysteem.", "Two ponds, one water system."],
+  ] as const
+).map(([id, n, fase, nl, en]) => ({
+  foto: fotosVoor(id)[n],
+  fase: {
+    bestaand: { nl: "Bestaande situatie", en: "Existing situation" },
+    proces: { nl: "Proces", en: "Process" },
+    uitvoering: { nl: "Uitvoering", en: "Construction" },
+    afronding: { nl: "Afronding", en: "Finishing" },
+  }[fase],
+  zin: { nl, en },
+}))
+
+/**
  * De Nederlandse velden blijven strings (andere pagina's lezen ze zo);
  * `en` draagt dezelfde velden in het Engels.
  */
