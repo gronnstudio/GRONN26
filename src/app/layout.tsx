@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Syne, Montserrat } from "next/font/google"
-import { Kop } from "@/components/kop"
 import { Menu } from "@/components/menu"
 import { Bekijk } from "@/components/bekijk"
 import { App } from "@/components/app"
@@ -53,7 +52,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: ZOOMSLOT }} />
       </head>
       <body>
-        <Kop />
         <main>{children}</main>
         <Voet />
         <Menu />

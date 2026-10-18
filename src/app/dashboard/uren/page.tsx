@@ -50,7 +50,7 @@ export default async function Uren() {
       </header>
       <main className="mx-auto grid max-w-[1200px] gap-10 px-5 py-8 md:px-8 lg:grid-cols-[420px_minmax(0,1fr)]">
         <section>
-          <h1 className="syne m-0 text-[clamp(30px,3.4vw,44px)] leading-[1.05]">Uren {jaar}</h1>
+          <h1 className="syne m-0 text-[clamp(36px,4vw,48px)] leading-[1.05]">Uren {jaar}</h1>
           <p className="m-0 mt-3 text-[14px] leading-[1.55] opacity-75">
             Het urencriterium is {DOEL.toLocaleString("nl-NL")} uur per kalenderjaar. Alles voor de zaak telt: klussen,
             reistijd, offertes, inkoop, administratie, social, website en bijleren.

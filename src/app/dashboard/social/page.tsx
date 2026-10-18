@@ -87,7 +87,7 @@ export default async function Social() {
       </header>
       <main className="mx-auto grid max-w-[1200px] gap-10 px-5 py-8 md:px-8 lg:grid-cols-[420px_minmax(0,1fr)]">
         <section>
-          <h1 className="syne m-0 text-[clamp(30px,3.4vw,44px)] leading-[1.05]">The KNIGHT move</h1>
+          <h1 className="syne m-0 text-[clamp(36px,4vw,48px)] leading-[1.05]">The KNIGHT move</h1>
           <p className="m-0 mt-3 text-[14px] leading-[1.55] opacity-75">
             Vijf tegels, steeds in deze volgorde. Op drie kolommen staat dezelfde tegel dan een paardensprong verder, nooit
             naast of onder zichzelf. Elke vijfde post is een quote.

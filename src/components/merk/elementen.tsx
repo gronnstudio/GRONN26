@@ -121,7 +121,7 @@ export function MerkElementen() {
             </a>
           </Vak>
           <Vak titel={{ nl: "Kopieerchip", en: "Copy chip" }}>
-            <Kopieer label="HEX" waarde="#DB6923" />
+            <Kopieer label="HEX" waarde="#FF5B04" />
           </Vak>
           <Vak titel={{ nl: "Menu · glazen pil met komeet", en: "Menu · glass pill with comet" }} i={1}>
             <div className="relative flex items-center gap-1 rounded-full bg-[rgba(32,32,32,.55)] p-1 ring-1 ring-gebroken-wit/10" aria-hidden="true">

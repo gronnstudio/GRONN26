@@ -24,7 +24,7 @@ export default async function Drukwerk({ params }: { params: Promise<{ slug: str
       <header className="rounded-b-[22px] bg-[#202020] px-12 pb-9 pt-12 text-[#EFEEEA]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[30px] w-auto" />
-        <p className="lbl m-0 mt-12 text-[#DB6923]">Kleine letters · versie {datum(d.updated)}</p>
+        <p className="lbl m-0 mt-12 text-[#FF5B04]">Kleine letters · versie {datum(d.updated)}</p>
         <h1 className="syne m-0 mt-1 text-[38px] leading-[1.05] tracking-[-.02em]">{d.title}</h1>
         <p className="m-0 mt-3 max-w-[60ch] opacity-80">{d.intro}</p>
       </header>

@@ -71,8 +71,8 @@
 .w-zij.weg { opacity: 0; }
 @media (max-width: 1100px) { .w-zij { display: none; } }
 @media (max-width: 767px) {
-  .w-opening { padding-top: 112px; }
-  .w-reus { font-size: clamp(40px, 12vw, 56px); }
+  .w-opening { padding-top: 56px; }
+  .w-reus { font-size: clamp(44px, 13.5vw, 72px); }
   .w-groei .w-beeld { aspect-ratio: 4 / 3; }
 }
 

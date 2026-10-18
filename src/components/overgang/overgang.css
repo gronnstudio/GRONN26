@@ -8,7 +8,7 @@ html.intro:not(.intro-los) { overflow: hidden; }
 
 /* De laadlijn is een komeet: een felle kop rechts met een staart die naar
    links uitdooft (eigenaar, 10 okt 2026: "maak de lijn bovenin een komeet"). */
-.og-laad { position: absolute; left: 0; top: 0; height: 4px; width: 0; border-radius: 0 9999px 9999px 0; background: linear-gradient(to right, rgb(219 105 35 / 0), rgb(219 105 35 / .35) 55%, #db6923); z-index: 1005; }
+.og-laad { position: absolute; left: 0; top: 0; height: 4px; width: 0; border-radius: 0 9999px 9999px 0; background: linear-gradient(to right, rgb(219 105 35 / 0), rgb(219 105 35 / .35) 55%, #ff5b04); z-index: 1005; }
 .og-grond { position: absolute; inset: 0; background: var(--grond); }
 .og-verloop { position: absolute; inset: 0; background: linear-gradient(to bottom, var(--vlak), var(--grond)); opacity: 0; }
 .og-laad, .og-grond, .og-merk { display: none; }

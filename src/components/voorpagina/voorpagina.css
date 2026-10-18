@@ -531,7 +531,7 @@
   border: 1.5px solid currentColor;
 }
 @media (max-width: 767px) {
-  .vp-vijver-titel { font-size: 12.5vw; }
+  .vp-vijver-titel { font-size: 14vw; }
   .vp-vijver-beeld img { object-position: 30% 60%; }
 }
 @media (prefers-reduced-motion: no-preference) {

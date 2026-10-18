@@ -105,7 +105,7 @@ for (const b of [390, 1440]) {
   })
 }
 
-test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: kop, voet en de brede menubalk bovenaan op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {
@@ -114,7 +114,7 @@ test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scher
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
       const wrap = document.querySelector("footer .wrap")!
       const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
-      return [links("main h1"), voet, links('[data-menu] a[href="/kennismaken"]')]
+      return [links("main h1"), voet, links("nav[data-menu] > ul")]
     })
     expect([h1, kennis], route).toEqual([voet, voet])
   }
