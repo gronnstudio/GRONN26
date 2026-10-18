@@ -73,11 +73,12 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-test("menu: Home, Werk, Studio, Shop en een hamburger met het megamenu", async ({ page }) => {
-  await zonderIntro(page)
-  for (const b of [390, 1440]) {
+// Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
+for (const b of [390, 1440]) {
+  test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
+    await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
-    await page.goto("/werk/vijverrenovatie", { waitUntil: "domcontentloaded" })
+    await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
     const nav = page.locator("nav[data-menu]")
     for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
@@ -94,8 +95,8 @@ test("menu: Home, Werk, Studio, Shop en een hamburger met het megamenu", async (
     await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
     await page.keyboard.press("Escape")
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
-  }
-})
+  })
+}
 
 test("uitlijning: kop, voet en menu-hoeken op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
