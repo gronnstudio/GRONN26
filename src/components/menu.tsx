@@ -18,12 +18,11 @@ import { useTaal } from "./taal-klant"
 // even bewegen, de huidige pagina als kiezelknopje, op de telefoon altijd
 // groot. Tijdens het lezen komt Omhoog achteraan, na de hamburger, in de
 // ronding van de pil ("hamburger en dan oranje back to top achteraan").
-// Studio is een poppetje in tuinbroek, Shop een mand (eigenaar, 18 okt 2026).
 const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string }[] = [
   { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
-  { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 6.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM5 14.5v-3a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v3M8.5 8.5v4.5M13.5 8.5V13M8 13h6v7.5h-2L11 17l-1 3.5H8z" },
-  { href: "/tuinen/borderpakketten", label: "Shop", bij: ["/tuinen/borderpakketten"], beweging: "groei", icoon: "M6.5 9.5c0-4 2-6.5 4.5-6.5s4.5 2.5 4.5 6.5M3.5 9.5h15M5 9.5l1.4 8.3a1.5 1.5 0 0 0 1.5 1.2h6.2a1.5 1.5 0 0 0 1.5-1.2L17 9.5M5.6 13.5h10.8M9 9.5l.5 9.5M13 9.5l-.5 9.5" },
+  { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
+  { href: "/tuinen/borderpakketten", label: "Shop", bij: ["/tuinen/borderpakketten"], beweging: "groei", icoon: "M4.5 8h13l-1 11h-11zM8 8V6.5a3 3 0 0 1 6 0V8" },
 ]
 
 // de huidige pagina: een licht kiezelknopje met reliëf achter een donker icoon
