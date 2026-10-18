@@ -170,20 +170,19 @@ export default function BorderpakkettenPagina() {
         {/* Kaartstijl (eigenaar, 18 okt 2026: "beter verdeeld, meer negatieve ruimte"): tekst bovenin met ruime marge, foto tot de rand onderaan. */}
         <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
           {BORDERPAKKETTEN.map((p, i) => (
-            <li key={p.slug}>
-              <a href={`#${p.slug}`} className="flex h-full flex-col overflow-hidden rounded-[16px] bg-vlak no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
-                <span className="flex flex-col p-4 pb-5 sm:p-6 sm:pb-7">
-                  <span className="lbl block text-oranje-tekst">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="syne mt-3 block text-[clamp(17px,2.2vw,26px)] leading-[1.1] tracking-[-.015em]"><T t={{ nl: afbreek(p.naam.nl), en: afbreek(p.naam.en) }} /></span>
-                  <span className="mt-2 block text-[14px] leading-[1.45] text-gedempt sm:text-[15px]"><T t={p.kort} /></span>
-                  <span className="mt-4 block text-[14px] font-medium tabular-nums">
-                    <T t={{ nl: `vanaf ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}`, en: `from ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}` }} />
-                  </span>
+            // Subgrid: nummer, naam, regel, prijs en foto delen per rij dezelfde lijnen, ook als een naam op twee regels breekt (eigenaar, 18 okt 2026: "alles op dezelfde lijn").
+            <li key={p.slug} className="row-span-5 grid grid-rows-subgrid gap-0">
+              <a href={`#${p.slug}`} className="row-span-5 grid grid-rows-subgrid gap-0 overflow-hidden rounded-[16px] bg-vlak no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
+                <span className="lbl block px-4 pt-4 text-oranje-tekst sm:px-6 sm:pt-6">{String(i + 1).padStart(2, "0")}</span>
+                <span className="syne mt-3 block px-4 text-[clamp(17px,2.2vw,26px)] leading-[1.1] tracking-[-.015em] sm:px-6"><T t={{ nl: afbreek(p.naam.nl), en: afbreek(p.naam.en) }} /></span>
+                <span className="mt-2 block px-4 text-[14px] leading-[1.45] text-gedempt sm:px-6 sm:text-[15px]"><T t={p.kort} /></span>
+                <span className="mt-4 block px-4 pb-5 text-[14px] font-medium tabular-nums sm:px-6 sm:pb-7">
+                  <T t={{ nl: `vanaf ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}`, en: `from ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}` }} />
                 </span>
                 <Foto
                   foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: "", label: "Sfeerbeeld", en: { alt: "", label: "Mood image" } }}
                   sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                  className="mt-auto aspect-[4/3]"
+                  className="aspect-[4/3]"
                 />
               </a>
             </li>
