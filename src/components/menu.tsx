@@ -19,7 +19,7 @@ import { useTaal } from "./taal-klant"
 // groot. Tijdens het lezen komt Omhoog achteraan, na de hamburger, in de
 // ronding van de pil ("hamburger en dan oranje back to top achteraan").
 const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string }[] = [
-  { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5c-3.3 0-5.5-2.4-5.5-5.3S7.9 8.5 11 8.5s5.5 2.8 5.5 5.7-2.2 5.3-5.5 5.3zM11 8.5V6M11 6.5c0-2.2 1.6-3.8 3.8-3.8 0 2.2-1.6 3.8-3.8 3.8z" },
+  { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/tuinen/borderpakketten", label: "Shop", bij: ["/tuinen/borderpakketten"], beweging: "groei", icoon: "M4.5 8h13l-1 11h-11zM8 8V6.5a3 3 0 0 1 6 0V8" },
@@ -27,14 +27,6 @@ const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoo
 
 // de huidige pagina: een licht kiezelknopje met reliëf achter een donker icoon
 const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10 aria-[current=page]:kiezel"
-
-// Alleen wat nog niet in de dock of de voet staat (eigenaar, 18 okt 2026:
-// "Alles dat in dock en footer al staat hoeft hier niet ook nog eens in het
-// hamburger menu"): de losse projecten, en daaronder Weergave.
-const PROJECTEN: [string, Tekst][] = [
-  ["/werk/vijverrenovatie", { nl: "Vijverrenovatie", en: "Pond renovation" }],
-  ["/werk/terras-geulle", { nl: "Terras in Geulle", en: "Terrace in Geulle" }],
-]
 
 const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
 
@@ -116,16 +108,6 @@ export function Menu() {
             <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
           </Link>
           <div>
-            <p className="lbl m-0 mb-2 text-gebroken-wit/60"><T t={{ nl: "Projecten", en: "Projects" }} /></p>
-            <ul className="m-0 list-none p-0 lg:flex lg:gap-x-10">
-              {PROJECTEN.map(([href, label]) => (
-                <li key={href}>
-                  <Link href={href} aria-current={pad === href ? "page" : undefined} className={`${linkKlasse} syne text-[26px] leading-[1.15] aria-[current=page]:text-oranje lg:text-[20px]`}><T t={label} /></Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="border-t border-gebroken-wit/15 pt-6">
             <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
             <Instellingen />
           </div>
