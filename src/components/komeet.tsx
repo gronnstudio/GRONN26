@@ -6,7 +6,7 @@ const STUKJES = 14
 const STUK = LENGTE / STUKJES
 
 /** De emberkomeet om de pil: een felle oranje kop met een staart die
- *  uitdooft, in zes seconden langs de rand. Puur versiering; stil bij minder
+ *  uitdooft, in zes seconden langs de rand (op desktop vijftien, globals.css). Puur versiering; stil bij minder
  *  beweging (globals.css). */
 export function Komeet({ as: Tag = "span" }: { as?: "span" | "li" }) {
   return (

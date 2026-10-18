@@ -38,6 +38,8 @@ test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
+  // pas klikken als er geen doek meer ligt; op CI viel de klik soms nog onder de opening
+  await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
   await page.click('nav[aria-label="Hoofdmenu"] a[href="/werk"]')
   await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
@@ -104,7 +106,7 @@ for (const b of [390, 1440]) {
   })
 }
 
-test("uitlijning: kop, voet en de brede menubalk bovenaan op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {
@@ -139,12 +141,37 @@ for (const route of ["/", "/vijvers", "/werk", "/kennismaken", "/merk"]) {
   })
 }
 
+test("borderpakket @390: een tik op de kaart opent het pakket onder de stapel", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto("/tuinen/borderpakketten")
+  await expect(page.locator("#open-plukborder")).toBeHidden()
+  await page.click('a[href="#open-plukborder"]')
+  await expect(page.locator("#open-plukborder")).toBeVisible()
+  await expect(page.locator('#open-plukborder img[src="/borderpakketten/plan-plukborder.svg"]')).toBeVisible()
+})
+
+test("borderpakket @1280: het pakket schuift over de foto bij hover", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await page.goto("/tuinen/borderpakketten")
+  const kaart = page.locator("article", { has: page.locator("#pakket-vlinderborder") })
+  const paneel = kaart.locator(".bp-paneel")
+  await kaart.scrollIntoViewIfNeeded()
+  await expect(paneel).toHaveCSS("opacity", "0")
+  await kaart.hover()
+  await expect(paneel).toHaveCSS("opacity", "1")
+})
+
 test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ page }) => {
   await zonderIntro(page)
   let body = ""
   await page.route("**/formsubmit.co/**", (r) => { body = r.request().postData() ?? ""; r.fulfill({ status: 200, contentType: "application/json", body: '{"success":"true"}' }) })
   await page.goto("/tuinen/borderpakketten")
-  await page.click('a[href="/kennismaken?pakket=plukborder"]')
+  // Desktop: het pakket schuift over de foto zodra de muis erop staat.
+  const kaart = page.locator("article", { has: page.locator("#pakket-plukborder") })
+  await kaart.hover()
+  await kaart.locator('a[href="/kennismaken?pakket=plukborder"]').click()
   await expect(page).toHaveURL(/pakket=plukborder/)
   await expect(page.locator('input[name="pakket"][value="plukborder"]')).toBeChecked()
   await page.fill('input[name="naam"]', "Test Persoon")

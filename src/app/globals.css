@@ -26,7 +26,7 @@
   --voorbeeld: #8a8272;
   --oranje: #ff5b04;
   --oranje-tekst: #ff5b04;
-  --bos: #2b2a24;
+  --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
   --mos: #6f6553;
   --salie: #cbbfa8;
   --goot: clamp(20px, 4vw, 56px);
@@ -73,7 +73,7 @@ html.donker, .donker {
    tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #36342d;
+  --vlak: #3a2e25;
   --gedempt: var(--salie);
   --lijn: rgba(239, 238, 234, 0.2);
 }
@@ -174,7 +174,10 @@ h1[tabindex="-1"]:focus-visible {
 .komeet { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .komeet svg { display: block; overflow: visible; }
 /* de komeet volgt de ronding van de pil: de helft van zijn hoogte (24 klein, 32 groot; menu.tsx zet --komeet-r) */
-.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet 6s linear infinite; }
+.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet var(--komeet-duur, 6s) linear infinite; }
+/* de desktoppil is ruim twee keer zo lang als die op de telefoon; met dezelfde
+   6 s leek de komeet daar te jagen (eigenaar, 18 okt 2026), dus even snel per pixel */
+@media (min-width: 1024px) { .komeet { --komeet-duur: 15s; } }
 @keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
@@ -365,3 +368,27 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 @keyframes lelie-water { from { opacity: 0; } to { opacity: 1; } }
 .lelie-bloeit .lelie-blad { animation: lelie-open 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) both; animation-delay: calc(150ms + var(--n) * 60ms); }
 .lelie-bloeit .lelie-water { animation: lelie-water 0.4s 0.3s both; }
+
+/* Stapel (src/components/stapel.tsx): elke kaart blijft bovenaan plakken, telkens
+   16px lager, zodat de koppen van de vorige kaarten zichtbaar blijven. */
+.stapel { margin: 0; padding: 0; list-style: none; }
+.stapel > li { position: sticky; top: calc(var(--stapel-top, 24px) + var(--i, 0) * 16px); }
+
+/* De rand van de voet is een border in silhouet (voet-tuin.tsx), in de kleur
+   van de voet. Komt hij in beeld, dan groeit de border een stukje op. */
+.voet-tuin {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 1px);
+  width: 100%;
+  height: clamp(64px, 8vw, 120px);
+  fill: var(--grond);
+  transform-origin: bottom;
+  pointer-events: none;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.stil) .voet-tuin { animation: voet-tuin linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+  }
+}
+@keyframes voet-tuin { from { transform: scaleY(0.35); } }

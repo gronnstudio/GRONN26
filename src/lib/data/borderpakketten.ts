@@ -10,8 +10,6 @@ import type { L } from "@/lib/i18n"
 export type BorderPakket = {
   slug: string
   naam: L
-  /** Eén korte regel voor de tegel. */
-  kort: L
   tags: L[]
   zin: L
   alt: L
@@ -26,7 +24,6 @@ export const BORDER_MATEN = [5, 10, 15] as const
 export const BORDERPAKKETTEN: BorderPakket[] = [
   {
     slug: "vlinderborder",
-    kort: { nl: "Prairiebloei voor bijen en vlinders.", en: "Prairie bloom for bees and butterflies." },
     naam: { nl: "Vlinderborder", en: "Butterfly border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Normale tot droge grond", en: "Normal to dry soil" }, { nl: "Bloei juni–oktober", en: "Flowers June–October" }],
     zin: {
@@ -45,7 +42,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "schaduwborder",
-    kort: { nl: "Rustig groen onder een boom.", en: "Calm green under a tree." },
     naam: { nl: "Schaduwborder", en: "Shade border" },
     tags: [{ nl: "Halfschaduw tot schaduw", en: "Part to full shade" }, { nl: "Vochthoudende grond", en: "Moist soil" }, { nl: "Jaarrond groen", en: "Green all year" }],
     zin: {
@@ -64,7 +60,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "vijverrand",
-    kort: { nl: "Een zachte oever voor kikker en libel.", en: "A soft bank for frogs and dragonflies." },
     naam: { nl: "Vijverrand", en: "Pond edge" },
     tags: [{ nl: "Zon tot halfschaduw", en: "Sun to part shade" }, { nl: "Natte grond en ondiep water", en: "Wet soil and shallow water" }, { nl: "Bij elke vijver", en: "For any pond" }],
     zin: {
@@ -82,7 +77,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "droge-border",
-    kort: { nl: "Voor hete zomers, zonder sproeien.", en: "For hot summers, no watering." },
     naam: { nl: "Droge border", en: "Dry border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Droge grond of grind", en: "Dry soil or gravel" }, { nl: "Weinig water nodig", en: "Little water needed" }],
     zin: {
@@ -100,7 +94,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "inheemse",
-    kort: { nl: "Wilde planten die hier thuishoren.", en: "Wild plants that belong here." },
     naam: { nl: "Inheemse border", en: "Native border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Schrale tot normale grond", en: "Poor to normal soil" }, { nl: "Bloei mei–september", en: "Flowers May–September" }],
     zin: {
@@ -119,7 +112,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "plukborder",
-    kort: { nl: "Een bos bloemen, de hele zomer.", en: "A bunch of flowers, all summer." },
     naam: { nl: "Plukborder", en: "Cutting border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Normale grond", en: "Normal soil" }, { nl: "Bloei juni–oktober", en: "Flowers June–October" }],
     zin: {
@@ -138,7 +130,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "witte-border",
-    kort: { nl: "Wit dat ’s avonds oplicht.", en: "White that glows at dusk." },
     naam: { nl: "Witte border", en: "White border" },
     tags: [{ nl: "Halfschaduw", en: "Part shade" }, { nl: "Vochthoudende grond", en: "Moist soil" }, { nl: "Licht in de avond", en: "Glows at dusk" }],
     zin: {
@@ -157,7 +148,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "eetbare-border",
-    kort: { nl: "Bes, rabarber en kruiden bij de deur.", en: "Currants, rhubarb and herbs by the door." },
     naam: { nl: "Eetbare border", en: "Edible border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Normale grond", en: "Normal soil" }, { nl: "Oogst juni–september", en: "Harvest June–September" }],
     zin: {
@@ -173,6 +163,26 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
       { naam: { nl: "Rode bes", en: "Redcurrant" }, lat: "Ribes rubrum", aantal: 2 },
       { naam: { nl: "Rabarber", en: "Rhubarb" }, lat: "Rheum rhabarbarum", aantal: 1 },
     ],
+  },
+]
+
+/** Compost met schors (eigenaar, 18 okt 2026), in twee varianten. Nog geen prijs: op aanvraag. */
+export const BODEMPAKKETTEN: { slug: string; naam: L; zin: L }[] = [
+  {
+    slug: "compost-dennenschors",
+    naam: { nl: "Compost + dennenschors", en: "Compost + pine bark" },
+    zin: {
+      nl: "Een laag compost met daarover dennenschors. Licht van kleur en zacht, een natuurlijke afdeklaag die na een paar jaar in de bodem opgaat.",
+      en: "A layer of compost with pine bark on top. Light in colour and soft, a natural cover that works into the soil after a few years.",
+    },
+  },
+  {
+    slug: "compost-franse-schors",
+    naam: { nl: "Compost + Franse schors", en: "Compost + French bark" },
+    zin: {
+      nl: "Een laag compost met daarover Franse schors. Grover en roodbruin, blijft langer liggen en ziet er strak uit.",
+      en: "A layer of compost with French maritime pine bark on top. Coarser and red-brown, it lasts longer and looks neat.",
+    },
   },
 ]
 

@@ -9,6 +9,8 @@ import { useEffect, useRef } from "react"
 // gewone foto. Kaal WebGL, geen bibliotheek. Geen WebGL, minder beweging of
 // html.stil: niets, de foto blijft zoals hij is.
 
+// Zacht gehouden (eigenaar, 18 okt 2026: "ripple effect is to strong"): kleine
+// verschuiving, weinig licht, snel uitgedempt.
 const MAX = 10
 
 const VS = `attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0.,1.);}`
@@ -19,8 +21,8 @@ void main(){
   for(int i=0;i<${MAX};i++){
     float leeftijd=nu-drop[i].z; if(leeftijd<0.||leeftijd>2.6) continue;
     vec2 r=(uv-drop[i].xy)*aspect; float a=length(r);
-    float golf=sin(a*70.-leeftijd*9.)*exp(-a*7.)*exp(-leeftijd*1.6);
-    d+=normalize(r+1e-5)*golf*.022; licht+=golf*.16;
+    float golf=sin(a*70.-leeftijd*9.)*exp(-a*10.)*exp(-leeftijd*2.);
+    d+=normalize(r+1e-5)*golf*.007; licht+=golf*.05;
   }
   vec2 t=(uv+d-.5)*schaal+.5;
   vec4 k=texture2D(img,clamp(t,0.,1.));
@@ -120,7 +122,7 @@ export function Rimpel({ src, className = "", vanzelf = false }: { src: string; 
       }
     }
     const raak = (e: PointerEvent) => {
-      if (nu() - laatste < 0.07) return
+      if (nu() - laatste < 0.15) return
       laatste = nu()
       const r = vak.getBoundingClientRect()
       druppel((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height)

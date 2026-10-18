@@ -130,6 +130,13 @@
     transition: opacity 700ms var(--w-ease), transform 700ms var(--w-ease);
     transition-delay: calc(var(--i, 0) * 100ms);
   }
+  /* foto's in het verhaal op Over mij schuiven in van boven of van onder */
+  html.w-fx:not(.stil) [data-zie="boven"],
+  html.w-fx:not(.stil) [data-zie="onder"] {
+    transition-duration: 1100ms;
+  }
+  html.w-fx:not(.stil) [data-zie="boven"] { transform: translate3d(0, -35%, 0); }
+  html.w-fx:not(.stil) [data-zie="onder"] { transform: translate3d(0, 35%, 0); }
   html.w-fx:not(.stil) [data-zie].aan {
     opacity: 1;
     transform: none;

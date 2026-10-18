@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState, type FocusEvent, type FormEvent, ty
 import { flushSync } from "react-dom"
 
 import { BUSINESS } from "@/lib/business"
-import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
+import { BODEMPAKKETTEN, BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
 import { CONTACT_BUDGETTEN } from "@/lib/data/teksten"
 import type { L } from "@/lib/i18n"
 import { T, kies, type Tekst } from "@/components/taal"
@@ -38,6 +38,7 @@ const SOORTEN: { id: string; label: L }[] = [
 // het pakket staat dan al gekozen, en de mail zegt welk pakket iemand zoekt.
 const PAKKETTEN: { id: string; label: L }[] = [
   ...BORDERPAKKETTEN.map((p) => ({ id: p.slug, label: p.naam })),
+  ...BODEMPAKKETTEN.map((p) => ({ id: p.slug, label: p.naam })),
   { id: "op-maat", label: { nl: "Op maat", en: "Made to measure" } },
 ]
 
