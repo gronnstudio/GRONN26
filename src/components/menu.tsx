@@ -59,7 +59,8 @@ export function Menu() {
   const toon = (aan: boolean) => `transition-[opacity,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
     aan ? "scale-100 opacity-100" : "pointer-events-none scale-0 opacity-0"
   }`
-  const rond = "grid size-[var(--knop)] cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2"
+  const rond = "grid size-[var(--knop)] cursor-pointer place-items-center rounded-full bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2"
+  const schaduw = "shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)]"
 
   return (
     <>
@@ -104,7 +105,7 @@ export function Menu() {
           type="button"
           onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
           aria-label={taal === "en" ? "Back to top" : "Terug naar boven"}
-          className={rond}
+          className={`${rond} glasrand`}
         >
           <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
           <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -128,7 +129,7 @@ export function Menu() {
           </svg>
         </Link>
         <div inert={boven} className={toon(!boven)}>
-          <Weergave knopKlasse={rond} />
+          <Weergave knopKlasse={`${rond} ${schaduw}`} />
         </div>
       </div>
     </>
