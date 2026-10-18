@@ -88,7 +88,14 @@ for (const b of [390, 1440]) {
     await page.mouse.wheel(0, 800)
     await page.waitForTimeout(300)
     await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
-    await expect(page.getByRole("button", { name: "Terug naar boven" })).toBeVisible()
+    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
+    await expect(omhoog).toBeVisible()
+    if (b < 1024) {
+      // de pil krimpt niet, en Omhoog ligt achteraan concentrisch in de ronding
+      const [p, o] = await Promise.all([nav.locator("ul").first().boundingBox(), omhoog.boundingBox()])
+      expect(Math.round(p!.height)).toBe(64)
+      expect(Math.round(p!.x + p!.width - o!.x - o!.width)).toBe(Math.round(o!.y - p!.y))
+    }
     await page.getByRole("button", { name: "Menu" }).click()
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
     await expect(vijvers).toBeVisible()
