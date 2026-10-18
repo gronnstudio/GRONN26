@@ -174,7 +174,10 @@ h1[tabindex="-1"]:focus-visible {
 .komeet { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .komeet svg { display: block; overflow: visible; }
 /* de komeet volgt de ronding van de pil: de helft van zijn hoogte (24 klein, 32 groot; menu.tsx zet --komeet-r) */
-.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet 6s linear infinite; }
+.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet var(--komeet-duur, 6s) linear infinite; }
+/* de desktoppil is ruim twee keer zo lang als die op de telefoon; met dezelfde
+   6 s leek de komeet daar te jagen (eigenaar, 18 okt 2026), dus even snel per pixel */
+@media (min-width: 1024px) { .komeet { --komeet-duur: 15s; } }
 @keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
