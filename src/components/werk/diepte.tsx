@@ -9,15 +9,18 @@ import "./diepte.css"
 
 // De foto's van het project hangen als een tunnel achter elkaar, elk 100°
 // verder rond het midden, en je vliegt erdoorheen terwijl je scrolt (eigenaar,
-// 18 okt 2026: "ongeveer hetzelfde tunnel effect van untamed"). Untamed doet
+// 18 okt 2026: "ongeveer hetzelfde tunnel effect van untamed"). Ver weg staan
+// ze deels buiten beeld en vaag; elke foto schuift naar het midden als hij voor
+// je komt ("zolang ze maar gecentreerd in beeld komen"). Untamed doet
 // het in three.js en neemt het scrollen over; hier is het CSS 3D en een paar
 // regels script op de gewone scroll. Tab of een tik vliegt naar een foto. Met
 // minder beweging (of html.stil) staan dezelfde foto's als rustig raster; dat
 // regelt diepte.css, het script doet dan niets.
 
 const AFSTAND = 420 // px diepte tussen twee foto's
-const VOOR = 320 // waar de foto staat die je net passeert
-const ZICHT = 14 // over hoeveel foto's de tunnel uitdooft in de verte
+const VOOR = 560 // waar de foto staat die je net passeert
+const ZICHT = 8 // over hoeveel foto's de tunnel uitdooft in de verte
+const UIT = 2.5 // vanaf hoeveel foto's ver een foto helemaal aan de rand staat
 const n = DIEPTE.length
 
 const stil = () =>
@@ -46,14 +49,20 @@ export function Diepte() {
     const teken = () => {
       nu += (doel - nu) * 0.14
       if (Math.abs(doel - nu) < 0.001) nu = doel
-      const r = Math.min(innerWidth * 0.3, 420) // straal van de tunnel
+      // Ver weg staan de foto's rond het midden, deels buiten beeld; hoe dichterbij,
+      // hoe meer ze naar het midden schuiven, zodat elke foto recht voor je komt.
+      const r = Math.max(innerWidth, innerHeight) * 0.55
       kaarten.current.forEach((k, i) => {
         if (!k) return
-        const d = (nu - i) * AFSTAND // 0 = je passeert hem nu, negatief = verder weg
+        const d = (nu - i) * AFSTAND // 0 = recht voor je, negatief = verder weg
+        const ver = Math.max(0, -d) / AFSTAND // in foto's
+        const uit = Math.min(1, ver / UIT) // 0 midden, 1 helemaal naar de rand
         const hoek = (i * 100 * Math.PI) / 180
-        const o = Math.max(0, Math.min(1, d <= 0 ? 1 + d / (AFSTAND * ZICHT) : 1 - d / (AFSTAND * 0.8)))
-        k.style.transform = `translate(-50%, -50%) translate3d(${(Math.cos(hoek) * r).toFixed(1)}px, ${(Math.sin(hoek) * r * 0.6).toFixed(1)}px, ${(d + VOOR).toFixed(1)}px)`
+        const o = Math.max(0, Math.min(1, d <= 0 ? 1 - ver / ZICHT : 1 - d / (AFSTAND * 0.8)))
+        const vaag = d <= 0 ? Math.min(6, Math.max(0, ver - 0.5) * 3) : Math.min(6, (d / AFSTAND) * 8)
+        k.style.transform = `translate(-50%, -50%) translate3d(${(Math.cos(hoek) * r * uit).toFixed(1)}px, ${(Math.sin(hoek) * r * 0.7 * uit).toFixed(1)}px, ${(d + VOOR).toFixed(1)}px)`
         k.style.opacity = o.toFixed(3)
+        k.style.filter = vaag > 0.3 ? `blur(${vaag.toFixed(1)}px)` : ""
         k.style.zIndex = String(1000 + Math.round(d / 10))
         k.style.visibility = o < 0.01 ? "hidden" : "visible"
       })

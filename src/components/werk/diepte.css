@@ -17,7 +17,7 @@
 .dp-onder {
   position: absolute; inset: auto 0 0; display: flex; align-items: end; justify-content: space-between; gap: 16px;
   padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)); /* vrij van de navigatiepil */
-  pointer-events: none;
+  pointer-events: none; z-index: 3000; /* boven de foto's, ook als die vaag voorbij vliegen */
 }
 .dp-voortgang { position: absolute; inset: 0 0 auto; height: 2px; background: var(--lijn); }
 .dp-voortgang i { display: block; height: 100%; background: var(--oranje); transform-origin: left; transform: scaleX(var(--p, 0)); }
