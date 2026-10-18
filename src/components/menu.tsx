@@ -28,14 +28,6 @@ const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoo
 // de huidige pagina: een licht kiezelknopje met reliëf achter een donker icoon
 const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10 aria-[current=page]:kiezel"
 
-// Alleen wat nog niet in de dock of de voet staat (eigenaar, 18 okt 2026:
-// "Alles dat in dock en footer al staat hoeft hier niet ook nog eens in het
-// hamburger menu"): de losse projecten, en daaronder Weergave.
-const PROJECTEN: [string, Tekst][] = [
-  ["/werk/vijverrenovatie", { nl: "Vijverrenovatie", en: "Pond renovation" }],
-  ["/werk/terras-geulle", { nl: "Terras in Geulle", en: "Terrace in Geulle" }],
-]
-
 const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
 
 export function Menu() {
@@ -116,16 +108,6 @@ export function Menu() {
             <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
           </Link>
           <div>
-            <p className="lbl m-0 mb-2 text-gebroken-wit/60"><T t={{ nl: "Projecten", en: "Projects" }} /></p>
-            <ul className="m-0 list-none p-0 lg:flex lg:gap-x-10">
-              {PROJECTEN.map(([href, label]) => (
-                <li key={href}>
-                  <Link href={href} aria-current={pad === href ? "page" : undefined} className={`${linkKlasse} syne text-[26px] leading-[1.15] aria-[current=page]:text-oranje lg:text-[20px]`}><T t={label} /></Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="border-t border-gebroken-wit/15 pt-6">
             <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
             <Instellingen />
           </div>

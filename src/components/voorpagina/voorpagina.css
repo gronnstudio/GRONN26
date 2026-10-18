@@ -532,6 +532,8 @@
 }
 @media (max-width: 767px) {
   .vp-vijver-titel { font-size: 14vw; }
+  /* zonder bovenbalk mag de kop hoog in beeld (eigenaar, 18 okt 2026) */
+  .vp-vijver-tekst { inset: 0 0 auto; padding-top: 64px; padding-bottom: 0; }
   .vp-vijver-beeld img { object-position: 30% 60%; }
 }
 @media (prefers-reduced-motion: no-preference) {
