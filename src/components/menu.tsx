@@ -118,22 +118,22 @@ export function Menu() {
       <nav ref={nav} aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-open={open || undefined} data-bovenaan={bovenaan || undefined} className="group fixed inset-x-[var(--goot)] bottom-5 z-[101] lg:inset-x-0 lg:flex lg:justify-center lg:pointer-events-none">
         {/* onder 1024px altijd groot, 64 hoog met rondjes van 48 en iconen van 32
             (eigenaar, 18 okt 2026: "zonder dock te verkleinen"); vanaf 1024px
-            48 hoog met 36 en 20, met het woordmerk */}
-        <ul className="relative z-10 m-0 flex list-none items-center justify-between rounded-full glas p-[6px] [--komeet-r:24px] transition-[background-color,box-shadow] duration-500 motion-reduce:transition-none group-data-[open]:bg-transparent group-data-[open]:shadow-none max-lg:p-[8px] max-lg:[--komeet-r:32px] lg:pointer-events-auto lg:w-[880px] lg:justify-start lg:gap-1 lg:transition-[width,background-color,box-shadow] lg:group-data-[bovenaan]:w-[calc(100vw-2*var(--rand))]">
+            ook 64 hoog met 48 en 22, met het woordmerk ("maak dock op desktop ook iets groter", 18 okt 2026) */}
+        <ul className="relative z-10 m-0 flex list-none items-center justify-between rounded-full glas p-[8px] [--komeet-r:32px] transition-[background-color,box-shadow] duration-500 motion-reduce:transition-none group-data-[open]:bg-transparent group-data-[open]:shadow-none max-lg:p-[8px] max-lg:[--komeet-r:32px] lg:pointer-events-auto lg:w-[1000px] lg:justify-start lg:gap-1 lg:transition-[width,background-color,box-shadow] lg:group-data-[bovenaan]:w-[calc(100vw-2*var(--rand))]">
           <Komeet as="li" />
           <li className="hidden lg:mr-auto lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
-            <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"} className="flex h-10 items-center rounded-full px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit">
+            <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"} className="flex h-12 items-center rounded-full px-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[13px] w-auto" />
+              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[16px] w-auto" />
             </Link>
           </li>
           {HOOFD.map((m) => {
             const actief = m.href === "/" ? pad === "/" : m.bij.some((b) => isHier(pad, b))
             return (
               <li key={m.href} className="flex min-w-0 justify-center">
-                <Link href={m.href} title={kies(m.label, taal)} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop-klein)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 motion-reduce:transition-none aria-[current=page]:w-[48px] max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[14px] lg:text-[13px] lg:font-medium lg:aria-[current=page]:w-auto max-lg:aria-[current=page]:w-[64px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
-                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:size-[32px]">
+                <Link href={m.href} title={kies(m.label, taal)} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 motion-reduce:transition-none aria-[current=page]:w-[48px] max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[18px] lg:text-[15px] lg:font-medium lg:aria-[current=page]:w-auto max-lg:aria-[current=page]:w-[64px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[22px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:size-[32px]">
                     <path d={m.icoon} />
                   </svg>
                   {/* op desktop staat het woord naast het icoon (eigenaar, 18 okt 2026) */}
@@ -146,7 +146,7 @@ export function Menu() {
           <li className="hidden lg:ml-auto lg:flex">
     <Link
       href="/kennismaken"
-      className="group knop-klein inline-flex h-[var(--knop-klein)] items-center gap-4 rounded-full bg-oranje px-[var(--knop-binnen-klein)] text-[var(--knop-tekst-klein)] font-semibold tracking-[var(--knop-letter)] text-antraciet uppercase no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
+      className="group knop inline-flex h-[var(--knop)] items-center gap-4 rounded-full bg-oranje px-[var(--knop-binnen)] text-[var(--knop-tekst)] font-semibold tracking-[var(--knop-letter)] text-antraciet uppercase no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
     >
       <span className="block h-4 overflow-hidden leading-4">
         <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
@@ -165,12 +165,12 @@ export function Menu() {
               aria-controls="megamenu"
               aria-label="Menu"
               title="Menu"
-              className={`grid size-[var(--knop-klein)] cursor-pointer place-items-center rounded-full border-0 bg-transparent transition-[background-color,width,height] duration-500 motion-reduce:transition-none max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[14px] lg:text-[13px] lg:font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}
+              className={`grid size-[var(--knop)] cursor-pointer place-items-center rounded-full border-0 bg-transparent transition-[background-color,width,height] duration-500 motion-reduce:transition-none max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[18px] lg:text-[15px] lg:font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}
               onClick={() => setOpen(!open)}
             >
               {/* vier stippen als vier perkjes (eigenaar, 18 okt 2026: "for hamburger
                   something else"); open worden ze een kruis */}
-              <svg viewBox="0 0 22 22" aria-hidden fill="currentColor" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:size-[30px]">
+              <svg viewBox="0 0 22 22" aria-hidden fill="currentColor" className="size-[22px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:size-[30px]">
                 <g className="group-data-[open]:hidden">
                   <circle cx="6.5" cy="6.5" r="2.2" /><circle cx="15.5" cy="6.5" r="2.2" /><circle cx="6.5" cy="15.5" r="2.2" /><circle cx="15.5" cy="15.5" r="2.2" />
                 </g>
@@ -187,7 +187,7 @@ export function Menu() {
               onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
               aria-label={taal === "en" ? "Back to top" : "Terug naar boven"}
               title={taal === "en" ? "Back to top" : "Terug naar boven"}
-              className="omhoog-in glasrand relative grid size-[var(--knop-klein)] max-lg:size-[var(--knop)] shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
+              className="omhoog-in glasrand relative grid size-[var(--knop)] max-lg:size-[var(--knop)] shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
             >
               <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
               <svg viewBox="0 0 22 22" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
