@@ -197,6 +197,14 @@ h1[tabindex="-1"]:focus-visible {
     inset 0 -1px .5px 0 rgb(0 0 0 / .2),
     0 10px 40px -12px rgb(0 0 0 / .45);
 }
+/* Dezelfde glasranden op de oranje knop Omhoog; het oranje blijft vol (eigenaar,
+   18 okt 2026: "hetzelfde glass effect toe, maar behoud de kleur"). */
+@utility glasrand {
+  box-shadow:
+    inset 0 1px .5px 0 rgb(255 255 255 / .35),
+    inset 0 -1.5px .5px 0 rgb(0 0 0 / .25),
+    0 10px 40px -12px rgb(0 0 0 / .45);
+}
 /* De huidige pagina in de pil: een licht kiezelknopje met reliëf. */
 @utility kiezel {
   background: rgb(239 238 234 / .9);
