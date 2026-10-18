@@ -65,9 +65,10 @@ export default function Over() {
         </div>
         {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
         <Oplichten tekst={eerste} className="m-0" />
-        {/* Het verhaal zelf staat gewoon vol in beeld, zonder oplichten
-            (eigenaar, 18 okt 2026: "zorg dat tekst goed leesbaar blijft").
-            Na een alinea schuift een foto in, om en om van links en rechts. */}
+        {/* Het verhaal licht letter voor letter op en staat daarna vol in beeld.
+            Na een alinea schuift een foto in, om en om van boven en van onder
+            (eigenaar, 18 okt 2026: "vertical scroll waar fotos van boven en
+            onder naar binnen schuiven, hou de animatie op tekst"). */}
         <div className="mt-[clamp(40px,5vw,72px)] overflow-x-clip">
           {rest.map((alinea, i) => {
             const foto = VERHAAL_FOTOS[i]
@@ -75,12 +76,12 @@ export default function Over() {
             const liggend = foto ? foto.width > foto.height : false
             return (
               <Fragment key={i}>
-                <p className="mx-auto my-0 max-w-[680px] text-[clamp(18px,1.5vw,24px)] leading-[1.6] font-light">
-                  <T t={alinea} />
-                </p>
+                <div className="mx-auto max-w-[680px]">
+                  <Oplichten tekst={alinea} className="m-0 text-[clamp(18px,1.5vw,24px)] leading-[1.6]" />
+                </div>
                 {foto ? (
                   <figure
-                    data-zie={links ? "links" : "rechts"}
+                    data-zie={links ? "boven" : "onder"}
                     className={`my-[clamp(40px,6vw,96px)] ${links ? "mr-auto" : "ml-auto"} ${liggend ? "w-[92%] md:w-[58%]" : "w-[78%] md:w-[34%]"}`}
                   >
                     <Foto foto={foto} sizes={liggend ? "(min-width: 768px) 58vw, 92vw" : "(min-width: 768px) 34vw, 78vw"} className={liggend ? "aspect-[4/3]" : "aspect-[3/4]"} />
