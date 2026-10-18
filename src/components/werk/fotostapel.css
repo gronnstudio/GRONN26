@@ -1,0 +1,41 @@
+/* Fotostapel (fotostapel.tsx): het kader plakt, de foto's liggen erin op elkaar
+   en elke volgende schuift van onder open (--p van 0 naar 1). */
+.fs { display: grid; gap: 24px; }
+.fs-kader {
+  position: sticky; top: 16px; z-index: 1; height: 50svh;
+  border-radius: 16px; overflow: hidden; background: var(--vlak);
+}
+.fs-laag { position: absolute; inset: 0; clip-path: inset(calc((1 - var(--p)) * 100%) 0 0 0); }
+.fs-laag img { object-fit: cover; transform: scale(calc(1.12 - 0.12 * var(--p))); }
+.fs-lijn {
+  position: absolute; inset: 0 0 auto; height: 2px; background: var(--oranje); pointer-events: none;
+  top: calc(var(--lijn, -1) * 100%); opacity: clamp(0, calc(var(--lijn, -1) * 1000 + 1), 1);
+}
+.fs-stappen { margin: 0; padding: 0; list-style: none; }
+.fs-stap { display: grid; align-content: start; gap: 12px; min-height: 40svh; max-width: 30ch; padding-top: 24px; }
+.fs-stap:last-child { min-height: 40svh; }
+
+@media (min-width: 1024px) {
+  .fs { grid-template-columns: 5fr 7fr; gap: 64px; }
+  .fs-kader { grid-column: 2; grid-row: 1; top: 96px; height: calc(100svh - 192px); }
+  .fs-stappen { grid-column: 1; grid-row: 1; padding: 30svh 0 20svh; }
+  .fs-stap { min-height: 70svh; padding-top: 0; }
+}
+
+/* Minder beweging: geen stapel, elke foto staat los, in volgorde. */
+@media (prefers-reduced-motion: reduce) {
+  .fs-kader { position: static; height: auto; overflow: visible; background: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+  .fs-laag { position: relative; aspect-ratio: 3 / 4; clip-path: none; border-radius: 16px; overflow: hidden; }
+  .fs-laag img { transform: none; }
+  .fs-lijn { display: none; }
+  .fs-stap { min-height: 0; padding: 0 0 24px; }
+  .fs { grid-template-columns: none; }
+  .fs-kader, .fs-stappen { grid-column: auto; grid-row: auto; padding: 0; }
+}
+html.stil .fs-kader { position: static; height: auto; overflow: visible; background: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+html.stil .fs-laag { position: relative; aspect-ratio: 3 / 4; clip-path: none; border-radius: 16px; overflow: hidden; }
+html.stil .fs-laag img { transform: none; }
+html.stil .fs-lijn { display: none; }
+html.stil .fs-stap { min-height: 0; padding: 0 0 24px; }
+html.stil .fs { grid-template-columns: none; }
+html.stil .fs-kader, html.stil .fs-stappen { grid-column: auto; grid-row: auto; padding: 0; }
