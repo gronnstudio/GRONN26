@@ -38,6 +38,8 @@ test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
+  // pas klikken als er geen doek meer ligt; op CI viel de klik soms nog onder de opening
+  await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
   await page.click('nav[aria-label="Hoofdmenu"] a[href="/werk"]')
   await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
@@ -104,7 +106,7 @@ for (const b of [390, 1440]) {
   })
 }
 
-test("uitlijning: kop, voet en de brede menubalk bovenaan op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {

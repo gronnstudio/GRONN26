@@ -41,7 +41,8 @@ export function Menu() {
   // boven = geen Omhoog: bovenaan de pagina en zodra je een stukje omhoog
   // scrollt (zoals Instagram); tijdens het lezen staat Omhoog erin
   const [boven, setBoven] = useState(true)
-  // bovenaan = de brede balk van desktop (zoals uncoded.life); daaronder een smalle pil
+  // bovenaan = de brede balk van desktop (zoals uncoded.life); daaronder een smalle pil.
+  // Sinds 18 okt 2026 staat hij ook op desktop onderaan (eigenaar: "make the dock on desktop also bottom").
   const [bovenaan, setBovenaan] = useState(true)
   useEffect(() => {
     let vorige = 0
@@ -98,8 +99,8 @@ export function Menu() {
         inert={!open}
         className={`donker fixed z-[100] overflow-y-auto overscroll-contain rounded-[32px] glas-diep text-gebroken-wit transition-[clip-path,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none
           inset-x-[var(--goot)] bottom-5 max-h-[calc(100dvh-36px)] px-6 pt-8 pb-[96px]
-          lg:top-5 lg:bottom-auto lg:left-1/2 lg:right-auto lg:max-h-[calc(100dvh-40px)] lg:w-[min(1120px,calc(100vw-2*var(--goot)))] lg:-translate-x-1/2 lg:px-10 lg:pt-[100px] lg:pb-10 ${
-          open ? "opacity-100 [clip-path:inset(0_0_0_0_round_32px)]" : "pointer-events-none opacity-0 [clip-path:inset(calc(100%-64px)_0_0_0_round_32px)] lg:[clip-path:inset(0_0_calc(100%-64px)_0_round_32px)]"
+          lg:left-1/2 lg:right-auto lg:max-h-[calc(100dvh-40px)] lg:w-[min(1120px,calc(100vw-2*var(--goot)))] lg:-translate-x-1/2 lg:px-10 lg:pt-10 lg:pb-[100px] ${
+          open ? "opacity-100 [clip-path:inset(0_0_0_0_round_32px)]" : "pointer-events-none opacity-0 [clip-path:inset(calc(100%-64px)_0_0_0_round_32px)]"
         }`}
       >
         <div className="grid gap-y-8">
@@ -114,7 +115,7 @@ export function Menu() {
         </div>
       </div>
 
-      <nav ref={nav} aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-open={open || undefined} data-bovenaan={bovenaan || undefined} className="group fixed inset-x-[var(--goot)] bottom-5 z-[101] lg:inset-x-0 lg:top-5 lg:bottom-auto lg:flex lg:justify-center lg:pointer-events-none">
+      <nav ref={nav} aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-open={open || undefined} data-bovenaan={bovenaan || undefined} className="group fixed inset-x-[var(--goot)] bottom-5 z-[101] lg:inset-x-0 lg:flex lg:justify-center lg:pointer-events-none">
         {/* onder 1024px altijd groot, 64 hoog met rondjes van 48 en iconen van 32
             (eigenaar, 18 okt 2026: "zonder dock te verkleinen"); vanaf 1024px
             48 hoog met 36 en 20, met het woordmerk */}
