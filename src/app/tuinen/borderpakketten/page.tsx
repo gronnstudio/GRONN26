@@ -57,7 +57,7 @@ function Pakket({ p, nr }: { p: BorderPakket; nr: number }) {
   const id = `pakket-${p.slug}`
   const totaal = p.planten.reduce((t, x) => t + x.aantal, 0)
   return (
-    <section id={p.slug} aria-labelledby={id} className="scroll-mt-[96px] border-t border-lijn pt-[clamp(40px,5vw,72px)] [&+&]:mt-[clamp(56px,7vw,96px)]">
+    <section id={p.slug} aria-labelledby={id} className="hidden scroll-mt-[96px] border-t border-lijn pt-[clamp(40px,5vw,72px)] target:block">
       <div className="grid gap-x-8 gap-y-8 md:grid-cols-12">
         <div className="md:col-span-6">
           <Foto
@@ -67,7 +67,10 @@ function Pakket({ p, nr }: { p: BorderPakket; nr: number }) {
           />
         </div>
         <div className="flex min-w-0 flex-col gap-5 md:col-span-5 md:col-start-8">
-          <p className="lbl m-0 text-gedempt"><T t={{ nl: "Pakket", en: "Package" }} /> {String(nr).padStart(2, "0")}</p>
+          <p className="lbl m-0 flex justify-between gap-4 text-gedempt">
+            <span><T t={{ nl: "Pakket", en: "Package" }} /> {String(nr).padStart(2, "0")}</span>
+            <a href="#pakketten" className="lnk"><T t={{ nl: "← Alle pakketten", en: "← All packages" }} /></a>
+          </p>
           <h2 id={id} className="syne m-0 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></h2>
           <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
             {p.tags.map((t) => (
@@ -166,19 +169,15 @@ export default function BorderpakkettenPagina() {
         </p>
 
         {/* Tegels (eigenaar, 18 okt 2026): twee naast elkaar op de telefoon, elk naar zijn uitleg verderop. */}
-        <h2 className="lbl mt-[clamp(56px,7vw,96px)] mb-5 text-gedempt"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
+        <h2 id="pakketten" className="lbl mt-[clamp(56px,7vw,96px)] mb-5 scroll-mt-[96px] text-gedempt"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
         {/* Kaartstijl (eigenaar, 18 okt 2026: "beter verdeeld, meer negatieve ruimte"): tekst bovenin met ruime marge, foto tot de rand onderaan. */}
         <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
           {BORDERPAKKETTEN.map((p, i) => (
-            // Subgrid: nummer, naam, regel, prijs en foto delen per rij dezelfde lijnen, ook als een naam op twee regels breekt (eigenaar, 18 okt 2026: "alles op dezelfde lijn").
-            <li key={p.slug} className="row-span-5 grid grid-rows-subgrid gap-0">
-              <a href={`#${p.slug}`} className="row-span-5 grid grid-rows-subgrid gap-0 overflow-hidden rounded-[16px] bg-vlak no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
-                <span className="lbl block px-4 pt-4 text-oranje-tekst sm:px-6 sm:pt-6">{String(i + 1).padStart(2, "0")}</span>
-                <span className="syne mt-3 block px-4 text-[clamp(17px,2.2vw,26px)] leading-[1.1] tracking-[-.015em] sm:px-6"><T t={{ nl: afbreek(p.naam.nl), en: afbreek(p.naam.en) }} /></span>
-                <span className="mt-2 block px-4 text-[14px] leading-[1.45] text-gedempt sm:px-6 sm:text-[15px]"><T t={p.kort} /></span>
-                <span className="mt-4 block px-4 pb-5 text-[14px] font-medium tabular-nums sm:px-6 sm:pb-7">
-                  <T t={{ nl: `vanaf ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}`, en: `from ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}` }} />
-                </span>
+            // Alleen naam en foto (eigenaar, 18 okt 2026: "anders is het dubbelop"); de rest staat in het pakket zelf, na een tik.
+            // Subgrid: de namen en foto's van één rij staan op dezelfde lijn, ook als een naam op twee regels breekt.
+            <li key={p.slug} className="row-span-2 grid grid-rows-subgrid gap-0">
+              <a href={`#${p.slug}`} className="row-span-2 grid grid-rows-subgrid gap-0 overflow-hidden rounded-[16px] bg-vlak no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
+                <span className="syne block px-4 pt-4 pb-4 text-[clamp(17px,2.2vw,26px)] leading-[1.1] tracking-[-.015em] sm:px-6 sm:pt-6 sm:pb-6"><T t={{ nl: afbreek(p.naam.nl), en: afbreek(p.naam.en) }} /></span>
                 <Foto
                   foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: "", label: "Sfeerbeeld", en: { alt: "", label: "Mood image" } }}
                   sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
