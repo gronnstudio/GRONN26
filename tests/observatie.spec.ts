@@ -2,10 +2,16 @@ import { test, expect, type Page } from "@playwright/test"
 
 // Observatiekaders (prototype, 18 okt 2026), op /proef/observatie.
 
+// De intro speelt één keer per bezoek; in tests slaan we hem over (zoals basis.spec.ts),
+// anders ligt het doek nog over de foto als de muis erop komt.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("gronn-intro", "1"))
+})
+
 /** Scroll de foto in beeld tot de kaders vastklikken (de pagina kan na het laden nog verspringen). */
 async function inBeeld(page: Page, timeout = 8000) {
   const fig = page.locator("figure[data-observatie]")
-  await page.waitForLoadState("networkidle")
+  await page.waitForLoadState("load")
   await expect(async () => {
     await fig.locator(".o-vak").scrollIntoViewIfNeeded()
     await expect(fig.locator(".o-kader.o-aan")).toHaveCount(5, { timeout: 4000 })
