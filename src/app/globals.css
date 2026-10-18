@@ -26,7 +26,7 @@
   --voorbeeld: #8a8272;
   --oranje: #ff5b04;
   --oranje-tekst: #ff5b04;
-  --bos: #2b2a24;
+  --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
   --mos: #6f6553;
   --salie: #cbbfa8;
   --goot: clamp(20px, 4vw, 56px);
@@ -73,7 +73,7 @@ html.donker, .donker {
    tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #36342d;
+  --vlak: #3a2e25;
   --gedempt: var(--salie);
   --lijn: rgba(239, 238, 234, 0.2);
 }
@@ -374,17 +374,21 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 .stapel { margin: 0; padding: 0; list-style: none; }
 .stapel > li { position: sticky; top: calc(var(--stapel-top, 24px) + var(--i, 0) * 16px); }
 
-/* De voet begint met een zachte boog in plaats van een rechte lijn (eigenaar,
-   18 okt 2026: "kunnen we de footer een bepaalde vorm transitie geven?").
-   Komt hij in beeld, dan bolt de boog op van vlak naar vol. */
-.voet-boog {
-  --boog: clamp(40px, 7vw, 120px);
-  border-top-left-radius: 50% var(--boog);
-  border-top-right-radius: 50% var(--boog);
+/* De rand van de voet is een border in silhouet (voet-tuin.tsx), in de kleur
+   van de voet. Komt hij in beeld, dan groeit de border een stukje op. */
+.voet-tuin {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 1px);
+  width: 100%;
+  height: clamp(64px, 8vw, 120px);
+  fill: var(--grond);
+  transform-origin: bottom;
+  pointer-events: none;
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    html:not(.stil) .voet-boog { animation: voet-boog linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    html:not(.stil) .voet-tuin { animation: voet-tuin linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
   }
 }
-@keyframes voet-boog { from { border-top-left-radius: 50% 0; border-top-right-radius: 50% 0; } }
+@keyframes voet-tuin { from { transform: scaleY(0.35); } }
