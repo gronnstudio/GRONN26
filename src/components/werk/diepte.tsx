@@ -11,7 +11,7 @@ import "./diepte.css"
 // De foto's van het project hangen als een tunnel achter elkaar, elk 100°
 // verder rond het midden, en je vliegt erdoorheen terwijl je scrolt (eigenaar,
 // 18 okt 2026: "ongeveer hetzelfde tunnel effect van untamed"). Ver weg staan
-// ze deels buiten beeld en vaag; elke foto schuift naar het midden als hij voor
+// ze deels buiten beeld, vaag en zwart-wit; elke foto schuift naar het midden als hij voor
 // je komt ("zolang ze maar gecentreerd in beeld komen"). Untamed doet
 // het in three.js en neemt het scrollen over; hier is het CSS 3D en een paar
 // regels script op de gewone scroll. Bij het begin staan alle foto's als een
@@ -20,7 +20,7 @@ import "./diepte.css"
 // minder beweging (of html.stil) staan dezelfde foto's als rustig raster; dat
 // regelt diepte.css, het script doet dan niets.
 
-const AFSTAND = 420 // px diepte tussen twee foto's
+const AFSTAND = 800 // px diepte tussen twee foto's; ruim, voor een diepe tunnel (eigenaar: "more distance")
 const VOOR = 560 // waar de foto staat die je net passeert
 const ZICHT = 16 // over hoeveel foto's de tunnel uitdooft; ruim, zodat de hele zwerm te zien is
 const UIT = 2.5 // vanaf hoeveel foto's ver een foto helemaal aan de rand staat
@@ -62,11 +62,14 @@ export function Diepte() {
         const ver = Math.max(0, -d) / AFSTAND // in foto's
         const uit = Math.min(1, ver / UIT) // 0 midden, 1 helemaal naar de rand
         const hoek = (i * 100 * Math.PI) / 180
-        const o = Math.max(0, Math.min(1, d <= 0 ? 1 - ver / ZICHT : 1 - d / (AFSTAND * 0.8)))
+        const o = Math.max(0, Math.min(1, d <= 0 ? 1 - ver / ZICHT : 1 - d / 500))
         const vaag = d <= 0 ? Math.min(6, Math.max(0, ver - 0.5) * 3) : Math.min(6, (d / AFSTAND) * 8)
         k.style.transform = `translate(-50%, -50%) translate3d(${(Math.cos(hoek) * r * uit).toFixed(1)}px, ${(Math.sin(hoek) * r * 0.7 * uit).toFixed(1)}px, ${(d + VOOR).toFixed(1)}px)`
         k.style.opacity = o.toFixed(3)
-        k.style.filter = vaag > 0.3 ? `blur(${vaag.toFixed(1)}px)` : ""
+        // Achterin zwart-wit, in kleur zodra hij vooraan scherp staat (eigenaar, 18 okt 2026).
+        const grijs = d <= 0 ? Math.min(1, ver * 1.25) : 0
+        const f = [vaag > 0.3 && `blur(${vaag.toFixed(1)}px)`, grijs > 0.02 && `grayscale(${grijs.toFixed(2)})`].filter(Boolean).join(" ")
+        k.style.filter = f
         k.style.zIndex = String(1000 + Math.round(d / 10))
         k.style.visibility = o < 0.01 ? "hidden" : "visible"
       })
@@ -139,7 +142,7 @@ export function Diepte() {
               alt=""
               width={foto.width}
               height={foto.height}
-              sizes={foto.width > foto.height ? "(min-width: 768px) 600px, 90vw" : "(min-width: 768px) 400px, 60vw"}
+              sizes={foto.width > foto.height ? "(min-width: 768px) 900px, 90vw" : "(min-width: 768px) 600px, 60vw"}
             />
           </button>
         ))}
