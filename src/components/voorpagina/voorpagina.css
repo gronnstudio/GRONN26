@@ -346,9 +346,6 @@
 .vp-kaarten {
   display: grid;
   gap: clamp(20px, 2.5vw, 32px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 @media (min-width: 1024px) {
   .vp-kaarten { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -430,6 +427,16 @@
 }
 .vp-kaart-link:hover .vp-kaart-pijl { transform: translateX(4px); }
 .vp-kaart-foto { aspect-ratio: 4 / 3; }
+/* gestapeld op één kolom: de kaart moet in één scherm passen, anders verdwijnt de foto onder de volgende */
+@media (max-width: 1023px) {
+  .vp-kaart { box-shadow: 0 -8px 24px rgb(0 0 0 / .18); }
+  .vp-kaart-tekst { padding-block: 28px 24px; }
+  .vp-kaart-naam { margin-top: 12px; }
+  .vp-kaart-zin { margin-top: 12px; font-size: 20px; }
+  .vp-kaart-delen { margin-top: 20px; gap: 8px; }
+  .vp-kaart-link { padding-top: 24px; }
+  .vp-kaart-foto { aspect-ratio: 16 / 9; }
+}
 
 /* ── begintoestanden, alleen als beweging mag ───────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
