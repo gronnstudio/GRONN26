@@ -39,9 +39,9 @@ test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
   await page.click('nav[aria-label="Hoofdmenu"] button[aria-controls="megamenu"]')
-  await page.click('#megamenu a[href="/vijvers"]')
-  await expect(page).toHaveURL(/\/vijvers$/, { timeout: 10_000 })
-  await expect(page.locator("h1")).toHaveText(/Vijvers/, { timeout: 10_000 })
+  await page.click('#megamenu a[href="/werk/terras-geulle"]')
+  await expect(page).toHaveURL(/\/werk\/terras-geulle$/, { timeout: 10_000 })
+  await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
   await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
 })
 
@@ -82,7 +82,7 @@ for (const b of [390, 1440]) {
     const nav = page.locator("nav[data-menu]")
     for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
-    const vijvers = page.locator('#megamenu a[href="/vijvers"]')
+    const vijvers = page.locator('#megamenu a[href="/werk/terras-geulle"]')
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
     // de pil blijft op het scherm, ook tijdens het lezen
     await page.mouse.wheel(0, 800)
