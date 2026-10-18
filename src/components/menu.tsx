@@ -15,8 +15,8 @@ import { useTaal } from "./taal-klant"
 //   als de rij hieronder, vanaf 1024px met het woordmerk voorop;
 //   ⭕   ⭕⭕⭕⭕⭕   ⭕  bij omlaag scrollen: de pil krimpt (op de telefoon) en
 //   links Weergave en rechts Omhoog verschijnen, rond en oranje.
-// De pil is bijna dicht antraciet, op elke grond even donker; de huidige
-// pagina is een zachtgrijze pil. De iconen bewegen om de beurt even (golf,
+// De pil is donker glas (.glas in globals.css), op elke grond even donker; de
+// huidige pagina is een licht kiezelknopje. De iconen bewegen om de beurt even (golf,
 // groei, spit, knik, plop; globals.css). Linksonder staat vanaf 1024px Kennismaken ↗.
 const MENU = [
   { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, beweging: "golf", icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
@@ -26,9 +26,10 @@ const MENU = [
   { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, beweging: "plop", icoon: "M5 4h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9.2 8.4a1.8 1.8 0 1 1 2.6 1.6c-.5.2-.8.6-.8 1.1v.3M11 13.2v.1" },
 ]
 
-// de huidige pagina: een zachtgrijs rondje achter een wit icoon, zoals
-// Instagram; 36 rond in de kleine pil, 48 in de grote
-const RUST = "text-gebroken-wit hover:bg-gebroken-wit/10 aria-[current=page]:bg-gebroken-wit/25"
+// de huidige pagina: een licht kiezelknopje met reliëf achter een donker
+// icoon (de .kiezel in globals.css, naar de preview van 18 okt 2026); 36
+// rond in de kleine pil, 48 in de grote
+const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10 aria-[current=page]:kiezel"
 
 export function Menu() {
   const pad = usePathname()
@@ -68,7 +69,7 @@ export function Menu() {
       <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-groot={boven || undefined} className={`group fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
         boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-102px),calc(var(--goot)+var(--knop)+6px))]"
       }`}>
-        <ul className="relative m-0 flex list-none items-center justify-between rounded-full bg-[rgba(22,22,21,.45)] p-[6px] [--komeet-r:24px] transition-[padding] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:p-[8px] max-lg:group-data-[groot]:[--komeet-r:32px] shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] ring-1 ring-gebroken-wit/15 backdrop-blur-[6px] backdrop-saturate-[1.8]">
+        <ul className="relative m-0 flex list-none items-center justify-between rounded-full glas p-[6px] [--komeet-r:24px] transition-[padding] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:p-[8px] max-lg:group-data-[groot]:[--komeet-r:32px]">
           <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
