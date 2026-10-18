@@ -22,6 +22,8 @@ import "./diepte.css"
 
 const AFSTAND = 800 // px diepte tussen twee foto's; ruim, voor een diepe tunnel (eigenaar: "more distance")
 const VOOR = 560 // waar de foto staat die je net passeert
+// Voorbij VOOR zoomt de foto eerst groot op je af en dooft pas daarna uit
+// (eigenaar, 18 okt 2026: "groter zoomen en daarna pas verdwijnen").
 const ZICHT = 16 // over hoeveel foto's de tunnel uitdooft; ruim, zodat de hele zwerm te zien is
 const UIT = 2.5 // vanaf hoeveel foto's ver een foto helemaal aan de rand staat
 const n = DIEPTE.length
@@ -62,8 +64,8 @@ export function Diepte() {
         const ver = Math.max(0, -d) / AFSTAND // in foto's
         const uit = Math.min(1, ver / UIT) // 0 midden, 1 helemaal naar de rand
         const hoek = (i * 100 * Math.PI) / 180
-        const o = Math.max(0, Math.min(1, d <= 0 ? 1 - ver / ZICHT : 1 - d / 500))
-        const vaag = d <= 0 ? Math.min(6, Math.max(0, ver - 0.5) * 3) : Math.min(6, (d / AFSTAND) * 8)
+        const o = Math.max(0, Math.min(1, d <= 0 ? 1 - ver / ZICHT : 1 - (d - AFSTAND * 0.55) / (AFSTAND * 0.4)))
+        const vaag = d <= 0 ? Math.min(6, Math.max(0, ver - 0.5) * 3) : Math.min(6, Math.max(0, d / AFSTAND - 0.55) * 14)
         k.style.transform = `translate(-50%, -50%) translate3d(${(Math.cos(hoek) * r * uit).toFixed(1)}px, ${(Math.sin(hoek) * r * 0.7 * uit).toFixed(1)}px, ${(d + VOOR).toFixed(1)}px)`
         k.style.opacity = o.toFixed(3)
         // Achterin zwart-wit, in kleur zodra hij vooraan scherp staat (eigenaar, 18 okt 2026).
