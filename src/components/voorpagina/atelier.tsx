@@ -1,10 +1,10 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Foto } from "@/components/foto";
-import type { Foto as FotoData } from "@/lib/data/vijverrenovatie";
 import { Beide, T, type Tekst } from "@/components/taal";
 import type { L } from "@/lib/i18n";
-import { F04_2, F05, F07_1, F08_1, F08_2, F09_2, F10, F11, T01, T02 } from "./beelden";
+import { F08_2, F10 } from "./beelden";
+import { Diepte } from "@/components/werk/diepte";
 import { Uitgelicht } from "./uitgelicht";
 import { SnelContact } from "@/components/snel-contact";
 
@@ -72,51 +72,6 @@ function KopRegels({ regels }: { regels: string[] }) {
   );
 }
 
-type Stuk = {
-  foto: FotoData;
-  vorm: "staand" | "vierkant" | "liggend";
-  v: number;
-  top: string;
-  left: string;
-};
-
-// Posities en snelheden zoals in het wireframe (gemeten op de demo).
-const COLLAGE_A: Stuk[] = [
-  { foto: F09_2, vorm: "staand", v: 0.5, top: "0", left: "0%" },
-  { foto: T02, vorm: "vierkant", v: 3, top: "10.61%", left: "56.74%" },
-  { foto: F08_1, vorm: "liggend", v: 0, top: "39.21%", left: "20.83%" },
-  { foto: F05, vorm: "staand", v: 0.5, top: "70.51%", left: "52.5%" },
-];
-const COLLAGE_B: Stuk[] = [
-  { foto: F11, vorm: "vierkant", v: 3, top: "0", left: "9.24%" },
-  { foto: F04_2, vorm: "liggend", v: 0, top: "31.95%", left: "20.83%" },
-  { foto: T01, vorm: "staand", v: 0.5, top: "66.97%", left: "0%" },
-  { foto: F07_1, vorm: "vierkant", v: 3, top: "78.89%", left: "56.74%" },
-];
-
-const SIZES = {
-  staand: "(min-width: 768px) 43vw, 43vw",
-  vierkant: "34vw",
-  liggend: "59vw",
-};
-
-function Collage({ stukken, klasse }: { stukken: Stuk[]; klasse: string }) {
-  return (
-    <div className={`vp-collage ${klasse}`}>
-      {stukken.map((s) => (
-        <figure
-          key={s.foto.src}
-          className={`vp-stuk vp-${s.vorm}`}
-          data-v={s.v}
-          style={{ top: s.top, left: s.left }}
-        >
-          <Foto foto={s.foto} sizes={SIZES[s.vorm]} className="h-full w-full" />
-        </figure>
-      ))}
-    </div>
-  );
-}
-
 export function Atelier() {
   return (
     <div className="vp-atelier">
@@ -167,24 +122,9 @@ export function Atelier() {
 
       <Uitgelicht />
 
-      <section className="vp-vel" aria-label="Foto's">
-        <p className="vp-reuswoord vp-licht" aria-hidden="true">
-          <span className="vp-spoor" data-spoor>
-            {[0, 1, 2].map((n) => (
-              <span key={n}>
-                <T
-                  t={{
-                    nl: "Vijvers\u00a0\u00a0Tuinen\u00a0\u00a0",
-                    en: "Ponds\u00a0\u00a0Gardens\u00a0\u00a0",
-                  }}
-                />
-              </span>
-            ))}
-          </span>
-        </p>
-        <Collage stukken={COLLAGE_A} klasse="vp-a" />
-      </section>
-      <Collage stukken={COLLAGE_B} klasse="vp-b" />
+      {/* De foto's komen op je af terwijl je scrolt (eigenaar, 18 okt 2026:
+          "ik wil dit op de eerste pagina op home"); verving de fotocollage. */}
+      <Diepte />
     </div>
   );
 }

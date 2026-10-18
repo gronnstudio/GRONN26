@@ -1,0 +1,38 @@
+/* Diepte (diepte.tsx): de projectfoto's komen op je af terwijl je scrolt. Het
+   podium plakt een scherm lang; het script zet transform en opacity per foto. */
+.dp { position: relative; height: calc(var(--n) * 70svh + 100svh); }
+.dp-podium { position: sticky; top: 0; height: 100svh; overflow: hidden; perspective: 1000px; perspective-origin: 50% 42%; }
+.dp-kaart {
+  position: absolute; left: 50%; top: 42%; margin: 0; padding: 0; border: 0;
+  background: none; cursor: pointer; border-radius: 16px; will-change: transform, opacity;
+  transform: translate(-50%, -50%); opacity: 0;
+}
+.dp-kaart:first-of-type { opacity: 1; }
+.dp-kaart:focus-visible { outline: 2px solid var(--oranje); outline-offset: 4px; }
+.dp-kaart img {
+  display: block; width: 100%; height: auto; border-radius: 16px; background: var(--vlak);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.08), 0 24px 48px -20px rgb(0 0 0 / 0.4);
+}
+.dp-staand { width: min(clamp(150px, 46vw, 300px), 28svh); }
+.dp-liggend { width: min(clamp(220px, 68vw, 460px), 50svh); }
+.dp-onder {
+  position: absolute; inset: auto 0 0; display: flex; align-items: end; justify-content: space-between; gap: 16px;
+  padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)); /* vrij van de navigatiepil */
+  pointer-events: none;
+}
+.dp-voortgang { position: absolute; inset: 0 0 auto; height: 2px; background: var(--lijn); }
+.dp-voortgang i { display: block; height: 100%; background: var(--oranje); transform-origin: left; transform: scaleX(var(--p, 0)); }
+
+/* Minder beweging: dezelfde foto's als rustig raster, zonder podium. */
+@media (prefers-reduced-motion: reduce) {
+  .dp { height: auto; }
+  .dp-podium { position: static; height: auto; overflow: visible; perspective: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 var(--rand); }
+  .dp-kaart { position: static; width: auto; transform: none; opacity: 1; cursor: default; }
+  .dp-kaart img { aspect-ratio: 3 / 4; object-fit: cover; }
+  .dp-onder, .dp-voortgang { display: none; }
+}
+html.stil .dp { height: auto; }
+html.stil .dp-podium { position: static; height: auto; overflow: visible; perspective: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 var(--rand); }
+html.stil .dp-kaart { position: static; width: auto; transform: none; opacity: 1; cursor: default; }
+html.stil .dp-kaart img { aspect-ratio: 3 / 4; object-fit: cover; }
+html.stil .dp-onder, html.stil .dp-voortgang { display: none; }

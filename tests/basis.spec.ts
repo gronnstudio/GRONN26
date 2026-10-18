@@ -87,6 +87,7 @@ test("menu: Home, Werk, Studio, Shop en een hamburger met het megamenu", async (
     await page.mouse.wheel(0, 800)
     await page.waitForTimeout(300)
     await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
+    await expect(page.getByRole("button", { name: "Terug naar boven" })).toBeVisible()
     await page.getByRole("button", { name: "Menu" }).click()
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
     await expect(vijvers).toBeVisible()

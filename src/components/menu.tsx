@@ -67,6 +67,16 @@ export function Menu() {
   const knop = useRef<HTMLButtonElement>(null)
   const vlak = useRef<HTMLDivElement>(null)
 
+  // Omhoog verschijnt zodra je een scherm voorbij de bovenkant bent
+  const [diep, setDiep] = useState(false)
+  useEffect(() => {
+    const meet = () => setDiep(scrollY > innerHeight * 0.8)
+    const t = setTimeout(meet, 0)
+    addEventListener("scroll", meet, { passive: true })
+    return () => { clearTimeout(t); removeEventListener("scroll", meet) }
+  }, [])
+  const stil = () => document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches
+
   // een andere pagina: het menu gaat dicht
   const [vorigPad, setVorigPad] = useState(pad)
   if (pad !== vorigPad) {
@@ -111,6 +121,24 @@ export function Menu() {
             <path d="M0 12.0593L7.504 4.60687L1.00002 4.51248V2.5H11V12.5624H9L8.93581 6.04761L1.4318 13.5L0 12.0593Z" fill="currentColor" />
           </svg>
         </Link>
+      </div>
+
+      {/* Omhoog, oranje met glasranden (eigenaar, 18 okt 2026): op de telefoon
+          rechts boven de pil, vanaf 1024px rechtsonder */}
+      <div data-menu inert={!diep || open} className={`fixed right-[var(--goot)] bottom-[92px] z-[101] transition-[opacity,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-[var(--rand)] lg:bottom-10 ${
+        diep && !open ? "scale-100 opacity-100" : "pointer-events-none scale-0 opacity-0"
+      }`}>
+        <button
+          type="button"
+          onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
+          aria-label={taal === "en" ? "Back to top" : "Terug naar boven"}
+          className="glasrand grid size-[var(--knop)] cursor-pointer place-items-center rounded-full bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
+          <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 18V4M5 10l6-6 6 6" />
+          </svg>
+        </button>
       </div>
 
       {/* het megamenu: één glazen vlak dat de pil omsluit en er op de telefoon
