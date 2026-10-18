@@ -166,6 +166,26 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
 ]
 
+/** Compost met schors (eigenaar, 18 okt 2026), in twee varianten. Nog geen prijs: op aanvraag. */
+export const BODEMPAKKETTEN: { slug: string; naam: L; zin: L }[] = [
+  {
+    slug: "compost-dennenschors",
+    naam: { nl: "Compost + dennenschors", en: "Compost + pine bark" },
+    zin: {
+      nl: "Een laag compost met daarover dennenschors. Licht van kleur en zacht, een natuurlijke afdeklaag die na een paar jaar in de bodem opgaat.",
+      en: "A layer of compost with pine bark on top. Light in colour and soft, a natural cover that works into the soil after a few years.",
+    },
+  },
+  {
+    slug: "compost-franse-schors",
+    naam: { nl: "Compost + Franse schors", en: "Compost + French bark" },
+    zin: {
+      nl: "Een laag compost met daarover Franse schors. Grover en roodbruin, blijft langer liggen en ziet er strak uit.",
+      en: "A layer of compost with French maritime pine bark on top. Coarser and red-brown, it lasts longer and looks neat.",
+    },
+  },
+]
+
 export function borderPakket(slug: string | null | undefined) {
   return BORDERPAKKETTEN.find((p) => p.slug === slug)
 }

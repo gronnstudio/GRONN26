@@ -1,0 +1,19 @@
+/* Borderpakketten op desktop met een muis (eigenaar, 18 okt 2026): beweeg over
+   een kaart en het pakket schuift over de foto; de planten komen één voor één
+   binnen. Toetsenbord: hetzelfde zodra iets in de kaart focus heeft. Telefoon en
+   tablet openen het pakket onder de stapel (:target in page.tsx). */
+.bp-paneel { display: none; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  .bp-paneel { display: block; opacity: 0; transform: translateY(24px); pointer-events: none; }
+  .bp-plant { opacity: 0; transform: translateY(8px); }
+  .bp-kaart:hover .bp-paneel, .bp-kaart:focus-within .bp-paneel { opacity: 1; transform: none; pointer-events: auto; }
+  .bp-kaart:hover .bp-plant, .bp-kaart:focus-within .bp-plant { opacity: 1; transform: none; }
+
+  html:not(.stil) .bp-paneel { transition: opacity .35s ease, transform .45s cubic-bezier(.2,.7,.2,1); }
+  html:not(.stil) .bp-plant { transition: opacity .3s ease, transform .3s ease; transition-delay: calc(.15s + var(--n, 0) * 60ms); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-paneel, .bp-plant { transition: none !important; transform: none !important; }
+}
