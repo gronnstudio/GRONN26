@@ -1,93 +1,94 @@
-import type { CSSProperties } from "react"
 import Link from "next/link"
-import { Foto, GeenFoto } from "@/components/foto"
+import { Foto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
-import { SERVICES, type Service } from "@/lib/data/services"
-import { Beide, T } from "@/components/taal"
-import { F05, F07_2, F10, T01 } from "./beelden"
+import { T, type Tekst } from "@/components/taal"
+import { F10, T01 } from "./beelden"
 
-// WF-057 (Uncode "Creative Persona"): de diensten als grote namen met kleine
-// nummers; met een muis loopt er een beeld mee, op telefoon/touch staat de
-// uitleg eronder. Volgt het thema. Het beeld is een foto die bij de dienst
-// past, zonder projectnaam; bij twijfel GeenFoto.
+// Wat ik doe als drie ruime kaarten (eigenaar, 18 okt 2026: de kaarten van de
+// zijtak "zijn beter verdeeld, meer negatieve ruimte", plus borderpakketten):
+// nummer, naam, één zin, de onderdelen als labels, een link en onderaan de foto.
+// Verving de lopende zin met meelopend beeld.
 
-type Rij = { slug: string; href: "/vijvers" | "/tuinen"; beeld: FotoData | string }
+type Kaart = { href: string; naam: Tekst; zin: Tekst; delen: Tekst[]; link: Tekst; foto: FotoData }
 
-// Alleen de kerndiensten (11 okt 2026, voorpagina korter); alle elf staan op
-// /vijvers en /tuinen. Een string = nog geen passende foto.
-const RIJEN: Rij[] = [
-  { slug: "pond-survey", href: "/vijvers", beeld: F07_2 },
-  { slug: "water-systems", href: "/vijvers", beeld: F10 },
-  { slug: "pond-autumn-service", href: "/vijvers", beeld: F05 },
-  { slug: "garden-design", href: "/tuinen", beeld: "foto bij Tuinontwerp" },
-  { slug: "implementation", href: "/tuinen", beeld: T01 },
+const KAARTEN: Kaart[] = [
+  {
+    href: "/vijvers",
+    naam: { nl: "Vijvers", en: "Ponds" },
+    zin: { nl: "Water dat zijn weg vindt, schoon blijft en bij de tuin hoort.", en: "Water that finds its way, stays clear and belongs to the garden." },
+    delen: [
+      { nl: "Diagnose", en: "Diagnosis" },
+      { nl: "Renovatie", en: "Renovation" },
+      { nl: "Aanleg", en: "Build" },
+      { nl: "Onderhoud", en: "Care" },
+    ],
+    link: { nl: "Bekijk vijvers", en: "See ponds" },
+    foto: F10,
+  },
+  {
+    href: "/tuinen",
+    naam: { nl: "Tuinen", en: "Gardens" },
+    zin: { nl: "Natuurlijke tuinen die met de seizoenen meegroeien.", en: "Natural gardens that grow with the seasons." },
+    delen: [
+      { nl: "Ontwerp", en: "Design" },
+      { nl: "Aanleg", en: "Build" },
+      { nl: "Beplanting", en: "Planting" },
+      { nl: "Onderhoud", en: "Care" },
+    ],
+    link: { nl: "Bekijk tuinen", en: "See gardens" },
+    foto: T01,
+  },
+  {
+    href: "/tuinen/borderpakketten",
+    naam: { nl: "Border\u00ADpakketten", en: "Border packages" },
+    zin: { nl: "Een complete border met plantlijst en plan, of een op maat.", en: "A complete border with plant list and plan, or a custom one." },
+    delen: [
+      { nl: "8 pakketten", en: "8 packages" },
+      { nl: "5, 10 of 15 m²", en: "5, 10 or 15 m²" },
+      { nl: "Op maat", en: "Custom" },
+    ],
+    link: { nl: "Bekijk pakketten", en: "See packages" },
+    foto: {
+      src: "/borderpakketten/vlinderborder.jpg",
+      width: 1600,
+      height: 1200,
+      alt: "Een bloeiende border met zonnehoed en siergras.",
+      label: "Sfeerbeeld",
+      en: { alt: "A flowering border with coneflowers and ornamental grass.", label: "Mood image" },
+    },
+  },
 ]
-
-const DIENSTEN: (Rij & { dienst: Service })[] = RIJEN.map((r) => {
-  const dienst = SERVICES.find((s) => s.slug === r.slug)
-  if (!dienst) throw new Error(`Onbekende dienst: ${r.slug}`)
-  return { ...r, dienst }
-})
 
 const nr = (n: number) => String(n + 1).padStart(2, "0")
 
 export function WatIkDoe() {
   return (
     <section className="vp-diensten-blok" aria-labelledby="h-diensten">
-      <div className="vp-kolom vp-diensten" data-diensten>
-        <h2 className="lbl" id="h-diensten">
-          <Beide nl={`Wat ik doe · ${DIENSTEN.length} kerndiensten`} en={`What I do · ${DIENSTEN.length} core services`} />
+      <div className="vp-kolom">
+        <h2 className="lbl vp-diensten-kop" id="h-diensten">
+          <T t={{ nl: "Wat ik doe", en: "What I do" }} />
         </h2>
-        {/* Zoals oudolf.com: de diensten als één lopende zin, gescheiden door
-            komma's, met het nummer klein ervoor en een punt aan het eind.
-            Twee zinnen: vijvers en tuinen (eigenaar, 5 okt 2026: "speelser"). */}
-        {(["/vijvers", "/tuinen"] as const).map((groep) => {
-          const rij = DIENSTEN.filter((d) => d.href === groep)
-          return (
-            <div key={groep} className="vp-zin-lijst syne" data-zie>
-              <span className="lbl vp-zin-kop"><T t={groep === "/vijvers" ? { nl: "Vijvers", en: "Ponds" } : { nl: "Tuinen", en: "Gardens" }} /></span>
-              {rij.map((d, k) => {
-                const n = DIENSTEN.indexOf(d)
-                return (
-                  <span key={d.slug} className="vp-zin-item" style={{ "--n": n } as CSSProperties}>
-                    <Link href={d.href} data-naam={n}>
-                      <sup>{nr(n)}</sup>
-                      <T t={{ ...d.dienst.title, nl: d.dienst.title.nl.replace("Onderhoudsabonnement", "Onderhouds\u00ADabonnement") }} />
-                      <span className="vp-uitleg"><T t={d.dienst.summary} /></span>
-                    </Link>
-                    <span className="vp-komma">{k < rij.length - 1 ? "," : "."}</span>{" "}
-                    {/* zonder foto geen lege plek in de kaart */}
-                    {typeof d.beeld === "string" ? null : (
-                      <span className="vp-inline" aria-hidden="true">
-                        <Foto foto={d.beeld} sizes="90vw" className="vp-inline-foto" />
-                      </span>
-                    )}
-                  </span>
-                )
-              })}
-            </div>
-          )
-        })}
-        <div className="vp-terzijde">
-          <Link className="lnk" href="/vijvers">
-            <T t={{ nl: "Alles over vijvers →", en: "All about ponds →" }} />
-          </Link>
-          <Link className="lnk" href="/tuinen">
-            <T t={{ nl: "Alles over tuinen →", en: "All about gardens →" }} />
-          </Link>
-        </div>
-      </div>
-      <div className="vp-zwerf" aria-hidden="true" data-zwerf>
-        {DIENSTEN.map((d, n) => (
-          <div key={d.slug} className="vp-zwerf-item" data-beeld={n}>
-            {typeof d.beeld === "string" ? (
-              <GeenFoto wat={d.beeld} className="vp-zwerf-foto" />
-            ) : (
-              <Foto foto={d.beeld} sizes="360px" className="vp-zwerf-foto" />
-            )}
-            <p className="vp-bijschrift"><T t={d.dienst.summary} /></p>
-          </div>
-        ))}
+        <ul className="vp-kaarten">
+          {KAARTEN.map((k, n) => (
+            <li key={k.href} className="vp-kaart">
+              <div className="vp-kaart-tekst">
+                <p className="lbl vp-kaart-nr">{nr(n)}</p>
+                <h3 className="vp-kaart-naam"><T t={k.naam} /></h3>
+                <p className="vp-kaart-zin"><T t={k.zin} /></p>
+                <ul className="vp-kaart-delen">
+                  {k.delen.map((d, i) => (
+                    <li key={i} className="lbl"><T t={d} /></li>
+                  ))}
+                </ul>
+                <Link href={k.href} className="vp-kaart-link">
+                  <T t={k.link} />
+                  <span className="vp-kaart-pijl" aria-hidden="true">→</span>
+                </Link>
+              </div>
+              <Foto foto={k.foto} sizes="(min-width: 1024px) 30vw, 90vw" className="vp-kaart-foto" />
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

@@ -83,7 +83,7 @@ export default async function Dashboard() {
             <p className={`${lbl} m-0 opacity-60`}>
               <Datum />
             </p>
-            <h1 className="syne m-0 mt-1 text-[clamp(30px,3.4vw,44px)] leading-[1.05]">
+            <h1 className="syne m-0 mt-1 text-[clamp(36px,4vw,48px)] leading-[1.05]">
               <Groet />
             </h1>
           </div>

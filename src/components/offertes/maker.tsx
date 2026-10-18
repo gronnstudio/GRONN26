@@ -309,7 +309,7 @@ export function OfferteMaker() {
           <header className="rounded-b-[22px] bg-[#202020] px-10 pb-8 pt-10 text-[#EFEEEA]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[30px] w-auto" />
-            <p className="lbl m-0 mt-12 text-[#DB6923]">Intern overzicht · niet meesturen</p>
+            <p className="lbl m-0 mt-12 text-[#FF5B04]">Intern overzicht · niet meesturen</p>
             <h2 className="syne m-0 mt-1 text-[40px] leading-[1.05] tracking-[-.02em]">Wat ik overhoud</h2>
             <p className="m-0 mt-2 opacity-80">
               {[o.titel, o.klant].filter(Boolean).join(" · ")} · bij offerte {o.nummer}
@@ -326,7 +326,7 @@ export function OfferteMaker() {
               ].map(([k, v], j) => (
                 <div key={k} className="rounded-[14px] bg-[#EFEEEA] px-4 py-3">
                   <span className="lbl text-[#5c5b57]">{k}</span>
-                  <b className={`syne mt-1 block text-[18px] ${j === 2 ? "text-[#A14312]" : ""}`}>{v}</b>
+                  <b className={`syne mt-1 block text-[18px] ${j === 2 ? "text-[#FF5B04]" : ""}`}>{v}</b>
                 </div>
               ))}
             </div>
@@ -365,7 +365,7 @@ export function OfferteMaker() {
         <header className="rounded-b-[22px] bg-[#202020] px-10 pb-8 pt-10 text-[#EFEEEA]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[30px] w-auto" />
-          <p className="lbl m-0 mt-12 text-[#DB6923]">Offerte</p>
+          <p className="lbl m-0 mt-12 text-[#FF5B04]">Offerte</p>
           <h2 className="syne m-0 mt-1 text-[40px] leading-[1.05] tracking-[-.02em]">{o.titel || "Titel"}</h2>
           <p className="m-0 mt-2 opacity-80">{[o.klant, o.adres].filter(Boolean).join(" · ")}</p>
           <dl className="m-0 mt-8 grid grid-cols-3 gap-3">
@@ -412,7 +412,7 @@ export function OfferteMaker() {
           </div>
           <div className="mt-3 flex break-inside-avoid justify-between rounded-[14px] bg-[#202020] px-4 py-4 text-[18px] text-[#EFEEEA]">
             <span className="syne">Totaal incl. btw</span>
-            <span className="syne text-[#DB6923]">{euro(totaal)}</span>
+            <span className="syne text-[#FF5B04]">{euro(totaal)}</span>
           </div>
           {o.termijnen && (
             <>

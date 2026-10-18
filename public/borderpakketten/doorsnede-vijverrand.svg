@@ -5,7 +5,7 @@
 .mos{fill:var(--mos,#607a59);fill-opacity:.85}
 .salie{fill:var(--salie,#b8c5a8);fill-opacity:.9}
 .zacht{fill:var(--salie,#b8c5a8);fill-opacity:.45}
-.or{fill:var(--oranje,#db6923)}
+.or{fill:var(--oranje,#ff5b04)}
 .w{fill:none;stroke:var(--mos,#607a59);stroke-width:1.1;stroke-linecap:round;stroke-dasharray:14 6}
 .h{fill:none;stroke:var(--inkt,#202020);stroke-opacity:.28;stroke-width:1;stroke-linecap:round}
 .t{font:600 10.5px Montserrat,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;fill:var(--inkt,#202020)}

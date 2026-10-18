@@ -48,7 +48,7 @@ export async function bouwApplePas(): Promise<Buffer> {
     description: `Visitekaartje van ${NAAM}, ${BUSINESS.name}`,
     foregroundColor: "rgb(239, 238, 234)",
     backgroundColor: "rgb(32, 32, 32)",
-    labelColor: "rgb(219, 105, 35)",
+    labelColor: "rgb(255, 91, 4)",
     sharingProhibited: false,
     generic: {
       primaryFields: [veld("naam", WAT, NAAM)],

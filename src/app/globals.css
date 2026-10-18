@@ -2,7 +2,7 @@
 
 /* GRØNN Brand Guide 2026, 60/30/10: gebroken wit en antraciet voeren de
    boventoon, aarde-oranje is het ene accent (een oranje vlak draagt
-   antraciet tekst; oranje als tekst op licht is #A14312), bosgroen, mos en
+   antraciet tekst; oranje als tekst op licht is #FF5B04), bosgroen, mos en
    salie zijn bijkleuren. Donker = de Blauwe Uur-kant: antraciet grond. */
 @custom-variant dark (&:where(.donker, .donker *));
 
@@ -24,8 +24,8 @@
   --vlak: #efe8dc;
   --veld: #e9e0d0;
   --voorbeeld: #8a8272;
-  --oranje: #db6923;
-  --oranje-tekst: #a14312;
+  --oranje: #ff5b04;
+  --oranje-tekst: #ff5b04;
   --bos: #2b2a24;
   --mos: #6f6553;
   --salie: #cbbfa8;
@@ -65,8 +65,8 @@ html.donker, .donker {
   --voorbeeld: #9a8e7a;
   /* Het oranje blijft op donker even vol als op licht (eigenaar, 11 okt
      2026: "oranje heb je vervaagt, dat wil ik niet"). */
-  --oranje: #db6923;
-  --oranje-tekst: #db6923;
+  --oranje: #ff5b04;
+  --oranje-tekst: #ff5b04;
   color-scheme: dark;
 }
 /* Donker aardevlak (de voet; heette bosgroen tot 11 okt 2026): de donkere
@@ -174,7 +174,7 @@ h1[tabindex="-1"]:focus-visible {
 .komeet { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .komeet svg { display: block; overflow: visible; }
 /* de komeet volgt de ronding van de pil: de helft van zijn hoogte (24 klein, 32 groot; menu.tsx zet --komeet-r) */
-.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #db6923; stroke-width: 1.5; animation: komeet 6s linear infinite; }
+.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet 6s linear infinite; }
 @keyframes komeet { to { stroke-dashoffset: -1; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
@@ -257,7 +257,7 @@ body:has([data-links]) > :not(main, .og) { display: none !important; }
 .zaai path { fill: none; stroke: var(--inkt); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: zaai-groei 1.1s cubic-bezier(.22,1,.36,1) forwards; }
 .zaai path:nth-child(2) { animation-delay: .5s; }
 .zaai path:nth-child(3) { animation-delay: .7s; }
-.zaai-bloem { fill: #db6923; transform-box: fill-box; transform-origin: center; transform: scale(0); animation: zaai-bloei .5s 1s cubic-bezier(.22,1,.36,1) forwards; }
+.zaai-bloem { fill: #ff5b04; transform-box: fill-box; transform-origin: center; transform: scale(0); animation: zaai-bloei .5s 1s cubic-bezier(.22,1,.36,1) forwards; }
 @keyframes zaai-groei { to { stroke-dashoffset: 0; } }
 @keyframes zaai-bloei { to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .zaai path, .zaai-bloem { animation-duration: 1ms; animation-delay: 0s; } }
@@ -272,7 +272,7 @@ main img:not([src*="/brand/"]):not(.rounded-full), main video { border-radius: 6
 html.en .t-en { display: contents; }
 
 /* Offertemaker (/offertes): een oranje stip voor elk kopje, en bij printen alleen het blad. */
-.kop-stip::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #db6923; margin: 0 10px 2px 0; }
+.kop-stip::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5b04; margin: 0 10px 2px 0; }
 @media print {
   @page { size: A4; margin: 0; }
   body:has(.offertes) { background: #fff !important; }

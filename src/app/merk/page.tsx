@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 const KLEUREN: { naam: L; hex: string; rol: L; licht?: boolean }[] = [
   { naam: { nl: "Gebroken wit", en: "Off-white" }, hex: "#EFEEEA", rol: { nl: "Grond · 60 %", en: "Ground · 60 %" }, licht: true },
   { naam: { nl: "Antraciet", en: "Anthracite" }, hex: "#202020", rol: { nl: "Tekst en donker · 30 %", en: "Text and dark · 30 %" } },
-  { naam: { nl: "Aarde-oranje", en: "Earth orange" }, hex: "#DB6923", rol: { nl: "Het ene accent · 10 %", en: "The one accent · 10 %" } },
-  { naam: { nl: "Donker oranje", en: "Dark orange" }, hex: "#A14312", rol: { nl: "Oranje als tekst op licht", en: "Orange as text on light" } },
+  { naam: { nl: "Aarde-oranje", en: "Earth orange" }, hex: "#FF5B04", rol: { nl: "Het ene accent · 10 %", en: "The one accent · 10 %" } },
+  { naam: { nl: "Donker oranje", en: "Dark orange" }, hex: "#FF5B04", rol: { nl: "Oranje als tekst op licht", en: "Orange as text on light" } },
   { naam: { nl: "Bosgroen", en: "Forest green" }, hex: "#23483A", rol: { nl: "Botanisch, in beeld en drukwerk", en: "Botanical, in imagery and print" } },
   { naam: { nl: "Mosgroen", en: "Moss green" }, hex: "#607A59", rol: { nl: "Botanisch, in beeld en drukwerk", en: "Botanical, in imagery and print" } },
   { naam: { nl: "Salie", en: "Sage" }, hex: "#B8C5A8", rol: { nl: "Botanisch, in beeld en drukwerk", en: "Botanical, in imagery and print" }, licht: true },
@@ -36,7 +36,7 @@ const REGELS: [L, L][] = [
   ],
   [
     { nl: "Oranje draagt antraciet", en: "Orange carries anthracite" },
-    { nl: "Op een oranje vlak staat antraciet tekst (4,70:1). Oranje als tekst op licht is donker oranje #A14312; #DB6923 op gebroken wit is nooit een tekstpaar.", en: "Text on an orange fill is anthracite (4.70:1). Orange as text on light is dark orange #A14312; #DB6923 on off-white is never a text pair." },
+    { nl: "Op een oranje vlak staat antraciet tekst (4,70:1). Oranje als tekst op licht is donker oranje #FF5B04; #FF5B04 op gebroken wit is nooit een tekstpaar.", en: "Text on an orange fill is anthracite (4.70:1). Orange as text on light is dark orange #FF5B04; #FF5B04 on off-white is never a text pair." },
   ],
   [
     { nl: "Vlakke kleuren", en: "Flat colours" },
@@ -154,7 +154,7 @@ export default function Merk() {
           <div className="merk-balk mb-8 flex h-14 overflow-hidden rounded-full ring-1 ring-lijn" aria-hidden="true" data-zie>
             <span className="w-[60%] bg-[#EFEEEA]" />
             <span className="w-[30%] bg-[#202020]" />
-            <span className="w-[10%] bg-[#DB6923]" />
+            <span className="w-[10%] bg-[#FF5B04]" />
           </div>
           <ul className="grid list-none grid-cols-1 gap-3 p-0 min-[400px]:grid-cols-2 md:grid-cols-4">
             {KLEUREN.map((k, i) => (

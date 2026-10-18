@@ -16,7 +16,7 @@ import type { L } from "./i18n"
 // een merkobject, net als een foto. Ze komen uit de kleurschaal (vol,
 // midden 55 %, licht 12 % met gebroken wit; `--merk-*` in globals.css),
 // plus de ene schaduw #566C50 (mosgroen met 15 % antraciet) en het
-// Siergrassen-paneel #E8E9E2 (salie-licht). Fel aarde-oranje #DB6923 is
+// Siergrassen-paneel #E8E9E2 (salie-licht). Fel aarde-oranje #FF5B04 is
 // voor knoppen en acties en staat hier nooit. Geen antraciet in de
 // plantgroepen (eigenaar, 28 sep 2026).
 
@@ -84,7 +84,7 @@ export const DIENST_ICONEN: Record<DienstId, DienstIcoon> = {
     nummer: "01",
     naam: { nl: "Ontwerp", en: "Design" },
     inkt: "#EFEEEA",
-    tint: "#A14312",
+    tint: "#FF5B04",
     grond: "#202020",
     tekst: "#EFEEEA",
     rand: "#202020",
@@ -99,7 +99,7 @@ export const DIENST_ICONEN: Record<DienstId, DienstIcoon> = {
     nummer: "02",
     naam: { nl: "Aanleg", en: "Build" },
     inkt: "#C49073",
-    tint: "#A14312",
+    tint: "#FF5B04",
     grond: "#EFEEEA",
     tekst: "#202020",
     rand: "#D6D5D2",
@@ -114,10 +114,10 @@ export const DIENST_ICONEN: Record<DienstId, DienstIcoon> = {
     id: "onderhoud",
     nummer: "03",
     naam: { nl: "Onderhoud", en: "Care" },
-    inkt: "#A14312",
+    inkt: "#FF5B04",
     tint: "#202020",
     grond: "#E6D9D0",
-    tekst: "#A14312",
+    tekst: "#FF5B04",
     rand: "#E6D9D0",
     vormen: [
       [0, 0, 2, "tr", "a"],
@@ -171,7 +171,7 @@ export const PLANTGROEP_ICONEN: Record<PlantgroepSlug, PlantgroepIcoon> = {
     slug: "vaste-planten",
     nummer: "03",
     naam: { nl: "Vaste planten", en: "Perennials" },
-    inkt: "#A14312",
+    inkt: "#FF5B04",
     tint: "#C49073",
     grond: "#E6D9D0",
     paneel: "#E6D9D0",
@@ -238,7 +238,7 @@ export const PLANTGROEP_ICONEN: Record<PlantgroepSlug, PlantgroepIcoon> = {
     slug: "bollen-en-knollen",
     nummer: "07",
     naam: { nl: "Bollen & knollen", en: "Bulbs & tubers" },
-    inkt: "#A14312",
+    inkt: "#FF5B04",
     tint: "#C49073",
     grond: "#EFEEEA",
     paneel: "#E6D9D0",

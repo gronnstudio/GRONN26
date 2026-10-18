@@ -169,7 +169,7 @@ html.stil .st-plaat { transition: none; }
 .fl-uitkomst { margin: 0; font-size: clamp(24px, 3vw, 44px); line-height: 1.1; letter-spacing: -0.025em; }
 .fl-uitkomst[data-stand="rust"] { color: var(--gedempt); }
 .fl-uitkomst[data-stand="ok"] { color: var(--oranje-tekst); }
-@keyframes tk-puls { 0% { box-shadow: 0 0 0 0 rgba(219, 105, 35, .55); } 100% { box-shadow: 0 0 0 14px rgba(219, 105, 35, 0); } }
+@keyframes tk-puls { 0% { box-shadow: 0 0 0 0 rgba(255, 91, 4, .55); } 100% { box-shadow: 0 0 0 14px rgba(255, 91, 4, 0); } }
 
 /* ── Jouw bezoek: een donker paneel met live waarden ──────────────── */
 .tk-bezoek {
@@ -181,7 +181,7 @@ html.stil .st-plaat { transition: none; }
   color: #efeeea;
 }
 .tk-bezoek-kop { display: flex; align-items: center; gap: 10px; }
-.tk-live { width: 10px; height: 10px; border-radius: 999px; background: #db6923; }
+.tk-live { width: 10px; height: 10px; border-radius: 999px; background: #ff5b04; }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.stil) .tk-live { animation: tk-puls 1.8s ease-out infinite; }
 }
@@ -207,7 +207,7 @@ html.stil .st-plaat { transition: none; }
   overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
 }
-.tk-bezoek-lijst > div:last-child .tk-bezoek-waarde { color: #db6923; }
+.tk-bezoek-lijst > div:last-child .tk-bezoek-waarde { color: #ff5b04; }
 
 /* op de telefoon is de tekening te klein om te lezen: hij krijgt zijn eigen breedte en schuift zijwaarts in zijn kader */
 @media (max-width: 767px) {

@@ -23,7 +23,7 @@ const BEELD = `${SITE_URL}/brand/mail`
 
 const TEKST = "font-family:Montserrat, Arial, Helvetica, sans-serif;"
 const GRIJS = "#5C5A54"
-const ORANJE = "#A14312"
+const ORANJE = "#FF5B04"
 const ANTRACIET = "#202020"
 const BOS = "#23483A"
 

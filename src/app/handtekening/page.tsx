@@ -17,7 +17,7 @@ export default function Handtekening() {
     <div data-links className="mx-auto flex min-h-svh max-w-[720px] flex-col gap-8 px-6 py-16 text-inkt">
       <div className="flex flex-col gap-3">
         <p className="lbl m-0 text-oranje-tekst">GRØNN · e-mail</p>
-        <h1 className="syne m-0 text-[clamp(32px,4vw,44px)] tracking-[-.02em]">E-mailhandtekening</h1>
+        <h1 className="syne m-0 text-[clamp(38px,4.4vw,52px)] tracking-[-.02em]">E-mailhandtekening</h1>
         <p className="m-0 text-[16px] leading-[1.6] text-gedempt">
           Kopieer de handtekening met de knop, of selecteer hem hieronder en kopieer hem zelf. Plak hem in Gmail bij
           Instellingen → Alle instellingen bekijken → Algemeen → Handtekening, en klik onderaan op Wijzigingen
