@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import Image from "next/image"
+import { Fragment } from "react"
 import { Foto } from "@/components/foto"
 import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
@@ -9,6 +9,27 @@ import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { OVER_MIJ } from "@/lib/data/teksten"
+import { FOTOS, fotosVoor, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
+
+const MOESTUIN: FotoData = {
+  src: "/studio/moestuin/M01.jpg",
+  width: 600,
+  height: 800,
+  alt: "Nick gehurkt in de moestuin, lachend, met een handvol pas gerooide aardappels.",
+  bijschrift: "In de moestuin.",
+  en: { alt: "Nick crouching in the vegetable garden, laughing, with a handful of freshly dug potatoes.", bijschrift: "In the vegetable garden." },
+}
+
+// Na elke alinea één echte foto van Nick of zijn werk, passend bij wat er
+// staat; de laatste twee korte alinea's lopen zonder foto door naar het slot.
+const VERHAAL_FOTOS: (FotoData | undefined)[] = [
+  FOTOS.F01 as FotoData, // kijken naar licht, water en beplanting
+  FOTOS.F11 as FotoData, // bouwen met de handen
+  MOESTUIN, // buiten rust vinden
+  fotosVoor("F09")[0], // zorgvuldig werken
+  FOTOS.F10 as FotoData, // bodem, water en planten die bij de plek passen
+  fotosVoor("F08")[1], // vaak ook modder
+]
 
 // Over mij in de taal van de voorpagina: donkere opening met het portret
 // als groeiende foto, Nicks eigen tekst letterlijk (de eerste alinea licht
@@ -44,25 +65,35 @@ export default function Over() {
         </div>
         {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
         <Oplichten tekst={eerste} className="m-0" />
-        <div className="mt-[clamp(40px,5vw,72px)] grid md:grid-cols-[5fr_7fr] md:gap-x-8">
-          {/* de lege kolom krijgt een echte foto uit de moestuin (van de oude Studio-pagina) */}
-          <figure className="m-0 mb-10 md:sticky md:top-[12vh] md:mb-0 md:self-start" data-zie>
-            <div className="relative aspect-[4/5] w-full overflow-hidden md:max-w-[440px]">
-              <Image
-                src="/studio/moestuin/M01.jpg"
-                alt="Nick gehurkt in de moestuin, lachend, met een handvol pas gerooide aardappels."
-                fill
-                sizes="(min-width: 768px) 440px, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="lbl mt-3 text-gedempt"><T t={{ nl: "In de moestuin", en: "In the vegetable garden" }} /></figcaption>
-          </figure>
-          <div>
-            {rest.map((alinea, i) => (
-              <Oplichten key={i} tekst={alinea} className="m-0 mb-[1.2em] text-[clamp(18px,1.5vw,24px)]" />
-            ))}
-          </div>
+        {/* Het verhaal zelf staat gewoon vol in beeld, zonder oplichten
+            (eigenaar, 18 okt 2026: "zorg dat tekst goed leesbaar blijft").
+            Na een alinea schuift een foto in, om en om van links en rechts. */}
+        <div className="mt-[clamp(40px,5vw,72px)] overflow-x-clip">
+          {rest.map((alinea, i) => {
+            const foto = VERHAAL_FOTOS[i]
+            const links = i % 2 === 0
+            const liggend = foto ? foto.width > foto.height : false
+            return (
+              <Fragment key={i}>
+                <p className="mx-auto my-0 max-w-[680px] text-[clamp(18px,1.5vw,24px)] leading-[1.6] font-light">
+                  <T t={alinea} />
+                </p>
+                {foto ? (
+                  <figure
+                    data-zie={links ? "links" : "rechts"}
+                    className={`my-[clamp(40px,6vw,96px)] ${links ? "mr-auto" : "ml-auto"} ${liggend ? "w-[92%] md:w-[58%]" : "w-[78%] md:w-[34%]"}`}
+                  >
+                    <Foto foto={foto} sizes={liggend ? "(min-width: 768px) 58vw, 92vw" : "(min-width: 768px) 34vw, 78vw"} className={liggend ? "aspect-[4/3]" : "aspect-[3/4]"} />
+                    {foto.bijschrift ? (
+                      <figcaption className={`lbl mt-3 text-gedempt ${links ? "" : "text-right"}`}>
+                        <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
+                      </figcaption>
+                    ) : null}
+                  </figure>
+                ) : null}
+              </Fragment>
+            )
+          })}
         </div>
       </section>
 
