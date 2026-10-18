@@ -24,6 +24,9 @@ const PRIJSKAART = [
   { naam: { nl: "Op maat", en: "Custom" }, prijs: BORDER_PRIJS.opgestuurd, vanaf: true, kort: { nl: "Voor jouw plek", en: "For your spot" }, href: "#op-maat" },
 ]
 
+/** Een zacht afbreekstreepje vóór "border" ("Schaduw-border"): een smalle tegel breekt daar, niet midden in een woord. */
+const afbreek = (naam: string) => naam.replace(/(\p{L})border/u, "$1\u00adborder")
+
 function Prijzen({ p }: { p: BorderPakket }) {
   return (
     <table className="w-full border-collapse text-[15px] tabular-nums">
@@ -164,20 +167,24 @@ export default function BorderpakkettenPagina() {
 
         {/* Tegels (eigenaar, 18 okt 2026): twee naast elkaar op de telefoon, elk naar zijn uitleg verderop. */}
         <h2 className="lbl mt-[clamp(56px,7vw,96px)] mb-5 text-gedempt"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
-        <ul className="m-0 grid list-none grid-cols-2 gap-x-3 gap-y-8 p-0 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
-          {BORDERPAKKETTEN.map((p) => (
+        {/* Kaartstijl (eigenaar, 18 okt 2026: "beter verdeeld, meer negatieve ruimte"): tekst bovenin met ruime marge, foto tot de rand onderaan. */}
+        <ul className="m-0 grid list-none grid-cols-2 gap-4 p-0 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+          {BORDERPAKKETTEN.map((p, i) => (
             <li key={p.slug}>
-              <a href={`#${p.slug}`} className="group flex h-full flex-col no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
+              <a href={`#${p.slug}`} className="flex h-full flex-col overflow-hidden rounded-[16px] bg-vlak no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
+                <span className="flex flex-col p-4 pb-5 sm:p-6 sm:pb-7">
+                  <span className="lbl block text-oranje-tekst">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="syne mt-3 block text-[clamp(17px,2.2vw,26px)] leading-[1.1] tracking-[-.015em]"><T t={{ nl: afbreek(p.naam.nl), en: afbreek(p.naam.en) }} /></span>
+                  <span className="mt-2 block text-[14px] leading-[1.45] text-gedempt sm:text-[15px]"><T t={p.kort} /></span>
+                  <span className="mt-4 block text-[14px] font-medium tabular-nums">
+                    <T t={{ nl: `vanaf ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}`, en: `from ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}` }} />
+                  </span>
+                </span>
                 <Foto
                   foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: "", label: "Sfeerbeeld", en: { alt: "", label: "Mood image" } }}
                   sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                  className="aspect-square rounded-[16px]"
+                  className="mt-auto aspect-[4/3]"
                 />
-                <span className="syne mt-3 block text-[clamp(17px,2vw,22px)] leading-[1.15] tracking-[-.01em]"><T t={p.naam} /></span>
-                <span className="mt-1 block text-[14px] leading-[1.4] text-gedempt"><T t={p.kort} /></span>
-                <span className="mt-auto block pt-2 text-[14px] font-medium tabular-nums">
-                  <T t={{ nl: `vanaf ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}`, en: `from ${priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)}` }} />
-                </span>
               </a>
             </li>
           ))}
