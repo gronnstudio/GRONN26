@@ -2,122 +2,106 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { BUSINESS } from "@/lib/business"
 import { Komeet } from "./komeet"
-import { Weergave } from "./weergave"
-import { T } from "./taal"
+import { Instellingen } from "./weergave"
+import { T, type Tekst } from "./taal"
 import { useTaal } from "./taal-klant"
 
-// Het menu (eigenaar, 10 okt 2026, als schets):
-//   bovenaan en bij omhoog scrollen: midden onderaan een donkere pil met vijf
-//   ronde iconen, Vijvers, Tuinen, Projecten, Over en FAQ, zonder woorden (het
-//   woord blijft voor schermlezers en als tooltip); op de telefoon even breed
-//   als de rij hieronder, vanaf 1024px met het woordmerk voorop;
-//   ⭕   ⭕⭕⭕⭕⭕   ⭕  bij omlaag scrollen: de pil krimpt (op de telefoon) en
-//   links Weergave en rechts Omhoog verschijnen, rond en oranje.
-// De pil is donker glas (.glas in globals.css), op elke grond even donker; de
-// huidige pagina is een licht kiezelknopje. De iconen bewegen om de beurt even (golf,
-// groei, spit, knik, plop; globals.css). Linksonder staat vanaf 1024px Kennismaken ↗.
-const MENU = [
-  { href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" }, beweging: "golf", icoon: "M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" },
-  { href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" }, beweging: "groei", icoon: "M11 20V9M11 13c-4 0-6-2-6-6 4 0 6 2 6 6zM11 10c0-4 2-6 6-6 0 4-2 6-6 6z" },
-  { href: "/werk", label: { nl: "Projecten", en: "Projects" }, beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
-  { href: "/over", label: { nl: "Over", en: "About" }, beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
-  { href: "/faq", label: { nl: "FAQ", en: "FAQ" }, beweging: "plop", icoon: "M5 4h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-4 3.5V16H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM9.2 8.4a1.8 1.8 0 1 1 2.6 1.6c-.5.2-.8.6-.8 1.1v.3M11 13.2v.1" },
+// Het menu, versimpeld (eigenaar, 18 okt 2026: "home, werk, studio, shop,
+// hamburger (hierin breng je alles onder wat in menu niet staat zoals
+// weergave etc.) maak er een mega menu en op mobiel zero.university achtig").
+// Onderaan blijft de glazen pil, nu met vier woorden en een hamburger. De
+// hamburger opent een megamenu met alle pagina's, contact en Weergave. Op de
+// telefoon groeit de pil zelf uit tot dat menu, zoals bij zero.university.
+const HOOFD: { href: string; label: Tekst; bij: string[] }[] = [
+  { href: "/", label: "Home", bij: [] },
+  { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"] },
+  { href: "/over", label: "Studio", bij: ["/over", "/techniek"] },
+  { href: "/tuinen/borderpakketten", label: "Shop", bij: ["/tuinen/borderpakketten"] },
 ]
 
-// de huidige pagina: een licht kiezelknopje met reliëf achter een donker
-// icoon (de .kiezel in globals.css, naar de preview van 18 okt 2026); 36
-// rond in de kleine pil, 48 in de grote
-const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10 aria-[current=page]:kiezel"
+const MEGA: { kop: Tekst; links: [string, Tekst][] }[] = [
+  {
+    kop: { nl: "Diensten", en: "Services" },
+    links: [
+      ["/vijvers", { nl: "Vijvers", en: "Ponds" }],
+      ["/tuinen", { nl: "Tuinen", en: "Gardens" }],
+      ["/tuinen/borderpakketten", { nl: "Borderpakketten", en: "Border packages" }],
+    ],
+  },
+  {
+    kop: { nl: "Werk", en: "Work" },
+    links: [
+      ["/werk", { nl: "Alle projecten", en: "All projects" }],
+      ["/werk/vijverrenovatie", { nl: "Vijverrenovatie", en: "Pond renovation" }],
+      ["/werk/terras-geulle", { nl: "Terras in Geulle", en: "Terrace in Geulle" }],
+    ],
+  },
+  {
+    kop: "Studio",
+    links: [
+      ["/over", { nl: "Over Nick", en: "About Nick" }],
+      ["/faq", { nl: "Veelgestelde vragen", en: "FAQ" }],
+      ["/techniek", { nl: "Techniek", en: "Technology" }],
+    ],
+  },
+  {
+    kop: "Contact",
+    links: [
+      ["/kennismaken", { nl: "Kennismaken", en: "Get in touch" }],
+      [BUSINESS.whatsapp, "WhatsApp"],
+      [BUSINESS.emailHref, BUSINESS.email],
+    ],
+  },
+]
+
+const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
 
 export function Menu() {
   const pad = usePathname()
   const taal = useTaal()
-  // boven = de pil staat er: bovenaan de pagina, en zodra je een stukje
-  // omhoog scrollt (zoals Instagram; eigenaar, 10 okt 2026)
-  const [boven, setBoven] = useState(true)
+  const [open, setOpen] = useState(false)
+  const nav = useRef<HTMLElement>(null)
+  const knop = useRef<HTMLButtonElement>(null)
+  const vlak = useRef<HTMLDivElement>(null)
+
+  // een andere pagina: het menu gaat dicht
+  const [vorigPad, setVorigPad] = useState(pad)
+  if (pad !== vorigPad) {
+    setVorigPad(pad)
+    setOpen(false)
+  }
 
   useEffect(() => {
-    let vorige = 0
-    const meet = () => {
-      const y = scrollY
-      if (y < 48) setBoven(true)
-      else if (y - vorige > 6) setBoven(false)
-      else if (vorige - y > 6) setBoven(true)
-      else return
-      vorige = y
+    if (!open) return
+    const toets = (e: KeyboardEvent) => e.key === "Escape" && (setOpen(false), knop.current?.focus())
+    const klik = (e: MouseEvent) => {
+      const t = e.target as Node
+      if (!nav.current?.contains(t) && !vlak.current?.contains(t)) setOpen(false)
     }
-    const t = setTimeout(meet, 0) // ook als de pagina al gescrold opent
-    addEventListener("scroll", meet, { passive: true })
-    return () => { clearTimeout(t); removeEventListener("scroll", meet) }
-  }, [pad])
+    document.addEventListener("keydown", toets)
+    document.addEventListener("click", klik)
+    // op de telefoon vult het menu het scherm: de pagina eronder staat stil
+    const oud = document.documentElement.style.overflow
+    if (!matchMedia("(min-width: 1024px)").matches) document.documentElement.style.overflow = "hidden"
+    return () => {
+      document.removeEventListener("keydown", toets)
+      document.removeEventListener("click", klik)
+      document.documentElement.style.overflow = oud
+    }
+  }, [open])
 
-
-  const stil = () => document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches
-  // wat bij de stand hoort is zichtbaar; de rest krimpt weg en is onbereikbaar
-  const toon = (aan: boolean) => `transition-[opacity,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
-    aan ? "scale-100 opacity-100" : "pointer-events-none scale-0 opacity-0"
-  }`
-  const rond = "grid size-[var(--knop)] cursor-pointer place-items-center rounded-full bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-2"
+  const linkKlasse = "flex min-h-[var(--raak)] items-center text-gebroken-wit no-underline transition-colors hover:text-oranje focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
 
   return (
     <>
-      {/* onder 1024px: de grote pil is 64 hoog met rondjes van 48 en iconen van
-          32, de kleine 48 hoog met 36 en 20 (eigenaar, 10 okt 2026: "de
-          iconen is top op mobiel maar pil is erg hoog") */}
-      <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-groot={boven || undefined} className={`group fixed bottom-5 z-[101] transition-[left,right] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none lg:right-auto lg:left-1/2 lg:bottom-10 lg:-translate-x-1/2 ${
-        boven ? "inset-x-[var(--goot)]" : "inset-x-[max(calc(50%-102px),calc(var(--goot)+var(--knop)+6px))]"
-      }`}>
-        <ul className="relative m-0 flex list-none items-center justify-between rounded-full glas p-[6px] [--komeet-r:24px] transition-[padding] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:p-[8px] max-lg:group-data-[groot]:[--komeet-r:32px]">
-          <Komeet as="li" />
-          <li className="hidden lg:flex">
-            {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
-            <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"} className="flex h-10 items-center rounded-full px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[13px] w-auto" />
-            </Link>
-          </li>
-          {MENU.map((m) => {
-            const actief = pad === m.href || pad.startsWith(m.href + "/")
-            return (
-              // vaste rondjes, verdeeld met justify-between: het eerste en laatste
-              // rondje liggen zo concentrisch in de ronding van de pil, met de
-              // padding als rand rondom (eigenaar, 11 okt 2026: "de cirkel sluit
-              // niet netjes aan op de ronding"). Het actieve rondje is een
-              // stadion, een derde breder (eigenaar: "zoals Instagram")
-              <li key={m.href} className="flex min-w-0 justify-center">
-                <Link href={m.href} title={m.label[taal]} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop-klein)] max-lg:group-data-[groot]:size-[var(--knop)] aria-[current=page]:w-[48px] max-lg:group-data-[groot]:aria-[current=page]:w-[64px] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
-                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]:size-[32px]">
-                    <path d={m.icoon} />
-                  </svg>
-                  <span className="sr-only"><T t={m.label} /></span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
-
-      <div data-menu inert={boven} className={`fixed right-[var(--goot)] bottom-5 z-[101] lg:right-[var(--rand)] lg:bottom-10 ${toon(!boven)}`}>
-        <button
-          type="button"
-          onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
-          aria-label={taal === "en" ? "Back to top" : "Terug naar boven"}
-          className={rond}
-        >
-          <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
-          <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M11 18V4M5 10l6-6 6 6" />
-          </svg>
-        </button>
-      </div>
-
-      {/* links: Kennismaken (vanaf 1024px) en, tijdens het lezen, Weergave */}
-      <div data-menu className="pointer-events-none fixed bottom-5 left-[var(--goot)] z-[101] flex items-center gap-2 lg:bottom-10 lg:left-[var(--rand)] [&>*]:pointer-events-auto">
+      {/* linksonder vanaf 1024px: Kennismaken (op de telefoon staat hij bovenaan, kop.tsx) */}
+      <div data-menu className="fixed bottom-10 left-[var(--rand)] z-[101] max-lg:hidden">
         <Link
           href="/kennismaken"
-          className="group knop gap-9 bg-oranje text-antraciet max-lg:hidden shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3"
+          className="group knop gap-9 bg-oranje text-antraciet shadow-[0_10px_40px_-12px_rgba(0,0,0,.45)] focus-visible:outline-2 focus-visible:outline-offset-3"
         >
           <span className="block h-4 overflow-hidden leading-4">
             <span className="block transition-transform duration-[450ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full"><T t={{ nl: "Kennismaken", en: "Get in touch" }} /></span>
@@ -127,10 +111,91 @@ export function Menu() {
             <path d="M0 12.0593L7.504 4.60687L1.00002 4.51248V2.5H11V12.5624H9L8.93581 6.04761L1.4318 13.5L0 12.0593Z" fill="currentColor" />
           </svg>
         </Link>
-        <div inert={boven} className={toon(!boven)}>
-          <Weergave knopKlasse={rond} />
+      </div>
+
+      {/* het megamenu: één glazen vlak dat de pil omsluit en er op de telefoon
+          uit omhoog groeit (clip-path van de pil naar het hele vlak) */}
+      <div
+        ref={vlak}
+        id="megamenu"
+        inert={!open}
+        className={`donker fixed z-[100] overflow-y-auto overscroll-contain rounded-[32px] glas-diep text-gebroken-wit transition-[clip-path,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none
+          inset-x-[var(--goot)] top-[max(16px,env(safe-area-inset-top))] bottom-5 px-6 pt-8 pb-[96px]
+          lg:top-auto lg:bottom-10 lg:left-1/2 lg:right-auto lg:max-h-[calc(100dvh-80px)] lg:w-[min(1120px,calc(100vw-2*var(--goot)))] lg:-translate-x-1/2 lg:px-10 lg:pt-10 lg:pb-[100px] ${
+          open ? "opacity-100 [clip-path:inset(0_0_0_0_round_32px)]" : "pointer-events-none opacity-0 [clip-path:inset(calc(100%-60px)_0_0_0_round_32px)]"
+        }`}
+      >
+        <div className="grid gap-x-10 gap-y-8 lg:grid-cols-4">
+          {MEGA.map((kolom) => (
+            <div key={kolom.links[0][0]}>
+              <p className="lbl m-0 mb-2 text-gebroken-wit/60"><T t={kolom.kop} /></p>
+              <ul className="m-0 list-none p-0">
+                {kolom.links.map(([href, label]) => {
+                  const extern = !href.startsWith("/")
+                  const klasse = `${linkKlasse} syne text-[26px] leading-[1.15] lg:text-[20px] ${extern ? "!font-sans !text-[15px] !font-medium [overflow-wrap:anywhere]" : ""}`
+                  return (
+                    <li key={href}>
+                      {extern ? (
+                        <a href={href} className={klasse} {...(href.startsWith("http") ? { target: "_blank", rel: "noopener" } : {})}><T t={label} /></a>
+                      ) : (
+                        <Link href={href} aria-current={pad === href ? "page" : undefined} className={`${klasse} aria-[current=page]:text-oranje`}><T t={label} /></Link>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          ))}
+          <div className="border-t border-gebroken-wit/15 pt-6 lg:col-span-4">
+            <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
+            <Instellingen />
+          </div>
         </div>
       </div>
+
+      <nav ref={nav} aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-open={open || undefined} className="group fixed inset-x-[var(--goot)] bottom-5 z-[101] lg:right-auto lg:bottom-10 lg:left-1/2 lg:-translate-x-1/2">
+        <ul className="relative z-10 m-0 flex list-none items-center gap-1 rounded-full glas p-[6px] [--komeet-r:30px] transition-[background-color,box-shadow] duration-500 group-data-[open]:bg-transparent group-data-[open]:shadow-none">
+          <Komeet as="li" />
+          <li className="hidden lg:flex">
+            {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
+            <Link href="/" aria-label={taal === "en" ? "GRØNN Studio, to the home page" : "GRØNN Studio, naar de voorpagina"} className="flex h-10 items-center rounded-full px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[13px] w-auto" />
+            </Link>
+          </li>
+          {HOOFD.map((m) => {
+            const actief = m.href === "/" ? pad === "/" : m.bij.some((b) => isHier(pad, b))
+            return (
+              <li key={m.href} className="flex min-w-0 flex-1 lg:flex-none">
+                <Link
+                  href={m.href}
+                  aria-current={actief ? "page" : undefined}
+                  className="flex h-[var(--knop)] w-full items-center justify-center rounded-full px-2 text-[13px] font-semibold text-gebroken-wit no-underline transition-colors hover:not-aria-[current=page]:bg-gebroken-wit/10 aria-[current=page]:kiezel focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit lg:px-5"
+                >
+                  <T t={m.label} />
+                </Link>
+              </li>
+            )
+          })}
+          <li className="flex">
+            <button
+              ref={knop}
+              type="button"
+              aria-expanded={open}
+              aria-controls="megamenu"
+              onClick={() => setOpen(!open)}
+              className="flex h-[var(--knop)] min-w-[var(--knop)] cursor-pointer items-center justify-center gap-2.5 rounded-full border-0 bg-gebroken-wit/90 px-0 text-antraciet lg:px-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
+            >
+              {/* twee streepjes die een kruis worden, zoals bij zero.university */}
+              <span aria-hidden className="relative block h-[10px] w-[18px]">
+                <span className="absolute inset-x-0 top-0 h-[2px] rounded-full bg-current transition-transform duration-300 group-data-[open]:translate-y-[4px] group-data-[open]:rotate-45" />
+                <span className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-current transition-transform duration-300 group-data-[open]:-translate-y-[4px] group-data-[open]:-rotate-45" />
+              </span>
+              <span className="text-[13px] font-semibold max-lg:sr-only">{open ? (taal === "en" ? "Close" : "Sluiten") : "Menu"}</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </>
   )
 }
