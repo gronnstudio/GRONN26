@@ -19,7 +19,7 @@ import { useTaal } from "./taal-klant"
 // groot. Tijdens het lezen komt Omhoog achteraan, na de hamburger, in de
 // ronding van de pil ("hamburger en dan oranje back to top achteraan").
 const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string }[] = [
-  { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5c-3.3 0-5.5-2.4-5.5-5.3S7.9 8.5 11 8.5s5.5 2.8 5.5 5.7-2.2 5.3-5.5 5.3zM11 8.5V6M11 6.5c0-2.2 1.6-3.8 3.8-3.8 0 2.2-1.6 3.8-3.8 3.8z" },
+  { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/tuinen/borderpakketten", label: "Shop", bij: ["/tuinen/borderpakketten"], beweging: "groei", icoon: "M4.5 8h13l-1 11h-11zM8 8V6.5a3 3 0 0 1 6 0V8" },
