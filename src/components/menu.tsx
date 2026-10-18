@@ -16,9 +16,9 @@ import { useTaal } from "./taal-klant"
 // telefoon groeit de pil zelf uit tot dat menu, zoals bij zero.university.
 // De pil zelf houdt de stijl van daarvoor (eigenaar, 18 okt 2026: "de styling
 // terug, menu blijft verder zo"): ronde iconen zonder woorden die om de beurt
-// even bewegen, de huidige pagina als kiezelknopje, op de telefoon groot
-// bovenaan en klein tijdens het lezen. Dan schuift Omhoog naast de hamburger
-// de pil in ("de back to top moet naast hamburger in het dock verschijnen").
+// even bewegen, de huidige pagina als kiezelknopje, op de telefoon altijd
+// groot. Tijdens het lezen komt Omhoog achteraan, na de hamburger, in de
+// ronding van de pil ("hamburger en dan oranje back to top achteraan").
 const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string }[] = [
   { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M3.5 10 11 3.5l7.5 6.5v8a1 1 0 0 1-1 1H14v-5.5H8V19H4.5a1 1 0 0 1-1-1z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
@@ -74,8 +74,8 @@ export function Menu() {
   const knop = useRef<HTMLButtonElement>(null)
   const vlak = useRef<HTMLDivElement>(null)
 
-  // boven = de grote pil: bovenaan de pagina en zodra je een stukje omhoog
-  // scrollt (zoals Instagram); tijdens het lezen klein, met Omhoog erin
+  // boven = geen Omhoog: bovenaan de pagina en zodra je een stukje omhoog
+  // scrollt (zoals Instagram); tijdens het lezen staat Omhoog erin
   const [boven, setBoven] = useState(true)
   useEffect(() => {
     let vorige = 0
@@ -180,9 +180,10 @@ export function Menu() {
       </div>
 
       <nav ref={nav} aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"} data-menu data-open={open || undefined} className="group fixed inset-x-[var(--goot)] bottom-5 z-[101] lg:right-auto lg:bottom-10 lg:left-1/2 lg:-translate-x-1/2">
-        {/* onder 1024px: groot 64 hoog met rondjes van 48 en iconen van 32, tijdens
-            het lezen 48 hoog met 36 en 20; vanaf 1024px altijd klein, met het woordmerk */}
-        <ul data-groot={boven || undefined} className="group/pil relative z-10 m-0 flex list-none items-center justify-between gap-1 rounded-full glas p-[6px] [--komeet-r:24px] transition-[padding,background-color,box-shadow] duration-500 motion-reduce:transition-none group-data-[open]:bg-transparent group-data-[open]:shadow-none max-lg:data-[groot]:p-[8px] max-lg:data-[groot]:[--komeet-r:32px] lg:justify-start">
+        {/* onder 1024px altijd groot, 64 hoog met rondjes van 48 en iconen van 32
+            (eigenaar, 18 okt 2026: "zonder dock te verkleinen"); vanaf 1024px
+            48 hoog met 36 en 20, met het woordmerk */}
+        <ul className="relative z-10 m-0 flex list-none items-center justify-between rounded-full glas p-[6px] [--komeet-r:24px] transition-[background-color,box-shadow] duration-500 motion-reduce:transition-none group-data-[open]:bg-transparent group-data-[open]:shadow-none max-lg:p-[8px] max-lg:[--komeet-r:32px] lg:justify-start lg:gap-1">
           <Komeet as="li" />
           <li className="hidden lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -195,8 +196,8 @@ export function Menu() {
             const actief = m.href === "/" ? pad === "/" : m.bij.some((b) => isHier(pad, b))
             return (
               <li key={m.href} className="flex min-w-0 justify-center">
-                <Link href={m.href} title={kies(m.label, taal)} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop-klein)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 motion-reduce:transition-none aria-[current=page]:w-[48px] max-lg:group-data-[groot]/pil:size-[var(--knop)] max-lg:group-data-[groot]/pil:aria-[current=page]:w-[64px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
-                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]/pil:size-[32px]">
+                <Link href={m.href} title={kies(m.label, taal)} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop-klein)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 motion-reduce:transition-none aria-[current=page]:w-[48px] max-lg:size-[var(--knop)] max-lg:aria-[current=page]:w-[64px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[20px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:size-[32px]">
                     <path d={m.icoon} />
                   </svg>
                   <span className="sr-only"><T t={m.label} /></span>
@@ -204,21 +205,6 @@ export function Menu() {
               </li>
             )
           })}
-          {/* Omhoog: alleen tijdens het lezen, rond en oranje met glasranden, naast de hamburger */}
-          <li inert={boven || open} className={`flex justify-center overflow-hidden transition-[width,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${boven || open ? "w-0 opacity-0" : "w-[var(--knop-klein)] opacity-100"}`}>
-            <button
-              type="button"
-              onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
-              aria-label={taal === "en" ? "Back to top" : "Terug naar boven"}
-              title={taal === "en" ? "Back to top" : "Terug naar boven"}
-              className="glasrand relative grid size-[var(--knop-klein)] shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
-            >
-              <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
-              <svg viewBox="0 0 22 22" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11 18V4M5 10l6-6 6 6" />
-              </svg>
-            </button>
-          </li>
           <li className="flex justify-center">
             <button
               ref={knop}
@@ -227,14 +213,30 @@ export function Menu() {
               aria-controls="megamenu"
               aria-label="Menu"
               title="Menu"
-              className={`grid size-[var(--knop-klein)] cursor-pointer place-items-center rounded-full border-0 bg-transparent transition-[background-color,width,height] duration-500 motion-reduce:transition-none max-lg:group-data-[groot]/pil:size-[var(--knop)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}
+              className={`grid size-[var(--knop-klein)] cursor-pointer place-items-center rounded-full border-0 bg-transparent transition-[background-color,width,height] duration-500 motion-reduce:transition-none max-lg:size-[var(--knop)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}
               onClick={() => setOpen(!open)}
             >
               {/* twee streepjes die een kruis worden, zoals bij zero.university */}
-              <span aria-hidden className="relative block h-[8px] w-[18px] transition-[width,height] duration-500 max-lg:group-data-[groot]/pil:h-[12px] max-lg:group-data-[groot]/pil:w-[26px]">
+              <span aria-hidden className="relative block h-[8px] w-[18px] transition-[width,height] duration-500 max-lg:h-[12px] max-lg:w-[26px]">
                 <span className="absolute inset-x-0 top-0 h-[2px] rounded-full bg-current transition-transform duration-300 group-data-[open]:top-1/2 group-data-[open]:-translate-y-1/2 group-data-[open]:rotate-45" />
                 <span className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-current transition-transform duration-300 group-data-[open]:bottom-1/2 group-data-[open]:translate-y-1/2 group-data-[open]:-rotate-45" />
               </span>
+            </button>
+          </li>
+          {/* Omhoog: alleen tijdens het lezen, rond en oranje met glasranden, achteraan
+              na de hamburger, concentrisch in de ronding van de pil */}
+          <li hidden={boven || open} className="justify-center [&:not([hidden])]:flex">
+            <button
+              type="button"
+              onClick={() => scrollTo({ top: 0, behavior: stil() ? "auto" : "smooth" })}
+              aria-label={taal === "en" ? "Back to top" : "Terug naar boven"}
+              title={taal === "en" ? "Back to top" : "Terug naar boven"}
+              className="omhoog-in glasrand relative grid size-[var(--knop-klein)] max-lg:size-[var(--knop)] shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
+            >
+              <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
+              <svg viewBox="0 0 22 22" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 18V4M5 10l6-6 6 6" />
+              </svg>
             </button>
           </li>
         </ul>

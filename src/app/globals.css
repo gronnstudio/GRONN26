@@ -215,6 +215,10 @@ h1[tabindex="-1"]:focus-visible {
     inset 0 -1.5px .5px 0 rgb(0 0 0 / .25),
     0 10px 40px -12px rgb(0 0 0 / .45);
 }
+/* Omhoog verschijnt in de pil met een korte plop; stil bij minder beweging. */
+.omhoog-in { animation: omhoog-in .4s cubic-bezier(.22,1,.36,1); }
+@keyframes omhoog-in { from { scale: 0; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .omhoog-in { animation: none; } }
 /* De huidige pagina in de pil: een licht kiezelknopje met reliëf. */
 @utility kiezel {
   background: rgb(239 238 234 / .9);
