@@ -615,9 +615,11 @@ html.stil .vp-zwerf {
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    html:not(.stil) .vp-vijver { height: 170svh; }
-    html:not(.stil) .vp-vijver-beeld { animation: vp-duik linear both; animation-timeline: scroll(root); animation-range: 0 70svh; }
-    html:not(.stil) .vp-vijver-waas::after { animation: vp-oplos linear both; animation-timeline: scroll(root); animation-range: 25svh 70svh; }
+    /* kort vasthouden: de foto is pas helemaal grond als hij al grotendeels
+       uit beeld is, anders bleef er een scherm leeg bruin over (eigenaar, 18 okt 2026) */
+    html:not(.stil) .vp-vijver { height: 110svh; }
+    html:not(.stil) .vp-vijver-beeld { animation: vp-duik linear both; animation-timeline: scroll(root); animation-range: 0 85svh; }
+    html:not(.stil) .vp-vijver-waas::after { animation: vp-oplos linear both; animation-timeline: scroll(root); animation-range: 20svh 85svh; }
     html:not(.stil) .vp-vijver-tekst { animation: vp-weg linear both; animation-timeline: scroll(root); animation-range: 0 40svh; }
   }
 }
