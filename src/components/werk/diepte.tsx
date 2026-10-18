@@ -5,13 +5,14 @@ import { useEffect, useRef, type CSSProperties } from "react"
 import { T } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import { DIEPTE } from "@/lib/data/vijverrenovatie"
+import "./diepte.css"
 
 // De foto's van het project komen op je af terwijl je scrolt (eigenaar, 18 okt
 // 2026, naar untamed.gallery). Untamed doet het in three.js en neemt het
 // scrollen over; hier is het CSS 3D en een paar regels script op de gewone
 // scroll. Elke foto blijft even vooraan staan met fase en bijschrift. Tab of
 // een tik brengt een foto naar voren. Met minder beweging (of html.stil) staan
-// dezelfde foto's als rustig raster; dat regelt werk.css, het script doet dan niets.
+// dezelfde foto's als rustig raster; dat regelt diepte.css, het script doet dan niets.
 
 const AFSTAND = 700 // px diepte tussen twee foto's
 const VOOR = 220 // de foto vooraan staat iets dichter dan het scherm: groter
