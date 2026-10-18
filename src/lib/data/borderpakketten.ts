@@ -10,8 +10,6 @@ import type { L } from "@/lib/i18n"
 export type BorderPakket = {
   slug: string
   naam: L
-  /** Eén korte regel voor de tegel. */
-  kort: L
   tags: L[]
   zin: L
   alt: L
@@ -26,7 +24,6 @@ export const BORDER_MATEN = [5, 10, 15] as const
 export const BORDERPAKKETTEN: BorderPakket[] = [
   {
     slug: "vlinderborder",
-    kort: { nl: "Prairiebloei voor bijen en vlinders.", en: "Prairie bloom for bees and butterflies." },
     naam: { nl: "Vlinderborder", en: "Butterfly border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Normale tot droge grond", en: "Normal to dry soil" }, { nl: "Bloei juni–oktober", en: "Flowers June–October" }],
     zin: {
@@ -45,7 +42,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "schaduwborder",
-    kort: { nl: "Rustig groen onder een boom.", en: "Calm green under a tree." },
     naam: { nl: "Schaduwborder", en: "Shade border" },
     tags: [{ nl: "Halfschaduw tot schaduw", en: "Part to full shade" }, { nl: "Vochthoudende grond", en: "Moist soil" }, { nl: "Jaarrond groen", en: "Green all year" }],
     zin: {
@@ -64,7 +60,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "vijverrand",
-    kort: { nl: "Een zachte oever voor kikker en libel.", en: "A soft bank for frogs and dragonflies." },
     naam: { nl: "Vijverrand", en: "Pond edge" },
     tags: [{ nl: "Zon tot halfschaduw", en: "Sun to part shade" }, { nl: "Natte grond en ondiep water", en: "Wet soil and shallow water" }, { nl: "Bij elke vijver", en: "For any pond" }],
     zin: {
@@ -82,7 +77,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "droge-border",
-    kort: { nl: "Voor hete zomers, zonder sproeien.", en: "For hot summers, no watering." },
     naam: { nl: "Droge border", en: "Dry border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Droge grond of grind", en: "Dry soil or gravel" }, { nl: "Weinig water nodig", en: "Little water needed" }],
     zin: {
@@ -100,7 +94,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "inheemse",
-    kort: { nl: "Wilde planten die hier thuishoren.", en: "Wild plants that belong here." },
     naam: { nl: "Inheemse border", en: "Native border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Schrale tot normale grond", en: "Poor to normal soil" }, { nl: "Bloei mei–september", en: "Flowers May–September" }],
     zin: {
@@ -119,7 +112,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "plukborder",
-    kort: { nl: "Een bos bloemen, de hele zomer.", en: "A bunch of flowers, all summer." },
     naam: { nl: "Plukborder", en: "Cutting border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Normale grond", en: "Normal soil" }, { nl: "Bloei juni–oktober", en: "Flowers June–October" }],
     zin: {
@@ -138,7 +130,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "witte-border",
-    kort: { nl: "Wit dat ’s avonds oplicht.", en: "White that glows at dusk." },
     naam: { nl: "Witte border", en: "White border" },
     tags: [{ nl: "Halfschaduw", en: "Part shade" }, { nl: "Vochthoudende grond", en: "Moist soil" }, { nl: "Licht in de avond", en: "Glows at dusk" }],
     zin: {
@@ -157,7 +148,6 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
   },
   {
     slug: "eetbare-border",
-    kort: { nl: "Bes, rabarber en kruiden bij de deur.", en: "Currants, rhubarb and herbs by the door." },
     naam: { nl: "Eetbare border", en: "Edible border" },
     tags: [{ nl: "Volle zon", en: "Full sun" }, { nl: "Normale grond", en: "Normal soil" }, { nl: "Oogst juni–september", en: "Harvest June–September" }],
     zin: {
