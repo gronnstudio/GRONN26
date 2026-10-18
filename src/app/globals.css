@@ -370,3 +370,18 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
    16px lager, zodat de koppen van de vorige kaarten zichtbaar blijven. */
 .stapel { margin: 0; padding: 0; list-style: none; }
 .stapel > li { position: sticky; top: calc(var(--stapel-top, 24px) + var(--i, 0) * 16px); }
+
+/* De voet begint met een zachte boog in plaats van een rechte lijn (eigenaar,
+   18 okt 2026: "kunnen we de footer een bepaalde vorm transitie geven?").
+   Komt hij in beeld, dan bolt de boog op van vlak naar vol. */
+.voet-boog {
+  --boog: clamp(40px, 7vw, 120px);
+  border-top-left-radius: 50% var(--boog);
+  border-top-right-radius: 50% var(--boog);
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.stil) .voet-boog { animation: voet-boog linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+  }
+}
+@keyframes voet-boog { from { border-top-left-radius: 50% 0; border-top-right-radius: 50% 0; } }
