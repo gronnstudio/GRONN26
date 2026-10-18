@@ -184,6 +184,28 @@ h1[tabindex="-1"]:focus-visible {
   .ring-voortgang circle { animation: ring-vol linear both; animation-timeline: scroll(root); }
 }
 @keyframes ring-vol { to { stroke-dashoffset: 0; } }
+/* Het glas van de menupil, uit de preview van de nieuwe site (eigenaar, 18 okt
+   2026: "het glass effect kunnen we wellicht overnemen?"): donker glas met een
+   lichtrand bovenin en een schaduwrand onderin, zodat het geslepen lijkt.
+   Op elke grond even donker, dus witte iconen blijven leesbaar. */
+@utility glas {
+  background: rgb(22 22 21 / .42);
+  -webkit-backdrop-filter: blur(8px) saturate(1.6) brightness(.85);
+  backdrop-filter: blur(8px) saturate(1.6) brightness(.85);
+  box-shadow:
+    inset 0 1px .5px 0 rgb(255 255 255 / .22),
+    inset 0 -1px .5px 0 rgb(0 0 0 / .2),
+    0 10px 40px -12px rgb(0 0 0 / .45);
+}
+/* De huidige pagina in de pil: een licht kiezelknopje met reliëf. */
+@utility kiezel {
+  background: rgb(239 238 234 / .9);
+  color: var(--color-antraciet);
+  box-shadow:
+    inset 0 1px .5px 0 rgb(255 255 255 / .3),
+    inset 0 -1.5px .5px 0 rgb(0 0 0 / .3),
+    0 2px 5px 0 rgb(0 0 0 / .25);
+}
 /* De iconen in de pil bewegen altijd, om de beurt: elke acht seconden doet
    elk icoon één korte beweging, de vijf na elkaar van links naar rechts
    (eigenaar, 10 okt 2026: "de iconen een kleine animatie meegeven", "niet bij
