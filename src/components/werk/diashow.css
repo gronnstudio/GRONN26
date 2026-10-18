@@ -1,0 +1,33 @@
+/* Diashow (diashow.tsx): één foto groot op een donker doek, knoppen eromheen. */
+.ds {
+  width: 100vw; max-width: none; height: 100svh; max-height: none; margin: 0; padding: 0;
+  border: 0; background: #14100c; color: #f3ede4;
+}
+.ds::backdrop { background: rgb(0 0 0 / 0.5); }
+.ds-binnen {
+  display: grid; height: 100%; padding: 64px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  grid-template: "beeld beeld" 1fr "onder onder" auto "vorige volgende" auto / 1fr 1fr; gap: 16px;
+}
+.ds-beeld { grid-area: beeld; min-height: 0; display: grid; place-items: center; }
+.ds-beeld img { max-width: 100%; max-height: calc(100svh - 240px); width: auto; height: auto; object-fit: contain; border-radius: 16px; }
+.ds-onder { grid-area: onder; display: flex; justify-content: space-between; align-items: end; gap: 16px; max-width: 1100px; width: 100%; margin: 0 auto; }
+.ds-onder .text-gedempt { color: #b9ad9e; }
+.ds-onder .text-oranje-tekst { color: var(--oranje); }
+.ds-knop {
+  min-height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid rgb(255 255 255 / 0.25);
+  background: rgb(255 255 255 / 0.08); color: inherit; font: 600 14px/1 var(--font-sans); cursor: pointer;
+}
+.ds-knop:hover { background: rgb(255 255 255 / 0.16); }
+.ds-knop:focus-visible { outline: 2px solid var(--oranje); outline-offset: 3px; }
+.ds-vorige { grid-area: vorige; justify-self: start; }
+.ds-volgende { grid-area: volgende; justify-self: end; }
+.ds-sluit { position: absolute; top: 12px; right: 16px; }
+
+/* Breed: de pijlen naast de foto, op het midden. */
+@media (min-width: 1024px) {
+  .ds-binnen { padding: 72px 32px 32px; grid-template: "vorige beeld volgende" 1fr ". onder ." auto / 140px 1fr 140px; }
+  .ds-vorige, .ds-volgende { align-self: center; }
+  .ds-sluit { top: 20px; right: 32px; }
+  .ds-beeld img { max-height: calc(100svh - 190px); }
+}
+html:has(.ds[open]) { overflow: hidden; }

@@ -1,10 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useRef, type CSSProperties } from "react"
+import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { T } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import { DIEPTE } from "@/lib/data/vijverrenovatie"
+import { Diashow } from "./diashow"
 import "./diepte.css"
 
 // De foto's van het project hangen als een tunnel achter elkaar, elk 100°
@@ -13,13 +14,15 @@ import "./diepte.css"
 // ze deels buiten beeld en vaag; elke foto schuift naar het midden als hij voor
 // je komt ("zolang ze maar gecentreerd in beeld komen"). Untamed doet
 // het in three.js en neemt het scrollen over; hier is het CSS 3D en een paar
-// regels script op de gewone scroll. Tab of een tik vliegt naar een foto. Met
+// regels script op de gewone scroll. Bij het begin staan alle foto's als een
+// zwerm in de verte, andersom dan het filmpje dat de eigenaar stuurde (18 okt
+// 2026). Een klik op een foto opent de diashow; Tab vliegt naar een foto. Met
 // minder beweging (of html.stil) staan dezelfde foto's als rustig raster; dat
 // regelt diepte.css, het script doet dan niets.
 
 const AFSTAND = 420 // px diepte tussen twee foto's
 const VOOR = 560 // waar de foto staat die je net passeert
-const ZICHT = 8 // over hoeveel foto's de tunnel uitdooft in de verte
+const ZICHT = 16 // over hoeveel foto's de tunnel uitdooft; ruim, zodat de hele zwerm te zien is
 const UIT = 2.5 // vanaf hoeveel foto's ver een foto helemaal aan de rand staat
 const n = DIEPTE.length
 
@@ -32,6 +35,7 @@ export function Diepte() {
   const fase = useRef<HTMLDivElement>(null)
   const teller = useRef<HTMLSpanElement>(null)
   const en = useTaal() === "en"
+  const [dia, setDia] = useState<number | null>(null)
 
   useEffect(() => {
     const s = sectie.current
@@ -126,7 +130,8 @@ export function Diepte() {
             type="button"
             className={`dp-kaart ${foto.width > foto.height ? "dp-liggend" : "dp-staand"}`}
             aria-label={en && foto.en ? foto.en.alt : foto.alt}
-            onClick={() => naar(i)}
+            aria-haspopup="dialog"
+            onClick={() => setDia(i)}
             onFocus={() => naar(i, true)}
           >
             <Image
@@ -150,6 +155,7 @@ export function Diepte() {
           <span ref={teller} className="lbl whitespace-nowrap tabular-nums text-gedempt">01 / {String(n).padStart(2, "0")}</span>
         </div>
       </div>
+      <Diashow dias={DIEPTE} open={dia} naar={setDia} />
     </section>
   )
 }
