@@ -94,3 +94,54 @@
 @media (prefers-reduced-motion: reduce) {
   .o-kader, .o-label { transition: none; animation: none; }
 }
+
+/* Loep: alleen met een muis op een breed scherm (loep.tsx). De lens ligt in
+   de DOM vóór de kaders, dus hoekhaken en labels staan erboven. */
+.o-loep { display: none; }
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+  .o-vak:has(.o-loep) { cursor: none; }
+  .o-vak:has(.o-loep) .o-kader { cursor: none; }
+  .o-loep {
+    --o-loep: 190px;
+    display: block;
+    position: absolute; left: 0; top: 0;
+    width: var(--o-loep); height: var(--o-loep);
+    border-radius: 50%;
+    border: 2px solid #efeeea;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / .35), 0 12px 32px rgb(0 0 0 / .35), inset 0 0 24px rgb(0 0 0 / .25);
+    background-color: var(--vlak);
+    background-repeat: no-repeat;
+    filter: saturate(.88) contrast(1.04) brightness(.98);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s ease;
+    will-change: transform;
+  }
+  .o-loep-aan { opacity: 1; }
+  /* Vizier: vier korte streepjes met een open midden. */
+  .o-loep::before, .o-loep::after {
+    content: "";
+    position: absolute; left: 50%; top: 50%;
+    background:
+      linear-gradient(#efeeea, #efeeea) 0 50% / 14px 1px no-repeat,
+      linear-gradient(#efeeea, #efeeea) 100% 50% / 14px 1px no-repeat;
+    width: 52px; height: 1px;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 0 1px rgb(0 0 0 / .6));
+  }
+  .o-loep::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .o-loep-info {
+    position: absolute; left: 50%; bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 3px 7px;
+    background: rgb(32 32 32 / .82);
+    color: #efeeea;
+    font-family: var(--font-sans); font-weight: 600; font-size: 10px;
+    letter-spacing: .1em; text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+  .o-loep-onder .o-loep-info { bottom: auto; top: calc(100% + 8px); }
+}

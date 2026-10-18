@@ -38,3 +38,28 @@ test("observatie: een kader kiezen dimt de rest, Escape zet het terug", async ({
   await page.keyboard.press("Escape")
   await expect(fig.locator(".o-vak")).not.toHaveClass(/o-kiest/)
 })
+
+test("observatie: de loep volgt de muis op desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/proef/observatie")
+  const fig = await inBeeld(page, 15000)
+  const vak = fig.locator(".o-vak")
+  const loep = vak.locator(".o-loep")
+  await expect(loep).not.toHaveClass(/o-loep-aan/)
+  const r = (await vak.boundingBox())!
+  await page.mouse.move(r.x + r.width * 0.7, r.y + r.height * 0.55)
+  await page.mouse.move(r.x + r.width * 0.71, r.y + r.height * 0.56)
+  await expect(loep).toHaveClass(/o-loep-aan/)
+  await expect(loep).toHaveCSS("background-image", /F10\.jpg/)
+  await page.mouse.move(r.x - 40, r.y - 40)
+  await expect(loep).not.toHaveClass(/o-loep-aan/)
+})
+
+test.describe("telefoon", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
+  test("observatie: geen loep op een telefoon", async ({ page }) => {
+    await page.goto("/proef/observatie")
+    await inBeeld(page, 15000)
+    await expect(page.locator(".o-loep")).toBeHidden()
+  })
+})

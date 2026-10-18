@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties }
 import { T, kies } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { Observatie } from "@/lib/data/observaties"
+import { Loep } from "./loep"
 import "./observatie.css"
 
 // Observatiekaders (prototype, 18 okt 2026). Zodra de foto in beeld komt,
@@ -107,6 +108,7 @@ export function ObservatieFoto({ obs, sizes = "(min-width: 1100px) 900px, 100vw"
         style={{ aspectRatio: `${obs.foto.width} / ${obs.foto.height}` }}
       >
         <Image src={obs.foto.src} alt={alt} fill sizes={sizes} className="object-cover [filter:saturate(.88)_contrast(1.04)_brightness(.98)]" />
+        <Loep src={obs.foto.src} />
         {obs.punten.map((p, i) => {
           const onder = p.y + p.h > 70
           const rechts = p.x > 50
