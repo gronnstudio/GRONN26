@@ -118,9 +118,21 @@
 }
 .w-lijnlink:hover, .w-lijnlink:focus-visible { background-size: 100% 1px; }
 
-/* ── het verhaal op Over mij: hoofdstukken van één scherm ──────────── */
-html:has(.w-hoofdstuk) { scroll-snap-type: y proximity; }
-.w-hoofdstuk { scroll-snap-align: start; }
+/* ── het verhaal op Over mij schuift zijwaarts (zijwaarts.tsx) ─────── */
+.w-zijwaarts { height: calc(var(--n) * 100svh); }
+.w-paneel { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.w-spoor { display: flex; gap: var(--w-rand); height: 100%; will-change: transform; }
+.w-spoor > .w-hoofdstuk { flex: 0 0 100%; height: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .w-zijwaarts { height: auto; }
+  .w-paneel { position: static; height: auto; overflow: visible; }
+  .w-spoor { flex-direction: column; gap: 0; }
+  .w-spoor > .w-hoofdstuk { height: auto; min-height: 100svh; }
+}
+html.stil .w-zijwaarts { height: auto; }
+html.stil .w-paneel { position: static; height: auto; overflow: visible; }
+html.stil .w-spoor { flex-direction: column; gap: 0; }
+html.stil .w-spoor > .w-hoofdstuk { height: auto; min-height: 100svh; }
 
 /* ── begintoestanden, alleen als beweging mag ───────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
