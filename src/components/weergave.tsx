@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { T, type Tekst } from "@/components/taal";
+import { useMuziek, zetMuziek } from "@/components/muziek";
 
 // WF-026: Kleur (Auto · Licht · Donker;
 // Auto = de instelling van het toestel) en Toegankelijkheid. Bewaard in deze
@@ -35,20 +36,6 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
   ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
 ];
 
-// Muziek (eigenaar, 11 okt 2026, naar Grova): staat uit, speelt pas na een
-// tik zacht in een lus en wordt niet bewaard, zodat de site nooit vanzelf
-// geluid maakt. Eén speler voor de hele site.
-let speler: HTMLAudioElement | null = null;
-function muziek(aan: boolean) {
-  if (!speler) {
-    speler = new Audio("/muziek/achtergrond.mp3");
-    speler.loop = true;
-    speler.volume = 0.35;
-  }
-  if (aan) speler.play().catch(() => {});
-  else speler.pause();
-}
-
 function pasToe(s: Stand) {
   const c = document.documentElement.classList;
   // Auto volgt de instelling van het toestel, zoals Apple en Material het
@@ -70,10 +57,10 @@ function pasToe(s: Stand) {
 
 // Sinds 18 okt 2026 geen eigen knop en paneel meer: de instellingen staan in
 // het hamburgermenu (eigenaar: "hierin breng je alles onder wat in menu niet
-// staat zoals weergave"). Altijd gemount, dus de muziek blijft spelen.
+// staat zoals weergave"). De muziek zelf staat in muziek.tsx.
 export function Instellingen() {
   const [stand, setStand] = useState<Stand>(STANDAARD);
-  const [speelt, setSpeelt] = useState(false);
+  const speelt = useMuziek();
 
   // Bewaarde stand ophalen ná de eerste render (hydration-veilig).
   useEffect(() => {
@@ -156,16 +143,13 @@ export function Instellingen() {
         </p>
       </fieldset>
       <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
-      <label className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5">
+      <label data-muziek className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5">
         <span><T t={{ nl: "Muziek", en: "Music" }} /></span>
         <input
           type="checkbox"
           role="switch"
           checked={speelt}
-          onChange={(e) => {
-            setSpeelt(e.target.checked);
-            muziek(e.target.checked);
-          }}
+          onChange={(e) => zetMuziek(e.target.checked)}
           className="size-5 cursor-pointer accent-[var(--inkt)]"
         />
       </label>
@@ -188,8 +172,7 @@ export function Instellingen() {
         type="button"
         onClick={() => {
           zet(STANDAARD);
-          setSpeelt(false);
-          muziek(false);
+          zetMuziek(true);
         }}
         className="lbl mt-3 w-fit cursor-pointer self-start border-0 border-b border-current bg-transparent p-0 text-inherit lg:col-start-2 lg:mt-4"
       >
