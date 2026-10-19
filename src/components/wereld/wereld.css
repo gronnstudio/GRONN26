@@ -118,6 +118,10 @@
 }
 .w-lijnlink:hover, .w-lijnlink:focus-visible { background-size: 100% 1px; }
 
+/* ── het verhaal op Over mij: hoofdstukken van één scherm ──────────── */
+html:has(.w-hoofdstuk) { scroll-snap-type: y proximity; }
+.w-hoofdstuk { scroll-snap-align: start; }
+
 /* ── begintoestanden, alleen als beweging mag ───────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
   html.w-fx:not(.stil) .w-w {

@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Fragment } from "react"
 import { Foto } from "@/components/foto"
 import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
@@ -65,34 +64,41 @@ export default function Over() {
         </div>
         {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
         <Oplichten tekst={eerste} className="m-0" />
-        {/* Het verhaal licht letter voor letter op en staat daarna vol in beeld.
-            Na een alinea schuift een foto in, om en om van boven en van onder
-            (eigenaar, 18 okt 2026: "vertical scroll waar fotos van boven en
-            onder naar binnen schuiven, hou de animatie op tekst"). */}
+        {/* Het verhaal scrolt verticaal als hoofdstukken: elke alinea met
+            haar foto vult één scherm en de pagina klikt zacht op het begin
+            van elk hoofdstuk (eigenaar, 19 okt 2026: "kun je het verhaal over
+            mij verticaal laten scrollen?"). De tekst licht letter voor letter
+            op; de foto schuift om en om van boven en van onder in (18 okt). */}
         <div className="mt-[clamp(40px,5vw,72px)] overflow-x-clip">
           {rest.map((alinea, i) => {
             const foto = VERHAAL_FOTOS[i]
-            const links = i % 2 === 0
+            const boven = i % 2 === 0
             const liggend = foto ? foto.width > foto.height : false
-            return (
-              <Fragment key={i}>
-                <div className="mx-auto max-w-[680px]">
-                  <Oplichten tekst={alinea} className="m-0 text-[clamp(18px,1.5vw,24px)] leading-[1.6]" />
+            if (!foto)
+              return (
+                <div key={i} className="mx-auto max-w-[680px] py-[6svh]">
+                  <Oplichten tekst={alinea} className="m-0 text-[clamp(18px,1.6vw,24px)]! leading-[1.6]!" />
                 </div>
-                {foto ? (
-                  <figure
-                    data-zie={links ? "boven" : "onder"}
-                    className={`my-[clamp(40px,6vw,96px)] ${links ? "mr-auto" : "ml-auto"} ${liggend ? "w-[92%] md:w-[58%]" : "w-[78%] md:w-[34%]"}`}
-                  >
-                    <Foto foto={foto} sizes={liggend ? "(min-width: 768px) 58vw, 92vw" : "(min-width: 768px) 34vw, 78vw"} className={liggend ? "aspect-[4/3]" : "aspect-[3/4]"} />
-                    {foto.bijschrift ? (
-                      <figcaption className={`lbl mt-3 text-gedempt ${links ? "" : "text-right"}`}>
-                        <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
-                      </figcaption>
-                    ) : null}
-                  </figure>
-                ) : null}
-              </Fragment>
+              )
+            return (
+              <div key={i} className={`w-hoofdstuk grid min-h-[100svh] content-start gap-[clamp(28px,4vw,64px)] py-[8svh] md:items-start md:pt-[12svh] ${boven ? "md:grid-cols-[7fr_5fr]" : "md:grid-cols-[5fr_7fr]"}`}>
+                <div className={boven ? "" : "md:order-2"}>
+                  <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")} / {String(VERHAAL_FOTOS.length).padStart(2, "0")}</span>
+                  <Oplichten tekst={alinea} className="mt-4 mb-0 text-[clamp(18px,1.6vw,24px)]! leading-[1.6]!" />
+                </div>
+                <figure data-zie={boven ? "boven" : "onder"} className={`m-0 ${boven ? "justify-self-start md:justify-self-end" : "justify-self-end md:justify-self-start"}`}>
+                  <Foto
+                    foto={foto}
+                    sizes={liggend ? "(min-width: 768px) 50vw, 92vw" : "(min-width: 768px) 34vw, 70vw"}
+                    className={`max-w-full ${liggend ? "aspect-[4/3] h-[30svh] md:h-[52svh]" : "aspect-[3/4] h-[38svh] md:h-[66svh]"}`}
+                  />
+                  {foto.bijschrift ? (
+                    <figcaption className="lbl mt-3 text-gedempt">
+                      <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
+                    </figcaption>
+                  ) : null}
+                </figure>
+              </div>
             )
           })}
         </div>
