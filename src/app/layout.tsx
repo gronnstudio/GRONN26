@@ -9,6 +9,7 @@ import { PullToRefresh } from "@/components/vernieuw"
 import { WereldBeweging } from "@/components/wereld/beweging"
 import "@/components/wereld/wereld.css"
 import { Voet } from "@/components/voet"
+import { MuziekKnop } from "@/components/muziek"
 import { Overgang } from "@/components/overgang/overgang"
 import { INTRO_VOORVERF } from "@/components/overgang/voorverf"
 import { BUSINESS } from "@/lib/business"
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Voet />
         <Menu />
+        <MuziekKnop />
         <Bekijk />
         <App />
         {/* alleen in de app-weergave: daar is geen browser om te verversen */}
