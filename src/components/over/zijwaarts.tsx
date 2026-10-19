@@ -10,6 +10,7 @@ import { useEffect, useRef, type ReactNode } from "react"
 export function Zijwaarts({ aantal, children }: { aantal: number; children: ReactNode }) {
   const buiten = useRef<HTMLDivElement>(null)
   const spoor = useRef<HTMLDivElement>(null)
+  const lijn = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const b = buiten.current, s = spoor.current
@@ -27,6 +28,7 @@ export function Zijwaarts({ aantal, children }: { aantal: number; children: Reac
       const g = Math.min(1, Math.max(0, (f - 0.25) / 0.5)), zacht = g * g * (3 - 2 * g)
       const stap = (s.scrollWidth - b.clientWidth) / Math.max(1, aantal - 1)
       s.style.transform = `translate3d(${(-(k + zacht) * stap).toFixed(1)}px,0,0)`
+      lijn.current?.style.setProperty("--p", ((k + zacht + 1) / aantal).toFixed(3))
     }
     const plan = () => { if (!wacht) wacht = requestAnimationFrame(zet) }
     addEventListener("scroll", plan, { passive: true })
@@ -44,6 +46,7 @@ export function Zijwaarts({ aantal, children }: { aantal: number; children: Reac
   return (
     <div ref={buiten} className="w-zijwaarts" style={{ "--n": aantal } as React.CSSProperties}>
       <div className="w-paneel">
+        <div ref={lijn} className="w-voortgang" aria-hidden="true"><span /></div>
         <div ref={spoor} className="w-spoor">{children}</div>
       </div>
     </div>
