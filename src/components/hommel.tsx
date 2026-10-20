@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 
-// Laadt de 3D-hommel (hommel-scene.ts) pas na de eerste verf en alleen als
+// Laadt de 3D-hommel (hommel-scene.ts) pas na een paar seconden en alleen als
 // beweging mag: niet bij minder beweging en niet als Weergave op Stil staat.
 export function Hommel() {
   useEffect(() => {
@@ -22,11 +22,15 @@ export function Hommel() {
           .catch(() => {}) // geen WebGL of laden mislukt: dan gewoon geen hommel
       }
     }
-    zet()
+    // pas na vier seconden laden: geen WebGL tijdens het laden van de pagina
     const kijker = new MutationObserver(zet)
-    kijker.observe(html, { attributes: true, attributeFilter: ["class"] })
+    const wacht = setTimeout(() => {
+      zet()
+      kijker.observe(html, { attributes: true, attributeFilter: ["class"] })
+    }, 4000)
     return () => {
       weg = true
+      clearTimeout(wacht)
       kijker.disconnect()
       stop?.()
     }
