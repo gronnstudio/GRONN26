@@ -268,7 +268,8 @@ html.stil .w-voortgang { display: none; }
 /* ── uitgesneden planten (20 okt 2026; zie plant.tsx) ───────────────────
    Altijd aan de rand: ze vangen geen klik. De hangende tak ligt achter de
    kop en wiegt traag (alleen als beweging mag). De bloem en varen in de voet
-   haalde de eigenaar weer weg (20 okt 2026). */
+   haalde de eigenaar weer weg (20 okt 2026); inheemse bloemen staan nu in
+   het slot van de pagina (.w-verder). */
 .plant {
   position: absolute;
   z-index: 0;
@@ -278,9 +279,41 @@ html.stil .w-voortgang { display: none; }
 .w-opening > .w-label,
 .w-opening > .w-reus,
 .w-opening > .w-zin,
-.w-opening > .w-groei {
+.w-opening > .w-groei,
+.w-verder > .w-verder-kop,
+.w-verder > .w-cirkel {
   position: relative;
   z-index: 1;
+}
+/* bloemen in het slot van de pagina: staan op de onderrand en lopen daar
+   zacht uit, zodat er geen snijkant te zien is */
+.plant-veld {
+  bottom: 0;
+  height: clamp(130px, 24vw, 380px);
+  width: auto;
+  mask-image: linear-gradient(to top, transparent, #000 22%);
+}
+.plant-links { left: clamp(0px, 4vw, 96px); transform-origin: 30% 100%; }
+.plant-rechts { right: 0; transform-origin: 40% 100%; }
+/* de dagpauwoog: zweeft traag rond boven de klaprozen en slaat af en toe
+   een paar keer met zijn vleugels */
+.vlinder {
+  position: absolute;
+  z-index: 0;
+  left: calc(clamp(0px, 4vw, 96px) + clamp(70px, 12vw, 190px));
+  bottom: clamp(130px, 24vw, 380px);
+  width: clamp(34px, 4.4vw, 64px);
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  /* op de telefoon staat de kop breder: de vlinder blijft laag bij de klaprozen */
+  .vlinder { left: 64px; bottom: 96px; }
+}
+.vlinder .vlinder-vleugels {
+  position: static;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 .plant-hang {
   top: -10px;
@@ -291,6 +324,22 @@ html.stil .w-voortgang { display: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.stil) .plant-hang { animation: plant-wieg 9s ease-in-out infinite alternate; }
+  html:not(.stil) .plant-links { animation: plant-wieg 7s ease-in-out infinite alternate; }
+  html:not(.stil) .plant-rechts { animation: plant-wieg 8.5s ease-in-out -3s infinite alternate-reverse; }
+  html:not(.stil) .vlinder { animation: vlinder-vlucht 16s ease-in-out infinite; }
+  html:not(.stil) .vlinder-vleugels { animation: vlinder-slag 4s linear infinite; }
+}
+@keyframes vlinder-vlucht {
+  0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+  25% { transform: translate(2.5vw, -1.5vw) rotate(4deg); }
+  50% { transform: translate(5vw, 0.5vw) rotate(10deg); }
+  75% { transform: translate(1.5vw, 1.5vw) rotate(-2deg); }
+}
+/* drie slagen, dan rust */
+@keyframes vlinder-slag {
+  0%, 30%, 100% { transform: scaleX(1); }
+  5%, 15%, 25% { transform: scaleX(0.3); }
+  10%, 20% { transform: scaleX(1); }
 }
 @keyframes plant-wieg {
   from { transform: rotate(-1.2deg); }

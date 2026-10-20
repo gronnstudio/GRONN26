@@ -211,3 +211,14 @@ test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ p
   await expect(tak).toHaveAttribute("aria-hidden", "true")
   await expect(page.locator("footer img.plant")).toHaveCount(0)
 })
+
+test("inheemse bloemen en de dagpauwoog in het slot: decoratief", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  const bloemen = page.locator(".w-verder img.plant")
+  await expect(bloemen).toHaveCount(3)
+  for (const b of await bloemen.all()) {
+    await expect(b).toHaveAttribute("alt", "")
+    await expect(b).toHaveAttribute("aria-hidden", "true")
+  }
+})
