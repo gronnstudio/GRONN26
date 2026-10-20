@@ -201,6 +201,8 @@ html.stil .w-voortgang { display: none; }
 
 /* ── het slot van elke pagina: kop + omlijnde pijl (Kolenda) ──────────── */
 .w-verder {
+  position: relative;
+  overflow: clip;
   padding: clamp(72px, 14vw, 220px) var(--w-rand) clamp(40px, 12vw, 180px);
   text-align: center;
 }
@@ -262,3 +264,43 @@ html.stil .w-voortgang { display: none; }
   html.w-fx:not(.stil) .merk-icoon path:nth-of-type(5) { transition-delay: .48s; }
 }
 @keyframes merk-stip { 0%, 100% { transform: translateX(0); opacity: 1; } 50% { transform: translateX(-28px); opacity: .5; } }
+
+/* ── uitgesneden planten (20 okt 2026; zie plant.tsx) ───────────────────
+   Altijd aan de rand: ze vangen geen klik. De hangende tak ligt achter de
+   kop en wiegt traag (alleen als beweging mag); de planten van de voet
+   blijven binnen de lege marge boven de voet, dus nooit over inhoud. */
+.plant {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.w-opening > .w-label,
+.w-opening > .w-reus,
+.w-opening > .w-zin,
+.w-opening > .w-groei {
+  position: relative;
+  z-index: 1;
+}
+.plant-hang {
+  top: -10px;
+  right: -16px; /* ruimte voor het wiegen, zodat de snijrand nooit zichtbaar is */
+  width: clamp(130px, 24vw, 380px);
+  height: auto;
+  transform-origin: 100% 0;
+}
+/* de voet staat clamp(80px, 14vw, 220px) onder de inhoud: daar blijven ze onder */
+.plant-voet {
+  bottom: calc(100% + 6px); /* in de grond van de rand, niet eronder */
+  height: clamp(72px, 13vw, 208px);
+  width: auto;
+}
+.plant-bloem { left: clamp(12px, 7vw, 120px); }
+.plant-varen { right: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .plant-hang { animation: plant-wieg 9s ease-in-out infinite alternate; }
+}
+@keyframes plant-wieg {
+  from { transform: rotate(-1.2deg); }
+  to { transform: rotate(1.2deg); }
+}
