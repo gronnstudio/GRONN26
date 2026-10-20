@@ -87,19 +87,6 @@ export const KOPPELINGEN = [
   { naam: "Website", uitleg: "gronn.studio", href: "/" },
 ] as const
 
-// Zakelijke accounts bij leveranciers, met de stand uit de mail (7 okt 2026).
-export type Stand = "actief" | "wacht" | "uit"
-export const LEVERANCIERS: { naam: string; uitleg: string; stand: Stand; href: string }[] = [
-  { naam: "Directplant", uitleg: "Planten · 20% korting", stand: "actief", href: "https://www.directplant.nl/customer/account/login/" },
-  { naam: "Bomenbezorgd", uitleg: "Bomen", stand: "actief", href: "https://www.bomenbezorgdtobusiness.nl/inloggen" },
-  { naam: "Biovijver", uitleg: "Vijver", stand: "actief", href: "https://biovijver.nl/" },
-  { naam: "ToolMax", uitleg: "Gereedschap", stand: "actief", href: "https://www.toolmax.nl/" },
-  { naam: "Wovar", uitleg: "IJzerwaren · B2B", stand: "actief", href: "https://www.wovar.nl/Customer/Login/" },
-  { naam: "Wildkamp", uitleg: "Tuinmaterialen · zakelijk niet bevestigd", stand: "wacht", href: "https://www.wildkamp.nl/" },
-  { naam: "Dutch Paving Tools", uitleg: "Bestratingsgereedschap · nog geen account", stand: "uit", href: "https://www.dutchpavingtools.com/my-account/" },
-  { naam: "Fenceweb", uitleg: "Hekwerk · in controle", stand: "wacht", href: "https://www.fenceweb.com/nl/customer/account/login/" },
-]
-
 // Facturen uit de mail (7 okt 2026). "Te ontvangen" = mijn facturen via DigiBoox;
 // betaald zie ik alleen als Mollie het uitbetaalt (online betaald). Een
 // overschrijving naar de bank zie ik niet: die vink je in DigiBoox af.

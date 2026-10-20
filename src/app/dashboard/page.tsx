@@ -10,15 +10,8 @@ import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
 import { aanvraagKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
-import { KOPPELINGEN, LEVERANCIERS, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
-
-// Stand van een leveranciersaccount (eigenaar, 7 okt 2026): groen vinkje,
-// geel vraagteken, rood kruis. Het woord ernaast blijft voor wie geen kleur ziet.
-const STAND = {
-  actief: { naam: "Actief", teken: "✓", bol: "bg-[#2f7d3b] text-white" },
-  wacht: { naam: "In afwachting", teken: "?", bol: "bg-[#f2c230] text-[#202020]" },
-  uit: { naam: "Niet actief", teken: "✕", bol: "bg-[#c0392b] text-white" },
-} as const
+import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
+import { KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { euro } from "@/lib/format"
 
@@ -359,7 +352,10 @@ export default async function Dashboard() {
         </section>
         {/* leveranciers */}
         <section className="lg:col-span-2">
-          <p className={`${lbl} m-0 opacity-60`}>Leveranciers · zakelijke accounts</p>
+          <div className="flex items-baseline justify-between gap-4">
+            <p className={`${lbl} m-0 opacity-60`}>Leveranciers · zakelijke accounts</p>
+            <Link href="/dashboard/leveranciers" className="text-[13px] font-semibold text-oranje-tekst">Alle leveranciers →</Link>
+          </div>
           <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-4">
             {LEVERANCIERS.map((k) => (
               <li key={k.naam}>
@@ -372,12 +368,12 @@ export default async function Dashboard() {
                   <span className="flex items-end justify-between gap-2 text-[12px]">
                     <span>
                       <span className="flex items-center gap-1.5 font-semibold">
-                        <span aria-hidden className={`grid size-[18px] place-items-center rounded-full text-[11px] font-bold ${STAND[k.stand].bol}`}>
-                          {STAND[k.stand].teken}
+                        <span aria-hidden className={`grid size-[18px] place-items-center rounded-full text-[11px] font-bold ${STAND[k.account].bol}`}>
+                          {STAND[k.account].teken}
                         </span>
-                        {STAND[k.stand].naam}
+                        {STAND[k.account].naam}
                       </span>
-                      <span className="mt-1 block opacity-60">{k.uitleg}</span>
+                      <span className="mt-1 block opacity-60">{k.wat}</span>
                     </span>
                     <span className="opacity-60 transition-transform group-hover:translate-x-0.5">↗</span>
                   </span>
