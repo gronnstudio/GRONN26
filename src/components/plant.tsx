@@ -4,13 +4,11 @@
 // nooit bij een project, altijd decoratief (alt leeg, aria-hidden). De hangende
 // takken zijn verticaal gespiegeld zodat ze uit de bovenhoek komen.
 // Bronnen (pexels.com/photo/…): boomkruin 2267547, takken 11552979,
-// bladtak 12847431, varen 6964288, bloem 13008750.
+// bladtak 12847431.
 const PLANTEN = {
   boomkruin: [484, 640],
   takken: [640, 640],
   bladtak: [600, 598],
-  varen: [640, 566],
-  bloem: [306, 640],
 } as const
 
 export type PlantNaam = keyof typeof PLANTEN

@@ -202,22 +202,12 @@ for (const route of ["/", "/over"]) {
   })
 }
 
-test("planten: decoratief en nooit over de inhoud boven de voet", async ({ page }) => {
+test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ page }) => {
   await zonderIntro(page)
-  for (const b of [1440, 390]) {
-    await page.setViewportSize({ width: b, height: 900 })
-    await page.goto("/privacy", { waitUntil: "domcontentloaded" })
-    const planten = page.locator("img.plant")
-    await expect(planten).toHaveCount(3)
-    for (const p of await planten.all()) {
-      await expect(p).toHaveAttribute("alt", "")
-      await expect(p).toHaveAttribute("aria-hidden", "true")
-    }
-    // de planten van de voet blijven onder de onderkant van <main>
-    const { main, top } = await page.evaluate(() => ({
-      main: document.querySelector("main")!.getBoundingClientRect().bottom,
-      top: Math.min(...[...document.querySelectorAll<HTMLElement>(".plant-voet")].map((e) => e.getBoundingClientRect().top)),
-    }))
-    expect(top, `@${b}`).toBeGreaterThanOrEqual(main)
-  }
+  await page.goto("/privacy", { waitUntil: "domcontentloaded" })
+  const tak = page.locator("img.plant-hang")
+  await expect(tak).toHaveCount(1)
+  await expect(tak).toHaveAttribute("alt", "")
+  await expect(tak).toHaveAttribute("aria-hidden", "true")
+  await expect(page.locator("footer img.plant")).toHaveCount(0)
 })
