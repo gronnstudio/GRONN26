@@ -267,8 +267,8 @@ html.stil .w-voortgang { display: none; }
 
 /* ── uitgesneden planten (20 okt 2026; zie plant.tsx) ───────────────────
    Altijd aan de rand: ze vangen geen klik. De hangende tak ligt achter de
-   kop en wiegt traag (alleen als beweging mag); de planten van de voet
-   blijven binnen de lege marge boven de voet, dus nooit over inhoud. */
+   kop en wiegt traag (alleen als beweging mag). De bloem en varen in de voet
+   haalde de eigenaar weer weg (20 okt 2026). */
 .plant {
   position: absolute;
   z-index: 0;
@@ -289,14 +289,6 @@ html.stil .w-voortgang { display: none; }
   height: auto;
   transform-origin: 100% 0;
 }
-/* de voet staat clamp(80px, 14vw, 220px) onder de inhoud: daar blijven ze onder */
-.plant-voet {
-  bottom: calc(100% + 6px); /* in de grond van de rand, niet eronder */
-  height: clamp(72px, 13vw, 208px);
-  width: auto;
-}
-.plant-bloem { left: clamp(12px, 7vw, 120px); }
-.plant-varen { right: 0; }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.stil) .plant-hang { animation: plant-wieg 9s ease-in-out infinite alternate; }
 }
