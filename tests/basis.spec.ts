@@ -222,3 +222,11 @@ test("inheemse bloemen en de dagpauwoog in het slot: decoratief", async ({ page 
     await expect(b).toHaveAttribute("aria-hidden", "true")
   }
 })
+
+test("hommel: niet bij minder beweging", async ({ page }) => {
+  await zonderIntro(page)
+  await page.emulateMedia({ reducedMotion: "reduce" })
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await page.waitForTimeout(1500)
+  await expect(page.locator("canvas.hommel-doek")).toHaveCount(0)
+})

@@ -345,3 +345,15 @@ html.stil .w-voortgang { display: none; }
   from { transform: rotate(-1.2deg); }
   to { transform: rotate(1.2deg); }
 }
+
+/* de 3D-hommel (hommel-scene.ts): over de pagina, onder het menu, vangt niets */
+.hommel-doek {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
