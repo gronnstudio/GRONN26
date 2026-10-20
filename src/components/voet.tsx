@@ -8,6 +8,7 @@ import { T, type Tekst } from "./taal"
 const PAGINAS: [string, Tekst][] = [
   ["/vijvers", { nl: "Vijvers", en: "Ponds" }],
   ["/tuinen", { nl: "Tuinen", en: "Gardens" }],
+  ["/tuinen/materialen", { nl: "Materialen", en: "Materials" }],
   ["/werk", { nl: "Werk", en: "Work" }],
   ["/over", { nl: "Over", en: "About" }],
   ["/kennismaken", { nl: "Kennismaken", en: "Get in touch" }],
