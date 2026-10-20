@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { KopRegel } from "@/components/diensten/werk-blok"
+import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 // Materialen (eigenaar, 20 okt 2026): wat er aan steen en buitenmateriaal kan,
 // zodat een klant ziet wat mogelijk is. Alleen naam en één zin, net als de
-// elementen op Tuinen; geen beelden zolang er geen eigen foto's zijn.
+// elementen op Tuinen. Elke groep opent met een sfeerbeeld, met label.
 export default function MaterialenPagina() {
   const aantal = MATERIAALGROEPEN.reduce((t, g) => t + g.materialen.length, 0)
   return (
@@ -29,6 +30,11 @@ export default function MaterialenPagina() {
         {MATERIAALGROEPEN.map((g, i) => (
           <section key={g.id} aria-labelledby={`materiaal-${g.id}`} className={i === 0 ? "pt-[48px]" : "w-sectie"}>
             <KopRegel id={`materiaal-${g.id}`} label={g.kop} aantal={{ nl: `${g.materialen.length} soorten`, en: `${g.materialen.length} kinds` }} />
+            <Foto
+              foto={{ src: `/materialen/${g.id}.jpg`, width: 1600, height: 900, alt: g.alt.nl, label: "Sfeerbeeld", en: { alt: g.alt.en, label: "Mood image" } }}
+              sizes="(min-width: 1280px) 1200px, 100vw"
+              className="mt-[24px] mb-[8px] aspect-[16/9] rounded-[16px] md:aspect-[21/9]"
+            />
             <ul data-zie className="m-0 grid list-none grid-cols-1 gap-x-[16px] p-0 sm:grid-cols-2 md:gap-x-[32px] lg:grid-cols-3">
               {g.materialen.map((m) => (
                 <li key={m.naam.nl} className="border-t border-lijn py-[16px] md:py-[24px]">

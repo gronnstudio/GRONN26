@@ -54,6 +54,8 @@ export const GROEPEN: Groep[] = [
       { naam: "Dirix", plaats: "Elsloo", km: 3, wat: "Tegels, klinkers, natuursteen, grind, zand; showroom, afhalen of laten leveren", href: "https://www.dirix.nl/tuin-en-bouw", zakelijk: "Vragen", stalen: { tekst: "Showroom, ma–vr 8–16 uur" } },
       { naam: "Steenrijk", plaats: "Sittard", km: 12, wat: "Sierbestrating, natuursteen, keramiek; showtuin altijd open", href: "https://steenrijk.info", zakelijk: "Ja", stalen: { tekst: "Stalen vragen aan de balie" } },
       { naam: "Wildkamp", wat: "Tuinmaterialen", href: "https://www.wildkamp.nl/", zakelijk: "Niet bevestigd", account: "wacht" },
+      { naam: "The Flagstone Company", wat: "Flagstones, steenstrips, natuursteen", href: "https://www.flagstones.nl/", zakelijk: "Vragen", stalen: { tekst: "Flagstone Magazine gratis", href: "https://www.natuursteenstrips.nl/het-flagstone-magazine/" } },
+      { naam: "Gardenlux", wat: "Merk: tegels, klinkers, natuursteen, hout (via dealer)", href: "https://www.gardenlux.nl", zakelijk: "Via dealer", stalen: { tekst: "Tuincatalogus gratis per post", href: "https://www.gardenlux.nl/tuincatalogus-aanvraag" } },
       { naam: "Struyk Verwo", wat: "Betonbestrating, ook natuurlijke look", href: "https://struykverwoinfra.nl", zakelijk: "Via dealer", stalen: { tekst: "Gedrukte catalogi gratis", href: "https://struykverwoinfra.nl/publicaties-aanvragen.html" } },
     ],
   },
@@ -104,7 +106,7 @@ export const GROEPEN: Groep[] = [
     naam: "Vakbladen",
     leveranciers: [
       { naam: "Tuin+Landschap", wat: "Vakblad voor hoveniers", href: "https://platform-groen.nl/abonnementen-tuinenlandschap/", zakelijk: "Vanaf € 351 per jaar", stalen: { tekst: "5 dagen gratis proberen", href: "https://platform-groen.nl/abonnementen-tuinenlandschap/" } },
-      { naam: "De Hovenier", wat: "Vakblad en nieuwsbrief", href: "https://www.vakbladdehovenier.nl", zakelijk: "Digitaal ± € 85 per jaar", stalen: { tekst: "Nieuwsbrief gratis", href: "https://www.vakbladdehovenier.nl" } },
+      { naam: "De Hovenier", wat: "Vakblad en nieuwsbrief", href: "https://www.vakbladdehovenier.nl", zakelijk: "Gratis voor hoveniers, 10x per jaar gedrukt", stalen: { tekst: "Aanmelden", href: "https://www.vakbladdehovenier.nl/pages/9/abonneren" } },
     ],
   },
 ]

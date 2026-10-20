@@ -3,15 +3,18 @@
 // voor klanten makkelijk inzicht geeft"). Het buitenassortiment van Steenrijk in
 // Sittard, in soorten in plaats van merken; per soort één zin. Kunstgras staat
 // er bewust niet in: het past niet bij natuurlijke tuinen.
+// Per groep één sfeerbeeld van Pexels (eigenaar koos ze, 20 okt 2026); geen
+// eigen werk, dus altijd met het label Sfeerbeeld.
 
 type L = { nl: string; en: string }
 export type Materiaal = { naam: L; zin: L }
-export type MateriaalGroep = { id: string; kop: L; materialen: Materiaal[] }
+export type MateriaalGroep = { id: string; kop: L; alt: L; materialen: Materiaal[] }
 
 export const MATERIAALGROEPEN: MateriaalGroep[] = [
   {
     id: "klinkers",
     kop: { nl: "Klinkers", en: "Pavers" },
+    alt: { nl: "Rode gebakken klinkers in visgraatverband.", en: "Red clay pavers in a herringbone pattern." },
     materialen: [
       { naam: { nl: "Gebakken klinkers", en: "Clay pavers" }, zin: { nl: "Gebakken klei in warme kleuren, die met de jaren mooier wordt. In waalformaat of dikformaat.", en: "Fired clay in warm colours that improves with age. In slim or thick format." } },
       { naam: { nl: "Getrommelde klinkers", en: "Tumbled pavers" }, zin: { nl: "Afgeronde randen en een geleefde look, alsof ze er altijd al lagen.", en: "Rounded edges and a weathered look, as if they were always there." } },
@@ -24,6 +27,7 @@ export const MATERIAALGROEPEN: MateriaalGroep[] = [
   {
     id: "tegels",
     kop: { nl: "Terrastegels", en: "Patio tiles" },
+    alt: { nl: "Een terras van terracotta tegels met bloeiende planten en een tafeltje.", en: "A terracotta tile patio with flowering plants and a small table." },
     materialen: [
       { naam: { nl: "Keramische tegels, 2 cm", en: "Ceramic tiles, 2 cm" }, zin: { nl: "Vlekken en mos krijgen geen grip. In beton-, natuursteen- of houtlook; ook op tegeldragers.", en: "Stains and moss find no grip. In concrete, stone or wood look; also on pedestals." } },
       { naam: { nl: "Keramische tegels, 3 cm", en: "Ceramic tiles, 3 cm" }, zin: { nl: "Dikker en sterker, dus minder kans op breuk. Ook voor de oprit.", en: "Thicker and stronger, so less risk of cracking. Also for driveways." } },
@@ -31,6 +35,7 @@ export const MATERIAALGROEPEN: MateriaalGroep[] = [
       { naam: { nl: "Betontegels", en: "Concrete tiles" }, zin: { nl: "Voordelig, in veel formaten, vaak met een laag tegen vlekken.", en: "Affordable, many sizes, often coated against stains." } },
       { naam: { nl: "Kleurechte betontegels", en: "Colourfast concrete tiles" }, zin: { nl: "Kleur door en door, met een strakke of juist ruwe bovenkant.", en: "Colour all the way through, with a smooth or rough top." } },
       { naam: { nl: "Natuursteen tegels", en: "Natural stone tiles" }, zin: { nl: "Echte steen, zoals hardsteen of leisteen. Geen tegel is hetzelfde.", en: "Real stone such as bluestone or slate. No two tiles alike." } },
+      { naam: { nl: "Flagstones", en: "Flagstones" }, zin: { nl: "Onregelmatige platen natuursteen, los in gras of grind gelegd voor een natuurlijk pad of terras.", en: "Irregular slabs of natural stone, laid loose in grass or gravel for a natural path or patio." } },
       { naam: { nl: "Oud-Hollandse tegels", en: "Old Dutch tiles" }, zin: { nl: "Grijze tegels met een gebruikte look, passend bij een oud huis.", en: "Grey tiles with a used look, suited to an old house." } },
       { naam: { nl: "Tegels voor de oprit", en: "Driveway tiles" }, zin: { nl: "Extra dik, zodat ze een auto dragen zonder te breken.", en: "Extra thick, so they carry a car without breaking." } },
     ],
@@ -38,6 +43,7 @@ export const MATERIAALGROEPEN: MateriaalGroep[] = [
   {
     id: "water",
     kop: { nl: "Regenwater en grind", en: "Rainwater and gravel" },
+    alt: { nl: "Grijs split van dichtbij.", en: "Grey chippings up close." },
     materialen: [
       { naam: { nl: "Waterdoorlatende bestrating", en: "Permeable paving" }, zin: { nl: "Stenen waar regen doorheen zakt, de grond in in plaats van het riool.", en: "Pavers that let rain soak into the ground instead of the sewer." } },
       { naam: { nl: "Grind en split", en: "Gravel and chippings" }, zin: { nl: "Voor paden en plekken waar water moet wegzakken, in veel kleuren.", en: "For paths and spots where water should drain away, in many colours." } },
@@ -49,6 +55,7 @@ export const MATERIAALGROEPEN: MateriaalGroep[] = [
   {
     id: "muren",
     kop: { nl: "Muren, trappen en randen", en: "Walls, steps and edges" },
+    alt: { nl: "Een gestapelde muur van ruwe natuursteen.", en: "A stacked wall of rough natural stone." },
     materialen: [
       { naam: { nl: "Stapelblokken", en: "Walling blocks" }, zin: { nl: "Voor een muurtje of verhoogde border; gekliefd, strak of getrommeld.", en: "For a low wall or raised border; split, smooth or tumbled." } },
       { naam: { nl: "Natuurstenen muurstenen", en: "Natural walling stone" }, zin: { nl: "Losse stenen voor een stapelmuur, met plek voor planten in de kieren.", en: "Loose stones for a dry wall, with room for plants in the gaps." } },
@@ -64,6 +71,7 @@ export const MATERIAALGROEPEN: MateriaalGroep[] = [
   {
     id: "afwerking",
     kop: { nl: "Licht en afwerking", en: "Lighting and finishing" },
+    alt: { nl: "Een zwarte tuinspot die 's avonds aangaat.", en: "A black garden spotlight switched on in the evening." },
     materialen: [
       { naam: { nl: "Tuinverlichting", en: "Garden lighting" }, zin: { nl: "Spots, wandlampen en grondlampjes op laagspanning, veilig om zelf te verplaatsen.", en: "Spots, wall lights and deck lights on low voltage, safe to move yourself." } },
       { naam: { nl: "Voegzand en voegmiddel", en: "Jointing sand and mortar" }, zin: { nl: "Gewoon voegzand, of polymeer en epoxy waar geen onkruid meer doorheen komt.", en: "Plain jointing sand, or polymer and epoxy that weeds cannot get through." } },
