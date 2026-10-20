@@ -3,6 +3,7 @@ import { BUSINESS } from "@/lib/business"
 import { Logo } from "./logo"
 import { Kopieer } from "./kopieer"
 import { VoetTuin } from "./voet-tuin"
+import { Plant } from "./plant"
 import { T, type Tekst } from "./taal"
 
 const PAGINAS: [string, Tekst][] = [
@@ -25,6 +26,10 @@ export function Voet() {
   const a = BUSINESS.address
   return (
     <footer className="donker bos-vlak relative mt-[clamp(80px,14vw,220px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
+      {/* een bloem en een varen die uit de tuinrand opkomen, in de lege ruimte
+          boven de voet; de grond van de rand dekt hun snijkant */}
+      <Plant naam="bloem" className="plant-voet plant-bloem" />
+      <Plant naam="varen" className="plant-voet plant-varen" />
       <VoetTuin />
       <div className="wrap">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-8">
