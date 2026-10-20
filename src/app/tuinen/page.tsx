@@ -60,6 +60,11 @@ const ELEMENTEN: { naam: { nl: string; en: string }; zin: { nl: string; en: stri
     naam: { nl: "Grind en regenwater", en: "Gravel and rainwater" },
     zin: { nl: "Minder tegels, zodat de regen in je eigen tuin wegzakt.", en: "Fewer tiles, so the rain soaks into your own garden." },
   },
+  {
+    naam: { nl: "Steen en bestrating", en: "Stone and paving" },
+    zin: { nl: "Klinkers, tegels, muurtjes en randen: alles wat er kan, elk in één zin.", en: "Pavers, tiles, walls and edges: everything that’s possible, each in one sentence." },
+    href: "/tuinen/materialen",
+  },
 ]
 
 const T02 = TERRAS_FOTOS.reeks[0]
