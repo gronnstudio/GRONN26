@@ -10,6 +10,7 @@ import { WereldBeweging } from "@/components/wereld/beweging"
 import "@/components/wereld/wereld.css"
 import { Voet } from "@/components/voet"
 import { MuziekKnop } from "@/components/muziek"
+import { Hommel } from "@/components/hommel"
 import { Overgang } from "@/components/overgang/overgang"
 import { INTRO_VOORVERF } from "@/components/overgang/voorverf"
 import { BUSINESS } from "@/lib/business"
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* alleen in de app-weergave: daar is geen browser om te verversen */}
         <PullToRefresh />
         <WereldBeweging />
+        <Hommel />
         <Overgang />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
