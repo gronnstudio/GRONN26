@@ -35,6 +35,7 @@ export const MATERIAALGROEPEN: MateriaalGroep[] = [
       { naam: { nl: "Betontegels", en: "Concrete tiles" }, zin: { nl: "Voordelig, in veel formaten, vaak met een laag tegen vlekken.", en: "Affordable, many sizes, often coated against stains." } },
       { naam: { nl: "Kleurechte betontegels", en: "Colourfast concrete tiles" }, zin: { nl: "Kleur door en door, met een strakke of juist ruwe bovenkant.", en: "Colour all the way through, with a smooth or rough top." } },
       { naam: { nl: "Natuursteen tegels", en: "Natural stone tiles" }, zin: { nl: "Echte steen, zoals hardsteen of leisteen. Geen tegel is hetzelfde.", en: "Real stone such as bluestone or slate. No two tiles alike." } },
+      { naam: { nl: "Flagstones", en: "Flagstones" }, zin: { nl: "Onregelmatige platen natuursteen, los in gras of grind gelegd voor een natuurlijk pad of terras.", en: "Irregular slabs of natural stone, laid loose in grass or gravel for a natural path or patio." } },
       { naam: { nl: "Oud-Hollandse tegels", en: "Old Dutch tiles" }, zin: { nl: "Grijze tegels met een gebruikte look, passend bij een oud huis.", en: "Grey tiles with a used look, suited to an old house." } },
       { naam: { nl: "Tegels voor de oprit", en: "Driveway tiles" }, zin: { nl: "Extra dik, zodat ze een auto dragen zonder te breken.", en: "Extra thick, so they carry a car without breaking." } },
     ],
