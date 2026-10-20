@@ -4,11 +4,16 @@
 // nooit bij een project, altijd decoratief (alt leeg, aria-hidden). De hangende
 // takken zijn verticaal gespiegeld zodat ze uit de bovenhoek komen.
 // Bronnen (pexels.com/photo/…): boomkruin 2267547, takken 11552979,
-// bladtak 12847431.
+// bladtak 12847431, klaproos 8208112, korenbloem 5557020 (met fluitenkruid
+// en gras), dagpauwoog 13515218. Bloemen en dieren alleen inheems (eigenaar, 20 okt 2026: "gebruik inheemse
+// bloemen").
 const PLANTEN = {
   boomkruin: [484, 640],
   takken: [640, 640],
   bladtak: [600, 598],
+  klaproos: [348, 640],
+  korenbloem: [367, 640],
+  dagpauwoog: [266, 320],
 } as const
 
 export type PlantNaam = keyof typeof PLANTEN
