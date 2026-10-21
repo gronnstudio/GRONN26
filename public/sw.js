@@ -9,7 +9,7 @@
 //     field-marker page (precached at install).
 //
 // Bump the version to invalidate everything after a change here.
-const VERSION = "gronn26-sw-v1"
+const VERSION = "gronn26-sw-v2"
 const OFFLINE_URL = "/offline"
 const PRECACHE = [OFFLINE_URL, "/icons/icon-192.png"]
 
@@ -17,7 +17,8 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(VERSION)
-      .then((cache) => cache.addAll(PRECACHE))
+      // reload: never take the offline page from the HTTP cache, or an old menu sticks
+      .then((cache) => cache.addAll(PRECACHE.map((u) => new Request(u, { cache: "reload" }))))
       .then(() => self.skipWaiting())
   )
 })
@@ -38,6 +39,8 @@ const IMMUTABLE = /^\/(_next\/static|icons)\/|\.(woff2?|ttf)$/
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url)
   if (url.origin !== self.location.origin) return
+  // The owner's pages and the API never go through the worker.
+  if (/^\/(dashboard|offertes|api)(\/|$)/.test(url.pathname)) return
 
   // Navigations: network, with the offline page as the only fallback.
   if (event.request.mode === "navigate") {
