@@ -2,7 +2,8 @@
 
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { BON_BEDRAGEN, bonNummer, geldigTot } from "@/lib/data/cadeaubon"
+import { BON_MAX, BON_MIN, DOOSJE_PRIJS, bonNummer, geldigTot } from "@/lib/data/cadeaubon"
+import { priceLabel } from "@/lib/format"
 import { leesStand, nieuweId, opslagAan, schrijfStand } from "@/lib/beheer/stand"
 import { maakBetaling, mollieAan } from "@/lib/mollie"
 
@@ -10,19 +11,22 @@ export type Uitkomst = { fout?: string }
 
 const kort = (v: FormDataEntryValue | null, n: number) => String(v ?? "").trim().slice(0, n)
 
-// Het bedrag komt uit BON_BEDRAGEN; het bonnummer geeft de server, op volgorde.
+// Het bedrag is een vast bedrag of een eigen bedrag in hele euro's tussen BON_MIN en BON_MAX; het bonnummer geeft de server, op volgorde.
 export async function koop(_: Uitkomst, d: FormData): Promise<Uitkomst> {
   if (!mollieAan() || !opslagAan()) return { fout: "Online kopen staat nu uit. App Nick op 06 18 11 80 14 voor een cadeaubon." }
   if (d.get("website")) return {}
-  const bedrag = Number(d.get("bedrag"))
+  const bedrag = Number(kort(d.get("bedrag"), 6))
   const voor = kort(d.get("voor"), 40)
   const van = kort(d.get("van"), 40)
   const boodschap = kort(d.get("boodschap"), 140)
   const naam = kort(d.get("naam"), 80)
   const email = kort(d.get("email"), 160)
-  if (!(BON_BEDRAGEN as readonly number[]).includes(bedrag)) return { fout: "Kies een bedrag." }
+  if (!Number.isInteger(bedrag) || bedrag < BON_MIN || bedrag > BON_MAX) return { fout: `Kies een bedrag tussen ${priceLabel(BON_MIN)} en ${priceLabel(BON_MAX)}, in hele euro's.` }
   if (!voor || !van) return { fout: "Vul in voor wie de bon is en van wie." }
   if (!naam || !/^\S+@\S+\.\S+$/.test(email)) return { fout: "Vul je naam en e-mail in." }
+  const doosje = d.get("vorm") === "doosje"
+  const adres = doosje ? [kort(d.get("straat"), 120), `${kort(d.get("postcode"), 12)} ${kort(d.get("plaats"), 80)}`.trim()].filter(Boolean).join(", ") : undefined
+  if (doosje && (!d.get("straat") || !d.get("postcode") || !d.get("plaats"))) return { fout: "Vul het adres in waar het doosje heen moet." }
   if (!d.get("akkoord")) return { fout: "Ga akkoord met de voorwaarden om te kopen." }
 
   const id = nieuweId()
@@ -36,14 +40,14 @@ export async function koop(_: Uitkomst, d: FormData): Promise<Uitkomst> {
     const jaar = nu.getFullYear()
     const nummer = bonNummer(jaar, s.bonnen.filter((b) => b.nummer.startsWith(`GR-${jaar}-`)).length + 1)
     const b = await maakBetaling({
-      bedrag,
-      omschrijving: `Cadeaubon ${nummer}`,
+      bedrag: bedrag + (doosje ? DOOSJE_PRIJS : 0),
+      omschrijving: `Cadeaubon ${nummer}${doosje ? " in doosje" : ""}`,
       terug: `${basis}/tuinen/cadeaubon/bon?b=${id}`,
       webhook: lokaal ? undefined : `${basis}/api/mollie`,
       bestelling: id,
     })
     checkout = b._links.checkout?.href
-    s.bonnen.unshift({ id, nummer, datum: nu.toISOString(), geldigTot: geldigTot(nu), bedrag, voor, van, boodschap, naam, email, mollie: b.id, status: "open" })
+    s.bonnen.unshift({ id, nummer, datum: nu.toISOString(), geldigTot: geldigTot(nu), bedrag, voor, van, boodschap, naam, email, adres, mollie: b.id, status: "open" })
     await schrijfStand(s)
   } catch (e) {
     console.error(e)

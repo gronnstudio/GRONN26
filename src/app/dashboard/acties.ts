@@ -66,6 +66,13 @@ export async function bonIngewisseld(id: string, ingewisseld: boolean) {
   })
 }
 
+export async function bonVerstuurd(id: string, verstuurd: boolean) {
+  await wijzig((s) => {
+    const b = s.bonnen.find((x) => x.id === id)
+    if (b) b.verstuurd = verstuurd
+  })
+}
+
 export async function bestellingKlaar(id: string, klaar: boolean) {
   await wijzig((s) => {
     const b = s.bestellingen.find((x) => x.id === id)

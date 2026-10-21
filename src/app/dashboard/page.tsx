@@ -9,7 +9,7 @@ import { Kopieer } from "@/components/beheer/kopieer"
 import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
-import { aanvraagKlaar, bestellingKlaar, bonIngewisseld, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
+import { aanvraagKlaar, bestellingKlaar, bonIngewisseld, bonVerstuurd, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
 import { EIGEN_PAGINAS, KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
@@ -313,6 +313,14 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                 <p className="m-0 mt-2 text-[13px] leading-[1.5]">
                   Gekocht door {b.naam} · <a href={`mailto:${b.email}`} className="text-oranje-tekst">{b.email}</a> · <a href={`/tuinen/cadeaubon/bon?b=${b.id}`} className="text-oranje-tekst">bon bekijken</a>
                 </p>
+                {b.adres && (
+                  <div className="mt-2 flex items-center justify-between gap-3 text-[13px] leading-[1.5]">
+                    <span>{b.verstuurd ? "Doosje verstuurd" : "In doosje versturen naar"} · {b.adres}</span>
+                    <form action={bonVerstuurd.bind(null, b.id, !b.verstuurd)}>
+                      <button className="knop-klein shrink-0 border border-inkt/30">{b.verstuurd ? "Terugzetten" : "Verstuurd ✓"}</button>
+                    </form>
+                  </div>
+                )}
               </li>
             ))}
           </ul>

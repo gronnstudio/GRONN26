@@ -8,6 +8,7 @@ const PAGINAS: [string, Tekst][] = [
   ["/vijvers", { nl: "Vijvers", en: "Ponds" }],
   ["/tuinen", { nl: "Tuinen", en: "Gardens" }],
   ["/tuinen/materialen", { nl: "Materialen", en: "Materials" }],
+  ["/shop", { nl: "Shop", en: "Shop" }],
   ["/werk", { nl: "Werk", en: "Work" }],
   ["/over", { nl: "Over", en: "About" }],
   ["/kennismaken", { nl: "Kennismaken", en: "Get in touch" }],

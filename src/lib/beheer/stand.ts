@@ -44,6 +44,9 @@ export type Bon = {
   boodschap: string
   naam: string
   email: string
+  /** Per post in een doosje: het adres; zonder adres is de bon alleen digitaal. */
+  adres?: string
+  verstuurd?: boolean
   mollie?: string
   status: "open" | "betaald" | "mislukt"
   ingewisseld?: boolean

@@ -51,6 +51,7 @@ export default async function Bon({ searchParams }: { searchParams: Promise<{ b?
           <p className="m-0 text-[17px] leading-[1.55]">
             Bonnummer <b className="tabular-nums">{bon.nummer}</b>, geldig tot en met {gegevens.geldigTot}. Bewaar deze pagina: de link is de bon.
           </p>
+          {bon.adres && <p className="m-0 text-[17px] leading-[1.55]">De kaart in het doosje gaat binnen drie werkdagen op de post naar {bon.adres}.</p>}
           <Print />
           <p className="m-0 text-[14px] leading-[1.55] text-gedempt">Inwisselen: app een foto van de vijver of tuin naar 06 18 11 80 14 en noem het bonnummer.</p>
         </div>
