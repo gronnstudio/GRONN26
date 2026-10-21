@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { BON_MAX, BON_MIN, bonNummer, geldigTot } from "@/lib/data/cadeaubon"
+import { BON_MAX, BON_MIN, DOOSJE_PRIJS, bonNummer, geldigTot } from "@/lib/data/cadeaubon"
 import { priceLabel } from "@/lib/format"
 import { leesStand, nieuweId, opslagAan, schrijfStand } from "@/lib/beheer/stand"
 import { maakBetaling, mollieAan } from "@/lib/mollie"
@@ -24,6 +24,9 @@ export async function koop(_: Uitkomst, d: FormData): Promise<Uitkomst> {
   if (!Number.isInteger(bedrag) || bedrag < BON_MIN || bedrag > BON_MAX) return { fout: `Kies een bedrag tussen ${priceLabel(BON_MIN)} en ${priceLabel(BON_MAX)}, in hele euro's.` }
   if (!voor || !van) return { fout: "Vul in voor wie de bon is en van wie." }
   if (!naam || !/^\S+@\S+\.\S+$/.test(email)) return { fout: "Vul je naam en e-mail in." }
+  const doosje = d.get("vorm") === "doosje"
+  const adres = doosje ? [kort(d.get("straat"), 120), `${kort(d.get("postcode"), 12)} ${kort(d.get("plaats"), 80)}`.trim()].filter(Boolean).join(", ") : undefined
+  if (doosje && (!d.get("straat") || !d.get("postcode") || !d.get("plaats"))) return { fout: "Vul het adres in waar het doosje heen moet." }
   if (!d.get("akkoord")) return { fout: "Ga akkoord met de voorwaarden om te kopen." }
 
   const id = nieuweId()
@@ -37,14 +40,14 @@ export async function koop(_: Uitkomst, d: FormData): Promise<Uitkomst> {
     const jaar = nu.getFullYear()
     const nummer = bonNummer(jaar, s.bonnen.filter((b) => b.nummer.startsWith(`GR-${jaar}-`)).length + 1)
     const b = await maakBetaling({
-      bedrag,
-      omschrijving: `Cadeaubon ${nummer}`,
+      bedrag: bedrag + (doosje ? DOOSJE_PRIJS : 0),
+      omschrijving: `Cadeaubon ${nummer}${doosje ? " in doosje" : ""}`,
       terug: `${basis}/tuinen/cadeaubon/bon?b=${id}`,
       webhook: lokaal ? undefined : `${basis}/api/mollie`,
       bestelling: id,
     })
     checkout = b._links.checkout?.href
-    s.bonnen.unshift({ id, nummer, datum: nu.toISOString(), geldigTot: geldigTot(nu), bedrag, voor, van, boodschap, naam, email, mollie: b.id, status: "open" })
+    s.bonnen.unshift({ id, nummer, datum: nu.toISOString(), geldigTot: geldigTot(nu), bedrag, voor, van, boodschap, naam, email, adres, mollie: b.id, status: "open" })
     await schrijfStand(s)
   } catch (e) {
     console.error(e)

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useActionState, useState } from "react"
 import { BonKaart } from "@/components/cadeaubon/kaart"
-import { BON_BEDRAGEN, BON_MAX, BON_MIN } from "@/lib/data/cadeaubon"
+import { BON_BEDRAGEN, BON_MAX, BON_MIN, DOOSJE_PRIJS } from "@/lib/data/cadeaubon"
 import { priceLabel } from "@/lib/format"
 import { koop } from "./acties"
 
@@ -17,6 +17,8 @@ export function BonFormulier({ online }: { online: boolean }) {
   const [vast, setVast] = useState<number | null>(BON_BEDRAGEN[1])
   const [eigen, setEigen] = useState("")
   const bedrag = vast ?? Number(eigen || 0)
+  const [doosje, setDoosje] = useState(false)
+  const totaal = bedrag + (doosje ? DOOSJE_PRIJS : 0)
   const [voor, setVoor] = useState("")
   const [van, setVan] = useState("")
   const [boodschap, setBoodschap] = useState("")
@@ -80,6 +82,41 @@ export function BonFormulier({ online }: { online: boolean }) {
           <textarea name="boodschap" maxLength={140} rows={2} value={boodschap} onChange={(e) => setBoodschap(e.target.value)} placeholder="Eindelijk die vijver weer helder!" className={`${veld} resize-none`} />
         </label>
 
+        <fieldset className="m-0 border-0 p-0">
+          <legend className="lbl mb-3 p-0">Hoe geef je hem</legend>
+          <div className="flex flex-wrap gap-2">
+            <label className="cursor-pointer">
+              <input type="radio" name="vorm" value="digitaal" checked={!doosje} onChange={() => setDoosje(false)} className="peer sr-only" />
+              <span className={chip}>Digitaal · gratis</span>
+            </label>
+            <label className="cursor-pointer">
+              <input type="radio" name="vorm" value="doosje" checked={doosje} onChange={() => setDoosje(true)} className="peer sr-only" />
+              <span className={chip}>Kaart in luxe doosje · +{priceLabel(DOOSJE_PRIJS)}</span>
+            </label>
+          </div>
+          <p className="mt-3 mb-0 text-[14px] leading-[1.5] text-gedempt">
+            {doosje
+              ? "Ik print de kaart op dik papier, leg hem in een doosje en stuur hem binnen drie werkdagen op, naar jou of naar wie hem krijgt. Je krijgt de digitale bon er meteen bij."
+              : "Na betalen staat de bon klaar om te printen of door te sturen."}
+          </p>
+          {doosje && (
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
+              <label className="flex flex-col gap-2 sm:col-span-2">
+                <span className="lbl">Straat en huisnummer</span>
+                <input name="straat" required autoComplete="street-address" className={veld} />
+              </label>
+              <label className="flex flex-col gap-2">
+                <span className="lbl">Postcode</span>
+                <input name="postcode" required autoComplete="postal-code" className={veld} />
+              </label>
+              <label className="flex flex-col gap-2">
+                <span className="lbl">Plaats</span>
+                <input name="plaats" required autoComplete="address-level2" className={veld} />
+              </label>
+            </div>
+          )}
+        </fieldset>
+
         <div className="grid gap-5 border-t border-lijn pt-7 sm:grid-cols-2">
           <label className="flex flex-col gap-2">
             <span className="lbl">Jouw naam</span>
@@ -102,14 +139,14 @@ export function BonFormulier({ online }: { online: boolean }) {
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <p className="m-0">
             <span className="lbl block text-gedempt">Totaal, incl. btw</span>
-            <span className="syne text-[clamp(32px,4vw,44px)] leading-none tabular-nums">{priceLabel(bedrag)}</span>
+            <span className="syne text-[clamp(32px,4vw,44px)] leading-none tabular-nums">{priceLabel(totaal)}</span>
           </p>
           <button disabled={bezig || !online || bedrag < BON_MIN || bedrag > BON_MAX} className="knop bg-oranje text-antraciet disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
             {bezig ? "Even geduld…" : "Kopen en betalen →"}
           </button>
         </div>
         <p className="-mt-3 mb-0 text-[14px] leading-[1.5] text-gedempt">
-          {online ? "Je betaalt veilig via Mollie. Direct daarna staat je bon klaar met een eigen bonnummer, om te printen of door te sturen." : "Online kopen staat nog niet aan. App Nick op 06 18 11 80 14 voor een cadeaubon."}
+          {online ? "Je betaalt veilig via Mollie. Direct daarna staat je bon klaar met een eigen bonnummer." : "Online kopen staat nog niet aan. App Nick op 06 18 11 80 14 voor een cadeaubon."}
         </p>
         {uitkomst.fout && <p role="alert" className="m-0 font-semibold text-oranje-tekst">{uitkomst.fout}</p>}
       </form>

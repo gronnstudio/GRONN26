@@ -7,6 +7,8 @@ export const BON_BEDRAGEN = [50, 100, 150, 250] as const
 export const BON_MIN = 25
 export const BON_MAX = 2500
 export const BON_JAREN = 2
+/** Fysieke kaart in een luxe doosje, per post (eigenaar, 21 okt 2026): toeslag bovenop het tegoed. */
+export const DOOSJE_PRIJS = 10
 
 /** GR-2026-0007: jaar en volgnummer, zodat Nick een bon in één oogopslag terugvindt. */
 export const bonNummer = (jaar: number, volgnummer: number) => `GR-${jaar}-${String(volgnummer).padStart(4, "0")}`
