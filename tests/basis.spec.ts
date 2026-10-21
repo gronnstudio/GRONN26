@@ -277,3 +277,12 @@ test("webhook van Mollie weigert een ongeldige id", async ({ request }) => {
   const r = await request.post("/api/mollie", { form: { id: "niet-mollie" } })
   expect(r.status()).toBe(400)
 })
+
+test("kopieerslot: tekst niet selecteerbaar, formuliervelden wel", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/kennismaken", { waitUntil: "domcontentloaded" })
+  expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).toBe("none")
+  expect(await page.locator('input[name="naam"]').evaluate((e) => getComputedStyle(e).userSelect)).toBe("text")
+  await page.fill('input[name="naam"]', "Test")
+  await expect(page.locator('input[name="naam"]')).toHaveValue("Test")
+})

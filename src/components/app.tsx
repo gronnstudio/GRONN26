@@ -22,11 +22,20 @@ export function App() {
     const d = document as Document & { webkitFullscreenEnabled?: boolean }
     const kan = !!(document.fullscreenEnabled || d.webkitFullscreenEnabled) && !/iphone|ipod/i.test(navigator.userAgent)
     const t0 = setTimeout(() => setKanVol(kan), 0) // ná de eerste render (hydration-veilig)
+    // Kopieerslot (zie globals.css): geen rechtermuisknop of slepen op beeld, en
+    // geen kopiëren buiten formuliervelden. De pagina's van de eigenaar doen niet mee.
+    const slot = (e: Event) => {
+      const doel = e.target as Element | null
+      if (!doel?.closest || document.querySelector("[data-links]") || doel.closest("input, textarea, select, [contenteditable]")) return
+      if (e.type === "copy" || doel.closest("img, video, picture, svg")) e.preventDefault()
+    }
+    for (const t of ["contextmenu", "dragstart", "copy"]) document.addEventListener(t, slot)
     const bijVol = () => setVol(!!document.fullscreenElement)
     document.addEventListener("fullscreenchange", bijVol)
     return () => {
       clearTimeout(t0)
       document.removeEventListener("fullscreenchange", bijVol)
+      for (const t of ["contextmenu", "dragstart", "copy"]) document.removeEventListener(t, slot)
     }
   }, [])
 
