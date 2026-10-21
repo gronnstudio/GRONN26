@@ -1,9 +1,13 @@
 name: quality
 
+# Eén run per commit: een PR-branch draait via pull_request, de productiebranch
+# via push. Voorheen draaide elke PR-commit twee keer (push én pull_request).
 on:
   push:
-    branches: ["**"]
+    branches: ["claude/brave-einstein-no9sq8"]
+    paths-ignore: ["**/*.md", "docs/**"]
   pull_request:
+    paths-ignore: ["**/*.md", "docs/**"]
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -22,10 +26,30 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npx eslint src
-      - run: npm run build
-      - run: npx playwright install chromium --with-deps
+      # De buildcache van Next (Turbopack en de omgezette foto's) blijft tussen runs.
+      - uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: next-${{ hashFiles('package-lock.json') }}-
+      # Typecheck en lint lopen naast de build; elk faalt nog steeds op zichzelf.
+      - name: typecheck, lint en build
+        run: |
+          npx tsc --noEmit > "$RUNNER_TEMP/tsc.log" 2>&1 & tsc=$!
+          npx eslint src > "$RUNNER_TEMP/eslint.log" 2>&1 & eslint=$!
+          npm run build
+          wait $tsc || { cat "$RUNNER_TEMP/tsc.log"; exit 1; }
+          wait $eslint || { cat "$RUNNER_TEMP/eslint.log"; exit 1; }
+      - uses: actions/cache@v4
+        id: pw
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ hashFiles('package-lock.json') }}
+      # Alleen de headless shell: de tests draaien headless, de volle Chrome is overbodig.
+      - run: npx playwright install chromium --only-shell --with-deps
+        if: steps.pw.outputs.cache-hit != 'true'
+      - run: npx playwright install-deps chromium
+        if: steps.pw.outputs.cache-hit == 'true'
       - run: npx playwright test
         env:
           CI: "true"

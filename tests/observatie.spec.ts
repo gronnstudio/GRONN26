@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test"
+import { test, expect, type Page } from "./fixtures"
 
 // Observatiekaders (prototype, 18 okt 2026), op /proef/observatie.
 
