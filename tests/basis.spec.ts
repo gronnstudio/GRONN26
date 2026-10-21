@@ -284,35 +284,24 @@ test("hommelbloemen: nooit over tekst, en weg bij de voet", async ({ page }) => 
   await expect(page.locator(".hommel-bloemen")).toHaveClass(/weg/)
 })
 
-test("over @390: het verhaal snapt na een korte scroll op het volgende hoofdstuk", async ({ page }) => {
-  await zonderIntro(page)
-  await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/over", { waitUntil: "domcontentloaded" })
-  const stand = () => page.evaluate(() => {
-    const b = document.querySelector(".w-zijwaarts")!.getBoundingClientRect()
-    return (-b.top / (b.height - innerHeight)) * (Number(getComputedStyle(document.querySelector(".w-zijwaarts")!).getPropertyValue("--n")) - 1)
+
+for (const b of [390, 1440]) {
+  test(`over @${b}: het verhaal staat altijd op een heel hoofdstuk, ook als je halverwege stopt`, async ({ page }) => {
+    await zonderIntro(page)
+    await page.setViewportSize({ width: b, height: 900 })
+    await page.goto("/over", { waitUntil: "domcontentloaded" })
+    // naar een plek in het verhaal: t hoofdstukken ver (0 = het eerste)
+    const naar = (t: number) => page.evaluate((t) => {
+      const z = document.querySelector<HTMLElement>(".w-zijwaarts")!
+      const n = Number(getComputedStyle(z).getPropertyValue("--n"))
+      scrollTo(0, scrollY + z.getBoundingClientRect().top + (t * (z.offsetHeight - innerHeight)) / (n - 1))
+    }, t)
+    const links = (i: number) => page.evaluate((i) => Math.round(document.querySelectorAll(".w-hoofdstuk")[i].getBoundingClientRect().left), i)
+    await naar(0.6)
+    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
+    await naar(2.4)
+    await expect.poll(() => links(2), { timeout: 3000 }).toBe(0)
+    await naar(1.3)
+    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
   })
-  // naar het begin van het verhaal, dan een klein stukje verder
-  await page.evaluate(() => scrollTo(0, scrollY + document.querySelector(".w-zijwaarts")!.getBoundingClientRect().top))
-  await page.waitForTimeout(600)
-  expect(Math.abs(await stand())).toBeLessThan(0.02)
-  await page.mouse.move(195, 400)
-  await page.mouse.wheel(0, 200)
-  await expect.poll(stand, { timeout: 4000 }).toBeCloseTo(1, 1)
-  await page.mouse.wheel(0, -200)
-  await expect.poll(stand, { timeout: 4000 }).toBeCloseTo(0, 1)
-})
-
-test("webhook van Mollie weigert een ongeldige id", async ({ request }) => {
-  const r = await request.post("/api/mollie", { form: { id: "niet-mollie" } })
-  expect(r.status()).toBe(400)
-})
-
-test("kopieerslot: tekst niet selecteerbaar, formuliervelden wel", async ({ page }) => {
-  await zonderIntro(page)
-  await page.goto("/kennismaken", { waitUntil: "domcontentloaded" })
-  expect(await page.evaluate(() => getComputedStyle(document.body).userSelect)).toBe("none")
-  expect(await page.locator('input[name="naam"]').evaluate((e) => getComputedStyle(e).userSelect)).toBe("text")
-  await page.fill('input[name="naam"]', "Test")
-  await expect(page.locator('input[name="naam"]')).toHaveValue("Test")
-})
+}

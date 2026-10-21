@@ -18,6 +18,10 @@ const SITE_URL = "https://gronn.studio"
 // staan vast: een tabelcel die krimpt drukte de foto anders tot een
 // ovaal, want de hoogte bleef 64 (eigenaar, 28 sep 2026: "foto looks
 // weird").
+//
+// De groet erboven staat in Syne Bold (eigenaar, 21 okt 2026). Gmail laadt
+// bij de ontvanger geen webfont, dus het is een plaatje (groet.png, 3x) met
+// de tekst als alt, zoals het woordmerk.
 
 const BEELD = `${SITE_URL}/brand/mail`
 
@@ -40,6 +44,9 @@ const instagram = BUSINESS.instagram.replace(/^https:\/\/(www\.)?instagram\.com\
 
 /** De handtekening als HTML, klaar om in Gmail, Outlook of Apple Mail te plakken. */
 export const HANDTEKENING_HTML = `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; ${TEKST} color:${ANTRACIET};">
+<tr>
+<td colspan="2" style="padding:0 0 14px 0;"><img src="${BEELD}/groet.png" width="206" height="22" alt="Met vriendelijke groet," style="display:block; border:0; width:206px; height:22px;"></td>
+</tr>
 <tr>
 <td width="80" style="padding:0 16px 0 0; vertical-align:top; width:64px; min-width:64px;"><img src="${BEELD}/portret.png" width="64" height="64" alt="Nick Peters" style="display:block; border:0; width:64px; min-width:64px; max-width:64px; height:64px;"></td>
 <td style="padding:0; vertical-align:top;">
@@ -69,6 +76,6 @@ export const HANDTEKENING_HTML = `<table cellpadding="0" cellspacing="0" border=
 </table>`
 
 /** De beelden die de handtekening van gronn.studio laadt. */
-export const HANDTEKENING_BEELDEN = ["portret", "ontwerp", "aanleg", "onderhoud", "woordmerk"].map(
+export const HANDTEKENING_BEELDEN = ["groet", "portret", "ontwerp", "aanleg", "onderhoud", "woordmerk"].map(
   (naam) => `/brand/mail/${naam}.png`,
 )

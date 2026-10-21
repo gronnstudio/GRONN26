@@ -11,7 +11,7 @@ import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
 import { aanvraagKlaar, bestellingKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
-import { KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
+import { EIGEN_PAGINAS, KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { euro } from "@/lib/format"
 
@@ -76,14 +76,20 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         </div>
       </header>
 
-      <nav aria-label="Onderdelen" className="mx-auto flex max-w-[1440px] gap-2 overflow-x-auto px-5 pt-6 pb-1 md:px-8">
+      {/* Tabbladen zoals in een browser (eigenaar, 21 okt 2026: "maak echte
+          tabbladen zoals een browser dat doet, nu staan er knoppen"): het
+          actieve blad heeft de kleur van de pagina en dekt de lijn eronder af. */}
+      <div className="border-b border-lijn">
+      <nav aria-label="Onderdelen" className="mx-auto -mb-px flex max-w-[1440px] items-end gap-1 overflow-x-auto px-5 pt-6 md:px-8">
         {TABS.map((t) => (
           <Link
             key={t.id}
             href={t.id === "vandaag" ? "/dashboard" : `/dashboard?tab=${t.id}`}
             aria-current={t.id === actief ? "page" : undefined}
-            className={`shrink-0 rounded-full border px-4 py-2 text-[14px] font-semibold transition-colors ${
-              t.id === actief ? "border-inkt bg-inkt text-grond" : "border-lijn hover:border-oranje"
+            className={`shrink-0 rounded-t-[12px] border border-b-0 px-5 text-[14px] font-semibold transition-colors ${
+              t.id === actief
+                ? "relative z-10 border-lijn bg-grond py-3 shadow-[0_2px_0_0_var(--grond)] before:absolute before:inset-x-4 before:top-0 before:h-[2px] before:rounded-full before:bg-oranje before:content-['']"
+                : "border-transparent bg-inkt/[.05] py-2.5 opacity-75 hover:bg-inkt/[.09] hover:opacity-100"
             }`}
           >
             {t.naam}
@@ -93,6 +99,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           </Link>
         ))}
       </nav>
+      </div>
 
       <main className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)] gap-x-10 gap-y-12 px-5 py-8 md:px-8 lg:grid-cols-[minmax(0,1fr)_400px]">
         {actief === "vandaag" && (<>
@@ -425,6 +432,25 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                     {k.uitleg} <span className="transition-transform group-hover:translate-x-0.5">↗</span>
                   </span>
                 </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+        {/* eigen pagina's */}
+        <section className="lg:col-span-2">
+          <p className={`${lbl} m-0 opacity-60`}>Eigen pagina&apos;s · niet in het menu</p>
+          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-6">
+            {EIGEN_PAGINAS.map((k) => (
+              <li key={k.naam}>
+                <Link
+                  href={k.href}
+                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
+                >
+                  <span className="syne text-[17px]">{k.naam}</span>
+                  <span className="flex items-center justify-between text-[12px] opacity-60">
+                    {k.uitleg} <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
