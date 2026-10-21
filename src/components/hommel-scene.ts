@@ -475,6 +475,7 @@ export function startHommel(): () => void {
   const BLOEM_Z = 1 // diepte van de landingsplek
   const scherm = new THREE.Vector3()
   const bloemPunt = (b: NonNullable<typeof bloem>) => {
+    if (b.el.closest(".weg")) return null // margebloemen bij het slot en de voet
     const r = b.el.getBoundingClientRect()
     const x = r.left + b.fx * r.width
     const y = r.top + b.fy * r.height

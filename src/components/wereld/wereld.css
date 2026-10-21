@@ -360,12 +360,15 @@ html.stil .w-voortgang { display: none; }
     position: fixed;
     bottom: 0;
     z-index: 5;
-    width: min(200px, calc((100vw - 1280px) / 2 - 32px));
     height: auto;
     mask-image: linear-gradient(to top, transparent, #000 18%);
+    transition: opacity 0.5s;
   }
-  .hommel-bloem-links { left: 16px; transform-origin: 40% 100%; }
-  .hommel-bloem-rechts { right: 16px; transform-origin: 35% 100%; }
+  /* zo breed als de vrije strook naast de tekst (hommel.tsx meet die), met
+     lucht ertussen; te smal en hij verdwijnt */
+  .hommel-bloem-links { left: 16px; width: min(200px, var(--marge-links, 0px) - 48px); transform-origin: 40% 100%; }
+  .hommel-bloem-rechts { right: 16px; width: min(120px, var(--marge-rechts, 0px) - 48px); transform-origin: 50% 100%; }
+  .hommel-bloemen.weg .hommel-bloem { opacity: 0; }
   @media (prefers-reduced-motion: no-preference) {
     html:not(.stil) .hommel-bloem-links { animation: plant-wieg 7.5s ease-in-out infinite alternate; }
     html:not(.stil) .hommel-bloem-rechts { animation: plant-wieg 9s ease-in-out -2s infinite alternate-reverse; }

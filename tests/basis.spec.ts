@@ -254,6 +254,37 @@ test("hommelbloemen: alleen in de marges van een breed scherm, decoratief, met l
   await expect(bloemen.first()).toBeHidden()
 })
 
+test("hommelbloemen: nooit over tekst, en weg bij de voet", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 1607, height: 900 })
+  await page.goto("/", { waitUntil: "load" })
+  await page.waitForTimeout(800)
+  const hoog = await page.evaluate(() => document.documentElement.scrollHeight)
+  for (let y = 0; y < hoog; y += 450) {
+    await page.evaluate((y) => scrollTo(0, y), y)
+    await page.waitForTimeout(80)
+    const botst = await page.evaluate(() => {
+      const uit: string[] = []
+      for (const f of document.querySelectorAll(".hommel-bloem")) {
+        const b = f.getBoundingClientRect()
+        if (!b.width || f.closest(".weg")) continue
+        const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+        const r = document.createRange()
+        for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+          if (!n.textContent?.trim() || n.parentElement!.closest(".sr-only, nav, .hommel-bloemen")) continue
+          r.selectNodeContents(n)
+          for (const q of r.getClientRects()) if (q.width && q.right > b.left && q.left < b.right && q.bottom > b.top && q.top < b.bottom) uit.push(n.textContent.trim())
+        }
+      }
+      return uit
+    })
+    expect(botst, `bij scrollY ${y}`).toEqual([])
+  }
+  await page.locator("footer").scrollIntoViewIfNeeded()
+  await expect(page.locator(".hommel-bloemen")).toHaveClass(/weg/)
+})
+
+
 for (const b of [390, 1440]) {
   test(`over @${b}: het verhaal staat altijd op een heel hoofdstuk, ook als je halverwege stopt`, async ({ page }) => {
     await zonderIntro(page)
