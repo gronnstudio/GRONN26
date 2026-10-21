@@ -2,8 +2,13 @@ import { expect, test } from "@playwright/test"
 
 // Zoeken en sneltoetsen (zoek.tsx): ⌘K/Ctrl K en "/" openen, typen geeft
 // treffers, Enter opent, Esc sluit en geeft de focus terug, g + letter navigeert.
+// Met "minder beweging": de paginawissel (overgang.tsx) heeft zijn eigen
+// timing en valt buiten deze test; op CI liep hij over de wachttijd heen.
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => sessionStorage.setItem("gronn-intro", "1"))
+  await page.addInitScript(() => {
+    sessionStorage.setItem("gronn-intro", "1")
+    localStorage.setItem("gronn-weergave", JSON.stringify({ beweging: true }))
+  })
 })
 
 test("Ctrl K zoekt, Enter opent, Esc sluit", async ({ page }) => {
