@@ -12,6 +12,8 @@ export type Aanvraag = {
   wat: string
   bron: "Formulier" | "WhatsApp" | "Telefoon" | "Anders"
   klaar?: boolean
+  /** id van de vijverfoto in Blob (vijverfotos/<id>.jpg), als de bezoeker er een stuurde */
+  foto?: string
 }
 export type Plan = { id: string; datum: string; wat: string }
 export type Stand = { gepost: Record<string, string>; aanvragen: Aanvraag[]; planning: Plan[] }

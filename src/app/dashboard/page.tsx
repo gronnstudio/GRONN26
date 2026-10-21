@@ -244,6 +244,12 @@ export default async function Dashboard() {
                     {a.contact}
                   </a>
                 )}
+                {a.foto && (
+                  <a href={`/api/vijverfoto?id=${a.foto}`} target="_blank" rel="noreferrer" className="mt-3 block">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- privé foto achter de inlog, niet via next/image */}
+                    <img src={`/api/vijverfoto?id=${a.foto}`} alt={`Vijverfoto van ${a.naam}`} loading="lazy" className="block max-h-[240px] w-full rounded-[12px] object-cover" />
+                  </a>
+                )}
                 {a.wat && <p className="m-0 mt-2 whitespace-pre-line text-[13px] leading-[1.5] opacity-75">{a.wat}</p>}
               </li>
             ))}

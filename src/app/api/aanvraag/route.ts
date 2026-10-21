@@ -13,8 +13,9 @@ export async function POST(request: NextRequest) {
   const contact = kort(b.contact, 160)
   const wat = kort(b.wat, 1200)
   if (!naam || !contact) return NextResponse.json({ ok: false }, { status: 400 })
+  const foto = typeof b.foto === "string" && /^[0-9a-f-]{36}$/.test(b.foto) ? b.foto : undefined
   const s = await leesStand()
-  s.aanvragen.unshift({ id: nieuweId(), datum: new Date().toISOString(), naam, contact, wat, bron: "Formulier" })
+  s.aanvragen.unshift({ id: nieuweId(), datum: new Date().toISOString(), naam, contact, wat, bron: "Formulier", foto })
   await schrijfStand(s)
   return NextResponse.json({ ok: true })
 }
