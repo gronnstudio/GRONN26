@@ -26,6 +26,7 @@ const PAGINAS: Record<string, { naam: Tekst; ouder?: string }> = {
   "/techniek": { naam: { nl: "Techniek", en: "Tech" }, ouder: "/over" },
   "/kennismaken": { naam: { nl: "Kennismaken", en: "Get in touch" } },
   "/faq": { naam: { nl: "Vragen", en: "Questions" } },
+  "/blog": { naam: "Blog" },
   "/privacy": { naam: { nl: "Privacy", en: "Privacy" } },
   "/voorwaarden": { naam: { nl: "Voorwaarden", en: "Terms" } },
   "/herroeping": { naam: { nl: "Herroeping", en: "Withdrawal" } },
@@ -36,6 +37,11 @@ const PAGINAS: Record<string, { naam: Tekst; ouder?: string }> = {
 
 function spoor(pad: string) {
   const stappen: { pad: string; naam: Tekst }[] = []
+  // een stuk op de blog: Home / Blog / Artikel (de titels blijven uit deze bundel)
+  if (pad.startsWith("/blog/")) {
+    stappen.push({ pad, naam: { nl: "Artikel", en: "Article" } })
+    pad = "/blog"
+  }
   for (let p: string | undefined = pad; p && PAGINAS[p]; p = PAGINAS[p].ouder) stappen.unshift({ pad: p, naam: PAGINAS[p].naam })
   return stappen.length ? [{ pad: "/", naam: "Home" as Tekst }, ...stappen] : []
 }

@@ -19,11 +19,15 @@ import { useTaal } from "./taal-klant"
 // groot. Tijdens het lezen komt Omhoog achteraan, na de hamburger, in de
 // ronding van de pil ("hamburger en dan oranje back to top achteraan").
 // Shop is een kruiwagen (eigenaar, 19 okt 2026).
-const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string }[] = [
+// Blog alleen vanaf desktop in de pil; op telefoon en tablet staat hij in het
+// megamenu, zodat de pil vier vakken plus menu houdt (eigenaar, 21 okt 2026:
+// "Blogs in eigen menu, dat past op desktop. Op mobiel waarschijnlijk niet").
+const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string; groot?: true }[] = [
   { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/shop", label: "Shop", bij: ["/shop", "/tuinen/borderpakketten", "/tuinen/cadeaubon"], beweging: "groei", icoon: "M3 8h3l2 7h9l2-6H6.5M15.5 18.5a1.8 1.8 0 1 0 0-.1M8 15l-1 4.5" },
+  { href: "/blog", label: "Blog", bij: ["/blog"], beweging: "knik", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12", groot: true },
 ]
 
 // de huidige pagina: een licht kiezelknopje met reliëf achter een donker icoon
@@ -109,6 +113,7 @@ export function Menu() {
           <Link href="/kennismaken" className="knop w-full bg-oranje text-antraciet lg:hidden">
             <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
           </Link>
+          <Link href="/blog" className={`${linkKlasse} syne text-[28px] leading-[1.2] tracking-[-.02em] lg:hidden`}>Blog</Link>
           <div>
             <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
             <Instellingen />
@@ -132,8 +137,8 @@ export function Menu() {
           {HOOFD.map((m) => {
             const actief = m.href === "/" ? pad === "/" : m.bij.some((b) => isHier(pad, b))
             return (
-              <li key={m.href} className="flex min-w-0 justify-center">
-                <Link href={m.href} title={kies(m.label, taal)} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 motion-reduce:transition-none aria-[current=page]:w-[48px] max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[18px] lg:text-[15px] lg:font-medium lg:aria-[current=page]:w-auto max-lg:aria-[current=page]:w-[64px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
+              <li key={m.href} className={`min-w-0 justify-center ${m.groot ? "hidden lg:flex" : "flex"}`}>
+                <Link href={m.href} title={kies(m.label, taal)} aria-current={actief ? "page" : undefined} data-beweging={m.beweging} className={`menu-icoon grid size-[var(--knop)] place-items-center rounded-full transition-[background-color,color,width,height] duration-500 motion-reduce:transition-none aria-[current=page]:w-[48px] max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[16px] lg:text-[15px] lg:font-medium lg:aria-[current=page]:w-auto max-lg:aria-[current=page]:w-[64px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}>
                   <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-[22px] transition-[width,height] duration-500 motion-reduce:transition-none max-lg:size-[32px]">
                     <path d={m.icoon} />
                   </svg>
@@ -144,7 +149,7 @@ export function Menu() {
             )
           })}
           {/* Kennismaken rechts in de balk, alleen vanaf 1024px (op de telefoon staat hij bovenaan, kop.tsx) */}
-          <li className="hidden lg:ml-auto lg:flex">
+          <li className="hidden lg:ml-auto lg:flex lg:pl-2">
     <Link
       href="/kennismaken"
       className="group knop inline-flex h-[var(--knop)] items-center gap-4 rounded-full bg-oranje px-[var(--knop-binnen)] text-[var(--knop-tekst)] font-semibold tracking-[var(--knop-letter)] text-antraciet uppercase no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
