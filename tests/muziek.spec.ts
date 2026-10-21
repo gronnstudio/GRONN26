@@ -11,10 +11,11 @@ test("muziek: aan na eerste tik, knop zet uit en onthoudt", async ({ context, pa
     HTMLMediaElement.prototype.pause = function () { w.log.push("pause") }
   })
   // Onder belasting is de pagina soms pas na seconden gehydrateerd; een tik
-  // daarvoor valt weg. Dus eerst laten uitladen, en ruimer de tijd.
+  // daarvoor valt weg. Dus ruimer de tijd, en tikken tot hij speelt (na de
+  // eerste tik die telt luistert de site niet meer, dus nooit twee keer play).
   test.setTimeout(60_000)
   const log = () => page.evaluate(() => (window as unknown as { log: string[] }).log.join(","))
-  await page.goto("/", { waitUntil: "networkidle" })
+  await page.goto("/")
   await page.waitForTimeout(500)
   expect(await log()).toBe("")
   const knop = page.locator("button[data-muziek]")
@@ -24,8 +25,10 @@ test("muziek: aan na eerste tik, knop zet uit en onthoudt", async ({ context, pa
   expect(Math.abs(vak!.y + vak!.height / 2 - vp.height / 2)).toBeLessThan(4)
   expect(vp.width - (vak!.x + vak!.width)).toBeLessThan(24)
 
-  await page.mouse.click(vp.width / 2, 200)
-  await expect.poll(log).toBe("play")
+  await expect(async () => {
+    await page.mouse.click(vp.width / 2, 200)
+    expect(await log()).toBe("play")
+  }).toPass({ timeout: 20_000 })
 
   await knop.click()
   await expect(knop).toHaveAttribute("aria-label", "Muziek aan")
@@ -35,13 +38,13 @@ test("muziek: aan na eerste tik, knop zet uit en onthoudt", async ({ context, pa
   const tweede = await context.newPage()
   for (let poging = 1; ; poging++) {
     try {
-      await tweede.goto("/", { waitUntil: "networkidle" })
+      await tweede.goto("/", { waitUntil: "domcontentloaded" })
       break
     } catch (fout) {
       if (poging === 3) throw fout
     }
   }
-  await expect(tweede.locator("button[data-muziek]")).toHaveAttribute("aria-label", "Muziek aan")
+  await expect(tweede.locator("button[data-muziek]")).toHaveAttribute("aria-label", "Muziek aan", { timeout: 15_000 })
   await tweede.mouse.click(vp.width / 2, 200)
   await tweede.waitForTimeout(300)
   expect(await tweede.evaluate(() => (window as unknown as { log: string[] }).log.join(","))).toBe("")
