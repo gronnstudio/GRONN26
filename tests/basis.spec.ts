@@ -74,6 +74,16 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
+// Auto volgt de klok van de bezoeker: 's avonds donker, overdag licht.
+for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
+  test(`weergave: Auto om ${uur} is ${donker ? "donker" : "licht"}`, async ({ page }) => {
+    await page.clock.setFixedTime(new Date(`2026-10-21T${uur}:00`))
+    await zonderIntro(page)
+    await page.goto("/over")
+    await expect(page.locator("html")).toHaveClass(donker ? /donker/ : /^(?!.*donker)/)
+  })
+}
+
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
 for (const b of [390, 1440]) {
   test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
@@ -185,6 +195,39 @@ test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ p
   expect(body).toContain("Pakket: Plukborder")
 })
 
+// Eén hoek voor elke foto en video (eigenaar, 21 okt 2026: "waarom is dit niet
+// op elke foto universeel via variabelen geregeld?"). Telt de hoek die je ZIET:
+// snijdt een kader de foto bij (parallax, schaal), dan moet dát kader rond zijn.
+for (const route of [...ROUTES, "/shop"]) {
+  test(`fotohoek ${route}: elke foto en video heeft de hoek van --foto-hoek`, async ({ page }) => {
+    await zonderIntro(page)
+    for (const b of [1440, 390]) {
+      await page.setViewportSize({ width: b, height: 900 })
+      await page.goto(route, { waitUntil: "domcontentloaded" })
+      const afwijkend = await page.evaluate(() => {
+        const hoek = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--foto-hoek"))
+        const rond = (e: Element) => Math.abs(parseFloat(getComputedStyle(e).borderTopLeftRadius) - hoek) < 0.5
+        return [...document.querySelectorAll<HTMLElement>("main img, main video")].flatMap((m) => {
+          const r = m.getBoundingClientRect()
+          // logo's, iconen, planten en tekeningen zijn geen foto
+          if (r.width < 120 || r.height < 120 || m.closest("[aria-hidden='true']") || /\.svg|\/brand\//.test((m as HTMLImageElement).currentSrc || m.getAttribute("src") || "") || m.classList.contains("rounded-full")) return []
+          // het kader dat de foto zichtbaar bijsnijdt, anders de foto zelf
+          let zichtbaar: Element = m
+          for (let e = m.parentElement; e && e.tagName !== "MAIN"; e = e.parentElement) {
+            const cs = getComputedStyle(e), k = e.getBoundingClientRect()
+            if (cs.overflowX === "visible" && cs.overflowY === "visible") continue
+            if (k.width < r.width - 1 || k.height < r.height - 1) { zichtbaar = e; break }
+          }
+          const k = zichtbaar.getBoundingClientRect()
+          if (k.width >= innerWidth - 1) return [] // schermvullend beeld: geen hoeken te zien
+          return rond(zichtbaar) ? [] : [`${(m.getAttribute("alt") || m.getAttribute("src") || "video").slice(0, 40)}: ${getComputedStyle(zichtbaar).borderTopLeftRadius}`]
+        })
+      })
+      expect(afwijkend, `${route} @${b}`).toEqual([])
+    }
+  })
+}
+
 // Elke route een eigen test (en dus een verse pagina): twee keer achter elkaar
 // goto op één pagina brak op CI af met ERR_ABORTED na de voorpagina.
 for (const route of ["/", "/over"]) {
@@ -280,3 +323,16 @@ for (const b of [390, 1440]) {
     await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
   })
 }
+
+test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/tuinen/cadeaubon", { waitUntil: "domcontentloaded" })
+  const pad = page.getByRole("navigation", { name: "Kruimelpad" })
+  await expect(pad.getByRole("listitem")).toHaveText(["Home", "Shop", /^Cadeaubon/]) // beide talen staan in de pagina
+  await expect(pad.locator('[aria-current="page"]')).toHaveText(/^Cadeaubon/)
+  const ld = JSON.parse((await pad.locator('script[type="application/ld+json"]').textContent()) ?? "{}")
+  expect(ld["@type"]).toBe("BreadcrumbList")
+  expect(ld.itemListElement.map((s: { name: string }) => s.name)).toEqual(["Home", "Shop", "Cadeaubon"])
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await expect(page.getByRole("navigation", { name: "Kruimelpad" })).toHaveCount(0)
+})

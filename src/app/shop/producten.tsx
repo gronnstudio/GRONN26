@@ -85,7 +85,7 @@ export function Producten({ producten }: { producten: Product[] }) {
                   <Foto
                     foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, label: lijst ? undefined : "Sfeerbeeld", en: { alt: p.foto.alt.en, label: lijst ? undefined : "Mood image" } }}
                     sizes={lijst ? "112px" : "(min-width: 1024px) 400px, 50vw"}
-                    className={`shop-foto rounded-[16px] ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/5]"}`}
+                    className={`shop-foto ${lijst ? "aspect-square" : "aspect-[4/5]"}`}
                   />
                 ) : (
                   <div className={`flex items-center justify-center rounded-[16px] border border-dashed border-gedempt text-gedempt ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/5]"}`}>
@@ -94,8 +94,8 @@ export function Producten({ producten }: { producten: Product[] }) {
                 )}
               </div>
               <span className="flex min-w-0 flex-col">
-                <span className={`syne leading-[1.15] tracking-[-.015em] ${lijst ? "text-[18px] sm:text-[20px]" : "mt-3 text-[18px] sm:mt-4 sm:text-[22px]"}`}><T t={p.naam} /></span>
-                <span className="mt-1 text-[13px] leading-[1.4] text-gedempt sm:text-[14px]"><T t={p.sub} /></span>
+                <span className={`syne leading-[1.15] tracking-[-.015em] ${lijst ? "text-[18px] sm:text-[20px]" : "mt-3 line-clamp-2 min-h-[2lh] text-[18px] sm:mt-4 sm:line-clamp-1 sm:min-h-0 sm:text-[22px]"}`}><T t={p.naam} /></span>
+                <span className={`mt-1 text-[13px] leading-[1.4] text-gedempt sm:text-[14px] ${lijst ? "" : "line-clamp-2 min-h-[2lh]"}`}><T t={p.sub} /></span>
                 {lijst && p.foto ? <span className="lbl mt-1 text-gedempt"><T t={{ nl: "Sfeerbeeld", en: "Mood image" }} /></span> : null}
               </span>
             </Link>

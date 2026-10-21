@@ -5,7 +5,7 @@ import { T, type Tekst } from "@/components/taal";
 import { useMuziek, zetMuziek } from "@/components/muziek";
 
 // WF-026: Kleur (Auto · Licht · Donker;
-// Auto = de instelling van het toestel) en Toegankelijkheid. Bewaard in deze
+// Auto = de klok: donker van 19:00 tot 07:00) en Toegankelijkheid. Bewaard in deze
 // browser; het voorverf-script in layout.tsx past het toe vóór de eerste verf.
 type Stand = {
   kleur: "auto" | "licht" | "donker";
@@ -40,14 +40,17 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
   ["toetsen", { nl: "Sneltoetsen", en: "Keyboard shortcuts" }],
 ];
 
+// Auto volgt de klok van de bezoeker: 's avonds donker, overdag licht
+// (eigenaar, 21 okt 2026). Dezelfde uren staan in het voorverf-script in
+// layout.tsx.
+export const isAvond = () => {
+  const u = new Date().getHours();
+  return u >= 19 || u < 7;
+};
+
 function pasToe(s: Stand) {
   const c = document.documentElement.classList;
-  // Auto volgt de instelling van het toestel, zoals Apple en Material het
-  // voorschrijven (eigenaar, 11 okt 2026), niet meer de klok.
-  c.toggle(
-    "donker",
-    s.kleur === "donker" || (s.kleur === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches),
-  );
+  c.toggle("donker", s.kleur === "donker" || (s.kleur === "auto" && isAvond()));
   c.toggle("stil", s.beweging);
   c.toggle("groot", s.groot);
   c.toggle("contrast", s.contrast);
@@ -78,14 +81,11 @@ export function Instellingen() {
     }, 0);
     return () => clearTimeout(t);
   }, []);
-  // Zet iemand zijn toestel tijdens het bezoek op licht of donker, dan volgt
-  // Auto meteen.
+  // Staat de pagina open om 07:00 of 19:00, dan wisselt Auto vanzelf mee.
   useEffect(() => {
     if (stand.kleur !== "auto") return;
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const volg = () => document.documentElement.classList.toggle("donker", mq.matches);
-    mq.addEventListener("change", volg);
-    return () => mq.removeEventListener("change", volg);
+    const id = setInterval(() => document.documentElement.classList.toggle("donker", isAvond()), 60_000);
+    return () => clearInterval(id);
   }, [stand.kleur]);
 
   const zet = (s: Stand) => {
@@ -143,7 +143,7 @@ export function Instellingen() {
           ))}
         </div>
         <p className="mt-2 mb-0 text-xs opacity-70">
-          <T t={{ nl: "Auto: volgt de instelling van je telefoon of computer.", en: "Auto: follows your phone or computer setting." }} />
+          <T t={{ nl: "Auto: overdag licht, 's avonds donker (19:00 tot 07:00).", en: "Auto: light by day, dark in the evening (19:00 to 07:00)." }} />
         </p>
       </fieldset>
       <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">

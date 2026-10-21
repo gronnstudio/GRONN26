@@ -81,7 +81,7 @@ html.stil .st-plaat { transition: none; }
 .pb { display: grid; gap: 20px; }
 @media (min-width: 1024px) { .pb { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .pb-tegel { display: grid; gap: 14px; align-content: start; min-width: 0; }
-.pb-vak { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; }
+.pb-vak { position: relative; aspect-ratio: 4 / 3; border-radius: var(--foto-hoek); overflow: hidden; }
 .pb-onder { display: grid; gap: 4px; margin: 0; }
 .pb-naam { font-size: clamp(22px, 2vw, 28px); line-height: 1.1; letter-spacing: -0.02em; }
 .pb-lelie { display: grid; place-content: center; justify-items: center; gap: 14px; background: var(--vlak); }
@@ -108,7 +108,7 @@ html.stil .st-plaat { transition: none; }
   bottom: 16px;
   width: 38%;
   aspect-ratio: 4 / 3;
-  border-radius: 10px;
+  border-radius: var(--foto-hoek);
   overflow: hidden;
   background: var(--oranje);
 }

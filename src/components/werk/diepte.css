@@ -4,12 +4,12 @@
 .dp-podium { position: sticky; top: 0; height: 100svh; overflow: hidden; perspective: 1600px; perspective-origin: 50% 42%; }
 .dp-kaart {
   position: absolute; left: 50%; top: 42%; margin: 0; padding: 0; border: 0;
-  background: none; cursor: pointer; border-radius: 16px; will-change: transform, opacity;
+  background: none; cursor: pointer; border-radius: var(--foto-hoek); will-change: transform, opacity;
   transform: translate(-50%, -50%);
 }
 .dp-kaart:focus-visible { outline: 2px solid var(--oranje); outline-offset: 4px; }
 .dp-kaart img {
-  display: block; width: 100%; height: auto; border-radius: 16px; background: var(--vlak);
+  display: block; width: 100%; height: auto; border-radius: var(--foto-hoek); background: var(--vlak);
   box-shadow: 0 2px 6px rgb(0 0 0 / 0.08), 0 24px 48px -20px rgb(0 0 0 / 0.4);
 }
 .dp-staand { width: min(clamp(120px, 34vw, 240px), 24svh); }

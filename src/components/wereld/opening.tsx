@@ -3,6 +3,7 @@ import { Foto } from "@/components/foto"
 import { Beide, T, type Tekst } from "@/components/taal"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 import { HANGERS, Plant } from "@/components/plant"
+import { Kruimelpad } from "@/components/kruimelpad"
 
 /**
  * De opening van elke pagina (behalve de voorpagina, die zijn eigen WF-058
@@ -46,6 +47,7 @@ export function Opening({
   return (
     <section className="w-opening" aria-labelledby="pagina-titel" data-opening>
       <Plant naam={hanger} className="plant-hang" />
+      <Kruimelpad />
       <p className="lbl w-label"><T t={label} /></p>
       <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={typeof titel === "string" ? titel.replace(/\n/g, " ") : undefined}>
         {typeof titel === "string" ? regels(titel) : <Beide nl={regels(titel.nl)} en={regels(titel.en)} />}

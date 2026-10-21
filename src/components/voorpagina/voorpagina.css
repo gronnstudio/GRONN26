@@ -157,7 +157,7 @@
 }
 .vp-voorna .vp-voorna-foto {
   aspect-ratio: 4 / 5;
-  border-radius: 6px;
+  border-radius: var(--foto-hoek);
 }
 .vp-voorna figcaption {
   margin-top: 12px;
@@ -212,7 +212,7 @@
   margin: 0;
   will-change: transform;
   /* een zachte schaduw geeft diepte boven het vel (eigenaar, 11 okt 2026) */
-  border-radius: 6px;
+  border-radius: var(--foto-hoek);
   box-shadow: 0 2px 6px rgb(0 0 0 / 0.08), 0 24px 48px -20px rgb(0 0 0 / 0.4);
 }
 .vp-stuk.vp-staand {
@@ -573,5 +573,5 @@
 /* het portret staat nu naast "Ik ben Nick" */
 .vp-onthul { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; }
 @media (min-width: 1024px) { .vp-onthul { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); } }
-.vp-portret { aspect-ratio: 4 / 5; border-radius: 16px; max-width: 420px; width: 100%; }
+.vp-portret { aspect-ratio: 4 / 5; border-radius: var(--foto-hoek); max-width: 420px; width: 100%; }
 @media (max-width: 1023px) { .vp-portret { max-width: 280px; } }

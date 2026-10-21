@@ -204,7 +204,7 @@ export default function BorderpakkettenPagina() {
                 <Foto
                   foto={{ src: `/borderpakketten/${b.slug}.jpg`, width: 1600, height: 1200, alt: b.alt.nl, label: "Sfeerbeeld", en: { alt: b.alt.en, label: "Mood image" } }}
                   sizes="(min-width: 640px) 45vw, 90vw"
-                  className="aspect-[4/3] rounded-[16px]"
+                  className="aspect-[4/3]"
                 />
                 <h3 className="syne m-0 text-[clamp(22px,2.4vw,30px)] leading-[1.1] tracking-[-.015em]"><T t={b.naam} /></h3>
                 <p className="m-0 text-[16px] leading-[1.5]"><T t={b.zin} /></p>
