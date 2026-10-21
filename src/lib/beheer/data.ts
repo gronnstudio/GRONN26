@@ -87,6 +87,18 @@ export const KOPPELINGEN = [
   { naam: "Website", uitleg: "gronn.studio", href: "/" },
 ] as const
 
+// Eigen gereedschapspagina's op de site, die nergens in een menu staan
+// (eigenaar, 21 okt 2026: "alles waar we links voor hebben gemaakt kun je in
+// dashboard makkelijk bereikbaar maken").
+export const EIGEN_PAGINAS = [
+  { naam: "Handtekening", uitleg: "Voor Gmail", href: "/handtekening" },
+  { naam: "Downloads", uitleg: "Merkbestanden", href: "/downloads" },
+  { naam: "Linkpagina", uitleg: "Voor Instagram", href: "/links" },
+  { naam: "Merk", uitleg: "Brand Guide", href: "/merk" },
+  { naam: "Social", uitleg: "Posts en captions", href: "/dashboard/social" },
+  { naam: "Uren", uitleg: "Urenregistratie", href: "/dashboard/uren" },
+] as const
+
 // Facturen uit de mail (7 okt 2026). "Te ontvangen" = mijn facturen via DigiBoox;
 // betaald zie ik alleen als Mollie het uitbetaalt (online betaald). Een
 // overschrijving naar de bank zie ik niet: die vink je in DigiBoox af.
