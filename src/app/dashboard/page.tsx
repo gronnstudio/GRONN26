@@ -33,7 +33,19 @@ const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2
 const dag = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" })
 const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
 
-export default async function Dashboard() {
+// Tabbladen (eigenaar, 21 okt 2026: "dashboard wordt rommelig, maak tabbladen").
+// Gewone links met ?tab=, net als op /dashboard/leveranciers.
+const TABS = [
+  { id: "vandaag", naam: "Vandaag" },
+  { id: "klanten", naam: "Klanten" },
+  { id: "geld", naam: "Geld en papieren" },
+  { id: "social", naam: "Social" },
+  { id: "links", naam: "Links" },
+] as const
+
+export default async function Dashboard({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const tab = (await searchParams).tab
+  const actief = TABS.find((t) => t.id === tab)?.id ?? "vandaag"
   const stand = await leesStand()
   const urenTotaal = RECONSTRUCTIE.reduce((t, r) => t + weekTotaal(r), 0) + (await leesUren()).filter((r) => r.datum.startsWith("2026")).reduce((t, r) => t + r.uren, 0)
   const aandacht = PROJECTEN.filter((p) => p.aandacht)
@@ -64,7 +76,26 @@ export default async function Dashboard() {
         </div>
       </header>
 
+      <nav aria-label="Onderdelen" className="mx-auto flex max-w-[1440px] gap-2 overflow-x-auto px-5 pt-6 pb-1 md:px-8">
+        {TABS.map((t) => (
+          <Link
+            key={t.id}
+            href={t.id === "vandaag" ? "/dashboard" : `/dashboard?tab=${t.id}`}
+            aria-current={t.id === actief ? "page" : undefined}
+            className={`shrink-0 rounded-full border px-4 py-2 text-[14px] font-semibold transition-colors ${
+              t.id === actief ? "border-inkt bg-inkt text-grond" : "border-lijn hover:border-oranje"
+            }`}
+          >
+            {t.naam}
+            {t.id === "klanten" && stand.aanvragen.some((a) => !a.klaar) && (
+              <span className="ml-1.5 text-oranje-tekst">{stand.aanvragen.filter((a) => !a.klaar).length}</span>
+            )}
+          </Link>
+        ))}
+      </nav>
+
       <main className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)] gap-x-10 gap-y-12 px-5 py-8 md:px-8 lg:grid-cols-[minmax(0,1fr)_400px]">
+        {actief === "vandaag" && (<>
         {/* de kern */}
         <section className="flex items-center justify-center">
           <Kern />
@@ -147,7 +178,9 @@ export default async function Dashboard() {
             ))}
           </ul>
         </section>
+        </>)}
 
+        {actief === "social" && (<>
         {/* social */}
         <section className="lg:col-span-2">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -217,8 +250,9 @@ export default async function Dashboard() {
             ))}
           </ul>
         </section>
+        </>)}
 
-
+        {actief === "klanten" && (<>
         {/* aanvragen */}
         <section className="min-w-0">
           <div className="flex items-baseline justify-between gap-4">
@@ -292,7 +326,9 @@ export default async function Dashboard() {
             <button className="knop-klein bg-oranje text-[#202020]">Plannen</button>
           </form>
         </section>
+        </>)}
 
+        {actief === "geld" && (<>
         {/* facturen */}
         <Facturen
           groepen={[
@@ -335,7 +371,13 @@ export default async function Dashboard() {
             ))}
           </ul>
         </section>
+        <p className="m-0 text-[11px] opacity-40 lg:col-span-2">
+          Projecten en to-do&apos;s staan in src/lib/beheer/data.ts. Open offertes samen:{" "}
+          {euro(PROJECTEN.filter((p) => p.fase === "Offerte").reduce((s, p) => s + (p.bedrag ?? 0), 0))}.
+        </p>
+        </>)}
 
+        {actief === "links" && (<>
         {/* koppelingen */}
         <section className="lg:col-span-2">
           <p className={`${lbl} m-0 opacity-60`}>Alles op één plek</p>
@@ -388,10 +430,7 @@ export default async function Dashboard() {
             ))}
           </ul>
         </section>
-        <p className="m-0 text-[11px] opacity-40 lg:col-span-2">
-          Projecten en to-do&apos;s staan in src/lib/beheer/data.ts. Open offertes samen:{" "}
-          {euro(PROJECTEN.filter((p) => p.fase === "Offerte").reduce((s, p) => s + (p.bedrag ?? 0), 0))}.
-        </p>
+        </>)}
       </main>
     </div>
   )
