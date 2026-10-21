@@ -7,6 +7,8 @@ import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
 import { BODEMPAKKETTEN, BORDER_MATEN, BORDER_PRIJS, BORDERPAKKETTEN, type BorderPakket } from "@/lib/data/borderpakketten"
 import { priceLabel } from "@/lib/format"
+import { opslagAan } from "@/lib/beheer/stand"
+import { mollieAan } from "@/lib/mollie"
 import "./stapel.css"
 
 export const metadata: Metadata = {
@@ -60,6 +62,8 @@ function Kaart({ p, nr }: { p: BorderPakket; nr: number }) {
 
 /** Alles wat bij een geopend pakket hoort: plek, zin, prijs, knop, plan en plantlijst. */
 function Inhoud({ p }: { p: BorderPakket }) {
+  // Online bestellen (21 okt 2026) zodra Mollie en de opslag aanstaan; anders de aanvraag.
+  const online = mollieAan() && opslagAan()
   const m = BORDER_MATEN[0]
   const totaal = p.planten.reduce((t, x) => t + x.aantal, 0)
   return (
@@ -70,12 +74,26 @@ function Inhoud({ p }: { p: BorderPakket }) {
         <p className="m-0 text-[15px] tabular-nums">
           <T t={{ nl: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} opgestuurd · ${priceLabel(m * BORDER_PRIJS.aangeplant)} aangeplant`, en: `${m} m²: ${priceLabel(m * BORDER_PRIJS.opgestuurd)} shipped · ${priceLabel(m * BORDER_PRIJS.aangeplant)} planted` }} />
         </p>
-        <Link
-          href={`/kennismaken?pakket=${p.slug}`}
-          className="knop mt-2 self-start bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
-        >
-          <T t={{ nl: `Vraag ${p.naam.nl.toLowerCase()} aan →`, en: `Ask about the ${p.naam.en.toLowerCase()} →` }} />
-        </Link>
+        {online ? (
+          <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <Link
+              href={`/tuinen/borderpakketten/bestellen?pakket=${p.slug}`}
+              className="knop bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
+            >
+              <T t={{ nl: "Bestellen →", en: "Order →" }} />
+            </Link>
+            <Link href={`/kennismaken?pakket=${p.slug}`} className="lnk text-[15px]">
+              <T t={{ nl: "Eerst een vraag?", en: "A question first?" }} />
+            </Link>
+          </div>
+        ) : (
+          <Link
+            href={`/kennismaken?pakket=${p.slug}`}
+            className="knop mt-2 self-start bg-oranje text-antraciet focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt"
+          >
+            <T t={{ nl: `Vraag ${p.naam.nl.toLowerCase()} aan →`, en: `Ask about the ${p.naam.en.toLowerCase()} →` }} />
+          </Link>
+        )}
       </div>
       <div className="flex min-w-0 flex-col gap-3">
         {/* Tekening op licht papier: de lijnen zijn antraciet, ook in Donker. */}

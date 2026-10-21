@@ -58,3 +58,10 @@ export async function planWeg(id: string) {
     s.planning = s.planning.filter((p) => p.id !== id)
   })
 }
+
+export async function bestellingKlaar(id: string, klaar: boolean) {
+  await wijzig((s) => {
+    const b = s.bestellingen.find((x) => x.id === id)
+    if (b) b.klaar = klaar
+  })
+}

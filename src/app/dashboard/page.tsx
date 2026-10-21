@@ -9,7 +9,7 @@ import { Kopieer } from "@/components/beheer/kopieer"
 import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
-import { aanvraagKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
+import { aanvraagKlaar, bestellingKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
 import { KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
@@ -253,6 +253,37 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         </>)}
 
         {actief === "klanten" && (<>
+        {/* bestellingen: borderpakketten die online zijn betaald (Mollie); open en mislukt laat Mollie zien */}
+        {stand.bestellingen.some((b) => b.status === "betaald") && (
+        <section className="min-w-0 lg:col-span-2">
+          <div className="flex items-baseline justify-between gap-4">
+            <p className={`${lbl} m-0 opacity-60`}>Bestellingen · borderpakketten</p>
+            <p className="m-0 text-[12px] opacity-60">{stand.bestellingen.filter((b) => b.status === "betaald" && !b.klaar).length} te doen</p>
+          </div>
+          <ul className="m-0 mt-4 grid list-none gap-3 p-0 md:grid-cols-2">
+            {stand.bestellingen.filter((b) => b.status === "betaald").map((b) => (
+              <li key={b.id} className={`rounded-[18px] border p-4 ${!b.klaar ? "border-oranje/60 bg-oranje/10" : "border-lijn opacity-60"}`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <b className="font-semibold">{b.pakket} · {b.maat} m² · {b.soort}</b>
+                    <span className="mt-0.5 block text-[12px] opacity-60">
+                      {euro(b.bedrag)} · betaald · {dag(b.datum.slice(0, 10))}
+                    </span>
+                  </div>
+                  <form action={bestellingKlaar.bind(null, b.id, !b.klaar)}>
+                    <button className="knop-klein shrink-0 border border-inkt/30">{b.klaar ? "Terugzetten" : "Geleverd ✓"}</button>
+                  </form>
+                </div>
+                <p className="m-0 mt-2 text-[13px] leading-[1.5]">
+                  {b.naam} · <a href={`mailto:${b.email}`} className="text-oranje-tekst">{b.email}</a> · <a href={`tel:${b.telefoon.replace(/\s/g, "")}`} className="text-oranje-tekst">{b.telefoon}</a>
+                  <br />
+                  {b.adres}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+        )}
         {/* aanvragen */}
         <section className="min-w-0">
           <div className="flex items-baseline justify-between gap-4">

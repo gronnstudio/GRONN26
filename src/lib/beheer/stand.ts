@@ -16,10 +16,26 @@ export type Aanvraag = {
   foto?: string
 }
 export type Plan = { id: string; datum: string; wat: string }
-export type Stand = { gepost: Record<string, string>; aanvragen: Aanvraag[]; planning: Plan[] }
+/** Een borderpakket dat online is besteld en via Mollie betaald (src/lib/mollie.ts). */
+export type Bestelling = {
+  id: string
+  datum: string
+  pakket: string
+  maat: number
+  soort: "opgestuurd" | "aangeplant"
+  bedrag: number
+  naam: string
+  email: string
+  telefoon: string
+  adres: string
+  mollie?: string
+  status: "open" | "betaald" | "mislukt"
+  klaar?: boolean
+}
+export type Stand = { gepost: Record<string, string>; aanvragen: Aanvraag[]; planning: Plan[]; bestellingen: Bestelling[] }
 
 const PAD = "dashboard/stand.json"
-const LEEG: Stand = { gepost: {}, aanvragen: [], planning: [] }
+const LEEG: Stand = { gepost: {}, aanvragen: [], planning: [], bestellingen: [] }
 const DERTIG_DAGEN = 30 * 24 * 60 * 60 * 1000
 
 export const opslagAan = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN)
@@ -40,6 +56,7 @@ export async function schrijfStand(s: Stand) {
   // Privacyverklaring: aanvragen bewaren we 30 dagen.
   const grens = Date.now() - DERTIG_DAGEN
   s.aanvragen = s.aanvragen.filter((a) => new Date(a.datum).getTime() > grens).slice(0, 200)
+  // Bestellingen zijn administratie (fiscale bewaarplicht): die blijven staan.
   s.planning = s.planning.sort((a, b) => a.datum.localeCompare(b.datum)).slice(-200)
   await put(PAD, JSON.stringify(s), { access: "private", allowOverwrite: true, addRandomSuffix: false, contentType: "application/json" })
 }
