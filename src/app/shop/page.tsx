@@ -67,7 +67,7 @@ export default function Shop() {
         zin={<T t={{ nl: "Planten, bodem en cadeaus, uitgezocht zoals ik het in mijn eigen tuinen doe. Opgestuurd in Nederland en België, of door mij aangeplant in Stein en omgeving.", en: "Plants, soil and gifts, chosen the way I do in my own gardens. Shipped in the Netherlands and Belgium, or planted by me in and around Stein." }} />}
       />
 
-      <div className="wrap mt-[clamp(56px,7vw,104px)]">
+      <div className="shop-start wrap">
         {/* Producten links in twee kolommen, de cadeaubon ernaast (eigenaar, 21 okt 2026). */}
         <div className="grid gap-x-[clamp(24px,4vw,64px)] gap-y-16 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <section id="borders" aria-label="Producten" className="scroll-mt-[96px]">
