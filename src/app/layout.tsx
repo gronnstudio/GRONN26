@@ -3,6 +3,8 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Syne, Montserrat } from "next/font/google"
 import { Menu } from "@/components/menu"
+import { Zoek } from "@/components/zoek"
+import { zoekIndex } from "@/lib/zoek-index"
 import { Bekijk } from "@/components/bekijk"
 import { App } from "@/components/app"
 import { PullToRefresh } from "@/components/vernieuw"
@@ -57,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Voet />
         <Menu />
+        <Zoek index={zoekIndex()} />
         <MuziekKnop />
         <Bekijk />
         <App />

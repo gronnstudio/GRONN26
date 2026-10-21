@@ -54,7 +54,7 @@ function Lijst({ kop, items, gedempt = false }: { kop: Tekst; items: L[]; gedemp
 export function DienstRij({ nr, dienst }: { nr: string; dienst: Service }) {
   const prijs = prijsblok(dienst)
   return (
-    <details className="group border-t border-lijn last:border-b">
+    <details id={dienst.slug} className="group scroll-mt-[96px] border-t border-lijn last:border-b">
       <summary
         className={`${RIJ} cursor-pointer list-none items-baseline py-[20px] md:py-[26px] [&::-webkit-details-marker]:hidden`}
       >
