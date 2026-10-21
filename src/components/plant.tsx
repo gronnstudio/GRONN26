@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 // Uitgesneden planten als versiering (eigenaar, 20 okt 2026: "green pexels
 // photos with trees and flowers ... background remove ... tactically placed").
 // Sfeerbeelden van Pexels, vrijgesteld en verkleind tot WebP in public/planten/;
@@ -33,8 +35,10 @@ export const HANGERS: PlantNaam[] = ["bladtak", "boomkruin", "takken"]
 
 export function Plant({ naam, className }: { naam: PlantNaam; className: string }) {
   const [w, h] = PLANTEN[naam]
+  // Via next/image: AVIF en alleen zo breed als nodig. Een bloem in het boeketje
+  // is hooguit 120 breed, een hangende tak hooguit 360 (gemeten 21 okt 2026).
+  const sizes = className.includes("plant-hang") ? "(min-width: 768px) 360px, 140px" : "120px"
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- al klein en vrijgesteld, geen optimalisatie nodig
-    <img src={`/planten/${naam}.webp`} width={w} height={h} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`plant ${className}`} data-landing={LANDING[naam]} />
+    <Image src={`/planten/${naam}.webp`} width={w} height={h} sizes={sizes} alt="" aria-hidden="true" className={`plant ${className}`} data-landing={LANDING[naam]} />
   )
 }
