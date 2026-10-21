@@ -8,3 +8,6 @@ html.stil .shop-foto img { transition: none; transform: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .shop-foto img { transition: none; transform: none !important; }
 }
+
+/* Weinig lucht tussen de opening en de producten (eigenaar, 21 okt 2026: "erg veel wit ruimte boven de filters"). */
+.w-opening:has(+ .shop-start) { padding-bottom: clamp(24px, 3vw, 40px); }
