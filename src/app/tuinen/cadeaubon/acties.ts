@@ -2,7 +2,8 @@
 
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
-import { BON_BEDRAGEN, bonNummer, geldigTot } from "@/lib/data/cadeaubon"
+import { BON_MAX, BON_MIN, bonNummer, geldigTot } from "@/lib/data/cadeaubon"
+import { priceLabel } from "@/lib/format"
 import { leesStand, nieuweId, opslagAan, schrijfStand } from "@/lib/beheer/stand"
 import { maakBetaling, mollieAan } from "@/lib/mollie"
 
@@ -10,17 +11,17 @@ export type Uitkomst = { fout?: string }
 
 const kort = (v: FormDataEntryValue | null, n: number) => String(v ?? "").trim().slice(0, n)
 
-// Het bedrag komt uit BON_BEDRAGEN; het bonnummer geeft de server, op volgorde.
+// Het bedrag is een vast bedrag of een eigen bedrag in hele euro's tussen BON_MIN en BON_MAX; het bonnummer geeft de server, op volgorde.
 export async function koop(_: Uitkomst, d: FormData): Promise<Uitkomst> {
   if (!mollieAan() || !opslagAan()) return { fout: "Online kopen staat nu uit. App Nick op 06 18 11 80 14 voor een cadeaubon." }
   if (d.get("website")) return {}
-  const bedrag = Number(d.get("bedrag"))
+  const bedrag = Number(kort(d.get("bedrag"), 6))
   const voor = kort(d.get("voor"), 40)
   const van = kort(d.get("van"), 40)
   const boodschap = kort(d.get("boodschap"), 140)
   const naam = kort(d.get("naam"), 80)
   const email = kort(d.get("email"), 160)
-  if (!(BON_BEDRAGEN as readonly number[]).includes(bedrag)) return { fout: "Kies een bedrag." }
+  if (!Number.isInteger(bedrag) || bedrag < BON_MIN || bedrag > BON_MAX) return { fout: `Kies een bedrag tussen ${priceLabel(BON_MIN)} en ${priceLabel(BON_MAX)}, in hele euro's.` }
   if (!voor || !van) return { fout: "Vul in voor wie de bon is en van wie." }
   if (!naam || !/^\S+@\S+\.\S+$/.test(email)) return { fout: "Vul je naam en e-mail in." }
   if (!d.get("akkoord")) return { fout: "Ga akkoord met de voorwaarden om te kopen." }

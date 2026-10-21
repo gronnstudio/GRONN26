@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useActionState, useState } from "react"
 import { BonKaart } from "@/components/cadeaubon/kaart"
-import { BON_BEDRAGEN } from "@/lib/data/cadeaubon"
+import { BON_BEDRAGEN, BON_MAX, BON_MIN } from "@/lib/data/cadeaubon"
 import { priceLabel } from "@/lib/format"
 import { koop } from "./acties"
 
@@ -14,7 +14,9 @@ const veld = "block w-full min-w-0 rounded-[12px] border border-gedempt bg-veld 
 const chip = "inline-flex min-h-[var(--knop)] items-center rounded-full border border-gedempt px-4 py-2 text-[15px] tabular-nums peer-checked:border-inkt peer-checked:bg-inkt peer-checked:text-grond peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-inkt"
 
 export function BonFormulier({ online }: { online: boolean }) {
-  const [bedrag, setBedrag] = useState<number>(BON_BEDRAGEN[1])
+  const [vast, setVast] = useState<number | null>(BON_BEDRAGEN[1])
+  const [eigen, setEigen] = useState("")
+  const bedrag = vast ?? Number(eigen || 0)
   const [voor, setVoor] = useState("")
   const [van, setVan] = useState("")
   const [boodschap, setBoodschap] = useState("")
@@ -31,11 +33,36 @@ export function BonFormulier({ online }: { online: boolean }) {
           <div className="flex flex-wrap gap-2">
             {BON_BEDRAGEN.map((b) => (
               <label key={b} className="cursor-pointer">
-                <input type="radio" name="bedrag" value={b} checked={bedrag === b} onChange={() => setBedrag(b)} className="peer sr-only" />
+                <input type="radio" name="keuze" checked={vast === b} onChange={() => setVast(b)} className="peer sr-only" />
                 <span className={chip}>{priceLabel(b)}</span>
               </label>
             ))}
+            <label className="cursor-pointer">
+              <input type="radio" name="keuze" checked={vast === null} onChange={() => setVast(null)} className="peer sr-only" />
+              <span className={chip}>Ander bedrag</span>
+            </label>
           </div>
+          {vast === null && (
+            <label className="mt-4 flex max-w-[340px] flex-col gap-2">
+              <span className="text-[14px] text-gedempt">Bedrag in hele euro&apos;s, {priceLabel(BON_MIN)} tot {priceLabel(BON_MAX)}</span>
+              <span className="relative">
+                <span aria-hidden="true" className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[18px]">€</span>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={4}
+                  required
+                  autoFocus
+                  value={eigen}
+                  onChange={(e) => setEigen(e.target.value.replace(/\D/g, "").replace(/^0+/, ""))}
+                  placeholder="75"
+                  className={`${veld} pl-9 tabular-nums`}
+                />
+              </span>
+            </label>
+          )}
+          <input type="hidden" name="bedrag" value={bedrag} />
         </fieldset>
 
         <div className="grid gap-5 sm:grid-cols-2">
@@ -77,7 +104,7 @@ export function BonFormulier({ online }: { online: boolean }) {
             <span className="lbl block text-gedempt">Totaal, incl. btw</span>
             <span className="syne text-[clamp(32px,4vw,44px)] leading-none tabular-nums">{priceLabel(bedrag)}</span>
           </p>
-          <button disabled={bezig || !online} className="knop bg-oranje text-antraciet disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
+          <button disabled={bezig || !online || bedrag < BON_MIN || bedrag > BON_MAX} className="knop bg-oranje text-antraciet disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt">
             {bezig ? "Even geduld…" : "Kopen en betalen →"}
           </button>
         </div>

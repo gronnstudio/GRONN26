@@ -3,6 +3,9 @@
 // werk van GRØNN Studio; betalen via Mollie, net als de borderpakketten.
 
 export const BON_BEDRAGEN = [50, 100, 150, 250] as const
+/** Ander bedrag (eigenaar, 21 okt 2026: "vrije keuze bedrag, invoer alleen cijfers"): hele euro's. */
+export const BON_MIN = 25
+export const BON_MAX = 2500
 export const BON_JAREN = 2
 
 /** GR-2026-0007: jaar en volgnummer, zodat Nick een bon in één oogopslag terugvindt. */
