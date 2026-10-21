@@ -59,6 +59,13 @@ export async function planWeg(id: string) {
   })
 }
 
+export async function bonIngewisseld(id: string, ingewisseld: boolean) {
+  await wijzig((s) => {
+    const b = s.bonnen.find((x) => x.id === id)
+    if (b) b.ingewisseld = ingewisseld
+  })
+}
+
 export async function bestellingKlaar(id: string, klaar: boolean) {
   await wijzig((s) => {
     const b = s.bestellingen.find((x) => x.id === id)
