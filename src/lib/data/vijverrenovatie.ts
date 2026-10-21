@@ -116,7 +116,7 @@ export type Video = {
 export const VIDEOS: Record<VideoId, Video> = {
   V01: {
     src: "/projecten/vijverrenovatie/V01.mp4",
-    poster: "/projecten/vijverrenovatie/V01-poster.jpg",
+    poster: "/projecten/vijverrenovatie/V01-poster.webp",
     width: 720,
     height: 1280,
     beschrijving: {
@@ -130,7 +130,7 @@ export const VIDEOS: Record<VideoId, Video> = {
   },
   V02: {
     src: "/projecten/vijverrenovatie/V02.mp4",
-    poster: "/projecten/vijverrenovatie/V02-poster.jpg",
+    poster: "/projecten/vijverrenovatie/V02-poster.webp",
     width: 720,
     height: 1280,
     beschrijving: {

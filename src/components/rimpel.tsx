@@ -79,7 +79,8 @@ export function Rimpel({ src, className = "", vanzelf = false }: { src: string; 
 
     const beeld = new Image()
     beeld.decoding = "async"
-    beeld.src = `/_next/image?url=${encodeURIComponent(src)}&w=1200&q=75`
+    // Dezelfde versie als de foto eronder al laadde: komt uit de cache, geen tweede download.
+    beeld.src = vak.querySelector("img")?.currentSrc || `/_next/image?url=${encodeURIComponent(src)}&w=1200&q=75`
     beeld.onload = () => {
       beeldW = beeld.naturalWidth
       beeldH = beeld.naturalHeight
