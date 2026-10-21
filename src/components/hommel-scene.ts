@@ -367,9 +367,18 @@ export function startHommel(): () => void {
   const canvas = document.createElement("canvas")
   canvas.className = "hommel-doek"
   canvas.setAttribute("aria-hidden", "true")
-  document.body.appendChild(canvas)
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" })
+  // Alleen met een echte grafische kaart: zonder (softwarematig WebGL) faalt
+  // dit en blijft de hommel weg, want dan zou hij de hele pagina vertragen.
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power", failIfMajorPerformanceCaveat: true })
+  const gl = renderer.getContext()
+  const info = gl.getExtension("WEBGL_debug_renderer_info")
+  const kaart = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : ""
+  if (/swiftshader|llvmpipe|softpipe|software/i.test(kaart)) {
+    renderer.dispose()
+    throw new Error("geen grafische kaart")
+  }
+  document.body.appendChild(canvas)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.NeutralToneMapping
