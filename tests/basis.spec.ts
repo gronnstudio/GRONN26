@@ -230,3 +230,11 @@ test("hommel: niet bij minder beweging", async ({ page }) => {
   await page.waitForTimeout(1500)
   await expect(page.locator("canvas.hommel-doek")).toHaveCount(0)
 })
+
+test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) => {
+  const r = await request.get("/")
+  expect(r.headers()["x-frame-options"]).toBe("SAMEORIGIN")
+  expect(r.headers()["x-content-type-options"]).toBe("nosniff")
+  expect(r.headers()["referrer-policy"]).toBe("strict-origin-when-cross-origin")
+  expect(r.headers()["permissions-policy"]).toContain("camera=()")
+})

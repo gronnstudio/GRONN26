@@ -41,9 +41,23 @@ const OUD: [string, string][] = [
 const nextConfig: NextConfig = {
   // Foto's als AVIF waar de browser dat kan (kleiner bij dezelfde scherpte), anders WebP.
   images: { formats: ["image/avif", "image/webp"] },
-  // De wireframes zijn werkmateriaal: nooit in zoekmachines.
   async headers() {
-    return [{ source: "/wireframes/:pad*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }]
+    return [
+      // Basisbeveiliging (21 okt 2026): geen inbedding op andere sites, geen
+      // raden naar bestandstypen, alleen het domein als verwijzer, en camera
+      // en locatie dicht. De microfoon blijft voor de assistent in het dashboard.
+      {
+        source: "/:pad*",
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), geolocation=(), microphone=(self), payment=(), usb=()" },
+        ],
+      },
+      // De wireframes zijn werkmateriaal: nooit in zoekmachines.
+      { source: "/wireframes/:pad*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+    ]
   },
   async rewrites() {
     return [
