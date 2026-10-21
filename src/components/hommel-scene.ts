@@ -228,8 +228,9 @@ function bouwHommel() {
     lijfGeo.computeVertexNormals()
   }
   const lijf = harig(lijfGeo, banden([[0, WIT], [0.38, ZWART], [0.6, GEEL], [0.73, ZWART]]), 0.1, 0.03, 11000)
-  lijf.scale.set(0.84, 0.8, 1.22)
-  lijf.position.set(0, -0.1, -0.3)
+  // kort en rond, zoals een echte aardhommel (eigenaar, 21 okt 2026: "maak em korter")
+  lijf.scale.set(0.86, 0.82, 0.9)
+  lijf.position.set(0, -0.08, -0.16)
   lijf.rotation.x = -0.32 // het achterlijf hangt omlaag, zoals op de foto
   hommel.add(lijf)
 
