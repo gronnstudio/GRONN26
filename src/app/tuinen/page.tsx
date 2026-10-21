@@ -134,7 +134,7 @@ export default function TuinenPagina() {
               <p className="w-lijnlink mt-[28px] mb-0 inline-block"><T t={{ nl: "Bekijk de pakketten →", en: "See the packages →" }} /></p>
             </div>
             <div className="md:col-span-5 md:col-start-8">
-              <Foto foto={BORDER_FOTO} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/3] rounded-[16px]" />
+              <Foto foto={BORDER_FOTO} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/3]" />
             </div>
           </Link>
         </section>
@@ -153,7 +153,7 @@ export default function TuinenPagina() {
                 <T t={{ nl: "Bekijk het project →", en: "View the project →" }} />
               </p>
             </div>
-            <div className="relative aspect-[3/4] overflow-hidden md:col-span-5 md:col-start-8 md:row-start-1">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--foto-hoek)] md:col-span-5 md:col-start-8 md:row-start-1">
               <div data-v="0.5" className="absolute inset-x-0 -inset-y-[48px]">
                 <Foto foto={T02} sizes="(min-width: 768px) 40vw, 100vw" className="h-full" />
               </div>

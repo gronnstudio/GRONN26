@@ -50,6 +50,11 @@
   --knop-binnen: 24px;       /* ruimte links en rechts van de tekst */
   --knop-binnen-klein: 14px;
   --raak: 44px;              /* minimale tikhoogte van elke link en knop; kleiner oogt, groter raakt (11 okt 2026) */
+  /* Eén hoek voor elke foto en video (eigenaar, 21 okt 2026: "universeel via
+     variabelen"). Gelijk aan de kaarten. Snijdt een kader de foto bij
+     (parallax, schaal bij hover), dan draagt dat kader deze hoek. Nooit een
+     eigen maat; tests/basis.spec.ts (fotohoek) bewaakt het. */
+  --foto-hoek: 16px;
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
@@ -283,8 +288,8 @@ body:has([data-links]) > :not(main, .og) { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .zaai path, .zaai-bloem { animation-duration: 1ms; animation-delay: 0s; } }
 html.stil .zaai path, html.stil .zaai-bloem { animation-duration: 1ms; animation-delay: 0s; }
 
-/* Foto's net iets zachter: 6px, niet rond (eigenaar, 5 okt 2026). */
-main img:not([src*="/brand/"]):not(.rounded-full), main video { border-radius: 6px; }
+/* Elke foto en video krijgt --foto-hoek; een kader dat bijsnijdt krijgt hem in de component zelf. */
+main img:not([src*="/brand/"]):not(.rounded-full), main video { border-radius: var(--foto-hoek); }
 
 /* Twee talen: beide staan in de pagina, de andere is verborgen (src/components/taal.tsx). */
 .t-nl, .t-en { display: contents; }
