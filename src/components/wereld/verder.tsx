@@ -24,7 +24,7 @@ export function Verder({ voor, nadruk, na, href, label }: { voor: Tekst; nadruk:
       {/* inheemse bloemen aan weerszijden, achter de kop, en een dagpauwoog
           die bij de klaprozen fladdert */}
       <Plant naam="klaproos" className="plant-veld plant-links" />
-      <Plant naam="korenbloem" className="plant-veld plant-rechts" />
+      <Plant naam="vingerhoed" className="plant-veld plant-rechts" />
       <span className="vlinder" aria-hidden="true">
         <Plant naam="dagpauwoog" className="vlinder-vleugels" />
       </span>
