@@ -386,7 +386,8 @@ export function startHommel(): () => void {
   camera.position.set(0, 0, 10)
 
   const { hommel, vleugels } = bouwHommel()
-  hommel.scale.setScalar(0.46)
+  const GROOTTE = 0.46
+  hommel.scale.setScalar(GROOTTE)
   scene.add(hommel)
 
   const maat = () => {
@@ -420,7 +421,7 @@ export function startHommel(): () => void {
   const pos = new THREE.Vector3()
   const snel = new THREE.Vector3()
   let doel = new THREE.Vector3()
-  let fase: "weg" | "vliegt" | "zweeft" | "vertrekt" = "weg"
+  let fase: "weg" | "vliegt" | "zweeft" | "vertrekt" | "landt" | "zit" = "weg"
   let tot = performance.now() + 500 // Hommel.tsx wacht al vier seconden met laden
   let bezoekTot = 0
   let raf = 0
@@ -428,6 +429,42 @@ export function startHommel(): () => void {
   const kijk = new THREE.Object3D()
   const wens = new THREE.Quaternion()
   let schiet = 0 // volgende zijsprong: echte hommels zigzaggen als ze zoeken
+
+  // Landen op een bloem (alleen met een muis op een groot scherm): de bloemen
+  // dragen data-landing met punten als fractie van het beeld. Hij zit er een
+  // paar seconden, dut in, en vliegt weer op. Scrolt de bloem weg, dan vliegt hij op.
+  const desktop = matchMedia("(min-width: 1024px) and (pointer: fine)")
+  let bloem: { el: Element; fx: number; fy: number } | null = null
+  let zitRichting = new THREE.Vector3(0, 0, 1)
+  let zitSinds = 0
+  const zzz = document.createElement("span")
+  zzz.className = "hommel-zzz"
+  zzz.setAttribute("aria-hidden", "true")
+  zzz.innerHTML = "<span>z</span><span>z</span><span>z</span>"
+  document.body.appendChild(zzz)
+  const BLOEM_Z = 1 // diepte van de landingsplek
+  const scherm = new THREE.Vector3()
+  const bloemPunt = (b: NonNullable<typeof bloem>) => {
+    const r = b.el.getBoundingClientRect()
+    const x = r.left + b.fx * r.width
+    const y = r.top + b.fy * r.height
+    if (!r.width || x < 40 || y < 60 || x > window.innerWidth - 40 || y > window.innerHeight - 40) return null
+    scherm.set((x / window.innerWidth) * 2 - 1, -(y / window.innerHeight) * 2 + 1, 0.5).unproject(camera).sub(camera.position)
+    const p = camera.position.clone().addScaledVector(scherm, (BLOEM_Z - camera.position.z) / scherm.z)
+    p.y += 0.1 // zijn pootjes op de bloem, niet zijn lijf erin
+    return p
+  }
+  const zoekBloem = () => {
+    if (!desktop.matches) return null
+    const plekken = [...document.querySelectorAll("[data-landing]")].flatMap((el) =>
+      (el.getAttribute("data-landing") ?? "").split(";").map((p) => {
+        const [fx, fy] = p.split(",").map(Number)
+        return { el, fx, fy }
+      }),
+    )
+    const zichtbaar = plekken.filter((b) => bloemPunt(b))
+    return zichtbaar.length ? zichtbaar[Math.floor(Math.random() * zichtbaar.length)] : null
+  }
 
   const stap = (nu: number) => {
     raf = requestAnimationFrame(stap)
@@ -441,10 +478,47 @@ export function startHommel(): () => void {
       doel = nieuwDoel()
       fase = "vliegt"
       bezoekTot = nu + tussen(18000, 30000)
+      // ziet hij bij binnenkomst een bloem, dan vliegt hij er vaak meteen heen
+      const b = Math.random() < 0.5 ? zoekBloem() : null
+      if (b) {
+        bloem = b
+        fase = "landt"
+      }
       canvas.style.opacity = "1"
     }
 
-    if (fase === "zweeft") {
+    if (fase === "zit") {
+      const p = bloem && bloemPunt(bloem)
+      if (!p || nu > tot) {
+        // wakker: recht omhoog van de bloem af en verder
+        fase = nu > bezoekTot ? "vertrekt" : "vliegt"
+        doel = fase === "vertrekt" ? buiten() : nieuwDoel()
+        snel.set(0, 1.4, 0.3)
+        bloem = null
+        zzz.style.opacity = "0"
+      } else {
+        pos.lerp(p, Math.min(1, dt * 8))
+        snel.set(0, 0, 0)
+      }
+    } else if (fase === "landt") {
+      const p = bloem && bloemPunt(bloem)
+      if (!p) {
+        fase = "vliegt"
+        doel = nieuwDoel()
+      } else {
+        // aanvliegen en vlak boven de bloem afremmen
+        const naar = p.clone().sub(pos)
+        const afstand = naar.length()
+        naar.setLength(Math.min(2.2, afstand * 1.8))
+        snel.lerp(naar, Math.min(1, dt * 2.4))
+        if (afstand < 0.08) {
+          fase = "zit"
+          zitSinds = nu
+          tot = nu + tussen(4000, 8000)
+          zitRichting = new THREE.Vector3(tussen(-1, 1), 0, tussen(0.3, 1)).normalize()
+        }
+      }
+    } else if (fase === "zweeft") {
       // stil in de lucht, licht wiebelend, en dan verder
       snel.multiplyScalar(0.9)
       pos.y += Math.sin(nu / 180) * 0.004
@@ -473,7 +547,11 @@ export function startHommel(): () => void {
           renderer.clear()
           return
         }
-        if (Math.random() < 0.45) {
+        const b = Math.random() < 0.4 ? zoekBloem() : null
+        if (b) {
+          bloem = b
+          fase = "landt"
+        } else if (Math.random() < 0.45) {
           fase = "zweeft"
           tot = nu + tussen(800, 2200)
         } else doel = nieuwDoel()
@@ -486,7 +564,9 @@ export function startHommel(): () => void {
     pos.addScaledVector(snel, dt)
     // een zware hommel trilt en deint in de lucht: kleine, onrustige schokjes bovenop de koers
     const s = nu / 1000
-    hommel.position.set(
+    const zit = fase === "zit"
+    if (zit) hommel.position.copy(pos)
+    else hommel.position.set(
       pos.x + Math.sin(s * 7.3) * 0.025 + Math.sin(s * 17.9) * 0.008,
       pos.y + Math.sin(s * 9.1) * 0.035 + Math.sin(s * 23.3) * 0.01,
       pos.z + Math.sin(s * 6.1) * 0.02,
@@ -495,18 +575,31 @@ export function startHommel(): () => void {
     // kijk in de vliegrichting (bij zweven: half naar de kijker), en hel over in bochten;
     // hoe trager, hoe meer hij rechtop hangt, zoals een hommel die stil hangt
     const vaart = snel.length()
-    const richting = vaart > 0.22 ? snel.clone() : new THREE.Vector3(Math.sin(nu / 900), 0, 1)
+    const richting = zit ? zitRichting : vaart > 0.22 ? snel.clone() : new THREE.Vector3(Math.sin(nu / 900), 0, 1)
     kijk.position.copy(pos)
     kijk.lookAt(pos.clone().add(richting))
-    kijk.rotateZ(THREE.MathUtils.clamp(-snel.x * 0.12, -0.5, 0.5))
-    kijk.rotateX(-0.55 + Math.min(vaart, 3) * 0.14)
-    kijk.rotateZ(Math.sin(s * 5.3) * 0.06) // wiebelen om de lengteas
+    if (zit) {
+      // zittend: plat op de bloem; slapend knikt de kop af en toe
+      kijk.rotateX(nu - zitSinds > 1500 ? 0.12 + Math.sin(s * 0.9) * 0.03 : 0.05)
+    } else {
+      kijk.rotateZ(THREE.MathUtils.clamp(-snel.x * 0.12, -0.5, 0.5))
+      kijk.rotateX(-0.55 + Math.min(vaart, 3) * 0.14)
+      kijk.rotateZ(Math.sin(s * 5.3) * 0.06) // wiebelen om de lengteas
+    }
     wens.copy(kijk.quaternion)
     hommel.quaternion.slerp(wens, Math.min(1, dt * 5))
 
     // vleugelslag: op en neer met een slag voor- en achteruit; de naslagen lopen achter
     const t = nu / 1000
+    // ademhalen: het lijf zwelt heel licht op en af
+    hommel.scale.set(GROOTTE, GROOTTE * (1 + Math.sin(s * (zit ? 2.2 : 6)) * 0.015), GROOTTE)
     for (const v of vleugels) {
+      v.mesh.visible = !zit || v.fase === 0
+      if (zit) {
+        // vleugels plat over het achterlijf gevouwen
+        v.mesh.rotation.set(0, v.kant * 0.8, v.kant * -0.06)
+        continue
+      }
       const hoek = t * 2 * Math.PI * 21 - v.fase * 1.4
       v.mesh.rotation.z = v.kant * (0.2 + Math.sin(hoek) * 0.7)
       v.mesh.rotation.y = v.kant * Math.cos(hoek) * 0.35
@@ -516,6 +609,13 @@ export function startHommel(): () => void {
     const d = camera.position.z - pos.z
     const waas = d > 16 ? (d - 16) * 0.15 : d < 6 ? (6 - d) * 1.2 : 0
     canvas.style.filter = waas > 0.2 ? `blur(${waas.toFixed(1)}px)` : ""
+
+    // na anderhalve seconde zitten valt hij in slaap: z z z naast hem
+    if (zit) {
+      scherm.copy(hommel.position).project(camera)
+      zzz.style.transform = `translate(${((scherm.x + 1) / 2) * window.innerWidth + 18}px, ${((1 - scherm.y) / 2) * window.innerHeight - 42}px)`
+      zzz.style.opacity = nu - zitSinds > 1500 ? "1" : "0"
+    }
 
     renderer.render(scene, camera)
   }
@@ -533,6 +633,7 @@ export function startHommel(): () => void {
         m.dispose()
       }
     })
+    zzz.remove()
     omgeving.dispose()
     pmrem.dispose()
     renderer.dispose()

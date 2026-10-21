@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { Plant } from "./plant"
 
 // Laadt de 3D-hommel (hommel-scene.ts) pas na een paar seconden en alleen als
 // beweging mag: niet bij minder beweging en niet als Weergave op Stil staat.
@@ -35,5 +36,12 @@ export function Hommel() {
       stop?.()
     }
   }, [])
-  return null
+  // Inheemse bloemen in de lege marges van een breed scherm, op de route van
+  // de hommel: hij landt erop en dut even in (eigenaar, 21 okt 2026).
+  return (
+    <div className="hommel-bloemen" aria-hidden="true">
+      <Plant naam="klaproos" className="hommel-bloem hommel-bloem-links" />
+      <Plant naam="korenbloem" className="hommel-bloem hommel-bloem-rechts" />
+    </div>
+  )
 }

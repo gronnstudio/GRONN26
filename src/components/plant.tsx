@@ -18,6 +18,13 @@ const PLANTEN = {
 
 export type PlantNaam = keyof typeof PLANTEN
 
+/** Waar de hommel kan landen, als fractie van het beeld (x, y): de bovenkant
+ *  van de bloemen. hommel-scene.ts leest dit uit data-landing. */
+const LANDING: Partial<Record<PlantNaam, string>> = {
+  klaproos: "0.5,0.04;0.45,0.53",
+  korenbloem: "0.34,0.72;0.66,0.47",
+}
+
 /** De takken die van boven in een opening hangen, om en om per pagina. */
 export const HANGERS: PlantNaam[] = ["bladtak", "boomkruin", "takken"]
 
@@ -25,6 +32,6 @@ export function Plant({ naam, className }: { naam: PlantNaam; className: string 
   const [w, h] = PLANTEN[naam]
   return (
     // eslint-disable-next-line @next/next/no-img-element -- al klein en vrijgesteld, geen optimalisatie nodig
-    <img src={`/planten/${naam}.webp`} width={w} height={h} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`plant ${className}`} />
+    <img src={`/planten/${naam}.webp`} width={w} height={h} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`plant ${className}`} data-landing={LANDING[naam]} />
   )
 }
