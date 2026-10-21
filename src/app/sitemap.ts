@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { STUKKEN } from "@/lib/data/blog"
 
 const BASIS = "https://gronn.studio"
 
@@ -23,6 +24,8 @@ const ROUTES = [
   "/colofon",
   "/merk",
   "/techniek",
+  "/blog",
+  ...STUKKEN.map((s) => `/blog/${s.slug}`),
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {

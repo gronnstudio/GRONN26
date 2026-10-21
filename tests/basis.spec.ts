@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "./fixtures"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek", "/blog", "/blog/vijver-winterklaar-maken"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
@@ -93,6 +93,8 @@ for (const b of [390, 1440]) {
     const nav = page.locator("nav[data-menu]")
     for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
+    // Blog staat vanaf desktop in de pil, op de telefoon in het megamenu (eigenaar, 21 okt 2026)
+    await expect(nav.getByRole("link", { name: "Blog", exact: true })).toBeVisible({ visible: b >= 1024 })
     const vijvers = page.locator('#megamenu label:has(input[value="donker"])')
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
     // de pil blijft op het scherm, ook tijdens het lezen
@@ -110,6 +112,7 @@ for (const b of [390, 1440]) {
     await page.getByRole("button", { name: "Menu" }).click()
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
     await expect(vijvers).toBeVisible()
+    await expect(page.locator("#megamenu").getByRole("link", { name: "Blog", exact: true })).toBeVisible({ visible: b < 1024 })
     await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
     await page.keyboard.press("Escape")
     await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
