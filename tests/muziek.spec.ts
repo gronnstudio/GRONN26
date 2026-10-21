@@ -1,10 +1,12 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures"
 
 // Muziek standaard aan, start bij de eerste tik, zwevende knop rechts midden
 // zet hem uit en dat blijft bewaard; weg van de site = pauze (19 okt 2026).
 test("muziek: aan na eerste tik, knop zet uit en onthoudt", async ({ context, page }) => {
   // Tel play/pause op de speler, los van of de browser het mp3 echt afspeelt.
   await context.addInitScript(() => {
+    // Zonder intro: anders ligt het doek seconden lang over de knop.
+    sessionStorage.setItem("gronn-intro", "1")
     const w = window as unknown as { log: string[] }
     w.log = []
     HTMLMediaElement.prototype.play = function () { w.log.push("play"); return Promise.resolve() }
