@@ -55,7 +55,7 @@ export default function Over() {
             sizes="100vw"
             className="aspect-[4/5] md:aspect-[3/2] [&_img]:object-[50%_30%]"
           />
-          <figcaption className="lbl mt-4 text-[#a9a8a3]">Nick Peters · GRØNN Studio</figcaption>
+          <figcaption className="lbl mt-4 text-gedempt">Nick Peters · GRØNN Studio</figcaption>
         </figure>
       </Opening>
 

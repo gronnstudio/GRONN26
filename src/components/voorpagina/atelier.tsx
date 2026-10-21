@@ -44,11 +44,7 @@ function Woorden({ tekst }: { tekst: Tekst }) {
               " "
             ) : (
               <span key={n} className="vp-wd">
-                {[...d].map((c, i) => (
-                  <span key={i} className="w-lt">
-                    {c}
-                  </span>
-                ))}
+                {d}
               </span>
             ),
           )}

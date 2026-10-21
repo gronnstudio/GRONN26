@@ -20,7 +20,7 @@ export function JuridischDocument({ doc, titel }: { doc: LegalDocument; titel: T
       {/* Eén lang woord per regel: op de telefoon iets kleiner, zodat het past. */}
       <div className="max-md:[&_.w-reus]:text-[13vw]!">
       <Opening label={{ nl: "Juridisch", en: "Legal" }} titel={titel}>
-        <div className="mt-[clamp(28px,3vw,48px)] flex flex-wrap gap-x-6 gap-y-2 text-[#a9a8a3]">
+        <div className="mt-[clamp(28px,3vw,48px)] flex flex-wrap gap-x-6 gap-y-2 text-gedempt">
           <p className="lbl m-0"><Beide nl={<>Laatst bijgewerkt · {datum(doc.updated)}</>} en={<>Last updated · {datum(doc.updated, "en-GB")}</>} /></p>
           <p className="lbl m-0">Status · <T t={doc.status === "concept" ? { nl: "Concept", en: "Draft" } : { nl: "Vastgesteld", en: "Final" }} /></p>
         </div>
