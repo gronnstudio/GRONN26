@@ -2,11 +2,13 @@ import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js"
 
-// Een aardhommel (Bombus terrestris) als klein 3D-model dat af en toe over de
+// Een tuinhommel (Bombus hortorum) als klein 3D-model dat af en toe over de
 // pagina vliegt (eigenaar, 20 okt 2026: "een hommel willekeurig door de
 // webpagina ... verder weg, dan weer dichtbij", "verschillende hoeken",
 // "vleugels moeten bewegen"; 21 okt: "maak de hommel super realistisch",
-// en daarna een foto van de inheemse aardhommel: "gebruik deze soort").
+// eerst de aardhommel; daarna foto's van de inheemse tuinhommel als voorbeeld:
+// lange kop, twee gele banden op het borststuk, een gele band en een witte
+// staart op het achterlijf, lange poten met roodbruine voetjes).
 // Geen foto: een model, zodat hij echt draait. Vacht in lagen (shell fur),
 // geaderde rookbruine vleugels met een zweem regenboog, glanzende facetogen,
 // geknikte voelsprieten, gelede poten met een stuifmeelklompje achteraan.
@@ -14,7 +16,7 @@ import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.j
 // weg en komt later terug. Zolang hij weg is, wordt er niets getekend.
 
 const ZWART = "#1c1814" // diep zwart, met een bruine glans in de haarpunten
-const GEEL = "#e3961c" // oranjegeel, zoals de smalle kraag en band van de aardhommel
+const GEEL = "#e2ab2c" // goudgeel, zoals de banden van de tuinhommel
 const WIT = "#f5f2ea" // de witte staart
 const LAGEN = 20 // vachtlagen per lichaamsdeel
 
@@ -160,8 +162,9 @@ function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture | THREE.Color, leng
       tint = new THREE.Color().setRGB(px[k] / 255, px[k + 1] / 255, px[k + 2] / 255, THREE.SRGBColorSpace)
     } else tint = (kleur as THREE.Color).clone()
     const helder = (tint.r + tint.g + tint.b) / 3
-    // de witte staart en de gele banden zijn langer en pluiziger dan het zwart
-    const l = lengte * (0.4 + Math.random() * 0.75) * (1 + helder * 0.7)
+    // de witte staart en de gele banden zijn iets pluiziger dan het zwart; kort
+    // en dicht als fluweel, zoals op foto's van hommels (21 okt 2026)
+    const l = lengte * (0.4 + Math.random() * 0.6) * (1 + helder * 0.35)
     const krul = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(0.9)
     a.copy(p)
     b.copy(p).addScaledVector(n, l * 0.5).addScaledVector(kam, l * 0.18).addScaledVector(krul, l * 0.2)
@@ -175,7 +178,7 @@ function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture | THREE.Color, leng
   const geo = new THREE.BufferGeometry()
   geo.setAttribute("position", new THREE.Float32BufferAttribute(punten, 3))
   geo.setAttribute("color", new THREE.Float32BufferAttribute(kleuren, 3))
-  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.8 }))
+  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.65 }))
 }
 
 function bouwHommel() {
@@ -227,16 +230,17 @@ function bouwHommel() {
     }
     lijfGeo.computeVertexNormals()
   }
-  const lijf = harig(lijfGeo, banden([[0, WIT], [0.38, ZWART], [0.6, GEEL], [0.73, ZWART]]), 0.1, 0.03, 11000)
-  lijf.scale.set(0.84, 0.8, 1.22)
-  lijf.position.set(0, -0.1, -0.3)
+  const lijf = harig(lijfGeo, banden([[0, WIT], [0.4, ZWART], [0.66, GEEL]]), 0.075, 0.03, 11000)
+  // kort en rond, zoals een echte hommel (eigenaar, 21 okt 2026: "maak em korter")
+  lijf.scale.set(0.86, 0.82, 0.9)
+  lijf.position.set(0, -0.08, -0.16)
   lijf.rotation.x = -0.32 // het achterlijf hangt omlaag, zoals op de foto
   hommel.add(lijf)
 
   // borststuk: rond en dicht behaard, gele kraag voorop
   const borstGeo = new THREE.SphereGeometry(0.33, 44, 32)
   borstGeo.rotateX(-Math.PI / 2)
-  const borst = harig(borstGeo, banden([[0, ZWART], [0.74, GEEL]]), 0.1, 0.03, 7000)
+  const borst = harig(borstGeo, banden([[0, GEEL], [0.24, ZWART], [0.72, GEEL]]), 0.075, 0.03, 7000)
   borst.scale.set(1.04, 0.96, 1)
   borst.position.set(0, 0.06, 0.36)
   hommel.add(borst)
@@ -244,8 +248,8 @@ function bouwHommel() {
   // kop: iets naar beneden gebogen, zwart behaard, met glanzende facetogen
   const kopGeo = new THREE.SphereGeometry(0.17, 32, 24)
   const kop = harig(kopGeo, banden([[0, ZWART]]), 0.05, 0.015, 500)
-  kop.scale.set(1.0, 1.15, 0.78)
-  kop.position.set(0, -0.08, 0.72)
+  kop.scale.set(0.95, 1.4, 0.8) // lange kop, het kenmerk van de tuinhommel
+  kop.position.set(0, -0.12, 0.72)
   kop.rotation.x = 0.5
   hommel.add(kop)
 
@@ -253,8 +257,8 @@ function bouwHommel() {
   const oogMat = new THREE.MeshPhysicalMaterial({ color: 0x0c0a09, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.08 })
   for (const k of [-1, 1]) {
     const oog = new THREE.Mesh(new THREE.SphereGeometry(0.1, 24, 18), oogMat)
-    oog.scale.set(0.34, 1.2, 0.55)
-    oog.position.set(k * 0.155, -0.06, 0.74)
+    oog.scale.set(0.24, 0.92, 0.42)
+    oog.position.set(k * 0.15, -0.07, 0.73)
     oog.rotation.z = k * 0.2
     hommel.add(oog)
   }
@@ -290,6 +294,8 @@ function bouwHommel() {
   }
 
   const pootMat = new THREE.MeshStandardMaterial({ color: 0x241b14, roughness: 0.7 })
+  // de voetjes (tarsen) zijn roodbruin, zoals op de foto's
+  const voetMat = new THREE.MeshStandardMaterial({ color: 0x7a3d1e, roughness: 0.6 })
   const stuifmeel = new THREE.MeshStandardMaterial({ color: 0xe0901e, roughness: 0.9 })
   for (const k of [-1, 1]) {
     // voelspriet: schacht, knik, en een zweep van kleine leedjes
@@ -301,11 +307,13 @@ function bouwHommel() {
     spriet.rotation.set(0.15, 0, k * -0.45)
     hommel.add(spriet)
 
-    // poten: dij, scheen en voet, in de vlucht naar achteren en onder het lijf
+    // poten: dij, scheen en voet, in de vlucht naar achteren en onder het lijf;
+  // lang en dun, en de vleugels reiken voorbij de staart, zoals bij de
+  // hommel van Google die de eigenaar als voorbeeld gaf (21 okt 2026)
     const poten: [number, number, number][] = [
-      [0.2, 0.52, 0.5],
-      [0.24, 0.36, 0.8],
-      [0.27, 0.2, 1.1],
+      [0.3, 0.52, 0.5],
+      [0.36, 0.36, 0.8],
+      [0.42, 0.2, 1.1],
     ]
     poten.forEach(([dij, z, hoek], i) => {
       const achter = i === 2
@@ -313,12 +321,17 @@ function bouwHommel() {
         [
           [dij, 0.02, 0],
           [dij * 1.1, achter ? 0.032 : 0.017, -1.3],
-          [0.06, 0.01, 0.4],
-          [0.05, 0.008, 0.25],
-          [0.05, 0.007, 0.25],
+          [0.1, 0.01, 0.4],
+          [0.08, 0.008, 0.25],
+          [0.07, 0.007, 0.25],
         ],
         pootMat,
       )
+      const leden: THREE.Mesh[] = []
+      poot.traverse((o) => {
+        if (o instanceof THREE.Mesh) leden.push(o)
+      })
+      for (const lid of leden.slice(-3)) lid.material = voetMat
       // haartjes op dij en scheen; de poten van een hommel zijn ook behaard
       const dijLid = poot.children[0]
       const scheenLid = dijLid.children[1]
@@ -356,8 +369,8 @@ function bouwHommel() {
       iridescenceThicknessRange: [180, 520],
       clearcoat: 0.6,
     })
-  const voor = vleugelGeo(0.92, 0.3)
-  const achter = vleugelGeo(0.6, 0.2)
+  const voor = vleugelGeo(1.0, 0.31)
+  const achter = vleugelGeo(0.64, 0.21)
   const vleugels: { mesh: THREE.Object3D; kant: number; fase: number }[] = []
   for (const kant of [-1, 1]) {
     for (const [fase, o] of [[0, 1], [0.22, 0.32], [0.45, 0.2], [0.7, 0.12]] as const) {
