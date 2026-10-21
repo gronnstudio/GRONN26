@@ -126,7 +126,7 @@ export function Doorkijk({
       </div>
     )
   return (
-    <div className={`relative overflow-hidden bg-vlak ${className}`} style={vak}>
+    <div className={`relative overflow-hidden rounded-[var(--foto-hoek)] bg-vlak ${className}`} style={vak}>
       <div className="absolute inset-x-0 -top-[12%] -bottom-[12%]" data-v={v}>
         <Foto foto={foto} sizes={sizes} priority={priority} className="h-full w-full" />
       </div>

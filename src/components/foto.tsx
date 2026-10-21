@@ -27,7 +27,7 @@ export function Foto({
   const taal = useTaal()
   const alt = taal === "en" && foto.en ? foto.en.alt : foto.alt
   return (
-    <div className={`relative overflow-hidden bg-vlak ${className}`}>
+    <div className={`relative overflow-hidden rounded-[var(--foto-hoek)] bg-vlak ${className}`}>
       <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover [filter:saturate(.88)_contrast(1.04)_brightness(.98)]" />
       {rimpel && !foto.label ? <Rimpel src={foto.src} vanzelf={rimpel === "vanzelf"} /> : null}
       {foto.label ? (

@@ -85,7 +85,7 @@ export function Producten({ producten }: { producten: Product[] }) {
                   <Foto
                     foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, label: lijst ? undefined : "Sfeerbeeld", en: { alt: p.foto.alt.en, label: lijst ? undefined : "Mood image" } }}
                     sizes={lijst ? "112px" : "(min-width: 1024px) 400px, 50vw"}
-                    className={`shop-foto rounded-[16px] ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/5]"}`}
+                    className={`shop-foto ${lijst ? "aspect-square" : "aspect-[4/5]"}`}
                   />
                 ) : (
                   <div className={`flex items-center justify-center rounded-[16px] border border-dashed border-gedempt text-gedempt ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/5]"}`}>

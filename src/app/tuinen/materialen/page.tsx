@@ -33,7 +33,7 @@ export default function MaterialenPagina() {
             <Foto
               foto={{ src: `/materialen/${g.id}.jpg`, width: 1600, height: 900, alt: g.alt.nl, label: "Sfeerbeeld", en: { alt: g.alt.en, label: "Mood image" } }}
               sizes="(min-width: 1280px) 1200px, 100vw"
-              className="mt-[24px] mb-[8px] aspect-[16/9] rounded-[16px] md:aspect-[21/9]"
+              className="mt-[24px] mb-[8px] aspect-[16/9] md:aspect-[21/9]"
             />
             <ul data-zie className="m-0 grid list-none grid-cols-1 gap-x-[16px] p-0 sm:grid-cols-2 md:gap-x-[32px] lg:grid-cols-3">
               {g.materialen.map((m) => (

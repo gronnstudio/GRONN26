@@ -9,7 +9,7 @@
   grid-template: "beeld beeld" 1fr "onder onder" auto "vorige volgende" auto / 1fr 1fr; gap: 16px;
 }
 .ds-beeld { grid-area: beeld; min-height: 0; display: grid; place-items: center; }
-.ds-beeld img { max-width: 100%; max-height: calc(100svh - 240px); width: auto; height: auto; object-fit: contain; border-radius: 16px; }
+.ds-beeld img { max-width: 100%; max-height: calc(100svh - 240px); width: auto; height: auto; object-fit: contain; border-radius: var(--foto-hoek); }
 .ds-onder { grid-area: onder; display: flex; justify-content: space-between; align-items: end; gap: 16px; max-width: 1100px; width: 100%; margin: 0 auto; }
 .ds-onder .text-gedempt { color: #b9ad9e; }
 .ds-onder .text-oranje-tekst { color: var(--oranje); }

@@ -82,7 +82,7 @@ export default function Over() {
                     <Oplichten tekst={alinea} className="mt-4 mb-0 text-[clamp(17px,1.5vw,23px)]! leading-[1.55]!" />
                   </div>
                   <figure data-zie={boven ? "boven" : "onder"} className="w-hoofdstuk-foto">
-                    <Foto foto={foto} sizes="(min-width: 768px) 50vw, 100vw" className="rounded-[16px]" />
+                    <Foto foto={foto} sizes="(min-width: 768px) 50vw, 100vw" className="" />
                     {foto.bijschrift ? (
                       <figcaption className="lbl absolute bottom-3 left-3 rounded-full bg-antraciet/80 px-2.5 py-1 text-gebroken-wit">
                         <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
