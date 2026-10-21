@@ -118,6 +118,23 @@ body {
   padding-bottom: 110px;
 }
 
+/* Kopieerslot (eigenaar, 21 okt 2026: "afbeeldingen, tekst en elementen kunnen
+   worden gekopieerd, beveilig dat"). Tekst niet selecteren, foto's niet slepen
+   of via lang drukken bewaren. Formuliervelden blijven gewoon werken, en de
+   pagina's van de eigenaar ([data-links]: dashboard, handtekening, …) doen
+   niet mee. Het remt kopiëren af; tegenhouden kan een website niet. */
+body:not(:has([data-links])) {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+body:not(:has([data-links])) :is(input, textarea, select, [contenteditable]) {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+body:not(:has([data-links])) :is(img, video, svg) { -webkit-user-drag: none; }
+
 /* Bouwstenen uit de wireframes (wf.css), één keer gedefinieerd */
 @utility wrap { max-width: var(--breedte); margin-inline: auto; padding-inline: var(--goot); }
 @utility lbl { font-family: var(--font-sans); font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
