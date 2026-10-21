@@ -35,6 +35,7 @@ function vrijeMarge() {
 // Laadt de 3D-hommel (hommel-scene.ts) pas na een paar seconden en alleen als
 // beweging mag: niet bij minder beweging en niet als Weergave op Stil staat.
 export function Hommel() {
+  const vak = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const html = document.documentElement
@@ -47,7 +48,24 @@ export function Hommel() {
       } else if (!stop) {
         import("./hommel-scene")
           .then(({ startHommel }) => {
-            if (!weg && !stop && !html.classList.contains("stil")) stop = startHommel()
+            if (weg || stop || html.classList.contains("stil")) return
+            const hommel = startHommel()
+            let klaproos: (() => void) | undefined
+            let aan = true
+            stop = () => {
+              aan = false
+              hommel()
+              klaproos?.()
+              klaproos = undefined
+            }
+            // de linker margebloem als 3D-klaproos; lukt dat niet, dan blijft de foto
+            const doel = vak.current
+            if (doel && matchMedia("(min-width: 1500px)").matches)
+              import("./klaproos-doek")
+                .then(({ startKlaproos }) => {
+                  if (aan) klaproos = startKlaproos(doel)
+                })
+                .catch(() => {})
           })
           .catch(() => {}) // geen WebGL of laden mislukt: dan gewoon geen hommel
       }
@@ -78,7 +96,6 @@ export function Hommel() {
   // de inhoud, gemeten per pagina. Bij het slot en de voet gaan ze weg, want
   // daar staan al bloemen en adresregels (eigenaar, 21 okt 2026).
   const pad = usePathname()
-  const vak = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const el = vak.current
     if (!el) return

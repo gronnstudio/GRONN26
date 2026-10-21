@@ -369,6 +369,9 @@ html.stil .w-voortgang { display: none; }
   .hommel-bloem-links { left: 16px; width: min(200px, var(--marge-links, 0px) - 48px); transform-origin: 40% 100%; }
   .hommel-bloem-rechts { right: 16px; width: min(120px, var(--marge-rechts, 0px) - 48px); transform-origin: 50% 100%; }
   .hommel-bloemen.weg .hommel-bloem { opacity: 0; }
+  /* de 3D-klaproos (klaproos-doek.ts) neemt de plek van de foto in; hij wiegt zelf */
+  .hommel-bloem-3d { aspect-ratio: 348 / 640; animation: none !important; }
+  .hommel-bloemen.drie-d img.hommel-bloem-links { display: none; }
   @media (prefers-reduced-motion: no-preference) {
     html:not(.stil) .hommel-bloem-links { animation: plant-wieg 7.5s ease-in-out infinite alternate; }
     html:not(.stil) .hommel-bloem-rechts { animation: plant-wieg 9s ease-in-out -2s infinite alternate-reverse; }
