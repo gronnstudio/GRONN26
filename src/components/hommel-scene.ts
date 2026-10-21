@@ -302,11 +302,13 @@ function bouwHommel() {
     spriet.rotation.set(0.15, 0, k * -0.45)
     hommel.add(spriet)
 
-    // poten: dij, scheen en voet, in de vlucht naar achteren en onder het lijf
+    // poten: dij, scheen en voet, in de vlucht naar achteren en onder het lijf;
+  // lang en dun, en de vleugels reiken voorbij de staart, zoals bij de
+  // hommel van Google die de eigenaar als voorbeeld gaf (21 okt 2026)
     const poten: [number, number, number][] = [
-      [0.2, 0.52, 0.5],
-      [0.24, 0.36, 0.8],
-      [0.27, 0.2, 1.1],
+      [0.25, 0.52, 0.5],
+      [0.3, 0.36, 0.8],
+      [0.34, 0.2, 1.1],
     ]
     poten.forEach(([dij, z, hoek], i) => {
       const achter = i === 2
@@ -357,8 +359,8 @@ function bouwHommel() {
       iridescenceThicknessRange: [180, 520],
       clearcoat: 0.6,
     })
-  const voor = vleugelGeo(0.92, 0.3)
-  const achter = vleugelGeo(0.6, 0.2)
+  const voor = vleugelGeo(1.0, 0.31)
+  const achter = vleugelGeo(0.64, 0.21)
   const vleugels: { mesh: THREE.Object3D; kant: number; fase: number }[] = []
   for (const kant of [-1, 1]) {
     for (const [fase, o] of [[0, 1], [0.22, 0.32], [0.45, 0.2], [0.7, 0.12]] as const) {
