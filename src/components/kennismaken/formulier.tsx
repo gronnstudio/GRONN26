@@ -291,7 +291,7 @@ export function KennismakenFormulier() {
     fetch("/api/aanvraag", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ naam: velden.naam, contact: velden.telefoon || velden.email, wat: tekst }),
+      body: JSON.stringify({ naam: velden.naam, contact: velden.telefoon || velden.email, wat: tekst, foto: foto?.id }),
       keepalive: true,
     }).catch(() => {})
     try {

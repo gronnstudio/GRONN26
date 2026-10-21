@@ -253,3 +253,22 @@ test("hommelbloemen: alleen in de marges van een breed scherm, decoratief, met l
   await page.setViewportSize({ width: 1280, height: 800 })
   await expect(bloemen.first()).toBeHidden()
 })
+
+test("over @390: het verhaal snapt na een korte scroll op het volgende hoofdstuk", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto("/over", { waitUntil: "domcontentloaded" })
+  const stand = () => page.evaluate(() => {
+    const b = document.querySelector(".w-zijwaarts")!.getBoundingClientRect()
+    return (-b.top / (b.height - innerHeight)) * (Number(getComputedStyle(document.querySelector(".w-zijwaarts")!).getPropertyValue("--n")) - 1)
+  })
+  // naar het begin van het verhaal, dan een klein stukje verder
+  await page.evaluate(() => scrollTo(0, scrollY + document.querySelector(".w-zijwaarts")!.getBoundingClientRect().top))
+  await page.waitForTimeout(600)
+  expect(Math.abs(await stand())).toBeLessThan(0.02)
+  await page.mouse.move(195, 400)
+  await page.mouse.wheel(0, 200)
+  await expect.poll(stand, { timeout: 4000 }).toBeCloseTo(1, 1)
+  await page.mouse.wheel(0, -200)
+  await expect.poll(stand, { timeout: 4000 }).toBeCloseTo(0, 1)
+})
