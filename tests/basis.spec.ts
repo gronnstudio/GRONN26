@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
@@ -271,4 +271,9 @@ test("over @390: het verhaal snapt na een korte scroll op het volgende hoofdstuk
   await expect.poll(stand, { timeout: 4000 }).toBeCloseTo(1, 1)
   await page.mouse.wheel(0, -200)
   await expect.poll(stand, { timeout: 4000 }).toBeCloseTo(0, 1)
+})
+
+test("webhook van Mollie weigert een ongeldige id", async ({ request }) => {
+  const r = await request.post("/api/mollie", { form: { id: "niet-mollie" } })
+  expect(r.status()).toBe(400)
 })

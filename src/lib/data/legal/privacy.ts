@@ -75,6 +75,7 @@ export const PRIVACY: LegalDocument = {
         "Waarvoor: om te kunnen offreren, factureren en onze boekhouding te voeren.",
         "Grondslag: uitvoering van de overeenkomst, en voor de boekhouding een wettelijke verplichting (art. 6 lid 1 sub c AVG).",
         "Hoe lang: de fiscale bewaarplicht is zeven jaar. Die termijn kunnen wij niet verkorten op verzoek — ook niet op jouw verzoek.",
+        "Bestel je een borderpakket online, dan bewaren wij je naam, e-mail, telefoon, adres en de bestelling in onze afgeschermde opslag bij Vercel. Je betaalt op de betaalpagina van Mollie; wij zien je bank- of kaartgegevens niet.",
       ],
     },
 
@@ -97,6 +98,7 @@ export const PRIVACY: LegalDocument = {
         "· **Vercel Inc.** — hosting van de website, afgeschermde opslag van aanvragen en foto's, en de bezoekers- en snelheidsmeting zonder cookies.",
         "· **Anthropic PBC** — de eerste inschatting van een foto die je bij het formulier meestuurt.",
         "· **FormSubmit (formsubmit.co)** — bezorgt de ingevulde formuliervelden per e-mail bij ons. Het formulier post rechtstreeks vanuit je browser naar deze dienst.",
+        "· **Mollie B.V.** — de betaling als je een borderpakket online bestelt (iDEAL, Wero, creditcard).",
         "· **Google (Google Workspace)** — onze mailbox, agenda en bestandsopslag.",
         "· **DigiBoox** — offertes, facturen en boekhouding.",
         "Deze partijen verwerken gegevens alleen in onze opdracht. Sommige zijn in de Verenigde Staten gevestigd of kunnen daar gegevens verwerken; voor die doorgifte gelden de standaardbepalingen van de Europese Commissie of het EU-VS Data Privacy Framework.",
