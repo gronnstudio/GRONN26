@@ -19,6 +19,8 @@ export function GET(request: NextRequest) {
   const res = NextResponse.redirect(url)
   const opties = { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/api", maxAge: 600 }
   res.cookies.set("gronn-state", state, opties)
-  res.cookies.set("gronn-terug", terug.startsWith("/") && !terug.startsWith("//") ? terug : "/dashboard", opties)
+  // Alleen terug naar een pagina op deze site: "/\ander.nl" is voor de browser ook een ander domein.
+  const veilig = terug.startsWith("/") && new URL(terug, request.nextUrl.origin).origin === request.nextUrl.origin
+  res.cookies.set("gronn-terug", veilig ? terug : "/dashboard", opties)
   return res
 }
