@@ -25,13 +25,20 @@ export function Hommel() {
     }
     // pas na vier seconden laden: geen WebGL tijdens het laden van de pagina
     const kijker = new MutationObserver(zet)
+    // en dan nog op een rustig moment, zodat het bouwen niets in de weg zit
+    let rust = 0
     const wacht = setTimeout(() => {
-      zet()
-      kijker.observe(html, { attributes: true, attributeFilter: ["class"] })
+      const begin = () => {
+        zet()
+        kijker.observe(html, { attributes: true, attributeFilter: ["class"] })
+      }
+      if ("requestIdleCallback" in window) rust = requestIdleCallback(begin, { timeout: 3000 })
+      else begin()
     }, 4000)
     return () => {
       weg = true
       clearTimeout(wacht)
+      if (rust) cancelIdleCallback(rust)
       kijker.disconnect()
       stop?.()
     }

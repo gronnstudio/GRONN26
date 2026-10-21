@@ -21,7 +21,7 @@ const doek = (b: number, h: number) => {
   const c = document.createElement("canvas")
   c.width = b
   c.height = h
-  return [c, c.getContext("2d")!] as const
+  return [c, c.getContext("2d", { willReadFrequently: true })!] as const
 }
 
 /** Kleurbanden van staart (boven) naar kop (onder), met zachte overgangen. */
@@ -57,16 +57,22 @@ function banden(stops: [number, string][]) {
 
 /** Haardichtheid: elk stipje is een haar, de helderheid is zijn lengte. */
 function harenKaart() {
+  // rechtstreeks in de pixels: 60.000 cirkeltjes tekenen kostte een kwart seconde
   const [c, g] = doek(512, 512)
-  g.fillStyle = "#000"
-  g.fillRect(0, 0, 512, 512)
+  const beeld = g.createImageData(512, 512)
+  const d = beeld.data
+  for (let i = 3; i < d.length; i += 4) d[i] = 255
   for (let n = 0; n < 60000; n++) {
     const l = 110 + Math.random() * 145
-    g.fillStyle = `rgb(${l},${l},${l})`
-    g.beginPath()
-    g.arc(Math.random() * 512, Math.random() * 512, 0.7 + Math.random() * 0.6, 0, Math.PI * 2)
-    g.fill()
+    const x = Math.floor(Math.random() * 511)
+    const y = Math.floor(Math.random() * 511)
+    const groot = Math.random() < 0.5
+    for (const [dx, dy] of groot ? [[0, 0], [1, 0], [0, 1], [1, 1]] : [[0, 0]]) {
+      const k = ((y + dy) * 512 + x + dx) * 4
+      if (d[k] < l) d[k] = d[k + 1] = d[k + 2] = l
+    }
   }
+  g.putImageData(beeld, 0, 0)
   const t = new THREE.CanvasTexture(c)
   t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.repeat.set(4, 7)
