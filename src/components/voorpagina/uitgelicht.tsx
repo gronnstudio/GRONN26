@@ -10,21 +10,21 @@ import { F01, F02_2 } from "./beelden"
 
 export function Uitgelicht() {
   return (
-    <section className="vp-project" aria-labelledby="h-project">
+    <section className="vp-project" aria-labelledby="h-project vp-ervoor vp-nu">
       <p className="lbl m-0">
         <T t={{ nl: `Werk · GR / 001 · ${VIJVER.categorie}`, en: `Work · GR / 001 · ${VIJVER.en.categorie}` }} />
       </p>
       <h2 id="h-project" className="syne">
         <T t={{ nl: VIJVER.titel, en: VIJVER.en.titel }} />
       </h2>
-      <Link href="/werk/vijverrenovatie" className="vp-voorna" aria-labelledby="h-project">
+      <Link href="/werk/vijverrenovatie" className="vp-voorna" aria-labelledby="h-project vp-ervoor vp-nu">
         <figure>
           <Foto foto={F02_2} sizes="(min-width: 768px) 45vw, 50vw" className="vp-voorna-foto" />
-          <figcaption className="lbl"><T t={{ nl: "Ervoor", en: "Before" }} /></figcaption>
+          <figcaption id="vp-ervoor" className="lbl"><T t={{ nl: "Ervoor", en: "Before" }} /></figcaption>
         </figure>
         <figure>
           <Foto foto={F01} sizes="(min-width: 768px) 45vw, 50vw" className="vp-voorna-foto" />
-          <figcaption className="lbl"><T t={{ nl: "Nu", en: "Now" }} /></figcaption>
+          <figcaption id="vp-nu" className="lbl"><T t={{ nl: "Nu", en: "Now" }} /></figcaption>
         </figure>
       </Link>
       <Link href="/werk/vijverrenovatie" className="lnk vp-meer">

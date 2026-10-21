@@ -36,6 +36,8 @@ export function Kopieer({ label, waarde, kaal = false }: { label: string; waarde
       }
     >
       {label ? <span className={kaal ? "opacity-70" : "text-gedempt"}>{label}</span> : null}
+      {/* een spatie, zodat de zichtbare tekst ("KVK 42072154") in de naam van de knop staat */}
+      {label ? " " : null}
       <span className={kaal ? "tabular-nums" : "text-inkt tabular-nums"}>{waarde}</span>
       <span aria-live="polite" className={kaal ? "grid size-4 place-items-center opacity-70 group-hover:opacity-100" : "grid size-4 place-items-center text-gedempt group-hover:text-inkt"}>
         {stand === "gekopieerd" ? (
