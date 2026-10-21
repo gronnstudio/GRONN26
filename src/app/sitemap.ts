@@ -9,6 +9,7 @@ const ROUTES = [
   "/tuinen",
   "/tuinen/borderpakketten",
   "/tuinen/cadeaubon",
+  "/shop",
   "/tuinen/materialen",
   "/werk",
   "/werk/vijverrenovatie",
