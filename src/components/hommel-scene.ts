@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
+import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js"
 
 // Een aardhommel (Bombus terrestris) als klein 3D-model dat af en toe over de
 // pagina vliegt (eigenaar, 20 okt 2026: "een hommel willekeurig door de
@@ -126,16 +127,56 @@ function vleugelGeo(lengte: number, breedte: number) {
   return geo
 }
 
+/** Losse haren als dunne gebogen lijntjes, in de kleur van de huid eronder:
+ *  zij maken de rand pluizig, zoals bij een echte hommel tegen het licht. */
+function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture, lengte: number, aantal: number) {
+  const beeld = kleur.image as HTMLCanvasElement
+  const px = beeld.getContext("2d", { willReadFrequently: true })!.getImageData(0, 0, beeld.width, beeld.height).data
+  const monster = new MeshSurfaceSampler(kern).build()
+  const p = new THREE.Vector3()
+  const n = new THREE.Vector3()
+  const uv = new THREE.Vector2()
+  const kam = new THREE.Vector3(0, -0.3, -1).normalize().multiplyScalar(0.6)
+  const punten: number[] = []
+  const kleuren: number[] = []
+  const a = new THREE.Vector3()
+  const b = new THREE.Vector3()
+  const c = new THREE.Vector3()
+  for (let i = 0; i < aantal; i++) {
+    monster.sample(p, n, undefined, uv)
+    const l = lengte * (0.4 + Math.random() * 0.75)
+    const krul = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(0.9)
+    a.copy(p)
+    b.copy(p).addScaledVector(n, l * 0.5).addScaledVector(kam, l * 0.18).addScaledVector(krul, l * 0.2)
+    c.copy(b).addScaledVector(n, l * 0.3).addScaledVector(kam, l * 0.35).addScaledVector(krul, l * 0.45)
+    punten.push(a.x, a.y, a.z, b.x, b.y, b.z, b.x, b.y, b.z, c.x, c.y, c.z)
+    const x = Math.min(beeld.width - 1, Math.floor(uv.x * beeld.width))
+    const y = Math.min(beeld.height - 1, Math.floor((1 - uv.y) * beeld.height))
+    const k = (y * beeld.width + x) * 4
+    const tint = new THREE.Color().setRGB(px[k] / 255, px[k + 1] / 255, px[k + 2] / 255, THREE.SRGBColorSpace)
+    const voet = tint.clone().multiplyScalar(0.45)
+    const midden = tint.clone().multiplyScalar(0.8)
+    const punt = tint.clone().lerp(new THREE.Color(1, 0.97, 0.9), 0.12)
+    for (const kl of [voet, midden, midden, punt]) kleuren.push(kl.r, kl.g, kl.b)
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(punten, 3))
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(kleuren, 3))
+  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.8 }))
+}
+
 function bouwHommel() {
   const hommel = new THREE.Group()
   const haren = harenKaart()
 
   /** Een lichaamsdeel met vacht: een kern plus LAGEN steeds grotere schillen
    *  waarin alleen de langere haren overblijven, iets naar achteren gekamd. */
-  const harig = (geo: THREE.BufferGeometry, kleur: THREE.Texture, vacht: number, kam = 0.03) => {
+  const harig = (geo: THREE.BufferGeometry, kleur: THREE.Texture, vacht: number, kam = 0.03, strengen = 0) => {
     const deel = new THREE.Group()
     const r = (geo.boundingSphere ?? (geo.computeBoundingSphere(), geo.boundingSphere!)).radius
-    deel.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: kleur, color: 0x777777, roughness: 1 })))
+    const kern = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: kleur, color: 0x777777, roughness: 1 }))
+    deel.add(kern)
+    if (strengen) deel.add(haarStrengen(kern, kleur, vacht * 1.05, strengen))
     for (let i = 1; i <= LAGEN; i++) {
       const h = i / LAGEN
       const laag = new THREE.Mesh(
@@ -173,7 +214,7 @@ function bouwHommel() {
     }
     lijfGeo.computeVertexNormals()
   }
-  const lijf = harig(lijfGeo, banden([[0, WIT], [0.3, ZWART], [0.52, GEEL], [0.68, ZWART]]), 0.1)
+  const lijf = harig(lijfGeo, banden([[0, WIT], [0.3, ZWART], [0.52, GEEL], [0.68, ZWART]]), 0.1, 0.03, 9000)
   lijf.scale.set(0.86, 0.78, 1.08)
   lijf.position.set(0, -0.06, -0.24)
   lijf.rotation.x = -0.22 // het achterlijf hangt iets omlaag
@@ -182,14 +223,14 @@ function bouwHommel() {
   // borststuk: rond en dicht behaard, gele kraag voorop
   const borstGeo = new THREE.SphereGeometry(0.33, 44, 32)
   borstGeo.rotateX(-Math.PI / 2)
-  const borst = harig(borstGeo, banden([[0, ZWART], [0.6, GEEL]]), 0.1)
+  const borst = harig(borstGeo, banden([[0, ZWART], [0.6, GEEL]]), 0.1, 0.03, 6000)
   borst.scale.set(1.04, 0.96, 1)
   borst.position.set(0, 0.06, 0.36)
   hommel.add(borst)
 
   // kop: iets naar beneden gebogen, zwart behaard, met glanzende facetogen
   const kopGeo = new THREE.SphereGeometry(0.17, 32, 24)
-  const kop = harig(kopGeo, banden([[0, ZWART]]), 0.065, 0.015)
+  const kop = harig(kopGeo, banden([[0, ZWART]]), 0.05, 0.015, 500)
   kop.scale.set(1.1, 0.95, 0.75)
   kop.position.set(0, -0.08, 0.72)
   kop.rotation.x = 0.5
@@ -386,6 +427,7 @@ export function startHommel(): () => void {
   let vorige = performance.now()
   const kijk = new THREE.Object3D()
   const wens = new THREE.Quaternion()
+  let schiet = 0 // volgende zijsprong: echte hommels zigzaggen als ze zoeken
 
   const stap = (nu: number) => {
     raf = requestAnimationFrame(stap)
@@ -419,6 +461,10 @@ export function startHommel(): () => void {
       snel.lerp(naar, Math.min(1, dt * 1.6))
       snel.x += Math.sin(nu / 230) * 0.03
       snel.y += Math.cos(nu / 170) * 0.04
+      if (fase === "vliegt" && nu > schiet) {
+        snel.add(new THREE.Vector3(tussen(-1, 1), tussen(-0.6, 0.6), tussen(-0.8, 0.8)).multiplyScalar(1.3))
+        schiet = nu + tussen(350, 1100)
+      }
       if (afstand < 0.4) {
         if (fase === "vertrekt") {
           fase = "weg"
@@ -438,7 +484,13 @@ export function startHommel(): () => void {
       }
     }
     pos.addScaledVector(snel, dt)
-    hommel.position.copy(pos)
+    // een zware hommel trilt en deint in de lucht: kleine, onrustige schokjes bovenop de koers
+    const s = nu / 1000
+    hommel.position.set(
+      pos.x + Math.sin(s * 7.3) * 0.025 + Math.sin(s * 17.9) * 0.008,
+      pos.y + Math.sin(s * 9.1) * 0.035 + Math.sin(s * 23.3) * 0.01,
+      pos.z + Math.sin(s * 6.1) * 0.02,
+    )
 
     // kijk in de vliegrichting (bij zweven: half naar de kijker), en hel over in bochten;
     // hoe trager, hoe meer hij rechtop hangt, zoals een hommel die stil hangt
@@ -447,7 +499,8 @@ export function startHommel(): () => void {
     kijk.position.copy(pos)
     kijk.lookAt(pos.clone().add(richting))
     kijk.rotateZ(THREE.MathUtils.clamp(-snel.x * 0.12, -0.5, 0.5))
-    kijk.rotateX(-0.35 + Math.min(vaart, 3) * 0.08)
+    kijk.rotateX(-0.55 + Math.min(vaart, 3) * 0.14)
+    kijk.rotateZ(Math.sin(s * 5.3) * 0.06) // wiebelen om de lengteas
     wens.copy(kijk.quaternion)
     hommel.quaternion.slerp(wens, Math.min(1, dt * 5))
 
@@ -472,7 +525,7 @@ export function startHommel(): () => void {
     cancelAnimationFrame(raf)
     window.removeEventListener("resize", maat)
     scene.traverse((o) => {
-      if (o instanceof THREE.Mesh) {
+      if (o instanceof THREE.Mesh || o instanceof THREE.LineSegments) {
         o.geometry.dispose()
         const m = o.material as THREE.MeshStandardMaterial
         m.map?.dispose()
