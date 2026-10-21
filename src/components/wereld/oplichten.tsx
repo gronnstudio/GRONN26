@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from "react";
 import { Beide, type Tekst } from "@/components/taal";
 
-/** Tekst in losse woorden en letters; elke letter licht op (zie letters.ts). */
+/** Tekst in losse woorden; elke letter licht op (letters.ts maakt ze pas op de grens). */
 export function Woorden({ tekst }: { tekst: Tekst }) {
   if (typeof tekst !== "string")
     return (
@@ -22,11 +22,7 @@ export function Woorden({ tekst }: { tekst: Tekst }) {
               " "
             ) : (
               <span key={n} className="w-wd">
-                {[...d].map((c, i) => (
-                  <span key={i} className="w-lt">
-                    {c}
-                  </span>
-                ))}
+                {d}
               </span>
             ),
           )}
