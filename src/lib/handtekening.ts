@@ -41,6 +41,9 @@ const instagram = BUSINESS.instagram.replace(/^https:\/\/(www\.)?instagram\.com\
 /** De handtekening als HTML, klaar om in Gmail, Outlook of Apple Mail te plakken. */
 export const HANDTEKENING_HTML = `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; ${TEKST} color:${ANTRACIET};">
 <tr>
+<td colspan="2" style="${TEKST} padding:0 0 14px 0; font-size:14px; line-height:20px; color:${ANTRACIET};">Met vriendelijke groet,</td>
+</tr>
+<tr>
 <td width="80" style="padding:0 16px 0 0; vertical-align:top; width:64px; min-width:64px;"><img src="${BEELD}/portret.png" width="64" height="64" alt="Nick Peters" style="display:block; border:0; width:64px; min-width:64px; max-width:64px; height:64px;"></td>
 <td style="padding:0; vertical-align:top;">
 <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;">
