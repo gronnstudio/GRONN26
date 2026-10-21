@@ -492,6 +492,9 @@
   height: 100svh;
   min-height: 560px;
   overflow: hidden;
+  /* sticky is een eigen laag: de tekst erin kan niet los boven de hommel
+     uitkomen, dus ver weg vliegt hij achter de hele opening langs */
+  z-index: 1;
 }
 .vp-vijver-beeld { position: absolute; inset: 0; }
 .vp-vijver-beeld img { object-position: 40% 60%; }
