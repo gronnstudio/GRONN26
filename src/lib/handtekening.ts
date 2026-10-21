@@ -39,8 +39,14 @@ function dienst(bestand: string, naam: string) {
   return `<td style="padding:0 14px 0 0; vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr><td style="padding:0 6px 0 0; vertical-align:middle;"><img src="${BEELD}/${bestand}.png" width="16" height="16" alt="" style="display:block; border:0; width:16px; height:16px;"></td><td style="${TEKST} font-size:12px; line-height:16px; color:${ANTRACIET}; vertical-align:middle; white-space:nowrap;">${naam}</td></tr></table></td>`
 }
 
+// De socials zoals in de voet van de site (eigenaar, 21 okt 2026: "maak
+// handtekening de socials zelfde als de footer"): Instagram, WhatsApp en
+// LinkedIn als ronde knopjes, hier als png (3x), want mail kent geen svg.
+function social(href: string, bestand: string, naam: string) {
+  return `<td style="padding:0 8px 0 0; vertical-align:middle;"><a href="${href}" style="text-decoration:none;"><img src="${BEELD}/${bestand}.png" width="28" height="28" alt="${naam}" style="display:block; border:0; width:28px; height:28px;"></a></td>`
+}
+
 const website = SITE_URL.replace("https://", "")
-const instagram = BUSINESS.instagram.replace(/^https:\/\/(www\.)?instagram\.com\//, "@")
 
 /** De handtekening als HTML, klaar om in Gmail, Outlook of Apple Mail te plakken. */
 export const HANDTEKENING_HTML = `<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse; ${TEKST} color:${ANTRACIET};">
@@ -66,16 +72,17 @@ export const HANDTEKENING_HTML = `<table cellpadding="0" cellspacing="0" border=
 <tr>
 <td style="padding:0 14px 0 0; vertical-align:middle;"><a href="${SITE_URL}" style="text-decoration:none;"><img src="${BEELD}/woordmerk.png" width="96" height="20" alt="${BUSINESS.name}" style="display:block; border:0; width:96px; height:20px;"></a></td>
 <td style="${TEKST} padding:0; font-size:12px; line-height:18px; color:${BOS}; vertical-align:middle;">Een tuin die met je meegroeit.</td>
+<td style="padding:0 0 0 16px; vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tr>${social(BUSINESS.instagram, "instagram", "Instagram")}${social(BUSINESS.whatsapp, "whatsapp", "WhatsApp")}${social(BUSINESS.linkedin, "linkedin", "LinkedIn")}</tr></table></td>
 </tr>
 </table>
 </td>
 </tr>
 <tr>
-<td colspan="2" style="${TEKST} padding:8px 0 0 0; font-size:11px; line-height:17px; color:${GRIJS};">${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city} · KVK ${BUSINESS.kvk} · ${link(BUSINESS.instagram, `Instagram ${instagram}`, GRIJS)}</td>
+<td colspan="2" style="${TEKST} padding:8px 0 0 0; font-size:11px; line-height:17px; color:${GRIJS};">${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city} · KVK ${BUSINESS.kvk}</td>
 </tr>
 </table>`
 
 /** De beelden die de handtekening van gronn.studio laadt. */
-export const HANDTEKENING_BEELDEN = ["groet", "portret", "ontwerp", "aanleg", "onderhoud", "woordmerk"].map(
+export const HANDTEKENING_BEELDEN = ["groet", "portret", "ontwerp", "aanleg", "onderhoud", "woordmerk", "instagram", "whatsapp", "linkedin"].map(
   (naam) => `/brand/mail/${naam}.png`,
 )
