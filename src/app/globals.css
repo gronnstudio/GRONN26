@@ -374,28 +374,4 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 .stapel { margin: 0; padding: 0; list-style: none; }
 .stapel > li { position: sticky; top: calc(var(--stapel-top, 24px) + var(--i, 0) * 16px); }
 
-/* De rand van de voet is een border in silhouet (voet-tuin.tsx), in de kleur
-   van de voet. Scrol je naar de voet, dan groeit elke plant uit de grond,
-   de een na de ander (--d). De tijdlijn is de hele voet, niet de smalle rand:
-   die is zo snel binnen dat je er niets van zag (eigenaar: "dit doet niks"). */
-.voet-tuin {
-  position: absolute;
-  left: 0;
-  bottom: calc(100% - 1px);
-  width: 100%;
-  height: clamp(64px, 8vw, 120px);
-  fill: var(--grond);
-  pointer-events: none;
-}
-.voet-plant { transform-box: fill-box; transform-origin: 50% 100%; }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    html:not(.stil) footer:has(> .voet-tuin) { view-timeline: --voet; }
-    html:not(.stil) .voet-plant {
-      animation: voet-plant linear both;
-      animation-timeline: --voet;
-      animation-range: entry calc(var(--d) * 1%) entry calc(var(--d) * 1% + 45%);
-    }
-  }
-}
-@keyframes voet-plant { from { transform: scaleY(0); } }
+/* Geen silhouet boven de voet (eigenaar, 21 okt 2026: "Haal dit weg"); de voet begint recht. */
