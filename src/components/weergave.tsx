@@ -14,6 +14,8 @@ type Stand = {
   groot: boolean;
   contrast: boolean;
   onderstreep: boolean;
+  /** Lettertoetsen als sneltoets (zoek.tsx); WCAG 2.1.4 wil ze uit kunnen zetten. */
+  toetsen: boolean;
 };
 const KEY = "gronn-weergave";
 const STANDAARD: Stand = {
@@ -23,6 +25,7 @@ const STANDAARD: Stand = {
   groot: false,
   contrast: false,
   onderstreep: false,
+  toetsen: true,
 };
 const KLEUREN: Record<Stand["kleur"], Tekst> = {
   auto: "Auto",
@@ -34,6 +37,7 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
   ["groot", { nl: "Grotere tekst", en: "Larger text" }],
   ["contrast", { nl: "Meer contrast", en: "More contrast" }],
   ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
+  ["toetsen", { nl: "Sneltoetsen", en: "Keyboard shortcuts" }],
 ];
 
 // Auto volgt de klok van de bezoeker: 's avonds donker, overdag licht

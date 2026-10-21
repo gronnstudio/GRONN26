@@ -44,7 +44,8 @@ export function Loep({ src }: { src: string }) {
       if (e.pointerType !== "mouse" || !mq.matches) return
       // De volle foto pas laden als iemand er echt met de muis op komt.
       if (!geladen) {
-        l.style.backgroundImage = `url("${src}")`
+        // Via de beeldoptimalisatie (AVIF/WebP) in plaats van de ruwe JPEG.
+        l.style.backgroundImage = `url("/_next/image?url=${encodeURIComponent(src)}&w=1920&q=75")`
         geladen = true
       }
       laatst = e
