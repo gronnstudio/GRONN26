@@ -289,23 +289,34 @@ html.stil .w-voortgang { display: none; }
   position: relative;
   z-index: 1;
 }
-/* bloemen in het slot van de pagina: staan op de onderrand en lopen daar
-   zacht uit, zodat er geen snijkant te zien is */
-.plant-veld {
+/* twee kleine boeketjes inheemse bloemen in het slot van de pagina, net
+   boven de voet; nergens anders (eigenaar, 21 okt 2026: "maak twee
+   bloemboeketten, kleiner en enkel boven footer"). Ze staan op de onderrand
+   en lopen daar zacht uit, zodat er geen snijkant te zien is. */
+.boeket {
+  --h: clamp(96px, 13vw, 200px);
+  position: absolute;
+  z-index: 0;
   bottom: 0;
-  height: clamp(130px, 24vw, 380px);
-  width: auto;
+  display: flex;
+  align-items: flex-end;
+  height: var(--h);
+  pointer-events: none;
   mask-image: linear-gradient(to top, transparent, #000 22%);
 }
-.plant-links { left: clamp(0px, 4vw, 96px); transform-origin: 30% 100%; }
-.plant-rechts { right: 0; transform-origin: 40% 100%; }
+.boeket .plant { position: static; height: 100%; width: auto; }
+.boeket .plant + .plant { margin-left: calc(var(--h) * -0.22); }
+.boeket .plant:nth-child(2) { height: 84%; }
+.boeket .plant:nth-child(3) { height: 92%; }
+.plant-links { left: clamp(8px, 4vw, 96px); transform-origin: 50% 100%; }
+.plant-rechts { right: clamp(8px, 4vw, 96px); transform-origin: 50% 100%; }
 /* de dagpauwoog: zweeft traag rond boven de klaprozen en slaat af en toe
    een paar keer met zijn vleugels */
 .vlinder {
   position: absolute;
   z-index: 0;
-  left: calc(clamp(0px, 4vw, 96px) + clamp(70px, 12vw, 190px));
-  bottom: clamp(130px, 24vw, 380px);
+  left: calc(clamp(8px, 4vw, 96px) + clamp(40px, 6vw, 100px));
+  bottom: clamp(96px, 13vw, 200px);
   width: clamp(34px, 4.4vw, 64px);
   pointer-events: none;
 }
@@ -351,32 +362,6 @@ html.stil .w-voortgang { display: none; }
 }
 
 /* de 3D-hommel (hommel-scene.ts): over de pagina, onder het menu, vangt niets */
-/* bloemen in de marges van een breed scherm (hommel.tsx); daar is ruimte
-   naast de 1280px van de inhoud, dus ze staan nergens voor */
-.hommel-bloemen { display: none; }
-@media (min-width: 1500px) {
-  .hommel-bloemen { display: block; }
-  .plant.hommel-bloem {
-    position: fixed;
-    bottom: 0;
-    z-index: 5;
-    height: auto;
-    mask-image: linear-gradient(to top, transparent, #000 18%);
-    transition: opacity 0.5s;
-  }
-  /* zo breed als de vrije strook naast de tekst (hommel.tsx meet die), met
-     lucht ertussen; te smal en hij verdwijnt */
-  .hommel-bloem-links { left: 16px; width: min(200px, var(--marge-links, 0px) - 48px); transform-origin: 40% 100%; }
-  .hommel-bloem-rechts { right: 16px; width: min(120px, var(--marge-rechts, 0px) - 48px); transform-origin: 50% 100%; }
-  .hommel-bloemen.weg .hommel-bloem { opacity: 0; }
-  /* de 3D-klaproos (klaproos-doek.ts) neemt de plek van de foto in; hij wiegt zelf */
-  .hommel-bloem-3d { aspect-ratio: 348 / 640; animation: none !important; }
-  .hommel-bloemen.drie-d img.hommel-bloem-links { display: none; }
-  @media (prefers-reduced-motion: no-preference) {
-    html:not(.stil) .hommel-bloem-links { animation: plant-wieg 7.5s ease-in-out infinite alternate; }
-    html:not(.stil) .hommel-bloem-rechts { animation: plant-wieg 9s ease-in-out -2s infinite alternate-reverse; }
-  }
-}
 /* het dutje: drie kleine z'en die opstijgen naast de slapende hommel */
 .hommel-zzz {
   position: fixed;

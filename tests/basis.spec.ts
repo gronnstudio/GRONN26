@@ -218,7 +218,7 @@ test("inheemse bloemen en de dagpauwoog in het slot: decoratief", async ({ page 
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
   const bloemen = page.locator(".w-verder img.plant")
-  await expect(bloemen).toHaveCount(3)
+  await expect(bloemen).toHaveCount(7) // twee boeketjes van drie en de vlinder
   for (const b of await bloemen.all()) {
     await expect(b).toHaveAttribute("alt", "")
     await expect(b).toHaveAttribute("aria-hidden", "true")
@@ -241,47 +241,22 @@ test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) =>
   expect(r.headers()["permissions-policy"]).toContain("camera=()")
 })
 
-test("hommelbloemen: alleen in de marges van een breed scherm, decoratief, met landingsplekken", async ({ page }) => {
+test("bloemen: alleen twee boeketjes boven de voet, decoratief, met landingsplekken", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1680, height: 950 })
   await page.goto("/over", { waitUntil: "domcontentloaded" })
-  const bloemen = page.locator(".hommel-bloemen img")
-  await expect(bloemen).toHaveCount(2)
-  await expect(bloemen.first()).toBeVisible()
-  await expect(page.locator(".hommel-bloemen")).toHaveAttribute("aria-hidden", "true")
-  for (const b of await bloemen.all()) await expect(b).toHaveAttribute("data-landing", /^[\d.]+,[\d.]+/)
-  await page.setViewportSize({ width: 1280, height: 800 })
-  await expect(bloemen.first()).toBeHidden()
-})
-
-test("hommelbloemen: nooit over tekst, en weg bij de voet", async ({ page }) => {
-  await zonderIntro(page)
-  await page.setViewportSize({ width: 1607, height: 900 })
-  await page.goto("/", { waitUntil: "load" })
-  await page.waitForTimeout(800)
-  const hoog = await page.evaluate(() => document.documentElement.scrollHeight)
-  for (let y = 0; y < hoog; y += 450) {
-    await page.evaluate((y) => scrollTo(0, y), y)
-    await page.waitForTimeout(80)
-    const botst = await page.evaluate(() => {
-      const uit: string[] = []
-      for (const f of document.querySelectorAll(".hommel-bloem")) {
-        const b = f.getBoundingClientRect()
-        if (!b.width || f.closest(".weg")) continue
-        const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
-        const r = document.createRange()
-        for (let n = tw.nextNode(); n; n = tw.nextNode()) {
-          if (!n.textContent?.trim() || n.parentElement!.closest(".sr-only, nav, .hommel-bloemen")) continue
-          r.selectNodeContents(n)
-          for (const q of r.getClientRects()) if (q.width && q.right > b.left && q.left < b.right && q.bottom > b.top && q.top < b.bottom) uit.push(n.textContent.trim())
-        }
-      }
-      return uit
-    })
-    expect(botst, `bij scrollY ${y}`).toEqual([])
+  // geen bloemen meer in de marges van de rest van de site (eigenaar, 21 okt 2026)
+  await expect(page.locator(".hommel-bloem, .hommel-bloemen")).toHaveCount(0)
+  const boeketten = page.locator(".w-verder .boeket")
+  await expect(boeketten).toHaveCount(2)
+  for (const b of await boeketten.all()) {
+    await expect(b).toHaveAttribute("aria-hidden", "true")
+    await expect(b.locator("img")).toHaveCount(3)
+    for (const i of await b.locator("img").all()) await expect(i).toHaveAttribute("data-landing", /^[\d.]+,[\d.]+/)
   }
   await page.locator("footer").scrollIntoViewIfNeeded()
-  await expect(page.locator(".hommel-bloemen")).toHaveClass(/weg/)
+  await expect(boeketten.first()).toBeVisible()
+  expect((await boeketten.first().boundingBox())!.height).toBeLessThanOrEqual(220) // 200 hoog, plus het wiegen
 })
 
 
