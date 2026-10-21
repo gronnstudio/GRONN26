@@ -280,3 +280,16 @@ for (const b of [390, 1440]) {
     await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
   })
 }
+
+test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/tuinen/cadeaubon", { waitUntil: "domcontentloaded" })
+  const pad = page.getByRole("navigation", { name: "Kruimelpad" })
+  await expect(pad.getByRole("listitem")).toHaveText(["Home", "Shop", /^Cadeaubon/]) // beide talen staan in de pagina
+  await expect(pad.locator('[aria-current="page"]')).toHaveText(/^Cadeaubon/)
+  const ld = JSON.parse((await pad.locator('script[type="application/ld+json"]').textContent()) ?? "{}")
+  expect(ld["@type"]).toBe("BreadcrumbList")
+  expect(ld.itemListElement.map((s: { name: string }) => s.name)).toEqual(["Home", "Shop", "Cadeaubon"])
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await expect(page.getByRole("navigation", { name: "Kruimelpad" })).toHaveCount(0)
+})
