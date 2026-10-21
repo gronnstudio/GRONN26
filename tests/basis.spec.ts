@@ -74,6 +74,16 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
+// Auto volgt de klok van de bezoeker: 's avonds donker, overdag licht.
+for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
+  test(`weergave: Auto om ${uur} is ${donker ? "donker" : "licht"}`, async ({ page }) => {
+    await page.clock.setFixedTime(new Date(`2026-10-21T${uur}:00`))
+    await zonderIntro(page)
+    await page.goto("/over")
+    await expect(page.locator("html")).toHaveClass(donker ? /donker/ : /^(?!.*donker)/)
+  })
+}
+
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
 for (const b of [390, 1440]) {
   test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {

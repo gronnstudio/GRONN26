@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isAvond } from "@/components/weergave";
 
 // Dezelfde kleurkeuze als in Weergave op de site (Auto · Licht · Donker; Auto =
-// de instelling van het toestel), en dezelfde bewaarde stand: wat je hier kiest,
+// de klok), en dezelfde bewaarde stand: wat je hier kiest,
 // geldt ook op de site en andersom. Het voorverf-script in layout.tsx zet het
 // vóór de eerste verf.
 type Kleur = "auto" | "licht" | "donker";
@@ -28,7 +29,7 @@ export function KleurKeuze() {
 
   const kies = (k: Kleur) => {
     setKleur(k);
-    document.documentElement.classList.toggle("donker", k === "donker" || (k === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches));
+    document.documentElement.classList.toggle("donker", k === "donker" || (k === "auto" && isAvond()));
     try {
       const stand = JSON.parse(localStorage.getItem(KEY) || "{}");
       localStorage.setItem(KEY, JSON.stringify({ ...stand, kleur: k }));
