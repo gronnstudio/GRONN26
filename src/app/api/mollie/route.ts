@@ -10,7 +10,8 @@ export async function POST(request: NextRequest) {
   const b = await haalBetaling(id)
   if (!b) return new NextResponse(null, { status: 404 })
   const s = await leesStand()
-  const bestelling = s.bestellingen.find((x) => x.mollie === id)
+  // Een borderpakket of een cadeaubon; beide houden hun Mollie-id bij.
+  const bestelling = s.bestellingen.find((x) => x.mollie === id) ?? s.bonnen.find((x) => x.mollie === id)
   if (!bestelling) return new NextResponse(null, { status: 200 })
   const status = b.status === "paid" ? "betaald" : ["canceled", "expired", "failed"].includes(b.status) ? "mislukt" : "open"
   if (bestelling.status !== status) {

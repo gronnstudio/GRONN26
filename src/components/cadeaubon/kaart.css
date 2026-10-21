@@ -1,0 +1,58 @@
+/* De cadeaubon in 3D (kaart.tsx). Maten in cqw, zodat de kaart op elke breedte
+   dezelfde verhoudingen houdt; de kaart zelf is 1,6 : 1, als een cadeaukaart. */
+.bk-scene { perspective: 1400px; }
+
+.bk-kaart {
+  display: block; width: 100%; aspect-ratio: 1.6; padding: 0; border: 0; background: none;
+  cursor: pointer; container-type: inline-size; transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 4deg)) rotateY(var(--ry, -8deg));
+  transition: transform .25s ease-out;
+}
+.bk-kaart:focus-visible { outline: 2px solid var(--inkt); outline-offset: 8px; border-radius: 18px; }
+
+.bk-binnen { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.bk-kaart[data-om="true"] .bk-binnen { transform: rotateY(180deg); }
+
+.bk-zijde {
+  position: absolute; inset: 0; display: flex; flex-direction: column; overflow: hidden;
+  border-radius: 16px; padding: 6cqw 6.5cqw; text-align: left;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  box-shadow: 0 2px 0 rgb(0 0 0 / .08), 0 40px 70px -30px rgb(42 32 25 / .55);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.bk-voor { background: #ff5b04; color: #2b2a24; }
+.bk-achter { background: #2a2019; color: #f0e9dc; transform: rotateY(180deg); }
+
+.bk-logo { width: 26cqw; height: auto; }
+.bk-plant { position: absolute; right: -3cqw; bottom: -10cqw; height: 92%; width: auto; transform: rotate(-6deg); pointer-events: none; }
+.bk-label { font: 600 2.4cqw/1.3 var(--font-sans); letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+.bk-voor .bk-label { position: absolute; top: 7cqw; right: 6.5cqw; }
+.bk-cadeau { position: relative; margin-top: auto; font-family: var(--font-syne); font-weight: 700; font-size: 16cqw; line-height: .9; letter-spacing: -.04em; }
+.bk-onder { position: relative; display: flex; align-items: baseline; gap: 3cqw; margin-top: 3cqw; }
+.bk-bedrag { font-family: var(--font-syne); font-weight: 700; font-size: 6.5cqw; line-height: 1; font-variant-numeric: tabular-nums; }
+.bk-voor-wie { font: 500 3.4cqw/1.2 var(--font-sans); max-width: 40cqw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.bk-boodschap { margin-top: 4cqw; font-family: var(--font-syne); font-weight: 700; font-size: 5cqw; line-height: 1.15; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.bk-gebruik { margin-top: auto; max-width: 70cqw; font: 400 2.6cqw/1.5 var(--font-sans); opacity: .85; }
+.bk-voet { display: flex; justify-content: space-between; align-items: baseline; gap: 3cqw; margin-top: 3cqw; padding-top: 3cqw; border-top: 1px solid rgb(240 233 220 / .25); font: 500 2.6cqw/1.2 var(--font-sans); }
+.bk-nummer { font-family: ui-monospace, "Geist Mono", monospace; font-size: 3.4cqw; letter-spacing: .06em; color: #ff5b04; }
+
+.bk-glans { position: absolute; inset: 0; border-radius: 16px; pointer-events: none; mix-blend-mode: soft-light; background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgb(255 255 255 / .55), transparent 55%); transform: translateZ(1px); }
+.bk-kaart[data-om="true"] .bk-glans { transform: rotateY(180deg) translateZ(1px); }
+
+html.stil .bk-kaart, html.stil .bk-binnen { transition: none; transform: none; }
+html.stil .bk-kaart[data-om="true"] .bk-binnen { transform: rotateY(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .bk-kaart, .bk-binnen { transition: none !important; }
+  .bk-kaart { transform: none !important; }
+}
+
+/* Printen (bonpagina): beide kanten plat onder elkaar, op ware grootte 85,6 mm breed ×2. */
+.bk-print { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  .bk-print, .bk-print * { visibility: visible; }
+  .bk-print { display: grid; gap: 8mm; position: absolute; top: 12mm; left: 12mm; width: 150mm; }
+  .bk-print > div { position: relative; aspect-ratio: 1.6; container-type: inline-size; }
+  .bk-print .bk-zijde { transform: none; box-shadow: none; }
+}

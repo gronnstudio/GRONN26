@@ -9,7 +9,7 @@ import { Kopieer } from "@/components/beheer/kopieer"
 import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
-import { aanvraagKlaar, bestellingKlaar, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
+import { aanvraagKlaar, bestellingKlaar, bonIngewisseld, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
 import { EIGEN_PAGINAS, KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
@@ -285,6 +285,33 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                   {b.naam} · <a href={`mailto:${b.email}`} className="text-oranje-tekst">{b.email}</a> · <a href={`tel:${b.telefoon.replace(/\s/g, "")}`} className="text-oranje-tekst">{b.telefoon}</a>
                   <br />
                   {b.adres}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+        )}
+        {/* cadeaubonnen: online betaald; het nummer staat op de bon die de klant laat zien */}
+        {stand.bonnen.some((b) => b.status === "betaald") && (
+        <section className="min-w-0 lg:col-span-2">
+          <div className="flex items-baseline justify-between gap-4">
+            <p className={`${lbl} m-0 opacity-60`}>Cadeaubonnen</p>
+            <p className="m-0 text-[12px] opacity-60">{stand.bonnen.filter((b) => b.status === "betaald" && !b.ingewisseld).length} open</p>
+          </div>
+          <ul className="m-0 mt-4 grid list-none gap-3 p-0 md:grid-cols-2">
+            {stand.bonnen.filter((b) => b.status === "betaald").map((b) => (
+              <li key={b.id} className={`rounded-[18px] border p-4 ${!b.ingewisseld ? "border-oranje/60 bg-oranje/10" : "border-lijn opacity-60"}`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <b className="font-semibold tabular-nums">{b.nummer} · {euro(b.bedrag)}</b>
+                    <span className="mt-0.5 block text-[12px] opacity-60">voor {b.voor} · van {b.van} · geldig t/m {b.geldigTot}</span>
+                  </div>
+                  <form action={bonIngewisseld.bind(null, b.id, !b.ingewisseld)}>
+                    <button className="knop-klein shrink-0 border border-inkt/30">{b.ingewisseld ? "Terugzetten" : "Ingewisseld ✓"}</button>
+                  </form>
+                </div>
+                <p className="m-0 mt-2 text-[13px] leading-[1.5]">
+                  Gekocht door {b.naam} · <a href={`mailto:${b.email}`} className="text-oranje-tekst">{b.email}</a> · <a href={`/tuinen/cadeaubon/bon?b=${b.id}`} className="text-oranje-tekst">bon bekijken</a>
                 </p>
               </li>
             ))}
