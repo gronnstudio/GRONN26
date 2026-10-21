@@ -1,5 +1,6 @@
 import { kortePrijs } from "@/components/diensten/prijs"
 import { faqVragen } from "@/components/faq/vragen"
+import { STUKKEN } from "@/lib/data/blog"
 import { BODEMPAKKETTEN, BORDER_MATEN, BORDER_PRIJS, BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
 import { SERVICES } from "@/lib/data/services"
 import { TERRAS_ALS_PROJECT } from "@/lib/data/terras-geulle"
@@ -33,6 +34,8 @@ const PAGINAS: Treffer[] = [
   { soort: "pagina", href: "/over", titel: { nl: "Studio", en: "Studio" }, sub: { nl: "Over Nick en GRØNN Studio", en: "About Nick and GRØNN Studio" } },
   { soort: "pagina", href: "/kennismaken", titel: { nl: "Kennismaken", en: "Get in touch" }, sub: { nl: "Contact, WhatsApp of een afspraak", en: "Contact, WhatsApp or an appointment" } },
   { soort: "pagina", href: "/faq", titel: { nl: "Veelgestelde vragen", en: "FAQ" }, sub: { nl: "Prijzen, werkgebied en werkwijze", en: "Prices, area and how I work" } },
+  { soort: "pagina", href: "/blog", titel: { nl: "Blog", en: "Blog" }, sub: { nl: "Praktische stukken over vijver en tuin", en: "Practical pieces on ponds and gardens (Dutch)" } },
+  ...STUKKEN.map((s): Treffer => ({ soort: "pagina", href: `/blog/${s.slug}`, titel: { nl: s.titel, en: s.titel }, sub: { nl: "Blog", en: "Blog" } })),
   { soort: "pagina", href: "/techniek", titel: { nl: "Techniek", en: "Technology" }, sub: { nl: "Het gereedschap achter de studio", en: "The tools behind the studio" } },
 ]
 

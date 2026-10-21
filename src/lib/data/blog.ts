@@ -46,7 +46,7 @@ export const STUKKEN: Stuk[] = [
     titel: "Je vijver winterklaar maken in Zuid-Limburg",
     beschrijving:
       "Stoppen met voeren, pomp hoger, bladnet erop, wak openhouden. Zo komt je vijver gezond de winter door. Vijveronderhoud in Stein en omgeving.",
-    datum: "2026-10-22",
+    datum: "2026-10-21",
     leestijd: 4,
     beeld: WATERVAL,
     blokken: [
