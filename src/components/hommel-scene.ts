@@ -5,16 +5,17 @@ import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.j
 // Een aardhommel (Bombus terrestris) als klein 3D-model dat af en toe over de
 // pagina vliegt (eigenaar, 20 okt 2026: "een hommel willekeurig door de
 // webpagina ... verder weg, dan weer dichtbij", "verschillende hoeken",
-// "vleugels moeten bewegen"; 21 okt: "maak de hommel super realistisch").
+// "vleugels moeten bewegen"; 21 okt: "maak de hommel super realistisch",
+// en daarna een foto van de inheemse aardhommel: "gebruik deze soort").
 // Geen foto: een model, zodat hij echt draait. Vacht in lagen (shell fur),
 // geaderde rookbruine vleugels met een zweem regenboog, glanzende facetogen,
 // geknikte voelsprieten, gelede poten met een stuifmeelklompje achteraan.
 // Hij komt binnen, zwerft een tijd rond (soms even stil in de lucht), vliegt
 // weg en komt later terug. Zolang hij weg is, wordt er niets getekend.
 
-const ZWART = "#2b241d"
-const GEEL = "#d9a23a" // oker, zoals de kraag van een aardhommel
-const WIT = "#efe6d2" // de vuilwitte staart
+const ZWART = "#1c1814" // diep zwart, met een bruine glans in de haarpunten
+const GEEL = "#e3961c" // oranjegeel, zoals de smalle kraag en band van de aardhommel
+const WIT = "#f5f2ea" // de witte staart
 const LAGEN = 20 // vachtlagen per lichaamsdeel
 
 const doek = (b: number, h: number) => {
@@ -82,9 +83,9 @@ function harenKaart() {
 /** Rookbruin vleugelvlies met aders, vooral aan de voorrand en de basis, zoals bij een bij. */
 function vleugelHuid() {
   const [c, g] = doek(512, 192)
-  g.fillStyle = "rgba(92,74,52,0.22)"
+  g.fillStyle = "rgba(58,44,32,0.36)"
   g.fillRect(0, 0, 512, 192)
-  g.strokeStyle = "rgba(60,44,30,0.7)"
+  g.strokeStyle = "rgba(34,24,16,0.8)"
   g.lineCap = "round"
   const lijn = (w: number, ...p: number[]) => {
     g.lineWidth = w
@@ -135,14 +136,15 @@ function vleugelGeo(lengte: number, breedte: number) {
 
 /** Losse haren als dunne gebogen lijntjes, in de kleur van de huid eronder:
  *  zij maken de rand pluizig, zoals bij een echte hommel tegen het licht. */
-function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture, lengte: number, aantal: number) {
-  const beeld = kleur.image as HTMLCanvasElement
-  const px = beeld.getContext("2d", { willReadFrequently: true })!.getImageData(0, 0, beeld.width, beeld.height).data
+function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture | THREE.Color, lengte: number, aantal: number) {
+  const beeld = kleur instanceof THREE.Texture ? (kleur.image as HTMLCanvasElement) : null
+  const px = beeld?.getContext("2d", { willReadFrequently: true })!.getImageData(0, 0, beeld.width, beeld.height).data
+  const glans = new THREE.Color(0.42, 0.3, 0.18) // bruinige glans op zwart haar in de zon
   const monster = new MeshSurfaceSampler(kern).build()
   const p = new THREE.Vector3()
   const n = new THREE.Vector3()
   const uv = new THREE.Vector2()
-  const kam = new THREE.Vector3(0, -0.3, -1).normalize().multiplyScalar(0.6)
+  const kam = new THREE.Vector3(0, -0.3, -1).normalize().multiplyScalar(0.3)
   const punten: number[] = []
   const kleuren: number[] = []
   const a = new THREE.Vector3()
@@ -150,19 +152,24 @@ function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture, lengte: number, aa
   const c = new THREE.Vector3()
   for (let i = 0; i < aantal; i++) {
     monster.sample(p, n, undefined, uv)
-    const l = lengte * (0.4 + Math.random() * 0.75)
+    let tint: THREE.Color
+    if (beeld && px) {
+      const x = Math.min(beeld.width - 1, Math.floor(uv.x * beeld.width))
+      const y = Math.min(beeld.height - 1, Math.floor((1 - uv.y) * beeld.height))
+      const k = (y * beeld.width + x) * 4
+      tint = new THREE.Color().setRGB(px[k] / 255, px[k + 1] / 255, px[k + 2] / 255, THREE.SRGBColorSpace)
+    } else tint = (kleur as THREE.Color).clone()
+    const helder = (tint.r + tint.g + tint.b) / 3
+    // de witte staart en de gele banden zijn langer en pluiziger dan het zwart
+    const l = lengte * (0.4 + Math.random() * 0.75) * (1 + helder * 0.7)
     const krul = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(0.9)
     a.copy(p)
     b.copy(p).addScaledVector(n, l * 0.5).addScaledVector(kam, l * 0.18).addScaledVector(krul, l * 0.2)
     c.copy(b).addScaledVector(n, l * 0.3).addScaledVector(kam, l * 0.35).addScaledVector(krul, l * 0.45)
     punten.push(a.x, a.y, a.z, b.x, b.y, b.z, b.x, b.y, b.z, c.x, c.y, c.z)
-    const x = Math.min(beeld.width - 1, Math.floor(uv.x * beeld.width))
-    const y = Math.min(beeld.height - 1, Math.floor((1 - uv.y) * beeld.height))
-    const k = (y * beeld.width + x) * 4
-    const tint = new THREE.Color().setRGB(px[k] / 255, px[k + 1] / 255, px[k + 2] / 255, THREE.SRGBColorSpace)
     const voet = tint.clone().multiplyScalar(0.45)
-    const midden = tint.clone().multiplyScalar(0.8)
-    const punt = tint.clone().lerp(new THREE.Color(1, 0.97, 0.9), 0.12)
+    const midden = tint.clone().multiplyScalar(0.85)
+    const punt = helder < 0.1 ? tint.clone().lerp(glans, 0.3 + Math.random() * 0.3) : tint.clone().lerp(new THREE.Color(1, 0.97, 0.9), 0.15)
     for (const kl of [voet, midden, midden, punt]) kleuren.push(kl.r, kl.g, kl.b)
   }
   const geo = new THREE.BufferGeometry()
@@ -220,16 +227,16 @@ function bouwHommel() {
     }
     lijfGeo.computeVertexNormals()
   }
-  const lijf = harig(lijfGeo, banden([[0, WIT], [0.3, ZWART], [0.52, GEEL], [0.68, ZWART]]), 0.1, 0.03, 9000)
-  lijf.scale.set(0.86, 0.78, 1.08)
-  lijf.position.set(0, -0.06, -0.24)
-  lijf.rotation.x = -0.22 // het achterlijf hangt iets omlaag
+  const lijf = harig(lijfGeo, banden([[0, WIT], [0.38, ZWART], [0.6, GEEL], [0.73, ZWART]]), 0.1, 0.03, 11000)
+  lijf.scale.set(0.84, 0.8, 1.22)
+  lijf.position.set(0, -0.1, -0.3)
+  lijf.rotation.x = -0.32 // het achterlijf hangt omlaag, zoals op de foto
   hommel.add(lijf)
 
   // borststuk: rond en dicht behaard, gele kraag voorop
   const borstGeo = new THREE.SphereGeometry(0.33, 44, 32)
   borstGeo.rotateX(-Math.PI / 2)
-  const borst = harig(borstGeo, banden([[0, ZWART], [0.6, GEEL]]), 0.1, 0.03, 6000)
+  const borst = harig(borstGeo, banden([[0, ZWART], [0.74, GEEL]]), 0.1, 0.03, 7000)
   borst.scale.set(1.04, 0.96, 1)
   borst.position.set(0, 0.06, 0.36)
   hommel.add(borst)
@@ -237,16 +244,16 @@ function bouwHommel() {
   // kop: iets naar beneden gebogen, zwart behaard, met glanzende facetogen
   const kopGeo = new THREE.SphereGeometry(0.17, 32, 24)
   const kop = harig(kopGeo, banden([[0, ZWART]]), 0.05, 0.015, 500)
-  kop.scale.set(1.1, 0.95, 0.75)
+  kop.scale.set(1.0, 1.15, 0.78)
   kop.position.set(0, -0.08, 0.72)
   kop.rotation.x = 0.5
   hommel.add(kop)
 
   const chitine = new THREE.MeshPhysicalMaterial({ color: 0x0d0b09, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.15 })
-  const oogMat = new THREE.MeshPhysicalMaterial({ color: 0x1c1712, roughness: 0.4, clearcoat: 0.5, clearcoatRoughness: 0.3, sheen: 0.5, sheenColor: 0x6a5a40 })
+  const oogMat = new THREE.MeshPhysicalMaterial({ color: 0x0c0a09, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.08 })
   for (const k of [-1, 1]) {
     const oog = new THREE.Mesh(new THREE.SphereGeometry(0.1, 24, 18), oogMat)
-    oog.scale.set(0.32, 0.95, 0.5)
+    oog.scale.set(0.34, 1.2, 0.55)
     oog.position.set(k * 0.155, -0.06, 0.74)
     oog.rotation.z = k * 0.2
     hommel.add(oog)
@@ -282,7 +289,7 @@ function bouwHommel() {
     return wortel
   }
 
-  const pootMat = new THREE.MeshStandardMaterial({ color: 0x1a1612, roughness: 0.8 })
+  const pootMat = new THREE.MeshStandardMaterial({ color: 0x241b14, roughness: 0.7 })
   const stuifmeel = new THREE.MeshStandardMaterial({ color: 0xe0901e, roughness: 0.9 })
   for (const k of [-1, 1]) {
     // voelspriet: schacht, knik, en een zweep van kleine leedjes
@@ -312,6 +319,13 @@ function bouwHommel() {
         ],
         pootMat,
       )
+      // haartjes op dij en scheen; de poten van een hommel zijn ook behaard
+      const dijLid = poot.children[0]
+      const scheenLid = dijLid.children[1]
+      for (const lid of [dijLid, scheenLid]) {
+        const been = lid.children[0] as THREE.Mesh
+        been.add(haarStrengen(been, new THREE.Color(ZWART), 0.03, 70))
+      }
       poot.position.set(k * 0.12, -0.16, z)
       poot.rotation.set(Math.PI + hoek, 0, k * 0.35)
       hommel.add(poot)
