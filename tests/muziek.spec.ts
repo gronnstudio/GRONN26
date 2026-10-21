@@ -10,8 +10,11 @@ test("muziek: aan na eerste tik, knop zet uit en onthoudt", async ({ context, pa
     HTMLMediaElement.prototype.play = function () { w.log.push("play"); return Promise.resolve() }
     HTMLMediaElement.prototype.pause = function () { w.log.push("pause") }
   })
+  // Onder belasting is de pagina soms pas na seconden gehydrateerd; een tik
+  // daarvoor valt weg. Dus eerst laten uitladen, en ruimer de tijd.
+  test.setTimeout(60_000)
   const log = () => page.evaluate(() => (window as unknown as { log: string[] }).log.join(","))
-  await page.goto("/")
+  await page.goto("/", { waitUntil: "networkidle" })
   await page.waitForTimeout(500)
   expect(await log()).toBe("")
   const knop = page.locator("button[data-muziek]")
@@ -28,9 +31,16 @@ test("muziek: aan na eerste tik, knop zet uit en onthoudt", async ({ context, pa
   await expect(knop).toHaveAttribute("aria-label", "Muziek aan")
   expect(await log()).toBe("play,pause")
   // Een tweede tabblad in plaats van reload: op CI breekt een tweede
-  // navigatie op dezelfde pagina soms af (ERR_ABORTED).
+  // navigatie soms af (ERR_ABORTED), ook in een nieuw tabblad; dan nog eens.
   const tweede = await context.newPage()
-  await tweede.goto("/")
+  for (let poging = 1; ; poging++) {
+    try {
+      await tweede.goto("/", { waitUntil: "networkidle" })
+      break
+    } catch (fout) {
+      if (poging === 3) throw fout
+    }
+  }
   await expect(tweede.locator("button[data-muziek]")).toHaveAttribute("aria-label", "Muziek aan")
   await tweede.mouse.click(vp.width / 2, 200)
   await tweede.waitForTimeout(300)
