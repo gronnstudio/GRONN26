@@ -210,6 +210,8 @@ test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ p
   await expect(tak).toHaveAttribute("alt", "")
   await expect(tak).toHaveAttribute("aria-hidden", "true")
   await expect(page.locator("footer img.plant")).toHaveCount(0)
+  // ook geen tuinsilhouet boven de voet (eigenaar, 21 okt 2026: "Haal dit weg")
+  await expect(page.locator("footer > svg")).toHaveCount(0)
 })
 
 test("inheemse bloemen en de dagpauwoog in het slot: decoratief", async ({ page }) => {

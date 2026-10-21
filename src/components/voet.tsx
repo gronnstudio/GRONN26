@@ -2,7 +2,6 @@ import Link from "next/link"
 import { BUSINESS } from "@/lib/business"
 import { Logo } from "./logo"
 import { Kopieer } from "./kopieer"
-import { VoetTuin } from "./voet-tuin"
 import { T, type Tekst } from "./taal"
 
 const PAGINAS: [string, Tekst][] = [
@@ -25,7 +24,6 @@ export function Voet() {
   const a = BUSINESS.address
   return (
     <footer className="donker bos-vlak relative mt-[clamp(80px,14vw,220px)] mb-[-110px] bg-grond pt-[clamp(56px,7vw,96px)] pb-[calc(110px+clamp(28px,4vw,48px))] text-inkt">
-      <VoetTuin />
       <div className="wrap">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-8">
           <div>
