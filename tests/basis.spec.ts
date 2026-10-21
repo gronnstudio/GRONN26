@@ -241,6 +241,19 @@ test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) =>
   expect(r.headers()["permissions-policy"]).toContain("camera=()")
 })
 
+test("hommelbloemen: alleen in de marges van een breed scherm, decoratief, met landingsplekken", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 1680, height: 950 })
+  await page.goto("/over", { waitUntil: "domcontentloaded" })
+  const bloemen = page.locator(".hommel-bloemen img")
+  await expect(bloemen).toHaveCount(2)
+  await expect(bloemen.first()).toBeVisible()
+  await expect(page.locator(".hommel-bloemen")).toHaveAttribute("aria-hidden", "true")
+  for (const b of await bloemen.all()) await expect(b).toHaveAttribute("data-landing", /^[\d.]+,[\d.]+/)
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await expect(bloemen.first()).toBeHidden()
+})
+
 test("over @390: het verhaal snapt na een korte scroll op het volgende hoofdstuk", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 390, height: 844 })

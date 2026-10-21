@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
+import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js"
 
 // Een aardhommel (Bombus terrestris) als klein 3D-model dat af en toe over de
 // pagina vliegt (eigenaar, 20 okt 2026: "een hommel willekeurig door de
@@ -20,7 +21,7 @@ const doek = (b: number, h: number) => {
   const c = document.createElement("canvas")
   c.width = b
   c.height = h
-  return [c, c.getContext("2d")!] as const
+  return [c, c.getContext("2d", { willReadFrequently: true })!] as const
 }
 
 /** Kleurbanden van staart (boven) naar kop (onder), met zachte overgangen. */
@@ -56,16 +57,22 @@ function banden(stops: [number, string][]) {
 
 /** Haardichtheid: elk stipje is een haar, de helderheid is zijn lengte. */
 function harenKaart() {
+  // rechtstreeks in de pixels: 60.000 cirkeltjes tekenen kostte een kwart seconde
   const [c, g] = doek(512, 512)
-  g.fillStyle = "#000"
-  g.fillRect(0, 0, 512, 512)
+  const beeld = g.createImageData(512, 512)
+  const d = beeld.data
+  for (let i = 3; i < d.length; i += 4) d[i] = 255
   for (let n = 0; n < 60000; n++) {
     const l = 110 + Math.random() * 145
-    g.fillStyle = `rgb(${l},${l},${l})`
-    g.beginPath()
-    g.arc(Math.random() * 512, Math.random() * 512, 0.7 + Math.random() * 0.6, 0, Math.PI * 2)
-    g.fill()
+    const x = Math.floor(Math.random() * 511)
+    const y = Math.floor(Math.random() * 511)
+    const groot = Math.random() < 0.5
+    for (const [dx, dy] of groot ? [[0, 0], [1, 0], [0, 1], [1, 1]] : [[0, 0]]) {
+      const k = ((y + dy) * 512 + x + dx) * 4
+      if (d[k] < l) d[k] = d[k + 1] = d[k + 2] = l
+    }
   }
+  g.putImageData(beeld, 0, 0)
   const t = new THREE.CanvasTexture(c)
   t.wrapS = t.wrapT = THREE.RepeatWrapping
   t.repeat.set(4, 7)
@@ -126,16 +133,56 @@ function vleugelGeo(lengte: number, breedte: number) {
   return geo
 }
 
+/** Losse haren als dunne gebogen lijntjes, in de kleur van de huid eronder:
+ *  zij maken de rand pluizig, zoals bij een echte hommel tegen het licht. */
+function haarStrengen(kern: THREE.Mesh, kleur: THREE.Texture, lengte: number, aantal: number) {
+  const beeld = kleur.image as HTMLCanvasElement
+  const px = beeld.getContext("2d", { willReadFrequently: true })!.getImageData(0, 0, beeld.width, beeld.height).data
+  const monster = new MeshSurfaceSampler(kern).build()
+  const p = new THREE.Vector3()
+  const n = new THREE.Vector3()
+  const uv = new THREE.Vector2()
+  const kam = new THREE.Vector3(0, -0.3, -1).normalize().multiplyScalar(0.6)
+  const punten: number[] = []
+  const kleuren: number[] = []
+  const a = new THREE.Vector3()
+  const b = new THREE.Vector3()
+  const c = new THREE.Vector3()
+  for (let i = 0; i < aantal; i++) {
+    monster.sample(p, n, undefined, uv)
+    const l = lengte * (0.4 + Math.random() * 0.75)
+    const krul = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).multiplyScalar(0.9)
+    a.copy(p)
+    b.copy(p).addScaledVector(n, l * 0.5).addScaledVector(kam, l * 0.18).addScaledVector(krul, l * 0.2)
+    c.copy(b).addScaledVector(n, l * 0.3).addScaledVector(kam, l * 0.35).addScaledVector(krul, l * 0.45)
+    punten.push(a.x, a.y, a.z, b.x, b.y, b.z, b.x, b.y, b.z, c.x, c.y, c.z)
+    const x = Math.min(beeld.width - 1, Math.floor(uv.x * beeld.width))
+    const y = Math.min(beeld.height - 1, Math.floor((1 - uv.y) * beeld.height))
+    const k = (y * beeld.width + x) * 4
+    const tint = new THREE.Color().setRGB(px[k] / 255, px[k + 1] / 255, px[k + 2] / 255, THREE.SRGBColorSpace)
+    const voet = tint.clone().multiplyScalar(0.45)
+    const midden = tint.clone().multiplyScalar(0.8)
+    const punt = tint.clone().lerp(new THREE.Color(1, 0.97, 0.9), 0.12)
+    for (const kl of [voet, midden, midden, punt]) kleuren.push(kl.r, kl.g, kl.b)
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(punten, 3))
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(kleuren, 3))
+  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.8 }))
+}
+
 function bouwHommel() {
   const hommel = new THREE.Group()
   const haren = harenKaart()
 
   /** Een lichaamsdeel met vacht: een kern plus LAGEN steeds grotere schillen
    *  waarin alleen de langere haren overblijven, iets naar achteren gekamd. */
-  const harig = (geo: THREE.BufferGeometry, kleur: THREE.Texture, vacht: number, kam = 0.03) => {
+  const harig = (geo: THREE.BufferGeometry, kleur: THREE.Texture, vacht: number, kam = 0.03, strengen = 0) => {
     const deel = new THREE.Group()
     const r = (geo.boundingSphere ?? (geo.computeBoundingSphere(), geo.boundingSphere!)).radius
-    deel.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: kleur, color: 0x777777, roughness: 1 })))
+    const kern = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: kleur, color: 0x777777, roughness: 1 }))
+    deel.add(kern)
+    if (strengen) deel.add(haarStrengen(kern, kleur, vacht * 1.05, strengen))
     for (let i = 1; i <= LAGEN; i++) {
       const h = i / LAGEN
       const laag = new THREE.Mesh(
@@ -173,7 +220,7 @@ function bouwHommel() {
     }
     lijfGeo.computeVertexNormals()
   }
-  const lijf = harig(lijfGeo, banden([[0, WIT], [0.3, ZWART], [0.52, GEEL], [0.68, ZWART]]), 0.1)
+  const lijf = harig(lijfGeo, banden([[0, WIT], [0.3, ZWART], [0.52, GEEL], [0.68, ZWART]]), 0.1, 0.03, 9000)
   lijf.scale.set(0.86, 0.78, 1.08)
   lijf.position.set(0, -0.06, -0.24)
   lijf.rotation.x = -0.22 // het achterlijf hangt iets omlaag
@@ -182,14 +229,14 @@ function bouwHommel() {
   // borststuk: rond en dicht behaard, gele kraag voorop
   const borstGeo = new THREE.SphereGeometry(0.33, 44, 32)
   borstGeo.rotateX(-Math.PI / 2)
-  const borst = harig(borstGeo, banden([[0, ZWART], [0.6, GEEL]]), 0.1)
+  const borst = harig(borstGeo, banden([[0, ZWART], [0.6, GEEL]]), 0.1, 0.03, 6000)
   borst.scale.set(1.04, 0.96, 1)
   borst.position.set(0, 0.06, 0.36)
   hommel.add(borst)
 
   // kop: iets naar beneden gebogen, zwart behaard, met glanzende facetogen
   const kopGeo = new THREE.SphereGeometry(0.17, 32, 24)
-  const kop = harig(kopGeo, banden([[0, ZWART]]), 0.065, 0.015)
+  const kop = harig(kopGeo, banden([[0, ZWART]]), 0.05, 0.015, 500)
   kop.scale.set(1.1, 0.95, 0.75)
   kop.position.set(0, -0.08, 0.72)
   kop.rotation.x = 0.5
@@ -320,9 +367,18 @@ export function startHommel(): () => void {
   const canvas = document.createElement("canvas")
   canvas.className = "hommel-doek"
   canvas.setAttribute("aria-hidden", "true")
-  document.body.appendChild(canvas)
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power" })
+  // Alleen met een echte grafische kaart: zonder (softwarematig WebGL) faalt
+  // dit en blijft de hommel weg, want dan zou hij de hele pagina vertragen.
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "low-power", failIfMajorPerformanceCaveat: true })
+  const gl = renderer.getContext()
+  const info = gl.getExtension("WEBGL_debug_renderer_info")
+  const kaart = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : ""
+  if (/swiftshader|llvmpipe|softpipe|software/i.test(kaart)) {
+    renderer.dispose()
+    throw new Error("geen grafische kaart")
+  }
+  document.body.appendChild(canvas)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.NeutralToneMapping
@@ -345,7 +401,8 @@ export function startHommel(): () => void {
   camera.position.set(0, 0, 10)
 
   const { hommel, vleugels } = bouwHommel()
-  hommel.scale.setScalar(0.46)
+  const GROOTTE = 0.46
+  hommel.scale.setScalar(GROOTTE)
   scene.add(hommel)
 
   const maat = () => {
@@ -379,13 +436,50 @@ export function startHommel(): () => void {
   const pos = new THREE.Vector3()
   const snel = new THREE.Vector3()
   let doel = new THREE.Vector3()
-  let fase: "weg" | "vliegt" | "zweeft" | "vertrekt" = "weg"
+  let fase: "weg" | "vliegt" | "zweeft" | "vertrekt" | "landt" | "zit" = "weg"
   let tot = performance.now() + 500 // Hommel.tsx wacht al vier seconden met laden
   let bezoekTot = 0
   let raf = 0
   let vorige = performance.now()
   const kijk = new THREE.Object3D()
   const wens = new THREE.Quaternion()
+  let schiet = 0 // volgende zijsprong: echte hommels zigzaggen als ze zoeken
+
+  // Landen op een bloem (alleen met een muis op een groot scherm): de bloemen
+  // dragen data-landing met punten als fractie van het beeld. Hij zit er een
+  // paar seconden, dut in, en vliegt weer op. Scrolt de bloem weg, dan vliegt hij op.
+  const desktop = matchMedia("(min-width: 1024px) and (pointer: fine)")
+  let bloem: { el: Element; fx: number; fy: number } | null = null
+  let zitRichting = new THREE.Vector3(0, 0, 1)
+  let zitSinds = 0
+  const zzz = document.createElement("span")
+  zzz.className = "hommel-zzz"
+  zzz.setAttribute("aria-hidden", "true")
+  zzz.innerHTML = "<span>z</span><span>z</span><span>z</span>"
+  document.body.appendChild(zzz)
+  const BLOEM_Z = 1 // diepte van de landingsplek
+  const scherm = new THREE.Vector3()
+  const bloemPunt = (b: NonNullable<typeof bloem>) => {
+    const r = b.el.getBoundingClientRect()
+    const x = r.left + b.fx * r.width
+    const y = r.top + b.fy * r.height
+    if (!r.width || x < 40 || y < 60 || x > window.innerWidth - 40 || y > window.innerHeight - 40) return null
+    scherm.set((x / window.innerWidth) * 2 - 1, -(y / window.innerHeight) * 2 + 1, 0.5).unproject(camera).sub(camera.position)
+    const p = camera.position.clone().addScaledVector(scherm, (BLOEM_Z - camera.position.z) / scherm.z)
+    p.y += 0.1 // zijn pootjes op de bloem, niet zijn lijf erin
+    return p
+  }
+  const zoekBloem = () => {
+    if (!desktop.matches) return null
+    const plekken = [...document.querySelectorAll("[data-landing]")].flatMap((el) =>
+      (el.getAttribute("data-landing") ?? "").split(";").map((p) => {
+        const [fx, fy] = p.split(",").map(Number)
+        return { el, fx, fy }
+      }),
+    )
+    const zichtbaar = plekken.filter((b) => bloemPunt(b))
+    return zichtbaar.length ? zichtbaar[Math.floor(Math.random() * zichtbaar.length)] : null
+  }
 
   const stap = (nu: number) => {
     raf = requestAnimationFrame(stap)
@@ -399,10 +493,47 @@ export function startHommel(): () => void {
       doel = nieuwDoel()
       fase = "vliegt"
       bezoekTot = nu + tussen(18000, 30000)
+      // ziet hij bij binnenkomst een bloem, dan vliegt hij er vaak meteen heen
+      const b = Math.random() < 0.5 ? zoekBloem() : null
+      if (b) {
+        bloem = b
+        fase = "landt"
+      }
       canvas.style.opacity = "1"
     }
 
-    if (fase === "zweeft") {
+    if (fase === "zit") {
+      const p = bloem && bloemPunt(bloem)
+      if (!p || nu > tot) {
+        // wakker: recht omhoog van de bloem af en verder
+        fase = nu > bezoekTot ? "vertrekt" : "vliegt"
+        doel = fase === "vertrekt" ? buiten() : nieuwDoel()
+        snel.set(0, 1.4, 0.3)
+        bloem = null
+        zzz.style.opacity = "0"
+      } else {
+        pos.lerp(p, Math.min(1, dt * 8))
+        snel.set(0, 0, 0)
+      }
+    } else if (fase === "landt") {
+      const p = bloem && bloemPunt(bloem)
+      if (!p) {
+        fase = "vliegt"
+        doel = nieuwDoel()
+      } else {
+        // aanvliegen en vlak boven de bloem afremmen
+        const naar = p.clone().sub(pos)
+        const afstand = naar.length()
+        naar.setLength(Math.min(2.2, afstand * 1.8))
+        snel.lerp(naar, Math.min(1, dt * 2.4))
+        if (afstand < 0.08) {
+          fase = "zit"
+          zitSinds = nu
+          tot = nu + tussen(4000, 8000)
+          zitRichting = new THREE.Vector3(tussen(-1, 1), 0, tussen(0.3, 1)).normalize()
+        }
+      }
+    } else if (fase === "zweeft") {
       // stil in de lucht, licht wiebelend, en dan verder
       snel.multiplyScalar(0.9)
       pos.y += Math.sin(nu / 180) * 0.004
@@ -419,6 +550,10 @@ export function startHommel(): () => void {
       snel.lerp(naar, Math.min(1, dt * 1.6))
       snel.x += Math.sin(nu / 230) * 0.03
       snel.y += Math.cos(nu / 170) * 0.04
+      if (fase === "vliegt" && nu > schiet) {
+        snel.add(new THREE.Vector3(tussen(-1, 1), tussen(-0.6, 0.6), tussen(-0.8, 0.8)).multiplyScalar(1.3))
+        schiet = nu + tussen(350, 1100)
+      }
       if (afstand < 0.4) {
         if (fase === "vertrekt") {
           fase = "weg"
@@ -427,7 +562,11 @@ export function startHommel(): () => void {
           renderer.clear()
           return
         }
-        if (Math.random() < 0.45) {
+        const b = Math.random() < 0.4 ? zoekBloem() : null
+        if (b) {
+          bloem = b
+          fase = "landt"
+        } else if (Math.random() < 0.45) {
           fase = "zweeft"
           tot = nu + tussen(800, 2200)
         } else doel = nieuwDoel()
@@ -438,22 +577,44 @@ export function startHommel(): () => void {
       }
     }
     pos.addScaledVector(snel, dt)
-    hommel.position.copy(pos)
+    // een zware hommel trilt en deint in de lucht: kleine, onrustige schokjes bovenop de koers
+    const s = nu / 1000
+    const zit = fase === "zit"
+    if (zit) hommel.position.copy(pos)
+    else hommel.position.set(
+      pos.x + Math.sin(s * 7.3) * 0.025 + Math.sin(s * 17.9) * 0.008,
+      pos.y + Math.sin(s * 9.1) * 0.035 + Math.sin(s * 23.3) * 0.01,
+      pos.z + Math.sin(s * 6.1) * 0.02,
+    )
 
     // kijk in de vliegrichting (bij zweven: half naar de kijker), en hel over in bochten;
     // hoe trager, hoe meer hij rechtop hangt, zoals een hommel die stil hangt
     const vaart = snel.length()
-    const richting = vaart > 0.22 ? snel.clone() : new THREE.Vector3(Math.sin(nu / 900), 0, 1)
+    const richting = zit ? zitRichting : vaart > 0.22 ? snel.clone() : new THREE.Vector3(Math.sin(nu / 900), 0, 1)
     kijk.position.copy(pos)
     kijk.lookAt(pos.clone().add(richting))
-    kijk.rotateZ(THREE.MathUtils.clamp(-snel.x * 0.12, -0.5, 0.5))
-    kijk.rotateX(-0.35 + Math.min(vaart, 3) * 0.08)
+    if (zit) {
+      // zittend: plat op de bloem; slapend knikt de kop af en toe
+      kijk.rotateX(nu - zitSinds > 1500 ? 0.12 + Math.sin(s * 0.9) * 0.03 : 0.05)
+    } else {
+      kijk.rotateZ(THREE.MathUtils.clamp(-snel.x * 0.12, -0.5, 0.5))
+      kijk.rotateX(-0.55 + Math.min(vaart, 3) * 0.14)
+      kijk.rotateZ(Math.sin(s * 5.3) * 0.06) // wiebelen om de lengteas
+    }
     wens.copy(kijk.quaternion)
     hommel.quaternion.slerp(wens, Math.min(1, dt * 5))
 
     // vleugelslag: op en neer met een slag voor- en achteruit; de naslagen lopen achter
     const t = nu / 1000
+    // ademhalen: het lijf zwelt heel licht op en af
+    hommel.scale.set(GROOTTE, GROOTTE * (1 + Math.sin(s * (zit ? 2.2 : 6)) * 0.015), GROOTTE)
     for (const v of vleugels) {
+      v.mesh.visible = !zit || v.fase === 0
+      if (zit) {
+        // vleugels plat over het achterlijf gevouwen
+        v.mesh.rotation.set(0, v.kant * 0.8, v.kant * -0.06)
+        continue
+      }
       const hoek = t * 2 * Math.PI * 21 - v.fase * 1.4
       v.mesh.rotation.z = v.kant * (0.2 + Math.sin(hoek) * 0.7)
       v.mesh.rotation.y = v.kant * Math.cos(hoek) * 0.35
@@ -464,6 +625,13 @@ export function startHommel(): () => void {
     const waas = d > 16 ? (d - 16) * 0.15 : d < 6 ? (6 - d) * 1.2 : 0
     canvas.style.filter = waas > 0.2 ? `blur(${waas.toFixed(1)}px)` : ""
 
+    // na anderhalve seconde zitten valt hij in slaap: z z z naast hem
+    if (zit) {
+      scherm.copy(hommel.position).project(camera)
+      zzz.style.transform = `translate(${((scherm.x + 1) / 2) * window.innerWidth + 18}px, ${((1 - scherm.y) / 2) * window.innerHeight - 42}px)`
+      zzz.style.opacity = nu - zitSinds > 1500 ? "1" : "0"
+    }
+
     renderer.render(scene, camera)
   }
   raf = requestAnimationFrame(stap)
@@ -472,7 +640,7 @@ export function startHommel(): () => void {
     cancelAnimationFrame(raf)
     window.removeEventListener("resize", maat)
     scene.traverse((o) => {
-      if (o instanceof THREE.Mesh) {
+      if (o instanceof THREE.Mesh || o instanceof THREE.LineSegments) {
         o.geometry.dispose()
         const m = o.material as THREE.MeshStandardMaterial
         m.map?.dispose()
@@ -480,6 +648,7 @@ export function startHommel(): () => void {
         m.dispose()
       }
     })
+    zzz.remove()
     omgeving.dispose()
     pmrem.dispose()
     renderer.dispose()
