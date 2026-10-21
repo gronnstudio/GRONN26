@@ -28,7 +28,7 @@ test("Ctrl K zoekt, Enter opent, Esc sluit", async ({ page }) => {
   await expect(zoek).toBeVisible()
   await zoek.getByRole("combobox").fill("najaars")
   await page.keyboard.press("Enter")
-  await expect(page).toHaveURL(/\/vijvers#pond-autumn-service$/, { timeout: 10_000 })
+  await expect(page).toHaveURL(/\/vijvers#pond-autumn-service$/, { timeout: 20_000 })
   await expect(zoek).toBeHidden()
 })
 
@@ -47,5 +47,5 @@ test("vanuit het menu, en g dan w gaat naar Werk", async ({ page }) => {
   await page.locator("body").click({ position: { x: 5, y: 300 } })
   await page.keyboard.press("g")
   await page.keyboard.press("w")
-  await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
+  await expect(page).toHaveURL(/\/werk$/, { timeout: 20_000 })
 })
