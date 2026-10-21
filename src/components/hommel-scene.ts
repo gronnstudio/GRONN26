@@ -392,7 +392,8 @@ export function startHommel(): () => void {
     renderer.dispose()
     throw new Error("geen grafische kaart")
   }
-  document.body.appendChild(canvas)
+  // vooraan in body: bij gelijke z-index tekent alles wat erna komt eroverheen
+  document.body.prepend(canvas)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.NeutralToneMapping
@@ -633,6 +634,13 @@ export function startHommel(): () => void {
       v.mesh.rotation.z = v.kant * (0.2 + Math.sin(hoek) * 0.7)
       v.mesh.rotation.y = v.kant * Math.cos(hoek) * 0.35
     }
+
+    // ver weg vliegt hij achter de tekst en de vlakken langs, dichtbij weer
+    // ervoor (eigenaar, 21 okt 2026: "om 3D meer te benadrukken"); met wat
+    // speling, zodat hij niet heen en weer springt rond de grens
+    const vrij = fase === "vliegt" || fase === "vertrekt" || fase === "zweeft"
+    if (vrij && pos.z < -4) canvas.classList.add("achter")
+    else if (!vrij || pos.z > -2) canvas.classList.remove("achter")
 
     // scherptediepte: heel ver of heel dichtbij een beetje wazig
     const d = camera.position.z - pos.z
