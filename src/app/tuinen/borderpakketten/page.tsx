@@ -201,6 +201,11 @@ export default function BorderpakkettenPagina() {
           <ul className="mt-8 mb-0 grid list-none gap-4 p-0 sm:grid-cols-2 sm:gap-6">
             {BODEMPAKKETTEN.map((b) => (
               <li key={b.slug} className="flex flex-col gap-4 rounded-[16px] bg-vlak p-6 sm:p-8">
+                <Foto
+                  foto={{ src: `/borderpakketten/${b.slug}.jpg`, width: 1600, height: 1200, alt: b.alt.nl, label: "Sfeerbeeld", en: { alt: b.alt.en, label: "Mood image" } }}
+                  sizes="(min-width: 640px) 45vw, 90vw"
+                  className="aspect-[4/3] rounded-[16px]"
+                />
                 <h3 className="syne m-0 text-[clamp(22px,2.4vw,30px)] leading-[1.1] tracking-[-.015em]"><T t={b.naam} /></h3>
                 <p className="m-0 text-[16px] leading-[1.5]"><T t={b.zin} /></p>
                 <p className="m-0 text-[15px] text-gedempt"><T t={{ nl: "Prijs op aanvraag", en: "Price on request" }} /></p>

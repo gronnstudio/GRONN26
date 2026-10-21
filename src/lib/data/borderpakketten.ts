@@ -167,10 +167,11 @@ export const BORDERPAKKETTEN: BorderPakket[] = [
 ]
 
 /** Compost met schors (eigenaar, 18 okt 2026), in twee varianten. Nog geen prijs: op aanvraag. */
-export const BODEMPAKKETTEN: { slug: string; naam: L; zin: L }[] = [
+export const BODEMPAKKETTEN: { slug: string; naam: L; zin: L; alt: L }[] = [
   {
     slug: "compost-dennenschors",
     naam: { nl: "Compost + dennenschors", en: "Compost + pine bark" },
+    alt: { nl: "Lichte dennenschors, close-up", en: "Light pine bark, close-up" },
     zin: {
       nl: "Een laag compost met daarover dennenschors. Licht van kleur en zacht, een natuurlijke afdeklaag die na een paar jaar in de bodem opgaat.",
       en: "A layer of compost with pine bark on top. Light in colour and soft, a natural cover that works into the soil after a few years.",
@@ -179,6 +180,7 @@ export const BODEMPAKKETTEN: { slug: string; naam: L; zin: L }[] = [
   {
     slug: "compost-franse-schors",
     naam: { nl: "Compost + Franse schors", en: "Compost + French bark" },
+    alt: { nl: "Grove roodbruine Franse schors, close-up", en: "Coarse red-brown French bark, close-up" },
     zin: {
       nl: "Een laag compost met daarover Franse schors. Grover en roodbruin, blijft langer liggen en ziet er strak uit.",
       en: "A layer of compost with French maritime pine bark on top. Coarser and red-brown, it lasts longer and looks neat.",
