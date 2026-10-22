@@ -21,10 +21,11 @@ export function Verder({ voor, nadruk, na, href, label }: { voor: Tekst; nadruk:
         </svg>
         <span className="sr-only"><T t={label} /></span>
       </Link>
-      {/* groene takken die in beide bovenhoeken hangen, achter de kop, en een
-          dagpauwoog die erbij fladdert (geen bloemen meer, 22 okt 2026) */}
-      <Plant naam="bladtak" className="plant-hang plant-slot" />
-      <Plant naam="takken" className="plant-hang plant-slot links" />
+      {/* klimop die in beide hoeken opgroeit vanaf de grond (de voet), en een
+          dagpauwoog die erbij fladdert (eigenaar, 22 okt 2026: geen bloemen,
+          en geen takken die nergens aan hangen) */}
+      <Plant naam="klimop-links" className="plant-klim links" />
+      <Plant naam="klimop-rechts" className="plant-klim rechts" />
       <span className="vlinder" aria-hidden="true">
         <Plant naam="dagpauwoog" className="vlinder-vleugels" />
       </span>

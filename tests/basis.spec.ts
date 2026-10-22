@@ -260,11 +260,11 @@ test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ p
   await expect(page.locator("footer > svg")).toHaveCount(0)
 })
 
-test("groene takken en de dagpauwoog in het slot: decoratief", async ({ page }) => {
+test("klimop en de dagpauwoog in het slot: decoratief", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
   const bloemen = page.locator(".w-verder img.plant")
-  await expect(bloemen).toHaveCount(3) // twee takken en de vlinder
+  await expect(bloemen).toHaveCount(3) // twee klimopranken en de vlinder
   for (const b of await bloemen.all()) {
     await expect(b).toHaveAttribute("alt", "")
     await expect(b).toHaveAttribute("aria-hidden", "true")
@@ -288,7 +288,7 @@ test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) =>
 })
 
 for (const breed of [390, 1440]) {
-  test(`groen @${breed}: takken in het slot en de blokken, geen bloemen, nooit over tekst`, async ({ page }) => {
+  test(`groen @${breed}: klimop uit de grond in het slot, geen losse takken of bloemen, nooit over tekst`, async ({ page }) => {
     await zonderIntro(page)
     await page.emulateMedia({ reducedMotion: "reduce" }) // stil, zodat de takken niet wiegen tijdens het meten
     await page.setViewportSize({ width: breed, height: 900 })
@@ -296,10 +296,16 @@ for (const breed of [390, 1440]) {
       await page.goto(pad, { waitUntil: "load" })
       // geen bloemen meer boven de voet (eigenaar, 22 okt 2026)
       await expect(page.locator("main img[src*='klaproos'], main img[src*='korenbloem'], main img[src*='vingerhoed'], .boeket")).toHaveCount(0)
-      await expect(page.locator(".w-verder .plant-hang")).toHaveCount(2)
-      const takken = page.locator(".plant-rand, .plant-slot")
-      expect(await takken.count()).toBeGreaterThanOrEqual(3)
+      // geen tak die midden op de pagina nergens aan hangt (eigenaar, 22 okt
+      // 2026: "wat moet dit voorstellen?"); hangen mag alleen in de opening
+      await expect(page.locator("main .plant-hang:not(.w-opening .plant-hang)")).toHaveCount(0)
+      const takken = page.locator(".w-verder .plant-klim")
+      await expect(takken).toHaveCount(2)
       for (const tak of await takken.all()) {
+        // de rank staat in de aarde: zijn voet zit net achter de bovenrand van de voet
+        const [onder, grond] = await tak.evaluate((img) => [img.getBoundingClientRect().bottom, document.querySelector("footer")!.getBoundingClientRect().top])
+        expect(onder - grond, `${pad}: klimop staat in de grond`).toBeGreaterThan(0)
+        expect(onder - grond, `${pad}: klimop staat in de grond`).toBeLessThan(14)
         await tak.evaluate((img) => img.scrollIntoView({ block: "center" }))
         await page.waitForTimeout(200)
         const botst = await tak.evaluate((img) => {
