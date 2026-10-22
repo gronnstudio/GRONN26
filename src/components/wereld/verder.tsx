@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react"
 import Link from "next/link"
 import { T, type Tekst } from "@/components/taal"
-import { Plant } from "@/components/plant"
 
 // Het slot van elke pagina, zoals Kolenda's "Interested in Seeing More
 // Projects?": één kop met een cursief woord en een omlijnde pijl naar de
@@ -21,11 +20,6 @@ export function Verder({ voor, nadruk, na, href, label }: { voor: Tekst; nadruk:
         </svg>
         <span className="sr-only"><T t={label} /></span>
       </Link>
-      {/* alleen een dagpauwoog die erbij fladdert (eigenaar, 22 okt 2026: geen
-          bloemen, geen takken die nergens aan hangen, en geen klimop) */}
-      <span className="vlinder" aria-hidden="true">
-        <Plant naam="dagpauwoog" className="vlinder-vleugels" />
-      </span>
     </section>
   )
 }
