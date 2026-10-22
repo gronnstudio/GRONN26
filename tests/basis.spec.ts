@@ -260,15 +260,12 @@ test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ p
   await expect(page.locator("footer > svg")).toHaveCount(0)
 })
 
-test("de dagpauwoog in het slot: decoratief, zonder planten", async ({ page }) => {
+test("het slot: geen dagpauwoog en geen planten", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
-  const bloemen = page.locator(".w-verder img.plant")
-  await expect(bloemen).toHaveCount(1) // alleen de vlinder (klimop afgewezen, 22 okt 2026)
-  for (const b of await bloemen.all()) {
-    await expect(b).toHaveAttribute("alt", "")
-    await expect(b).toHaveAttribute("aria-hidden", "true")
-  }
+  // de vlinder is weggehaald (eigenaar, 22 okt 2026: "Verwijder dagpauwoog vlinder")
+  await expect(page.locator(".w-verder img.plant")).toHaveCount(0)
+  await expect(page.locator(".vlinder")).toHaveCount(0)
 })
 
 test("hommel: niet bij minder beweging", async ({ page }) => {
