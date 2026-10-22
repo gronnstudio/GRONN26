@@ -65,7 +65,7 @@ function Gemarkeerd({ tekst, van, lengte }: { tekst: string; van: number; lengte
   return (
     <>
       {tekst.slice(0, van)}
-      <mark className="bg-transparent font-semibold text-oranje">{tekst.slice(van, van + lengte)}</mark>
+      <mark className="bg-transparent font-semibold text-oranje-tekst">{tekst.slice(van, van + lengte)}</mark>
       {tekst.slice(van + lengte)}
     </>
   )

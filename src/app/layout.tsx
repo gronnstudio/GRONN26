@@ -38,10 +38,9 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 }
 
-// Niet in- of uitzoomen (eigenaar, 11 okt 2026). iOS Safari negeert
-// user-scalable, daarom houdt ZOOMSLOT daar het knijpgebaar tegen.
-export const viewport: Viewport = { width: "device-width", initialScale: 1, maximumScale: 1, userScalable: false }
-const ZOOMSLOT = `document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false})`
+// Zoomen mag weer (eigenaar, 22 okt 2026, voor toegankelijkheid 100; was
+// sinds 11 okt uit).
+export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
@@ -53,7 +52,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
         <script dangerouslySetInnerHTML={{ __html: INTRO_VOORVERF }} />
-        <script dangerouslySetInnerHTML={{ __html: ZOOMSLOT }} />
       </head>
       <body>
         <main>{children}</main>
