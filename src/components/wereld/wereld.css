@@ -314,20 +314,7 @@ html.stil .w-voortgang { display: none; }
   position: relative;
   z-index: 1;
 }
-/* meer groen (eigenaar, 22 okt 2026: "voeg meer groene elementen toe aan de
-   website ... haal de bloemen uit de footer"): in het slot van elke pagina
-   hangen takken in beide bovenhoeken, naast de kop die in het midden staat.
-   Gespiegeld met scale, zodat het wiegen (transform) erbij blijft werken. */
-/* niet hoger dan de lucht boven de kop (de padding van .w-verder) */
-.plant-hang.plant-slot { width: auto; height: clamp(72px, 14vw, 220px); }
-.plant-hang.links { left: -16px; right: auto; scale: -1 1; transform-origin: 50% 0; }
-/* een kleine tak in de bovenrand van een blok: niet hoger dan de lucht
-   boven de inhoud, zodat hij nooit over tekst valt */
-.met-groen { position: relative; overflow-x: clip; }
-.met-groen > :not(.plant) { position: relative; z-index: 1; }
-.plant-hang.plant-rand { width: auto; height: clamp(72px, 8vw, 118px); }
-.vp-blok > .plant-hang.plant-rand { height: clamp(72px, 10vw, 144px); }
-/* de dagpauwoog: zweeft traag rond boven de klaprozen en slaat af en toe
+/* de dagpauwoog: zweeft traag rond naast de kop en slaat af en toe
    een paar keer met zijn vleugels */
 .vlinder {
   position: absolute;

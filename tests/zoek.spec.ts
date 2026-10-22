@@ -32,7 +32,7 @@ test("Ctrl K zoekt, Enter opent, Esc sluit", async ({ page }) => {
   await expect(zoek).toBeHidden()
 })
 
-test("vanuit het menu, en g dan w gaat naar Werk", async ({ page }) => {
+test("vanuit het menu, g dan w gaat naar Werk, Backspace terug", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/", { waitUntil: "domcontentloaded" })
   await page.waitForTimeout(400)
@@ -48,4 +48,8 @@ test("vanuit het menu, en g dan w gaat naar Werk", async ({ page }) => {
   await page.keyboard.press("g")
   await page.keyboard.press("w")
   await expect(page).toHaveURL(/\/werk$/, { timeout: 20_000 })
+
+  await page.waitForTimeout(400)
+  await page.keyboard.press("Backspace")
+  await expect(page).toHaveURL(/localhost:3210\/$/, { timeout: 20_000 })
 })

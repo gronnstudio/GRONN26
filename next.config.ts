@@ -86,7 +86,12 @@ const nextConfig: NextConfig = {
     // het bord bij een project, dan wijst deze regel naar dat project; tijdelijk,
     // zodat browsers de bestemming niet onthouden.
     const bord = [{ source: "/bord", destination: "/werk", permanent: false }]
-    return [...oud, ...talen, ...dashboard, ...bord, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
+    // De blog heet sinds 22 okt 2026 Journaal (eigenaar koos de naam).
+    const journaal = [
+      { source: "/blog", destination: "/journaal", permanent: true },
+      { source: "/blog/:slug", destination: "/journaal/:slug", permanent: true },
+    ]
+    return [...oud, ...talen, ...dashboard, ...bord, ...journaal, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
       source: `/${n}`,
       destination: `/wireframes/${n}`,
       permanent: false,

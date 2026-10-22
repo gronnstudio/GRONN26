@@ -3,7 +3,6 @@ import { Foto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 import { T, type Tekst } from "@/components/taal"
 import { F10, T01 } from "./beelden"
-import { Plant } from "@/components/plant"
 import { Stapel } from "@/components/stapel"
 
 // Wat ik doe als drie ruime kaarten (eigenaar, 18 okt 2026: de kaarten van de
@@ -66,8 +65,7 @@ const nr = (n: number) => String(n + 1).padStart(2, "0")
 
 export function WatIkDoe() {
   return (
-    <section className="vp-diensten-blok met-groen" aria-labelledby="h-diensten">
-      <Plant naam="bladtak" className="plant-hang plant-rand links" />
+    <section className="vp-diensten-blok" aria-labelledby="h-diensten">
       <div className="vp-kolom">
         <h2 className="lbl vp-diensten-kop" id="h-diensten">
           <T t={{ nl: "Wat ik doe", en: "What I do" }} />
