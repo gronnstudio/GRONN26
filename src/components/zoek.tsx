@@ -8,7 +8,7 @@ import type { Soort, Treffer } from "@/lib/zoek-index"
 
 // Zoeken en sneltoetsen, terug uit de oude site (eigenaar, 21 okt 2026:
 // "shortcut knoppen en een interactieve zoek functie mist ook nog"). Zelfde
-// werking als daar: ⌘K of Ctrl K overal, "/" en g + letter als sneltoetsen,
+// werking als daar: ⌘K of Ctrl K overal, "/", Backspace (terug) en g + letter als sneltoetsen,
 // live suggesties per soort, pijltjes en Enter. Eén <dialog>: Esc sluit, de
 // focus blijft erin en keert daarna terug. Openen kan ook vanuit het menu
 // (event "gronn:zoek"), dus geen eigen knop op het scherm.
@@ -24,6 +24,8 @@ const GA_NAAR: { toets: string; href: string; label: { nl: string; en: string } 
   { toets: "t", href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" } },
   { toets: "w", href: "/werk", label: { nl: "Werk", en: "Work" } },
   { toets: "s", href: "/shop", label: { nl: "Shop", en: "Shop" } },
+  { toets: "o", href: "/over", label: { nl: "Studio", en: "Studio" } },
+  { toets: "f", href: "/faq", label: { nl: "Veelgestelde vragen", en: "FAQ" } },
   { toets: "k", href: "/kennismaken", label: { nl: "Kennismaken", en: "Get in touch" } },
 ]
 
@@ -155,6 +157,10 @@ export function Zoek({ index }: { index: Treffer[] }) {
       if (e.key === "/") {
         e.preventDefault()
         openen()
+      } else if (e.key === "Backspace") {
+        // terug naar de vorige pagina (eigenaar, 22 okt 2026: "terug toevoegen met backspace")
+        e.preventDefault()
+        history.back()
       } else if (e.key === "g") {
         g = Date.now()
       } else if (Date.now() - g < 1200) {
@@ -282,6 +288,7 @@ export function Zoek({ index }: { index: Treffer[] }) {
                 <li className="flex items-center justify-between gap-3"><span>{en ? "Search" : "Zoeken"}</span><Kbd>/</Kbd></li>
                 <li className="flex items-center justify-between gap-3"><span>{en ? "Move, open" : "Kiezen, openen"}</span><span className="flex gap-1"><Kbd>↑</Kbd><Kbd>↓</Kbd><Kbd>↵</Kbd></span></li>
                 <li className="flex items-center justify-between gap-3"><span>{en ? "Close" : "Sluiten"}</span><Kbd>Esc</Kbd></li>
+                <li className="flex items-center justify-between gap-3"><span>{en ? "Back" : "Terug"}</span><Kbd>⌫</Kbd></li>
               </ul>
             </div>
             <div>
