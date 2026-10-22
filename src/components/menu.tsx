@@ -19,7 +19,7 @@ import { useTaal } from "./taal-klant"
 // even bewegen, de huidige pagina als kiezelknopje, op de telefoon altijd
 // groot. Tijdens het lezen komt Omhoog achteraan, na de hamburger, in de
 // ronding van de pil ("hamburger en dan oranje back to top achteraan").
-// Shop is een kruiwagen (eigenaar, 19 okt 2026).
+// Shop is een shoptas (eigenaar, 22 okt 2026: koos variant A uit drie tassen).
 // Blog alleen vanaf desktop in de pil; op telefoon en tablet staat hij in het
 // megamenu, zodat de pil vier vakken plus menu houdt (eigenaar, 21 okt 2026:
 // "Blogs in eigen menu, dat past op desktop. Op mobiel waarschijnlijk niet").
@@ -27,7 +27,7 @@ const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoo
   { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
-  { href: "/shop", label: "Shop", bij: ["/shop", "/tuinen/borderpakketten", "/tuinen/cadeaubon"], beweging: "groei", icoon: "M3 8h3l2 7h9l2-6H6.5M15.5 18.5a1.8 1.8 0 1 0 0-.1M8 15l-1 4.5" },
+  { href: "/shop", label: "Shop", bij: ["/shop", "/tuinen/borderpakketten", "/tuinen/cadeaubon"], beweging: "groei", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
   { href: "/blog", label: "Blog", bij: ["/blog"], beweging: "knik", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12", groot: true },
 ]
 
