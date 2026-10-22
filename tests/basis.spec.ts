@@ -260,11 +260,11 @@ test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ p
   await expect(page.locator("footer > svg")).toHaveCount(0)
 })
 
-test("inheemse bloemen en de dagpauwoog in het slot: decoratief", async ({ page }) => {
+test("groene takken en de dagpauwoog in het slot: decoratief", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
   const bloemen = page.locator(".w-verder img.plant")
-  await expect(bloemen).toHaveCount(7) // twee boeketjes van drie en de vlinder
+  await expect(bloemen).toHaveCount(3) // twee takken en de vlinder
   for (const b of await bloemen.all()) {
     await expect(b).toHaveAttribute("alt", "")
     await expect(b).toHaveAttribute("aria-hidden", "true")
@@ -287,23 +287,38 @@ test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) =>
   expect(r.headers()["permissions-policy"]).toContain("camera=()")
 })
 
-test("bloemen: alleen twee boeketjes boven de voet, decoratief, met landingsplekken", async ({ page }) => {
-  await zonderIntro(page)
-  await page.setViewportSize({ width: 1680, height: 950 })
-  await page.goto("/over", { waitUntil: "domcontentloaded" })
-  // geen bloemen meer in de marges van de rest van de site (eigenaar, 21 okt 2026)
-  await expect(page.locator(".hommel-bloem, .hommel-bloemen")).toHaveCount(0)
-  const boeketten = page.locator(".w-verder .boeket")
-  await expect(boeketten).toHaveCount(2)
-  for (const b of await boeketten.all()) {
-    await expect(b).toHaveAttribute("aria-hidden", "true")
-    await expect(b.locator("img")).toHaveCount(3)
-    for (const i of await b.locator("img").all()) await expect(i).toHaveAttribute("data-landing", /^[\d.]+,[\d.]+/)
-  }
-  await page.locator("footer").scrollIntoViewIfNeeded()
-  await expect(boeketten.first()).toBeVisible()
-  expect((await boeketten.first().boundingBox())!.height).toBeLessThanOrEqual(220) // 200 hoog, plus het wiegen
-})
+for (const breed of [390, 1440]) {
+  test(`groen @${breed}: takken in het slot en de blokken, geen bloemen, nooit over tekst`, async ({ page }) => {
+    await zonderIntro(page)
+    await page.emulateMedia({ reducedMotion: "reduce" }) // stil, zodat de takken niet wiegen tijdens het meten
+    await page.setViewportSize({ width: breed, height: 900 })
+    for (const pad of ["/", "/over"]) {
+      await page.goto(pad, { waitUntil: "load" })
+      // geen bloemen meer boven de voet (eigenaar, 22 okt 2026)
+      await expect(page.locator("main img[src*='klaproos'], main img[src*='korenbloem'], main img[src*='vingerhoed'], .boeket")).toHaveCount(0)
+      await expect(page.locator(".w-verder .plant-hang")).toHaveCount(2)
+      const takken = page.locator(".plant-rand, .plant-slot")
+      expect(await takken.count()).toBeGreaterThanOrEqual(3)
+      for (const tak of await takken.all()) {
+        await tak.evaluate((img) => img.scrollIntoView({ block: "center" }))
+        await page.waitForTimeout(200)
+        const botst = await tak.evaluate((img) => {
+          const b = img.getBoundingClientRect()
+          const uit: string[] = []
+          const tw = document.createTreeWalker(img.closest("section")!, NodeFilter.SHOW_TEXT)
+          const r = document.createRange()
+          for (let n = tw.nextNode(); n; n = tw.nextNode()) {
+            if (!n.textContent?.trim() || n.parentElement!.closest(".sr-only")) continue
+            r.selectNodeContents(n)
+            for (const q of r.getClientRects()) if (q.width && q.right > b.left + 4 && q.left < b.right - 4 && q.bottom > b.top + 4 && q.top < b.bottom - 4) uit.push(n.textContent.trim())
+          }
+          return uit
+        })
+        expect(botst, `${pad}: tak over tekst`).toEqual([])
+      }
+    }
+  })
+}
 
 
 for (const b of [390, 1440]) {
