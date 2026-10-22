@@ -1,14 +1,12 @@
 import type { CSSProperties } from "react"
 import { WERKWIJZE, WERKWIJZE_KOP } from "@/lib/data/teksten"
 import { Beide, T } from "@/components/taal"
-import { Plant } from "@/components/plant"
 
 // WF-059 (Uncode "Creative Freelance"): de zes stappen als raster van 3×2,
 // per kolom 200 ms na elkaar opkomend. Volgt het thema.
 export function Werkwijze() {
   return (
-    <section className="vp-blok met-groen" aria-labelledby="h-stappen" id="werkwijze">
-      <Plant naam="bladtak" className="plant-hang plant-rand" />
+    <section className="vp-blok" aria-labelledby="h-stappen" id="werkwijze">
       <div className="vp-inhoud">
         <h2 className="lbl vp-zes-kop" id="h-stappen">
           <Beide nl={`${WERKWIJZE_KOP.nl} · ${WERKWIJZE.length} stappen`} en={`${WERKWIJZE_KOP.en} · ${WERKWIJZE.length} steps`} />

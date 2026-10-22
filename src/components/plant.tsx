@@ -7,8 +7,10 @@ import Image from "next/image"
 // takken zijn verticaal gespiegeld zodat ze uit de bovenhoek komen.
 // Bronnen (pexels.com/photo/…): boomkruin 2267547, takken 11552979,
 // bladtak 12847431, dagpauwoog 13515218. Dieren alleen inheems (eigenaar, 20
-// okt 2026). Sinds 22 okt 2026 alleen groen, geen bloemen meer (eigenaar:
-// "voeg meer groene elementen toe ... haal de bloemen uit de footer").
+// okt 2026). Sinds 22 okt 2026 geen bloemen meer (eigenaar: "haal de bloemen
+// uit de footer"), en alleen groen dat ergens aan vastzit: de tak hangt van de
+// bovenrand van de pagina (eigenaar: "wat moet dit voorstellen?"). Klimop is
+// geprobeerd en afgewezen ("ovreselijk die klimop, weg!").
 const PLANTEN = {
   boomkruin: [484, 640],
   takken: [640, 640],
@@ -19,7 +21,8 @@ const PLANTEN = {
 export type PlantNaam = keyof typeof PLANTEN
 
 /** Waar de hommel kan landen, als fractie van het beeld (x, y): op een blad
- *  van de bladtak (bloemen staan er niet meer, eigenaar 22 okt 2026). hommel-scene.ts leest dit uit data-landing. */
+ *  van de bladtak (bloemen staan er niet meer, eigenaar 22 okt 2026).
+ *  hommel-scene.ts leest dit uit data-landing. */
 const LANDING: Partial<Record<PlantNaam, string>> = {
   bladtak: "0.42,0.5;0.7,0.78",
 }
