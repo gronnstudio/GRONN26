@@ -21,6 +21,11 @@ const LABEL: L = {
   en: "Ponds and gardens · Stein and surrounding area",
 };
 
+const HELD_ZIN: L = {
+  nl: "Voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
+  en: "For homeowners in Stein and the surrounding area, with a fixed price up front.",
+};
+
 const i = (n: number) => ({ "--i": n }) as CSSProperties;
 
 /** Tekst in losse woorden, zodat ze één voor één kunnen oplichten. */
@@ -86,6 +91,15 @@ export function Atelier() {
                 en={<KopRegels regels={["A pond and garden", "that stay healthy."]} />}
               />
             </h1>
+            {/* in één scherm voor wie, waar en hoe, met één knop (les uit
+                danhoye.com, 22 okt 2026); de knop alleen onder 1024px, daarboven
+                staat Kennismaken al in de balk: één oranje accent */}
+            <p className="vp-vijver-zin m-0">
+              <T t={HELD_ZIN} />
+            </p>
+            <Link href="/kennismaken" className="knop vp-vijver-knop bg-oranje text-antraciet">
+              <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
+            </Link>
             <p className="lbl vp-vijver-tip m-0" aria-hidden="true">
               <T t={{ nl: "Raak het water aan", en: "Touch the water" }} />
             </p>

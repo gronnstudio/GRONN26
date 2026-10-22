@@ -3,6 +3,7 @@ import { Verder } from "@/components/wereld/verder"
 import { Atelier } from "@/components/voorpagina/atelier"
 import { Beweging } from "@/components/voorpagina/beweging"
 import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
+import { Vragen } from "@/components/voorpagina/vragen"
 import "@/components/voorpagina/voorpagina.css"
 import { BUSINESS } from "@/lib/business"
 import { studioSchema } from "@/lib/schema"
@@ -26,6 +27,7 @@ export default function Voorpagina() {
         <Atelier />
         <WatIkDoe />
       </div>
+      <Vragen />
 
       <Verder
         voor={{ nl: "Zullen we", en: "Shall we" }}
