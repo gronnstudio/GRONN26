@@ -24,8 +24,8 @@ const ROUTES = [
   "/colofon",
   "/merk",
   "/techniek",
-  "/blog",
-  ...STUKKEN.map((s) => `/blog/${s.slug}`),
+  "/journaal",
+  ...STUKKEN.map((s) => `/journaal/${s.slug}`),
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
