@@ -1,9 +1,11 @@
 import type { Foto } from "./vijverrenovatie"
+import { ARCHIEF } from "./journaal-archief"
 
 // Het Journaal, de blog (eigenaar, 21 okt 2026: "schrijf elke maand 2 blogs", "Blogs in
 // eigen menu"). Praktische stukken bij het seizoen, alleen in het Nederlands,
-// alleen met eigen foto's. Een stuk komt hier pas bij als Nick de tekst
-// heeft goedgekeurd. Nieuwste bovenaan.
+// alleen met eigen foto's (of geen foto). Een stuk komt hier pas bij als
+// Nick de tekst heeft goedgekeurd. De oudere stukken staan in
+// journaal-archief.ts. Nieuwste bovenaan.
 
 export type Blok =
   | { soort: "alinea"; tekst: string }
@@ -27,8 +29,8 @@ export type Stuk = {
   leestijd: number
   /** Het thema: rubriek boven de titel en de groep op /journaal. */
   rubriek: Thema
-  /** De foto voor de lijst en voor delen. */
-  beeld: Foto
+  /** De foto voor de lijst en voor delen; zonder eigen foto blijft het een tekststuk. */
+  beeld?: Foto
   blokken: Blok[]
   /** Bronnen in APA-stijl (eigenaar, 22 okt 2026), onder het stuk. */
   bronnen?: string[]
@@ -59,7 +61,7 @@ const NICK_TUSSEN_DE_PLANTEN: Foto = {
   bijschrift: "Aan het werk tussen de oeverplanten.",
 }
 
-export const STUKKEN: Stuk[] = [
+const RECENT: Stuk[] = [
   {
     slug: "levende-tuin",
     titel: "Werken mét de natuur: wat een levende tuin is",
@@ -151,6 +153,8 @@ export const STUKKEN: Stuk[] = [
     ],
   },
 ]
+
+export const STUKKEN: Stuk[] = [...RECENT, ...ARCHIEF].sort((a, b) => b.datum.localeCompare(a.datum))
 
 export const stukMet = (slug: string) => STUKKEN.find((s) => s.slug === slug)
 
