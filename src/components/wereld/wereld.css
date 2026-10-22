@@ -230,7 +230,7 @@ html.stil .w-voortgang { display: none; }
 /* ── het slot van elke pagina: kop + omlijnde pijl (Kolenda) ──────────── */
 .w-verder {
   position: relative;
-  overflow-x: clip; /* naar beneden niet: de klimop groeit tot in de voet */
+  overflow: clip;
   padding: clamp(72px, 14vw, 220px) var(--w-rand) clamp(40px, 12vw, 180px);
   text-align: center;
 }
@@ -314,25 +314,7 @@ html.stil .w-voortgang { display: none; }
   position: relative;
   z-index: 1;
 }
-/* klimop in het slot (eigenaar, 22 okt 2026: "wat moet dit voorstellen?"):
-   twee ranken die in de hoeken opgroeien vanaf de grond, de voet eronder.
-   Niet hoger dan de lucht naast de kop; ze wiegen traag vanuit hun voet. */
-.plant-klim {
-  /* tot in de voet (zijn marge boven, zie voet.tsx), die eroverheen tekent:
-     zo staat de rank in de aarde, ook als hij wiegt */
-  bottom: calc(-1 * clamp(80px, 14vw, 220px) - 8px);
-  width: auto;
-  height: clamp(150px, 30vw, 480px);
-  transform-origin: 50% 100%;
-}
-.plant-klim.links { left: 0; }
-.plant-klim.rechts { right: -14px; height: clamp(180px, 36vw, 560px); transform-origin: 100% 100%; }
-@media (max-width: 767px) {
-  /* op de telefoon staat de kop breder: lagere ranken, naast de pijl */
-  .plant-klim.links { height: 150px; }
-  .plant-klim.rechts { height: 190px; right: -4px; }
-}
-/* de dagpauwoog: zweeft traag rond boven de klaprozen en slaat af en toe
+/* de dagpauwoog: zweeft traag rond naast de kop en slaat af en toe
    een paar keer met zijn vleugels */
 .vlinder {
   position: absolute;
@@ -361,8 +343,6 @@ html.stil .w-voortgang { display: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.stil) .plant-hang { animation: plant-wieg 9s ease-in-out infinite alternate; }
-  html:not(.stil) .plant-klim { animation: plant-wieg 11s ease-in-out infinite alternate; }
-  html:not(.stil) .plant-klim.rechts { animation-duration: 13s; animation-delay: -4s; }
   html:not(.stil) .vlinder { animation: vlinder-vlucht 16s ease-in-out infinite; }
   html:not(.stil) .vlinder-vleugels { animation: vlinder-slag 4s linear infinite; }
 }
