@@ -293,10 +293,20 @@ function bouwHommel() {
     return wortel
   }
 
+  /** Een ronde staaf van punt a naar punt b, iets taps toelopend. */
+  const lid = (a: THREE.Vector3, b: THREE.Vector3, r0: number, r1: number, mat: THREE.Material) => {
+    const lengte = a.distanceTo(b)
+    const g = new THREE.CylinderGeometry(r1, r0, lengte, 10)
+    g.translate(0, lengte / 2, 0)
+    const m = new THREE.Mesh(g, mat)
+    m.position.copy(a)
+    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize())
+    return m
+  }
   const pootMat = new THREE.MeshStandardMaterial({ color: 0x241b14, roughness: 0.7 })
   // de voetjes (tarsen) zijn roodbruin, zoals op de foto's
   const voetMat = new THREE.MeshStandardMaterial({ color: 0x7a3d1e, roughness: 0.6 })
-  const stuifmeel = new THREE.MeshStandardMaterial({ color: 0xe0901e, roughness: 0.9 })
+  const stuifmeel = new THREE.MeshStandardMaterial({ color: 0xc98a32, roughness: 1 })
   for (const k of [-1, 1]) {
     // voelspriet: schacht, knik, en een zweep van kleine leedjes
     const spriet = ketting(
@@ -307,50 +317,59 @@ function bouwHommel() {
     spriet.rotation.set(0.15, 0, k * -0.45)
     hommel.add(spriet)
 
-    // poten: dij, scheen en voet, in de vlucht naar achteren en onder het lijf;
-  // lang en dun, en de vleugels reiken voorbij de staart, zoals bij de
-  // hommel van Google die de eigenaar als voorbeeld gaf (21 okt 2026)
-    const poten: [number, number, number][] = [
-      [0.3, 0.52, 0.5],
-      [0.36, 0.36, 0.8],
-      [0.42, 0.2, 1.1],
+    // Poten zoals bij een echte hommel (eigenaar, 22 okt 2026: "pootjes zitten
+    // allemaal in midden ... maak hommel nog levensechter"): drie paar aan het
+    // borststuk, voor, midden en achter, en gespreid. Voorpoten kort en naar
+    // voren onder de kop, middenpoten opzij, achterpoten lang en naar achteren
+    // langs het achterlijf, met een brede, glanzende scheen waarop het
+    // stuifmeelklompje (corbicula) zit. Elk been loopt van gewricht naar
+    // gewricht: heup, dij, scheen, en een voet van vijf leedjes met klauwtjes.
+    const v = (x: number, y: number, z: number) => new THREE.Vector3(k * x, y, z)
+    const poten = [
+      { heup: v(0.1, -0.2, 0.56), knie: v(0.25, -0.3, 0.68), enkel: v(0.28, -0.5, 0.7), teen: v(0.3, -0.62, 0.64), dik: 0.016 },
+      { heup: v(0.15, -0.23, 0.4), knie: v(0.38, -0.3, 0.42), enkel: v(0.46, -0.52, 0.34), teen: v(0.5, -0.65, 0.24), dik: 0.017 },
+      { heup: v(0.14, -0.24, 0.22), knie: v(0.38, -0.36, 0.12), enkel: v(0.42, -0.56, -0.16), teen: v(0.44, -0.66, -0.34), dik: 0.019, korf: true },
     ]
-    poten.forEach(([dij, z, hoek], i) => {
-      const achter = i === 2
-      const poot = ketting(
-        [
-          [dij, 0.02, 0],
-          [dij * 1.1, achter ? 0.032 : 0.017, -1.3],
-          [0.1, 0.01, 0.4],
-          [0.08, 0.008, 0.25],
-          [0.07, 0.007, 0.25],
-        ],
-        pootMat,
-      )
-      const leden: THREE.Mesh[] = []
-      poot.traverse((o) => {
-        if (o instanceof THREE.Mesh) leden.push(o)
-      })
-      for (const lid of leden.slice(-3)) lid.material = voetMat
-      // haartjes op dij en scheen; de poten van een hommel zijn ook behaard
-      const dijLid = poot.children[0]
-      const scheenLid = dijLid.children[1]
-      for (const lid of [dijLid, scheenLid]) {
-        const been = lid.children[0] as THREE.Mesh
-        been.add(haarStrengen(been, new THREE.Color(ZWART), 0.03, 70))
+    for (const { heup, knie, enkel, teen, dik, korf } of poten) {
+      // heup en dij: zwart en behaard
+      const heupStuk = new THREE.Mesh(new THREE.SphereGeometry(dik * 1.6, 10, 8), chitine)
+      heupStuk.position.copy(heup)
+      hommel.add(heupStuk)
+      const dij = lid(heup, knie, dik * 1.25, dik, pootMat)
+      dij.add(haarStrengen(dij, new THREE.Color(ZWART), 0.04, 120))
+      hommel.add(dij)
+      // scheen: bij de achterpoot breed en plat, een glanzend korfje met een
+      // rand van lange haren en een klomp oranje stuifmeel erop
+      const scheen = lid(knie, enkel, dik, korf ? dik * 2.2 : dik * 1.05, korf ? chitine : pootMat)
+      if (korf) scheen.scale.set(1, 1, 0.45)
+      scheen.add(haarStrengen(scheen, new THREE.Color(ZWART), korf ? 0.07 : 0.035, korf ? 220 : 100))
+      hommel.add(scheen)
+      if (korf) {
+        const klomp = new THREE.Mesh(new THREE.SphereGeometry(0.036, 16, 12), stuifmeel)
+        klomp.scale.set(0.9, 1.6, 0.7)
+        klomp.add(haarStrengen(klomp, stuifmeel.color, 0.012, 120)) // korrelig, niet glad
+        klomp.position.copy(knie).lerp(enkel, 0.6).add(new THREE.Vector3(k * 0.022, 0, 0))
+        klomp.lookAt(enkel.clone().add(new THREE.Vector3(k * 0.022, 0, 0)))
+        klomp.rotateX(Math.PI / 2)
+        hommel.add(klomp)
       }
-      poot.position.set(k * 0.12, -0.16, z)
-      poot.rotation.set(Math.PI + hoek, 0, k * 0.35)
-      hommel.add(poot)
-      if (achter) {
-        // stuifmeelkorfje op de achterscheen
-        const korf = new THREE.Mesh(new THREE.SphereGeometry(0.05, 14, 10), stuifmeel)
-        korf.scale.set(0.8, 1.3, 0.8)
-        const scheen = poot.children[0].children[1]
-        korf.position.set(0, dij * 0.6, 0.02)
-        scheen.add(korf)
+      // voet: een brede eerste leed (bij de achterpoot), dan vier kleine, roodbruin
+      const leden = [enkel.clone()]
+      for (let i = 1; i <= 5; i++) {
+        const t = i / 5
+        leden.push(enkel.clone().lerp(teen, t).add(new THREE.Vector3(0, -Math.sin(t * Math.PI) * 0.03, 0)))
       }
-    })
+      for (let i = 0; i < 5; i++) {
+        const d = i === 0 ? dik * (korf ? 1.3 : 0.9) : dik * 0.55
+        hommel.add(lid(leden[i], leden[i + 1], d, d * 0.85, voetMat))
+      }
+      for (const z of [-1, 1]) {
+        const klauw = new THREE.Mesh(new THREE.ConeGeometry(0.006, 0.03, 5), chitine)
+        klauw.position.copy(teen)
+        klauw.rotation.set(Math.PI, 0, z * 0.5)
+        hommel.add(klauw)
+      }
+    }
   }
 
   // vleugels: voor- en achtervleugel per kant, elk met drie naslagen voor bewegingsonscherpte
