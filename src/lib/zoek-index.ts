@@ -12,7 +12,7 @@ import type { L } from "@/lib/i18n"
 // opgebouwd uit dezelfde data als de pagina's. Geen zoekbibliotheek: het zijn
 // een paar honderd korte teksten, indexOf is genoeg (zo deed de oude site het ook).
 
-export type Soort = "pagina" | "dienst" | "shop" | "werk" | "vraag"
+export type Soort = "pagina" | "dienst" | "shop" | "werk" | "vraag" | "journaal"
 
 export type Treffer = {
   soort: Soort
@@ -35,7 +35,6 @@ const PAGINAS: Treffer[] = [
   { soort: "pagina", href: "/kennismaken", titel: { nl: "Kennismaken", en: "Get in touch" }, sub: { nl: "Contact, WhatsApp of een afspraak", en: "Contact, WhatsApp or an appointment" } },
   { soort: "pagina", href: "/faq", titel: { nl: "Veelgestelde vragen", en: "FAQ" }, sub: { nl: "Prijzen, werkgebied en werkwijze", en: "Prices, area and how I work" } },
   { soort: "pagina", href: "/journaal", titel: { nl: "Journaal", en: "Journal" }, sub: { nl: "Praktische stukken over vijver en tuin", en: "Practical pieces on ponds and gardens (Dutch)" } },
-  ...STUKKEN.map((s): Treffer => ({ soort: "pagina", href: `/journaal/${s.slug}`, titel: { nl: s.titel, en: s.titel }, sub: { nl: "Journaal", en: "Journal" } })),
   { soort: "pagina", href: "/techniek", titel: { nl: "Techniek", en: "Technology" }, sub: { nl: "Het gereedschap achter de studio", en: "The tools behind the studio" } },
 ]
 
@@ -43,6 +42,8 @@ export function zoekIndex(): Treffer[] {
   const vanaf = priceLabel(BORDER_MATEN[0] * BORDER_PRIJS.opgestuurd)
   return [
     ...PAGINAS,
+    // stukken uit het Journaal als eigen soort, achteraan: een dienst of pakket gaat voor
+    ...STUKKEN.map((s): Treffer => ({ soort: "journaal", href: `/journaal/${s.slug}`, titel: { nl: s.titel, en: s.titel }, sub: { nl: s.rubriek, en: s.rubriek } })),
     ...SERVICES.map((s): Treffer => ({
       soort: "dienst",
       href: `${VIJVER.has(s.slug) ? "/vijvers" : "/tuinen"}#${s.slug}`,

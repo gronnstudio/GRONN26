@@ -35,8 +35,9 @@ const SOORT: Record<Soort, { nl: string; en: string }> = {
   shop: { nl: "Shop", en: "Shop" },
   werk: { nl: "Werk", en: "Work" },
   vraag: { nl: "Vraag", en: "Question" },
+  journaal: { nl: "Journaal", en: "Journal" },
 }
-const PER_SOORT: [Soort, number][] = [["pagina", 3], ["dienst", 5], ["shop", 4], ["werk", 2], ["vraag", 3]]
+const PER_SOORT: [Soort, number][] = [["pagina", 3], ["dienst", 5], ["shop", 4], ["werk", 2], ["vraag", 3], ["journaal", 3]]
 
 /** Kleine letters zonder accenten: "tuinbeplanting" vindt ook "Tuïnbeplanting". */
 const plat = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: s.beschrijving,
       url: `/journaal/${s.slug}`,
       publishedTime: s.datum,
-      images: [{ url: s.beeld.src, width: s.beeld.width, height: s.beeld.height, alt: s.beeld.alt }],
+      images: s.beeld ? [{ url: s.beeld.src, width: s.beeld.width, height: s.beeld.height, alt: s.beeld.alt }] : undefined,
     },
   }
 }
@@ -45,16 +45,17 @@ export default async function BlogStuk({ params }: { params: Promise<{ slug: str
     headline: s.titel,
     description: s.beschrijving,
     datePublished: s.datum,
-    image: `https://gronn.studio${s.beeld.src}`,
+    image: s.beeld ? `https://gronn.studio${s.beeld.src}` : undefined,
     inLanguage: "nl-NL",
     author: { "@type": "Person", name: "Nick Peters" },
     publisher: { "@type": "Organization", name: "GRØNN Studio", url: "https://gronn.studio" },
     mainEntityOfPage: `https://gronn.studio/journaal/${s.slug}`,
   }
   // het openingsbeeld staat al bovenaan; niet nog eens in de tekst
-  const blokken = s.blokken.filter((b) => b.soort !== "foto" || b.foto.src !== s.beeld.src)
+  const blokken = s.blokken.filter((b) => b.soort !== "foto" || b.foto.src !== s.beeld?.src)
   const eerste = blokken.findIndex((b) => b.soort === "alinea")
-  const staand = s.beeld.height > s.beeld.width
+  const beeld = s.beeld
+  const staand = beeld ? beeld.height > beeld.width : false
   const kicker = (
     <p className="lbl m-0 mt-[clamp(20px,2.5vw,36px)] flex flex-wrap gap-x-3 border-t-2 border-inkt pt-3">
       <span className="text-oranje-tekst">Journaal Nr. {nummer(s)} · {s.rubriek}</span>
@@ -69,11 +70,16 @@ export default async function BlogStuk({ params }: { params: Promise<{ slug: str
       <header className="wrap pt-[clamp(120px,14vw,200px)]">
         <Kruimelpad />
         {kicker}
-        {staand ? (
+        {!beeld ? (
+          <>
+            {titel}
+            {lead}
+          </>
+        ) : staand ? (
           <div className="grid gap-y-8 md:grid-cols-12 md:items-end md:gap-x-8">
             <div className="md:col-span-7">{titel}{lead}</div>
             <div className="aspect-[4/5] md:col-span-5">
-              <Foto foto={s.beeld} priority sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 100vw" className="h-full w-full" />
+              <Foto foto={beeld} priority sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 100vw" className="h-full w-full" />
             </div>
           </div>
         ) : (
@@ -81,7 +87,7 @@ export default async function BlogStuk({ params }: { params: Promise<{ slug: str
             {titel}
             {lead}
             <div className="mt-[clamp(32px,4vw,56px)] aspect-[4/3] md:aspect-[16/9] lg:aspect-[21/9]">
-              <Foto foto={s.beeld} priority sizes="(min-width: 1280px) 1232px, 100vw" className="h-full w-full" />
+              <Foto foto={beeld} priority sizes="(min-width: 1280px) 1232px, 100vw" className="h-full w-full" />
             </div>
           </>
         )}
