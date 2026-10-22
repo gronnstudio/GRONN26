@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Kruimelpad } from "@/components/kruimelpad"
 import { Verder } from "@/components/wereld/verder"
 import { Foto } from "@/components/foto"
-import { STUKKEN, datumTekst, nummer, seizoen, type Stuk } from "@/lib/data/blog"
+import { STUKKEN, THEMAS, datumTekst, nummer, seizoen, type Stuk } from "@/lib/data/blog"
 
 export const metadata: Metadata = {
   title: "Journaal",
@@ -24,10 +24,12 @@ function Meta({ s }: { s: Stuk }) {
 
 // Het Journaal als tijdschrift (eigenaar, 22 okt 2026: "magazine waardig",
 // naam gekozen: Journaal). Een naambord met seizoen, het nieuwste stuk als
-// coververhaal, daaronder de inhoudsopgave met nummers. Alles in de breedte
-// van de site.
+// coververhaal, daaronder alle stukken per thema met nummers en "Direct
+// naar"-ankers (kennis per thema, niet per datum). Alles in de breedte van
+// de site.
 export default function JournaalPagina() {
-  const [cover, ...rest] = STUKKEN
+  const [cover] = STUKKEN
+  const groepen = THEMAS.map((t) => ({ thema: t, stukken: STUKKEN.filter((s) => s.rubriek === t) })).filter((g) => g.stukken.length)
   const staand = cover ? cover.beeld.height > cover.beeld.width : false
   return (
     <>
@@ -86,20 +88,29 @@ export default function JournaalPagina() {
         </div>
       ) : null}
 
-      {rest.length ? (
-        <section aria-labelledby="inhoud" className="wrap mt-[clamp(64px,8vw,120px)]">
-          <div className="flex items-baseline justify-between border-b-2 border-inkt pb-3">
-            <h2 id="inhoud" className="lbl m-0">Eerder in het Journaal</h2>
-            <p className="lbl m-0 text-gedempt">{rest.length} {rest.length === 1 ? "stuk" : "stukken"}</p>
-          </div>
+      {groepen.length ? (
+        <nav aria-label="Thema's" className="wrap mt-[clamp(64px,8vw,120px)]">
+          <p className="lbl m-0 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b-2 border-inkt pb-3">
+            <span className="text-gedempt">Direct naar</span>
+            {groepen.map((g) => (
+              <a key={g.thema} href={`#${g.thema.toLowerCase()}`} className="text-inherit no-underline hover:text-oranje-tekst focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-inkt">
+                {g.thema} <span className="text-gedempt">({g.stukken.length})</span>
+              </a>
+            ))}
+          </p>
+        </nav>
+      ) : null}
+
+      {groepen.map((g) => (
+        <section key={g.thema} id={g.thema.toLowerCase()} aria-labelledby={`kop-${g.thema.toLowerCase()}`} className="wrap mt-[clamp(40px,5vw,72px)] scroll-mt-8">
+          <h2 id={`kop-${g.thema.toLowerCase()}`} className="syne m-0 border-b border-lijn pb-3 text-[clamp(28px,3vw,44px)] leading-[1.1] tracking-[-.02em]">{g.thema}</h2>
           <ol className="m-0 list-none p-0">
-            {rest.map((s) => (
+            {g.stukken.map((s) => (
               <li key={s.slug} className="border-b border-lijn">
                 <Link href={`/journaal/${s.slug}`} className={`${LINK} grid grid-cols-[auto_1fr] items-start gap-x-5 py-[clamp(20px,2.5vw,32px)] md:grid-cols-12 md:items-center md:gap-x-8`}>
                   <span aria-hidden="true" className="syne text-[clamp(28px,3vw,48px)] leading-[1] tracking-[-.03em] text-gedempt md:col-span-1">{nummer(s)}</span>
                   <div className="md:col-span-7">
-                    <p className="lbl m-0 text-oranje-tekst">{s.rubriek}</p>
-                    <h3 className={`syne m-0 mt-2 text-[clamp(22px,2.4vw,34px)] leading-[1.12] tracking-[-.02em] ${TITEL_HOVER}`}>{s.titel}</h3>
+                    <h3 className={`syne m-0 text-[clamp(22px,2.4vw,34px)] leading-[1.12] tracking-[-.02em] ${TITEL_HOVER}`}>{s.titel}</h3>
                     <p className="m-0 mt-2 max-w-[60ch] text-[16px] leading-[1.6] text-gedempt max-sm:hidden">{s.beschrijving}</p>
                     <div className="mt-3 md:hidden"><Meta s={s} /></div>
                   </div>
@@ -112,7 +123,7 @@ export default function JournaalPagina() {
             ))}
           </ol>
         </section>
-      ) : null}
+      ))}
 
       <Verder voor="Een vraag over" nadruk="jouw vijver" na="?" href="/kennismaken" label="Naar Kennismaken" />
     </>

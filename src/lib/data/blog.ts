@@ -11,6 +11,12 @@ export type Blok =
   | { soort: "lijst"; regels: string[] }
   | { soort: "foto"; foto: Foto }
 
+// Kennis per thema, niet per datum (eigenaar, 22 okt 2026, uit de VHG-lessen:
+// "4, doen! meteen!"). Seizoen is voor stukken die over de hele tuin in een
+// bepaalde tijd van het jaar gaan.
+export const THEMAS = ["Vijver", "Tuin", "Seizoen"] as const
+export type Thema = (typeof THEMAS)[number]
+
 export type Stuk = {
   slug: string
   titel: string
@@ -19,8 +25,8 @@ export type Stuk = {
   /** ISO-datum van publicatie. */
   datum: string
   leestijd: number
-  /** De rubriek boven de titel, zoals in een tijdschrift. */
-  rubriek: "Vijver" | "Tuin"
+  /** Het thema: rubriek boven de titel en de groep op /journaal. */
+  rubriek: Thema
   /** De foto voor de lijst en voor delen. */
   beeld: Foto
   blokken: Blok[]
