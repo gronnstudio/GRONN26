@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 // Laadt de 3D-hommel (hommel-scene.ts) pas na een paar seconden en alleen als
 // beweging mag: niet bij minder beweging en niet als Weergave op Stil staat.
-// Hij landt op de boeketjes boven de voet (verder.tsx, data-landing).
+// Hij landt op een blad van de bladtak (plant.tsx, data-landing).
 export function Hommel() {
   useEffect(() => {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return

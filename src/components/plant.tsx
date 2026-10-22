@@ -6,28 +6,22 @@ import Image from "next/image"
 // nooit bij een project, altijd decoratief (alt leeg, aria-hidden). De hangende
 // takken zijn verticaal gespiegeld zodat ze uit de bovenhoek komen.
 // Bronnen (pexels.com/photo/…): boomkruin 2267547, takken 11552979,
-// bladtak 12847431, klaproos 8208112, korenbloem 5557020, wit vingerhoedskruid 37443327 (verving
-// de korenbloem, eigenaar 21 okt 2026: "de rechterzijde niet zo heel erg"),
-// dagpauwoog 13515218. Bloemen en dieren alleen inheems (eigenaar, 20 okt 2026: "gebruik inheemse
-// bloemen").
+// bladtak 12847431, dagpauwoog 13515218. Dieren alleen inheems (eigenaar, 20
+// okt 2026). Sinds 22 okt 2026 alleen groen, geen bloemen meer (eigenaar:
+// "voeg meer groene elementen toe ... haal de bloemen uit de footer").
 const PLANTEN = {
   boomkruin: [484, 640],
   takken: [640, 640],
   bladtak: [600, 598],
-  klaproos: [348, 640],
-  vingerhoed: [241, 640],
-  korenbloem: [367, 640],
   dagpauwoog: [266, 320],
 } as const
 
 export type PlantNaam = keyof typeof PLANTEN
 
-/** Waar de hommel kan landen, als fractie van het beeld (x, y): de bovenkant
- *  van de bloemen. hommel-scene.ts leest dit uit data-landing. */
+/** Waar de hommel kan landen, als fractie van het beeld (x, y): op een blad
+ *  van de bladtak (bloemen staan er niet meer, eigenaar 22 okt 2026). hommel-scene.ts leest dit uit data-landing. */
 const LANDING: Partial<Record<PlantNaam, string>> = {
-  klaproos: "0.5,0.04;0.45,0.53",
-  vingerhoed: "0.5,0.3;0.45,0.62",
-  korenbloem: "0.34,0.72;0.66,0.47",
+  bladtak: "0.42,0.5;0.7,0.78",
 }
 
 /** De takken die van boven in een opening hangen, om en om per pagina. */
@@ -35,9 +29,9 @@ export const HANGERS: PlantNaam[] = ["bladtak", "boomkruin", "takken"]
 
 export function Plant({ naam, className }: { naam: PlantNaam; className: string }) {
   const [w, h] = PLANTEN[naam]
-  // Via next/image: AVIF en alleen zo breed als nodig. Een bloem in het boeketje
-  // is hooguit 120 breed, een hangende tak hooguit 360 (gemeten 21 okt 2026).
-  const sizes = className.includes("plant-hang") ? "(min-width: 768px) 360px, 140px" : "120px"
+  // Via next/image: AVIF en alleen zo breed als nodig. Een hangende tak is
+  // hooguit 360 breed, de vlinder hooguit 64 (gemeten 21 okt 2026).
+  const sizes = className.includes("plant-hang") ? "(min-width: 768px) 360px, 140px" : "64px"
   return (
     <Image src={`/planten/${naam}.webp`} width={w} height={h} sizes={sizes} alt="" aria-hidden="true" className={`plant ${className}`} data-landing={LANDING[naam]} />
   )
