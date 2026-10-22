@@ -40,7 +40,7 @@ export function Rimpel({ src, className = "", vanzelf = false }: { src: string; 
     if (stil()) return
 
     // WebGL pas opzetten als het nodig is: bij de eerste aanraking, of (vanzelf)
-    // op een rustig moment na het laden. Shaders en de textuur kosten op een
+    // zodra de foto in beeld komt. Shaders en de textuur kosten op een
     // telefoon een paar honderd ms; tijdens het laden zat dat alles in de weg.
     let opgezet = false
     let raakVoorKlaar: [number, number] | null = null
@@ -157,16 +157,23 @@ export function Rimpel({ src, className = "", vanzelf = false }: { src: string; 
     vak.addEventListener("pointermove", raak, { passive: true })
     vak.addEventListener("pointerdown", raak, { passive: true })
 
-    // vanzelf: na het laden, als de browser even niets te doen heeft
-    let rust = 0
-    const wacht = vanzelf
-      ? setTimeout(() => {
-          rust = "requestIdleCallback" in window ? requestIdleCallback(zetOp, { timeout: 2000 }) : (zetOp(), 0)
-        }, 2500)
-      : 0
+    // vanzelf: pas als de foto echt in beeld komt, dan zie je de druppels ook.
+    // (Na een vaste tijd viel het tekenen midden in de intro en kostte het op
+    // desktop zonder GPU seconden.)
+    const io = vanzelf
+      ? new IntersectionObserver(
+          (es) => {
+            if (es.some((e) => e.isIntersecting)) {
+              io?.disconnect()
+              zetOp()
+            }
+          },
+          { threshold: 0.4 },
+        )
+      : null
+    io?.observe(vak)
     return () => {
-      clearTimeout(wacht)
-      if (rust) cancelIdleCallback(rust)
+      io?.disconnect()
       vak.removeEventListener("pointermove", raak)
       vak.removeEventListener("pointerdown", raak)
       opruimen()

@@ -2,7 +2,7 @@
 
 /* GRØNN Brand Guide 2026, 60/30/10: gebroken wit en antraciet voeren de
    boventoon, aarde-oranje is het ene accent (een oranje vlak draagt
-   antraciet tekst; oranje als tekst op licht is #FF5B04), bosgroen, mos en
+   antraciet tekst; oranje als tekst op licht is #B84000, op donker #FF5B04), bosgroen, mos en
    salie zijn bijkleuren. Donker = de Blauwe Uur-kant: antraciet grond. */
 @custom-variant dark (&:where(.donker, .donker *));
 
@@ -25,7 +25,9 @@
   --veld: #e9e0d0;
   --voorbeeld: #8a8272;
   --oranje: #ff5b04;
-  --oranje-tekst: #ff5b04;
+  /* kleine oranje tekst op Licht: #FF5B04 haalde 2,8:1 op het zand, #B84000
+     5,0:1 (eigenaar, 22 okt 2026). Vlakken en knoppen blijven #FF5B04. */
+  --oranje-tekst: #b84000;
   --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
   --mos: #6f6553;
   --salie: #cbbfa8;
