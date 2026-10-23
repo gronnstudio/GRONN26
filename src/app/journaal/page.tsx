@@ -30,7 +30,7 @@ function Meta({ s }: { s: Stuk }) {
 export default function JournaalPagina() {
   const [cover] = STUKKEN
   const groepen = THEMAS.map((t) => ({ thema: t, stukken: STUKKEN.filter((s) => s.rubriek === t) })).filter((g) => g.stukken.length)
-  const staand = cover ? cover.beeld.height > cover.beeld.width : false
+  const staand = cover?.beeld ? cover.beeld.height > cover.beeld.width : false
   return (
     <>
       <header className="wrap pt-[clamp(120px,14vw,200px)]">
@@ -64,15 +64,17 @@ export default function JournaalPagina() {
                   </div>
                 </div>
                 <div className="aspect-[4/5] md:col-span-5">
-                  <Foto foto={cover.beeld} priority sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 100vw" className="h-full w-full" />
+                  <Foto foto={cover.beeld!} priority sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 100vw" className="h-full w-full" />
                 </div>
               </article>
             ) : (
               // liggende foto: breed beeld, daaronder titel en inleiding in kolommen
               <article>
-                <div className="aspect-[4/3] md:aspect-[16/9] lg:aspect-[2/1]">
-                  <Foto foto={cover.beeld} priority sizes="(min-width: 1280px) 1232px, 100vw" className="h-full w-full" />
-                </div>
+                {cover.beeld ? (
+                  <div className="aspect-[4/3] md:aspect-[16/9] lg:aspect-[2/1]">
+                    <Foto foto={cover.beeld} priority sizes="(min-width: 1280px) 1232px, 100vw" className="h-full w-full" />
+                  </div>
+                ) : null}
                 <div className="mt-[clamp(20px,2.5vw,32px)] grid gap-y-4 md:grid-cols-12 md:gap-x-8">
                   <p className="lbl m-0 text-oranje-tekst md:col-span-3">Coververhaal · {cover.rubriek}</p>
                   <h2 className={`syne m-0 text-[clamp(32px,4.4vw,64px)] leading-[1.04] tracking-[-.03em] md:col-span-6 ${TITEL_HOVER}`}>{cover.titel}</h2>
@@ -115,9 +117,11 @@ export default function JournaalPagina() {
                     <div className="mt-3 md:hidden"><Meta s={s} /></div>
                   </div>
                   <div className="max-md:hidden md:col-span-2"><Meta s={s} /></div>
-                  <div className="aspect-[4/3] max-md:hidden md:col-span-2">
-                    <Foto foto={s.beeld} sizes="200px" className="h-full w-full" />
-                  </div>
+                  {s.beeld ? (
+                    <div className="aspect-[4/3] max-md:hidden md:col-span-2">
+                      <Foto foto={s.beeld} sizes="200px" className="h-full w-full" />
+                    </div>
+                  ) : null}
                 </Link>
               </li>
             ))}
