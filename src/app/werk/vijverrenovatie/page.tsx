@@ -12,6 +12,7 @@ import {
   CIJFERS,
   CIJFERS_NOOT,
   CITAAT,
+  KLANT_CITAAT,
   FOTOS,
   HOOFDSTUKKEN,
   NA_CITAAT,
@@ -140,6 +141,9 @@ export default function Vijverrenovatie() {
             ))}
           </dl>
         </section>
+
+        {/* de stem van de klant, zoals de cases van danhoye.com (23 okt 2026) */}
+        <Citaat tekst={KLANT_CITAAT.tekst} bron={KLANT_CITAAT.bron} />
       </div>
 
       <div className="w-sectie">

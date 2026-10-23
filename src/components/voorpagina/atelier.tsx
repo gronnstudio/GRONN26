@@ -6,7 +6,6 @@ import type { L } from "@/lib/i18n";
 import { F08_2, F10 } from "./beelden";
 import { Diepte } from "@/components/werk/diepte";
 import { Uitgelicht } from "./uitgelicht";
-import { SnelContact } from "@/components/snel-contact";
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
 // van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
@@ -128,8 +127,8 @@ export function Atelier() {
         <Foto foto={F08_2} sizes="(min-width: 1024px) 30vw, 60vw" className="vp-portret" />
       </div>
 
-      {/* eerst wie, dan snel contact (eigenaar, 18 okt 2026) */}
-      <SnelContact className="px-[var(--vp-rand)] pt-[56px]" />
+      {/* "Snel geregeld" stond hier tot 23 okt 2026; met Kennismaken in de
+          opening was het dubbelop (eigenaar). Op Vijvers en Tuinen staat het nog. */}
 
       <Uitgelicht />
 
