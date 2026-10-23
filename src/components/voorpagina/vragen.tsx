@@ -4,9 +4,10 @@ import { VraagRegel } from "@/components/faq/vraag-regel"
 import { T } from "@/components/taal"
 
 // Vier vragen die bezoekers echt hebben, op de voorpagina (les uit
-// danhoye.com, 22 okt 2026): wat het kost, waar, hoe lang en hoe je begint.
+// danhoye.com, 22 okt 2026): voor wie, waar, hoe lang en hoe je begint. Geen
+// vraag die alleen over de vijver gaat (eigenaar, 23 okt 2026).
 // Uit dezelfde bron als /faq; daar staan ze allemaal.
-const IDS = ["alleen-hulp-met-mijn-vijver", "werk-je-ook-in-mijn-plaats", "hoe-lang-duurt-een-ontwerp-of-aanleg", "hoe-begin-ik"]
+const IDS = ["voor-welke-tuinen-werk-je", "werk-je-ook-in-mijn-plaats", "hoe-lang-duurt-een-ontwerp-of-aanleg", "hoe-begin-ik"]
 
 export function Vragen() {
   const nl = faqVragen()
