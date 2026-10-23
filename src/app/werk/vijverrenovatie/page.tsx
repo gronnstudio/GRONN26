@@ -12,6 +12,7 @@ import {
   CIJFERS,
   CIJFERS_NOOT,
   CITAAT,
+  KLANT_CITAAT,
   FOTOS,
   HOOFDSTUKKEN,
   NA_CITAAT,
@@ -58,6 +59,41 @@ const REUSTITEL = {
 const EN = VIJVER.en
 const nlEn = (nl: string, en: string) => ({ nl, en })
 
+const IN_HET_KORT: [{ nl: string; en: string }, { nl: string; en: string }, string][] = [
+  [
+    nlEn("Intro", "Intro"),
+    nlEn(
+      "Een bestaande tuin met twee vijvers, een waterval en een beekloop, samen circa 5.000 liter water.",
+      "An existing garden with two ponds, a waterfall and a stream, together about 5,000 litres of water.",
+    ),
+    "opgave",
+  ],
+  [
+    nlEn("Uitdaging", "Challenge"),
+    nlEn(
+      "Alles moest technisch op elkaar aansluiten en in de tuin als één geheel aanvoelen, terwijl filter en aansluitingen bereikbaar blijven.",
+      "Everything had to connect technically and feel like one whole in the garden, while the filter and connections stay accessible.",
+    ),
+    "opgave",
+  ],
+  [
+    nlEn("Oplossing", "Solution"),
+    nlEn(
+      "Eén watersysteem: drukvast pvc, een filter met drie kamers en een bypass, een skimmer en losneembare aansluitingen voor onderhoud.",
+      "One water system: pressure-rated PVC, a three-chamber filter with a bypass, a skimmer and detachable connections for maintenance.",
+    ),
+    "waterroute",
+  ],
+  [
+    nlEn("Resultaat", "Result"),
+    nlEn(
+      "Twee vijvers die samenwerken, na circa 120 uur werk. Het project is in afronding; de beplanting laat het verder groeien.",
+      "Two ponds that work together, after about 120 hours of work. The project is being finished; the planting will let it grow on.",
+    ),
+    "afronding",
+  ],
+]
+
 export default function Vijverrenovatie() {
   return (
     <article>
@@ -85,6 +121,29 @@ export default function Vijverrenovatie() {
             [nlEn("Water", "Water"), nlEn("circa 5.000 l", "about 5,000 l")],
           ]}
         />
+      </div>
+
+      {/* Het project in vier regels, zoals de cases van danhoye.com (22 okt
+          2026): wie snel leest, weet het hier; het hele verhaal volgt eronder.
+          Elke zin komt uit de projecttekst. */}
+      <div className="wrap">
+        <section aria-labelledby="kort-kop" className="w-sectie">
+          <Kopregel id="kort-kop" links={<T t={nlEn("In het kort", "In short")} />} />
+          <dl className="m-0">
+            {IN_HET_KORT.map(([k, v, anker]) => (
+              <div key={k.nl} className="grid grid-cols-1 gap-x-8 gap-y-1 border-t border-lijn py-4 last:border-b md:grid-cols-[3fr_9fr]">
+                <dt className="lbl text-gedempt"><T t={k} /></dt>
+                <dd className="m-0 max-w-[62ch] text-[17px] leading-[1.6]">
+                  <T t={v} />{" "}
+                  <a href={`#${anker}`} className="lnk whitespace-nowrap"><T t={nlEn("Lees meer", "Read more")} /> ↓</a>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        {/* de stem van de klant, zoals de cases van danhoye.com (23 okt 2026) */}
+        <Citaat tekst={KLANT_CITAAT.tekst} bron={KLANT_CITAAT.bron} />
       </div>
 
       <div className="w-sectie">

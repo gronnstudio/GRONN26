@@ -6,7 +6,6 @@ import type { L } from "@/lib/i18n";
 import { F08_2, F10 } from "./beelden";
 import { Diepte } from "@/components/werk/diepte";
 import { Uitgelicht } from "./uitgelicht";
-import { SnelContact } from "@/components/snel-contact";
 
 // WF-058 (Uncode "portfolio-atelier"), van de opening tot en met de onderkant
 // van de fotocollage. Volgt licht/donker. De beweging zit in beweging.tsx; zonder
@@ -19,6 +18,11 @@ export const ZIN: L = {
 const LABEL: L = {
   nl: "Vijvers en tuinen · Stein en omgeving",
   en: "Ponds and gardens · Stein and surrounding area",
+};
+
+const HELD_ZIN: L = {
+  nl: "Voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
+  en: "For homeowners in Stein and the surrounding area, with a fixed price up front.",
 };
 
 const i = (n: number) => ({ "--i": n }) as CSSProperties;
@@ -86,6 +90,15 @@ export function Atelier() {
                 en={<KopRegels regels={["A pond and garden", "that stay healthy."]} />}
               />
             </h1>
+            {/* in één scherm voor wie, waar en hoe, met één knop (les uit
+                danhoye.com, 22 okt 2026); de knop alleen onder 1024px, daarboven
+                staat Kennismaken al in de balk: één oranje accent */}
+            <p className="vp-vijver-zin m-0">
+              <T t={HELD_ZIN} />
+            </p>
+            <Link href="/kennismaken" className="knop vp-vijver-knop bg-oranje text-antraciet">
+              <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
+            </Link>
             <p className="lbl vp-vijver-tip m-0" aria-hidden="true">
               <T t={{ nl: "Raak het water aan", en: "Touch the water" }} />
             </p>
@@ -114,8 +127,8 @@ export function Atelier() {
         <Foto foto={F08_2} sizes="(min-width: 1024px) 30vw, 60vw" className="vp-portret" />
       </div>
 
-      {/* eerst wie, dan snel contact (eigenaar, 18 okt 2026) */}
-      <SnelContact className="px-[var(--vp-rand)] pt-[56px]" />
+      {/* "Snel geregeld" stond hier tot 23 okt 2026; met Kennismaken in de
+          opening was het dubbelop (eigenaar). Op Vijvers en Tuinen staat het nog. */}
 
       <Uitgelicht />
 

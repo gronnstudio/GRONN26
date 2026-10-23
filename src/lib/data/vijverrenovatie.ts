@@ -632,6 +632,15 @@ export const CITAAT: { tekst: L; bron: string } = {
   bron: "Nick Peters, GRØNN Studio",
 }
 
+/** De opdrachtgever, ingekort uit haar Google-review (5 sterren, sep 2026). */
+export const KLANT_CITAAT: { tekst: L; bron: string } = {
+  tekst: {
+    nl: "Nick verbond onze bestaande vijvers tot één natuurlijk geheel. Helder in zijn offerte, secuur in het werk, en hij komt zijn afspraken na. Onze tuin is er echt op vooruitgegaan.",
+    en: "Nick joined our existing ponds into one natural whole. Clear in his quote, meticulous in the work, and he keeps his promises. Our garden has truly moved up a level.",
+  },
+  bron: "Veronique, opdrachtgever · Google-review",
+}
+
 export const NA_CITAAT: L = {
   nl: "Het uitgangspunt voor volgende projecten is daarmee verder aangescherpt: de werking van het watersysteem, het onderhoud en de inrichting van de tuin vanaf het begin samen bekijken. Met evenveel aandacht voor het zichtbare resultaat als voor de keuzes die achter de schermen nodig zijn.",
   en: "That has sharpened the starting point for future projects: looking at how the water system works, the maintenance and the layout of the garden together from the start. With as much attention for the visible result as for the choices needed behind the scenes.",
