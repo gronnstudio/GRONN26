@@ -90,9 +90,8 @@ function toetsenAan() {
 }
 
 /**
- * Naar een pagina zoals met een gewone link: via een klik op een <a>, zodat de
- * paginawissel (overgang.tsx) meedoet. Neemt die de klik niet over (minder
- * beweging, of een anker op dezelfde pagina), dan de router of de browser zelf.
+ * Naar een pagina zoals met een gewone link: via een klik op een <a>; bij een
+ * anker op dezelfde pagina springt de browser zelf, anders de router.
  */
 function volg(href: string, push: (href: string) => void) {
   const a = document.createElement("a")

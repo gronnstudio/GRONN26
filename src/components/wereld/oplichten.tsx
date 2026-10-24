@@ -1,37 +1,8 @@
 import type { ElementType, ReactNode } from "react";
-import { Beide, type Tekst } from "@/components/taal";
+import { T, type Tekst } from "@/components/taal";
 
-/** Tekst in losse woorden; elke letter licht op (letters.ts maakt ze pas op de grens). */
-export function Woorden({ tekst }: { tekst: Tekst }) {
-  if (typeof tekst !== "string")
-    return (
-      <Beide
-        nl={<Woorden tekst={tekst.nl} />}
-        en={<Woorden tekst={tekst.en} />}
-      />
-    );
-  return (
-    <>
-      <span className="sr-only">{tekst}</span>
-      <span aria-hidden="true">
-        {tekst
-          .split(/(\s+)/)
-          .filter(Boolean)
-          .map((d, n) =>
-            /^\s+$/.test(d) ? (
-              " "
-            ) : (
-              <span key={n} className="w-wd">
-                {d}
-              </span>
-            ),
-          )}
-      </span>
-    </>
-  );
-}
-
-/** Een alinea (of ander element) waarvan de woorden één voor één oplichten. */
+/** Een grote, lichte alinea (de intro van een pagina). Sinds 24 okt 2026
+ *  gewoon tekst: de woorden lichten niet meer één voor één op. */
 export function Oplichten({
   tekst,
   als: Als = "p",
@@ -44,8 +15,8 @@ export function Oplichten({
   children?: ReactNode;
 }) {
   return (
-    <Als className={`w-onthul ${className}`} data-onthul>
-      <Woorden tekst={tekst} />
+    <Als className={`w-onthul ${className}`}>
+      <T t={tekst} />
       {children}
     </Als>
   );

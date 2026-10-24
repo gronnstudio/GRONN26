@@ -1,339 +1,91 @@
-/* De voorpagina (5 okt 2026): WF-058 + WF-059 + WF-057. Maten, easings en
-   snelheden uit de wireframes (nagemeten op de Uncode-demo's). Alles met het
-   voorvoegsel vp-, zodat niets elders geraakt wordt. Bewegende begintoestanden
-   staan alleen onder .vp-fx (gezet door beweging.tsx) en alleen als beweging
-   mag: zonder JS, met prefers-reduced-motion of html.stil is alles zichtbaar. */
+/* De voorpagina, versimpeld (24 okt 2026). Alles met het voorvoegsel vp-,
+   zodat niets elders geraakt wordt. Geen beweging: wat je ziet staat stil.
+   De werkwijze (vp-blok, vp-zes) staat op Over en gebruikt dit bestand ook. */
 
 .vp-wortel {
   overflow-x: clip;
-  --vp-rand: var(--rand); /* dezelfde marge als de rest van de site (audit 5 okt 2026) */
-  --vp-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
-  --vp-regel: cubic-bezier(0.25, 1, 0.5, 1);
-  --vp-inhoud: calc(100% - 2 * var(--rand)); /* volle breedte: de zes stappen stonden te smal (eigenaar, 5 okt 2026) */
-  --vp-kolom: calc(100% - 2 * var(--rand));
-}
-.vp-licht {
-  font-family: var(--font-syne);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
 }
 
-/* ── WF-058: volgt licht/donker (eigenaar, 5 okt 2026) ─────────────────────────────────────────── */
-.vp-atelier {
-  background: var(--grond);
-  color: var(--inkt);
-  overflow: clip;
-}
-
-/* 1 · opening: reuzenkop blijft staan, de foto groeit eronder van 70 % naar vol.
-   Het wireframe legt de kop (108px) over de pagina; hier staat de kop van de
-   site erboven, dus begint de opening 108px − de hoogte van die kop lager. */
-.vp-held {
+/* ── opening: de waterval met kop, zin en knop ─────────────────────── */
+.vp-vijver {
   position: relative;
-  padding-top: 108px; /* de sitekop ligt eroverheen, zoals in de demo */
-}
-.vp-held-titel {
-  position: sticky;
-  top: max(24px, 7.5vw);
-  z-index: 3;
-  /* links op de lijn van de rest van de site, zoals de kop op elke andere pagina */
-  text-align: left;
-  margin: 0 var(--rand);
-  /* de kop is de zin zelf (11 okt 2026), niet meer het woordmerk */
-  font-family: var(--font-syne);
-  font-weight: 700;
-  font-size: clamp(40px, 7vw, 120px);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-  mix-blend-mode: difference;
-  color: #efeeea;
-  pointer-events: none;
-}
-.vp-r {
-  display: block;
+  height: 100svh;
+  min-height: 560px;
+  max-height: 960px;
   overflow: hidden;
-  padding-inline: 0.04em;
 }
-.vp-held-titel .vp-r {
-  padding-block: 0.06em; /* ruimte voor de staarten van j en g */
-}
-.vp-w {
-  display: inline-block;
-  animation: vp-btt 1s var(--vp-ease) both;
-  animation-delay: calc(200ms + var(--i) * 100ms);
-}
-@keyframes vp-btt {
-  from {
-    transform: translate3d(0, 100%, 0);
-  }
-  to {
-    transform: none;
-  }
-}
-.vp-held-foto {
-  position: relative;
-  z-index: 1;
-  margin-top: clamp(48px, 6vw, 96px);
-  transform: scale(var(--s, 0.7));
-  transform-origin: 50% 0;
-  will-change: transform;
-}
-.vp-held-beeld {
-  aspect-ratio: 16 / 10;
-}
-.vp-held-beeld img {
-  object-position: 50% 25%;
-}
-.vp-lbl-tel {
-  display: none;
-}
-/* verticale labels in de marge; verdwijnen na 80px scrollen */
-.vp-verticaal {
+.vp-vijver-beeld { position: absolute; inset: 0; border-radius: 0; }
+.vp-vijver-beeld img { object-position: 40% 60%; }
+.vp-vijver-waas {
   position: absolute;
-  top: calc(100vh - 140px);
-  z-index: 10;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(20 16 12 / .28) 0%, rgb(20 16 12 / 0) 25%, rgb(20 16 12 / .3) 45%, rgb(20 16 12 / .72) 100%);
+}
+.vp-vijver-tekst {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 16px;
+  padding: 0 var(--rand) clamp(120px, 16vh, 168px);
+  color: #fff;
+  /* een zachte schaduw, zodat de letters ook boven zonlicht en blad lezen (eigenaar, 18 okt 2026) */
+  text-shadow: 0 1px 2px rgb(20 16 12 / .35), 0 2px 18px rgb(20 16 12 / .45);
+}
+.vp-vijver-tekst .lbl { color: #fff; }
+.vp-vijver-titel {
   margin: 0;
-  font: 300 20px/24px var(--font-sans);
-  letter-spacing: -0.02em;
-  writing-mode: vertical-rl;
-  transition: opacity 0.4s;
+  max-width: 14ch;
+  font-family: var(--font-syne);
+  font-weight: 700;
+  font-size: clamp(44px, 8vw, 136px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
 }
-.vp-verticaal.vp-links {
-  left: 60px;
-  transform: translateY(-100%) rotate(180deg);
-}
-.vp-verticaal.vp-rechts {
-  right: 60px;
-  transform: translateY(-100%);
-}
-.vp-verticaal.vp-weg {
-  opacity: 0;
+.vp-vijver-zin { max-width: 40ch; font-size: clamp(17px, 1.6vw, 22px); line-height: 1.4; }
+.vp-vijver-knop { justify-self: start; text-shadow: none; }
+/* boven 1024px staat Kennismaken al in de balk: één oranje accent */
+@media (min-width: 1024px) { .vp-vijver-knop { display: none; } }
+@media (max-width: 767px) {
+  .vp-vijver-titel { font-size: 14vw; margin-inline: auto; }
+  .vp-vijver-knop { justify-self: center; }
+  /* gecentreerd in het scherm (eigenaar, 18 okt 2026); onderaan ruimte voor de pil */
+  .vp-vijver-tekst { inset: 0; align-content: center; justify-items: center; text-align: center; padding: 0 var(--rand) 88px; }
+  .vp-vijver-waas { background: linear-gradient(180deg, rgb(20 16 12 / .35) 0%, rgb(20 16 12 / .66) 25%, rgb(20 16 12 / .66) 65%, rgb(20 16 12 / .45) 100%); }
+  .vp-vijver-beeld img { object-position: 30% 60%; }
 }
 
-/* 2 · tekst die woord voor woord oplicht */
-.vp-onthul {
-  padding: calc(144 / 1440 * 100vw) var(--vp-rand) 0;
+/* ── wie ik ben, met het portret ernaast ───────────────────────────── */
+.vp-wie {
+  display: grid;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  padding: clamp(72px, 10vw, 144px) var(--rand) 0;
+}
+@media (min-width: 1024px) { .vp-wie { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); } }
+.vp-wie-zin {
+  margin: 0;
   font-size: max(20px, 2.373vw);
   line-height: 1.5;
-  font-family: var(--font-sans);
   font-weight: 300;
   letter-spacing: -0.02em;
+  text-wrap: pretty;
 }
-.vp-onthul h1,
-.vp-onthul p {
-  display: inline;
-  font: inherit;
-  margin: 0;
-}
-.vp-onthul .vp-meer {
+.vp-meer {
   display: inline-block;
   margin-top: 32px;
-  font-family: var(--font-sans);
-  letter-spacing: 0.12em;
   color: inherit;
 }
+.vp-portret { aspect-ratio: 4 / 5; max-width: 420px; width: 100%; }
+@media (max-width: 1023px) { .vp-portret { max-width: 280px; } }
 
-/* 2b · echt werk: de vijverrenovatie als ervoor en nu (11 okt 2026) */
-.vp-project {
-  padding: clamp(96px, 12vw, 180px) var(--vp-rand) 0;
-}
-.vp-project h2 {
-  margin: 16px 0 clamp(32px, 4vw, 56px);
-  max-width: 18ch;
-  font-size: clamp(32px, 4.4vw, 64px);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-}
-.vp-voorna {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(12px, 2vw, 32px);
-  color: inherit;
-  text-decoration: none;
-}
-.vp-voorna figure {
-  margin: 0;
-}
-.vp-voorna .vp-voorna-foto {
-  aspect-ratio: 4 / 5;
-  border-radius: var(--foto-hoek);
-}
-.vp-voorna figcaption {
-  margin-top: 12px;
-  color: var(--gedempt);
-}
-.vp-project .vp-meer {
-  display: inline-block;
-  margin-top: 32px;
-}
-
-/* 3 · reuzenwoord dat opzij schuift, met de fotocollage eroverheen */
-.vp-vel {
-  position: relative;
-  overflow-x: clip;
-  margin-top: calc(144 / 1440 * 100vw);
-}
-/* het effect van de herotitel (eigenaar, 10 okt 2026): de band loopt óver de
-   foto's en keert de kleuren eronder om, met dezelfde vaste lichte kleur */
-.vp-reuswoord {
-  position: sticky;
-  top: 30vh;
-  z-index: 2;
-  mix-blend-mode: difference;
-  color: #efeeea;
-  pointer-events: none;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 14vw;
-  line-height: 0.85;
-  margin: 0;
-}
-.vp-spoor {
-  display: inline-block;
-  will-change: transform;
-}
-.vp-collage {
-  position: relative;
-  z-index: 1;
-  /* binnen de paginamarge, zodat de eerste foto op dezelfde lijn staat als de tekst */
-  margin-inline: var(--rand);
-}
-.vp-collage.vp-a {
-  aspect-ratio: 1440 / 2591;
-  margin-top: calc(180 / 1440 * 100%);
-}
-.vp-collage.vp-b {
-  aspect-ratio: 1440 / 2316;
-  margin-top: calc(-488 / 1440 * 100%);
-}
-.vp-stuk {
-  position: absolute;
-  margin: 0;
-  will-change: transform;
-  /* een zachte schaduw geeft diepte boven het vel (eigenaar, 11 okt 2026) */
-  border-radius: var(--foto-hoek);
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.08), 0 24px 48px -20px rgb(0 0 0 / 0.4);
-}
-.vp-stuk.vp-staand {
-  width: 42.5%;
-  aspect-ratio: 612 / 764;
-}
-.vp-stuk.vp-vierkant {
-  width: 34.03%;
-  aspect-ratio: 1;
-}
-.vp-stuk.vp-liggend {
-  width: 58.33%;
-  aspect-ratio: 3 / 2;
-}
-/* telefoon (16 okt 2026): één collage is genoeg, de tweede maakte de
-   voorpagina een scherm langer zonder iets nieuws te laten zien */
-@media (max-width: 767px) {
-  .vp-collage.vp-b { display: none; }
-}
-
-@media (max-width: 767px) {
-  .vp-held {
-    padding-top: 96px;
-  }
-  /* hetzelfde effect als op desktop (eigenaar, 5 okt 2026): de kop blijft
-     plakken, de foto begint klein eronder en groeit terwijl hij onder de kop
-     doorschuift */
-  .vp-held-titel {
-    top: 72px;
-    font-size: 11vw;
-  }
-  .vp-held-titel .vp-w {
-    text-wrap: balance;
-  }
-  .vp-held-foto {
-    margin: 32px 0 0;
-    transform: scale(var(--s, 0.8));
-  }
-  /* bijna een scherm hoog, zodat de foto echt onder de kop doorschuift */
-  .vp-held-beeld {
-    aspect-ratio: auto;
-    height: 78svh;
-  }
-  .vp-held {
-    padding-bottom: 0;
-  }
-  .vp-verticaal {
-    display: none;
-  }
-  .vp-onthul {
-    padding-top: 40px;
-  }
-  .vp-lbl-tel {
-    display: block;
-    text-align: center;
-    margin: 44px var(--vp-rand) 0;
-    color: var(--gedempt);
-  }
-  .vp-onthul {
-    padding-top: 72px;
-  }
-}
-
-/* ── WF-059: Zo werk ik, raster van 3×2 ─────────────────────────────── */
-.vp-blok {
-  padding-block: clamp(72px, 10vw, 144px);
-}
-.vp-inhoud {
-  width: var(--vp-inhoud);
-  margin-inline: auto;
-}
-.vp-zes-kop {
-  margin: 0 0 clamp(40px, 5vw, 72px);
-  font-weight: 400;
-}
-.vp-zes {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: clamp(24px, 5vw, 72px);
-  row-gap: clamp(48px, 6vw, 80px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.vp-zes li {
-  max-width: 420px;
-}
-.vp-zes .lbl {
-  display: block;
-  margin-bottom: 14px;
-  color: var(--gedempt);
-}
-.vp-zes h3 {
-  margin: 0;
-  font-size: clamp(26px, 3.1vw, 44px);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-.vp-zes p {
-  margin: clamp(18px, 2.4vw, 36px) 0 0;
-  font-size: clamp(16px, 1.25vw, 18px);
-  line-height: 1.75;
-  color: var(--gedempt);
-}
-@media (max-width: 959px) {
-  .vp-zes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 767px) {
-  .vp-zes {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ── WF-057: Wat ik doe ─────────────────────────────────────────────── */
+/* ── wat ik doe: drie ruime kaarten (18 okt 2026) ──────────────────── */
 .vp-diensten-blok {
-  padding-top: clamp(72px, 8vw, 118px);
+  padding-top: clamp(72px, 10vw, 144px);
 }
 .vp-kolom {
-  width: var(--vp-kolom);
+  width: calc(100% - 2 * var(--rand));
   margin-inline: auto;
 }
 .vp-diensten-kop {
@@ -342,10 +94,12 @@
   font-weight: 400;
   color: var(--gedempt);
 }
-/* drie ruime kaarten (18 okt 2026): veel lucht rond weinig tekst, de foto onderaan tot de rand */
 .vp-kaarten {
   display: grid;
   gap: clamp(20px, 2.5vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 @media (min-width: 1024px) {
   .vp-kaarten { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -363,14 +117,14 @@
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  padding: clamp(32px, 4vw, 48px) clamp(24px, 3vw, 40px) clamp(36px, 4vw, 48px);
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 3vw, 40px) clamp(28px, 4vw, 48px);
 }
 .vp-kaart-nr {
   margin: 0;
   color: var(--oranje-tekst);
 }
 .vp-kaart-naam {
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   font-family: var(--font-syne);
   font-weight: 700;
   font-size: clamp(36px, 3.4vw, 52px);
@@ -379,9 +133,9 @@
   letter-spacing: -0.03em;
 }
 .vp-kaart-zin {
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   font-weight: 300;
-  font-size: clamp(24px, 2.2vw, 30px);
+  font-size: clamp(20px, 2.2vw, 30px);
   line-height: 1.3;
   letter-spacing: -0.01em;
   text-wrap: pretty;
@@ -389,8 +143,8 @@
 .vp-kaart-delen {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin: 32px 0 0;
+  gap: 8px 12px;
+  margin: 24px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -407,7 +161,7 @@
   align-items: center;
   gap: 20px;
   margin-top: auto;
-  padding-top: 40px;
+  padding-top: 32px;
   font-family: var(--font-syne);
   font-weight: 700;
   font-size: 20px;
@@ -423,159 +177,73 @@
   background: var(--oranje);
   color: #202020;
   font-size: 22px;
-  transition: transform 0.3s var(--vp-ease);
 }
-.vp-kaart-link:hover .vp-kaart-pijl { transform: translateX(4px); }
-.vp-kaart-foto { aspect-ratio: 4 / 3; }
-/* gestapeld op één kolom: de kaart moet in één scherm passen, anders verdwijnt de foto onder de volgende */
-@media (max-width: 1023px) {
-  .vp-kaart { box-shadow: 0 -8px 24px rgb(0 0 0 / .18); }
-  .vp-kaart-tekst { padding-block: 28px 24px; }
-  .vp-kaart-naam { margin-top: 12px; }
-  .vp-kaart-zin { margin-top: 12px; font-size: 20px; }
-  .vp-kaart-delen { margin-top: 20px; gap: 8px; }
-  .vp-kaart-link { padding-top: 24px; }
-  .vp-kaart-foto { aspect-ratio: 16 / 9; }
-}
+.vp-kaart-foto { aspect-ratio: 4 / 3; border-radius: 0; }
+@media (max-width: 1023px) { .vp-kaart-foto { aspect-ratio: 16 / 9; } }
 
-/* ── begintoestanden, alleen als beweging mag ───────────────────────── */
-@media (prefers-reduced-motion: no-preference) {
-  /* WF-059: zachte opkomst (Uncode alpha-anim, 1s), per kolom 200 ms later */
-  html:not(.stil) .vp-fx .vp-alpha {
-    opacity: 0;
-  }
-  html:not(.stil) .vp-fx .vp-alpha.aan {
-    animation: vp-alpha 1s ease both;
-    animation-delay: calc(var(--i, 0) * 200ms);
-  }
-  /* WF-057: blokken 100px omhoog, 600 ms, 100 ms na elkaar */
-  html:not(.stil) .vp-fx .vp-op {
-    opacity: 0;
-    transform: translate3d(0, 100px, 0);
-    transition:
-      opacity 600ms var(--vp-ease),
-      transform 600ms var(--vp-ease);
-    transition-delay: calc(var(--i, 0) * 100ms);
-  }
-  html:not(.stil) .vp-fx .vp-op.aan {
-    opacity: 1;
-    transform: none;
-  }
+/* ── echt werk: de vijverrenovatie als ervoor en nu (11 okt 2026) ──── */
+.vp-project {
+  padding: clamp(72px, 10vw, 144px) var(--rand) 0;
 }
-@keyframes vp-alpha {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vp-held-foto {
-    transform: scale(0.7);
-  }
-}
-
-/* ── 1 · De vijver als opening (11 okt 2026) ─────────────────────────
-   De waterval schermvullend; het water rimpelt (Rimpel, vanzelf bij het
-   openen). Scrollend duik je erin: de foto groeit en lost op in de grond,
-   de kop schuift weg. Zonder scroll-timelines of met minder beweging staat
-   het stil op één scherm. */
-.vp-vijver {
-  position: relative;
-  height: 100svh;
-  min-height: 560px;
-}
-.vp-vijver-plak {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 560px;
-  overflow: hidden;
-  /* sticky is een eigen laag: de tekst erin kan niet los boven de hommel
-     uitkomen, dus ver weg vliegt hij achter de hele opening langs */
-  z-index: 1;
-}
-.vp-vijver-beeld { position: absolute; inset: 0; }
-.vp-vijver-beeld img { object-position: 40% 60%; }
-.vp-vijver-waas {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  /* een donkere rand onderaan voor de kop; de grond komt er pas bij het duiken bij */
-  background: linear-gradient(180deg, rgb(20 16 12 / .28) 0%, rgb(20 16 12 / 0) 25%, rgb(20 16 12 / .3) 45%, rgb(20 16 12 / .72) 100%);
-}
-.vp-vijver-waas::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--grond);
-  opacity: 0;
-}
-.vp-vijver-tekst {
-  position: absolute;
-  inset: auto 0 0;
-  display: grid;
-  gap: 16px;
-  padding: 0 var(--rand) clamp(120px, 16vh, 168px);
-  color: #fff;
-  pointer-events: none;
-}
-.vp-vijver-tekst .lbl { color: #fff; }
-/* een zachte schaduw onder de letters, zodat ze ook boven zonlicht en blad lezen (eigenaar, 18 okt 2026) */
-.vp-vijver-tekst { text-shadow: 0 1px 2px rgb(20 16 12 / .35), 0 2px 18px rgb(20 16 12 / .45); }
-.vp-vijver-titel {
-  margin: 0;
-  font-family: var(--font-syne);
-  font-weight: 700;
-  font-size: clamp(44px, 8vw, 136px);
+.vp-project h2 {
+  margin: 16px 0 clamp(32px, 4vw, 56px);
+  max-width: 18ch;
+  font-size: clamp(32px, 4.4vw, 64px);
   line-height: 1.02;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
+  letter-spacing: -0.035em;
 }
-.vp-vijver-titel .vp-r { padding-block: 0.06em; }
-.vp-vijver-zin { max-width: 40ch; font-size: clamp(17px, 1.6vw, 22px); line-height: 1.4; }
-.vp-vijver-knop { justify-self: start; pointer-events: auto; text-shadow: none; }
-@media (min-width: 1024px) { .vp-vijver-knop { display: none; } }
-.vp-vijver-tip { display: inline-flex; align-items: center; gap: 10px; }
-.vp-vijver-tip::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  border: 1.5px solid currentColor;
+.vp-voorna {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 2vw, 32px);
+  color: inherit;
+  text-decoration: none;
 }
-@media (max-width: 767px) {
-  .vp-vijver-titel { font-size: 14vw; }
-  .vp-vijver-knop { justify-self: center; }
-  /* zonder bovenbalk mag de kop hoog in beeld (eigenaar, 18 okt 2026) */
-  /* gecentreerd in het scherm (eigenaar, 18 okt 2026: "Waarom niet gecentreerd?"); onderaan ruimte voor de pil */
-  .vp-vijver-tekst { inset: 0; align-content: center; justify-items: center; text-align: center; padding: 0 var(--rand) 88px; }
-  /* het donker ligt daarom in het midden, waar de tekst staat */
-  .vp-vijver-waas { background: linear-gradient(180deg, rgb(20 16 12 / .35) 0%, rgb(20 16 12 / .66) 25%, rgb(20 16 12 / .66) 65%, rgb(20 16 12 / .45) 100%); }
-  .vp-vijver-beeld img { object-position: 30% 60%; }
+.vp-voorna figure { margin: 0; }
+.vp-voorna .vp-voorna-foto { aspect-ratio: 4 / 5; }
+.vp-voorna figcaption {
+  margin-top: 12px;
+  color: var(--gedempt);
 }
-@media (prefers-reduced-motion: no-preference) {
-  html:not(.stil) .vp-vijver-tip::before { animation: vp-druppel 2.4s ease-out infinite; }
-}
-@keyframes vp-druppel { 0% { box-shadow: 0 0 0 0 rgb(255 255 255 / .6); } 100% { box-shadow: 0 0 0 16px rgb(255 255 255 / 0); } }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    /* kort vasthouden: de foto is pas helemaal grond als hij al grotendeels
-       uit beeld is, anders bleef er een scherm leeg bruin over (eigenaar, 18 okt 2026) */
-    html:not(.stil) .vp-vijver { height: 110svh; }
-    html:not(.stil) .vp-vijver-beeld { animation: vp-duik linear both; animation-timeline: scroll(root); animation-range: 0 85svh; }
-    html:not(.stil) .vp-vijver-waas::after { animation: vp-oplos linear both; animation-timeline: scroll(root); animation-range: 20svh 85svh; }
-    html:not(.stil) .vp-vijver-tekst { animation: vp-weg linear both; animation-timeline: scroll(root); animation-range: 0 40svh; }
-  }
+/* ── Over: de werkwijze, raster van 3×2 ────────────────────────────── */
+.vp-blok {
+  padding-block: clamp(72px, 10vw, 144px);
 }
-@keyframes vp-duik { to { transform: scale(1.3); } }
-@keyframes vp-oplos { to { opacity: 1; } }
-@keyframes vp-weg { to { transform: translate3d(0, -12vh, 0); opacity: 0; } }
-
-/* het portret staat nu naast "Ik ben Nick" */
-.vp-onthul { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; }
-@media (min-width: 1024px) { .vp-onthul { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); } }
-.vp-portret { aspect-ratio: 4 / 5; border-radius: var(--foto-hoek); max-width: 420px; width: 100%; }
-@media (max-width: 1023px) { .vp-portret { max-width: 280px; } }
+.vp-inhoud {
+  width: calc(100% - 2 * var(--rand));
+  margin-inline: auto;
+}
+.vp-zes-kop {
+  margin: 0 0 clamp(40px, 5vw, 72px);
+  font-weight: 400;
+}
+.vp-zes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(24px, 5vw, 72px);
+  row-gap: clamp(48px, 6vw, 80px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.vp-zes li { max-width: 420px; }
+.vp-zes .lbl {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--gedempt);
+}
+.vp-zes h3 {
+  margin: 0;
+  font-size: clamp(26px, 3.1vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.vp-zes p {
+  margin: clamp(18px, 2.4vw, 36px) 0 0;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.75;
+  color: var(--gedempt);
+}
+@media (max-width: 959px) { .vp-zes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 767px) { .vp-zes { grid-template-columns: 1fr; } }

@@ -34,16 +34,18 @@ test("404 geeft status 404", async ({ page }) => {
   await expect(page.locator("h1")).toContainText("Hier groeit")
 })
 
-test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }) => {
+test("index: een blad kiezen gaat naar die pagina en de nieuwe h1 is er", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  // pas klikken als er geen doek meer ligt; op CI viel de klik soms nog onder de opening
-  await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
-  await page.click('nav[aria-label="Hoofdmenu"] a[href="/werk"]')
+  await page.getByRole("button", { name: "Index" }).click()
+  const index = page.getByRole("dialog", { name: "Index" })
+  await expect(index).toBeVisible()
+  await index.locator('nav[aria-label="Hoofdmenu"] a[href="/werk"]').click()
   await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
-  await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
+  await expect(index).toBeHidden()
+  await expect(page.locator(".bk-blad")).toContainText("B-05")
 })
 
 test("minder beweging: geen doek, alles zichtbaar", async ({ page }) => {
@@ -67,8 +69,8 @@ test("kennismaken: lege verzending toont fouten en verstuurt niets", async ({ pa
 test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/over")
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.click('#megamenu label:has(input[value="donker"])')
+  await page.getByRole("button", { name: "Index" }).click()
+  await page.getByRole("dialog", { name: "Index" }).locator('label:has(input[value="donker"])').click()
   await expect(page.locator("html")).toHaveClass(/donker/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
@@ -86,51 +88,38 @@ for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
 
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
 for (const b of [390, 1440]) {
-  test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
+  test(`index @${b}: acht bladen, het huidige gemarkeerd, Esc sluit`, async ({ page }) => {
     await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
     await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
-    const nav = page.locator("nav[data-menu]")
-    for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
-    await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
-    // Journaal (was Blog) staat vanaf desktop in de pil, op de telefoon in het megamenu (eigenaar, 21 okt 2026)
-    await expect(nav.getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b >= 1024 })
-    const vijvers = page.locator('#megamenu label:has(input[value="donker"])')
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
-    // de pil blijft op het scherm, ook tijdens het lezen
-    await page.mouse.wheel(0, 800)
+    const knop = page.getByRole("button", { name: "Index" })
+    // de kop blijft staan tijdens het lezen
+    await page.mouse.wheel(0, 1200)
     await page.waitForTimeout(300)
-    await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
-    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
-    await expect(omhoog).toBeVisible()
-    if (b < 1024) {
-      // de pil krimpt niet, en Omhoog ligt achteraan concentrisch in de ronding
-      const [p, o] = await Promise.all([nav.locator("ul").first().boundingBox(), omhoog.boundingBox()])
-      expect(Math.round(p!.height)).toBe(64)
-      expect(Math.round(p!.x + p!.width - o!.x - o!.width)).toBe(Math.round(o!.y - p!.y))
-    }
-    await page.getByRole("button", { name: "Menu" }).click()
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
-    await expect(vijvers).toBeVisible()
-    await expect(page.locator("#megamenu").getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b < 1024 })
-    await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
+    await expect(knop).toBeInViewport()
+    await knop.click()
+    const index = page.getByRole("dialog", { name: "Index" })
+    await expect(index.locator("nav ol > li")).toHaveCount(8)
+    await expect(index.getByRole("link", { name: /Werk/ })).toHaveAttribute("aria-current", "page")
+    await expect(index.locator('input[value="donker"]')).toBeAttached()
     await page.keyboard.press("Escape")
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
+    await expect(index).toBeHidden()
+    await expect(knop).toBeFocused()
   })
 }
 
-test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: logo, kop en stempelvak op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
-    const [h1, voet, kennis] = await page.evaluate(() => {
+    const [h1, voet, logo] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
-      const wrap = document.querySelector("footer .wrap")!
+      const wrap = document.querySelector("footer.stempel")!
       const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
-      return [links("main h1"), voet, links("nav[data-menu] > ul")]
+      return [links("main h1"), voet, links(".bk-merk")]
     })
-    expect([h1, kennis], route).toEqual([voet, voet])
+    expect([h1, logo], route).toEqual([voet, voet])
   }
 })
 
@@ -248,32 +237,12 @@ for (const route of ["/", "/over"]) {
   })
 }
 
-test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ page }) => {
-  await zonderIntro(page)
-  await page.goto("/privacy", { waitUntil: "domcontentloaded" })
-  const tak = page.locator("img.plant-hang")
-  await expect(tak).toHaveCount(1)
-  await expect(tak).toHaveAttribute("alt", "")
-  await expect(tak).toHaveAttribute("aria-hidden", "true")
-  await expect(page.locator("footer img.plant")).toHaveCount(0)
-  // ook geen tuinsilhouet boven de voet (eigenaar, 21 okt 2026: "Haal dit weg")
-  await expect(page.locator("footer > svg")).toHaveCount(0)
-})
-
 test("het slot: geen dagpauwoog en geen planten", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
   // de vlinder is weggehaald (eigenaar, 22 okt 2026: "Verwijder dagpauwoog vlinder")
   await expect(page.locator(".w-verder img.plant")).toHaveCount(0)
   await expect(page.locator(".vlinder")).toHaveCount(0)
-})
-
-test("hommel: niet bij minder beweging", async ({ page }) => {
-  await zonderIntro(page)
-  await page.emulateMedia({ reducedMotion: "reduce" })
-  await page.goto("/", { waitUntil: "domcontentloaded" })
-  await page.waitForTimeout(1500)
-  await expect(page.locator("canvas.hommel-doek")).toHaveCount(0)
 })
 
 test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) => {
@@ -299,27 +268,6 @@ for (const breed of [390, 1440]) {
   })
 }
 
-
-for (const b of [390, 1440]) {
-  test(`over @${b}: het verhaal staat altijd op een heel hoofdstuk, ook als je halverwege stopt`, async ({ page }) => {
-    await zonderIntro(page)
-    await page.setViewportSize({ width: b, height: 900 })
-    await page.goto("/over", { waitUntil: "domcontentloaded" })
-    // naar een plek in het verhaal: t hoofdstukken ver (0 = het eerste)
-    const naar = (t: number) => page.evaluate((t) => {
-      const z = document.querySelector<HTMLElement>(".w-zijwaarts")!
-      const n = Number(getComputedStyle(z).getPropertyValue("--n"))
-      scrollTo(0, scrollY + z.getBoundingClientRect().top + (t * (z.offsetHeight - innerHeight)) / (n - 1))
-    }, t)
-    const links = (i: number) => page.evaluate((i) => Math.round(document.querySelectorAll(".w-hoofdstuk")[i].getBoundingClientRect().left), i)
-    await naar(0.6)
-    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
-    await naar(2.4)
-    await expect.poll(() => links(2), { timeout: 3000 }).toBe(0)
-    await naar(1.3)
-    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
-  })
-}
 
 test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", async ({ page }) => {
   await zonderIntro(page)

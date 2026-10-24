@@ -1,9 +1,7 @@
 /* De wereld: wat elke pagina deelt, zodat de site één geheel is (eigenaar,
    5 okt 2026: "Maak het geheel kloppend!"). De taal van de voorpagina
-   (WF-058/059/057): een donkere opening met een reuzenkop en een foto die
-   groeit, tekst die woord voor woord oplicht, blokken die zacht opkomen.
-   Begintoestanden gelden alleen onder html.w-fx (gezet door beweging.tsx)
-   en alleen als beweging mag; zonder JS staat alles er gewoon. */
+   (WF-058/059/057): een opening met een reuzenkop en een grote foto.
+   Sinds 24 okt 2026 zonder scrolleffecten: alles staat er gewoon. */
 :root {
   --w-ease: cubic-bezier(0.35, 0.81, 0.41, 1);
   --w-rand: var(--rand);
@@ -60,9 +58,6 @@
   overflow: hidden;
   padding-bottom: 0.06em;
 }
-.w-w {
-  display: inline-block;
-}
 .w-opening .w-zin {
   margin: clamp(28px, 3vw, 48px) 0 0;
   max-width: 46ch;
@@ -72,35 +67,17 @@
 }
 .w-groei {
   margin-top: clamp(48px, 6vw, 96px);
-  transform: scale(var(--s, 1));
-  transform-origin: 50% 0;
-  will-change: transform;
 }
 .w-groei .w-beeld {
   aspect-ratio: 16 / 9;
 }
-.w-zij {
-  position: absolute;
-  top: clamp(120px, 14vw, 200px);
-  margin: 0;
-  font-weight: 300;
-  font-size: 18px;
-  letter-spacing: -0.02em;
-  writing-mode: vertical-rl;
-  color: var(--gedempt);
-  transition: opacity 0.4s;
-}
-.w-zij.links { left: 20px; transform: rotate(180deg); }
-.w-zij.rechts { right: 20px; }
-.w-zij.weg { opacity: 0; }
-@media (max-width: 1100px) { .w-zij { display: none; } }
 @media (max-width: 767px) {
   .w-opening { padding-top: 56px; }
   .w-reus { font-size: clamp(44px, 13.5vw, 72px); }
   .w-groei .w-beeld { aspect-ratio: 4 / 3; }
 }
 
-/* ── tekst die woord voor woord oplicht ─────────────────────────────── */
+/* ── een grote, lichte intro-alinea ─────────────────────────────── */
 .w-onthul {
   font-weight: 300;
   font-size: max(20px, 2.2vw);
@@ -108,8 +85,6 @@
   letter-spacing: -0.02em;
   max-width: 1100px;
 }
-.w-onthul .w-wd, .vp-onthul .vp-wd { white-space: nowrap; }
-/* geen transition: het oplichten volgt het scrollen beeld voor beeld (letters.ts) */
 
 /* ── sectiekop zoals op de voorpagina: label · aantal ───────────────── */
 .w-sectie {
@@ -142,89 +117,19 @@
 }
 .w-lijnlink:hover, .w-lijnlink:focus-visible { background-size: 100% 1px; }
 
-/* ── het verhaal op Over mij schuift zijwaarts (zijwaarts.tsx) ─────── */
-/* Het paneel loopt van rand tot rand; elk hoofdstuk is één scherm breed:
-   bovenaan de tekst (licht op boven 70 % van het scherm), daaronder de foto
-   die de rest van het scherm tot boven de dock vult. */
-.w-zijwaarts { height: calc(var(--n) * 100svh); margin-inline: calc(50% - 50vw); }
-.w-paneel { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-.w-spoor {
-  display: flex; height: 100%; will-change: transform;
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-}
+/* ── het verhaal op Over mij: hoofdstukken onder elkaar ─────────────── */
 .w-hoofdstuk {
-  flex: 0 0 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 20px;
-  padding: max(56px, 7svh) var(--w-rand) 112px;
+  padding-block: clamp(40px, 6vw, 80px);
 }
-.w-hoofdstuk-foto { position: relative; flex: 1; min-height: 140px; margin: 0; }
-.w-hoofdstuk-foto > :first-child { position: absolute; inset: 0; }
-.w-voortgang {
-  position: absolute; left: var(--w-rand); right: var(--w-rand); top: max(32px, 4svh);
-  height: 2px; background: var(--lijn); border-radius: 2px; overflow: hidden;
-}
-.w-voortgang > span {
-  position: absolute; inset: 0; background: var(--inkt);
-  transform-origin: 0 50%; transform: scaleX(var(--p, 0));
-  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-}
+.w-hoofdstuk-foto { position: relative; margin: 0; aspect-ratio: 4 / 3; }
 @media (min-width: 768px) {
   .w-hoofdstuk {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    align-items: start;
+    align-items: center;
     gap: clamp(32px, 5vw, 96px);
-    padding-top: max(96px, 12svh);
-    padding-bottom: 120px;
   }
-  .w-hoofdstuk-foto { height: 100%; }
-  .w-voortgang { right: calc(var(--w-rand) + 56px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .w-zijwaarts { height: auto; }
-  .w-paneel { position: static; height: auto; overflow: visible; }
-  .w-spoor { flex-direction: column; }
-  .w-hoofdstuk { height: auto; padding-block: 8svh; }
-  .w-hoofdstuk-foto { flex: none; height: auto !important; aspect-ratio: 4 / 3; }
-  .w-voortgang { display: none; }
-}
-html.stil .w-zijwaarts { height: auto; }
-html.stil .w-paneel { position: static; height: auto; overflow: visible; }
-html.stil .w-spoor { flex-direction: column; }
-html.stil .w-hoofdstuk { height: auto; padding-block: 8svh; }
-html.stil .w-hoofdstuk-foto { flex: none; height: auto; aspect-ratio: 4 / 3; }
-html.stil .w-voortgang { display: none; }
-
-/* ── begintoestanden, alleen als beweging mag ───────────────────────── */
-@media (prefers-reduced-motion: no-preference) {
-  html.w-fx:not(.stil) .w-w {
-    animation: w-btt 1s var(--w-ease) both;
-    animation-delay: calc(150ms + var(--i, 0) * 90ms);
-  }
-  html.w-fx:not(.stil) [data-zie] {
-    opacity: 0;
-    transform: translate3d(0, 60px, 0);
-    transition: opacity 700ms var(--w-ease), transform 700ms var(--w-ease);
-    transition-delay: calc(var(--i, 0) * 100ms);
-  }
-  /* foto's in het verhaal op Over mij schuiven in van boven of van onder */
-  html.w-fx:not(.stil) [data-zie="boven"],
-  html.w-fx:not(.stil) [data-zie="onder"] {
-    transition-duration: 1100ms;
-  }
-  html.w-fx:not(.stil) [data-zie="boven"] { transform: translate3d(0, -35%, 0); }
-  html.w-fx:not(.stil) [data-zie="onder"] { transform: translate3d(0, 35%, 0); }
-  html.w-fx:not(.stil) [data-zie].aan {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes w-btt {
-  from { transform: translate3d(0, 105%, 0); }
-  to { transform: none; }
 }
 
 /* ── het slot van elke pagina: kop + omlijnde pijl (Kolenda) ──────────── */
@@ -280,89 +185,6 @@ html.stil .w-voortgang { display: none; }
 .merk-stip { position: absolute; top: 24px; right: 24px; width: 10px; height: 10px; border-radius: 999px; background: var(--oranje); }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.stil) .merk-stip { animation: merk-stip 3.2s ease-in-out infinite; }
-  html.w-fx:not(.stil) .merk-balk span { transform: scaleX(0); transform-origin: left; transition: transform 1.1s var(--w-ease); }
-  html.w-fx:not(.stil) .merk-balk span:nth-child(2) { transition-delay: .15s; }
-  html.w-fx:not(.stil) .merk-balk span:nth-child(3) { transition-delay: .3s; }
-  html.w-fx:not(.stil) .merk-balk.aan span { transform: none; }
-  html.w-fx:not(.stil) .merk-icoon path { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform .7s var(--w-ease); }
   html.w-fx:not(.stil) .aan .merk-icoon path, html.w-fx:not(.stil) .merk-icoon.aan path { transform: none; }
-  html.w-fx:not(.stil) .merk-icoon path:nth-of-type(2) { transition-delay: .12s; }
-  html.w-fx:not(.stil) .merk-icoon path:nth-of-type(3) { transition-delay: .24s; }
-  html.w-fx:not(.stil) .merk-icoon path:nth-of-type(4) { transition-delay: .36s; }
-  html.w-fx:not(.stil) .merk-icoon path:nth-of-type(5) { transition-delay: .48s; }
 }
 @keyframes merk-stip { 0%, 100% { transform: translateX(0); opacity: 1; } 50% { transform: translateX(-28px); opacity: .5; } }
-
-/* ── uitgesneden planten (20 okt 2026; zie plant.tsx) ───────────────────
-   Altijd aan de rand: ze vangen geen klik. De hangende tak ligt achter de
-   kop en wiegt traag (alleen als beweging mag). De bloem en varen in de voet
-   haalde de eigenaar weer weg (20 okt 2026); inheemse bloemen staan nu in
-   het slot van de pagina (.w-verder). */
-.plant {
-  position: absolute;
-  z-index: 0;
-  pointer-events: none;
-  user-select: none;
-}
-.w-opening > .kruimelpad,
-.w-opening > .w-label,
-.w-opening > .w-reus,
-.w-opening > .w-zin,
-.w-opening > .w-groei,
-.w-verder > .w-verder-kop,
-.w-verder > .w-cirkel {
-  position: relative;
-  z-index: 1;
-}
-.plant-hang {
-  top: -10px;
-  right: -16px; /* ruimte voor het wiegen, zodat de snijrand nooit zichtbaar is */
-  width: clamp(130px, 24vw, 380px);
-  height: auto;
-  transform-origin: 100% 0;
-}
-@media (prefers-reduced-motion: no-preference) {
-  html:not(.stil) .plant-hang { animation: plant-wieg 9s ease-in-out infinite alternate; }
-}
-@keyframes plant-wieg {
-  from { transform: rotate(-1.2deg); }
-  to { transform: rotate(1.2deg); }
-}
-
-/* de 3D-hommel (hommel-scene.ts): over de pagina, onder het menu, vangt niets */
-/* het dutje: drie kleine z'en die opstijgen naast de slapende hommel */
-.hommel-zzz {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 91;
-  pointer-events: none;
-  font: 600 13px/1 var(--font-mono, monospace);
-  color: var(--inkt);
-  opacity: 0;
-  transition: opacity 0.6s;
-}
-.hommel-zzz span { display: inline-block; animation: hommel-zzz 2.4s ease-in-out infinite; }
-.hommel-zzz span:nth-child(2) { animation-delay: 0.8s; font-size: 11px; }
-.hommel-zzz span:nth-child(3) { animation-delay: 1.6s; font-size: 9px; }
-@keyframes hommel-zzz {
-  0% { transform: translate(0, 4px); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translate(6px, -18px); opacity: 0; }
-}
-.hommel-doek {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.6s;
-}
-/* ver weg: achter de koppen en zinnen langs. Die staan op z-index 1 (zie de
-   planten hierboven); het canvas staat vooraan in body, dus bij dezelfde
-   z-index tekenen zij eroverheen, terwijl de vlakken eronder blijven. */
-.hommel-doek.achter { z-index: 1; }
-/* de tussenkoppen ook, zodat het verderop op de pagina gebeurt */
-main h2 { position: relative; z-index: 1; }
