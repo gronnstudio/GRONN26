@@ -1,6 +1,5 @@
 "use client"
 
-import { Woorden } from "@/components/wereld/oplichten"
 import { kies, T, type Tekst } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { CSSProperties, ReactNode } from "react"
@@ -55,8 +54,8 @@ export function Alineas({ teksten }: { teksten: readonly Tekst[] }) {
   return (
     <>
       {teksten.map((t) => (
-        <p key={kies(t, "nl").slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]" data-onthul>
-          <Woorden tekst={t} />
+        <p key={kies(t, "nl").slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]">
+          <T t={t} />
         </p>
       ))}
     </>

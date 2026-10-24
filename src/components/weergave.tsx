@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { T, type Tekst } from "@/components/taal";
-import { useMuziek, zetMuziek } from "@/components/muziek";
 
 // WF-026: Kleur (Auto · Licht · Donker;
 // Auto = de klok: donker van 19:00 tot 07:00) en Toegankelijkheid. Bewaard in deze
@@ -64,10 +63,9 @@ function pasToe(s: Stand) {
 
 // Sinds 18 okt 2026 geen eigen knop en paneel meer: de instellingen staan in
 // het hamburgermenu (eigenaar: "hierin breng je alles onder wat in menu niet
-// staat zoals weergave"). De muziek zelf staat in muziek.tsx.
+// staat zoals weergave").
 export function Instellingen() {
   const [stand, setStand] = useState<Stand>(STANDAARD);
-  const speelt = useMuziek();
 
   // Bewaarde stand ophalen ná de eerste render (hydration-veilig).
   useEffect(() => {
@@ -147,16 +145,6 @@ export function Instellingen() {
         </p>
       </fieldset>
       <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
-      <label data-muziek className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5">
-        <span><T t={{ nl: "Muziek", en: "Music" }} /></span>
-        <input
-          type="checkbox"
-          role="switch"
-          checked={speelt}
-          onChange={(e) => zetMuziek(e.target.checked)}
-          className="size-5 cursor-pointer accent-[var(--inkt)]"
-        />
-      </label>
       {SCHAKELAARS.map(([k, t]) => (
         <label
           key={k}
@@ -176,7 +164,6 @@ export function Instellingen() {
         type="button"
         onClick={() => {
           zet(STANDAARD);
-          zetMuziek(true);
         }}
         className="lbl mt-3 w-fit cursor-pointer self-start border-0 border-b border-current bg-transparent p-0 text-inherit lg:col-start-2 lg:mt-4"
       >

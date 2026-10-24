@@ -45,7 +45,6 @@ export default function TerrasGeulle() {
           zin={<T t={nlEn(TERRAS.ondertitel, EN.ondertitel)} />}
           foto={HELD}
           morph="project-terras-geulle"
-          zij={[nlEn(TERRAS.categorie, EN.categorie), "Geulle"]}
         />
       </div>
 

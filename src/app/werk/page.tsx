@@ -32,7 +32,6 @@ export default function WerkPagina() {
         label={{ nl: `Werk · ${WERK.length} projecten`, en: `Work · ${WERK.length} projects` }}
         titel={{ nl: "Werk", en: "Work" }}
         zin={<T t={ZIN} />}
-        zij={[{ nl: "Vijvers", en: "Ponds" }, { nl: "Tuinen", en: "Gardens" }]}
       />
       <div className="wrap">
         <WerkOverzicht />
