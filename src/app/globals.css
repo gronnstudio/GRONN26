@@ -17,20 +17,24 @@
      zand voor vlakken en kaarten. Geen bosgroen of salie (eigenaar, 11 okt
      2026: "ik hou niet van dat bosgroen, salie"): de diepe kleur is aarde,
      de bijkleuren zijn klei en donker zand. */
-  --grond: #f6f2e9;
-  --inkt: #2b2a24;
-  --gedempt: #615a4c;
-  --lijn: #ddd2c0;
-  --vlak: #efe8dc;
-  --veld: #e9e0d0;
-  --voorbeeld: #8a8272;
+  /* Tuinplan op blauwdruk (zijtak, 24 okt 2026, eigenaar: "afwijkend op
+     alle vlakken, ik geef je volledige vrijheid"). Licht is witdruk: wit
+     tekenpapier met blauwe inkt. Donker is de blauwdruk zelf. Oranje blijft
+     het ene accent (de rode pen van de ontwerper). */
+  --grond: #f3f5f7;
+  --inkt: #16314f;
+  --gedempt: #4a6382;
+  --lijn: #c5d1de;
+  --vlak: #e8edf2;
+  --veld: #dfe6ee;
+  --voorbeeld: #6d829b;
   --oranje: #ff5b04;
-  /* kleine oranje tekst op Licht: #FF5B04 haalde 2,8:1 op het zand, #B84000
-     5,0:1 (eigenaar, 22 okt 2026). Vlakken en knoppen blijven #FF5B04. */
   --oranje-tekst: #b84000;
-  --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
-  --mos: #6f6553;
-  --salie: #cbbfa8;
+  --bos: #0f2f52;
+  --mos: #3d5a7a;
+  --salie: #9fb4cb;
+  --raster: rgb(22 49 79 / 0.06);
+  --raster-groot: rgb(22 49 79 / 0.1);
   --goot: clamp(20px, 4vw, 56px);
   /* Eén paginabreedte voor alles (uitlijning, 9 okt 2026): tekst, voet en
      menu-hoeken staan op dezelfde lijn. --breedte is de kolom inclusief de
@@ -56,31 +60,31 @@
      variabelen"). Gelijk aan de kaarten. Snijdt een kader de foto bij
      (parallax, schaal bij hover), dan draagt dat kader deze hoek. Nooit een
      eigen maat; tests/basis.spec.ts (fotohoek) bewaakt het. */
-  --foto-hoek: 16px;
+  --foto-hoek: 0px; /* tuinplan: beelden als strak geplakte foto's op het blad */
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
-  /* Warm aardebruin (eigenaar koos "Brown", 11 okt 2026): bruin in plaats
-     van grijs, hoogte als lichter bruin (veld, dan vlak), roomwitte tekst. */
-  --grond: #221c17;
-  --inkt: #f0e9dc;
-  --gedempt: #c8bca8;
-  --lijn: #4a3f33;
-  --vlak: #372e25;
-  --veld: #2e261f;
-  --mos: #b7a98f;
-  --voorbeeld: #9a8e7a;
-  /* Het oranje blijft op donker even vol als op licht (eigenaar, 11 okt
-     2026: "oranje heb je vervaagt, dat wil ik niet"). */
+  /* De blauwdruk: diep Pruisisch blauw met witte lijnen. */
+  --grond: #123a63;
+  --inkt: #eef4fa;
+  --gedempt: #b5c8dd;
+  --lijn: #3f6489;
+  --vlak: #174675;
+  --veld: #154170;
+  --mos: #9fb4cb;
+  --voorbeeld: #8fa8c2;
   --oranje: #ff5b04;
-  --oranje-tekst: #ff5b04;
+  /* oranje als kleine tekst op het blauw: iets lichter, anders 4,0:1 */
+  --oranje-tekst: #ff8a4c;
+  --raster: rgb(238 244 250 / 0.07);
+  --raster-groot: rgb(238 244 250 / 0.12);
   color-scheme: dark;
 }
 /* Donker aardevlak (de voet; heette bosgroen tot 11 okt 2026): de donkere
    tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #3a2e25;
+  --vlak: #163c66;
   --gedempt: var(--salie);
   --lijn: rgba(239, 238, 234, 0.2);
 }
@@ -106,9 +110,9 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-gebroken-wit: #efeeea;
   --font-syne: var(--font-syne), sans-serif;
   --font-sans: var(--font-montserrat), sans-serif;
-  /* Brand Guide: alleen Syne Bold en Montserrat (eigenaar, 5 okt 2026:
-     "schrap mono geist"). font-mono blijft als naam, maar is Montserrat. */
-  --font-mono: var(--font-montserrat), sans-serif;
+  /* Tuinplan: IBM Plex (Sans, Condensed en Mono) onder de oude namen;
+     de maten en labels staan in Mono, zoals op een tekening. */
+  --font-mono: var(--font-plex-mono), monospace;
 }
 
 /* Niets steekt opzij uit en de pagina zoomt niet (eigenaar, 11 okt 2026):
@@ -119,10 +123,16 @@ html { touch-action: pan-x pan-y; }
 
 body {
   margin: 0;
-  background: var(--grond);
+  background-color: var(--grond);
+  /* millimeterpapier: een fijn raster van 24px met elke vijfde lijn zwaarder */
+  background-image:
+    linear-gradient(var(--raster-groot) 1px, transparent 1px),
+    linear-gradient(90deg, var(--raster-groot) 1px, transparent 1px),
+    linear-gradient(var(--raster) 1px, transparent 1px),
+    linear-gradient(90deg, var(--raster) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
   color: var(--inkt);
   font-family: var(--font-sans);
-  padding-bottom: 110px;
 }
 
 /* Kopieerslot (eigenaar, 21 okt 2026: "afbeeldingen, tekst en elementen kunnen
@@ -144,7 +154,7 @@ body:not(:has([data-links])) :is(img, video, svg) { -webkit-user-drag: none; }
 
 /* Bouwstenen uit de wireframes (wf.css), één keer gedefinieerd */
 @utility wrap { max-width: var(--breedte); margin-inline: auto; padding-inline: var(--goot); }
-@utility lbl { font-family: var(--font-sans); font-weight: 600; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+@utility lbl { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
 @utility syne { font-family: var(--font-syne); font-weight: 700; }
 @utility lnk {
   font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
@@ -152,14 +162,14 @@ body:not(:has([data-links])) :is(img, video, svg) { -webkit-user-drag: none; }
 }
 @utility knop {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: var(--knop); max-width: 100%; flex-shrink: 0; padding: 8px var(--knop-binnen); border-radius: 9999px;
-  font-family: var(--font-sans); font-size: var(--knop-tekst); font-weight: 700;
+  min-height: var(--knop); max-width: 100%; flex-shrink: 0; padding: 8px var(--knop-binnen); border-radius: 0;
+  font-family: var(--font-mono); font-size: var(--knop-tekst); font-weight: 600;
   letter-spacing: var(--knop-letter); line-height: 1.2; text-align: center; text-transform: uppercase; text-decoration: none; cursor: pointer;
 }
 @utility knop-klein {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: var(--knop-klein); max-width: 100%; flex-shrink: 0; padding: 6px var(--knop-binnen-klein); border-radius: 9999px;
-  font-family: var(--font-sans); font-size: var(--knop-tekst-klein); font-weight: 700;
+  min-height: var(--knop-klein); max-width: 100%; flex-shrink: 0; padding: 6px var(--knop-binnen-klein); border-radius: 0;
+  font-family: var(--font-mono); font-size: var(--knop-tekst-klein); font-weight: 600;
   letter-spacing: var(--knop-letter); line-height: 1.2; text-align: center; text-transform: uppercase; text-decoration: none; cursor: pointer;
 }
 /* Tikvlak (11 okt 2026): tekstlinks, kleine knoppen en de links in de voet

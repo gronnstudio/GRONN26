@@ -32,17 +32,17 @@ test("Ctrl K zoekt, Enter opent, Esc sluit", async ({ page }) => {
   await expect(zoek).toBeHidden()
 })
 
-test("vanuit het menu, g dan w gaat naar Werk, Backspace terug", async ({ page }) => {
+test("vanuit de index, g dan w gaat naar Werk, Backspace terug", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/", { waitUntil: "domcontentloaded" })
   await page.waitForTimeout(400)
-  await page.getByRole("button", { name: "Menu" }).click()
+  await page.getByRole("button", { name: "Index" }).click()
   await page.getByRole("button", { name: "Zoek op de site" }).click()
   const zoek = page.getByRole("dialog", { name: "Zoek op deze site" })
   await expect(zoek).toBeVisible()
   await page.keyboard.press("Escape")
   await expect(zoek).toBeHidden()
-  await expect(page.getByRole("button", { name: "Menu" })).toBeFocused()
+  await expect(page.getByRole("button", { name: "Index" })).toBeFocused()
 
   await page.locator("body").click({ position: { x: 5, y: 300 } })
   await page.keyboard.press("g")

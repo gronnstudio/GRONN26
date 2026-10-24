@@ -1,17 +1,22 @@
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Syne, Montserrat } from "next/font/google"
-import { Menu } from "@/components/menu"
+import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed } from "next/font/google"
+import { Kop } from "@/components/blad/kop"
+import "@/components/blad/blad.css"
 import { Zoek } from "@/components/zoek"
 import { zoekIndex } from "@/lib/zoek-index"
 import "@/components/wereld/wereld.css"
-import { Voet } from "@/components/voet"
+import { Stempel } from "@/components/blad/stempel"
 import { BUSINESS } from "@/lib/business"
 import "./globals.css"
 
-const syne = Syne({ subsets: ["latin"], weight: ["700"], variable: "--font-syne" })
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-montserrat" })
+// Tuinplan (24 okt 2026): IBM Plex, de letter van tekeningen en maten. De
+// oude variabelenamen blijven, zodat elke pagina meteen meedoet: --font-syne
+// is nu de smalle Condensed voor koppen, --font-montserrat de gewone Sans.
+const smal = IBM_Plex_Sans_Condensed({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-syne" })
+const tekst = IBM_Plex_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-montserrat" })
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-plex-mono" })
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gronn.studio"),
@@ -40,14 +45,14 @@ const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${syne.variable} ${montserrat.variable}`} suppressHydrationWarning>
+    <html lang="nl" className={`${smal.variable} ${tekst.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
       </head>
       <body>
+        <Kop />
         <main>{children}</main>
-        <Voet />
-        <Menu />
+        <Stempel />
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
