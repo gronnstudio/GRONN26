@@ -1,9 +1,8 @@
-import type { CSSProperties } from "react"
 import { WERKWIJZE, WERKWIJZE_KOP } from "@/lib/data/teksten"
 import { Beide, T } from "@/components/taal"
 
-// WF-059 (Uncode "Creative Freelance"): de zes stappen als raster van 3×2,
-// per kolom 200 ms na elkaar opkomend. Volgt het thema.
+// WF-059 (Uncode "Creative Freelance"): de zes stappen als raster van 3×2.
+// Volgt het thema.
 export function Werkwijze() {
   return (
     <section className="vp-blok" aria-labelledby="h-stappen" id="werkwijze">
@@ -13,7 +12,7 @@ export function Werkwijze() {
         </h2>
         <ol className="vp-zes">
           {WERKWIJZE.map((s, n) => (
-            <li key={n} className="vp-alpha" data-zie style={{ "--i": n % 3 } as CSSProperties}>
+            <li key={n}>
               <span className="lbl">{String(n + 1).padStart(2, "0")}</span>
               <h3 className="syne"><T t={s.titel} /></h3>
               <p><T t={s.tekst} /></p>

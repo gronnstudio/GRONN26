@@ -5,16 +5,8 @@ import { Syne, Montserrat } from "next/font/google"
 import { Menu } from "@/components/menu"
 import { Zoek } from "@/components/zoek"
 import { zoekIndex } from "@/lib/zoek-index"
-import { Bekijk } from "@/components/bekijk"
-import { App } from "@/components/app"
-import { PullToRefresh } from "@/components/vernieuw"
-import { WereldBeweging } from "@/components/wereld/beweging"
 import "@/components/wereld/wereld.css"
 import { Voet } from "@/components/voet"
-import { MuziekKnop } from "@/components/muziek"
-import { Hommel } from "@/components/hommel"
-import { Overgang } from "@/components/overgang/overgang"
-import { INTRO_VOORVERF } from "@/components/overgang/voorverf"
 import { BUSINESS } from "@/lib/business"
 import "./globals.css"
 
@@ -51,21 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="nl" className={`${syne.variable} ${montserrat.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
-        <script dangerouslySetInnerHTML={{ __html: INTRO_VOORVERF }} />
       </head>
       <body>
         <main>{children}</main>
         <Voet />
         <Menu />
         <Zoek index={zoekIndex()} />
-        <MuziekKnop />
-        <Bekijk />
-        <App />
-        {/* alleen in de app-weergave: daar is geen browser om te verversen */}
-        <PullToRefresh />
-        <WereldBeweging />
-        <Hommel />
-        <Overgang />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
         <Analytics />

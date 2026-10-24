@@ -248,32 +248,12 @@ for (const route of ["/", "/over"]) {
   })
 }
 
-test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ page }) => {
-  await zonderIntro(page)
-  await page.goto("/privacy", { waitUntil: "domcontentloaded" })
-  const tak = page.locator("img.plant-hang")
-  await expect(tak).toHaveCount(1)
-  await expect(tak).toHaveAttribute("alt", "")
-  await expect(tak).toHaveAttribute("aria-hidden", "true")
-  await expect(page.locator("footer img.plant")).toHaveCount(0)
-  // ook geen tuinsilhouet boven de voet (eigenaar, 21 okt 2026: "Haal dit weg")
-  await expect(page.locator("footer > svg")).toHaveCount(0)
-})
-
 test("het slot: geen dagpauwoog en geen planten", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
   // de vlinder is weggehaald (eigenaar, 22 okt 2026: "Verwijder dagpauwoog vlinder")
   await expect(page.locator(".w-verder img.plant")).toHaveCount(0)
   await expect(page.locator(".vlinder")).toHaveCount(0)
-})
-
-test("hommel: niet bij minder beweging", async ({ page }) => {
-  await zonderIntro(page)
-  await page.emulateMedia({ reducedMotion: "reduce" })
-  await page.goto("/", { waitUntil: "domcontentloaded" })
-  await page.waitForTimeout(1500)
-  await expect(page.locator("canvas.hommel-doek")).toHaveCount(0)
 })
 
 test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) => {
@@ -299,27 +279,6 @@ for (const breed of [390, 1440]) {
   })
 }
 
-
-for (const b of [390, 1440]) {
-  test(`over @${b}: het verhaal staat altijd op een heel hoofdstuk, ook als je halverwege stopt`, async ({ page }) => {
-    await zonderIntro(page)
-    await page.setViewportSize({ width: b, height: 900 })
-    await page.goto("/over", { waitUntil: "domcontentloaded" })
-    // naar een plek in het verhaal: t hoofdstukken ver (0 = het eerste)
-    const naar = (t: number) => page.evaluate((t) => {
-      const z = document.querySelector<HTMLElement>(".w-zijwaarts")!
-      const n = Number(getComputedStyle(z).getPropertyValue("--n"))
-      scrollTo(0, scrollY + z.getBoundingClientRect().top + (t * (z.offsetHeight - innerHeight)) / (n - 1))
-    }, t)
-    const links = (i: number) => page.evaluate((i) => Math.round(document.querySelectorAll(".w-hoofdstuk")[i].getBoundingClientRect().left), i)
-    await naar(0.6)
-    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
-    await naar(2.4)
-    await expect.poll(() => links(2), { timeout: 3000 }).toBe(0)
-    await naar(1.3)
-    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
-  })
-}
 
 test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", async ({ page }) => {
   await zonderIntro(page)
