@@ -68,7 +68,7 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await zonderIntro(page)
   await page.goto("/over")
   await page.getByRole("button", { name: "Menu" }).click()
-  await page.click('#megamenu label:has(input[value="donker"])')
+  await page.getByRole("dialog").locator('label:has(input[value="donker"])').click()
   await expect(page.locator("html")).toHaveClass(/donker/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
@@ -85,52 +85,39 @@ for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
 }
 
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
+// De kop van de architectensite (24 okt 2026): vanaf 1024px de woorden in de
+// kop, daaronder alleen Menu, dat een paneel opent met alle pagina's en Weergave.
 for (const b of [390, 1440]) {
-  test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
+  test(`kop @${b}: de pagina's in de kop of in het Menu-paneel, met Weergave`, async ({ page }) => {
     await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
     await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
-    const nav = page.locator("nav[data-menu]")
-    for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
-    await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
-    // Journaal (was Blog) staat vanaf desktop in de pil, op de telefoon in het megamenu (eigenaar, 21 okt 2026)
-    await expect(nav.getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b >= 1024 })
-    const vijvers = page.locator('#megamenu label:has(input[value="donker"])')
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
-    // de pil blijft op het scherm, ook tijdens het lezen
-    await page.mouse.wheel(0, 800)
-    await page.waitForTimeout(300)
-    await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
-    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
-    await expect(omhoog).toBeVisible()
-    if (b < 1024) {
-      // de pil krimpt niet, en Omhoog ligt achteraan concentrisch in de ronding
-      const [p, o] = await Promise.all([nav.locator("ul").first().boundingBox(), omhoog.boundingBox()])
-      expect(Math.round(p!.height)).toBe(64)
-      expect(Math.round(p!.x + p!.width - o!.x - o!.width)).toBe(Math.round(o!.y - p!.y))
-    }
+    const nav = page.locator('nav[aria-label="Hoofdmenu"]')
+    for (const naam of ["Werk", "Vijvers", "Tuinen", "Shop", "Studio", "Journaal"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible({ visible: b >= 1024 })
+    if (b >= 1024) await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
     await page.getByRole("button", { name: "Menu" }).click()
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
-    await expect(vijvers).toBeVisible()
-    await expect(page.locator("#megamenu").getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b < 1024 })
-    await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
+    const paneel = page.getByRole("dialog")
+    await expect(paneel).toBeVisible()
+    await expect(paneel.getByRole("link", { name: /Journaal/ })).toBeVisible()
+    await expect(paneel.locator('input[value="donker"]')).toBeAttached()
     await page.keyboard.press("Escape")
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
+    await expect(paneel).toBeHidden()
   })
 }
 
-test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: kop en voet op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
-    const [h1, voet, kennis] = await page.evaluate(() => {
+    const [h1, voet, logo] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
       const wrap = document.querySelector("footer .wrap")!
       const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
-      return [links("main h1"), voet, links("nav[data-menu] > ul")]
+      // op de voorpagina staat de kop bewust in de tweede kolom; daar telt het grote beeld
+      return [links(location.pathname === "/" ? "main figure" : "main h1"), voet, links("header a")]
     })
-    expect([h1, kennis], route).toEqual([voet, voet])
+    expect([h1, logo], route).toEqual([voet, voet])
   }
 })
 

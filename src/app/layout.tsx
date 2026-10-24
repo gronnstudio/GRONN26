@@ -2,11 +2,11 @@ import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Syne, Montserrat } from "next/font/google"
-import { Menu } from "@/components/menu"
+import { Kop } from "@/components/architect/kop"
 import { Zoek } from "@/components/zoek"
 import { zoekIndex } from "@/lib/zoek-index"
 import "@/components/wereld/wereld.css"
-import { Voet } from "@/components/voet"
+import { Voet } from "@/components/architect/voet"
 import { BUSINESS } from "@/lib/business"
 import "./globals.css"
 
@@ -45,9 +45,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
       </head>
       <body>
+        <Kop />
         <main>{children}</main>
         <Voet />
-        <Menu />
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
