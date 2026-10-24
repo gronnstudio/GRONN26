@@ -56,7 +56,7 @@
      variabelen"). Gelijk aan de kaarten. Snijdt een kader de foto bij
      (parallax, schaal bij hover), dan draagt dat kader deze hoek. Nooit een
      eigen maat; tests/basis.spec.ts (fotohoek) bewaakt het. */
-  --foto-hoek: 16px;
+  --foto-hoek: 0px; /* architectensite (24 okt 2026): strakke beeldvlakken */
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
@@ -89,7 +89,54 @@ html.groot { font-size: 115%; }
 html.onderstreep main a { text-decoration: underline; text-underline-offset: 3px; }
 html.stil *, html.stil *::before, html.stil *::after { transition: none !important; animation: none !important; }
 
+/* shadcn/ui (architectensite, 24 okt 2026): de namen die de componenten
+   verwachten, gekoppeld aan de bestaande tokens. Zo volgen ze licht/donker
+   en blijft oranje het ene accent. */
+:root, .donker {
+  --background: var(--grond);
+  --foreground: var(--inkt);
+  --card: var(--grond);
+  --card-foreground: var(--inkt);
+  --popover: var(--grond);
+  --popover-foreground: var(--inkt);
+  --primary: var(--inkt);
+  --primary-foreground: var(--grond);
+  --secondary: var(--vlak);
+  --secondary-foreground: var(--inkt);
+  --muted: var(--vlak);
+  --muted-foreground: var(--gedempt);
+  --accent: var(--vlak);
+  --accent-foreground: var(--inkt);
+  --destructive: #b42318;
+  --border: var(--lijn);
+  --input: var(--lijn);
+  --ring: var(--inkt);
+  --radius: 0px;
+}
+
 @theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
   --color-grond: var(--grond);
   --color-inkt: var(--inkt);
   --color-gedempt: var(--gedempt);
@@ -122,7 +169,6 @@ body {
   background: var(--grond);
   color: var(--inkt);
   font-family: var(--font-sans);
-  padding-bottom: 110px;
 }
 
 /* Kopieerslot (eigenaar, 21 okt 2026: "afbeeldingen, tekst en elementen kunnen
@@ -152,13 +198,13 @@ body:not(:has([data-links])) :is(img, video, svg) { -webkit-user-drag: none; }
 }
 @utility knop {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: var(--knop); max-width: 100%; flex-shrink: 0; padding: 8px var(--knop-binnen); border-radius: 9999px;
+  min-height: var(--knop); max-width: 100%; flex-shrink: 0; padding: 8px var(--knop-binnen); border-radius: 0;
   font-family: var(--font-sans); font-size: var(--knop-tekst); font-weight: 700;
   letter-spacing: var(--knop-letter); line-height: 1.2; text-align: center; text-transform: uppercase; text-decoration: none; cursor: pointer;
 }
 @utility knop-klein {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: var(--knop-klein); max-width: 100%; flex-shrink: 0; padding: 6px var(--knop-binnen-klein); border-radius: 9999px;
+  min-height: var(--knop-klein); max-width: 100%; flex-shrink: 0; padding: 6px var(--knop-binnen-klein); border-radius: 0;
   font-family: var(--font-sans); font-size: var(--knop-tekst-klein); font-weight: 700;
   letter-spacing: var(--knop-letter); line-height: 1.2; text-align: center; text-transform: uppercase; text-decoration: none; cursor: pointer;
 }

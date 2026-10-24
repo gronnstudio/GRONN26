@@ -3,7 +3,7 @@ import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Verder } from "@/components/wereld/verder"
 import { WERK } from "@/components/werk/projecten"
-import { WerkOverzicht } from "@/components/werk/werk-overzicht"
+import { Projectbeelden, Projecttabel } from "@/components/architect/projectindex"
 
 const BESCHRIJVING =
   "Echt werk van GRØNN Studio: een vijverrenovatie met twee vijvers, een waterval en een beekloop, en een terras van 24\u00a0m² in Geulle."
@@ -32,10 +32,12 @@ export default function WerkPagina() {
         label={{ nl: `Werk · ${WERK.length} projecten`, en: `Work · ${WERK.length} projects` }}
         titel={{ nl: "Werk", en: "Work" }}
         zin={<T t={ZIN} />}
-        zij={[{ nl: "Vijvers", en: "Ponds" }, { nl: "Tuinen", en: "Gardens" }]}
       />
       <div className="wrap">
-        <WerkOverzicht />
+        <Projectbeelden />
+        <div className="mt-16">
+          <Projecttabel />
+        </div>
       </div>
       <Verder
         voor={{ nl: "Wie is", en: "Who is" }}
