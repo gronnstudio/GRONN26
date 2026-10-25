@@ -388,3 +388,23 @@ test("blueprint: terug naar boven verschijnt tijdens het lezen en brengt je bove
     await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(5)
   }
 })
+
+test("trekken om te vernieuwen in de app-weergave @390", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium")
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.addInitScript(() => {
+    const echt = window.matchMedia.bind(window)
+    window.matchMedia = (q: string) => (q.includes("display-mode: standalone") ? ({ ...echt("all"), matches: true, media: q, addEventListener() {}, removeEventListener() {} } as unknown as MediaQueryList) : echt(q))
+  })
+  await page.goto("/")
+  await expect(page.locator("[data-trek]")).toBeAttached()
+  const cdp = await page.context().newCDPSession(page)
+  const raak = (type: "touchStart" | "touchMove" | "touchEnd", y: number) =>
+    cdp.send("Input.dispatchTouchEvent", { type, touchPoints: type === "touchEnd" ? [] : [{ x: 195, y }] })
+  await raak("touchStart", 150)
+  for (let y = 160; y <= 420; y += 20) await raak("touchMove", y)
+  await expect(page.locator("[data-trek]")).toHaveAttribute("data-trek", "pulling")
+  const herladen = page.waitForEvent("framenavigated")
+  await raak("touchEnd", 420)
+  await herladen
+})
