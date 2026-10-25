@@ -11,7 +11,9 @@ import { BLADEN, bladVan } from "./bladen"
 
 // De kop van het tuinplan: links het woordmerk, in het midden het blad waar
 // je bent (zoals de hoek van een tekening), rechts Index. Index opent een
-// gewoon <dialog> met alle bladen, zoeken en Weergave. Geen dock meer.
+// gewoon <dialog> met alle bladen, zoeken en Weergave. Op de telefoon zit
+// Index onderaan bij de duim, als strook van het stempelvak, en vouwt de index
+// vanaf daar open naar boven (eigenaar, 25 okt 2026).
 export function Kop() {
   const pad = usePathname()
   const taal = useTaal()
@@ -24,6 +26,7 @@ export function Kop() {
   }, [pad])
 
   return (
+    <>
     <header className="bk">
       <Link href="/" className="bk-merk" aria-label={taal === "en" ? "GRØNN Studio, to the site plan" : "GRØNN Studio, naar de plattegrond"}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -52,8 +55,8 @@ export function Kop() {
           </div>
           <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"}>
             <ol className="bk-lijst">
-              {BLADEN.map((b) => (
-                <li key={b.nr}>
+              {BLADEN.map((b, i) => (
+                <li key={b.nr} style={{ "--i": i } as React.CSSProperties}>
                   <Link href={b.href} aria-current={nu?.nr === b.nr ? "page" : undefined}>
                     <span className="bk-nr">{b.nr}</span>
                     <span className="bk-titel"><T t={b.titel} /></span>
@@ -80,5 +83,15 @@ export function Kop() {
         </div>
       </dialog>
     </header>
+    {/* buiten de kop: zijn backdrop-filter zou fixed aan de kop vastmaken */}
+    <div className="bk-dock">
+      <p className="bk-dock-blad" aria-hidden>
+        {nu ? <><span className="bk-dock-nr">{nu.nr}</span> <T t={nu.titel} /></> : null}
+      </p>
+      <button type="button" className="bk-dock-knop" aria-haspopup="dialog" onClick={() => venster.current?.showModal()}>
+        Index <span aria-hidden>{BLADEN.length.toString().padStart(2, "0")} ↑</span>
+      </button>
+    </div>
+    </>
   )
 }

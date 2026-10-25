@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BUSINESS } from "@/lib/business"
 import { T } from "@/components/taal"
+import { LayoutWissel } from "@/components/weergave"
 import { BLADEN, bladVan } from "./bladen"
 
 // De voet als het stempelvak van een tekening (tuinplan, 24 okt 2026): wie
@@ -67,6 +68,7 @@ export function Stempel() {
             <Link key={h} href={h} className="st-link"><T t={t} /></Link>
           ))}
           <a href="/dashboard" rel="nofollow" className="st-link"><T t={{ nl: "Inloggen (eigenaar)", en: "Log in (owner)" }} /></a>
+          <LayoutWissel className="st-link st-wissel" />
         </div>
         <div className="st-vak st-meta">
           <p className="st-lbl">Blad</p>

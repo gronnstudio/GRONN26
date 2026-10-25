@@ -1,6 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
+import { Verder } from "@/components/wereld/verder"
+import { Atelier } from "@/components/voorpagina/atelier"
+import { Uitgelicht } from "@/components/voorpagina/uitgelicht"
+import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
+import "@/components/voorpagina/voorpagina.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
 import "@/components/blad/plan.css"
@@ -9,7 +14,13 @@ import { F08_2 } from "@/components/voorpagina/beelden"
 import { BUSINESS } from "@/lib/business"
 import { studioSchema } from "@/lib/schema"
 
-// Blad B-01, de plattegrond (tuinplan, 24 okt 2026): bovenaan de kop van de
+// Twee voorpagina's, één per layout (Weergave → Layout, 25 okt 2026); de
+// andere staat uit via html.plan in globals.css.
+//
+// Klassiek, versimpeld (24 okt 2026): opening, wie ik ben, wat ik doe, één
+// echt project en Kennismaken.
+//
+// Tuinplan, blad B-01, de plattegrond (24 okt 2026): bovenaan de kop van de
 // tekening, dan de tuin van boven met legenda, de toelichting in genummerde
 // opmerkingen, het uitgevoerde werk als detailbladen en de poort naar
 // Kennismaken.
@@ -38,9 +49,25 @@ export default function Voorpagina() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema()).replace(/</g, "\\u003c") }} />
 
-      <section className="wrap b-titel" aria-labelledby="kop">
+      <div className="alleen-klassiek">
+        <div className="vp-wortel">
+          <Atelier />
+          <WatIkDoe />
+          <Uitgelicht />
+        </div>
+        <Verder
+          voor={{ nl: "Zullen we", en: "Shall we" }}
+          nadruk={{ nl: "kennismaken", en: "meet" }}
+          na="?"
+          href="/kennismaken"
+          label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
+        />
+      </div>
+
+      <div className="alleen-plan">
+      <section className="wrap b-titel" aria-labelledby="plan-kop">
         <p className="lbl m-0"><T t={{ nl: "Blad B-01 · Plattegrond · Stein en omgeving", en: "Sheet B-01 · Site plan · Stein and surroundings" }} /></p>
-        <h1 id="kop">
+        <h1 id="plan-kop">
           <T t={{ nl: "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.", en: "I build and maintain ponds and natural gardens for homeowners in Stein and the surrounding area, with a fixed price up front." }} />
         </h1>
         <Link href="/kennismaken" className="knop bg-oranje text-antraciet b-knop">
@@ -106,6 +133,7 @@ export default function Voorpagina() {
           </div>
         </div>
       </section>
+      </div>
     </>
   )
 }

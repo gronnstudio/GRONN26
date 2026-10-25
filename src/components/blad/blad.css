@@ -148,3 +148,114 @@
 .b-poort-acties { display: flex; flex-wrap: wrap; gap: 12px; }
 .b-knop-lijn { border: 1px solid var(--inkt); color: var(--inkt); background: var(--grond); }
 .b-knop-lijn:hover { background: var(--inkt); color: var(--grond); }
+.st-wissel { border: 0; background: none; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── de dock op de telefoon (25 okt 2026) ───────────────────────────────
+   Onder 768px zit Index onderaan bij de duim: een strook van het stempelvak
+   met het huidige blad links en Index rechts. De index komt dan als blad
+   van onderen en vouwt open naar boven: eerst trekt de maatlijn, dan klapt
+   het papier uit, dan vouwt rij voor rij open. Sluiten zit onderaan, op de
+   plek van de dockknop, zodat één duim opent en sluit. */
+.bk-dock { display: none; }
+@media (max-width: 767px) {
+  .bk { grid-template-columns: 1fr; }
+  .bk-blad, .bk-index { display: none; }
+  html.plan body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .bk-dock {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 60;
+    display: flex;
+    align-items: stretch;
+    height: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    border-top: 1.5px solid var(--inkt);
+    background: var(--grond);
+  }
+  .bk-dock-blad {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding-inline: var(--rand);
+    border-right: 1px solid var(--inkt);
+    font: 500 12px/1 var(--font-mono);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .bk-dock-nr { color: var(--oranje-tekst); }
+  .bk-dock-knop {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 22px;
+    border: 0;
+    background: var(--inkt);
+    color: var(--grond);
+    font: 600 13px/1 var(--font-mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .bk-dock-knop span { opacity: .7; }
+
+  .bk-venster {
+    width: 100vw;
+    height: auto;
+    max-height: 88dvh;
+    margin: auto 0 0;
+    border-left: 0;
+    border-top: 1.5px solid var(--inkt);
+    overflow: auto;
+    overscroll-behavior: contain;
+    /* vouwlijnen in het papier, zoals een opengevouwen tekening */
+    background-image: repeating-linear-gradient(to bottom, transparent 0 calc(25% - 1px), var(--lijn) calc(25% - 1px) 25%);
+    background-attachment: local;
+  }
+  .bk-venster-binnen { padding: 16px var(--goot) calc(8px + env(safe-area-inset-bottom)); gap: 24px; }
+  .bk-venster-kop {
+    order: 99;
+    position: sticky;
+    bottom: 0;
+    margin-inline: calc(var(--goot) * -1);
+    padding: 0 0 0 var(--goot);
+    border-bottom: 0;
+    border-top: 1.5px solid var(--inkt);
+    background: var(--grond);
+    min-height: 56px;
+    z-index: 2;
+  }
+  .bk-venster-kop .bk-sluit { align-self: stretch; padding: 0 22px; background: var(--inkt); color: var(--grond); font-weight: 600; }
+  .bk-titel { font-size: 28px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.stil) .bk-venster[open] { animation: bk-uitklap 520ms cubic-bezier(.2, .8, .2, 1) both; transform-origin: 50% 100%; }
+    html:not(.stil) .bk-venster[open]::before {
+      /* de maatlijn: trekt eerst van links naar rechts over de vouw */
+      content: ""; position: absolute; inset: 0 0 auto; height: 2px; background: var(--oranje);
+      transform-origin: 0 50%; animation: bk-maat 360ms ease-out both;
+    }
+    html:not(.stil) .bk-venster[open] .bk-lijst li {
+      transform-origin: 50% 100%;
+      animation: bk-vouw 420ms cubic-bezier(.2, .8, .2, 1) both;
+      animation-delay: calc(160ms + (7 - var(--i)) * 45ms);
+    }
+    html:not(.stil) .bk-venster[open]::backdrop { animation: bk-schaduw 300ms ease-out both; }
+  }
+}
+@keyframes bk-uitklap {
+  from { clip-path: inset(100% 0 0 0); transform: perspective(1200px) rotateX(18deg); }
+  to { clip-path: inset(0 0 0 0); transform: none; }
+}
+@keyframes bk-maat { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes bk-vouw {
+  from { opacity: 0; transform: perspective(700px) rotateX(-80deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bk-schaduw { from { opacity: 0; } }
+
+/* Weergave in de index: hoekig, zoals de rest van het blad */
+html.plan .bk-weergave :is(.rounded-full) { border-radius: 0; }

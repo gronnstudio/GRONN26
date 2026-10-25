@@ -21,7 +21,7 @@ for (const route of ROUTES) {
       await page.waitForTimeout(400)
       const overloop = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
       expect(overloop, `${route} @${b} overloop`).toBe(0)
-      await expect(page.locator("h1")).toHaveCount(1)
+      await expect(page.locator("h1:visible")).toHaveCount(1)
     }
     expect(fouten).toEqual([])
   })
@@ -34,18 +34,16 @@ test("404 geeft status 404", async ({ page }) => {
   await expect(page.locator("h1")).toContainText("Hier groeit")
 })
 
-test("index: een blad kiezen gaat naar die pagina en de nieuwe h1 is er", async ({ page }) => {
+test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  await page.getByRole("button", { name: "Index" }).click()
-  const index = page.getByRole("dialog", { name: "Index" })
-  await expect(index).toBeVisible()
-  await index.locator('nav[aria-label="Hoofdmenu"] a[href="/werk"]').click()
+  // pas klikken als er geen doek meer ligt; op CI viel de klik soms nog onder de opening
+  await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
+  await page.click('nav[data-menu] a[href="/werk"]')
   await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
-  await expect(index).toBeHidden()
-  await expect(page.locator(".bk-blad")).toContainText("B-05")
+  await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
 })
 
 test("minder beweging: geen doek, alles zichtbaar", async ({ page }) => {
@@ -69,8 +67,8 @@ test("kennismaken: lege verzending toont fouten en verstuurt niets", async ({ pa
 test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/over")
-  await page.getByRole("button", { name: "Index" }).click()
-  await page.getByRole("dialog", { name: "Index" }).locator('label:has(input[value="donker"])').click()
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.click('#megamenu label:has(input[value="donker"])')
   await expect(page.locator("html")).toHaveClass(/donker/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
@@ -88,38 +86,51 @@ for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
 
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
 for (const b of [390, 1440]) {
-  test(`index @${b}: acht bladen, het huidige gemarkeerd, Esc sluit`, async ({ page }) => {
+  test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
     await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
     await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
-    const knop = page.getByRole("button", { name: "Index" })
-    // de kop blijft staan tijdens het lezen
-    await page.mouse.wheel(0, 1200)
+    const nav = page.locator("nav[data-menu]")
+    for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+    await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
+    // Journaal (was Blog) staat vanaf desktop in de pil, op de telefoon in het megamenu (eigenaar, 21 okt 2026)
+    await expect(nav.getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b >= 1024 })
+    const vijvers = page.locator('#megamenu label:has(input[value="donker"])')
+    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
+    // de pil blijft op het scherm, ook tijdens het lezen
+    await page.mouse.wheel(0, 800)
     await page.waitForTimeout(300)
-    await expect(knop).toBeInViewport()
-    await knop.click()
-    const index = page.getByRole("dialog", { name: "Index" })
-    await expect(index.locator("nav ol > li")).toHaveCount(8)
-    await expect(index.getByRole("link", { name: /Werk/ })).toHaveAttribute("aria-current", "page")
-    await expect(index.locator('input[value="donker"]')).toBeAttached()
+    await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
+    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
+    await expect(omhoog).toBeVisible()
+    if (b < 1024) {
+      // de pil krimpt niet, en Omhoog ligt achteraan concentrisch in de ronding
+      const [p, o] = await Promise.all([nav.locator("ul").first().boundingBox(), omhoog.boundingBox()])
+      expect(Math.round(p!.height)).toBe(64)
+      expect(Math.round(p!.x + p!.width - o!.x - o!.width)).toBe(Math.round(o!.y - p!.y))
+    }
+    await page.getByRole("button", { name: "Menu" }).click()
+    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
+    await expect(vijvers).toBeVisible()
+    await expect(page.locator("#megamenu").getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b < 1024 })
+    await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
     await page.keyboard.press("Escape")
-    await expect(index).toBeHidden()
-    await expect(knop).toBeFocused()
+    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
   })
 }
 
-test("uitlijning: logo, kop en stempelvak op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
   for (const route of ["/", "/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
-    const [h1, voet, logo] = await page.evaluate(() => {
+    const [h1, voet, kennis] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
-      const wrap = document.querySelector("footer.stempel")!
+      const wrap = document.querySelector("footer .wrap")!
       const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
-      return [links("main h1"), voet, links(".bk-merk")]
+      return [links("main h1"), voet, links("nav[data-menu] > ul")]
     })
-    expect([h1, logo], route).toEqual([voet, voet])
+    expect([h1, kennis], route).toEqual([voet, voet])
   }
 })
 
@@ -280,4 +291,86 @@ test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", asy
   expect(ld.itemListElement.map((s: { name: string }) => s.name)).toEqual(["Home", "Shop", "Cadeaubon"])
   await page.goto("/", { waitUntil: "domcontentloaded" })
   await expect(page.getByRole("navigation", { name: "Kruimelpad" })).toHaveCount(0)
+})
+
+// ── Layout Tuinplan (Weergave → Layout, 25 okt 2026) ──────────────────
+async function alsPlan(page: Page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem("gronn-intro", "1")
+    localStorage.setItem("gronn-weergave", JSON.stringify({ layout: "plan" }))
+  })
+}
+
+test("layout: de wissel in de voet zet Tuinplan aan en weer uit, en het blijft bewaard", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/")
+  await expect(page.locator("nav[data-menu]")).toBeVisible()
+  await expect(page.locator(".bk")).toBeHidden()
+  await page.getByRole("button", { name: "Bekijk als tuinplan" }).click()
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await expect(page.locator(".bk")).toBeVisible()
+  await expect(page.locator("nav[data-menu]")).toBeHidden()
+  await expect(page.locator("h1:visible")).toHaveCount(1)
+  await page.reload()
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await page.getByRole("button", { name: "Klassieke layout" }).click()
+  await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
+})
+
+test("layout: Tuinplan kiezen in Weergave via het megamenu", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/over")
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.click('#megamenu label:has(input[value="plan"])')
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await expect(page.locator(".bk")).toBeVisible()
+})
+
+test("tuinplan, index: een blad kiezen gaat naar die pagina", async ({ page }) => {
+  await alsPlan(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/")
+  await page.getByRole("button", { name: "Index" }).click()
+  const index = page.getByRole("dialog", { name: "Index" })
+  await expect(index).toBeVisible()
+  await index.locator('a[href="/werk"]').click()
+  await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
+  await expect(index).toBeHidden()
+  await expect(page.locator(".bk-blad")).toContainText("B-05")
+})
+
+for (const b of [390, 1440]) {
+  test(`tuinplan, index @${b}: acht bladen, het huidige gemarkeerd, Esc sluit`, async ({ page }) => {
+    await alsPlan(page)
+    await page.setViewportSize({ width: b, height: 800 })
+    await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
+    const knop = page.getByRole("button", { name: "Index" })
+    await page.mouse.wheel(0, 1200)
+    await page.waitForTimeout(300)
+    await expect(knop).toBeInViewport()
+    await knop.click()
+    const index = page.getByRole("dialog", { name: "Index" })
+    await expect(index.locator("nav ol > li")).toHaveCount(8)
+    await expect(index.getByRole("link", { name: /Werk/ })).toHaveAttribute("aria-current", "page")
+    await expect(index.locator('input[value="donker"]')).toBeAttached()
+    await page.keyboard.press("Escape")
+    await expect(index).toBeHidden()
+    await expect(knop).toBeFocused()
+  })
+}
+
+test("tuinplan, uitlijning: logo, kop en stempelvak op één lijn", async ({ page }) => {
+  await alsPlan(page)
+  await page.setViewportSize({ width: 1920, height: 900 })
+  for (const route of ["/", "/vijvers", "/over"]) {
+    await page.goto(route, { waitUntil: "domcontentloaded" })
+    const [h1, voet, logo] = await page.evaluate(() => {
+      const links = (e: Element) => Math.round(e.getBoundingClientRect().left)
+      const kop = [...document.querySelectorAll("main h1")].find((e) => (e as HTMLElement).offsetParent)!
+      const wrap = document.querySelector("footer.stempel")!
+      return [links(kop), Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft)), links(document.querySelector(".bk-merk")!)]
+    })
+    expect([h1, logo], route).toEqual([voet, voet])
+  }
 })

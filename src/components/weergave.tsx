@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { T, type Tekst } from "@/components/taal";
 
 // WF-026: Kleur (Auto · Licht · Donker;
@@ -8,6 +8,8 @@ import { T, type Tekst } from "@/components/taal";
 // browser; het voorverf-script in layout.tsx past het toe vóór de eerste verf.
 type Stand = {
   kleur: "auto" | "licht" | "donker";
+  /** Klassiek (de gewone site) of Tuinplan (blauwdruk), 25 okt 2026. */
+  layout: "klassiek" | "plan";
   taal: "nl" | "en";
   beweging: boolean;
   groot: boolean;
@@ -19,6 +21,7 @@ type Stand = {
 const KEY = "gronn-weergave";
 const STANDAARD: Stand = {
   kleur: "auto",
+  layout: "klassiek",
   taal: "nl",
   beweging: false,
   groot: false,
@@ -31,7 +34,11 @@ const KLEUREN: Record<Stand["kleur"], Tekst> = {
   licht: { nl: "Licht", en: "Light" },
   donker: { nl: "Donker", en: "Dark" },
 };
-const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal">, Tekst][] = [
+const LAYOUTS: Record<Stand["layout"], Tekst> = {
+  klassiek: { nl: "Klassiek", en: "Classic" },
+  plan: { nl: "Tuinplan", en: "Garden plan" },
+};
+const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal" | "layout">, Tekst][] = [
   ["beweging", { nl: "Minder beweging", en: "Less motion" }],
   ["groot", { nl: "Grotere tekst", en: "Larger text" }],
   ["contrast", { nl: "Meer contrast", en: "More contrast" }],
@@ -47,8 +54,20 @@ export const isAvond = () => {
   return u >= 19 || u < 7;
 };
 
+// Er staan twee Instellingen op de pagina (megamenu en Index); na een
+// wijziging lezen ze allebei de bewaarde stand opnieuw.
+const GEWIJZIGD = "gronn-weergave-gewijzigd";
+const lees = (): Stand => {
+  try {
+    return { ...STANDAARD, ...JSON.parse(localStorage.getItem(KEY) || "{}") };
+  } catch {
+    return STANDAARD;
+  }
+};
+
 function pasToe(s: Stand) {
   const c = document.documentElement.classList;
+  c.toggle("plan", s.layout === "plan");
   c.toggle("donker", s.kleur === "donker" || (s.kleur === "auto" && isAvond()));
   c.toggle("stil", s.beweging);
   c.toggle("groot", s.groot);
@@ -59,6 +78,27 @@ function pasToe(s: Stand) {
   try {
     localStorage.setItem(KEY, JSON.stringify(s));
   } catch {}
+  dispatchEvent(new Event(GEWIJZIGD));
+}
+
+/** Eén knop die tussen de twee layouts wisselt (in de kop en de voet). */
+export function LayoutWissel({ className }: { className?: string }) {
+  const [plan, setPlan] = useState(false);
+  useEffect(() => {
+    const zet = () => setPlan(lees().layout === "plan");
+    zet();
+    addEventListener(GEWIJZIGD, zet);
+    return () => removeEventListener(GEWIJZIGD, zet);
+  }, []);
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={() => pasToe({ ...lees(), layout: plan ? "klassiek" : "plan" })}
+    >
+      <T t={plan ? { nl: "Klassieke layout", en: "Classic layout" } : { nl: "Bekijk als tuinplan", en: "View as garden plan" }} />
+    </button>
+  );
 }
 
 // Sinds 18 okt 2026 geen eigen knop en paneel meer: de instellingen staan in
@@ -66,18 +106,18 @@ function pasToe(s: Stand) {
 // staat zoals weergave").
 export function Instellingen() {
   const [stand, setStand] = useState<Stand>(STANDAARD);
+  const id = useId();
 
-  // Bewaarde stand ophalen ná de eerste render (hydration-veilig).
+  // Bewaarde stand ophalen ná de eerste render (hydration-veilig), en
+  // opnieuw als de andere Instellingen of de LayoutWissel iets wijzigt.
   useEffect(() => {
-    const t = setTimeout(() => {
-      try {
-        setStand({
-          ...STANDAARD,
-          ...JSON.parse(localStorage.getItem(KEY) || "{}"),
-        });
-      } catch {}
-    }, 0);
-    return () => clearTimeout(t);
+    const zet = () => setStand(lees());
+    const t = setTimeout(zet, 0);
+    addEventListener(GEWIJZIGD, zet);
+    return () => {
+      clearTimeout(t);
+      removeEventListener(GEWIJZIGD, zet);
+    };
   }, []);
   // Staat de pagina open om 07:00 of 19:00, dan wisselt Auto vanzelf mee.
   useEffect(() => {
@@ -92,7 +132,7 @@ export function Instellingen() {
   };
 
   return (
-    <div className="text-sm lg:grid lg:grid-cols-[1fr_1fr_2fr] lg:items-start lg:gap-x-10">
+    <div className="text-sm lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-10">
       <fieldset className="m-0 mb-4 border-0 p-0">
         <legend className="lbl mb-2.5 p-0 opacity-70">
           <T t={{ nl: "Taal", en: "Language" }} />
@@ -106,7 +146,7 @@ export function Instellingen() {
             >
               <input
                 type="radio"
-                name="taal"
+                name={`taal${id}`}
                 value={k}
                 checked={stand.taal === k}
                 onChange={() => zet({ ...stand, taal: k })}
@@ -130,7 +170,7 @@ export function Instellingen() {
             >
               <input
                 type="radio"
-                name="kleur"
+                name={`kleur${id}`}
                 value={k}
                 checked={stand.kleur === k}
                 onChange={() => zet({ ...stand, kleur: k })}
@@ -144,7 +184,28 @@ export function Instellingen() {
           <T t={{ nl: "Auto: overdag licht, 's avonds donker (19:00 tot 07:00).", en: "Auto: light by day, dark in the evening (19:00 to 07:00)." }} />
         </p>
       </fieldset>
-      <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
+      <fieldset className="m-0 mb-4 border-0 p-0">
+        <legend className="lbl mb-2.5 p-0 opacity-70">Layout</legend>
+        <div className="grid grid-cols-2 rounded-full border border-lijn p-[3px]">
+          {(["klassiek", "plan"] as const).map((k) => (
+            <label
+              key={k}
+              className="cursor-pointer rounded-full py-2 text-center text-[13px] font-medium has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
+            >
+              <input
+                type="radio"
+                name={`layout${id}`}
+                value={k}
+                checked={stand.layout === k}
+                onChange={() => zet({ ...stand, layout: k })}
+                className="sr-only"
+              />
+              <T t={LAYOUTS[k]} />
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div className="lg:col-span-3 lg:grid lg:grid-cols-2 lg:gap-x-8">
       {SCHAKELAARS.map(([k, t]) => (
         <label
           key={k}
