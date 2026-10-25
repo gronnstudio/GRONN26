@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Foto } from "@/components/foto"
 import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
-import { Zijwaarts } from "@/components/over/zijwaarts"
 import { Werkwijze } from "@/components/voorpagina/werkwijze"
 import "@/components/voorpagina/voorpagina.css"
 import { T } from "@/components/taal"
@@ -33,8 +32,7 @@ const VERHAAL_FOTOS: FotoData[] = [
 const HOOFDSTUKKEN = VERHAAL_FOTOS.length
 
 // Over mij in de taal van de voorpagina: donkere opening met het portret
-// als groeiende foto, Nicks eigen tekst letterlijk (de eerste alinea licht
-// op, de rest rustig leesbaar), Zo werk ik als het raster van de voorpagina
+// groot, Nicks eigen tekst letterlijk, Zo werk ik als het raster van de voorpagina
 // en het bosgroene Kennismaken-vlak.
 export const metadata: Metadata = {
   title: "Over mij",
@@ -48,7 +46,7 @@ export default function Over() {
       <Opening label={{ nl: "Hovenier en ecologisch ontwerper", en: "Gardener and ecological designer" }} titel={{ nl: "Over mij", en: "About me" }}>
         {/* Het portret staat rechtop; daarom een eigen kader (3:2, op de
             telefoon 4:5) met het gezicht in beeld, in plaats van 16:9. */}
-        <figure className="w-groei m-0" data-groei>
+        <figure className="w-groei m-0">
           <Foto
             foto={PORTRET}
             priority
@@ -64,14 +62,11 @@ export default function Over() {
           <h2 id="h-verhaal" className="lbl m-0 font-normal">Nick Peters</h2>
           <span className="lbl text-gedempt">GRØNN Studio</span>
         </div>
-        {/* het hele verhaal licht woord voor woord op (eigenaar, 5 okt 2026: "ga alle teksten na") */}
         <Oplichten tekst={eerste} className="m-0" />
-        {/* Het verhaal schuift zijwaarts in hoofdstukken terwijl je naar
-            beneden scrolt (eigenaar, 19 okt 2026). Elk hoofdstuk is een alinea
-            met haar foto; de tekst licht letter voor letter op en de foto
-            schuift om en om van boven en van onder in (18 okt). */}
+        {/* Het verhaal in hoofdstukken onder elkaar: elke alinea met haar
+            foto, om en om links en rechts (versimpeld 24 okt 2026; schoof
+            sinds 19 okt zijwaarts). */}
         <div className="mt-[clamp(40px,5vw,72px)]">
-          <Zijwaarts aantal={HOOFDSTUKKEN}>
             {rest.slice(0, HOOFDSTUKKEN).map((alinea, i) => {
               const foto = VERHAAL_FOTOS[i]
               const boven = i % 2 === 0
@@ -81,8 +76,8 @@ export default function Over() {
                     <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")} / {String(HOOFDSTUKKEN).padStart(2, "0")}</span>
                     <Oplichten tekst={alinea} className="mt-4 mb-0 text-[clamp(17px,1.5vw,23px)]! leading-[1.55]!" />
                   </div>
-                  <figure data-zie={boven ? "boven" : "onder"} className="w-hoofdstuk-foto">
-                    <Foto foto={foto} sizes="(min-width: 768px) 50vw, 100vw" className="" />
+                  <figure className="w-hoofdstuk-foto">
+                    <Foto foto={foto} sizes="(min-width: 768px) 50vw, 100vw" className="h-full" />
                     {foto.bijschrift ? (
                       <figcaption className="lbl absolute bottom-3 left-3 rounded-full bg-antraciet/80 px-2.5 py-1 text-gebroken-wit">
                         <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
@@ -92,7 +87,6 @@ export default function Over() {
                 </div>
               )
             })}
-          </Zijwaarts>
           {rest.slice(HOOFDSTUKKEN).map((alinea, i) => (
             <div key={i} className="mx-auto max-w-[680px] py-[6svh]">
               <Oplichten tekst={alinea} className="m-0 text-[clamp(18px,1.6vw,24px)]! leading-[1.6]!" />

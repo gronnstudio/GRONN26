@@ -3,13 +3,11 @@ import { Foto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 import { T, type Tekst } from "@/components/taal"
 import { F10, T01 } from "./beelden"
-import { Stapel } from "@/components/stapel"
 
 // Wat ik doe als drie ruime kaarten (eigenaar, 18 okt 2026: de kaarten van de
 // zijtak "zijn beter verdeeld, meer negatieve ruimte", plus borderpakketten):
 // nummer, naam, één zin, de onderdelen als labels, een link en onderaan de foto.
-// Verving de lopende zin met meelopend beeld. Op één kolom stapelen ze bij het
-// scrollen (Stapel).
+// Verving de lopende zin met meelopend beeld. Op één kolom gewoon onder elkaar.
 
 type Kaart = { href: string; naam: Tekst; zin: Tekst; delen: Tekst[]; link: Tekst; foto: FotoData }
 
@@ -70,7 +68,7 @@ export function WatIkDoe() {
         <h2 className="lbl vp-diensten-kop" id="h-diensten">
           <T t={{ nl: "Wat ik doe", en: "What I do" }} />
         </h2>
-        <Stapel className="vp-kaarten">
+        <ul className="vp-kaarten">
           {KAARTEN.map((k, n) => (
             <li key={k.href} className="vp-kaart">
               <div className="vp-kaart-tekst">
@@ -90,7 +88,7 @@ export function WatIkDoe() {
               <Foto foto={k.foto} sizes="(min-width: 1024px) 30vw, 90vw" className="vp-kaart-foto" />
             </li>
           ))}
-        </Stapel>
+        </ul>
       </div>
     </section>
   )

@@ -108,13 +108,71 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --font-sans: var(--font-montserrat), sans-serif;
   /* Brand Guide: alleen Syne Bold en Montserrat (eigenaar, 5 okt 2026:
      "schrap mono geist"). font-mono blijft als naam, maar is Montserrat. */
-  --font-mono: var(--font-montserrat), sans-serif;
+  --font-mono: var(--mono-letter);
 }
 
 /* Niets steekt opzij uit en de pagina zoomt niet (eigenaar, 11 okt 2026):
    clip in plaats van hidden, zodat sticky blijft werken; pan-x pan-y laat
    alleen scrollen toe, geen knijp- of dubbeltikzoom. */
 html, body { overflow-x: clip; }
+
+/* ── Layout Tuinplan (25 okt 2026, eigenaar: "kunnen we een switch maken
+   tussen beide layouts? Ook in weergave menu?"). Weergave → Layout zet
+   html.plan; dan gelden deze tokens, letters en vormen. Zonder .plan is
+   alles de gewone site. ─────────────────────────────────────────────── */
+:root { --mono-letter: var(--font-montserrat), sans-serif; }
+html.plan {
+  --font-syne: var(--font-plex-smal);
+  --font-montserrat: var(--font-plex);
+  --mono-letter: var(--font-plex-mono), monospace;
+  /* afgerond zoals de gewone site (eigenaar, 25 okt 2026: "kunnen we de
+     hoeken van foto's en andere elementen afronden?") */
+  --bp-hoek: 16px;
+  /* Licht is witdruk: wit tekenpapier met blauwe inkt. */
+  --grond: #f3f5f7;
+  --inkt: #16314f;
+  --gedempt: #4a6382;
+  --lijn: #c5d1de;
+  --vlak: #e8edf2;
+  --veld: #dfe6ee;
+  --voorbeeld: #6d829b;
+  --oranje-tekst: #b84000;
+  --bos: #0f2f52;
+  --mos: #3d5a7a;
+  --salie: #9fb4cb;
+  --raster: rgb(22 49 79 / 0.06);
+  --raster-groot: rgb(22 49 79 / 0.1);
+}
+/* Donker is de blauwdruk zelf: diep Pruisisch blauw met witte lijnen. */
+html.plan.donker, html.plan .donker {
+  --grond: #123a63;
+  --inkt: #eef4fa;
+  --gedempt: #b5c8dd;
+  --lijn: #3f6489;
+  --vlak: #174675;
+  --veld: #154170;
+  --mos: #9fb4cb;
+  --voorbeeld: #8fa8c2;
+  /* oranje als kleine tekst op het blauw: iets lichter, anders 4,0:1 */
+  --oranje-tekst: #ff8a4c;
+  --raster: rgb(238 244 250 / 0.07);
+  --raster-groot: rgb(238 244 250 / 0.12);
+}
+html.plan .bos-vlak { --vlak: #163c66; }
+html.plan body {
+  padding-bottom: 0;
+  /* millimeterpapier: een fijn raster van 24px met elke vijfde lijn zwaarder */
+  background-image:
+    linear-gradient(var(--raster-groot) 1px, transparent 1px),
+    linear-gradient(90deg, var(--raster-groot) 1px, transparent 1px),
+    linear-gradient(var(--raster) 1px, transparent 1px),
+    linear-gradient(90deg, var(--raster) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+html.plan .lbl { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.08em; }
+html.plan :is(.knop, .knop-klein) { font-family: var(--font-mono); font-weight: 600; }
+/* Elke layout zijn eigen kop, voet en voorpagina; de andere staat uit. */
+html.plan .alleen-klassiek, html:not(.plan) .alleen-plan { display: none !important; }
 html { touch-action: pan-x pan-y; }
 
 body {

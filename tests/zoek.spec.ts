@@ -26,7 +26,12 @@ test("Ctrl K zoekt, Enter opent, Esc sluit", async ({ page }) => {
 
   await page.keyboard.press("/")
   await expect(zoek).toBeVisible()
-  await zoek.getByRole("combobox").fill("najaars")
+  // Het openen met "/" kan het veld nog leegmaken nadat fill al typte (het
+  // sluiten van de vorige keer zet de zoekterm terug); dan opnieuw typen.
+  await expect(async () => {
+    await zoek.getByRole("combobox").fill("najaars")
+    await expect(zoek.getByRole("option").first()).toContainText("Najaarsbeurt", { timeout: 1000 })
+  }).toPass({ timeout: 10_000 })
   await page.keyboard.press("Enter")
   await expect(page).toHaveURL(/\/vijvers#pond-autumn-service$/, { timeout: 20_000 })
   await expect(zoek).toBeHidden()

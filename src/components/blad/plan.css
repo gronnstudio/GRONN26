@@ -1,0 +1,53 @@
+/* De plattegrond op de voorpagina (plan.tsx). Lijnen in de inktkleur, een
+   zone licht oranje op als je hem of zijn regel in de legenda aanwijst. */
+.pl { display: grid; gap: clamp(32px, 4vw, 56px); }
+@media (min-width: 1100px) { .pl { grid-template-columns: minmax(0, 1fr) 360px; align-items: start; } }
+.pl-tekening { border-radius: var(--bp-hoek); border: 1.5px solid var(--inkt); background: var(--grond); padding: clamp(8px, 2vw, 24px); }
+.pl-svg { display: block; width: 100%; height: auto; }
+.pl-onderschrift { margin-top: 10px; font: 500 11px/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--gedempt); }
+.pl-grens { fill: none; stroke: var(--inkt); stroke-width: 4; }
+.pl-woning { stroke: var(--inkt); stroke-width: 2; }
+.pl-lijn-dun { stroke: var(--inkt); stroke-width: 1; opacity: .55; }
+.pl-tegel { fill: none; stroke: var(--inkt); stroke-width: .8; opacity: .5; }
+.pl-stip { fill: var(--inkt); }
+.pl-tekst { font: 500 13px var(--font-mono); letter-spacing: .12em; fill: var(--inkt); }
+.pl-vlak { stroke: var(--inkt); stroke-width: 1.5; transition: fill-opacity .2s, stroke-width .2s; }
+.pl-vlak-tuin { fill: var(--inkt); fill-opacity: .03; stroke-dasharray: 2 6; }
+.pl-kroon { fill: none; stroke-dasharray: 8 6; }
+.pl-beek { fill: none; stroke: var(--inkt); stroke-width: 6; stroke-linecap: round; opacity: .35; }
+.pl-steen { fill: var(--grond); stroke: var(--inkt); stroke-width: 1.2; }
+.pl-poort { fill: none; stroke: var(--inkt); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.pl-poort-vak { fill: transparent; stroke: none; }
+.pl-schaal { fill: none; stroke: var(--inkt); }
+.pl-schaal-vol { fill: var(--inkt); }
+.pl-noord path { fill: var(--inkt); }
+.pl-nummer circle { fill: var(--grond); stroke: var(--oranje-tekst); stroke-width: 2; }
+.pl-nummer text { font: 600 15px var(--font-mono); fill: var(--oranje-tekst); }
+.pl-zone { cursor: pointer; outline: none; }
+.pl-zone:focus-visible .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 4; }
+
+/* de legenda */
+.pl-legenda { margin: 0; padding: 0; list-style: none; border-top: 1.5px solid var(--inkt); }
+.pl-leg a { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--lijn); color: inherit; text-decoration: none; }
+.pl-leg-nr { display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid var(--oranje-tekst); border-radius: 999px; color: var(--oranje-tekst); font: 600 14px var(--font-mono); }
+.pl-leg-tekst { display: grid; gap: 4px; }
+.pl-leg-naam { font: 600 20px/1.15 var(--font-syne); }
+.pl-leg-zin { font-size: 14px; line-height: 1.5; color: var(--gedempt); }
+.pl-leg-prijs { font: 500 12px var(--font-mono); letter-spacing: .04em; text-transform: uppercase; }
+.pl-leg a:hover .pl-leg-naam, .pl-leg a:focus-visible .pl-leg-naam { color: var(--oranje-tekst); }
+.pl-z-vijver:hover .pl-vlak, .pl-z-vijver:focus-visible .pl-vlak, .pl:has(.pl-leg-vijver:hover, .pl-leg-vijver a:focus-visible) .pl-z-vijver .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 3; }
+.pl:has(.pl-z-vijver:hover) .pl-leg-vijver .pl-leg-naam { color: var(--oranje-tekst); }
+.pl-z-border:hover .pl-vlak, .pl-z-border:focus-visible .pl-vlak, .pl:has(.pl-leg-border:hover, .pl-leg-border a:focus-visible) .pl-z-border .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 3; }
+.pl:has(.pl-z-border:hover) .pl-leg-border .pl-leg-naam { color: var(--oranje-tekst); }
+.pl-z-terras:hover .pl-vlak, .pl-z-terras:focus-visible .pl-vlak, .pl:has(.pl-leg-terras:hover, .pl-leg-terras a:focus-visible) .pl-z-terras .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 3; }
+.pl:has(.pl-z-terras:hover) .pl-leg-terras .pl-leg-naam { color: var(--oranje-tekst); }
+.pl-z-tuin:hover .pl-vlak, .pl-z-tuin:focus-visible .pl-vlak, .pl:has(.pl-leg-tuin:hover, .pl-leg-tuin a:focus-visible) .pl-z-tuin .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 3; }
+.pl:has(.pl-z-tuin:hover) .pl-leg-tuin .pl-leg-naam { color: var(--oranje-tekst); }
+.pl-z-onderhoud:hover .pl-vlak, .pl-z-onderhoud:focus-visible .pl-vlak, .pl:has(.pl-leg-onderhoud:hover, .pl-leg-onderhoud a:focus-visible) .pl-z-onderhoud .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 3; }
+.pl:has(.pl-z-onderhoud:hover) .pl-leg-onderhoud .pl-leg-naam { color: var(--oranje-tekst); }
+.pl-z-poort:hover .pl-vlak, .pl-z-poort:focus-visible .pl-vlak, .pl:has(.pl-leg-poort:hover, .pl-leg-poort a:focus-visible) .pl-z-poort .pl-vlak { stroke: var(--oranje-tekst); stroke-width: 3; }
+.pl:has(.pl-z-poort:hover) .pl-leg-poort .pl-leg-naam { color: var(--oranje-tekst); }
+/* vlakken die met een patroon gevuld zijn, krijgen bij oplichten een oranje waas eroverheen */
+.pl .pl-z-tuin:hover .pl-vlak-tuin, .pl:has(.pl-leg-tuin:hover) .pl-vlak-tuin { fill: var(--oranje); fill-opacity: .08; }
+.pl .pl-z-onderhoud:hover .pl-kroon, .pl:has(.pl-leg-onderhoud:hover) .pl-kroon { fill: var(--oranje); fill-opacity: .12; }
+.pl-z-poort:hover .pl-poort, .pl:has(.pl-leg-poort:hover) .pl-poort { stroke: var(--oranje-tekst); stroke-width: 3; stroke-dasharray: none; }

@@ -21,7 +21,7 @@ for (const route of ROUTES) {
       await page.waitForTimeout(400)
       const overloop = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)
       expect(overloop, `${route} @${b} overloop`).toBe(0)
-      await expect(page.locator("h1")).toHaveCount(1)
+      await expect(page.locator("h1:visible")).toHaveCount(1)
     }
     expect(fouten).toEqual([])
   })
@@ -40,7 +40,7 @@ test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }
   await page.goto("/")
   // pas klikken als er geen doek meer ligt; op CI viel de klik soms nog onder de opening
   await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
-  await page.click('nav[aria-label="Hoofdmenu"] a[href="/werk"]')
+  await page.click('nav[data-menu] a[href="/werk"]')
   await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
   await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
@@ -248,32 +248,12 @@ for (const route of ["/", "/over"]) {
   })
 }
 
-test("planten: de hangende tak is decoratief, de voet heeft er geen", async ({ page }) => {
-  await zonderIntro(page)
-  await page.goto("/privacy", { waitUntil: "domcontentloaded" })
-  const tak = page.locator("img.plant-hang")
-  await expect(tak).toHaveCount(1)
-  await expect(tak).toHaveAttribute("alt", "")
-  await expect(tak).toHaveAttribute("aria-hidden", "true")
-  await expect(page.locator("footer img.plant")).toHaveCount(0)
-  // ook geen tuinsilhouet boven de voet (eigenaar, 21 okt 2026: "Haal dit weg")
-  await expect(page.locator("footer > svg")).toHaveCount(0)
-})
-
 test("het slot: geen dagpauwoog en geen planten", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/", { waitUntil: "domcontentloaded" })
   // de vlinder is weggehaald (eigenaar, 22 okt 2026: "Verwijder dagpauwoog vlinder")
   await expect(page.locator(".w-verder img.plant")).toHaveCount(0)
   await expect(page.locator(".vlinder")).toHaveCount(0)
-})
-
-test("hommel: niet bij minder beweging", async ({ page }) => {
-  await zonderIntro(page)
-  await page.emulateMedia({ reducedMotion: "reduce" })
-  await page.goto("/", { waitUntil: "domcontentloaded" })
-  await page.waitForTimeout(1500)
-  await expect(page.locator("canvas.hommel-doek")).toHaveCount(0)
 })
 
 test("beveiliging: de basisheaders staan op elke pagina", async ({ request }) => {
@@ -300,27 +280,6 @@ for (const breed of [390, 1440]) {
 }
 
 
-for (const b of [390, 1440]) {
-  test(`over @${b}: het verhaal staat altijd op een heel hoofdstuk, ook als je halverwege stopt`, async ({ page }) => {
-    await zonderIntro(page)
-    await page.setViewportSize({ width: b, height: 900 })
-    await page.goto("/over", { waitUntil: "domcontentloaded" })
-    // naar een plek in het verhaal: t hoofdstukken ver (0 = het eerste)
-    const naar = (t: number) => page.evaluate((t) => {
-      const z = document.querySelector<HTMLElement>(".w-zijwaarts")!
-      const n = Number(getComputedStyle(z).getPropertyValue("--n"))
-      scrollTo(0, scrollY + z.getBoundingClientRect().top + (t * (z.offsetHeight - innerHeight)) / (n - 1))
-    }, t)
-    const links = (i: number) => page.evaluate((i) => Math.round(document.querySelectorAll(".w-hoofdstuk")[i].getBoundingClientRect().left), i)
-    await naar(0.6)
-    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
-    await naar(2.4)
-    await expect.poll(() => links(2), { timeout: 3000 }).toBe(0)
-    await naar(1.3)
-    await expect.poll(() => links(1), { timeout: 3000 }).toBe(0)
-  })
-}
-
 test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/tuinen/cadeaubon", { waitUntil: "domcontentloaded" })
@@ -332,4 +291,100 @@ test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", asy
   expect(ld.itemListElement.map((s: { name: string }) => s.name)).toEqual(["Home", "Shop", "Cadeaubon"])
   await page.goto("/", { waitUntil: "domcontentloaded" })
   await expect(page.getByRole("navigation", { name: "Kruimelpad" })).toHaveCount(0)
+})
+
+// ── Layout Blueprint (Weergave → Layout, 25 okt 2026) ──────────────────
+async function alsPlan(page: Page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem("gronn-intro", "1")
+    localStorage.setItem("gronn-weergave", JSON.stringify({ layout: "plan" }))
+  })
+}
+
+test("layout: de wissel in de voet zet Blueprint aan en weer uit, en het blijft bewaard", async ({ page }) => {
+  await zonderIntro(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/")
+  await expect(page.locator("nav[data-menu]")).toBeVisible()
+  await expect(page.locator(".bk")).toBeHidden()
+  await page.getByRole("button", { name: "Bekijk als blueprint" }).click()
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await expect(page.locator(".bk")).toBeVisible()
+  await expect(page.locator("nav[data-menu]")).toBeHidden()
+  await expect(page.locator("h1:visible")).toHaveCount(1)
+  await page.reload()
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await page.getByRole("button", { name: "Klassieke layout" }).click()
+  await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
+})
+
+test("layout: Blueprint kiezen in Weergave via het megamenu", async ({ page }) => {
+  await zonderIntro(page)
+  await page.goto("/over")
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.click('#megamenu label:has(input[value="plan"])')
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await expect(page.locator(".bk")).toBeVisible()
+})
+
+test("tuinplan, index: een blad kiezen gaat naar die pagina", async ({ page }) => {
+  await alsPlan(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/")
+  await page.getByRole("button", { name: "Index" }).click()
+  const index = page.getByRole("dialog", { name: "Index" })
+  await expect(index).toBeVisible()
+  await index.locator('a[href="/werk"]').click()
+  await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
+  await expect(index).toBeHidden()
+  await expect(page.locator(".bk-blad")).toContainText("B-05")
+})
+
+for (const b of [390, 1440]) {
+  test(`tuinplan, index @${b}: acht bladen, het huidige gemarkeerd, Esc sluit`, async ({ page }) => {
+    await alsPlan(page)
+    await page.setViewportSize({ width: b, height: 800 })
+    await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
+    const knop = page.getByRole("button", { name: "Index" })
+    await page.mouse.wheel(0, 1200)
+    await page.waitForTimeout(300)
+    await expect(knop).toBeInViewport()
+    await knop.click()
+    const index = page.getByRole("dialog", { name: "Index" })
+    await expect(index.locator("nav ol > li")).toHaveCount(8)
+    await expect(index.getByRole("link", { name: /Werk/ })).toHaveAttribute("aria-current", "page")
+    await expect(index.locator('input[value="donker"]')).toBeAttached()
+    await page.keyboard.press("Escape")
+    await expect(index).toBeHidden()
+    await expect(knop).toBeFocused()
+  })
+}
+
+test("tuinplan, uitlijning: logo, kop en stempelvak op één lijn", async ({ page }) => {
+  await alsPlan(page)
+  await page.setViewportSize({ width: 1920, height: 900 })
+  for (const route of ["/", "/vijvers", "/over"]) {
+    await page.goto(route, { waitUntil: "domcontentloaded" })
+    const [h1, voet, logo] = await page.evaluate(() => {
+      const links = (e: Element) => Math.round(e.getBoundingClientRect().left)
+      const kop = [...document.querySelectorAll("main h1")].find((e) => (e as HTMLElement).offsetParent)!
+      const wrap = document.querySelector("footer.stempel")!
+      return [links(kop), Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft)), links(document.querySelector(".bk-merk")!)]
+    })
+    expect([h1, logo], route).toEqual([voet, voet])
+  }
+})
+
+test("blueprint: terug naar boven verschijnt tijdens het lezen en brengt je bovenaan", async ({ page }) => {
+  await alsPlan(page)
+  for (const b of [390, 1440]) {
+    await page.setViewportSize({ width: b, height: 800 })
+    await page.goto("/vijvers", { waitUntil: "domcontentloaded" })
+    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
+    await expect(omhoog).toBeHidden()
+    await page.mouse.wheel(0, 1600)
+    await expect(omhoog).toBeVisible()
+    await omhoog.click()
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(5)
+  }
 })
