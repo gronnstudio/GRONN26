@@ -298,5 +298,16 @@
 }
 @keyframes bk-schaduw { from { opacity: 0; } }
 
-/* Weergave in de index: hoekig, zoals de rest van het blad */
-html.plan .bk-weergave :is(.rounded-full) { border-radius: 0; }
+/* ── afgeronde hoeken (25 okt 2026) ───────────────────────────────────
+   Kaders en foto's 16px (--bp-hoek), knoppen helemaal rond, net als de
+   gewone site. De dock blijft recht: hij ligt tegen de rand van het scherm. */
+.bk-index, .bk-zoek { border-radius: 999px; }
+.bk-omhoog { border-radius: 999px; }
+.b-foto { border-radius: var(--bp-hoek); --foto-hoek: 8px; }
+.b-detail-blad { border-radius: var(--bp-hoek); overflow: hidden; --foto-hoek: 0px; }
+.st-raster { border-radius: var(--bp-hoek); overflow: hidden; }
+.bk-venster { border-radius: var(--bp-hoek) 0 0 var(--bp-hoek); }
+@media (max-width: 767px) {
+  .bk-omhoog { border-radius: 0; }
+  .bk-venster { border-radius: var(--bp-hoek) var(--bp-hoek) 0 0; }
+}

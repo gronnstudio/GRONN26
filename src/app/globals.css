@@ -125,7 +125,9 @@ html.plan {
   --font-syne: var(--font-plex-smal);
   --font-montserrat: var(--font-plex);
   --mono-letter: var(--font-plex-mono), monospace;
-  --foto-hoek: 0px; /* beelden als strak geplakte foto's op het blad */
+  /* afgerond zoals de gewone site (eigenaar, 25 okt 2026: "kunnen we de
+     hoeken van foto's en andere elementen afronden?") */
+  --bp-hoek: 16px;
   /* Licht is witdruk: wit tekenpapier met blauwe inkt. */
   --grond: #f3f5f7;
   --inkt: #16314f;
@@ -168,7 +170,7 @@ html.plan body {
   background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
 }
 html.plan .lbl { font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.08em; }
-html.plan :is(.knop, .knop-klein) { border-radius: 0; font-family: var(--font-mono); font-weight: 600; }
+html.plan :is(.knop, .knop-klein) { font-family: var(--font-mono); font-weight: 600; }
 /* Elke layout zijn eigen kop, voet en voorpagina; de andere staat uit. */
 html.plan .alleen-klassiek, html:not(.plan) .alleen-plan { display: none !important; }
 html { touch-action: pan-x pan-y; }
