@@ -8,7 +8,7 @@ import { T, type Tekst } from "@/components/taal";
 // browser; het voorverf-script in layout.tsx past het toe vóór de eerste verf.
 type Stand = {
   kleur: "auto" | "licht" | "donker";
-  /** Klassiek (de gewone site) of Tuinplan (blauwdruk), 25 okt 2026. */
+  /** Klassiek (de gewone site) of Blueprint (het tuinplan), 25 okt 2026. */
   layout: "klassiek" | "plan";
   taal: "nl" | "en";
   beweging: boolean;
@@ -36,7 +36,7 @@ const KLEUREN: Record<Stand["kleur"], Tekst> = {
 };
 const LAYOUTS: Record<Stand["layout"], Tekst> = {
   klassiek: { nl: "Klassiek", en: "Classic" },
-  plan: { nl: "Tuinplan", en: "Garden plan" },
+  plan: { nl: "Blueprint", en: "Blueprint" },
 };
 const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal" | "layout">, Tekst][] = [
   ["beweging", { nl: "Minder beweging", en: "Less motion" }],
@@ -96,7 +96,7 @@ export function LayoutWissel({ className }: { className?: string }) {
       className={className}
       onClick={() => pasToe({ ...lees(), layout: plan ? "klassiek" : "plan" })}
     >
-      <T t={plan ? { nl: "Klassieke layout", en: "Classic layout" } : { nl: "Bekijk als tuinplan", en: "View as garden plan" }} />
+      <T t={plan ? { nl: "Klassieke layout", en: "Classic layout" } : { nl: "Bekijk als blueprint", en: "View as blueprint" }} />
     </button>
   );
 }

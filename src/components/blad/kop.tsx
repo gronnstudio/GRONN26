@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Instellingen } from "@/components/weergave"
 import { OPEN_ZOEK } from "@/components/zoek"
 import { T } from "@/components/taal"
@@ -19,6 +19,18 @@ export function Kop() {
   const taal = useTaal()
   const venster = useRef<HTMLDialogElement>(null)
   const nu = bladVan(pad)
+  // Terug naar boven verschijnt pas als je een scherm voorbij de kop bent.
+  const [gelezen, setGelezen] = useState(false)
+  useEffect(() => {
+    const kijk = () => setGelezen(scrollY > innerHeight * 0.8)
+    kijk()
+    addEventListener("scroll", kijk, { passive: true })
+    return () => removeEventListener("scroll", kijk)
+  }, [])
+  const omhoog = () => {
+    const rustig = document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches
+    scrollTo({ top: 0, behavior: rustig ? "auto" : "smooth" })
+  }
 
   // een ander blad: de index gaat dicht
   useEffect(() => {
@@ -45,49 +57,55 @@ export function Kop() {
         Index <span aria-hidden>{BLADEN.length.toString().padStart(2, "0")}</span>
       </button>
 
-      <dialog ref={venster} className="bk-venster" aria-label="Index" onClick={(e) => e.target === venster.current && venster.current?.close()}>
-        <div className="bk-venster-binnen">
-          <div className="bk-venster-kop">
-            <p className="lbl m-0"><T t={{ nl: "Index van bladen", en: "Sheet index" }} /></p>
-            <button type="button" className="bk-sluit" onClick={() => venster.current?.close()}>
-              <T t={{ nl: "Sluiten", en: "Close" }} /> ×
-            </button>
-          </div>
-          <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"}>
-            <ol className="bk-lijst">
-              {BLADEN.map((b, i) => (
-                <li key={b.nr} style={{ "--i": i } as React.CSSProperties}>
-                  <Link href={b.href} aria-current={nu?.nr === b.nr ? "page" : undefined}>
-                    <span className="bk-nr">{b.nr}</span>
-                    <span className="bk-titel"><T t={b.titel} /></span>
-                    <span aria-hidden className="bk-pijl">→</span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </nav>
-          <button
-            type="button"
-            className="bk-zoek"
-            onClick={() => {
-              venster.current?.close()
-              dispatchEvent(new Event(OPEN_ZOEK))
-            }}
-          >
-            <T t={{ nl: "Zoek op de site", en: "Search the site" }} /> <span aria-hidden>⌘K</span>
-          </button>
-          <div className="bk-weergave">
-            <p className="lbl m-0 mb-4"><T t={{ nl: "Weergave", en: "Display" }} /></p>
-            <Instellingen />
-          </div>
-        </div>
-      </dialog>
     </header>
+    <dialog ref={venster} className="bk-venster" aria-label="Index" onClick={(e) => e.target === venster.current && venster.current?.close()}>
+      <div className="bk-venster-binnen">
+        <div className="bk-venster-kop">
+          <p className="lbl m-0"><T t={{ nl: "Index van bladen", en: "Sheet index" }} /></p>
+          <button type="button" className="bk-sluit" onClick={() => venster.current?.close()}>
+            <T t={{ nl: "Sluiten", en: "Close" }} /> ×
+          </button>
+        </div>
+        <nav aria-label={taal === "en" ? "Main menu" : "Hoofdmenu"}>
+          <ol className="bk-lijst">
+            {BLADEN.map((b, i) => (
+              <li key={b.nr} style={{ "--i": i } as React.CSSProperties}>
+                <Link href={b.href} aria-current={nu?.nr === b.nr ? "page" : undefined}>
+                  <span className="bk-nr">{b.nr}</span>
+                  <span className="bk-titel"><T t={b.titel} /></span>
+                  <span aria-hidden className="bk-pijl">→</span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <button
+          type="button"
+          className="bk-zoek"
+          onClick={() => {
+            venster.current?.close()
+            dispatchEvent(new Event(OPEN_ZOEK))
+          }}
+        >
+          <T t={{ nl: "Zoek op de site", en: "Search the site" }} /> <span aria-hidden>⌘K</span>
+        </button>
+        <div className="bk-weergave">
+          <p className="lbl m-0 mb-4"><T t={{ nl: "Weergave", en: "Display" }} /></p>
+          <Instellingen />
+        </div>
+      </div>
+    </dialog>
     {/* buiten de kop: zijn backdrop-filter zou fixed aan de kop vastmaken */}
     <div className="bk-dock">
       <p className="bk-dock-blad" aria-hidden>
         {nu ? <><span className="bk-dock-nr">{nu.nr}</span> <T t={nu.titel} /></> : null}
       </p>
+      {gelezen && (
+        <button type="button" className="bk-omhoog" onClick={omhoog}>
+          <span aria-hidden>↑</span>
+          <span className="bk-omhoog-tekst"><T t={{ nl: "Terug naar boven", en: "Back to top" }} /></span>
+        </button>
+      )}
       <button type="button" className="bk-dock-knop" aria-haspopup="dialog" onClick={() => venster.current?.showModal()}>
         Index <span aria-hidden>{BLADEN.length.toString().padStart(2, "0")} ↑</span>
       </button>

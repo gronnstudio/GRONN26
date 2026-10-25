@@ -156,11 +156,39 @@
    van onderen en vouwt open naar boven: eerst trekt de maatlijn, dan klapt
    het papier uit, dan vouwt rij voor rij open. Sluiten zit onderaan, op de
    plek van de dockknop, zodat één duim opent en sluit. */
-.bk-dock { display: none; }
+/* Vanaf 768px is de dock er niet; alleen Terug naar boven blijft, als
+   vierkant vak rechtsonder op het blad. */
+.bk-dock { display: contents; }
+.bk-dock-blad, .bk-dock-knop { display: none; }
+.bk-omhoog {
+  position: fixed;
+  right: var(--rand);
+  bottom: var(--rand);
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--inkt);
+  background: var(--grond);
+  color: var(--inkt);
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.bk-omhoog:hover, .bk-omhoog:focus-visible { background: var(--inkt); color: var(--grond); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .bk-omhoog { animation: bk-maat-op 260ms ease-out both; }
+}
+@keyframes bk-maat-op { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
 @media (max-width: 767px) {
-  .bk { grid-template-columns: 1fr; }
-  .bk-blad, .bk-index { display: none; }
+  /* geen bovenbalk op de telefoon (eigenaar, 25 okt 2026): zonder knop is
+     een balk met alleen het logo onzin; de plattegrond zit in de Index */
+  .bk { display: none; }
   html.plan body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .bk-dock-blad { display: flex; }
   .bk-dock {
     position: fixed;
     inset: auto 0 0;
@@ -200,7 +228,20 @@
     text-transform: uppercase;
     cursor: pointer;
   }
+  .bk-dock-knop { display: inline-flex; }
   .bk-dock-knop span { opacity: .7; }
+  /* in de dock: een vierkant vak tussen het blad en Index */
+  .bk-omhoog {
+    position: static;
+    justify-content: center;
+    width: 56px;
+    height: auto;
+    padding: 0;
+    border: 0;
+    border-right: 1px solid var(--inkt);
+    font-size: 18px;
+  }
+  .bk-omhoog-tekst { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
   .bk-venster {
     width: 100vw;

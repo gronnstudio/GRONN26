@@ -293,7 +293,7 @@ test("kruimelpad: op subpagina's met BreadcrumbList, niet op de voorpagina", asy
   await expect(page.getByRole("navigation", { name: "Kruimelpad" })).toHaveCount(0)
 })
 
-// ── Layout Tuinplan (Weergave → Layout, 25 okt 2026) ──────────────────
+// ── Layout Blueprint (Weergave → Layout, 25 okt 2026) ──────────────────
 async function alsPlan(page: Page) {
   await page.addInitScript(() => {
     sessionStorage.setItem("gronn-intro", "1")
@@ -301,13 +301,13 @@ async function alsPlan(page: Page) {
   })
 }
 
-test("layout: de wissel in de voet zet Tuinplan aan en weer uit, en het blijft bewaard", async ({ page }) => {
+test("layout: de wissel in de voet zet Blueprint aan en weer uit, en het blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
   await expect(page.locator("nav[data-menu]")).toBeVisible()
   await expect(page.locator(".bk")).toBeHidden()
-  await page.getByRole("button", { name: "Bekijk als tuinplan" }).click()
+  await page.getByRole("button", { name: "Bekijk als blueprint" }).click()
   await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await expect(page.locator(".bk")).toBeVisible()
   await expect(page.locator("nav[data-menu]")).toBeHidden()
@@ -318,7 +318,7 @@ test("layout: de wissel in de voet zet Tuinplan aan en weer uit, en het blijft b
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
 })
 
-test("layout: Tuinplan kiezen in Weergave via het megamenu", async ({ page }) => {
+test("layout: Blueprint kiezen in Weergave via het megamenu", async ({ page }) => {
   await zonderIntro(page)
   await page.goto("/over")
   await page.getByRole("button", { name: "Menu" }).click()
@@ -372,5 +372,19 @@ test("tuinplan, uitlijning: logo, kop en stempelvak op één lijn", async ({ pag
       return [links(kop), Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft)), links(document.querySelector(".bk-merk")!)]
     })
     expect([h1, logo], route).toEqual([voet, voet])
+  }
+})
+
+test("blueprint: terug naar boven verschijnt tijdens het lezen en brengt je bovenaan", async ({ page }) => {
+  await alsPlan(page)
+  for (const b of [390, 1440]) {
+    await page.setViewportSize({ width: b, height: 800 })
+    await page.goto("/vijvers", { waitUntil: "domcontentloaded" })
+    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
+    await expect(omhoog).toBeHidden()
+    await page.mouse.wheel(0, 1600)
+    await expect(omhoog).toBeVisible()
+    await omhoog.click()
+    await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(5)
   }
 })
