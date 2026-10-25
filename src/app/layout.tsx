@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
+import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed, Montserrat, Syne } from "next/font/google"
 import { Menu } from "@/components/menu"
@@ -43,9 +44,12 @@ export const metadata: Metadata = {
 // sinds 11 okt uit).
 export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 
+// 50/50 (25 okt 2026): wie nog geen layout heeft, krijgt bij het eerste bezoek
+// Klassiek of Blueprint en houdt die (LayoutMeting telt het). Geautomatiseerde
+// browsers (navigator.webdriver, ook de tests) krijgen altijd Klassiek.
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
-const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
+const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(!s.layout&&!navigator.webdriver){s.layout=Math.random()<.5?'plan':'klassiek';s.toegewezen=1;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -65,6 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
         <Analytics />
+        <LayoutMeting />
         <SpeedInsights />
       </body>
     </html>
