@@ -8,6 +8,7 @@ import { Voet } from "@/components/voet"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
 import { Zoek } from "@/components/zoek"
+import { PullToRefresh } from "@/components/vernieuw"
 import { zoekIndex } from "@/lib/zoek-index"
 import "@/components/wereld/wereld.css"
 import { Stempel } from "@/components/blad/stempel"
@@ -68,6 +69,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
+        {/* alleen in de app-weergave: daar is geen browser om te verversen */}
+        <PullToRefresh />
         <Analytics />
         <LayoutMeting />
         <SpeedInsights />
