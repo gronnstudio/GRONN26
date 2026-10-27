@@ -76,7 +76,8 @@ function pasToe(s: Stand) {
   c.toggle("en", s.taal === "en");
   document.documentElement.lang = s.taal;
   try {
-    localStorage.setItem(KEY, JSON.stringify(s));
+    // Zelf gekozen: het merkje van de oude 50/50-toewijzing gaat eraf.
+    localStorage.setItem(KEY, JSON.stringify({ ...s, toegewezen: undefined }));
   } catch {}
   dispatchEvent(new Event(GEWIJZIGD));
 }

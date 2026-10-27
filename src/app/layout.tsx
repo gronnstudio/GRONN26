@@ -45,12 +45,14 @@ export const metadata: Metadata = {
 // sinds 11 okt uit).
 export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 
-// 50/50 (25 okt 2026): wie nog geen layout heeft, krijgt bij het eerste bezoek
-// Klassiek of Blueprint en houdt die (LayoutMeting telt het). Geautomatiseerde
-// browsers (navigator.webdriver, ook de tests) krijgen altijd Klassiek.
+// Klassiek is weer voor iedereen de standaard (eigenaar, 27 okt 2026: "Zet de
+// klassieke site terug vast en laat gebruikers zelf kiezen"); Blueprint alleen
+// als de bezoeker het zelf kiest (Weergave of de wissel in de voet). Wie bij de
+// 50/50 van 25 okt een layout toegewezen kreeg (`toegewezen`) en daarna niet
+// zelf koos, gaat één keer terug naar Klassiek.
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
-const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(!s.layout&&!navigator.webdriver){s.layout=Math.random()<.5?'plan':'klassiek';s.toegewezen=1;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
+const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
