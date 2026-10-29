@@ -12,7 +12,7 @@ Laatst bijgewerkt: 29 okt 2026.
 | 05 Tuinrecord | Gebouwd | meerdere tuinen per klant, voor/tijdens/na |
 | 06 Calculatie | Getest | centen, btw per tarief, marge/opslag, rekenhulpen, versies |
 | 07 Catalogus | Gebouwd | prijshistorie, ★ onthouden, CSV-export |
-| 08 Offertes | Gepland | offertemaker bestaat los |
+| 08 Offertes | Getest | offerte met privélink uit een calculatieversie, akkoord zonder inlog (`/offerte/[token]`); offertemaker bestaat los |
 | 09 Projecten | Gepland | |
 | 10 Planning | Gebouwd | eigen afspraken en opvolgen; geen agendakoppeling |
 | 11 Uren | Gebouwd (bestond) | koppeling per klant op naam; per project gepland |

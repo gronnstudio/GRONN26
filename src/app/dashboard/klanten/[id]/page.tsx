@@ -11,6 +11,8 @@ import { euro } from "@/lib/format"
 import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukRond, stukWeg } from "../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { AdresVeld } from "@/components/adres-veld"
+import { KopieerKnop } from "@/components/crm/kopieer-knop"
+import { trekOfferteIn } from "../offerte-acties"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
 // module 02: Overzicht | Tuinen | Calculaties | Stukken | Activiteit). Gewone
@@ -273,6 +275,17 @@ function Stukken({ k }: { k: Klant }) {
                 <span className={`${lbl} mr-2 text-gedempt`}>{s.soort}</span>
                 <span className="[overflow-wrap:anywhere]">{s.nummer}</span>
                 <span className="block text-[12px] text-gedempt">{datum(s.datum)}</span>
+                {s.link && (
+                  <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    <KopieerKnop tekst={`/offerte/${s.link}`} />
+                    <a href={`/offerte/${s.link}`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Bekijk als klant ↗</a>
+                    {!s.rond && (
+                      <form action={trekOfferteIn.bind(null, k.id, s.link)}>
+                        <button className="crm-knop-stil crm-knop-klein">Intrekken</button>
+                      </form>
+                    )}
+                  </span>
+                )}
               </span>
               <span className="crm-cijfer">{euro(s.bedrag)}</span>
               <span className="flex gap-1">

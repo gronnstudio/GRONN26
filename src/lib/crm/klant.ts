@@ -32,6 +32,8 @@ export type Stuk = {
   datum: string
   /** Factuur: betaald. Offerte: akkoord. */
   rond?: boolean
+  /** Offerte met een privélink: de sleutel van /offerte/[token]. */
+  link?: string
 }
 
 export type Foto = { id: string; datum: string; bijschrift: string; moment: "Opname" | "Voor" | "Tijdens" | "Na" }

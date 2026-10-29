@@ -121,6 +121,33 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   const rij = page.locator("tbody tr", { hasText: naam })
   await expect(rij).toHaveCount(1)
   await expect(rij).toContainText("Opname")
+
+  // 8. Offerte met privélink uit versie 2; de klant geeft akkoord zonder inlog.
+  await rij.getByRole("link", { name: naam }).click()
+  await page.getByRole("link", { name: /^Calculaties/ }).click()
+  await page.getByRole("link", { name: /Oprit/ }).first().click()
+  await page.getByRole("button", { name: "Offerte met link maken (v2)" }).click()
+  await expect(page).toHaveURL(/tab=stukken/)
+  const href = (await page.getByRole("link", { name: "Bekijk als klant ↗" }).getAttribute("href"))!
+  expect(href).toMatch(/^\/offerte\/[A-Za-z0-9_-]{32}$/)
+  const klant = await page.context().browser()!.newContext({ baseURL: "http://localhost:3210" })
+  const kp = await klant.newPage()
+  await kp.goto(href)
+  await expect(kp.getByRole("heading", { level: 1 })).toContainText("Oprit")
+  await expect(kp.getByText("€ 1.722,70")).toBeVisible()
+  await expect(kp.getByText("Totaal incl. btw")).toBeVisible()
+  // inkoop (€ 25,00 per m²), opslag en uren staan er niet op
+  await expect(kp.locator("article")).not.toContainText("€ 25,00")
+  await expect(kp.locator("article")).not.toContainText(/opslag|inkoop|44 uur/i)
+  await kp.getByLabel("Je naam").fill("Test Klant")
+  await kp.getByLabel(/Ik ga akkoord/).check()
+  await kp.getByRole("button", { name: "Akkoord geven" }).click()
+  await expect(kp.getByRole("heading", { name: "Akkoord, dank je wel" })).toBeVisible()
+  await klant.close()
+  await page.reload()
+  await expect(page.getByRole("button", { name: "Akkoord ✓" })).toBeVisible()
+  // een verzonnen sleutel geeft niets
+  expect((await request.get("/offerte/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).status()).toBe(404)
 })
 
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
