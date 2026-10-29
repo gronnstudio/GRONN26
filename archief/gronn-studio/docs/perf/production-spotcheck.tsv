@@ -1,0 +1,10 @@
+page	form_factor	run	perf	lcp_ms	tbt_ms	cls	transfer_kb
+home	mobile	1	41	8436	2447	0.000	1799
+home	mobile	2	41	8217	1998	0.000	1799
+home	mobile	3	43	8310	1669	0.000	1799
+home	desktop	1	70	2232	310	0.000	3313
+home	desktop	2	75	2186	252	0.001	3313
+home	desktop	3	68	2181	337	0.000	3313
+projects	mobile	1	55	11315	587	0.000	2807
+projects	mobile	2	59	11436	439	0.000	2807
+projects	mobile	3	59	11459	439	0.000	2807

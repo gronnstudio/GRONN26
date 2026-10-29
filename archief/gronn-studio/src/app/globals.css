@@ -1,0 +1,2412 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.bluehour *));
+
+@theme inline {
+  /* Semantic tokens — flip between light and dark (see :root / .dark) */
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-placeholder: var(--placeholder);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+
+  /* Brand constants (outline §11) — identical in both themes */
+  --color-gronn-black: var(--gronn-black);
+  --color-gronn-green: var(--gronn-green);
+  --color-gronn-light: var(--gronn-light);
+  --color-gronn-white: var(--gronn-white);
+  --color-gronn-soil: var(--gronn-soil);
+  --color-gronn-mineral: var(--gronn-mineral);
+  --color-gronn-clay: var(--gronn-clay);
+  --color-gronn-water: var(--gronn-water);
+  --color-gronn-moss: var(--gronn-moss);
+  --color-gronn-forest: var(--gronn-forest);
+  --color-gronn-ember: var(--gronn-ember);
+  --color-gronn-ember-strong: var(--gronn-ember-strong);
+
+  /* Kleurschaal Editie 02 — vaste merkconstanten (bg-merk-bos-licht,
+     fill-merk-oranje, …) — en de thema-afhankelijke paneeltinten
+     (bg-paneel-oranje, …). Zie :root. */
+  --color-merk-oranje: var(--merk-oranje);
+  --color-merk-oranje-midden: var(--merk-oranje-midden);
+  --color-merk-oranje-licht: var(--merk-oranje-licht);
+  --color-merk-bos: var(--merk-bos);
+  --color-merk-bos-midden: var(--merk-bos-midden);
+  --color-merk-bos-licht: var(--merk-bos-licht);
+  --color-merk-mos: var(--merk-mos);
+  --color-merk-mos-midden: var(--merk-mos-midden);
+  --color-merk-mos-licht: var(--merk-mos-licht);
+  --color-merk-mos-schaduw: var(--merk-mos-schaduw);
+  --color-merk-antraciet: var(--merk-antraciet);
+  --color-merk-antraciet-midden: var(--merk-antraciet-midden);
+  --color-merk-antraciet-licht: var(--merk-antraciet-licht);
+  --color-merk-salie: var(--merk-salie);
+  --color-merk-salie-licht: var(--merk-salie-licht);
+  --color-merk-gebroken-wit: var(--merk-gebroken-wit);
+  --color-paneel-oranje: var(--paneel-oranje);
+  --color-paneel-bos: var(--paneel-bos);
+  --color-paneel-mos: var(--paneel-mos);
+  --color-paneel-salie: var(--paneel-salie);
+  --color-paneel-antraciet: var(--paneel-antraciet);
+
+  /* ── shadcn's token names, pointed at ours ──────────────────────────
+     Components copied from 21st.dev are written for a shadcn project and
+     reach for `border`, `card`, `primary`, `secondary`, `ring`. Those
+     names do not exist here — this project has its own set — so such a
+     component compiles and renders colourless.
+
+     These aliases are the translation, in one place. Nothing above is
+     touched: `bg-surface` and `bg-card` are the same colour under two
+     names, and every existing file keeps the name it already uses.
+
+     TWO NAMES ARE DELIBERATELY ABSENT: `accent` and `muted`.
+     Both already exist here with a DIFFERENT meaning. `--accent` is a
+     soft-emphasis colour for text and lines; shadcn's `accent` is a
+     subtle background, and its `muted` is a background too where ours is
+     secondary text. Aliasing them would give every copied component a
+     plausible wrong colour — the failure that renders fine and reads
+     wrong, which is the worst kind. A component that wants them gets
+     translated by hand when it comes in, and then the mistake is loud
+     instead of silent.
+
+     `primary` is brand green under white at 4.87:1 and `destructive` is
+     the burnt ember at 4.64:1 — the only two fills check-contrast
+     guarantees under white text. */
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--gronn-green);
+  --color-primary-foreground: var(--gronn-white);
+  --color-secondary: var(--surface);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted);
+  --color-ring: var(--focus-ring);
+  --color-destructive: var(--gronn-ember-strong);
+  --color-destructive-foreground: var(--gronn-white);
+
+  /* Corner radius, one step softer than Tailwind's default scale. Set
+     here rather than by hand-editing the ~55 `rounded-*` utilities across
+     the site — the whole point of a scale is that photo cards, service
+     panels, inputs and the mega menu round by the same rule. `rounded-full`
+     is untouched (buttons, dots and the dock stay pills). */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+  --radius-3xl: 2.25rem;
+
+  /* THE PANEL'S TWO STACKED BARS.
+     Two sticky bars sit above the document workspace: the shell's top bar
+     and, under it, the document toolbar. Both used `top-0`, so the second
+     slid UNDER the first; and the editor column pinned itself with a
+     hardcoded `top-[57px]` that matched only one of the toolbar's two
+     heights — the bar grew ~8px whenever a draft showed its kind switch,
+     and the column did not follow.
+     One number each, declared here, read by all three. Change a bar's
+     height and everything that hangs off it moves with it. */
+  --panel-topbar-h: 3.8125rem; /* 61px: a 36px control + py-3 + hairline */
+  --panel-toolbar-h: 6.5rem; /* 104px: two 36px rows + gap-2 + py-3 + hairline */
+  --panel-bars-h: calc(var(--panel-topbar-h) + var(--panel-toolbar-h));
+
+  /* THE PAGE COLUMN. Every section on the site is `mx-auto w-full
+     max-w-7xl px-4 sm:px-6` — 40 call sites across 25 files, differing
+     only in vertical padding. Widening it is one value, not 40 edits,
+     for the same reason the radius scale above is: the point of a scale
+     is that every use of it moves together.
+
+     NOTE the name no longer matches Tailwind's own 7xl (80rem). That is
+     the deliberate cost: `max-w-7xl` in this codebase means "the page
+     column", currently 1440px. It was 1280, which stopped being enough
+     once the bar grew five panel triggers, a CTA and a control pill —
+     measured at 1280, logo 123px + right group 1109px = 1232px, exactly
+     the column, with nothing to spare.
+
+     What does NOT scale with this: max-w-4xl and max-w-5xl. Those are
+     LINE LENGTHS — hero and case-study headlines, the contact reading
+     column — and belong to the typography, not the page. A headline that
+     grows with the screen stops being readable. */
+  --container-7xl: 90rem;
+
+  /* Type system mirrors Equilibrium: Syne for headings, Montserrat body,
+     Geist Mono for technical/annotation text. Syne and Montserrat are
+     served from src/fonts/ (see layout.tsx) — the owner's own files,
+     subset and converted to woff2, fetched from nowhere. */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+:root {
+  /* ── Brand Guide 2026 (Editie 01) ────────────────────────────────
+     Drie basiskleuren — aarde-oranje #DB6923, gebroken wit #EFEEEA,
+     antraciet #202020 — en een botanische supportlaag: bosgroen
+     #23483A, mosgroen #607A59, salie #B8C5A8. Verhouding 60 % licht /
+     30 % donker / 10 % accent. Oranje is de primaire actie- en
+     herkenningskleur; groen is voor diepe secties, secundaire UI en
+     zachte vlakken. De tokennamen bleven staan zodat portaal en
+     dashboard meeverhuizen zonder dat hun code verandert. */
+  --gronn-black: #202020;
+  --gronn-green: #23483a;
+  --gronn-light: #b8c5a8;
+  --gronn-white: #efeeea;
+  --gronn-moss-guide: #607a59;
+  --gronn-soil: #6b4a2b;
+  --gronn-mineral: #8a928c;
+  --gronn-clay: #b0876a;
+  --gronn-water: #3e7c8f;
+  --gronn-moss: #4a6b3d;
+  /* Bosgroen uit de brand guide: het diepe merkvlak. */
+  --gronn-forest: #23483a;
+  /* Aarde-oranje — de actie- en herkenningskleur. Als vlak draagt het
+     ANTRACIET (4,70:1), nooit wit, en het staat nooit als tekst op
+     gebroken wit (2,99:1). */
+  --gronn-ember: #db6923;
+  /* Signal Ember carrying WHITE TEXT on top of it. Pure ember is a bright
+     orange: #f6f6f6 on #f95a08 is 2.99:1, so every filled ember button —
+     the primary CTA's hover, the dock's centre slot, the editor toolbar —
+     was failing AA on its label. Lighthouse scored the site 100 because it
+     only ever measures the resting state, never :hover.
+     This is the same burnt ember already in the palette as --focus-ring,
+     and at 4.64:1 it passes. Signal Ember itself is untouched and stays
+     #f95a08 everywhere it is a line, dot, marker, border or tint — this
+     value exists only for the fill-under-white-text case. */
+  /* Brand guide: donker oranje #A14312 — oranje tekstlinks op de lichte
+     basis (5,44:1) en, zoals hierboven, het vlak onder witte tekst in
+     portaal en dashboard (5,4:1). */
+  --gronn-ember-strong: #a14312;
+
+  /* ── Kleurschaal (huisstijl Editie 02, 28 sep 2026) ───────────────
+     Vol, midden, licht — geen andere mengsels. Midden is 55 % en licht
+     12 % van de kleur in gebroken wit (#EFEEEA), in sRGB gemengd, zodat
+     tinten van verschillende tegels en fiches altijd bij elkaar horen.
+     VASTE MERKCONSTANTEN: in beide thema's gelijk. De icoontegels
+     (src/lib/iconen.ts, IcoonTegel) gebruiken ze: een tegel is een
+     merkobject, net als een foto. Voor kaarten die met het thema
+     meegaan zijn er de `--paneel-*`-tinten hieronder.
+     Oranje vol is donkeroranje #A14312 (= --gronn-ember-strong): fel
+     aarde-oranje #DB6923 blijft voor knoppen en acties, niet voor het
+     beeldsysteem. Salie en gebroken wit zijn zelf al licht; salie-licht
+     is het Siergrassen-paneel van het bord. Eén schaduw: mosgroen met
+     15 % antraciet, alleen waar gebroken wit erop 4,5:1 moet halen
+     (4,95:1, Heesters). */
+  --merk-oranje: #a14312;
+  --merk-oranje-midden: #c49073;
+  --merk-oranje-licht: #e6d9d0;
+  --merk-bos: #23483a;
+  --merk-bos-midden: #7f9389;
+  --merk-bos-licht: #d7dad5;
+  --merk-mos: #607a59;
+  --merk-mos-midden: #a0ae9a;
+  --merk-mos-licht: #dee0d9;
+  --merk-mos-schaduw: #566c50;
+  --merk-antraciet: #202020;
+  --merk-antraciet-midden: #7d7d7b;
+  --merk-antraciet-licht: #d6d5d2;
+  --merk-salie: #b8c5a8;
+  --merk-salie-licht: #e8e9e2;
+  --merk-gebroken-wit: #efeeea;
+
+  /* Keyboard focus ring. Signal ember fails the 3:1 non-text contrast
+     minimum on the two light grounds (2.8:1 on Paper, 2.7:1 on Meadow),
+     so those themes deepen it to a burnt ember — same family, 4.3:1+.
+     The three dark themes keep the pure signal. */
+  --focus-ring: #a14312;
+  /* Ember when used as small *text* (section-label indices): needs
+     4.5:1, so the light grounds deepen it further; dark themes keep
+     signal ember (5.6:1 on Nocturne). */
+  --ember-text: #a14312;
+
+  /* Licht (brand guide): gebroken wit, antraciet. */
+  --background: #efeeea;
+  --surface: #f8f7f4;
+  --foreground: #202020;
+  --muted: #5c5a54;
+  /* Het licht gedrukte voorbeeld in een leeg invulveld (eigenaar, 28 sep
+     2026). Stiller dan muted, maar nog 4,73:1 op de veldgrond: een
+     voorbeeld moet je kunnen lezen. check-contrast meet het. */
+  --placeholder: #6b6962;
+  --line: #202020; /* border/divider base — use with opacity modifiers */
+  --accent: #23483a; /* soft-emphasis text/borders (gronn-light's role in dark) */
+
+  /* Paneeltinten: het vlak van een kaart die bij een dienst of plantgroep
+     hoort. Thema-afhankelijk, anders dan de --merk-schaal. In Licht de
+     lichte stap van de schaal; in Donker zie .bluehour. Tekst erop is
+     gewoon --foreground/--muted (check-contrast.mjs meet beide). */
+  --paneel-oranje: #e6d9d0;
+  --paneel-bos: #d7dad5;
+  --paneel-mos: #dee0d9;
+  --paneel-salie: #e8e9e2;
+  --paneel-antraciet: #d6d5d2;
+
+  /* Hero ecosystem scene */
+  --scene-ground-a: #e3e7da;
+  --scene-ground-b: #cfd8c6;
+  --scene-stroke: #4b5751;
+  --scene-life: #175c3d;
+}
+
+
+
+
+/* Theme "forest" — deep green-charcoal, the new default: softer than pure
+   black, higher text contrast */
+
+/* Theme "nocturne" — Dark Mode 2.0: deep blue-charcoal ground, rich
+   blue-greys, soft green accent. Premium-dark rather than pure black.
+   OWNER RULE (20 Jul 2026): the neon mint #8de8c0 is vetoed — accents
+   here use the brand's soft light green, never a neon tint. */
+
+/* ---------------------------------------------------------------------
+   THE HOURS — the second palette set (see src/lib/themes.ts and the
+   second, separately labeled switcher).
+
+   A garden is never one colour; it is whatever the light is doing to it.
+   These five are one day, dawn to dark, and they are the set where the
+   site is allowed to be atmospheric rather than neutral.
+
+   Built to the rules that separate a designed dark mode from an inverted
+   one:
+   · no pure black ground — Material puts the floor at #121212 because
+     black against bright content raises contrast to the point of eye
+     strain, and it smears for readers with astigmatism;
+   · surface is LIGHTER than background, never a shadow — in dark mode
+     elevation is expressed as light, so a card lifts by getting paler;
+   · accents are desaturated on dark grounds — a saturated colour that
+     sings on white visually vibrates against dark;
+   · light grounds stay HIGH VALUE and LOW CHROMA. A mid-value tinted
+     ground is the classic trap: it reads muddy no matter how correct the
+     contrast maths says it is.
+   Green still carries structure in all five; ember still answers
+   interaction and is verified against every one of these grounds.
+   --------------------------------------------------------------------- */
+
+/* 1 — First Light: the blue hour's other end. Cool, pale, almost
+   colourless, the way a garden looks before the sun clears the hedge. */
+
+/* 2 — Glasshouse: noon under glass. The brightest ground in the whole
+   system, with just enough green in it to feel like light through
+   leaves rather than a blank page. */
+
+/* 3 — Golden Hour: low sun, warm ground, deep green ink. Kept a cream
+   rather than a true amber on purpose — ember has to stay legible as the
+   interaction colour, and it cannot do that on a ground of its own hue. */
+.goldenhour {
+  /* Gouden Uur = de lichte kant van de brand guide: gebroken wit met
+     antraciet ("Helder op licht", 14,03:1). */
+  --background: #efeeea;
+  --surface: #f8f7f4;
+  --foreground: #202020;
+  --muted: #5c5a54;
+  --placeholder: #6b6962;
+  --line: #202020;
+  --accent: #23483a;
+
+  --paneel-oranje: #e6d9d0;
+  --paneel-bos: #d7dad5;
+  --paneel-mos: #dee0d9;
+  --paneel-salie: #e8e9e2;
+  --paneel-antraciet: #d6d5d2;
+
+  --scene-ground-a: #e4e3dd;
+  --scene-ground-b: #d6d9cd;
+  --scene-stroke: #5c5a54;
+  --scene-life: #23483a;
+}
+
+/* 4 — Blue Hour: dusk proper. Nocturne is a blue-charcoal that behaves
+   like a neutral; this is the colour committed to — a deep indigo, the
+   twenty minutes after sunset. Accent stays the brand's soft green so
+   the structure still reads as GRØNN and not as a synthwave poster. */
+.bluehour {
+  /* Blauwe Uur = de donkere kant van de brand guide: antraciet met
+     gebroken wit ("Helder op donker", 14,03:1). Oranje als tekst haalt
+     4,70:1 op antraciet maar zakt op het lichtere surface, dus de
+     teksttint gaat daar één stap lichter in dezelfde aarde-familie. */
+  --focus-ring: var(--gronn-ember);
+  --ember-text: #e27b3c;
+  --background: #202020;
+  --surface: #2a2a2a;
+  --foreground: #efeeea;
+  --muted: #aaa8a0;
+  /* Donkerder dan muted, dus stiller; 5,37:1 op antraciet, 4,73:1 op surface. */
+  --placeholder: #96948d;
+  --line: #efeeea;
+  --accent: #b8c5a8;
+
+  /* Paneeltinten in Donker: dezelfde kleur, gemengd met ANTRACIET in
+     plaats van met gebroken wit, zodat het paneel iets lichter is dan de
+     grond — elevatie is licht. Elk paneel ligt op de lichtheid van
+     --surface (relatieve luminantie ≈ 0,023), zodat ze alleen in kleur
+     verschillen, niet in hoogte. Daarvoor is per kleur een ander aandeel
+     nodig: oranje 16 %, mos 12 %, salie 7 %; bosgroen is zelf zo donker
+     dat 16 % niet van de grond loskomt (#202624), dus 30 %. Antraciet in
+     antraciet is de grond zelf; dat paneel is de midden-stap (#7D7D7B)
+     12 % in antraciet. Gebroken wit haalt op elk ≥ 12:1, muted ≥ 5,8:1. */
+  --paneel-oranje: #35261e;
+  --paneel-bos: #212c28;
+  --paneel-mos: #282b27;
+  --paneel-salie: #2b2c2a;
+  --paneel-antraciet: #2b2b2b;
+
+  --scene-ground-a: #2a2a2a;
+  --scene-ground-b: #202020;
+  --scene-stroke: #aaa8a0;
+  --scene-life: #b8c5a8;
+}
+
+/* 5 — Moonlight: the neutral graphite the set never had. Forest is green,
+   Night is absolute, Nocturne is blue — none of them is the quiet
+   near-neutral that most well-made dark interfaces actually use. Ground
+   sits at Material's #121212 floor with a trace of green so it belongs
+   to this brand rather than to a default stylesheet. */
+
+
+@layer base {
+  /* No CSS scroll-behavior:smooth here — Lenis drives scrollTop every frame
+     and CSS smoothing would animate each write, rubber-banding the scroll. */
+  html {
+    @apply font-sans;
+    /* No invented cuts. When a requested weight has no real face the
+       browser will smear the nearest one into a fake bold — silently,
+       and it always looks cheap. That is exactly what was happening
+       here: Montserrat shipped at 400 alone while the interface asks
+       for `font-medium` and `font-semibold` all over the buttons, menu
+       items and links. Montserrat now carries a real 400-600 axis, and
+       this line makes the old failure mode impossible rather than
+       merely fixed — a missing cut shows up as the wrong weight, which
+       is visible, instead of as a bad one, which is not.
+
+       `-weight` only, deliberately, NOT `font-synthesis: none`. The site
+       sets italic in exactly one place — the "inbegrepen" lines on the
+       printed quote sheet (document-sheet.tsx) — and neither family has
+       an italic face, so switching style synthesis off would stand those
+       lines upright. That is a separate question from this one. */
+    font-synthesis-weight: none;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background: var(--gronn-ember);
+    color: var(--gronn-white);
+  }
+
+  /* Focus is designed, not browser-default: keyboard users get the same
+     ember answer that hover users get (theme-aware for contrast). */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Keyboard focus on the living-system diagram nodes */
+  svg [role="button"]:focus-visible {
+    outline: none;
+  }
+  svg [role="button"]:focus-visible circle {
+    stroke: var(--focus-ring);
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
+
+  /* No orphaned single words on headline last lines */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+/* Hoe hard `nav-glass` de achtergrond naar de eigen grond toe duwt.
+   
+   Op een lichte grond omhoog, op een donkere omlaag. Dat is wat het
+   contrast van de iconen in de balk stabiel houdt zonder de tint te
+   verhogen — zie de toelichting bij `@utility nav-glass`.
+   
+   De donkere lijst is LETTERLIJK dezelfde als die van
+   `@custom-variant dark` bovenaan dit bestand. Lopen die twee uiteen,
+   dan krijgt een palet de verkeerde kant op geduwd en wordt zijn balk
+   onleesbaar — dus: verandert de ene lijst, dan de andere mee. */
+:root {
+  /* 1,45 haalde met de nieuwe opening (portretregel, langere aanhef;
+     het sfeerbeeld zakte zo'n 125px) boven het groen van dat beeld
+     2,7:1 (Projecten-icoon, telefoon). Gemeten: 1,7 → 2,98; 1,9 → 3,16;
+     2,0 → 3,29; 2,1 → laagste icoon 3,75. Lichter duwen = op licht de
+     tint omhoog. */
+  --nav-glass-brightness: 2.1;
+  /* De labels onder de dockiconen (25 sep 2026). Muted (#5c5a54) haalde
+     op licht glas boven de foto 3,62:1; kleine tekst eist 4,5. Deze
+     tint ligt tussen muted en antraciet en haalt ≥ 5 (dock-contrast.spec).
+     Op Blauwe Uur is muted al ruim genoeg. */
+  --dock-label: #3d3b37;
+  /* De verf in het glas. 55 % tot 29 sep 2026; toen lag de dock op de
+     telefoon bij het openen van home op de volle openingsfoto, onderaan
+     zijn scrim, en daar zakte hij op Licht naar 2,7:1 (Studio-icoon) en
+     4,26:1 (Projecten-label). Meer helderheid hielp nauwelijks (3,0 →
+     2,93: over een donkere grond verzadigt brightness). Gemeten met de
+     tint: 62 % → laagste icoon 3,06; 68 % → 3,57. Licht staat op 65 %;
+     Blauwe Uur haalde het al en houdt 55 %. */
+  --nav-glass-tint: 65%;
+  /* De telefoondock als lichte plaat, zoals in de ING-app (eigenaar, 1 okt
+     2026: "use the colors similarly, instead of darkgreen now"): wit op
+     Licht met een zachte grijze pil achter het actieve vak. */
+  --dock-grond: #ffffff;
+  --dock-actief: rgb(32 32 32 / 0.07);
+}
+.bluehour {
+  --dock-label: var(--foreground);
+  --dock-grond: #2e2e2e;
+  --dock-actief: rgb(239 238 234 / 0.1);
+  --nav-glass-tint: 55%;
+  /* 0,45 haalde op V5 boven het portret 2,92:1 (Studio-icoon); 0,34
+     brengt het boven 3:1. Donkerder duwen = op donker de tint omhoog. */
+  --nav-glass-brightness: 0.34;
+}
+
+/* Shared easing vocabulary (mirrors the framer-motion curves) */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ── Duur, als woorden in plaats van getallen ──────────────────────
+     
+     Drie maten voor drie soorten beweging, zodat twee dingen die even
+     lang horen te duren dat ook werkelijk doen. Ze kwamen mee met de
+     telefoondock uit het V2-concept, waar ze uit de bouwbrief komen:
+     aanraking 120–180, pil en uitklapper 200–280, laagwissel 350–550.
+     
+     Er is BEWUST geen vierde ease bijgekomen. Het concept gebruikt
+     `cubic-bezier(0.22, 1, 0.36, 1)` en dit project
+     `--ease-out-expo` (0.16, 1, 0.3, 1). Dat verschil is op 240ms met
+     geen oog te zien, en één easevocabulaire is meer waard dan die
+     nauwkeurigheid — te meer omdat `src/lib/motion.ts` de
+     framer-motion-helft van diezelfde curve draagt en de twee in
+     dezelfde commit horen te veranderen. */
+  --dur-tap: 150ms;
+  --dur-dock: 240ms;
+  --dur-layer: 450ms;
+
+  /* De slagschaduw onder de telefoondock. Eén waarde, niet per palet:
+     het is dezelfde schaduw die `@utility glass` al site-breed draagt,
+     hier apart genoemd zodat de dock en de dock niet uit elkaar kunnen
+     lopen als er ooit aan gedraaid wordt. */
+  --shadow-dock: 0 10px 36px -10px rgb(10 21 16 / 0.45);
+}
+
+/* Opening veil (see preloader.tsx): fully CSS-driven so it plays and
+   lifts before hydration. Skipped for repeat pages this session (the
+   root layout's inline script stamps `intro-seen` pre-paint) and under
+   reduced motion. `visibility: hidden` rides the final keyframe with
+   fill-forwards so the lifted veil stays gone. */
+.preloader-veil {
+  animation: veil-lift 0.9s var(--ease-curtain) 2s forwards;
+}
+html.intro-seen .preloader-veil {
+  display: none;
+}
+.preloader-photo {
+  animation: veil-zoom 2.6s ease-out both;
+}
+.preloader-lockup {
+  animation: veil-lockup 1.1s var(--ease-out-expo) both;
+}
+@keyframes veil-lift {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+@keyframes veil-zoom {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes veil-lockup {
+  from {
+    transform: scale(0.94);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader-veil {
+    display: none;
+  }
+}
+
+/* ── Openingsdoek (V5, zie src/components/gronn/openingsdoek.tsx) ─────
+   De opvolger van het doek hierboven, op de Brand Guide 2026: vlakke
+   grond (`--background`, dus gebroken wit of antraciet per Uur), het
+   woordmerk, geen foto en geen gloed. 0,7 s komt het woordmerk uit zijn
+   masker omhoog, om 0,75 s tilt het doek in 0,6 s op: 1,35 s in totaal,
+   ruim onder de 2,9 s van het oude.
+   `pointer-events: none` vanaf het eerste beeld: het doek vangt niets,
+   de pagina eronder is meteen bruikbaar.
+   Niet getoond: tweede pagina van de sessie en de geïnstalleerde app
+   (`intro-seen`, pre-paint gezet in de root-layout), minder beweging
+   (in beide richtingen, zoals `use-reduced-motion.ts`), en afdrukken.
+   `display-mode: standalone` staat er ook hier, voor het geval het
+   script niet draait. */
+.openingsdoek {
+  background: var(--background);
+  pointer-events: none;
+  animation: doek-op 0.6s var(--ease-curtain) 0.75s forwards;
+}
+.openingsdoek-merk {
+  animation: doek-merk 0.7s var(--ease-out-expo) both;
+}
+/* Blauwe Uur: het primaire logo tekent zichzelf (1,2 s lijnen, 0,5 s
+   vulling, zie openingsdoek.tsx). Geen masker eromheen — de lijnen ZIJN
+   de onthulling — en het doek tilt pas op als het logo vol staat:
+   1,85 s, en in 0,6 s weg, 2,45 s in totaal. */
+.bluehour .openingsdoek {
+  animation-delay: 1.85s;
+}
+.bluehour .openingsdoek-merk {
+  animation: none;
+}
+@keyframes doek-op {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+@keyframes doek-merk {
+  from {
+    transform: translateY(12px);
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    transform: none;
+    clip-path: inset(0);
+  }
+}
+html.intro-seen .openingsdoek,
+:root[data-motion="reduced"] .openingsdoek {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .openingsdoek {
+    display: none;
+  }
+}
+@media (display-mode: standalone), print {
+  .openingsdoek {
+    display: none;
+  }
+}
+
+/* ── Letterrol in de menubalk (src/components/motion/letter-flip.tsx) ─
+   Het woord rolt letter voor letter omhoog uit zijn masker en een
+   oranje kopie rolt van onderen in. Oranje als TEKST is `--ember-text`
+   (#A14312 op licht, #E27B3C op Blauwe Uur), nooit pure #DB6923: dat is
+   2,99:1 op gebroken wit. Hover zit op de ouder (`:hover >`): de
+   LetterFlip staat direct in de menuknop.
+   Minder beweging — in beide richtingen, zoals `use-reduced-motion.ts` —
+   betekent: geen rol, alleen dezelfde kleurwissel. */
+.letter-flip-uit,
+.letter-flip-in {
+  display: inline-block;
+  transition:
+    translate 300ms ease-out,
+    color 200ms ease;
+  transition-delay: calc(var(--i, 0) * 22ms);
+}
+.letter-flip-in {
+  translate: 0 100%;
+  color: var(--ember-text);
+}
+@media (hover: hover) {
+  :hover > .letter-flip .letter-flip-uit {
+    translate: 0 -100%;
+  }
+  :hover > .letter-flip .letter-flip-in {
+    translate: none;
+  }
+}
+:root[data-motion="reduced"] .letter-flip-in-rij {
+  display: none;
+}
+@media (hover: hover) {
+  :root[data-motion="reduced"] :hover > .letter-flip .letter-flip-uit {
+    translate: none;
+    color: var(--ember-text);
+    transition-delay: 0s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .letter-flip-in-rij {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  :root:not([data-motion="full"]) :hover > .letter-flip .letter-flip-uit {
+    translate: none;
+    color: var(--ember-text);
+    transition-delay: 0s;
+  }
+}
+
+/* Cookie banner entrance (see cookie-notice.tsx): CSS-timed from parse
+   so the page's largest text block paints early instead of becoming a
+   seconds-late LCP on slow phones. Hidden pre-paint for visitors who
+   already noted it (root inline script stamps `cookies-noted`). */
+.cookie-enter {
+  animation: cookie-rise 0.5s var(--ease-out-expo) 1.2s both;
+}
+html.cookies-noted .cookie-enter {
+  display: none;
+}
+@keyframes cookie-rise {
+  from {
+    opacity: 0.01;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cookie-enter {
+    animation: cookie-rise 0s 1.2s both;
+  }
+}
+
+/* Pre-hydration hero entrance. The hero copy is the LCP element on
+   phones; framer-motion server-renders it hidden and can only reveal it
+   after React hydrates — ~4 s of pure render delay on a slow-4G phone
+   (measured: FCP 1.1 s, LCP 5.7 s). CSS animations start the moment
+   styles apply, so the text paints seconds earlier with the same
+   line-mask look. Delays are set inline at the call site. */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes hero-line-up {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
+  }
+}
+.hero-enter {
+  animation: hero-rise 0.7s var(--ease-out-expo) both;
+}
+.hero-line {
+  display: block;
+  animation: hero-line-up 0.8s var(--ease-out-expo) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter,
+  .hero-line {
+    animation: none;
+  }
+}
+
+/* Liquid-glass surface — frosted fill plus specular rim, matching the
+   mobile dock's glass. Tint rides on --background so every palette keeps
+   its own glass; pair with a border-radius at the call site. */
+@utility glass {
+  background: color-mix(in srgb, var(--background) 30%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.12),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 10px 36px -10px rgb(10 21 16 / 0.45);
+}
+/* ── HET GLAS VAN DE TELEFOONNAVIGATIE ──────────────────────────────
+   
+   Eén wash voor de dock onderaan, de twee knoppen bovenin en hun
+   panelen. Als `@utility` en niet drie keer ingetikt, om dezelfde reden
+   als `photo-glass`: een wash die je per plek overschrijft, drijft weg.
+   
+   ── WAAROM DE TINT OMLAAG GING EN NIET OMHOOG ─────────────────────
+   
+   De dock stond op `bg-surface/85` met een backdrop-blur van 40px. Dat
+   is een blur die je niet ziet: bij 85 % dekking komt er zo weinig
+   achtergrond door dat er niets te vervormen valt. Het resultaat is een
+   donkere plaat die over de pagina ligt in plaats van glas dat erboven
+   zweeft — en dat is precies wat de eigenaar zag toen hij vroeg om "een
+   vervormingsblur zoals Instagram dat heeft".
+   
+   Instagram doet het andersom: weinig verf, veel blur. Wat eronder
+   ligt blijft zichtbaar als KLEUR maar wordt onleesbaar als VORM. Daar
+   komt de verzadiging bij, anders trekt de blur alles naar grijs.
+   
+   ── EN HET CONTRAST DAN ───────────────────────────────────────────
+   
+   Het echte bezwaar tegen doorzichtig chroom: de ondergrond van een
+   icoon is dan wat er toevallig onder ligt, en dat kun je niet
+   garanderen. Dat bezwaar is terecht en het is de reden dat de knoppen
+   in V2C juist dekkend zijn.
+   
+   Het is alleen wél meetbaar. `tests/e2e/dock-contrast.spec.ts`
+   decodeert een schermafdruk van de dock boven het zwaarste beeld dat
+   de site heeft en rekent de WCAG-verhouding uit voor het actieve
+   icoon, de inactieve iconen en de emberpijl. Zakt er één onder 3:1,
+   dan gaat de tint hier omhoog tot hij het haalt. "Het hangt van de
+   foto af" is daarmee geen bezwaar meer maar een getal.
+   
+   ── DE TERUGVAL ───────────────────────────────────────────────────
+   
+   Zonder `backdrop-filter` is er niets om achter te vervormen, en dan
+   is een lage tint alleen maar onleesbaar. De afnemers zetten daarom
+   `bg-surface/95` als grondlaag en deze utility alleen binnen
+   `supports-[backdrop-filter]`. */
+@utility nav-glass {
+  /* ── VERVORMEN, NIET VERBERGEN ──────────────────────────────────
+     
+     Dit is drie keer verkeerd gegaan voordat het goed stond, en de
+     fout was elke keer dezelfde: het probleem met de tint oplossen.
+     
+     Eerst 85 %: een donkere plaat waar je niets doorheen zag, en de
+     blur van 40px deed niets omdat er niets te vervormen viel. Toen
+     72 %: beter meetbaar, maar nog steeds vooral VERDUISTEREN — de
+     achtergrond werd weggemoffeld in plaats van vervormd.
+     
+     Waar de eigenaar op wees (Instagram) doet het omgekeerde. Daar
+     blíjft de inhoud eronder zichtbaar — je ziet de letters van de
+     titel gewoon doorlopen — maar ze zijn tot een kleurvlek gesmolten.
+     Weinig verf, veel blur, en de leesbaarheid komt niet van de tint.
+     
+     ── WAAR DE LEESBAARHEID DAN WEL VANDAAN KOMT ─────────────────
+     
+     Van `brightness()` in de backdrop-filter, en dat is het scharnier
+     van dit hele blok. De filter duwt eerst ALLES wat eronder ligt
+     naar de kant van de eigen grond — op een licht palet omhoog, op
+     een donker palet omlaag — en pas daarna komt er een dun laagje
+     verf overheen.
+     
+     Het verschil met een hogere tint: een tint verbergt de foto, dit
+     VERVORMT hem. Je ziet nog steeds dat er iets onder zit, en je ziet
+     nog steeds welke kleur het heeft; je kunt het alleen niet meer
+     lezen. En omdat de helderheid naar de grond toe getrokken wordt,
+     hangt het contrast van de iconen niet langer af van de vraag of er
+     toevallig een lichte lucht of een donkere heg onder de balk
+     schuift.
+     
+     Dat laatste was het echte bezwaar tegen doorzichtig chroom, en
+     hier wordt het bij de wortel weggenomen in plaats van
+     weggeverfd. `dock-contrast.spec.ts` meet het over twee paletten
+     en twee ondergronden; zakt er iets onder 3:1, dan gaat de
+     helderheid of de tint omhoog — nooit de drempel omlaag.
+
+     25 sep 2026: de leesstand werd één pil met hetzelfde glas, en boven
+     het groen van de voorpagina haalde hij op 40 % tint Delen 2,92:1 en
+     de emberpijl (na 2,4 helderheid) 2,90:1. Meer helderheid hielp daar
+     niet: het groen kanaal zat al tegen zijn plafond. Vandaar de tint
+     omhoog, gemeten in dock-contrast.spec.ts. */
+  background: color-mix(in srgb, var(--surface) var(--nav-glass-tint), transparent);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6)
+    brightness(var(--nav-glass-brightness));
+  backdrop-filter: blur(30px) saturate(1.6)
+    brightness(var(--nav-glass-brightness));
+}
+
+/* Heavier pour for surfaces carrying body text (notices, sheets). */
+@utility glass-strong {
+  background: color-mix(in srgb, var(--background) 62%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.12),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 10px 36px -10px rgb(10 21 16 / 0.45);
+}
+
+/* The screen laid over every photograph. Replaces the old green film
+   (`#14472e/60` multiply + `#3c6b46/25` soft-light), which was hand-copied
+   into six files and had already drifted — one site sat at /55, another had
+   lost its second layer entirely.
+
+   Glass, not frost: NO backdrop-filter here, deliberately, for three
+   independent reasons.
+   1. The wash sits inside RevealImage, which animates `filter: blur(10px)`
+      on its wrapper. A filter on an ancestor forms a containing block and
+      stops backdrop-filter sampling anything outside it — it would simply
+      not work.
+   2. project-card wraps cards in <Tilt> (rotateX/rotateY + perspective).
+      3D-transformed ancestors are the classic backdrop-filter flicker case
+      in Safari and Chrome.
+   3. Blur that samples a photo directly beneath it is the pathological
+      compositing case and cannot be skipped while scrolling — and
+      docs/perf shows style/paint, not bytes, is this site's bottleneck.
+   The photography is also the product: it stays sharp.
+
+   So the glass is read purely as *light on a pane* — a specular rise at the
+   top edge, clear through the middle, a slight settle at the foot, plus the
+   same inset rim vocabulary the `glass` utility uses so it belongs to the
+   same material family as the dock and header. No outer drop shadow: these
+   frames are `overflow-hidden`, so it would be clipped away, and it would
+   double with project-card's own hover shadow.
+
+   THEME-INVARIANT ON PURPOSE, and this is the one acknowledged exception to
+   "never hardcode theme-dependent colour". It is a photographic filter, not
+   interface chrome, and the labels that sit on top of it (`--gronn-light` on
+   `--gronn-black` scrims) are themselves theme-invariant brand constants. A
+   `--background`-derived tint would lighten photos toward white on the five
+   light palettes and destroy those labels. */
+@utility photo-glass {
+  pointer-events: none;
+  border-radius: inherit;
+  /* A whisper of cool light, so the pane reads as present rather than as
+     nothing at all. Far below the old film's darkening. */
+  background-color: rgb(226 236 232 / 0.05);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.11) 0%,
+    rgb(255 255 255 / 0.03) 18%,
+    rgb(255 255 255 / 0) 42%,
+    rgb(9 20 15 / 0.06) 72%,
+    rgb(9 20 15 / 0.16) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 0 rgb(255 255 255 / 0.16),
+    inset 0 0 0 1px rgb(255 255 255 / 0.07);
+}
+
+/* Touch-target expander (WCAG 2.5.5 / Apple HIG 44 px). The control keeps
+   the size it is *drawn* at — fine line-work is the brand's language and
+   scaling icons or type up would coarsen it — while an invisible, centred
+   pseudo-element carries the press. It is out of flow, so layout, rhythm
+   and the visible box are untouched. Where a control is narrower than
+   44 px *and* has an immediate neighbour (segmented pills), pair this with
+   `min-w-11` so the two hit areas abut instead of overlapping; where it
+   grows vertically, give the row at least `gap-y-4` for the same reason
+   (`gap-y-6` for ~20 px text links, which overhang further).
+
+   ::before, deliberately — `.underline-draw` owns ::after for its hover
+   rule, and the two classes sit on the same element all over the footer
+   and the header menu. Sharing a pseudo-element merges the declarations:
+   min-height would win over the underline's height and inflate that 1 px
+   hairline into a 44 px block on hover. Nothing else on the site uses
+   ::before, so this side is free. */
+/* The three sliders on the design intake, given a real height.
+
+   A bare `input[type=range]` inherits whatever the browser feels like —
+   in Blink somewhere around 17px tall — and that is the drag surface,
+   not just the picture of it. `tap-target` cannot help: its ::before is
+   out of flow and a range input only responds to pointer events on
+   itself, so the box would say 44px and the control would still be 17.
+
+   So the height is real, the track is drawn inside it, and the thumb is
+   sized to a fingertip. `appearance: none` is required before any of the
+   pseudo-elements below have an effect, and the thumb must be styled per
+   engine — there is no shared selector, and a selector list containing
+   one unknown pseudo-element is dropped whole by every browser, which is
+   why these are written out separately rather than grouped. */
+@utility intake-range {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 44px;
+  background: transparent;
+  cursor: pointer;
+
+  &::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: color-mix(in oklab, var(--line) 55%, transparent);
+  }
+  &::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: color-mix(in oklab, var(--line) 55%, transparent);
+  }
+
+  /* -20px lifts a 44px thumb back over a 4px track: (4 - 44) / 2. */
+  &::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 44px;
+    width: 44px;
+    margin-top: -20px;
+    border-radius: 9999px;
+    /* The visible dot is drawn by the border; the rest of the 44px is
+       transparent and exists only to be pressed. */
+    border: 17px solid transparent;
+    background: var(--gronn-ember) content-box;
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--gronn-ember) 40%, transparent);
+  }
+  &::-moz-range-thumb {
+    height: 10px;
+    width: 10px;
+    border: 17px solid transparent;
+    border-radius: 9999px;
+    background: var(--gronn-ember) content-box;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@utility tap-target {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    min-height: 44px;
+    min-width: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Horizontal padding for fixed chrome that must clear the notch in
+   landscape. Floors at the 1.5rem the dock and sheet already use, so
+   nothing moves on devices that report zero insets. */
+@utility safe-x {
+  padding-left: max(1.5rem, env(safe-area-inset-left));
+  padding-right: max(1.5rem, env(safe-area-inset-right));
+}
+
+/* A bar or an arc with no value behind it.
+   The dashboard needs a way to draw "there is nothing here yet" that is
+   not a zero-height bar (invisible, and indistinguishable from a missing
+   one) and not a grey fill (reads as a real, small value). Diagonal
+   hatching is the convention, and it rides `--line` so it is correct on
+   all ten palettes without adding a token — which matters, because
+   `check-contrast.mjs` only audits tokens it is told about, and the
+   cheapest correct answer for a new surface is to add none.
+   Never the only carrier of meaning: pair it with the legend, the way
+   `season-year.tsx` pairs its colours with one. */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--line) 26%, transparent) 0 1.5px,
+    transparent 1.5px 6px
+  );
+}
+
+/* Hide the scrollbar on touch carousels (the swipe affordance is the
+   snap itself plus the progress underline). */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Recording mode (see privacy-toggle.tsx): with .privacy-blur on the
+   root, everything marked data-sensitive — street address, phone,
+   email, registration numbers — blurs beyond legibility for screen
+   recordings. Selection is disabled so a stray triple-click can't
+   reveal the text in the capture. */
+.privacy-blur [data-sensitive] {
+  filter: blur(7px);
+  user-select: none;
+}
+
+/* Directional underline-draw for textual links: sweeps in from the left on
+   hover, retracts to the right on leave. */
+.underline-draw {
+  position: relative;
+}
+.underline-draw::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.underline-draw:hover::after,
+.group:hover .underline-draw::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Water flow along diagram paths (system diagram dashes) */
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+/* Rotating brand stamp */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ambient marquee track: duplicate the content once and translate -50%
+   so the loop is seamless. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Film-grain jitter (see GrainOverlay) */
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 2%);
+  }
+  50% {
+    transform: translate(2%, -1%);
+  }
+  75% {
+    transform: translate(-1%, -2%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Pulsating ember ring on the mobile dock's back-to-top slot */
+@keyframes ring-pulse {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+.ring-pulse {
+  animation: ring-pulse 2.2s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-pulse {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* Ember comet orbiting the mobile dock's glass pill — a thin arc that
+   travels the border as a quiet attention cue. The pill itself is only
+   the 1.5px edge (padding + mask-composite, clipped round by overflow),
+   so it follows the pill whatever width the fold animation gives it.
+   The arc is a STATIC conic gradient on an oversized square behind that
+   edge, and the square turns with `transform`.
+
+   Why not animate the gradient's angle, as it did until 30 Sep 2026: an
+   animated custom property is main-thread work every frame — style,
+   then a repaint of the ring over the glass. Measured on a 4× slowed
+   phone, the comets alone kept the main thread ~70 % busy while the page
+   sat still (3.5 s of work per 5 s). A transform runs on the compositor
+   and costs the main thread nothing; the arc looks the same, because
+   turning a centred conic gradient IS turning its start angle. */
+@keyframes orbit-ring {
+  from {
+    transform: translate(-50%, -50%) rotate(0turn);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
+}
+.orbit-ring {
+  padding: 1.5px;
+  overflow: hidden;
+  /* Paints nothing, and stays: the labels under the comet sit on
+     measured glass, and axe cannot see a backdrop-filter. While the arc
+     was this element's own gradient, axe met an image here and left the
+     contrast to `dock-contrast.spec.ts`, which measures the real pixels.
+     Without an image it looks straight through the glass to the page
+     and reports a contrast nobody sees. */
+  background-image: linear-gradient(transparent, transparent);
+  /* Unprefixed only: -webkit-mask aliases mask in today's engines, so
+     re-declaring it would silently reset mask-composite back to add. */
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.orbit-ring::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Covers the pill at every angle: the diagonal of any pill is at most
+     √2 × its width, and 150 % is more than that. */
+  width: 150%;
+  aspect-ratio: 1;
+  background: conic-gradient(
+    transparent 0turn 0.78turn,
+    var(--color-gronn-ember) 0.92turn,
+    transparent 0.98turn 1turn
+  );
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  animation: orbit-ring 6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* `:root:not([data-motion="full"])` en niet de kale media query: deze
+     site laat de bezoeker het besturingssysteem in BEIDE richtingen
+     overrulen (zie use-a11y-prefs.ts). Zonder deze gate bleef de boog
+     bevroren voor iemand die op een rustig ingesteld toestel
+     uitdrukkelijk "beweging: volledig" had gekozen. */
+  :root:not([data-motion="full"]) .orbit-ring {
+    /* Frozen: a static ember arc resting on the rim, no motion. */
+    opacity: 0.6;
+  }
+  :root:not([data-motion="full"]) .orbit-ring::before {
+    animation: none;
+  }
+}
+
+/* ── De emberhalo achter de pijl in de telefoondock ───────────────────
+   
+   Eén knippering per ronde van de komeet, en het moment is uitgerekend
+   in plaats van geprobeerd: de heldere punt van `orbit-ring` zit op
+   0.92turn, de pijl staat op 90°, dus 90 − 331 ≡ 119° ≈ 33% van de
+   ronde. Dezelfde 6s-periode, anders lopen de twee uit de maat en
+   knippert er iets op een willekeurig moment.
+   
+   WAAROM EEN RING EN GEEN GLOED. De eerste versie was een vervaagde
+   oranje vlek. Boven een foto is dat precies het soort grote decoratie
+   dat deze site niet is — de beeldtaal is fijne lijnen, maatstreepjes
+   en landmeterstekens, en een glow leest als goedkoop (ontwerpregel 2).
+   
+   Puur decoratief, dus pure `--gronn-ember` mag: hij draagt geen
+   informatie en zijn contrast is nergens dragend (ontwerpregel 3). De
+   pijl zelf staat stil op ember-strong en blijft dus altijd even
+   leesbaar — ook halverwege een knippering, wat de eis is voor een
+   grafisch element dat wél iets betekent. */
+@keyframes ember-halo {
+  0%,
+  24%,
+  46%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  33%,
+  37% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+}
+.ember-halo {
+  animation: ember-halo 6s linear infinite;
+}
+/* Ook bij de eigen voorkeur. De globale klem hieronder zet de animatie
+   op 0,01ms en één ronde, en daarna valt de halo terug op zijn
+   basisstijl: opacity 1, een vaste oranje ring over het label. */
+:root[data-motion="reduced"] .ember-halo {
+  animation: none;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .ember-halo {
+    /* Helemaal weg, niet bevroren: een stilstaande ring om de pijl is
+       een tweede vorm die niets betekent. */
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Shared-element navigation: project card → case study
+   (src/lib/view-transition.ts names the pair `project-hero`). The card
+   frame is 4:3 and the case-study hero 21:9 — with the default UA
+   styles the snapshots would stretch between those ratios mid-morph, so
+   both snapshots fill their group box and crop like the live photos do
+   (object-fit: cover). The group rides the house reveal ease. */
+::view-transition-group(project-hero) {
+  animation-duration: 0.45s;
+  animation-timing-function: var(--ease-out-expo);
+}
+::view-transition-old(project-hero),
+::view-transition-new(project-hero) {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+/* Reduced motion: the JS path already declines to start a view
+   transition (startProjectTransition bails), but the API itself is not
+   covered by the UA's reduced-motion handling — belt and braces: any
+   transition that does start swaps instantly. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   STUDIO DOCUMENTS — the quote/invoice sheet in the admin dashboard.
+
+   The sheet is a real A4 page: fixed millimetre geometry on screen so
+   what the owner sees is what the PDF becomes, and in print the whole
+   dashboard chrome steps aside so only the paper remains. Ink and paper
+   colours live in the component (see document-sheet.tsx) because a
+   printed business document must not follow the visitor's theme.
+   --------------------------------------------------------------------- */
+.doc-sheet {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 18mm;
+  box-shadow: 0 2px 22px rgb(10 21 16 / 0.13);
+  /* The page keeps its true A4 geometry at every screen size and is
+     scaled to fit instead of reflowed. Reflowing changed the line
+     breaks, so the phone preview stopped predicting the PDF — which is
+     the one thing a document preview has to do. `--doc-scale` is
+     measured by the builder; transform-origin keeps the top-left corner
+     pinned so the wrapper can reserve exactly the scaled box. */
+  transform: scale(var(--doc-scale, 1));
+  transform-origin: top left;
+}
+/* Reserves the scaled footprint, since a transform does not affect
+   layout. The builder sets its width and height from the measurement. */
+.doc-scaler {
+  flex: none;
+}
+@media print {
+  /* The ground the page sits on.
+     `.doc-stage` was already forced white, but the page it floats in was
+     not — so with "background graphics" switched on in the print dialog,
+     the theme's ground printed into every gap the sheet did not fill.
+     On a night palette that is a slab of near-black under the last page
+     of a quote. A printed document is ink on paper in every theme; the
+     sheet itself has said so since it was written (see
+     document-sheet.tsx), and this is the same rule one level up. */
+  html,
+  body {
+    background: #fff !important;
+  }
+  /* Everything that is not the page itself. */
+  .doc-chrome {
+    display: none !important;
+  }
+  .doc-stage {
+    display: block !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+  .doc-sheet {
+    width: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    /* Print is the real page — never the screen's fitting scale. */
+    transform: none !important;
+  }
+  .doc-scaler {
+    width: auto !important;
+    height: auto !important;
+  }
+  @page {
+    size: A4;
+    margin: 18mm;
+  }
+
+  /* ── The intake sheet ─────────────────────────────────────────────
+     This page has a second life on paper: it is carried to the site and
+     the survey in section 08 is filled in there, beside the client's own
+     answers. So printing is a real output, not a courtesy.
+
+     Controls disappear, unchosen material samples disappear (sixty
+     swatches over four pages is not a document), and the two dark
+     panels invert — the site's ground is a colour, and a colour is a
+     page of toner nobody asked for. */
+  [data-print="hide"] {
+    display: none !important;
+  }
+  [data-chip="off"] {
+    display: none !important;
+  }
+  [data-intake-section] {
+    break-inside: avoid;
+    padding-top: 0.6rem !important;
+  }
+  [data-intake-section] textarea,
+  [data-intake-print="head"] input {
+    min-height: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+    border-color: #999 !important;
+  }
+  [data-intake-print="hero"] {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  [data-intake-print="hero"] h2,
+  [data-intake-print="hero"] p {
+    color: #000 !important;
+  }
+
+  /* ── De checklist op papier ────────────────────────────────────────
+     "Download als PDF" op /checklist is het printvenster van de browser
+     (geen PDF-bibliotheek). Alles rond <main> valt weg — kop, spacer,
+     voet, dock, hoekknoppen — en de pagina wordt zwart op wit in elk
+     thema. Het woordmerk en de afzenderregel staan in de pagina zelf
+     (`print:block`). Binnenkomst-animaties staan stil: een kop die nog
+     "onderweg" is, hoort niet op papier. */
+  body:has([data-checklist]) div:has(> main#main) > :not(main) {
+    display: none !important;
+  }
+  body:has([data-checklist]) main#main,
+  body:has([data-checklist]) main#main * {
+    color: #000 !important;
+    border-color: #999 !important;
+    background: transparent !important;
+    animation: none !important;
+  }
+  body:has([data-checklist]) [data-regels] .g-regel {
+    translate: none !important;
+  }
+  /* Het conceptlabel is wit op een halfdonker vlak; zonder
+     achtergrondkleuren zou het op papier verdwijnen. */
+  body:has([data-checklist]) [data-concept-label] {
+    border: 1px solid #000 !important;
+  }
+  /* Papier is wit in elk thema: altijd het antraciet woordmerk. */
+  body:has([data-checklist]) [data-checklist] img[src*="woordmerk-wit"] {
+    display: none !important;
+  }
+  body:has([data-checklist]) [data-checklist] img[src*="woordmerk-antraciet"] {
+    display: block !important;
+  }
+  body:has([data-checklist]) [data-checklist] header {
+    padding-top: 12px !important;
+    padding-bottom: 20px !important;
+  }
+
+  /* ── Juridische documenten op papier (en als PDF) ──────────────────
+     Zelfde regel als de checklist: alleen de tekst, zwart op wit, in
+     elk thema. Bron voor `npm run juridisch:pdf`. */
+  body:has([data-juridisch]) div:has(> main#main) > :not(main) {
+    display: none !important;
+  }
+  body:has([data-juridisch]) main#main,
+  body:has([data-juridisch]) main#main * {
+    color: #000 !important;
+    border-color: #999 !important;
+    background: transparent !important;
+    animation: none !important;
+  }
+}
+
+/* ── Visitor accessibility preferences ──────────────────────────────
+   Written onto <html> by src/lib/use-a11y-prefs.ts. These override the
+   operating system in both directions: someone can calm this one site
+   without changing a system setting, and someone whose system says
+   "reduce" can still choose to see the terrain move here. */
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Grotere tekst, als wortelmaat.
+   
+   De hele site is in `rem` gezet, dus één percentage op <html> verzet
+   alle tekst tegelijk — er is geen tweede schaal die kan afwijken.
+   
+   DE VASTE PX-MATEN GROEIEN BEWUST NIET MEE. De telefoonbalk is
+   uitgerekend op 360px breed (zeven slots, de capsule die het huis niet
+   mag raken); op 125% zou hij uit beeld lopen. Tekst groeit, chroom
+   niet — en dat is precies wat "tekstvergroting veroorzaakt geen
+   overlap" mogelijk maakt. */
+:root[data-text="large"] {
+  font-size: 112.5%;
+}
+:root[data-text="larger"] {
+  font-size: 125%;
+}
+
+/* Extra contrast, in alle tien de paletten tegelijk.
+   
+   `color-mix` trekt de gedempte kleur en de lijnkleur naar de voorgrond
+   toe in plaats van ze te vervangen. Dus: geen elfde palet dat kan
+   afwijken van de tien die `check-contrast.mjs` bewaakt, en het kan per
+   definitie alleen omhoog — een mengsel dat dichter bij de voorgrond
+   ligt heeft altijd méér contrast met de achtergrond.
+   
+   Ember blijft ember. Dat is een merkconstante die overal dezelfde
+   betekenis draagt (CLAUDE.md regel 3), en op een gevuld vlak onder
+   witte tekst is `--gronn-ember-strong` al de AA-veilige variant. */
+:root[data-contrast="more"] {
+  --muted: color-mix(in oklab, var(--foreground) 82%, var(--background));
+  --line: var(--foreground);
+}
+
+/* Underline every link, permanently. The site distinguishes links by
+   colour and weight, which is exactly what fails for a reader who cannot
+   rely on either — and it failed once for the owner too, on a menu where
+   headings and links shared a face and a size. */
+:root[data-underline="on"] a:not([class*="tap-target"]):not([aria-label]),
+:root[data-underline="on"] main a,
+:root[data-underline="on"] footer a,
+:root[data-underline="on"] nav a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: from-font;
+}
+
+/* ── V5 · GRØNN, van scratch (sep 2026) ─────────────────────────────
+   Sinds 23 sep 2026 op de Brand Guide 2026 (Editie 01): kleuren,
+   typografische schaal, 8/16px-radius, raster 1280 / 24–64px marge.
+   Alles hieronder hoort bij de nieuwe publieke site (src/components/gronn).
+   Rustige regel: de rustende stand is de eindstand. Beweging gebruikt
+   alleen `from`, zit achter @supports en staat uit onder reduced motion
+   (de media query én de eigen keuze van de bezoeker). */
+
+/* Groen als TEKST, lijn of vulling wordt in Blauwe Uur salie. Bosgroen
+   #23483A op antraciet haalt maar 1,6:1: het actieve menu-item en de
+   pijltjes in de balk waren 's avonds nauwelijks te lezen (eigenaar,
+   23 sep 2026). Bosgroen als VLAK onder witte tekst blijft (8,6:1) —
+   daarom per utility en niet door --gronn-green zelf te veranderen.
+   Salie op antraciet: 9,2:1. */
+.bluehour .text-gronn-green,
+.bluehour .hover\:text-gronn-green:hover,
+.bluehour .group:hover .group-hover\:text-gronn-green {
+  color: var(--gronn-light);
+}
+.bluehour .stroke-gronn-green {
+  stroke: var(--gronn-light);
+}
+.bluehour .fill-gronn-green {
+  fill: var(--gronn-light);
+}
+
+/* Het diepe merkvlak: bosgroen met gebroken wit (8,6:1). */
+@utility vlak-bos {
+  background-color: var(--gronn-forest);
+  color: var(--gronn-white);
+}
+/* Het donkere merkvlak: antraciet met gebroken wit — de voet, de
+   merkbelofte. Op Blauwe Uur valt het samen met de grond, dus het krijgt
+   daar een lijn om zich af te tekenen. */
+@utility vlak-antraciet {
+  background-color: var(--gronn-black);
+  color: var(--gronn-white);
+}
+
+/* ── Typografische schaal (brand guide, p. 7) ────────────────────────
+   Eerst de variabelen, dan de stijlen die ze lezen (eigenaar, 28 sep
+   2026: "kun je voor tekst niet over het hele project fluid font (clamp)
+   gebruiken?" … "eerst een aantal variabelen die je vervolgens clamp
+   geeft"). Elke maat loopt vloeiend van de telefoonmaat bij 390px naar
+   de desktopmaat bij 1280px schermbreedte; daarbuiten staat hij stil op
+   die twee maten uit de gids. Min en max in px, zodat zoomen tot 200 %
+   blijft werken (een clamp met alleen vw zou dat breken).
+   `tegel-*` is de één stap kleinere schaal van de linkpagina.
+   Chroom (menu, dock, knoppen) houdt vaste px-maten: zie CLAUDE.md,
+   de telefoonnavigatie, punt 1. */
+:root {
+  --tekst-display: clamp(44px, 24.72px + 4.944vw, 88px);
+  --tekst-display-regel: clamp(46px, 25.84px + 5.169vw, 92px);
+  --tekst-h1: clamp(40px, 29.48px + 2.697vw, 64px);
+  --tekst-h1-regel: clamp(44px, 33.48px + 2.697vw, 68px);
+  --tekst-h2: clamp(30px, 23.87px + 1.573vw, 44px);
+  --tekst-h2-regel: clamp(34px, 27.87px + 1.573vw, 48px);
+  --tekst-h3: clamp(24px, 22.25px + 0.449vw, 28px);
+  --tekst-h3-regel: clamp(30px, 28.25px + 0.449vw, 34px);
+  --tekst-body: clamp(16px, 15.12px + 0.225vw, 18px);
+  --tekst-body-regel: clamp(26px, 24.69px + 0.337vw, 29px);
+  --tekst-knop: 15px;
+  --tekst-knop-regel: 20px;
+  --tekst-annotatie: 12px;
+  --tekst-annotatie-regel: 18px;
+  --tekst-tegel-kop: clamp(22px, 19.37px + 0.674vw, 28px);
+  --tekst-tegel-kop-regel: clamp(26px, 23.37px + 0.674vw, 32px);
+  --tekst-tegel-titel: clamp(17px, 15.69px + 0.337vw, 20px);
+  --tekst-tegel-titel-regel: clamp(21px, 19.69px + 0.337vw, 24px);
+  --tekst-tegel-tekst: clamp(14px, 13.12px + 0.225vw, 16px);
+  --tekst-tegel-tekst-regel: clamp(21px, 19.25px + 0.449vw, 25px);
+}
+/* Onder 360px past een lang Nederlands woord op 40px niet in 272px
+   (320 − 2 × 24): "samenhangend" in de kop van het vijverproject liep
+   17px buiten het scherm. */
+@media (width < 360px) {
+  :root {
+    --tekst-h1: 34px;
+    --tekst-h1-regel: 38px;
+  }
+}
+@utility tekst-display {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--tekst-display);
+  line-height: var(--tekst-display-regel);
+  letter-spacing: -0.03em;
+}
+@utility tekst-h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--tekst-h1);
+  line-height: var(--tekst-h1-regel);
+  letter-spacing: -0.025em;
+}
+@utility tekst-h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--tekst-h2);
+  line-height: var(--tekst-h2-regel);
+  letter-spacing: -0.02em;
+}
+@utility tekst-h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--tekst-h3);
+  line-height: var(--tekst-h3-regel);
+  letter-spacing: -0.01em;
+}
+@utility tekst-body {
+  font-size: var(--tekst-body);
+  line-height: var(--tekst-body-regel);
+}
+@utility tekst-knop {
+  font-weight: 600;
+  font-size: var(--tekst-knop);
+  line-height: var(--tekst-knop-regel);
+}
+@utility tekst-annotatie {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--tekst-annotatie);
+  line-height: var(--tekst-annotatie-regel);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@keyframes g-in {
+  from { opacity: 0; translate: 0 1.5rem; }
+}
+@keyframes g-parallax {
+  from { translate: 0 -6%; }
+  to { translate: 0 6%; }
+}
+@keyframes g-stroom {
+  to { stroke-dashoffset: -64; }
+}
+.g-stroom {
+  stroke-dasharray: 6 10;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) .g-stroom {
+    animation: g-stroom 1.6s linear infinite;
+  }
+  @supports (animation-timeline: view()) {
+    :root:not([data-motion="reduced"]) .g-in {
+      animation: g-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+    :root:not([data-motion="reduced"]) .g-parallax {
+      animation: g-parallax linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+/* ── Markee (V5, elementen/foto-markee.tsx) ──────────────────────────
+   Twee rijen foto's die in tegengestelde richting doorlopen (eigenaar,
+   24 sep 2026). Elke rij is twee keer hetzelfde spoor; −50 % is precies
+   één kopie, dus de lus naadloos. Sinds de kleinere tegels draagt elke
+   kopie de rij twee keer (.g-markee-herhaal), zodat één kopie breder is
+   dan het scherm — anders viel er rechts een gat. Elke kopie draagt zijn eigen staart-
+   gap (pr in de tsx), anders verspringt de naad.
+
+   De RUST is de basis: zonder de poort (minder beweging, systeem of
+   `data-motion="reduced"`) staat er geen kopie, en is elke rij een
+   strook die opzij scrollt — elke foto bereikbaar. De beweging komt er
+   alleen bij onder dezelfde poort als g-in, plus `data-motion="full"`
+   zoals de stempel: de bezoeker die zelf "volledig" koos. */
+@keyframes g-markee {
+  to { translate: -50% 0; }
+}
+.g-markee-rij {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.g-markee-spoor {
+  display: flex;
+  width: max-content;
+  padding-inline: 24px 12px;
+}
+@media (width >= 64rem) {
+  .g-markee-spoor { padding-inline: 64px 48px; }
+}
+.g-markee-kopie[aria-hidden="true"],
+.g-markee-herhaal {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) .g-markee-rij {
+    overflow-x: hidden;
+  }
+  :root:not([data-motion="reduced"]) .g-markee-spoor {
+    padding-inline: 0;
+    animation: g-markee 90s linear infinite;
+  }
+  :root:not([data-motion="reduced"]) [data-markee-rij="rechts"] .g-markee-spoor {
+    animation-direction: reverse;
+  }
+  :root:not([data-motion="reduced"]) .g-markee-kopie[aria-hidden="true"] {
+    display: flex;
+  }
+  :root:not([data-motion="reduced"]) .g-markee-herhaal {
+    display: block;
+  }
+}
+:root[data-motion="full"] .g-markee-rij {
+  overflow-x: hidden;
+}
+:root[data-motion="full"] .g-markee-spoor {
+  padding-inline: 0;
+  animation: g-markee 90s linear infinite;
+}
+:root[data-motion="full"] [data-markee-rij="rechts"] .g-markee-spoor {
+  animation-direction: reverse;
+}
+:root[data-motion="full"] .g-markee-kopie[aria-hidden="true"] {
+  display: flex;
+}
+:root[data-motion="full"] .g-markee-herhaal {
+  display: block;
+}
+/* Stil onder de muis en bij toetsenbordfocus: wie kijkt, houdt hem vast.
+   Beide rijen tegelijk — een toetsenbordbezoeker op rij 1 wil ook rij 2
+   kunnen lezen (WCAG 2.2.2: Tab naar een rij zet alles stil).
+   Niet bij aanraken (eigenaar, 24 sep 2026: "the markee when touched on
+   mobile stops spinning, prevent that"): een tik op de telefoon laat een
+   plakkerige :hover achter én focust de rij (tabIndex=0), dus :hover
+   geldt alleen op een echte muis (hover + fijne aanwijzer) en focus
+   alleen als :focus-visible — die zet de browser bij toetsenbord, niet
+   bij een tik. moestuin-markee.spec.ts bewaakt beide kanten. */
+@media (hover: hover) and (pointer: fine) {
+  .g-markee:hover .g-markee-spoor {
+    animation-play-state: paused;
+  }
+}
+.g-markee:has(:focus-visible) .g-markee-spoor {
+  animation-play-state: paused;
+}
+
+/* ── Tekst en beeld (V5) ──────────────────────────────────────────────
+   De binnenkomst van de oude site (eigenaar, 23 sep 2026: "Kunnen we ook
+   de animaties van de oude site in de nieuwe verwerken?"), voor de
+   elementen Kop, BeeldOnthulling en TelOp. De maten komen uit
+   motion/reveal-text.tsx en motion/reveal-image.tsx; de beweging zelf is
+   CSS, zodat een kop boven de vouw niet op de hydratie wacht (zie de
+   hero-noot hierboven: framer-motion kostte daar seconden LCP).
+
+   Drie toestanden per element, als data-attribuut:
+   - `laden`: boven de vouw, speelt vanaf de eerste verf.
+   - `wacht`: verderop, nog niet in beeld. ALLEEN verborgen als er JS
+     draait (`scripting: enabled`) — zonder JS komt er geen trekker, en
+     dan hoort alles er gewoon te staan.
+   - `nu`: de trekker (in-beeld.ts) heeft hem gezien.
+   Minder beweging (systeem of `data-motion="reduced"`): geen van deze
+   regels geldt, alles staat meteen stil op zijn plek. Zelfde poort als
+   g-in hierboven.
+
+   Het masker: een kop staat op ~1,05 regelafstand, en Syne's stokken en
+   staarten (g, j, p, de ring van Å) steken buiten die regel. Padding met
+   een even grote negatieve marge rekt het venster op zonder de regel te
+   verzetten; met `vertical-align: top` blijft de lijnhoogte exact wat hij
+   was. De afstand onderweg (100 % + 0,5em) ligt voorbij die rek, dus een
+   woord in `wacht` is echt weg. */
+@keyframes g-regel-op {
+  from { translate: 0 calc(100% + 0.5em); }
+}
+@keyframes g-beeld-in {
+  from { scale: 1.12; filter: blur(10px); opacity: 0.6; }
+}
+.g-regel-masker {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  padding: 0.2em 0.1em 0.28em;
+  margin: -0.2em -0.1em -0.28em;
+}
+.g-regel {
+  display: inline-block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) [data-regels="laden"] .g-regel {
+    animation: g-regel-op 0.8s var(--ease-out-expo) backwards;
+    animation-delay: calc(var(--w, 0) * 45ms);
+  }
+  :root:not([data-motion="reduced"]) [data-regels="nu"] .g-regel {
+    animation: g-regel-op 0.8s var(--ease-out-expo) backwards;
+    animation-delay: calc(var(--r, 0) * 90ms);
+  }
+  :root:not([data-motion="reduced"]) [data-beeld="nu"] {
+    animation: g-beeld-in 1.1s var(--ease-out-expo) backwards;
+  }
+}
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  :root:not([data-motion="reduced"]) [data-regels="wacht"] .g-regel {
+    translate: 0 calc(100% + 0.5em);
+  }
+  :root:not([data-motion="reduced"]) [data-beeld="wacht"] {
+    scale: 1.12;
+    filter: blur(10px);
+    opacity: 0.6;
+  }
+}
+
+/* Diensten als "interactive link showcase": de zwevende kaart volgt
+   de muis (CSS-variabelen uit een klein eiland); op touch staat de
+   uitleg gewoon in de regel. */
+.g-zweef {
+  opacity: 0;
+  scale: 0.94;
+  translate: -50% -108%;
+  transition: opacity 180ms ease, scale 240ms ease;
+}
+.g-rij:is(:hover, :focus-visible) .g-zweef {
+  opacity: 1;
+  scale: 1;
+}
+.g-rij-kop {
+  transition: translate 320ms cubic-bezier(0.2, 0.7, 0.2, 1), color 200ms;
+}
+.g-rij:is(:hover, :focus-visible) .g-rij-kop {
+  translate: 0.35ch 0;
+  color: var(--ember-text);
+}
+@media (hover: none) {
+  .g-zweef { display: none; }
+}
+:root[data-motion="reduced"] :is(.g-zweef, .g-rij-kop) {
+  transition: none;
+}
+
+/* ── Stempel en © (V5) ───────────────────────────────────────────────
+   De draaiende stempel van de oude site (elementen/stempel.tsx) en de ©
+   in de voet die even het Ø van het woordmerk wordt (elementen/auteursrecht.tsx).
+   Beide bewegen alleen zonder minder beweging, in BEIDE richtingen zoals
+   `use-reduced-motion.ts`: het systeem beslist, tenzij de bezoeker zelf
+   "rustig" (`data-motion="reduced"`) of "volledig" (`"full"`) koos.
+
+   De © rolt zoals de letterrol in de menubalk: omhoog uit een masker van
+   één regel, het Ø (in `--ember-text`) rolt van onderen in, blijft
+   staan en rolt terug. Alleen verschuiving, nooit doorzichtigheid: de
+   tekens houden op elk moment hun volle contrast. 8 s per ronde, ruim
+   drie seconden stil op elk teken. Zonder beweging staat er gewoon ©. */
+.copy-wissel {
+  display: inline-block;
+  height: 1lh;
+  overflow: hidden;
+  vertical-align: top;
+}
+.copy-wissel-rol {
+  display: block;
+}
+.copy-wissel-rol > span {
+  display: block;
+  height: 1lh;
+}
+.copy-wissel-rol > span + span {
+  color: var(--ember-text);
+}
+@keyframes copy-wissel {
+  0%,
+  40% {
+    translate: 0 0;
+  }
+  50%,
+  90% {
+    translate: 0 -50%;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) .stempel-draai {
+    animation: spin-slow 28s linear infinite;
+  }
+  :root:not([data-motion="reduced"]) .copy-wissel-rol {
+    animation: copy-wissel 8s var(--ease-curtain) infinite;
+  }
+}
+:root[data-motion="full"] .stempel-draai {
+  animation: spin-slow 28s linear infinite;
+}
+:root[data-motion="full"] .copy-wissel-rol {
+  animation: copy-wissel 8s var(--ease-curtain) infinite;
+}
+
+/* ── BeeldWissel en FotoStapel (V5, Qi) ──────────────────────────────
+   Twee elementen naar Qi Addons (eigenaar, 24 sep 2026), rustig
+   uitgevoerd. Beide bewegen alleen met opacity en translate.
+
+   BeeldWissel (elementen/beeld-wissel.tsx): op een projectkaart vloeit
+   een tweede echte foto over de eerste. Wisselen doet hij alleen met een
+   echte muis (`hover: hover` én `pointer: fine`) — op touch blijft de
+   eerste foto staan, want een tik is daar de klik naar het project — en
+   bij toetsenbordfocus op de kaart of iets erin. De overvloeiing (400 ms)
+   staat onder dezelfde poort als g-in, plus `data-motion="full"`; zonder
+   die poort wisselt hij meteen, zonder vloeien.
+
+   FotoStapel (elementen/foto-stapel.tsx): een reeks van twee staande
+   foto's ligt op de telefoon (< md) als stapel, de achterste 12px
+   rechtsboven verschoven; "Volgende foto" legt de volgende voorop. Het
+   bijschrift van de achterste kaart is onzichtbaar (niet weg: het staat
+   in de DOM en wordt voorgelezen). Alleen met JS (`scripting: enabled`):
+   zonder JS is er geen knop en staan beide foto's onder elkaar, zoals
+   vroeger. Vanaf md is het gewoon het raster van FotoRij. */
+.g-wissel {
+  opacity: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .g-wissel-groep:hover .g-wissel {
+    opacity: 1;
+  }
+}
+.g-wissel-groep:is(:focus-visible, :has(:focus-visible)) .g-wissel {
+  opacity: 1;
+}
+
+.g-stapel-bediening {
+  display: none;
+}
+@media (width < 48rem) and (scripting: enabled) {
+  .g-stapel-vak {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "stapel";
+    gap: 0;
+    padding: 12px 12px 0 0;
+  }
+  .g-stapel-kaart {
+    grid-area: stapel;
+  }
+  .g-stapel-kaart[data-plek="voor"] {
+    z-index: 1;
+  }
+  .g-stapel-kaart[data-plek="achter"] {
+    translate: 12px -12px;
+  }
+  .g-stapel-kaart[data-plek="achter"] figcaption {
+    opacity: 0;
+  }
+  .g-stapel-bediening {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) .g-wissel {
+    transition: opacity 400ms ease;
+  }
+  :root:not([data-motion="reduced"]) .g-stapel-kaart {
+    transition: translate 400ms var(--ease-out-expo);
+  }
+  :root:not([data-motion="reduced"]) .g-stapel-kaart figcaption {
+    transition: opacity 400ms ease;
+  }
+}
+:root[data-motion="full"] .g-wissel {
+  transition: opacity 400ms ease;
+}
+:root[data-motion="full"] .g-stapel-kaart {
+  transition: translate 400ms var(--ease-out-expo);
+}
+:root[data-motion="full"] .g-stapel-kaart figcaption {
+  transition: opacity 400ms ease;
+}
+
+/* ── Stappenlijn en FaseBalk (V5, Qi tweede ronde, 24 sep 2026) ──────
+   Twee elementen naar Qi Addons (process/timeline en progress), in CSS
+   op `animation-timeline: view()`. Zelfde poort als g-in: alleen zonder
+   minder beweging (systeem of `data-motion="reduced"`) én met
+   ondersteuning. De rust is de eindstand: lijn helemaal getekend, elk
+   nummer oranje, elk fasevak gevuld tot waar het project staat.
+
+   Lijnkleur: bosgroen op licht, salie op Blauwe Uur (bosgroen haalt op
+   antraciet maar 1,6:1). De leeslijn ligt op 60 % van het scherm (40vh
+   boven de onderrand): de lijn vult tot waar je leest, en een nummer
+   wordt oranje op het moment dat de vulling het bereikt. */
+
+/* Stappenlijn (elementen/stappenlijn.tsx). Het midden van elk nummer
+   ligt 20 + 15px (md: 20 + 17px) onder de bovenkant van zijn stap; de
+   lijn staat 24px van de rand. */
+.g-stappenlijn {
+  --stap-lijn: var(--gronn-forest);
+  --stap-top: 35px;
+  view-timeline: --stappenlijn block;
+  /* De z-indexen hieronder blijven binnen de lijst. */
+  isolation: isolate;
+}
+@media (width >= 48rem) {
+  .g-stappenlijn { --stap-top: 37px; }
+}
+.bluehour .g-stappenlijn {
+  --stap-lijn: var(--gronn-light);
+}
+.g-stappenlijn::before,
+.g-stappenlijn::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: var(--stap-top);
+  bottom: 0;
+  left: 23px;
+  width: 2px;
+  pointer-events: none;
+}
+.g-stappenlijn::before {
+  background: color-mix(in oklab, var(--line) 15%, transparent);
+}
+.g-stappenlijn::after {
+  background: var(--stap-lijn);
+  transform-origin: top;
+}
+/* De lijn stopt bij het laatste nummer: daaronder dekt de laatste stap
+   hem af, binnen zijn eigen vak. */
+.g-stappenlijn > li:last-child {
+  position: relative;
+}
+.g-stappenlijn > li:last-child::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: var(--stap-top);
+  bottom: 0;
+  left: 20px;
+  width: 8px;
+  background: var(--background);
+}
+.g-stap-nummer {
+  position: relative;
+  z-index: 2;
+  color: var(--ember-text);
+}
+@keyframes g-stap-lijn {
+  from { scale: 1 0; }
+}
+@keyframes g-stap-nummer {
+  from { color: var(--muted); }
+}
+
+/* FaseBalk (elementen/fase-balk.tsx). */
+.g-fasebalk {
+  --fase-vul: var(--gronn-forest);
+  --fase-spoor: color-mix(in oklab, var(--line) 15%, transparent);
+}
+.bluehour .g-fasebalk,
+.g-fasebalk.g-fasebalk-bos {
+  --fase-vul: var(--gronn-light);
+}
+.g-fasebalk.g-fasebalk-bos {
+  --fase-spoor: color-mix(in oklab, var(--gronn-white) 22%, transparent);
+}
+.g-fase-spoor {
+  background: var(--fase-spoor);
+}
+.g-fase-vul {
+  background: var(--fase-vul);
+  transform-origin: left;
+}
+@keyframes g-fase-vul {
+  from { scale: 0 1; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    :root:not([data-motion="reduced"]) .g-stappenlijn::after {
+      animation: g-stap-lijn linear both;
+      animation-timeline: --stappenlijn;
+      animation-range: cover 40vh cover calc(100% - 60vh);
+    }
+    :root:not([data-motion="reduced"]) .g-stap-nummer {
+      animation: g-stap-nummer linear both;
+      animation-timeline: view();
+      animation-range: cover calc(40vh - 48px) cover 40vh;
+    }
+    :root:not([data-motion="reduced"]) .g-fasebalk-beweeg {
+      view-timeline: --fasebalk block;
+    }
+    /* Na elkaar: elk vak begint 6 % later (--i uit de tsx). */
+    :root:not([data-motion="reduced"]) .g-fasebalk-beweeg .g-fase-vul {
+      animation: g-fase-vul linear both;
+      animation-timeline: --fasebalk;
+      animation-range: cover calc(8% + var(--i) * 6%) cover calc(18% + var(--i) * 6%);
+    }
+  }
+}
+
+/* ── Begrip (V5, elementen/begrip.tsx) ───────────────────────────────
+   Een vakterm in lopende tekst: stippellijn eronder, een tik opent een
+   native `popover="auto"` met de uitleg. Alles in px (chrome groeit niet
+   mee met de tekst). Geen beweging: de kaart staat er meteen.
+
+   De knop verandert de regel niet: hij erft letter, maat en kleur, heeft
+   geen padding, en zijn raakvlak van 44px is een pseudo-element dat over
+   de regels erboven en eronder valt zonder ruimte te nemen. */
+.g-begrip-knop {
+  position: relative;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  anchor-name: var(--begrip-anker);
+}
+/* Als `@utility tap-target`: een ::before met min-width/min-height, zodat
+   mobile-reach.spec.ts het raakvlak meet en niet alleen het woord. */
+.g-begrip-knop::before,
+.g-begrip-sluit::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  translate: -50% -50%;
+}
+.g-begrip-knop:focus-visible,
+.g-begrip-sluit:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.g-begrip-sluit {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+}
+
+/* De kaart. Basis = de kaart onderin, boven de dock (58px hoog, 16px
+   van de onderrand, 12px lucht): zo op de telefoon, en overal waar de
+   browser geen anchor positioning kent. De popover staat in de top
+   layer, dus boven de dock zonder z-index. */
+.g-begrip-kaart {
+  position: fixed;
+  inset: auto 16px calc(58px + 16px + 12px + env(safe-area-inset-bottom)) 16px;
+  width: auto;
+  max-width: 480px;
+  max-height: calc(100dvh - 58px - 16px - 12px - 88px - env(safe-area-inset-bottom));
+  margin: 0 auto;
+  padding: 16px 20px 18px;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--line) 15%, transparent);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 15px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 22px;
+  letter-spacing: normal;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+}
+
+/* Vanaf md, met ondersteuning: onder het woord, en erboven als er onder
+   geen plek is. `span-inline-end` laat de kaart bij het woord beginnen
+   en naar rechts uitlopen; past dat niet, dan spiegelt hij. */
+@media (min-width: 768px) {
+  @supports (anchor-name: --a) {
+    .g-begrip-kaart {
+      position-anchor: var(--begrip-anker);
+      inset: auto;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+      width: max-content;
+      max-width: 320px;
+      max-height: none;
+      margin: 8px 0 0;
+    }
+  }
+}
+
+
+/* ── Leesdraad en VolgendProject (V5, eigenaar 25 sep 2026: "Bouw ze") ─
+   Leesdraad (elementen/leesdraad.tsx): leesvoortgang als lijn van 2px
+   bovenaan het scherm, sinds 28 sep 2026 op elke pagina (eigenaar, uit
+   zijn CodePen: "Voortgangsbalk bovenaan"). `scale` op de
+   scrollpositie van het document (scroll(root block)), van links.
+   Standaard is hij er NIET: alleen onder de poort van g-in en met
+   scroll()-ondersteuning komt hij tevoorschijn, want een stilstaande
+   lijn zegt niets. z-index 55: boven de desktopbalk (50 — onder zijn
+   glas zou hij vervagen), onder de app-melding (58), de dock (61), de
+   bovenbalk op de telefoon (62) en elke overlay (70+). Op de telefoon
+   ligt hij in de 12px boven de bovenbalk, dus nooit op een knop. Kleur
+   als Stappenlijn: bosgroen, salie op Blauwe Uur — geen oranje.
+
+   VolgendProject (elementen/volgend-project.tsx): de foto opent vanuit
+   een inzet (4 %, vanaf md 8 %) naar het volle vlak terwijl de kaart in
+   beeld schuift. Rust = de hele foto. */
+.g-leesdraad {
+  display: none;
+  position: fixed;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  z-index: 55;
+  height: 2px;
+  background: var(--gronn-forest);
+  transform-origin: left;
+  /* Leeg in rust: op een pagina die niet scrolt is de tijdlijn inactief
+     en valt de animatie weg — dan geen volle lijn. */
+  scale: 0 1;
+  pointer-events: none;
+}
+.bluehour .g-leesdraad {
+  background: var(--gronn-light);
+}
+@keyframes g-leesdraad {
+  from { scale: 0 1; }
+  to { scale: 1 1; }
+}
+
+/* De voortgangsring om NaarBovenKnop (elementen/naar-boven-knop.tsx):
+   dezelfde tijdlijn en dezelfde poort als de leesdraad. pathLength 100,
+   dus de streep loopt van 100 (leeg) naar 0 (rond). */
+.g-ring {
+  display: none;
+  stroke-dashoffset: 100;
+}
+@keyframes g-ring {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+.g-volgend-beeld {
+  --volgend-inzet: 4%;
+}
+@media (width >= 48rem) {
+  .g-volgend-beeld { --volgend-inzet: 8%; }
+}
+@keyframes g-volgend-beeld {
+  from { clip-path: inset(var(--volgend-inzet) round 16px); }
+  to { clip-path: inset(0 round 16px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    :root:not([data-motion="reduced"]) .g-leesdraad {
+      display: block;
+      animation: g-leesdraad linear both;
+      animation-timeline: scroll(root block);
+    }
+    :root:not([data-motion="reduced"]) .g-ring {
+      display: block;
+      animation: g-ring linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+  @supports (animation-timeline: view()) {
+    :root:not([data-motion="reduced"]) .g-volgend-beeld {
+      animation: g-volgend-beeld linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 45%;
+    }
+  }
+}
+
+/* ── LeesTekst (V5, elementen/lees-tekst.tsx; eigenaar, 28 sep 2026) ──
+   "Licht tekst op na scrollen zodat het lijkt alsof je leest." Een
+   alinea waarvan elk woord van gedimd naar vol gaat terwijl het de
+   leeslijn passeert. Pure CSS op één view()-tijdlijn per alinea.
+
+   Twee lagen: de bron (echte tekst: schermlezer, kopiëren, zoeken) en
+   een woordlaag die `aria-hidden` over de bron ligt, met de letters uit
+   `::before { content: attr(data-w) }`. Buiten de poort bestaat de
+   woordlaag niet (`display: none`) en is de bron een gewone alinea in
+   de volle kleur: minder beweging (systeem of `data-motion="reduced"`),
+   geen view() (Firefox zonder vlag), afdrukken (`screen`).
+
+   De tijd per woord: woord i staat ongeveer op i/n van de hoogte h van
+   de alinea, en in de cover-range is `100% - 100vh` precies die h. Het
+   eerste woord begint op te lichten als de alinea 84 % van het scherm
+   bereikt (16vh na binnenkomst, net boven de dock); de woorden volgen
+   over 1,5 × h scroll, elk in 8vh — ruim een regel tegelijk, dus het
+   leest woord voor woord en niet als een waas over de hele alinea. Het
+   laatste woord is vol als de onderkant van de alinea op 76vh − h/2
+   staat (een alinea van 130px op de telefoon: 68 %). Boven de vouw kan
+   een alinea dus al vol staan; aan het eind van de scroll is alles vol. Gedimd = de eigen tekstkleur op 24 %, met transparent
+   gemengd: werkt op de grond en op een donker merkvlak, in beide Uren. */
+.g-lees-woorden {
+  display: none;
+}
+@keyframes g-lees-w {
+  from { color: color-mix(in oklab, currentColor 24%, transparent); }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    :root:not([data-motion="reduced"]) .g-lees {
+      --lees-start: 16vh;
+      --lees-spreiding: 1.5;
+      --lees-duur: 8vh;
+      position: relative;
+      view-timeline: --lees block;
+    }
+    :root:not([data-motion="reduced"]) .g-lees-bron,
+    :root:not([data-motion="reduced"]) .g-lees-bron::selection {
+      color: transparent;
+    }
+    :root:not([data-motion="reduced"]) .g-lees-woorden {
+      display: block;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+    :root:not([data-motion="reduced"]) .g-lees-w::before {
+      content: attr(data-w);
+    }
+    :root:not([data-motion="reduced"]) .g-lees-w {
+      --lees-op: calc(var(--lees-start) + (100% - 100vh) * var(--lees-spreiding) * var(--i) / var(--n));
+      animation: g-lees-w linear both;
+      animation-timeline: --lees;
+      animation-range: cover var(--lees-op) cover calc(var(--lees-op) + var(--lees-duur));
+    }
+  }
+}
+
+/* ── DE VOLLE OPENING (VolleOpening, home; eigenaar 29 sep 2026) ────
+   
+   De scrim over de openingsfoto: antraciet met een groene zweem
+   (rgb 14 16 14), van onderen op de telefoon en tablet — daar loopt de
+   tekst over de volle breedte — en vanaf lg van links met een lichte
+   voet, zodat de rechterhelft van de foto open blijft. Een fotofilter,
+   dus themavast (zie photo-glass). De sterkte (0,8 in de zwaarste stop)
+   is gemeten in `opening-contrast.spec.ts`: 0,72 liet het label op de
+   telefoon op 1,5:1 staan, en met het portret van 72px schoof het label
+   hoger (4,4:1), dus loopt de donkere zone op de telefoon tot 62 %. Zakt er iets, dan gaat deze scrim omhoog,
+   nooit de drempel omlaag. */
+.opening-scrim {
+  background-image: linear-gradient(
+    to top,
+    rgb(14 16 14 / 0.8) 0%,
+    rgb(14 16 14 / 0.78) 62%,
+    rgb(14 16 14 / 0.62) 72%,
+    rgb(14 16 14 / 0.25) 86%,
+    rgb(14 16 14 / 0) 96%
+  );
+}
+@media (width >= 64rem) {
+  .opening-scrim {
+    background-image:
+      linear-gradient(
+        to right,
+        rgb(14 16 14 / 0.8) 0%,
+        rgb(14 16 14 / 0.72) 30%,
+        rgb(14 16 14 / 0.44) 48%,
+        rgb(14 16 14 / 0.12) 64%,
+        rgb(14 16 14 / 0) 76%
+      ),
+      linear-gradient(
+        to top,
+        rgb(14 16 14 / 0.44) 0%,
+        rgb(14 16 14 / 0.2) 35%,
+        rgb(14 16 14 / 0) 62%
+      );
+  }
+}
+/* Bij wegscrollen zoomt de foto rustig uit, van 1,08 naar 1, over de
+   eerste schermhoogte. Oorsprong linksboven, zodat het rood van de canna
+   in beeld blijft. Alleen met scroll-timeline en zonder minder beweging
+   (systeem of `data-motion="reduced"`); anders staat hij stil op 1. */
+@keyframes opening-uitzoom {
+  from { scale: 1.08; }
+  to { scale: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    :root:not([data-motion="reduced"]) .opening-uitzoom {
+      transform-origin: 20% 0%;
+      animation: opening-uitzoom linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------
+   GRØNN Command Center (/os). The token VALUES live in src/app/os/os.css,
+   scoped to `.os`; this block only exposes them as utilities
+   (bg-os-ground, text-os-green, …). Outside `.os` they resolve to
+   nothing, so they cannot leak onto the public site.
+   --------------------------------------------------------------------- */
+@theme inline {
+  --color-os-ground: var(--os-ground);
+  --color-os-surface: var(--os-surface);
+  --color-os-raised: var(--os-raised);
+  --color-os-text: var(--os-text);
+  --color-os-text-2: var(--os-text-2);
+  --color-os-text-3: var(--os-text-3);
+  --color-os-line: var(--os-line);
+  --color-os-green: var(--os-green);
+  --color-os-green-2: var(--os-green-2);
+  --color-os-forest: var(--os-forest);
+  --color-os-attention: var(--os-attention);
+}
+
+/* Voedselbos (de 404): een plantje tekent zichzelf in lijnwerk. Elk pad
+   heeft pathLength="1"; zonder beweging staat het er meteen. */
+@keyframes g-kiem {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) .g-kiem path[pathLength] {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: g-kiem 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+}
