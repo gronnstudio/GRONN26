@@ -18,7 +18,7 @@ import { Rekenhulp } from "./rekenhulp"
 type Schatting = { uren: number; posten: { wat: string; uren: number }[]; regels?: { wat: string; soort: string; inkoop: number }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
-type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
+type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
 
 // "Met btw" (eigenaar, 29 okt 2026: "ik wil met btw"): inkoop en verkoop
 // tonen en invoeren incl. btw. Opgeslagen en gerekend wordt altijd excl.
@@ -55,6 +55,7 @@ const naarInvul = (r: Regel): Invul => ({
   optioneel: !!r.optioneel,
   groep: r.groep ?? "",
   catalogusId: r.catalogusId,
+  meetstaat: r.meetstaat,
 })
 const naarRegel = (r: Invul): Regel => ({
   id: r.id,
@@ -69,6 +70,7 @@ const naarRegel = (r: Invul): Regel => ({
   groep: r.groep.trim() || undefined,
   optioneel: r.optioneel || undefined,
   catalogusId: r.catalogusId,
+  meetstaat: r.meetstaat,
 })
 const leeg = () => naarInvul(nieuweRegel("materiaal", { hoeveelheid: 1000 }))
 
@@ -148,7 +150,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   // Een omschrijving die precies een catalogusnaam is, neemt eenheid en prijs over.
   const zetOmschrijving = (i: number, tekst: string) => {
     const item = perNaam.get(tekst.toLowerCase())
-    if (item && item.id !== regels[i].catalogusId) zet(i, { ...naarInvul(alsRegel(item, leesMilli(regels[i].hoeveelheid) ?? 1000)), id: regels[i].id })
+    if (item && item.id !== regels[i].catalogusId) zet(i, { ...naarInvul(alsRegel(item, leesMilli(regels[i].hoeveelheid) ?? 1000)), id: regels[i].id, meetstaat: regels[i].meetstaat, ...(regels[i].meetstaat ? { afval: "0" } : {}) })
     else zet(i, { omschrijving: tekst })
   }
   const voegToe = (r: Regel) => setRegels((oud) => [...oud.filter((x) => x.omschrijving.trim() || x.inkoop.trim()), naarInvul(r)])
@@ -175,7 +177,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       setVersie(uit.nr)
       setMelding(`Versie ${uit.nr} bewaard.`)
       // Op de klantpagina: naar het vaste adres van deze calculatie.
-      if (begin && !calcId) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
+      // Ook na een meetstaat-import naar het vaste adres: verversen mag de import niet herhalen.
+      if (begin && (!calcId || window.location.search.includes("meetstaat="))) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
     })
 
   const onthoud = (i: number) =>

@@ -5,6 +5,7 @@ import { Kop } from "@/components/crm/kop"
 import { Intake } from "@/components/crm/intake"
 import { TuinFotos } from "@/components/beheer/tuin-fotos"
 import { Bevindingen } from "@/components/crm/bevindingen"
+import { Meetstaat } from "@/components/crm/meetstaat"
 import { zetBevinding } from "../../../intake-acties"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
@@ -69,6 +70,16 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
               Vragenlijst aanpassen
             </Link>
           </section>
+
+          <Meetstaat
+            tuin={t.id}
+            zones={t.zones}
+            naarCalculatie={(() => {
+              // De laatste calculatie van deze tuin krijgt een nieuwe versie; anders een nieuwe calculatie.
+              const c = k.calculaties.filter((x) => x.tuinId === t.id).at(-1)
+              return c ? `/dashboard/klanten/${k.id}/calculatie/${c.id}?meetstaat=1` : `/dashboard/klanten/${k.id}/calculatie/nieuw?tuin=${t.id}&meetstaat=1`
+            })()}
+          />
 
           {los.length > 0 && (
             <section className="crm-paneel p-5">

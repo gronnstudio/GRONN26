@@ -60,6 +60,8 @@ export type Regel = {
   optioneel?: boolean
   /** Uit de catalogus; de prijs is bij het invoegen gekopieerd, dus een oude calculatie verandert niet mee. */
   catalogusId?: string
+  /** Uit de meetstaat van deze zone (Zone.id): "Zet in calculatie" vervangt zulke regels. */
+  meetstaat?: string
 }
 
 export type Invoer = {
@@ -221,5 +223,6 @@ export function schoonRegel(r: Partial<Regel> & Record<string, unknown>): Regel 
     groep: r.groep ? String(r.groep).slice(0, 60) : undefined,
     optioneel: r.optioneel === true || undefined,
     catalogusId: typeof r.catalogusId === "string" ? r.catalogusId.slice(0, 64) : undefined,
+    meetstaat: typeof r.meetstaat === "string" && r.meetstaat ? r.meetstaat.slice(0, 64) : undefined,
   }
 }
