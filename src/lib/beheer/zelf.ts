@@ -9,11 +9,7 @@ const heeft = (v: string, ...woorden: string[]) => woorden.some((w) => v.include
 export function zelfAntwoord(vraag: string): string | null {
   const v = vraag.toLowerCase()
 
-  const project = PROJECTEN.find((p) => v.includes(p.naam.toLowerCase().split(" ")[0]))
-  if (project) {
-    const bedrag = project.bedrag ? `, ${euro(project.bedrag)}` : ""
-    return `${project.naam}: ${project.wat}, fase ${project.fase.toLowerCase()}${bedrag}. Volgende stap: ${project.volgende}`
-  }
+  // Vragen over een klant gaan naar Claude, die de klanten uit het CRM krijgt (src/lib/crm/context.ts).
 
   if (heeft(v, "factuur", "facturen", "betaald", "betalen", "geld")) {
     const open = TE_ONTVANGEN.filter((f) => !f.betaald)

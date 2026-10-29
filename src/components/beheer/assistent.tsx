@@ -21,11 +21,13 @@ type Herkenning = {
 const zetStand = (s: Stand) => document.documentElement.setAttribute("data-assistent", s);
 
 // Het gesprek blijft bewaard in deze browser, zodat herladen het niet wist.
-const KEY = "gronn-assistent";
 // Eén tik stelt een vraag die vaak terugkomt.
 const SNEL = ["Wat moet ik vandaag doen?", "Wat staat er open aan offertes?", "Wat is het dringendst?"];
 
-export function Assistent() {
+// Op een klantkaart krijgt Grønn die klant mee (alleen het id; de server zoekt
+// de gegevens zelf op en controleert de inlog), met eigen snelle vragen.
+export function Assistent({ klantId, snel = SNEL }: { klantId?: string; snel?: string[] } = {}) {
+  const KEY = klantId ? `gronn-assistent-${klantId}` : "gronn-assistent";
   const [beurten, setBeurten] = useState<Beurt[]>([]);
   const [tekst, setTekst] = useState("");
   const [stand, setStandState] = useState<Stand>("rust");
@@ -38,13 +40,13 @@ export function Assistent() {
       } catch {}
     }, 0);
     return () => clearTimeout(t);
-  }, []);
+  }, [KEY]);
   useEffect(() => {
     try {
       if (beurten.length) localStorage.setItem(KEY, JSON.stringify(beurten.slice(-20)));
       else localStorage.removeItem(KEY);
     } catch {}
-  }, [beurten]);
+  }, [beurten, KEY]);
 
   const stel = (s: Stand) => {
     setStandState(s);
@@ -73,7 +75,7 @@ export function Assistent() {
       const r = await fetch("/api/assistent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vraag: v, eerder }),
+        body: JSON.stringify({ vraag: v, eerder, klantId }),
       });
       const { antwoord } = (await r.json()) as { antwoord: string };
       setBeurten((b) => [...b, { rol: "grønn", tekst: antwoord }]);
@@ -144,7 +146,7 @@ export function Assistent() {
       )}
       {beurten.length === 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
-          {SNEL.map((v) => (
+          {snel.map((v) => (
             <button
               key={v}
               type="button"
