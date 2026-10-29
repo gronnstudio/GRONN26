@@ -9,6 +9,7 @@ import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { leesUren } from "@/lib/beheer/uren"
 import { euro } from "@/lib/format"
 import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukRond, stukWeg } from "../acties"
+import { BewaarKnop } from "@/components/crm/bewaar-knop"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
 // module 02: Overzicht | Tuinen | Calculaties | Stukken | Activiteit). Gewone
@@ -131,7 +132,7 @@ async function Overzicht({ k }: { k: Klant }) {
           <textarea name="notities" defaultValue={k.notities} rows={8} className={`${veld} resize-y leading-[1.5]`} placeholder="Afspraken, wensen, wat je zag…" />
         </label>
         <div className="flex items-center justify-between">
-          <button className="crm-knop">Bewaren</button>
+          <BewaarKnop>Bewaren</BewaarKnop>
           <button formAction={klantWeg.bind(null, k.id)} className="crm-knop-stil hover:!text-let">Klant verwijderen</button>
         </div>
       </form>
