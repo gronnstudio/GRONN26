@@ -1,0 +1,148 @@
+import { expect, test, type Page } from "./fixtures"
+import { KOEKJE, maakKoekje } from "../src/lib/eigenaar"
+
+// Het CRM van begin tot calculatie, tegen de echte build: een aanvraag komt
+// binnen, wordt een klant, krijgt een tuin met opname en foto, en een
+// calculatie met twee versies. Plus de deur: zonder inlog kom je nergens.
+// De server draait met CRM_LOKAAL=1 (playwright.config.ts), dus alles staat in
+// .crm-data/ en niet in Blob.
+
+process.env.AUTH_SECRET = "alleen-voor-tests"
+
+async function log(page: Page) {
+  await page.context().addCookies([{ name: KOEKJE, value: await maakKoekje("hello@gronn.studio"), url: "http://localhost:3210" }])
+}
+
+test("zonder inlog: dashboard dicht, API's weigeren", async ({ request }) => {
+  const r = await request.get("/dashboard/klanten", { maxRedirects: 0 })
+  expect(r.status()).toBe(307)
+  expect(r.headers().location).toContain("/api/inloggen")
+  expect((await request.post("/api/assistent", { data: { vraag: "Wie zijn mijn klanten?" } })).status()).toBe(401)
+  expect((await request.get("/api/crm/foto?id=00000000-0000-0000-0000-000000000000")).status()).toBe(401)
+  expect((await request.post("/api/crm/foto", { multipart: { klant: "a", tuin: "b" } })).status()).toBe(401)
+  expect((await request.get("/dashboard/catalogus/export", { maxRedirects: 0 })).status()).not.toBe(200)
+})
+
+test("van aanvraag tot calculatie", async ({ page, request }) => {
+  test.setTimeout(90_000)
+  const naam = `Test Klant ${Date.now()}`
+  const telefoon = `06 ${String(Date.now()).slice(-8)}`
+
+  // 1. Aanvraag via het formulier, twee keer verstuurd: telt één keer.
+  for (let i = 0; i < 2; i++) {
+    const r = await request.post("/api/aanvraag", { data: { naam, contact: telefoon, wat: "Nieuwe oprit in klinkers, 55 m²" } })
+    expect(r.ok()).toBeTruthy()
+  }
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/dashboard?tab=klanten")
+  const kaart = page.locator("li", { hasText: naam })
+  await expect(kaart).toHaveCount(1)
+
+  // 2. Aanvraag wordt klant.
+  await kaart.getByRole("button", { name: "Maak klant →" }).click()
+  await expect(page.locator("h1")).toHaveText(naam)
+  await expect(page.locator('input[name="telefoon"]')).toHaveValue(telefoon)
+  await expect(page.locator('input[name="opvolgen"]')).not.toHaveValue("")
+  const klantUrl = page.url()
+
+  // Nog een keer omzetten (dezelfde persoon belt opnieuw): geen tweede kaart.
+  const opnieuw = await request.post("/api/aanvraag", { data: { naam, contact: telefoon, wat: "Nog een vraag" } })
+  expect(opnieuw.ok()).toBeTruthy()
+  await page.goto("/dashboard?tab=klanten")
+  await page.locator("li", { hasText: "Nog een vraag" }).getByRole("button", { name: "Maak klant →" }).click()
+  await expect(page).toHaveURL(klantUrl.split("?")[0])
+
+  // 3. Fase en lead bewaren; de tijdlijn houdt het bij.
+  await page.locator('select[name="fase"]').selectOption("Opname")
+  await page.locator('input[name="kans"]').fill("60")
+  await page.getByRole("button", { name: "Bewaren", exact: true }).click()
+  await page.getByRole("link", { name: /Tijdlijn/ }).click()
+  await expect(page.getByText("Aanvraag → Opname")).toBeVisible()
+  await expect(page.getByText(/Nog een vraag/)).toBeVisible()
+
+  // 4. Tuin met opname en een foto.
+  await page.getByRole("link", { name: /^Tuinen/ }).click()
+  await page.locator('input[name="naam"]').fill("Oprit")
+  await page.getByRole("button", { name: "+ Tuin en opname" }).click()
+  await expect(page.locator('input[name="naam"]')).toHaveValue("Oprit")
+  await page.locator('input[name="i_oppervlak"]').fill("55")
+  await page.locator('select[name="i_toegang"]').selectOption("Minigraver past (≥ 1 m)")
+  await page.getByLabel("Bestrating", { exact: true }).check()
+  await page.getByRole("button", { name: "Opname bewaren" }).click()
+  await expect(page.getByText("55 m²")).toBeVisible()
+  // tweede versie: de eerste blijft in de geschiedenis
+  await page.locator('input[name="i_oppervlak"]').fill("56")
+  await page.getByRole("button", { name: "Opname bewaren" }).click()
+  await expect(page.getByText(/1 veld daarna veranderd/)).toBeVisible()
+
+  const jpg = await page.evaluate(async () => {
+    const c = document.createElement("canvas")
+    c.width = 40
+    c.height = 30
+    c.getContext("2d")!.fillRect(0, 0, 40, 30)
+    const b = await new Promise<Blob>((ok) => c.toBlob((x) => ok(x!), "image/jpeg"))
+    return Array.from(new Uint8Array(await b.arrayBuffer()))
+  })
+  await page.locator('input[type="file"]').setInputFiles({ name: "voor.jpg", mimeType: "image/jpeg", buffer: Buffer.from(jpg) })
+  const foto = page.locator('img[src^="/api/crm/foto?id="]')
+  await expect(foto).toHaveCount(1, { timeout: 15_000 })
+  const src = (await foto.getAttribute("src"))!
+  expect((await page.request.get(src)).status()).toBe(200)
+  // een ander (zonder inlog) krijgt de foto niet
+  expect((await request.get(src)).status()).toBe(401)
+
+  // 5. Calculatie met de maten uit de opname: rekenhulp 56 m² + 7 % = 59,92 m².
+  await page.getByRole("link", { name: "Calculatie met deze maten →" }).click()
+  await expect(page.getByRole("heading", { name: "Nieuwe calculatie" })).toBeVisible()
+  await page.getByLabel("Oppervlak m²").fill("56")
+  await expect(page.getByText("= 59,92 m²")).toBeVisible()
+  await page.getByRole("button", { name: "+ Als regel" }).click()
+  const regel = page.locator("tbody tr").last()
+  await expect(regel.getByLabel("Aantal")).toHaveValue("59,92")
+  await regel.getByLabel("Inkoop per eenheid").fill("25")
+  await page.getByPlaceholder("bijv. 24").fill("40")
+  // 59,92 × € 28,75 = € 1.722,70 verkoop; arbeid 40 × € 50 = € 2.000
+  await expect(regel.getByText("€ 1.722,70")).toBeVisible()
+  await expect(page.locator("aside").getByText("€ 3.722,70", { exact: true })).toBeVisible()
+  await page.getByRole("button", { name: "Bewaar bij klant" }).click()
+  await expect(page).toHaveURL(/\/calculatie\/[0-9a-f-]{36}$/)
+  await expect(page.getByRole("link", { name: "1", exact: true })).toBeVisible()
+  await page.getByPlaceholder("bijv. 24").fill("44")
+  await page.getByRole("button", { name: "Bewaar als versie 2" }).click()
+  await expect(page.getByRole("status")).toHaveText("Versie 2 bewaard.")
+
+  // 6. ★ zet de prijs in de catalogus.
+  await page.locator("tbody tr").last().getByRole("button", { name: "Prijs onthouden in de catalogus" }).click()
+  await expect(page.getByRole("status")).toContainText("staat in de catalogus")
+
+  // 7. De klant staat in de tabel met de calculatie als waarde.
+  await page.goto(`/dashboard/klanten?weergave=tabel&q=${encodeURIComponent(naam)}`)
+  const rij = page.locator("tbody tr", { hasText: naam })
+  await expect(rij).toHaveCount(1)
+  await expect(rij).toContainText("Opname")
+})
+
+test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill("Noah Goffin")
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await expect(page).toHaveURL(/\/dashboard\/klanten\/noah-goffin\?bestond=1/)
+  await expect(page.getByRole("status")).toContainText("bestond al")
+})
+
+test("CRM-pagina's: één h1, geen fouten, geen overloop", async ({ page }) => {
+  await log(page)
+  const fouten: string[] = []
+  page.on("pageerror", (e) => fouten.push(e.message))
+  await page.setViewportSize({ width: 1440, height: 900 })
+  for (const pad of ["/dashboard/klanten", "/dashboard/klanten?weergave=tabel", "/dashboard/klanten/clannad-stijn", "/dashboard/klanten/clannad-stijn?tab=tuinen", "/dashboard/klanten/clannad-stijn?tab=activiteit", "/dashboard/catalogus", "/dashboard/prijs"]) {
+    const r = await page.goto(pad)
+    expect(r?.status(), pad).toBe(200)
+    await expect(page.locator("h1:visible"), pad).toHaveCount(1)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), pad).toBe(0)
+  }
+  expect(fouten).toEqual([])
+})

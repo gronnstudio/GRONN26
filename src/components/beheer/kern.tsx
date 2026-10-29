@@ -1,4 +1,4 @@
-import { FASEN, PROJECTEN } from "@/lib/beheer/data"
+import { FASEN, type Project } from "@/lib/beheer/data"
 import { euro } from "@/lib/format"
 
 // De kern: alle projecten op één ring, per fase een sector, met de klok mee van
@@ -15,7 +15,7 @@ const boog = (r: number, van: number, tot: number) => {
   return `M${x1} ${y1} A${r} ${r} 0 ${tot - van > 180 ? 1 : 0} 1 ${x2} ${y2}`
 }
 
-export function Kern() {
+export function Kern({ projecten: PROJECTEN }: { projecten: Project[] }) {
   const sector = 360 / FASEN.length
   const open = PROJECTEN.filter((p) => p.fase === "Offerte")
   const waarde = open.reduce((s, p) => s + (p.bedrag ?? 0), 0)

@@ -9,9 +9,10 @@ import { Kopieer } from "@/components/beheer/kopieer"
 import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
-import { aanvraagKlaar, bestellingKlaar, bonIngewisseld, bonVerstuurd, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
+import { aanvraagKlaar, aanvraagNaarKlant, bestellingKlaar, bonIngewisseld, bonVerstuurd, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
 import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
-import { EIGEN_PAGINAS, KOPPELINGEN, OFFERTES, PROJECTEN, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
+import { EIGEN_PAGINAS, KOPPELINGEN, OFFERTES, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
+import { alsProjecten, leesKlanten } from "@/lib/beheer/klanten"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { euro } from "@/lib/format"
 
@@ -48,6 +49,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
   const actief = TABS.find((t) => t.id === tab)?.id ?? "vandaag"
   const stand = await leesStand()
   const urenTotaal = RECONSTRUCTIE.reduce((t, r) => t + weekTotaal(r), 0) + (await leesUren()).filter((r) => r.datum.startsWith("2026")).reduce((t, r) => t + r.uren, 0)
+  const PROJECTEN = alsProjecten(await leesKlanten())
   const aandacht = PROJECTEN.filter((p) => p.aandacht)
   const lopend = PROJECTEN.filter((p) => p.fase !== "Opgeleverd")
   // Social (eigenaar, 10 okt 2026: "maak in dashboard een special stuk voor social
@@ -105,7 +107,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
         {actief === "vandaag" && (<>
         {/* de kern */}
         <section className="flex items-center justify-center">
-          <Kern />
+          <Kern projecten={PROJECTEN} />
         </section>
 
         {/* vandaag */}
@@ -146,7 +148,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
               {lopend.map((p) => (
                 <li key={p.naam} className="border-l-2 pl-4" style={{ borderColor: p.aandacht ? "var(--oranje)" : "var(--lijn)" }}>
                   <div className="flex justify-between gap-3">
-                    <b className="font-semibold">{p.naam}</b>
+                    {p.href ? <Link href={p.href} className="font-semibold hover:text-oranje-tekst">{p.naam}</Link> : <b className="font-semibold">{p.naam}</b>}
                     <span className={`${lbl} shrink-0 opacity-60`}>{p.fase}</span>
                   </div>
                   <p className="m-0 mt-1 text-[13px] leading-[1.5] opacity-75">{p.volgende}</p>
@@ -354,9 +356,16 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                       {a.bron} · {dag(a.datum.slice(0, 10))}
                     </span>
                   </div>
-                  <form action={aanvraagKlaar.bind(null, a.id, !a.klaar)}>
-                    <button className="knop-klein shrink-0 border border-inkt/30">{a.klaar ? "Terugzetten" : "Gebeld ✓"}</button>
-                  </form>
+                  <div className="flex shrink-0 gap-1">
+                    {!a.klaar && (
+                      <form action={aanvraagNaarKlant.bind(null, a.id)}>
+                        <button className="knop-klein shrink-0 border border-inkt/30">Maak klant →</button>
+                      </form>
+                    )}
+                    <form action={aanvraagKlaar.bind(null, a.id, !a.klaar)}>
+                      <button className="knop-klein shrink-0 border border-inkt/30">{a.klaar ? "Terugzetten" : "Gebeld ✓"}</button>
+                    </form>
+                  </div>
                 </div>
                 {a.contact && (
                   <a href={/^[\d\s+()-]+$/.test(a.contact) ? `tel:${a.contact.replace(/\s/g, "")}` : `mailto:${a.contact}`} className="mt-2 block break-all text-[14px] font-semibold text-oranje-tekst">
@@ -457,7 +466,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           </ul>
         </section>
         <p className="m-0 text-[11px] opacity-40 lg:col-span-2">
-          Projecten en to-do&apos;s staan in src/lib/beheer/data.ts. Open offertes samen:{" "}
+          Projecten komen uit Klanten; to-do&apos;s staan in src/lib/beheer/data.ts. Open offertes samen:{" "}
           {euro(PROJECTEN.filter((p) => p.fase === "Offerte").reduce((s, p) => s + (p.bedrag ?? 0), 0))}.
         </p>
         </>)}
