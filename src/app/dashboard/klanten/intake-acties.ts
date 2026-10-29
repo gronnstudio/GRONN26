@@ -59,7 +59,8 @@ export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWij
           if (!vragen.has(id)) continue
           t.aandacht = aan ? [...new Set([...t.aandacht, id])] : t.aandacht.filter((x) => x !== id)
         }
-        if (Array.isArray(w.diensten)) t.diensten = w.diensten.map(String).filter((x) => lijst.diensten.includes(x))
+        // Een werkzaamheid die al gekozen was blijft staan, ook als ze later uit de lijst ging; alleen nieuwe worden gecontroleerd.
+        if (Array.isArray(w.diensten)) t.diensten = [...new Set(w.diensten.map(String))].filter((x) => lijst.diensten.includes(x) || oud.diensten.includes(x)).slice(0, 40)
         if (w.soort && (INTAKE_SOORTEN as readonly string[]).includes(w.soort) && w.soort !== oud.soort) {
           t.soort = w.soort
           log = `${INTAKE_NAAM[w.soort].naam} begonnen voor "${oud.naam}"`

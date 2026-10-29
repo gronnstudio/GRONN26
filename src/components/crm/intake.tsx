@@ -230,7 +230,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
       <fieldset className="m-0 border-0 p-0">
         <legend className="crm-label mb-2 p-0">Gewenste werkzaamheden</legend>
         <div className="flex flex-wrap gap-2">
-          {lijst.diensten.map((dn) => {
+          {[...lijst.diensten, ...s.diensten.filter((x) => !lijst.diensten.includes(x))].map((dn) => {
             const aan = s.diensten.includes(dn)
             return (
               <button
@@ -343,6 +343,8 @@ function VraagKaart({ v, s, wijzig }: { v: Vraag; s: Stand; wijzig: (w: IntakeWi
         <fieldset className="m-0 border-0 p-0">
           <legend className="mb-2 p-0 text-[15px] font-semibold leading-snug">{label}</legend>
           {v.hulp && <p className="m-0 mb-2 text-[13px] text-gedempt">{v.hulp}</p>}
+          {/* Een antwoord van vóór een wijziging van het soort vraag blijft leesbaar. */}
+          {waarde && !(JNOV as readonly string[]).includes(waarde) && <p className="m-0 mb-2 text-[13px]">Eerder ingevuld: <strong>{waarde}</strong></p>}
           <div className="grid grid-cols-4 gap-1.5">
             {JNOV.map((o) => (
               <button
