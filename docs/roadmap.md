@@ -12,7 +12,10 @@ Zie [product/modules.md](product/modules.md), modules 02–07.
 **Acceptatie:** aanvraag → klant zonder dubbelen; opname met geschiedenis en
 foto's; calculatie in centen met versies; catalogus onthoudt prijzen. Getest in `tests/crm*.spec.ts`.
 
-## Fase 2 · Offertes en akkoord — volgende
+## Intake en projectvoorbereiding (opdracht 29 okt 2026)
+Plan en fasering in [architecture/intake.md](architecture/intake.md), ADR 0005–0007. Fase 1 (analyse) klaar; fase 2 (intake-engine) wacht op het ja van de eigenaar. Fase 4–6 van dat plan vallen samen met Projecten hieronder.
+
+## Fase 2 · Offertes en akkoord — privélink en akkoord klaar (PR #156)
 - Offerte uit een calculatieversie: posten per groep, optioneel werk, uitgangspunten uit de opname (aannames), betaaltermijnen, geldig tot, voorwaarden en herroepingsformulier (particulier).
 - De bestaande offertemaker (`/offertes`) leest de versie in plaats van een concept in de browser; nummer GR-O // JJJJMMDDNNNN, één nummer één keer.
 - Stand: Concept → Verstuurd → Bekeken (alleen als het echt gemeten is) → Akkoord / Afgewezen / Verlopen; handmatig gezette stand heet ook zo.

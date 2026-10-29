@@ -12,6 +12,7 @@ nu echt werkt, en [roadmap.md](roadmap.md) voor wat komt.
 | --- | --- |
 | Opbouw, audit van wat er al was, migratie | [architecture/overview.md](architecture/overview.md) |
 | Gegevensmodel | [architecture/database.md](architecture/database.md) |
+| Intake en projectvoorbereiding (plan) | [architecture/intake.md](architecture/intake.md) |
 | Beslissingen (ADR) | [architecture/decisions/](architecture/decisions/) |
 | AI-samenwerking (Claude × GPT/Codex) | [ai-samenwerking.md](ai-samenwerking.md) |
 | Ontwerp en tokens | [design/design-system.md](design/design-system.md) |

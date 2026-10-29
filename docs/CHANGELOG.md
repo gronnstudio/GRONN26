@@ -1,5 +1,9 @@
 # Wijzigingen
 
+## 29 okt 2026 · Plan intake en projectvoorbereiding
+
+- Audit en architectuur voor de opdracht "Intelligent Intake & Project Intelligence": [architecture/intake.md](architecture/intake.md), ADR 0005 (één checklist als gegevens), 0006 (video via beelden uit de browser), 0007 (Claude stelt voor, de code rekent). Nog geen code.
+
 ## 29 okt 2026 · Offerte met privélink
 
 - Op een calculatie: "Offerte met link maken". Er komt een momentopname met alleen omschrijving, hoeveelheid en prijs (geen inkoop, opslag of uren) onder een onraadbare sleutel in `crm/offertes/`.
