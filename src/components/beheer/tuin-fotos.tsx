@@ -1,7 +1,8 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
+import { INTAKE_ZONES, type IntakeZones } from "@/components/crm/intake"
 import type { Foto } from "@/lib/crm/klant"
 import type { Zone } from "@/lib/crm/vragenlijst"
 
@@ -65,11 +66,21 @@ async function beeldenUit(bestand: File): Promise<{ tijd: number; jpg: Blob }[]>
   }
 }
 
-export function TuinFotos({ klant, tuin, fotos, zones = [], weg }: { klant: string; tuin: string; fotos: Foto[]; zones?: Zone[]; weg: (fotoId: string) => Promise<void> }) {
+export function TuinFotos({ klant, tuin, fotos, zones: begin = [], weg }: { klant: string; tuin: string; fotos: Foto[]; zones?: Zone[]; weg: (fotoId: string) => Promise<void> }) {
   const router = useRouter()
   const [moment, setMoment] = useState<(typeof MOMENTEN)[number]>("Opname")
   const [bijschrift, setBijschrift] = useState("")
   const [zone, setZone] = useState("")
+  // De intake ernaast meldt elke zonewijziging, ook voordat de pagina ververst.
+  const [zones, setZones] = useState(begin)
+  useEffect(() => {
+    const zet = (e: Event) => {
+      const d = (e as CustomEvent<IntakeZones>).detail
+      if (d?.tuin === tuin) setZones(d.zones.filter((z) => z.naam.trim()))
+    }
+    window.addEventListener(INTAKE_ZONES, zet)
+    return () => window.removeEventListener(INTAKE_ZONES, zet)
+  }, [tuin])
   const [voortgang, setVoortgang] = useState("")
   const [stand, setStand] = useState<"" | "bezig" | "fout">("")
   const [fout, setFout] = useState("")

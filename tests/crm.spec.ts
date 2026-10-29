@@ -134,11 +134,14 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
     const b = await new Promise<Blob>((ok) => c.toBlob((x) => ok(x!), "image/jpeg"))
     return Array.from(new Uint8Array(await b.arrayBuffer()))
   })
+  // De zone die net in de intake ontstond, is zonder herladen te kiezen bij de foto.
+  await page.getByLabel("Zone", { exact: true }).selectOption({ label: "Zone A" })
   await page.locator('input[type="file"][accept="image/*"]').setInputFiles({ name: "voor.jpg", mimeType: "image/jpeg", buffer: Buffer.from(jpg) })
   const foto = page.locator('img[src^="/api/crm/foto?id="]')
   await expect(foto).toHaveCount(1, { timeout: 15_000 })
   const src = (await foto.getAttribute("src"))!
   expect((await page.request.get(src)).status()).toBe(200)
+  await expect(page.getByText("Zone A", { exact: true }).last()).toBeVisible()
   // een ander (zonder inlog) krijgt de foto niet
   expect((await request.get(src)).status()).toBe(401)
   // Analyseren: zonder sleutel in de test zegt de knop dat Claude niet is ingesteld, en er verandert niets.
