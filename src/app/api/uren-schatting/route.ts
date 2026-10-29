@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk"
 import { NextResponse, type NextRequest } from "next/server"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
 import { leesCatalogus } from "@/lib/beheer/catalogus"
+import { voorClaude } from "@/lib/crm/catalogus"
 import { toonEuro } from "@/lib/crm/geld"
 
 // Urenschatting voor het rekenblad /dashboard/prijs (eigenaar, 29 okt 2026:
@@ -74,7 +75,8 @@ export async function POST(request: NextRequest) {
   if (!process.env.ANTHROPIC_API_KEY) return NextResponse.json({ fout: "Claude is niet ingesteld." }, { status: 503 })
 
   // Nicks eigen prijzen uit de catalogus gaan vóór de richtprijzen hierboven.
-  const items = await leesCatalogus()
+  // Met de prijslijsten erin zijn dat er duizenden: alleen eigen items en wat bij de beschrijving past.
+  const items = voorClaude(await leesCatalogus(), beschrijving)
   const catalogus = items.length
     ? `\n\nPrijzen uit Nicks catalogus (inkoop excl. btw, gebruik deze vóór de richtprijzen, en dezelfde naam als omschrijving):\n${items.map((i) => `- ${i.naam}: ${toonEuro(i.inkoop)} per ${i.eenheid}`).join("\n")}`
     : ""

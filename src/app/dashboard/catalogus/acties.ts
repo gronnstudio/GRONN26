@@ -6,6 +6,7 @@ import { BTW_TARIEVEN, SOORTEN, isSoort } from "@/lib/crm/calculatie"
 import { nieuwItem, zetPrijs, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten } from "@/lib/crm/geld"
 import { wijzigCatalogus } from "@/lib/beheer/catalogus"
+import { importeer, leesCsv, type ImportUitkomst } from "@/lib/crm/catalogus-import"
 
 const tekst = (d: FormData, k: string, n: number) => String(d.get(k) ?? "").trim().slice(0, n)
 
@@ -63,4 +64,26 @@ export async function catalogusItemWeg(id: string) {
   await eisEigenaar()
   await wijzigCatalogus((items) => items.filter((i) => i.id !== id))
   revalidatePath("/dashboard", "layout")
+}
+
+/** Een prijslijst (CSV) inlezen: nieuwe items erbij, bestaande bijwerken op leverancier + artikelnummer. */
+export async function importeerCatalogus(_vorig: ImportUitkomst | null, d: FormData): Promise<ImportUitkomst> {
+  await eisEigenaar()
+  const leeg: ImportUitkomst = { nieuw: 0, bijgewerkt: 0, gelijk: 0, afgewezen: [] }
+  const bestand = d.get("bestand")
+  if (!(bestand instanceof File) || !bestand.size) return { ...leeg, fout: "Kies eerst een CSV-bestand." }
+  if (bestand.size > 3_500_000) return { ...leeg, fout: "Het bestand is groter dan 3,5 MB. Splits het in delen." }
+  const rijen = leesCsv(await bestand.text())
+  let uitkomst = leeg
+  try {
+    await wijzigCatalogus((items) => {
+      const r = importeer(items, rijen)
+      uitkomst = r.uitkomst
+      return r.items
+    })
+  } catch {
+    return { ...leeg, fout: "Bewaren lukte niet. Probeer het nog eens." }
+  }
+  revalidatePath("/dashboard", "layout")
+  return uitkomst
 }

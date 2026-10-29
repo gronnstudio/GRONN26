@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { Kop } from "@/components/crm/kop"
 import { PrijsRekenaar, type Begin } from "@/components/beheer/prijs"
 import { leesCatalogus } from "@/lib/beheer/catalogus"
+import { voorRekenblad } from "@/lib/crm/catalogus"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { STANDAARD } from "@/lib/crm/calculatie"
 import { oppervlakUit } from "@/lib/crm/vragenlijst"
@@ -87,7 +88,7 @@ export default async function CalculatiePagina({ params, searchParams }: { param
         )}
         <div className="mt-4 print:mt-0">
           {/* key: een andere gekozen versie (?v=) begint met een schoon rekenblad; na bewaren blijft het blad staan */}
-          <PrijsRekenaar key={`${c?.id ?? "nieuw"}-${v ?? "laatste"}`} klanten={keuze} catalogus={catalogus} begin={begin} />
+          <PrijsRekenaar key={`${c?.id ?? "nieuw"}-${v ?? "laatste"}`} klanten={keuze} catalogus={voorRekenblad(catalogus)} begin={begin} />
         </div>
       </main>
     </>

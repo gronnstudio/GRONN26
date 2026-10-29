@@ -34,7 +34,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
     ...klanten.flatMap((k) => k.tuinen.map((t) => ({ groep: "Tuinen", titel: t.naam, sub: k.naam, href: `/dashboard/klanten/${k.id}/tuin/${t.id}` }))),
     ...klanten.flatMap((k) => k.calculaties.map((c) => ({ groep: "Calculaties", titel: c.titel, sub: k.naam, href: `/dashboard/klanten/${k.id}/calculatie/${c.id}` }))),
     ...klanten.flatMap((k) => k.stukken.map((s) => ({ groep: "Offertes en facturen", titel: s.nummer, sub: `${s.soort} · ${k.naam}`, href: `/dashboard/klanten/${k.id}?tab=stukken` }))),
-    ...catalogus.map((i) => ({ groep: "Catalogus", titel: i.naam, sub: [i.leverancier, i.eenheid].filter(Boolean).join(" · "), href: `/dashboard/catalogus?q=${encodeURIComponent(i.naam)}` })),
+    // Alleen eigen items: de duizenden regels uit prijslijsten zoek je op de catalogus zelf.
+    ...catalogus.filter((i) => !i.groep).map((i) => ({ groep: "Catalogus", titel: i.naam, sub: [i.leverancier, i.eenheid].filter(Boolean).join(" · "), href: `/dashboard/catalogus?q=${encodeURIComponent(i.naam)}` })),
     ...LEVERANCIERS.flatMap((g) => g.leveranciers.map((l) => ({ groep: "Leveranciers", titel: l.naam, sub: `${g.naam} · ${l.wat}`, href: `/dashboard/leveranciers?tab=${g.id}` }))),
   ]
   const tellers = {

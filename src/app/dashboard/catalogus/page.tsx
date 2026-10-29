@@ -4,7 +4,9 @@ import { leesCatalogus } from "@/lib/beheer/catalogus"
 import { BTW_TARIEVEN, EENHEDEN, SOORTEN, type Soort } from "@/lib/crm/calculatie"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { sleutel } from "@/lib/crm/klant"
-import { bewaarCatalogusItem, catalogusItemWeg, nieuwCatalogusItem } from "./acties"
+import { zoekItems } from "@/lib/crm/catalogus"
+import { CatalogusImport } from "@/components/crm/catalogus-import"
+import { bewaarCatalogusItem, catalogusItemWeg, importeerCatalogus, nieuwCatalogusItem } from "./acties"
 
 // De catalogus (masterprompt CRM, module 07): wat je inkoopt, per eenheid,
 // met leverancier en de historie van de prijs. Het rekenblad leest hieruit;
@@ -14,15 +16,17 @@ export const dynamic = "force-dynamic"
 
 const lbl = "crm-label"
 const klein = "crm-veld !px-2 !py-1 !text-[13px]"
+// Met de prijslijsten erin zijn het duizenden items; de tabel toont er zoveel tegelijk.
+const TONEN = 100
 const datum = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { day: "numeric", month: "short", year: "numeric" })
 
 export default async function Catalogus({ searchParams }: { searchParams: Promise<{ soort?: string; q?: string }> }) {
   const { soort, q } = await searchParams
   const alle = await leesCatalogus()
-  const zoek = (q ?? "").toLowerCase()
-  const items = alle
-    .filter((i) => (!soort || i.soort === soort) && (!zoek || `${i.naam} ${i.leverancier} ${i.sku}`.toLowerCase().includes(zoek)))
+  const gevonden = zoekItems(alle, q ?? "")
+    .filter((i) => !soort || i.soort === soort)
     .sort((a, b) => a.soort.localeCompare(b.soort) || a.naam.localeCompare(b.naam))
+  const items = gevonden.slice(0, TONEN)
 
   return (
     <>
@@ -31,16 +35,22 @@ export default async function Catalogus({ searchParams }: { searchParams: Promis
         <a href="#nieuw" className="crm-knop">+ Item</a>
       </Kop>
       <main className="mx-auto max-w-[1440px] px-8 py-6">
-        <form className="flex items-center gap-2" action="/dashboard/catalogus">
-          <input name="q" defaultValue={q} placeholder="Zoek op naam, leverancier…" aria-label="Zoeken" className="crm-veld w-[260px]" />
+        <form className="flex flex-wrap items-center gap-2" action="/dashboard/catalogus">
+          <input name="q" defaultValue={q} type="search" placeholder="Zoek op naam, leverancier, artikelnummer, groep…" aria-label="Zoeken" className="crm-veld w-[min(100%,360px)]" />
           <select name="soort" defaultValue={soort ?? ""} aria-label="Soort" className="crm-veld">
             <option value="">Alle soorten</option>
             {Object.entries(SOORTEN).map(([id, s]) => (
               <option key={id} value={id}>{s.naam}</option>
             ))}
           </select>
-          <button className="crm-knop-rand">Filter</button>
+          <button className="crm-knop-rand">Zoek</button>
+          <span className="text-[13px] text-gedempt" role="status">
+            {gevonden.length > TONEN
+              ? `${TONEN} van ${gevonden.length.toLocaleString("nl-NL")} getoond, zoek verder om te verfijnen`
+              : `${gevonden.length.toLocaleString("nl-NL")} van ${alle.length.toLocaleString("nl-NL")} items`}
+          </span>
         </form>
+        <CatalogusImport actie={importeerCatalogus} />
 
         <datalist id="eenheden">
           {EENHEDEN.map((e) => (
@@ -63,6 +73,7 @@ export default async function Catalogus({ searchParams }: { searchParams: Promis
                   <td className="!py-1.5">
                     <form id={formId} action={bewaarCatalogusItem.bind(null, i.id)} />
                     <input form={formId} name="naam" defaultValue={i.naam} aria-label="Naam" className={`${klein} w-full`} />
+                    {(i.groep || i.sku) && <span className="mt-1 block text-[12px] text-gedempt">{[i.groep, i.sku && `art. ${i.sku}`].filter(Boolean).join(" · ")}</span>}
                     {i.notitie && <span className="mt-1 block text-[12px] text-gedempt">{i.notitie}</span>}
                     {i.historie.length > 0 && (
                       <details className="mt-1 text-[12px]">
