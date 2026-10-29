@@ -77,6 +77,7 @@ export function importeer(items: Item[], rijen: string[][]): { items: Item[]; ui
   // Eerst de regels lezen; staat hetzelfde artikel twee keer in het bestand, dan telt de laatste.
   type Regel = Omit<Item, "id" | "historie" | "opslag" | "btw" | "afval" | "notitie" | "bijgewerkt"> & { opslag: number | null; btw: number | null; afval: number | null; datum: string }
   const regels = new Map<string, Regel>()
+  const rauw = new Map<string, { soort: string; eenheid: string }>()
   for (let r = 1; r < rijen.length; r++) {
     const rij = rijen[r]
     const v = (k: keyof typeof KOLOMMEN, n: number) => (kol[k] >= 0 ? (rij[kol[k]] ?? "").trim().slice(0, n) : "")
@@ -102,6 +103,7 @@ export function importeer(items: Item[], rijen: string[][]): { items: Item[]; ui
       datum: v("bijgewerkt", 10),
     }
     regels.set(koppel(regel), regel)
+    rauw.set(koppel(regel), { soort: v("soort", 40), eenheid: v("eenheid", 12) })
   }
 
   const uit = [...items]
@@ -116,6 +118,7 @@ export function importeer(items: Item[], rijen: string[][]): { items: Item[]; ui
           opslag: opslag !== null && opslag >= 0 ? opslag : SOORTEN[velden.soort].opslag,
           btw: btw !== null && BTW_TARIEVEN.includes(btw) ? btw : SOORTEN[velden.soort].btw,
           afval: afval !== null && afval >= 0 ? afval : 0,
+          geimporteerd: true,
           ...(/^\d{4}-\d{2}-\d{2}$/.test(datum) ? { bijgewerkt: datum } : {}),
         }),
       )
@@ -123,7 +126,16 @@ export function importeer(items: Item[], rijen: string[][]): { items: Item[]; ui
       continue
     }
     const oud = uit[plek]
-    const nieuw: Item = { ...zetPrijs(oud, inkoop, velden.leverancier), naam: velden.naam, soort: velden.soort, eenheid: velden.eenheid, link: velden.link || oud.link, groep: velden.groep ?? oud.groep }
+    // Een kolom die ontbreekt of leeg is, laat het bestaande veld staan.
+    const nieuw: Item = {
+      ...zetPrijs(oud, inkoop, velden.leverancier),
+      naam: velden.naam,
+      soort: kol.soort >= 0 && soortUit(rauw.get(sleutel)?.soort ?? "") ? velden.soort : oud.soort,
+      eenheid: rauw.get(sleutel)?.eenheid ? velden.eenheid : oud.eenheid,
+      link: velden.link || oud.link,
+      groep: velden.groep ?? oud.groep,
+      geimporteerd: true,
+    }
     if ((Object.keys(nieuw) as (keyof Item)[]).some((k) => nieuw[k] !== oud[k])) {
       uit[plek] = nieuw
       uitkomst.bijgewerkt++

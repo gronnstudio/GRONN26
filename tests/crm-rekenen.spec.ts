@@ -154,6 +154,11 @@ test.describe("catalogus en klanten", () => {
     // Nog een keer hetzelfde bestand: niets verandert.
     expect(importeer(items, rijen).uitkomst).toMatchObject({ nieuw: 0, bijgewerkt: 0, gelijk: 2 })
     expect(importeer(items, leesCsv("Iets;Anders\n1;2")).uitkomst.fout).toContain("Naam")
+    // Zonder kolommen Soort en Eenheid blijven die van het bestaande item staan; zonder Groep telt het toch als prijslijst.
+    const compost = nieuwItem({ naam: "Compost", soort: "planten", eenheid: "m³", leverancier: "Lev", sku: "9", inkoop: 1000 })
+    const kaal = importeer([compost], leesCsv("Naam;Inkoop;Leverancier;Artikelnummer\nCompost;12,50;Lev;9\nZand;3;Lev;10"))
+    expect(kaal.items[0]).toMatchObject({ eenheid: "m³", soort: "planten", inkoop: 1250, geimporteerd: true })
+    expect(voorClaude(kaal.items, "minigraver huren")).toHaveLength(0)
   })
   test("zoeken in duizenden items en wat Claude ervan ziet", () => {
     const items = [

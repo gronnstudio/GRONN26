@@ -25,6 +25,8 @@ export type Item = {
   notitie: string
   /** Groep uit de prijslijst van de leverancier, bijv. "OPSLUITBANDEN / MBI" */
   groep?: string
+  /** Komt uit een ingelezen prijslijst (niet zelf toegevoegd) */
+  geimporteerd?: boolean
   bijgewerkt: string
   historie: Prijs[]
 }
@@ -77,20 +79,23 @@ export function zoekItems(items: Item[], q: string): Item[] {
 
 /**
  * Wat Claude bij het urenvoorstel van de catalogus te zien krijgt. Met
- * duizenden ingelezen regels gaat niet alles mee: eigen items (zonder groep
- * uit een prijslijst) wel, uit de prijslijsten alleen wat een woord uit de
+ * duizenden ingelezen regels gaat niet alles mee: eigen items (niet uit een
+ * prijslijst) wel, uit de prijslijsten alleen wat een woord uit de
  * beschrijving deelt, tot `max`.
  */
 export function voorClaude(items: Item[], beschrijving: string, max = 80): Item[] {
   const woorden = plat(beschrijving).split(/[^a-z0-9]+/).filter((w) => w.length >= 4)
   // "opsluitbanden" vindt "Opsluitband": het ene woord begint met het andere.
   const past = (w: string) => w.length >= 4 && woorden.some((b) => b.startsWith(w) || w.startsWith(b))
-  const eigen = items.filter((i) => !i.groep)
-  const passend = items.filter((i) => i.groep && plat(i.naam).split(/[^a-z0-9]+/).some(past))
+  const eigen = items.filter(isEigen)
+  const passend = items.filter((i) => !isEigen(i) && plat(i.naam).split(/[^a-z0-9]+/).some(past))
   return [...eigen, ...passend].slice(0, eigen.length + max)
 }
 
 /** Voor het rekenblad in de browser: alleen wat het gebruikt, want met de prijslijsten zijn het duizenden items. */
+/** Zelf toegevoegd, niet uit een prijslijst. */
+export const isEigen = (i: Item) => !i.geimporteerd && !i.groep
+
 export const voorRekenblad = (items: Item[]): Item[] =>
   items.map((i) => ({ ...i, historie: [], notitie: "", link: "", sku: "", groep: undefined, bijgewerkt: "" }))
 
