@@ -147,6 +147,8 @@ export function Zoek({ index }: { index: Treffer[] }) {
     const t = setTimeout(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)), 0)
     let g = 0
     const toets = (e: KeyboardEvent) => {
+      // Het systeem achter de login heeft zijn eigen zoekvenster en sneltoetsen.
+      if (location.pathname.startsWith("/dashboard")) return
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault()
         if (doos.current?.open) sluit()

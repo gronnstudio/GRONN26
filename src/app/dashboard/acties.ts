@@ -13,8 +13,7 @@ async function wijzig(f: (s: Stand) => void) {
   const s = await leesStand()
   f(s)
   await schrijfStand(s)
-  revalidatePath("/dashboard")
-  revalidatePath("/dashboard/social")
+  revalidatePath("/dashboard", "layout")
 }
 
 const tekst = (d: FormData, k: string, n = 300) => String(d.get(k) ?? "").trim().slice(0, n)

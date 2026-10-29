@@ -103,6 +103,14 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-mos: var(--mos);
   --color-salie: var(--salie);
   --color-antraciet: #202020;
+  /* het bedrijfssysteem (/dashboard, .crm hieronder) */
+  --color-accent: var(--accent);
+  --color-accent-tekst: var(--accent-tekst);
+  --color-op-accent: var(--op-accent);
+  --color-let: var(--let);
+  --color-lijn-sterk: var(--lijn-sterk);
+  --color-zijbalk: var(--zijbalk);
+  --font-cijfer: var(--font-geist-mono), ui-monospace, monospace;
   --color-gebroken-wit: #efeeea;
   --font-syne: var(--font-syne), sans-serif;
   --font-sans: var(--font-montserrat), sans-serif;
@@ -367,26 +375,6 @@ html.en .t-en { display: contents; }
 }
 @media print { .drukwerk { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 
-/* Beheer: de kern (src/components/beheer/kern.tsx). */
-.kern-label { font: 600 9.5px var(--font-montserrat, Montserrat), sans-serif; letter-spacing: .16em; fill: var(--inkt); fill-opacity: .55; }
-.kern-naam { font: 600 13px var(--font-montserrat, Montserrat), sans-serif; fill: var(--inkt); }
-.kern-sub { font: 500 11px var(--font-montserrat, Montserrat), sans-serif; fill: var(--inkt); fill-opacity: .6; }
-.kern-merk { font: 700 30px var(--font-syne, Syne), sans-serif; fill: var(--inkt); letter-spacing: .02em; }
-.kern-getal { font: 700 22px var(--font-syne, Syne), sans-serif; fill: var(--oranje-tekst); }
-.kern-draai { transform-origin: 300px 300px; animation: kern-draai 120s linear infinite; }
-.kern-puls { transform-box: fill-box; transform-origin: center; animation: kern-puls 2.4s ease-in-out infinite; }
-@keyframes kern-draai { to { transform: rotate(360deg); } }
-@keyframes kern-puls { 50% { transform: scale(1.25); opacity: .2; } }
-@media (prefers-reduced-motion: reduce) { .kern-draai, .kern-puls { animation: none; } }
-html.stil .kern-draai, html.stil .kern-puls { animation: none; }
-
-/* De kern reageert op de assistent: luisteren pulseert, denken draait sneller, praten ademt. */
-html[data-assistent="luistert"] .kern-draai { animation-duration: 30s; }
-html[data-assistent="denkt"] .kern-draai { animation-duration: 6s; }
-html[data-assistent="praat"] .kern { animation: kern-adem 1.2s ease-in-out infinite; }
-html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranje); stroke-opacity: .7; }
-@keyframes kern-adem { 50% { transform: scale(1.015); } }
-@media (prefers-reduced-motion: reduce) { html[data-assistent] .kern { animation: none; } }
 
 /* View Transition (11 okt 2026): een projectfoto groeit van Werk naar de
    grote foto bovenaan de projectpagina. Zonder ondersteuning wisselt de
@@ -457,3 +445,99 @@ html[data-assistent="luistert"] .kern circle:first-of-type { stroke: var(--oranj
 .stapel > li { position: sticky; top: calc(var(--stapel-top, 24px) + var(--i, 0) * 16px); }
 
 /* Geen silhouet boven de voet (eigenaar, 21 okt 2026: "Haal dit weg"); de voet begint recht. */
+
+/* ── Het bedrijfssysteem achter de login (/dashboard), 29 okt 2026 ──────────
+   Eigenaar: "het moest dashboard helemaal vervangen door een nieuw systeem"
+   en de masterprompt CRM: licht = warm crème, gebroken wit, antraciet en
+   botanisch groen; donker = diep houtskool, gelaagd antraciet, warm wit en
+   gedempt groen. Een eigen identiteit, los van de site: daarom eigen tokens
+   onder .crm, sterker dan html.plan (0,2,0 tegen 0,1,1), zodat Layout
+   Tuinplan het systeem niet blauw kleurt. Groen = handelen en waar je bent;
+   oranje (--let) = er moet iets gebeuren (te laat, open bedrag). Paren
+   gemeten: accent-tekst op grond 6,8:1, wit op accent 6,4:1, gedempt 6,1:1,
+   let 5,0:1; op donker alle paren boven 7:1. */
+:root .crm {
+  --grond: #f4f0e6;
+  --vlak: #fbf9f4;
+  --veld: #fffdf8;
+  --zijbalk: #ebe5d8;
+  --inkt: #23221f;
+  --gedempt: #5f5b52;
+  --voorbeeld: #8a8578;
+  --lijn: #e0d9ca;
+  --lijn-sterk: #cbc2b0;
+  --accent: #2f6a4f;
+  --accent-tekst: #2a5f47;
+  --op-accent: #ffffff;
+  --accent-zacht: rgb(47 106 79 / 0.1);
+  --let: #b84000;
+  --let-zacht: rgb(255 91 4 / 0.09);
+  --oranje: #b84000;
+  --oranje-tekst: #b84000;
+  color-scheme: light;
+}
+:root.donker .crm {
+  --grond: #161614;
+  --vlak: #1f1f1c;
+  --veld: #262623;
+  --zijbalk: #1b1b19;
+  --inkt: #ece8df;
+  --gedempt: #a9a497;
+  --voorbeeld: #7d796f;
+  --lijn: #33322e;
+  --lijn-sterk: #46443e;
+  --accent: #8fbf9f;
+  --accent-tekst: #9fcdaf;
+  --op-accent: #13231a;
+  --accent-zacht: rgb(143 191 159 / 0.12);
+  --let: #ff8a4c;
+  --let-zacht: rgb(255 138 76 / 0.1);
+  --oranje: #ff8a4c;
+  --oranje-tekst: #ff8a4c;
+  color-scheme: dark;
+}
+@layer components {
+  .crm { font-family: var(--font-montserrat), sans-serif; font-size: 14px; background: var(--grond); color: var(--inkt); }
+  .crm ::selection { background: var(--accent-zacht); }
+  .crm :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .crm-cijfer { font-family: var(--font-geist-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .crm-tabel .crm-cijfer { white-space: nowrap; }
+  .crm-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gedempt); }
+  .crm-knop, .crm-knop-rand, .crm-knop-stil {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 36px; padding: 0 16px; border-radius: 9999px; border: 1px solid transparent;
+    font-size: 13px; font-weight: 600; line-height: 1; white-space: nowrap; cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .crm-knop { background: var(--accent); color: var(--op-accent); }
+  .crm-knop:hover { background: color-mix(in oklab, var(--accent) 86%, var(--inkt)); }
+  .crm-knop-rand { background: var(--vlak); color: var(--inkt); border-color: var(--lijn-sterk); }
+  .crm-knop-rand:hover { border-color: var(--accent); color: var(--accent-tekst); }
+  .crm-knop-stil { background: transparent; color: var(--gedempt); }
+  .crm-knop-stil:hover { background: var(--accent-zacht); color: var(--inkt); }
+  .crm-knop-klein { min-height: 28px; padding: 0 12px; font-size: 12px; }
+  .crm-veld {
+    min-width: 0; border: 1px solid var(--lijn-sterk); border-radius: 8px; background: var(--veld); color: var(--inkt);
+    padding: 7px 10px; font-size: 14px; line-height: 1.4;
+  }
+  .crm-veld::placeholder { color: var(--voorbeeld); }
+  .crm-veld:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+  select.crm-veld { padding-right: 28px; }
+  .crm-paneel { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 12px; }
+  .crm-let { background: var(--let-zacht); border: 1px solid color-mix(in oklab, var(--let) 35%, transparent); border-radius: 12px; }
+  .crm-badge {
+    display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 6px;
+    font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--accent-zacht); color: var(--accent-tekst);
+  }
+  .crm-badge-let { background: var(--let-zacht); color: var(--let); }
+  .crm-badge-stil { background: color-mix(in oklab, var(--inkt) 7%, transparent); color: var(--gedempt); }
+  .crm-tabel { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .crm-tabel th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gedempt); padding: 8px 12px; border-bottom: 1px solid var(--lijn-sterk); }
+  .crm-tabel td { padding: 9px 12px; border-bottom: 1px solid var(--lijn); vertical-align: top; }
+  .crm-tabel tbody tr:hover td { background: color-mix(in oklab, var(--inkt) 2.5%, transparent); }
+  .crm-tabel :is(th, td):first-child { padding-left: 0; }
+  .crm-tabel :is(th, td):last-child { padding-right: 0; }
+  .crm-link { color: var(--inkt); font-weight: 600; }
+  .crm-link:hover { color: var(--accent-tekst); }
+}
+@media (prefers-reduced-motion: reduce) { .crm * { transition: none !important; } }

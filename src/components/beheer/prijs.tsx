@@ -23,8 +23,8 @@ type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: stri
 export type KlantKeuze = { id: string; naam: string; tuinen: { id: string; naam: string }[] }
 export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; regels: Regel[]; nr?: number }
 
-const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
-const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2 text-[14px]"
+const lbl = "crm-label"
+const veld = "crm-veld"
 const klein = "min-w-0 rounded-[10px] border border-lijn bg-transparent px-2 py-1.5 text-[13px]"
 
 const naarInvul = (r: Regel): Invul => ({
@@ -161,13 +161,13 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
 
   return (
     <>
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-8 print:hidden xl:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-8 print:hidden @min-[1340px]:grid-cols-[minmax(0,1fr)_380px]">
         <div className="flex min-w-0 flex-col gap-8">
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="grid gap-1 text-[13px]">
               Klant
               {klanten.length ? (
-                <select value={klantId} onChange={(e) => { setKlantId(e.target.value); setCalcId(undefined); setVersie(0); setTuinId("") }} className={`${veld} bg-grond`}>
+                <select value={klantId} onChange={(e) => { setKlantId(e.target.value); setCalcId(undefined); setVersie(0); setTuinId("") }} className={`${veld}`}>
                   <option value="">Losse berekening</option>
                   {klanten.map((k) => (
                     <option key={k.id} value={k.id}>{k.naam}</option>
@@ -184,7 +184,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             {klant && klant.tuinen.length > 0 && (
               <label className="grid gap-1 text-[13px]">
                 Tuin
-                <select value={tuinId} onChange={(e) => setTuinId(e.target.value)} className={`${veld} bg-grond`}>
+                <select value={tuinId} onChange={(e) => setTuinId(e.target.value)} className={`${veld}`}>
                   <option value="">Geen</option>
                   {klant.tuinen.map((t) => (
                     <option key={t.id} value={t.id}>{t.naam}</option>
@@ -195,7 +195,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           </div>
 
           <section>
-            <p className={`${lbl} m-0 opacity-60`}>1 · Jouw werk</p>
+            <p className={`${lbl} m-0`}>1 · Jouw werk</p>
             <label className="mt-3 grid gap-1 text-[13px]">
               Wat moet er gebeuren? Grønn stelt de uren voor
               <textarea
@@ -206,10 +206,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 className={`${veld} resize-y`}
               />
             </label>
-            <button type="button" onClick={schat} disabled={bezig || !beschrijving.trim()} className="mt-2 rounded-full bg-oranje px-5 py-2 text-[14px] font-semibold text-[#202020] disabled:opacity-50">
+            <button type="button" onClick={schat} disabled={bezig || !beschrijving.trim()} className="mt-2 crm-knop disabled:opacity-50">
               {bezig ? "Grønn rekent…" : "Schat de uren"}
             </button>
-            {fout && <p role="alert" className="m-0 mt-2 text-[13px] text-oranje-tekst">{fout}</p>}
+            {fout && <p role="alert" className="m-0 mt-2 text-[13px] text-let">{fout}</p>}
             {schatting && (
               <div className="mt-3 rounded-[14px] border border-lijn p-4 text-[13px]">
                 <ul className="m-0 grid list-none gap-1 p-0">
@@ -224,9 +224,9 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <span className="tabular-nums">{Math.round(schatting.uren)} u</span>
                   </li>
                 </ul>
-                {!!schatting.regels?.length && <p className="m-0 mt-2 opacity-70">{schatting.regels.length} regels voor machines en materiaal staan hieronder bij 2, met geschatte inkoop.</p>}
-                {schatting.aannames && <p className="m-0 mt-2 opacity-70">Aangenomen: {schatting.aannames}</p>}
-                <p className="m-0 mt-2 opacity-60">Een voorstel: klopt het niet met wat jij weet, pas de uren en bedragen hieronder aan.</p>
+                {!!schatting.regels?.length && <p className="m-0 mt-2 text-gedempt">{schatting.regels.length} regels voor machines en materiaal staan hieronder bij 2, met geschatte inkoop.</p>}
+                {schatting.aannames && <p className="m-0 mt-2 text-gedempt">Aangenomen: {schatting.aannames}</p>}
+                <p className="m-0 mt-2 text-gedempt">Een voorstel: klopt het niet met wat jij weet, pas de uren en bedragen hieronder aan.</p>
               </div>
             )}
             <div className="mt-5 grid grid-cols-2 items-end gap-3 sm:grid-cols-4">
@@ -247,13 +247,13 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 <input inputMode="decimal" value={korting} onChange={(e) => setKorting(e.target.value)} className={veld} />
               </label>
             </div>
-            <p className="m-0 mt-2 text-[12px] opacity-60">Uren is alles: ook laden, rijden en opruimen. Een dag is 8 uur. Vrienden krijgen korting, niet een lager uurtarief.</p>
+            <p className="m-0 mt-2 text-[12px] text-gedempt">Uren is alles: ook laden, rijden en opruimen. Een dag is 8 uur. Vrienden krijgen korting, niet een lager uurtarief.</p>
           </section>
 
           <section className="min-w-0">
             <div className="flex items-baseline justify-between gap-4">
-              <p className={`${lbl} m-0 opacity-60`}>2 · Materiaal, machines en overig, inkoop excl. btw</p>
-              <Link href="/dashboard/catalogus" className="text-[12px] text-oranje-tekst">Catalogus →</Link>
+              <p className={`${lbl} m-0`}>2 · Materiaal, machines en overig, inkoop excl. btw</p>
+              <Link href="/dashboard/catalogus" className="text-[12px] text-accent-tekst">Catalogus →</Link>
             </div>
             <datalist id="catalogus-namen">
               {catalogus.map((i) => (
@@ -263,7 +263,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             <div className="mt-3 overflow-x-auto">
               <table className="w-full min-w-[920px] border-collapse text-[13px]">
                 <thead>
-                  <tr className={`${lbl} text-left opacity-60`}>
+                  <tr>
                     <th className="py-1 pr-2 font-semibold">Omschrijving</th>
                     <th className="py-1 pr-2 font-semibold">Soort</th>
                     <th className="py-1 pr-2 font-semibold">Aantal</th>
@@ -283,7 +283,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                       <tr key={r.id} className="border-t border-lijn align-top">
                         <td className="py-1.5 pr-2">
                           <input aria-label="Omschrijving" list="catalogus-namen" value={r.omschrijving} onChange={(e) => zetOmschrijving(i, e.target.value)} placeholder="bijv. klinkers" className={`${klein} w-full`} />
-                          <label className="mt-1 flex items-center gap-1.5 text-[12px] opacity-70">
+                          <label className="mt-1 flex items-center gap-1.5 text-[12px] text-gedempt">
                             <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
                           </label>
                         </td>
@@ -308,12 +308,12 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                             ))}
                           </select>
                         </td>
-                        <td className={`py-1.5 pr-2 text-right font-mono tabular-nums whitespace-nowrap ${r.optioneel ? "opacity-50" : ""}`}>
+                        <td className={`py-1.5 pr-2 text-right crm-cijfer whitespace-nowrap ${r.optioneel ? "text-gedempt" : ""}`}>
                           {uit ? toonEuro(uit.verkoop) : "—"}
-                          {uit && uit.brutoHoeveelheid !== uit.hoeveelheid && <span className="block text-[11px] opacity-60">{toonDecimaal(uit.brutoHoeveelheid, 3)} {r.eenheid} incl. afval</span>}
+                          {uit && uit.brutoHoeveelheid !== uit.hoeveelheid && <span className="block text-[11px] text-gedempt">{toonDecimaal(uit.brutoHoeveelheid, 3)} {r.eenheid} incl. afval</span>}
                         </td>
                         <td className="py-1.5 whitespace-nowrap">
-                          <button type="button" aria-label="Prijs onthouden in de catalogus" title="Onthoud in catalogus" onClick={() => onthoud(i)} disabled={!r.omschrijving.trim()} className={`size-[28px] hover:opacity-100 disabled:opacity-20 ${r.catalogusId ? "text-oranje-tekst opacity-100" : "opacity-60"}`}>★</button>
+                          <button type="button" aria-label="Prijs onthouden in de catalogus" title="Onthoud in catalogus" onClick={() => onthoud(i)} disabled={!r.omschrijving.trim()} className={`size-[28px] hover:opacity-100 disabled:opacity-20 ${r.catalogusId ? "text-let opacity-100" : "text-gedempt"}`}>★</button>
                           <button type="button" aria-label="Regel omhoog" disabled={i === 0} onClick={() => schuif(i, -1)} className="size-[28px] opacity-60 hover:opacity-100 disabled:opacity-20">↑</button>
                           <button type="button" aria-label="Regel omlaag" disabled={i === regels.length - 1} onClick={() => schuif(i, 1)} className="size-[28px] opacity-60 hover:opacity-100 disabled:opacity-20">↓</button>
                           <button type="button" aria-label="Regel weghalen" onClick={() => setRegels(regels.length > 1 ? regels.filter((_, j) => j !== i) : [leeg()])} className="size-[28px] opacity-60 hover:opacity-100">×</button>
@@ -329,8 +329,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 ))}
               </datalist>
             </div>
-            <button type="button" onClick={() => setRegels([...regels, leeg()])} className="mt-3 rounded-full border border-lijn px-4 py-2 text-[14px] font-semibold hover:border-oranje">+ Regel</button>
-            <p className="m-0 mt-2 text-[12px] opacity-60">
+            <button type="button" onClick={() => setRegels([...regels, leeg()])} className="mt-3 crm-knop-rand">+ Regel</button>
+            <p className="m-0 mt-2 text-[12px] text-gedempt">
               Kies een naam uit de catalogus en prijs en eenheid vullen zich in. ★ zet de prijs in de catalogus, zodat je hem de volgende keer weet. Planten 9 % btw, de rest 21 %.
             </p>
           </section>
@@ -338,8 +338,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           <Rekenhulp catalogus={catalogus} onRegel={voegToe} onUren={(m) => setUren(toonDecimaal(urenMilli + m, 3))} />
         </div>
 
-        <aside className="flex flex-col gap-4 self-start rounded-[18px] border border-lijn p-5 xl:sticky xl:top-6">
-          <p className={`${lbl} m-0 opacity-60`}>Voor de klant</p>
+        <aside className="flex flex-col gap-4 self-start crm-paneel p-5 xl:sticky xl:top-6">
+          <p className={`${lbl} m-0`}>Voor de klant</p>
           <dl className="m-0 grid gap-2 text-[14px]">
             <Rij t="Arbeid" b={u.arbeid} />
             <Rij t="Materiaal en overig" b={u.materiaal} />
@@ -352,14 +352,14 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             <Rij t="Totaal incl. btw" b={u.totaal} vet />
           </dl>
           {u.optioneel.length > 0 && (
-            <p className="m-0 text-[12px] opacity-70">Optioneel, niet in het totaal: {toonEuro(u.optioneel.reduce((t, r) => t + r.verkoop, 0))} excl. btw</p>
+            <p className="m-0 text-[12px] text-gedempt">Optioneel, niet in het totaal: {toonEuro(u.optioneel.reduce((t, r) => t + r.verkoop, 0))} excl. btw</p>
           )}
 
-          <div className={`rounded-[14px] p-4 ${goed ? "bg-inkt/[.05]" : "bg-oranje/15"}`}>
-            <p className={`${lbl} m-0 opacity-60`}>Wat jij overhoudt</p>
+          <div className={`rounded-[14px] p-4 ${goed ? "bg-inkt/[.05]" : "bg-accent/15"}`}>
+            <p className={`${lbl} m-0`}>Wat jij overhoudt</p>
             <p className="syne m-0 mt-1 text-[30px]">{toonEuro(u.winst)}</p>
             <p className="m-0 text-[14px]">{urenMilli ? <>{toonEuro(u.perUur)} per uur</> : "Vul je uren in"}</p>
-            <p className="m-0 mt-1 text-[12px] opacity-70">
+            <p className="m-0 mt-1 text-[12px] text-gedempt">
               Marge {toonDecimaal(u.marge, 2)} % van de verkoop · opslag {toonDecimaal(u.opslag, 2)} % op de inkoop
             </p>
             {urenMilli > 0 && (
@@ -369,31 +369,31 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             )}
           </div>
           <div className="rounded-[14px] border border-lijn p-4">
-            <p className={`${lbl} m-0 opacity-60`}>Na betaling wegzetten</p>
+            <p className={`${lbl} m-0`}>Na betaling wegzetten</p>
             <dl className="m-0 mt-2 grid gap-2 text-[14px]">
               <Rij t="Leveranciers, incl. btw" b={w.leveranciers} />
               <Rij t="Btw-rekening, af te dragen" b={w.btwAfdragen} />
               <Rij t={`Belasting op je winst (${STANDAARD.reserveBelasting / 100} %)`} b={w.reserve} />
               <Rij t="Vrij voor jou" b={w.vrij} vet />
             </dl>
-            <p className="m-0 mt-2 text-[12px] leading-[1.5] opacity-60">De btw op je inkoop trek je af in je aangifte, daarom staat alleen het verschil op de btw-rekening.</p>
+            <p className="m-0 mt-2 text-[12px] leading-[1.5] text-gedempt">De btw op je inkoop trek je af in je aangifte, daarom staat alleen het verschil op de btw-rekening.</p>
           </div>
-          <p className="m-0 text-[12px] leading-[1.5] opacity-60">Overhouden = verkoop excl. btw min inkoop, vóór vaste lasten en inkomstenbelasting. Zet de uren niet op de offerte, alleen de prijs per post.</p>
+          <p className="m-0 text-[12px] leading-[1.5] text-gedempt">Overhouden = verkoop excl. btw min inkoop, vóór vaste lasten en inkomstenbelasting. Zet de uren niet op de offerte, alleen de prijs per post.</p>
           {klantId && (
-            <button type="button" onClick={bewaar} disabled={bewaart} className="rounded-full bg-oranje px-5 py-3 text-[14px] font-semibold text-[#202020] disabled:opacity-50">
+            <button type="button" onClick={bewaar} disabled={bewaart} className="crm-knop disabled:opacity-50">
               {bewaart ? "Bewaren…" : versie ? `Bewaar als versie ${versie + 1}` : "Bewaar bij klant"}
             </button>
           )}
           {melding && <p role="status" className="m-0 -mt-2 text-[13px]">{melding}</p>}
-          <button type="button" onClick={() => window.print()} disabled={!u.verkoop} className="rounded-full border border-lijn px-5 py-3 text-[14px] font-semibold hover:border-oranje disabled:opacity-50">
+          <button type="button" onClick={() => window.print()} disabled={!u.verkoop} className="crm-knop-rand disabled:opacity-50">
             Print of bewaar als PDF
           </button>
-          <p className="m-0 -mt-2 text-[12px] leading-[1.5] opacity-60">De klant ziet alleen de prijzen, niet je inkoop, opslag of uren.</p>
+          <p className="m-0 -mt-2 text-[12px] leading-[1.5] text-gedempt">De klant ziet alleen de prijzen, niet je inkoop, opslag of uren.</p>
         </aside>
       </div>
 
       {/* Wat de klant krijgt: alleen verkoopprijzen. Op het scherm verborgen. */}
-      <article className="hidden bg-white p-[18mm] text-[11pt] text-[#202020] print:block">
+      <article className="hidden bg-white p-[18mm] text-[11pt] text-op-accent print:block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="h-[22px] w-auto" />
         <h1 className="syne m-0 mt-10 text-[24pt] leading-[1.1]">{titel || "Prijsoverzicht"}</h1>
@@ -425,7 +425,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             </dl>
           </>
         )}
-        <p className="m-0 mt-10 text-[9pt] leading-[1.5] opacity-70">Dit is een prijsindicatie, geen offerte. GRØNN Studio · Stein · hello@gronn.studio · gronn.studio</p>
+        <p className="m-0 mt-10 text-[9pt] leading-[1.5] text-gedempt">Dit is een prijsindicatie, geen offerte. GRØNN Studio · Stein · hello@gronn.studio · gronn.studio</p>
       </article>
     </>
   )
@@ -435,7 +435,7 @@ function Rij({ t, b, vet }: { t: string; b: number; vet?: boolean }) {
   return (
     <div className={`flex justify-between gap-4 ${vet ? "border-t border-lijn pt-2 font-semibold" : ""}`}>
       <dt>{t}</dt>
-      <dd className="m-0 whitespace-nowrap font-mono tabular-nums">{toonEuro(b)}</dd>
+      <dd className="m-0 whitespace-nowrap crm-cijfer">{toonEuro(b)}</dd>
     </div>
   )
 }

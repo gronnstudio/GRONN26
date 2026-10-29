@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { CrmKop } from "@/components/beheer/crm-kop"
+import { Cijfer, Cijfers, Kop } from "@/components/crm/kop"
 import { Pijplijn } from "@/components/beheer/pijplijn"
 import { BRONNEN, KLANT_SOORTEN, geld, gewogen, isOpen, laatsteCalculatie, leesKlanten, opslagAan } from "@/lib/beheer/klanten"
 import { toonEuro } from "@/lib/crm/geld"
@@ -10,19 +10,15 @@ import { nieuweKlant } from "./acties"
 // Klanten als pijplijn of als tabel, alleen voor desktop (eigenaar, 29 okt
 // 2026: "maak de UI gewoon goed en enkel voor desktop!"). Een klus sleep je
 // naar de volgende fase; de kaart opent de klant.
-export const metadata: Metadata = {
-  title: { absolute: "Klanten · Dashboard · GRØNN Studio" },
-  robots: { index: false, follow: false },
-}
+export const metadata: Metadata = { title: "Klanten" }
 export const dynamic = "force-dynamic"
 
-const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
-const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2 text-[14px]"
+const veld = "crm-veld"
 const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
 const kortDatum = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { day: "numeric", month: "short" })
 
-export default async function Klanten({ searchParams }: { searchParams: Promise<{ weergave?: string; soort?: string; q?: string }> }) {
-  const { weergave, soort, q } = await searchParams
+export default async function Klanten({ searchParams }: { searchParams: Promise<{ weergave?: string; soort?: string; q?: string; nieuw?: string }> }) {
+  const { weergave, soort, q, nieuw } = await searchParams
   const tabel = weergave === "tabel"
   const alle = await leesKlanten()
   const zoek = (q ?? "").trim().toLowerCase()
@@ -59,84 +55,75 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
   }
 
   return (
-    <div data-links className="min-h-svh min-w-[1200px] bg-grond text-inkt">
-      <CrmKop pad={[{ naam: "Dashboard", href: "/dashboard" }, { naam: "Klanten" }]} actief="/dashboard/klanten" />
-      <main className="px-8 py-8">
-        <div className="flex items-end justify-between gap-8">
-          <div>
-            <h1 className="syne m-0 text-[48px] leading-[1.05]">Klanten</h1>
-            <p className="m-0 mt-2 text-[14px] opacity-70">{tabel ? "Alle contacten. Klik op een naam voor de klantkaart." : "Sleep een klus naar de volgende fase. Klik op een naam voor de klantkaart."}</p>
-          </div>
-          <dl className="m-0 flex gap-10">
-            {[
-              [String(lopend.length), "lopende klussen"],
-              [toonEuro(pijplijnGewogen), "leads, gewogen naar kans"],
-              [euro(open), "nog te ontvangen"],
-            ].map(([n, t]) => (
-              <div key={t}>
-                <dd className={`syne m-0 text-[26px] tabular-nums ${t === "nog te ontvangen" && open > 0 ? "text-oranje-tekst" : ""}`}>{n}</dd>
-                <dt className={`${lbl} opacity-60`}>{t}</dt>
-              </div>
-            ))}
-          </dl>
-        </div>
+    <>
+      <Kop pad={[{ naam: "Werk" }, { naam: "Klanten" }]} titel="Klanten" sub={tabel ? "Alle contacten. Klik op een naam voor de klantkaart." : "Sleep een klus naar de volgende fase. Klik op een naam voor de klantkaart."}>
+        <a href="#nieuw" className="crm-knop">+ Klant</a>
+      </Kop>
+      <main className="px-8 py-6">
+        <Cijfers>
+          <Cijfer label="Lopende klussen" waarde={String(lopend.length)} uitleg="voorbij de aanvraag, niet afgerond" />
+          <Cijfer label="Leads, gewogen" waarde={toonEuro(pijplijnGewogen)} uitleg="waarde × kans die je invult" />
+          <Cijfer label="Nog te ontvangen" waarde={euro(open)} let={open > 0} uitleg="facturen niet afgevinkt" href="/dashboard/geld" />
+          <Cijfer label="Opvolgen" waarde={String(opvolgen.length)} let={opvolgen.length > 0} uitleg="vandaag of eerder" />
+        </Cijfers>
 
         {opvolgen.length > 0 && (
-          <section aria-label="Opvolgen" className="mt-6 rounded-[16px] border border-oranje/60 bg-oranje/10 p-4">
-            <p className={`${lbl} m-0`}>Opvolgen · vandaag of eerder</p>
+          <section aria-label="Opvolgen" className="crm-let mt-6 p-4">
+            <p className="crm-label m-0 !text-let">Opvolgen · vandaag of eerder</p>
             <ul className="m-0 mt-2 flex list-none flex-wrap gap-x-6 gap-y-1 p-0 text-[14px]">
               {opvolgen.map((k) => (
                 <li key={k.id}>
-                  <Link href={`/dashboard/klanten/${k.id}`} className="font-semibold hover:text-oranje-tekst">{k.naam}</Link>
-                  <span className="opacity-70"> · {kortDatum(k.opvolgen)}{k.volgende ? ` · ${k.volgende}` : ""}</span>
+                  <Link href={`/dashboard/klanten/${k.id}`} className="crm-link">{k.naam}</Link>
+                  <span className="text-gedempt"> · {kortDatum(k.opvolgen)}{k.volgende ? ` · ${k.volgende}` : ""}</span>
                 </li>
               ))}
             </ul>
           </section>
         )}
 
-        <form action={nieuweKlant} className="mt-8 flex flex-wrap items-center gap-2">
-          <input name="naam" required placeholder="Naam nieuwe klant" aria-label="Naam" className={`${veld} w-[220px]`} />
-          <input name="telefoon" placeholder="Telefoon" aria-label="Telefoon" className={`${veld} w-[150px]`} />
-          <input name="email" type="email" placeholder="E-mail" aria-label="E-mail" className={`${veld} w-[200px]`} />
-          <input name="wat" placeholder="Wat wil de klant?" aria-label="Wat" className={`${veld} w-[280px]`} />
-          <input name="plaats" placeholder="Plaats" aria-label="Plaats" className={`${veld} w-[130px]`} />
-          <select name="bron" aria-label="Bron" defaultValue="" className={`${veld} bg-grond`}>
+        <form id="nieuw" action={nieuweKlant} className="crm-paneel mt-6 flex flex-wrap items-center gap-2 p-3">
+          <span className="crm-label px-2">Nieuwe klant</span>
+          <input name="naam" required autoFocus={!!nieuw} placeholder="Naam" aria-label="Naam" className={`${veld} w-[200px]`} />
+          <input name="telefoon" placeholder="Telefoon" aria-label="Telefoon" className={`${veld} w-[140px]`} />
+          <input name="email" type="email" placeholder="E-mail" aria-label="E-mail" className={`${veld} w-[190px]`} />
+          <input name="wat" placeholder="Wat wil de klant?" aria-label="Wat" className={`${veld} w-[260px]`} />
+          <input name="plaats" placeholder="Plaats" aria-label="Plaats" className={`${veld} w-[120px]`} />
+          <select name="bron" aria-label="Bron" defaultValue="" className={veld}>
             <option value="" disabled>Hoe binnen?</option>
             {BRONNEN.map((b) => (
               <option key={b}>{b}</option>
             ))}
           </select>
-          <button className="rounded-full bg-oranje px-5 py-2 text-[14px] font-semibold text-[#202020]">+ Klant</button>
-          {!opslagAan() && <span className="text-[12px] text-oranje-tekst">Opslag staat uit: wijzigingen worden niet bewaard.</span>}
+          <button className="crm-knop">+ Klant</button>
+          {!opslagAan() && <span className="text-[12px] text-let">Opslag staat uit: wijzigingen worden niet bewaard.</span>}
         </form>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-          <nav aria-label="Weergave" className="flex gap-1 rounded-full border border-lijn p-1 text-[13px] font-semibold">
-            <Link href={basis({ weergave: undefined })} aria-current={!tabel ? "page" : undefined} className={`rounded-full px-4 py-1.5 ${!tabel ? "bg-inkt text-grond" : "opacity-70"}`}>Pijplijn</Link>
-            <Link href={basis({ weergave: "tabel" })} aria-current={tabel ? "page" : undefined} className={`rounded-full px-4 py-1.5 ${tabel ? "bg-inkt text-grond" : "opacity-70"}`}>Tabel</Link>
+          <nav aria-label="Weergave" className="flex gap-1 rounded-full border border-lijn bg-vlak p-1 text-[13px] font-semibold">
+            <Link href={basis({ weergave: undefined })} aria-current={!tabel ? "page" : undefined} className={`rounded-full px-4 py-1.5 ${!tabel ? "bg-accent text-op-accent" : "text-gedempt hover:text-inkt"}`}>Pijplijn</Link>
+            <Link href={basis({ weergave: "tabel" })} aria-current={tabel ? "page" : undefined} className={`rounded-full px-4 py-1.5 ${tabel ? "bg-accent text-op-accent" : "text-gedempt hover:text-inkt"}`}>Tabel</Link>
           </nav>
           <form className="flex items-center gap-2" action="/dashboard/klanten">
             {tabel && <input type="hidden" name="weergave" value="tabel" />}
             <input name="q" defaultValue={q} placeholder="Zoek op naam, plaats, tag…" aria-label="Zoeken" className={`${veld} w-[260px]`} />
-            <select name="soort" defaultValue={soort ?? ""} aria-label="Soort contact" className={`${veld} bg-grond`}>
+            <select name="soort" defaultValue={soort ?? ""} aria-label="Soort contact" className={veld}>
               <option value="">Alle soorten</option>
               {KLANT_SOORTEN.map((s) => (
                 <option key={s}>{s}</option>
               ))}
             </select>
-            <button className="rounded-full border border-lijn px-4 py-2 text-[13px] font-semibold hover:border-oranje">Filter</button>
-            {(q || soort) && <Link href={basis({ q: undefined, soort: undefined })} className="text-[13px] opacity-70">Wissen</Link>}
+            <button className="crm-knop-rand">Filter</button>
+            {(q || soort) && <Link href={basis({ q: undefined, soort: undefined })} className="crm-knop-stil">Wissen</Link>}
           </form>
         </div>
 
         <div className="mt-6">
           {tabel ? (
-            <table className="w-full border-collapse text-[14px]">
+            <table className="crm-tabel">
               <thead>
-                <tr className={`${lbl} text-left opacity-60`}>
+                <tr>
                   {["Naam", "Soort", "Fase", "Plaats", "Contact", "Bron", "Opvolgen", "Waarde", "Open"].map((h) => (
-                    <th key={h} className={`border-b border-lijn py-2 pr-4 font-semibold ${h === "Waarde" || h === "Open" ? "text-right" : ""}`}>{h}</th>
+                    <th key={h} className={h === "Waarde" || h === "Open" ? "text-right" : ""}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -145,25 +132,25 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
                   const g = geld(k)
                   const calc = laatsteCalculatie(k)
                   return (
-                    <tr key={k.id} className="border-b border-lijn align-top">
-                      <td className="py-2 pr-4">
-                        <Link href={`/dashboard/klanten/${k.id}`} className="font-semibold hover:text-oranje-tekst">{k.naam}</Link>
-                        {k.wat && <span className="block max-w-[340px] truncate text-[12px] opacity-60">{k.wat}</span>}
+                    <tr key={k.id}>
+                      <td>
+                        <Link href={`/dashboard/klanten/${k.id}`} className="crm-link">{k.naam}</Link>
+                        {k.wat && <span className="block max-w-[340px] truncate text-[12px] text-gedempt">{k.wat}</span>}
                       </td>
-                      <td className="py-2 pr-4">{k.soort}</td>
-                      <td className="py-2 pr-4">{k.fase}</td>
-                      <td className="py-2 pr-4">{k.plaats}</td>
-                      <td className="py-2 pr-4 text-[13px]">{[k.telefoon, k.email].filter(Boolean).join(" · ") || k.contact}</td>
-                      <td className="py-2 pr-4">{k.bron}</td>
-                      <td className={`py-2 pr-4 tabular-nums ${k.opvolgen && k.opvolgen <= nu && isOpen(k.fase) ? "font-semibold text-oranje-tekst" : ""}`}>{k.opvolgen ? kortDatum(k.opvolgen) : ""}</td>
-                      <td className="py-2 pr-4 text-right font-mono tabular-nums">{g.offerte ? euro(g.offerte) : calc ? toonEuro(calc.v.totaal) : k.waarde ? toonEuro(k.waarde) : ""}</td>
-                      <td className={`py-2 text-right font-mono tabular-nums ${g.open > 0 ? "text-oranje-tekst" : "opacity-50"}`}>{g.open > 0 ? euro(g.open) : "—"}</td>
+                      <td>{k.soort}</td>
+                      <td><span className={`crm-badge ${k.fase === "Verloren" || k.fase === "Opgeleverd" ? "crm-badge-stil" : ""}`}>{k.fase}</span></td>
+                      <td>{k.plaats}</td>
+                      <td className="text-[13px]">{[k.telefoon, k.email].filter(Boolean).join(" · ") || k.contact}</td>
+                      <td>{k.bron}</td>
+                      <td className={`crm-cijfer text-[13px] ${k.opvolgen && k.opvolgen <= nu && isOpen(k.fase) ? "font-semibold text-let" : ""}`}>{k.opvolgen ? kortDatum(k.opvolgen) : ""}</td>
+                      <td className="crm-cijfer text-right">{g.offerte ? euro(g.offerte) : calc ? toonEuro(calc.v.totaal) : k.waarde ? toonEuro(k.waarde) : ""}</td>
+                      <td className={`crm-cijfer text-right ${g.open > 0 ? "text-let" : "text-gedempt"}`}>{g.open > 0 ? euro(g.open) : "—"}</td>
                     </tr>
                   )
                 })}
                 {!klanten.length && (
                   <tr>
-                    <td colSpan={9} className="py-6 text-center opacity-60">Geen klanten gevonden{zoek ? ` voor "${q}"` : ""}.</td>
+                    <td colSpan={9} className="py-6 text-center text-gedempt">Geen klanten gevonden{zoek ? ` voor "${q}"` : ""}.</td>
                   </tr>
                 )}
               </tbody>
@@ -173,6 +160,6 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
           )}
         </div>
       </main>
-    </div>
+    </>
   )
 }

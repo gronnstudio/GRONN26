@@ -63,10 +63,19 @@ Contacten → Leads → Tuinopname → Calculatie → Offertes → Projecten →
 
 Foto's per tuin werken (zie 04). Overige documenten: gepland.
 
-## 01 · Overzicht — Bezig
+## 01 · Vandaag — Getest
 
-De ring en "Volgende stap" op `/dashboard` komen uit de klanten. To-do's,
-facturen en offertes op het tabblad Geld staan nog in `src/lib/beheer/data.ts`.
+`/dashboard` is het startscherm van het systeem (het oude startscherm met ring,
+klok en tabbladen is weg; oude `?tab=`-adressen leiden door). Zes cijfers, elk
+een link: opvolgen, nieuwe aanvragen, offertes open, lopende klussen, te
+ontvangen, uren deze week. Daaronder wat vandaag moet, de lopende klussen, de
+pijplijn, de komende twee weken, geld, de volgende post en wat er te regelen
+is. Elke definitie staat onder het blok. Geld en papieren (`/dashboard/geld`)
+rekent uit de facturen en offertes op de klantkaarten; "Zelf te betalen" en de
+to-do's staan nog in `src/lib/beheer/data.ts`.
+
+Verder in de zijbalk: Aanvragen, Planning (eigen afspraken en opvolgen; geen
+Google Agenda), Calculaties (alle klanten), Uren, Social, Leveranciers, Links.
 
 ## Gepland
 

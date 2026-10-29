@@ -62,8 +62,8 @@ export function Rekenhulp({ catalogus, onRegel, onUren }: { catalogus: Item[]; o
   }
 
   return (
-    <section className="rounded-[18px] border border-lijn p-5">
-      <p className="m-0 text-[10px] font-semibold uppercase tracking-[.18em] opacity-60">3 · Rekenhulp</p>
+    <section className="crm-paneel p-5">
+      <p className="m-0 text-[10px] font-semibold uppercase tracking-[.18em] text-gedempt">3 · Rekenhulp</p>
       <div className="mt-3 flex flex-wrap items-end gap-3">
         <label className="grid gap-1 text-[13px]">
           Wat reken je uit?
@@ -87,7 +87,7 @@ export function Rekenhulp({ catalogus, onRegel, onUren }: { catalogus: Item[]; o
       </div>
       {uit && (
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-[13px]">
-          <p className="m-0 font-mono">{uit.formule}</p>
+          <p className="m-0 crm-cijfer">{uit.formule}</p>
           <div className="flex flex-wrap items-center gap-2">
             {geschikt.length > 0 && (
               <select aria-label="Prijs uit catalogus" value={item} onChange={(e) => setItem(e.target.value)} className="rounded-[10px] border border-lijn bg-grond px-2 py-1.5 text-[13px]">
@@ -97,7 +97,7 @@ export function Rekenhulp({ catalogus, onRegel, onUren }: { catalogus: Item[]; o
                 ))}
               </select>
             )}
-            <button type="button" onClick={voegToe} className="rounded-full border border-lijn px-4 py-2 text-[13px] font-semibold hover:border-oranje">
+            <button type="button" onClick={voegToe} className="crm-knop-rand">
               {hulp.id === "arbeid" ? "+ Bij de uren" : "+ Als regel"}
             </button>
           </div>
