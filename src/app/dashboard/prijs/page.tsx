@@ -14,17 +14,17 @@ const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
 
 export default function Prijs() {
   return (
-    <div data-links className="min-h-svh bg-grond text-inkt">
-      <header className="flex items-center justify-between gap-4 border-b border-lijn px-5 py-4 md:px-8">
+    <div data-links className="min-h-svh bg-grond text-inkt print:min-h-0 print:bg-white">
+      <header className="flex items-center print:hidden justify-between gap-4 border-b border-lijn px-5 py-4 md:px-8">
         <span className={`${lbl} text-oranje-tekst`}>Dashboard · Prijs berekenen</span>
         <Link href="/dashboard" className="text-[13px] opacity-70 hover:opacity-100">← Dashboard</Link>
       </header>
-      <main className="mx-auto max-w-[1200px] px-5 py-8 md:px-8">
-        <h1 className="syne m-0 text-[clamp(36px,4vw,48px)] leading-[1.05]">Prijs berekenen</h1>
-        <p className="m-0 mt-3 max-w-[60ch] text-[14px] leading-[1.55] opacity-75">
+      <main className="mx-auto max-w-[1200px] px-5 py-8 md:px-8 print:max-w-none print:p-0">
+        <h1 className="syne m-0 text-[clamp(36px,4vw,48px)] leading-[1.05] print:hidden">Prijs berekenen</h1>
+        <p className="m-0 mt-3 print:hidden max-w-[60ch] text-[14px] leading-[1.55] opacity-75">
           Vul je uren en je inkoop in. De opslag per soort rekent vanzelf mee, en je ziet meteen of er genoeg overblijft.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 print:mt-0">
           <PrijsRekenaar />
         </div>
       </main>
