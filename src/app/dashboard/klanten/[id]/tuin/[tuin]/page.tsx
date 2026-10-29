@@ -31,11 +31,12 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
   const n = telling(lijst, t)
   const opp = oppervlakUit(t.antwoorden)
   const vragen = vraagMap(lijst)
-  const naam = (vid: string) => vragen.get(vid)?.tekst ?? t.vragen[vid] ?? vid
+  // De tekst van toen het antwoord gegeven werd gaat voor: een hernoemde vraag geeft een oud antwoord geen andere betekenis.
+  const naam = (vid: string) => t.vragen[vid] ?? vragen.get(vid)?.tekst ?? vid
   // Antwoorden die de intake nu niet toont: vervallen vragen, vervolgvragen van een werkzaamheid die
   // niet meer gekozen is, en vinkjes van de oude checklist. Zo blijft elk antwoord terug te lezen.
   const getoond = new Set(vragenVoor(lijst, t, "uitgebreid").flatMap((c) => c.vragen.map((v) => v.id)))
-  const los = Object.keys(t.antwoorden).filter((vid) => !getoond.has(vid))
+  const los = [...new Set([...Object.keys(t.antwoorden), ...Object.keys(t.notities)])].filter((vid) => !getoond.has(vid))
 
   return (
     <>
@@ -73,7 +74,8 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
               <ul className="m-0 mt-2 flex list-none flex-col gap-1.5 p-0 text-[13px]">
                 {los.map((vid) => (
                   <li key={vid}>
-                    {naam(vid)}: <strong>{t.antwoorden[vid]}</strong>
+                    {naam(vid)}: <strong>{t.antwoorden[vid] || "—"}</strong>
+                    {t.notities[vid] && <span className="block text-gedempt">{t.notities[vid]}</span>}
                   </li>
                 ))}
               </ul>
