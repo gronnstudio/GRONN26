@@ -85,6 +85,7 @@ function schrijfLokaal(tuin: string, w: IntakeWijziging | null) {
 export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: string; lijst: Vragenlijst; begin: IntakeBegin }) {
   const [s, setS] = useState<Stand>(begin)
   const [bewaard, setBewaard] = useState<Bewaard>("bewaard")
+  const [afgewezen, setAfgewezen] = useState<string[]>([])
   const [blad, setBlad] = useState<string>("")
   // De vervolginspectie houdt de lijst vast waarmee hij begon, anders verdwijnt een vraag zodra je hem beantwoordt.
   const [vervolgIds, setVervolgIds] = useState<Set<string> | null>(() => (begin.soort === "vervolg" ? new Set(vragenVoor(lijst, begin, "vervolg").flatMap((c) => c.vragen.map((v) => v.id))) : null))
@@ -108,6 +109,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
         const r = await bewaarIntake(klant, tuin, w)
         gelukt = r.ok
         if (!r.ok) setBewaard("fout")
+        else setAfgewezen(r.afgewezen)
       } catch {
         setBewaard("wacht")
       }
@@ -223,6 +225,11 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
             {statusTekst}
           </span>
         </div>
+        {afgewezen.length > 0 && (
+          <p role="alert" className="m-0 text-[13px] font-semibold text-let">
+            Niet bewaard, de vragenlijst is intussen veranderd: {afgewezen.join(", ")}. Herlaad de pagina en vul {afgewezen.length === 1 ? "die vraag" : "die vragen"} opnieuw in.
+          </p>
+        )}
       </div>
 
       <p className="m-0 text-[13px] text-gedempt">{INTAKE_NAAM[s.soort].uitleg}</p>

@@ -22,11 +22,14 @@ export type IntakeWijziging = {
 
 const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
 
-export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWijziging): Promise<{ ok: true } | { ok: false; fout: string }> {
+export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWijziging): Promise<{ ok: true; afgewezen: string[] } | { ok: false; fout: string }> {
   await eisEigenaar()
   const lijst = await leesVragenlijst()
   const vragen = vraagMap(lijst)
   let gevonden = false
+  // Antwoorden die niet (meer) passen, bv. een keuzeoptie die intussen uit de vragenlijst ging terwijl
+  // de intake offline was. Die worden niet stil overgeslagen: de browser meldt ze.
+  const afgewezen = new Set<string>()
 
   await wijzigKlanten((klanten) =>
     klanten.map((k) => {
@@ -40,7 +43,10 @@ export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWij
         for (const [id, ruw] of Object.entries(w.antwoorden ?? {})) {
           const v = vragen.get(id)
           const waarde = v ? schoonAntwoord(v, ruw) : null
-          if (!v || waarde === null) continue
+          if (!v || waarde === null) {
+            afgewezen.add(v?.tekst ?? id)
+            continue
+          }
           if (waarde) {
             t.antwoorden[id] = waarde
             t.vragen[id] = v.tekst
@@ -92,5 +98,5 @@ export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWij
       return log ? { ...nieuw, activiteit: [gebeurtenis("Opname", log), ...k.activiteit].slice(0, 500) } : nieuw
     }),
   )
-  return gevonden ? { ok: true } : { ok: false, fout: "Deze tuin bestaat niet meer." }
+  return gevonden ? { ok: true, afgewezen: [...afgewezen] } : { ok: false, fout: "Deze tuin bestaat niet meer." }
 }

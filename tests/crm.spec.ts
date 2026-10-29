@@ -256,6 +256,12 @@ test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem
   await page.unrouteAll({ behavior: "wait" })
   await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible({ timeout: 20_000 })
   expect(await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith("gronn-intake-")))).toBe(false)
+
+  // Een offline antwoord dat niet meer in de vragenlijst past, wordt gemeld en niet stil overgeslagen.
+  const sleutel = `gronn-intake-${tuin.split("/").pop()}`
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({ antwoorden: { grond: "Marmer" } })), sleutel)
+  await page.reload()
+  await expect(page.getByRole("alert")).toContainText("Niet bewaard, de vragenlijst is intussen veranderd: Grondsoort")
 })
 
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
