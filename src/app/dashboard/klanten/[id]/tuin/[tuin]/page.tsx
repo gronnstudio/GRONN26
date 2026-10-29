@@ -8,6 +8,7 @@ import { ALLE_VELDEN, DIENSTEN, INTAKE, ingevuld, oppervlakUit } from "@/lib/crm
 import { toonDecimaal } from "@/lib/crm/geld"
 import { bewaarOpname, fotoWeg, tuinWeg } from "../../../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
+import { AdresVeld } from "@/components/adres-veld"
 
 // De tuinopname (masterprompt CRM, module 04 en 05): één vaste vragenlijst per
 // tuin, foto's per moment, en elke eerdere versie blijft bewaard. Werkt ook op
@@ -37,10 +38,7 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
               Naam
               <input name="naam" defaultValue={t.naam} className={`${veld} text-[16px] font-semibold`} />
             </label>
-            <label className="grid gap-1 text-[13px]">
-              Adres van de tuin
-              <input name="adres" defaultValue={t.adres} className={veld} />
-            </label>
+            <AdresVeld naam="adres" label="Adres van de tuin" waarde={t.adres} className={veld} />
           </div>
 
           {INTAKE.map((g) => (
