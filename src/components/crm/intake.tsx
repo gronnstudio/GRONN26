@@ -10,6 +10,7 @@ import {
   ZONE_SOORTEN,
   isOpenAntwoord,
   openPunten,
+  schoonAntwoord,
   telling,
   vragenVoor,
   zoneOppervlak,
@@ -350,8 +351,6 @@ function VraagKaart({ v, s, wijzig }: { v: Vraag; s: Stand; wijzig: (w: IntakeWi
         <fieldset className="m-0 border-0 p-0">
           <legend className="mb-2 p-0 text-[15px] font-semibold leading-snug">{label}</legend>
           {v.hulp && <p className="m-0 mb-2 text-[13px] text-gedempt">{v.hulp}</p>}
-          {/* Een antwoord van vóór een wijziging van het soort vraag blijft leesbaar. */}
-          {waarde && !(JNOV as readonly string[]).includes(waarde) && <p className="m-0 mb-2 text-[13px]">Eerder ingevuld: <strong>{waarde}</strong></p>}
           <div className="grid grid-cols-4 gap-1.5">
             {JNOV.map((o) => (
               <button
@@ -378,8 +377,6 @@ function VraagKaart({ v, s, wijzig }: { v: Vraag; s: Stand; wijzig: (w: IntakeWi
               {v.opties?.map((o) => (
                 <option key={o}>{o}</option>
               ))}
-              {/* Een bewaard antwoord waarvan de optie later uit de vragenlijst ging, blijft leesbaar. */}
-              {waarde && !v.opties?.includes(waarde) && <option value={waarde}>{waarde} (oude keuze)</option>}
             </select>
           ) : v.soort === "lang" ? (
             <textarea id={veldId} value={waarde} onChange={(e) => zet(e.target.value)} rows={3} className="crm-veld resize-y text-[16px] leading-[1.5]" />
@@ -396,6 +393,12 @@ function VraagKaart({ v, s, wijzig }: { v: Vraag; s: Stand; wijzig: (w: IntakeWi
         </div>
       )}
 
+      {/* Een antwoord dat niet meer in dit soort vraag past (optie weg, soort veranderd) blijft leesbaar. */}
+      {waarde && schoonAntwoord(v, waarde) !== waarde && (
+        <p className="m-0 mt-2 text-[13px]">
+          Eerder ingevuld: <strong>{waarde}</strong>
+        </p>
+      )}
       <div className="mt-3 flex flex-wrap gap-2">
         <button type="button" aria-expanded={notitieOpen} onClick={() => setNotitieOpen((x) => !x)} className="crm-knop-stil crm-knop-klein min-h-[36px]">
           {notitie ? "Notitie ✓" : "+ Notitie"}
