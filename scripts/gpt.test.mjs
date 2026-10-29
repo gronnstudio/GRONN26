@@ -38,3 +38,9 @@ test("verboden paden, ook via ./ en een symlink", () => {
     process.chdir(oud)
   }
 })
+
+test("regels die op een diffkop lijken worden ook gecontroleerd", () => {
+  const mail = `klant${"@"}prive.nl`
+  assert.equal(controleer(`--- ${mail}`).length, 1)
+  assert.equal(controleer(`+++ ${mail}`).length, 1)
+})

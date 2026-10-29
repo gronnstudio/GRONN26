@@ -100,14 +100,14 @@ export function controleer(tekst) {
   let pad = ""
   tekst.split("\n").forEach((regel, i) => {
     if (regel.startsWith("+++ b/")) pad = regel.slice(6)
-    if (regel.startsWith("+++ ") || regel.startsWith("--- ")) return
     for (const [soort, re] of GEVOELIG) if (re.test(regel)) fouten.push(`${soort} in ${pad || "invoer"} (regel ${i + 1} van de invoer)`)
   })
   return fouten
 }
 
 function diffVan(base) {
-  const paden = git("diff", "--name-only", `${base}...HEAD`).split("\n").filter(Boolean)
+  // -z: ongequote namen, ook bij niet-ASCII.
+  const paden = git("diff", "--name-only", "-z", `${base}...HEAD`).split("\0").filter(Boolean)
   const mee = paden.filter((p) => !verboden(p))
   const weg = paden.filter(verboden)
   if (mee.length === 0) stop("geen bestanden om te reviewen")
@@ -116,7 +116,7 @@ function diffVan(base) {
 
 async function vraagModel(model, systeem, invoer) {
   if (invoer.length > MAX_IN_TEKENS) stop(`invoer is ${invoer.length} tekens, het plafond is ${MAX_IN_TEKENS}; maak de PR kleiner of review per map`)
-  const fouten = controleer(invoer)
+  const fouten = controleer(`${systeem}\n${invoer}`)
   if (fouten.length) stop(`niet verstuurd, mogelijk gevoelige gegevens:\n  - ${fouten.join("\n  - ")}`)
   const res = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
