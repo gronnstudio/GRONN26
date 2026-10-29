@@ -8,7 +8,7 @@
 // Sleutel: de Network secret voor api.openai.com in de Claude-omgeving, of lokaal
 // OPENAI_API_KEY / OPENAI_API_KEY_FILE.
 
-import { execFileSync } from "node:child_process"
+import { execFileSync, spawnSync } from "node:child_process"
 import { readFileSync, realpathSync } from "node:fs"
 import { relative } from "node:path"
 
@@ -192,4 +192,9 @@ async function main() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main()
+// Node's fetch negeert HTTPS_PROXY tenzij NODE_USE_ENV_PROXY=1; zonder proxy geen Network secret.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  if (process.env.HTTPS_PROXY && !process.env.NODE_USE_ENV_PROXY)
+    process.exit(spawnSync(process.execPath, process.argv.slice(1), { stdio: "inherit", env: { ...process.env, NODE_USE_ENV_PROXY: "1" } }).status ?? 1)
+  main()
+}
