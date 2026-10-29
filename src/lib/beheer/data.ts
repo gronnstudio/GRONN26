@@ -14,6 +14,8 @@ export type Project = {
   volgende: string
   /** Moet ik iets doen? */
   aandacht?: boolean
+  /** Klantkaart in het CRM */
+  href?: string
 }
 
 export const PROJECTEN: Project[] = [

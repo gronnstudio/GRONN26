@@ -1,4 +1,4 @@
-import { get, put } from "@vercel/blob"
+import { leesJson, opslagAan, schrijfJson } from "@/lib/crm/opslag"
 
 // Urenregistratie voor het urencriterium (eigenaar, 15 okt 2026: "een
 // uitvoerige urenregistratie" in het dashboard). 1.225 uur per kalenderjaar,
@@ -50,23 +50,15 @@ export const RECONSTRUCTIE = [
 export const weekTotaal = (r: (typeof RECONSTRUCTIE)[number]) => r.website + r.social + r.vijver + r.overig
 
 const PAD = "dashboard/uren.json"
-export const opslagAan = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+export { opslagAan }
 
 export async function leesUren(): Promise<Regel[]> {
-  if (!opslagAan()) return []
-  try {
-    const r = await get(PAD, { access: "private", useCache: false })
-    if (!r?.stream) return []
-    const d = (await new Response(r.stream).json()) as { regels?: Regel[] }
-    return d.regels ?? []
-  } catch {
-    return []
-  }
+  return (await leesJson<{ regels?: Regel[] }>(PAD, () => ({ regels: [] }))).regels ?? []
 }
 
 export async function schrijfUren(regels: Regel[]) {
   regels.sort((a, b) => b.datum.localeCompare(a.datum))
-  await put(PAD, JSON.stringify({ regels }), { access: "private", allowOverwrite: true, addRandomSuffix: false, contentType: "application/json" })
+  await schrijfJson(PAD, { regels })
 }
 
 /** ISO-weeknummer en maandag van die week, voor het groeperen per week. */

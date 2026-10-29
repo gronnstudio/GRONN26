@@ -1,0 +1,157 @@
+import { expect, test } from "@playwright/test"
+import { deel, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
+import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
+import * as h from "../src/lib/crm/rekenhulpen"
+import { zetPrijs, nieuwItem } from "../src/lib/crm/catalogus"
+import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
+import { oppervlakUit } from "../src/lib/crm/intake"
+
+// De rekenkern van het CRM zonder browser: geld in centen, afronden, btw per
+// tarief, marge tegenover opslag en de rekenhulpen. Draait in dezelfde
+// Playwright-run als de rest (geen extra testpakket).
+
+test.describe("geld", () => {
+  test("afronden is half weg van nul", () => {
+    expect(deel(5, 2)).toBe(3)
+    expect(deel(-5, 2)).toBe(-3)
+    expect(deel(4, 3)).toBe(1)
+    expect(deel(1005 * 2100, 10000)).toBe(211) // 21 % van € 10,05 = 2,1105 → 2,11
+  })
+  test("invoer lezen zonder kommagetallen", () => {
+    expect(leesCenten("1.234,56")).toBe(123456)
+    expect(leesCenten("1234.56")).toBe(123456)
+    expect(leesCenten("€ 7")).toBe(700)
+    expect(leesCenten("1.234")).toBe(123400)
+    expect(leesCenten("0,105")).toBe(11)
+    expect(leesCenten("abc")).toBeNull()
+    expect(leesCenten("")).toBeNull()
+    expect(leesMilli("58,85")).toBe(58850)
+  })
+  test("tonen", () => {
+    expect(toonEuro(123456)).toBe("€ 1.234,56")
+    expect(toonEuro(-50)).toBe("€ -0,50")
+    expect(toonDecimaal(58850, 3)).toBe("58,85")
+  })
+  test("verdelen telt exact op", () => {
+    const delen = verdeel(100, [1, 1, 1])
+    expect(delen.reduce((a, b) => a + b, 0)).toBe(100)
+    expect(verdeel(0, [0, 0])).toEqual([0, 0])
+  })
+})
+
+test.describe("rekenhulpen", () => {
+  test("55 m² bestrating met 7 % snijverlies is 58,85 m²", () => {
+    expect(h.bestrating(55000, 700).hoeveelheid).toBe(58850)
+    expect(plusProcent(55000, 700)).toBe(58850)
+  })
+  test("afgraven, grond, grind, mulch", () => {
+    expect(h.afgraven(62000, 300).hoeveelheid).toBe(18600) // 18,6 m³
+    expect(h.grond(10000, 200, 1500).hoeveelheid).toBe(2300) // 2 m³ + 15 %
+    expect(h.grind(62000, 150, 1600).ton).toBe(14880) // 9,3 m³ × 1,6
+    expect(h.mulch(20000, 50).hoeveelheid).toBe(1000)
+  })
+  test("planten altijd naar boven op hele stuks", () => {
+    expect(h.planten(20500, 7000).hoeveelheid).toBe(144000) // 143,5 → 144
+  })
+  test("machinehuur en arbeid", () => {
+    expect(h.machinehuur(3000, 15000, 7500).bedrag).toBe(52500)
+    expect(h.arbeid(62000, 22000).hoeveelheid).toBe(23000) // 22,55 uur → 23
+    expect(h.arbeid(1000, 0).hoeveelheid).toBe(0)
+  })
+})
+
+test.describe("calculatie", () => {
+  const klinkers = nieuweRegel("materiaal", { omschrijving: "Klinkers", hoeveelheid: 55000, eenheid: "m²", inkoop: 2500, afval: 700 })
+  const planten = nieuweRegel("planten", { omschrijving: "Grassen P9", hoeveelheid: 140000, eenheid: "st", inkoop: 250 })
+
+  test("opslag, marge en btw per tarief", () => {
+    const u = reken({ uren: 48000, uurtarief: 5000, regels: [klinkers, planten], onvoorzien: 0, korting: 0 })
+    // klinkers: 58,85 m² × € 25 = € 1.471,25 inkoop; +15 % = € 28,75 × 58,85 = € 1.691,94
+    expect(u.regels[0].kostprijs).toBe(147125)
+    expect(u.regels[0].verkoop).toBe(169194)
+    // planten: 140 × € 2,50 = € 350 inkoop; verkoopprijs per stuk € 3,125 → € 3,13 (per eenheid op de cent), × 140 = € 438,20, 9 % btw
+    expect(u.regels[1].verkoop).toBe(43820)
+    expect(u.arbeid).toBe(240000)
+    expect(u.verkoop).toBe(240000 + 169194 + 43820)
+    expect(u.btw).toEqual([
+      { tarief: 2100, grondslag: 409194, btw: 85931 },
+      { tarief: 900, grondslag: 43820, btw: 3944 },
+    ])
+    expect(u.totaal).toBe(u.verkoop + 85931 + 3944)
+    expect(u.winst).toBe(u.verkoop - 147125 - 35000)
+    // marge is winst / verkoop, opslag is winst / kostprijs: nooit hetzelfde
+    expect(u.marge).toBe(deel(u.winst * 10000, u.verkoop))
+    expect(u.opslag).toBe(deel(u.winst * 10000, u.kostprijs))
+    expect(u.marge).not.toBe(u.opslag)
+    expect(u.perUur).toBe(deel(u.winst * 1000, 48000))
+  })
+
+  test("korting en onvoorzien gaan naar rato over de tarieven", () => {
+    const u = reken({ uren: 10000, uurtarief: 5000, regels: [planten], onvoorzien: 500, korting: 1000 })
+    const bruto = 50000 + 43820
+    expect(u.onvoorzien).toBe(deel(bruto * 500, 10000))
+    expect(u.korting).toBe(deel((bruto + u.onvoorzien) * 1000, 10000))
+    expect(u.btw.reduce((t, b) => t + b.grondslag, 0)).toBe(u.verkoop)
+  })
+
+  test("optioneel werk staat niet in het totaal", () => {
+    const optie = { ...planten, id: "o", optioneel: true }
+    const met = reken({ uren: 0, uurtarief: 5000, regels: [klinkers, optie], onvoorzien: 0, korting: 0 })
+    const zonder = reken({ uren: 0, uurtarief: 5000, regels: [klinkers], onvoorzien: 0, korting: 0 })
+    expect(met.totaal).toBe(zonder.totaal)
+    expect(met.optioneel).toHaveLength(1)
+  })
+
+  test("na betaling wegzetten en tekort", () => {
+    const u = reken({ uren: 8000, uurtarief: 5000, regels: [klinkers], onvoorzien: 0, korting: 0 })
+    const w = wegzetten(u)
+    expect(w.btwInkoop).toBe(deel(147125 * 2100, 10000))
+    expect(w.btwAfdragen).toBe(u.btwTotaal - w.btwInkoop)
+    expect(w.vrij + w.reserve).toBe(u.winst)
+    expect(tekort(u, 8000)).toBe(Math.max(0, 3700 * 8 - u.winst))
+    expect(tekort(u, 0)).toBe(0)
+  })
+
+  test("marge en opslag omrekenen", () => {
+    expect(margeUitOpslag(2500)).toBe(2000) // 25 % opslag = 20 % marge
+    expect(opslagUitMarge(2000)).toBe(2500)
+  })
+
+  test("onzin uit opslag of van Claude wordt een veilige regel", () => {
+    const r = schoonRegel({ soort: "raket", hoeveelheid: 1.5, inkoop: -4, btw: 1900, opslag: 9e15 } as never)
+    expect(r.soort).toBe("overig")
+    expect(r.hoeveelheid).toBe(1000)
+    expect(r.inkoop).toBe(0)
+    expect(r.btw).toBe(2100)
+    expect(r.opslag).toBe(100000)
+  })
+})
+
+test.describe("catalogus en klanten", () => {
+  test("een nieuwe prijs bewaart de oude in de historie", () => {
+    const i = nieuwItem({ naam: "Waaltjes", inkoop: 2000, bijgewerkt: "2026-10-01" })
+    const zelfde = zetPrijs(i, 2000)
+    expect(zelfde.historie).toHaveLength(0)
+    const nieuw = zetPrijs(i, 2200, "Steenrijk")
+    expect(nieuw.inkoop).toBe(2200)
+    expect(nieuw.historie[0]).toEqual({ datum: "2026-10-01", inkoop: 2000, leverancier: "" })
+  })
+  test("dubbele klant op mail, nummer of naam", () => {
+    const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]
+    expect(zoekDubbel(lijst, { contact: "+31 6 12345678" }).map((k) => k.id)).toEqual(["a"])
+    expect(zoekDubbel(lijst, { contact: "NOAH@voorbeeld.nl" }).map((k) => k.id)).toEqual(["b"])
+    expect(zoekDubbel(lijst, { naam: "diliana timmermans " }).map((k) => k.id)).toEqual(["a"])
+    expect(zoekDubbel(lijst, { naam: "Iemand anders", contact: "0612000000" })).toHaveLength(0)
+  })
+  test("een oude klant zonder nieuwe velden blijft leesbaar", () => {
+    const k = normaliseer({ id: "oud", naam: "Vaessen", fase: "Opgeleverd" as never, stukken: [] })
+    expect(k.tuinen).toEqual([])
+    expect(k.soort).toBe("Particulier")
+    expect(normaliseer({ id: "x", naam: "X", fase: "Bestaat niet" as never }).fase).toBe("Aanvraag")
+  })
+  test("oppervlak uit de opname", () => {
+    expect(oppervlakUit({ oppervlak: "62" })).toBe(62000)
+    expect(oppervlakUit({ lengte: "8,5", breedte: "6" })).toBe(51000)
+    expect(oppervlakUit({})).toBeNull()
+  })
+})
