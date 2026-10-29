@@ -150,7 +150,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   // Een omschrijving die precies een catalogusnaam is, neemt eenheid en prijs over.
   const zetOmschrijving = (i: number, tekst: string) => {
     const item = perNaam.get(tekst.toLowerCase())
-    if (item && item.id !== regels[i].catalogusId) zet(i, { ...naarInvul(alsRegel(item, leesMilli(regels[i].hoeveelheid) ?? 1000)), id: regels[i].id })
+    if (item && item.id !== regels[i].catalogusId) zet(i, { ...naarInvul(alsRegel(item, leesMilli(regels[i].hoeveelheid) ?? 1000)), id: regels[i].id, meetstaat: regels[i].meetstaat })
     else zet(i, { omschrijving: tekst })
   }
   const voegToe = (r: Regel) => setRegels((oud) => [...oud.filter((x) => x.omschrijving.trim() || x.inkoop.trim()), naarInvul(r)])
