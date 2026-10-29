@@ -11,7 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # Samenwerking Claude Code × GPT/Codex
 
 Geldt voor elke AI-agent in deze repo. Uitleg: [docs/ai-samenwerking.md](docs/ai-samenwerking.md),
-waarom: [ADR 0005](docs/architecture/decisions/0005-gpt-als-reviewer.md).
+waarom: [ADR 0008](docs/architecture/decisions/0008-gpt-als-reviewer.md).
 
 - **Rollen.** Claude Code schrijft de code. GPT/Codex reviewt en adviseert, maar pusht nooit naar
   een branch van Claude. Vraagt Nick Codex om code, dan komt die op een eigen `codex/`-branch met

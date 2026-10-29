@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// GPT als onafhankelijke reviewer (ADR 0005). Geen pakketten: fetch naar de
+// GPT als onafhankelijke reviewer (ADR 0008). Geen pakketten: fetch naar de
 // OpenAI Responses API. Alleen code gaat de deur uit, nooit klantgegevens.
 //
 //   node scripts/gpt.mjs review [--base <ref>] [--tegenronde <bestand>] [--zwaar]
