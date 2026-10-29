@@ -59,13 +59,13 @@ export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWij
           if (!vragen.has(id)) continue
           t.aandacht = aan ? [...new Set([...t.aandacht, id])] : t.aandacht.filter((x) => x !== id)
         }
-        if (w.diensten) t.diensten = w.diensten.map(String).filter((x) => lijst.diensten.includes(x))
+        if (Array.isArray(w.diensten)) t.diensten = w.diensten.map(String).filter((x) => lijst.diensten.includes(x))
         if (w.soort && (INTAKE_SOORTEN as readonly string[]).includes(w.soort) && w.soort !== oud.soort) {
           t.soort = w.soort
           log = `${INTAKE_NAAM[w.soort].naam} begonnen voor "${oud.naam}"`
         }
-        if (w.zones)
-          t.zones = w.zones.slice(0, 30).map((z) => ({
+        if (Array.isArray(w.zones))
+          t.zones = w.zones.slice(0, 30).filter((z) => z && typeof z === "object").map((z) => ({
             id: String(z.id ?? "").slice(0, 64) || crypto.randomUUID(),
             naam: String(z.naam ?? "").trim().slice(0, 60) || "Zone",
             soort: (ZONE_SOORTEN as readonly string[]).includes(z.soort) ? z.soort : "Overig",

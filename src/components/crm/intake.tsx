@@ -87,7 +87,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
   const [bewaard, setBewaard] = useState<Bewaard>("bewaard")
   const [blad, setBlad] = useState<string>("")
   // De vervolginspectie houdt de lijst vast waarmee hij begon, anders verdwijnt een vraag zodra je hem beantwoordt.
-  const [vervolgIds, setVervolgIds] = useState<Set<string> | null>(null)
+  const [vervolgIds, setVervolgIds] = useState<Set<string> | null>(() => (begin.soort === "vervolg" ? new Set(vragenVoor(lijst, begin, "vervolg").flatMap((c) => c.vragen.map((v) => v.id))) : null))
   const wachtrij = useRef<IntakeWijziging>({})
   const bezig = useRef(false)
   const klok = useRef<ReturnType<typeof setTimeout> | null>(null)
