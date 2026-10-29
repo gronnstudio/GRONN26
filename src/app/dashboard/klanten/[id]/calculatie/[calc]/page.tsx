@@ -8,6 +8,8 @@ import { leesKlanten } from "@/lib/beheer/klanten"
 import { STANDAARD } from "@/lib/crm/calculatie"
 import { oppervlakUit } from "@/lib/crm/intake"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
+import { BewaarKnop } from "@/components/crm/bewaar-knop"
+import { maakOfferteVan } from "../../../offerte-acties"
 
 // Een calculatie bij een klant: hetzelfde rekenblad als /dashboard/prijs, met
 // bewaren als nieuwe versie. ?v=2 opent een oudere versie om verder te
@@ -70,6 +72,11 @@ export default async function CalculatiePagina({ params, searchParams }: { param
               </Link>
             ))}
           </nav>
+        )}
+        {c && versie && (
+          <form action={maakOfferteVan.bind(null, k.id, c.id, versie.nr)}>
+            <BewaarKnop>Offerte met link maken (v{versie.nr})</BewaarKnop>
+          </form>
         )}
       </Kop>
       <main className="mx-auto max-w-[1440px] px-8 py-6 print:max-w-none print:p-0">

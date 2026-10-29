@@ -1,5 +1,12 @@
 # Wijzigingen
 
+## 29 okt 2026 · Offerte met privélink
+
+- Op een calculatie: "Offerte met link maken". Er komt een momentopname met alleen omschrijving, hoeveelheid en prijs (geen inkoop, opslag of uren) onder een onraadbare sleutel in `crm/offertes/`.
+- De klant opent `/offerte/[token]` zonder inlog, vult zijn naam in en geeft akkoord; het stuk wordt akkoord en de klant gaat naar fase Akkoord, met een regel op de tijdlijn.
+- Intrekken maakt de link ongeldig; na 30 dagen verloopt hij.
+- Ook: adres zoekt mee via PDOK; opname-checklist per tuin.
+
 ## 29 okt 2026 · Nieuw systeem in plaats van het dashboard
 
 - Schil met zijbalk (Werk, Rekenen, Bedrijf), Nieuw-menu, ⌘K-zoekvenster en Grønn als zijpaneel (⌘J).
