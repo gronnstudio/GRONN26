@@ -5,9 +5,10 @@
 //   node scripts/gpt.mjs review [--base <ref>] [--tegenronde <bestand>] [--zwaar]
 //   node scripts/gpt.mjs vraag "<vraag>" <bestand> [<bestand> …] [--zwaar]
 //
-// Sleutel: OPENAI_API_KEY, of OPENAI_API_KEY_FILE met het pad naar een bestand.
+// Sleutel: de Network secret voor api.openai.com in de Claude-omgeving, of lokaal
+// OPENAI_API_KEY / OPENAI_API_KEY_FILE.
 
-import { execFileSync } from "node:child_process"
+import { execFileSync, spawnSync } from "node:child_process"
 import { readFileSync, realpathSync } from "node:fs"
 import { relative } from "node:path"
 
@@ -73,10 +74,11 @@ function stop(melding) {
   process.exit(1)
 }
 
-function sleutel() {
-  if (process.env.OPENAI_API_KEY) return process.env.OPENAI_API_KEY.trim()
-  if (process.env.OPENAI_API_KEY_FILE) return readFileSync(process.env.OPENAI_API_KEY_FILE, "utf8").trim()
-  stop("geen OPENAI_API_KEY of OPENAI_API_KEY_FILE")
+// Zonder eigen sleutel zet de proxy van de Claude-omgeving de header zelf
+// (Network secret voor api.openai.com); het script ziet de sleutel dan nooit.
+function kop() {
+  const k = process.env.OPENAI_API_KEY ?? (process.env.OPENAI_API_KEY_FILE && readFileSync(process.env.OPENAI_API_KEY_FILE, "utf8"))
+  return k ? { Authorization: `Bearer ${k.trim()}` } : {}
 }
 
 function git(...args) {
@@ -120,7 +122,7 @@ async function vraagModel(model, systeem, invoer) {
   if (fouten.length) stop(`niet verstuurd, mogelijk gevoelige gegevens:\n  - ${fouten.join("\n  - ")}`)
   const res = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
-    headers: { Authorization: `Bearer ${sleutel()}`, "Content-Type": "application/json" },
+    headers: { ...kop(), "Content-Type": "application/json" },
     body: JSON.stringify({
       model,
       instructions: systeem,
@@ -131,6 +133,7 @@ async function vraagModel(model, systeem, invoer) {
     }),
   })
   const data = await res.json()
+  if (res.status === 401) stop("OpenAI 401: geen geldige sleutel. Staat de Network secret voor api.openai.com in de Claude-omgeving, of OPENAI_API_KEY?")
   if (!res.ok) stop(`OpenAI ${res.status}: ${data.error?.message ?? "onbekende fout"}`)
   const tekst = data.output_text ?? data.output?.flatMap((o) => o.content ?? []).find((c) => c.type === "output_text")?.text
   if (!tekst) stop(`geen antwoord (status ${data.status})`)
@@ -189,4 +192,9 @@ async function main() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main()
+// Node's fetch negeert HTTPS_PROXY tenzij NODE_USE_ENV_PROXY=1; zonder proxy geen Network secret.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  if (process.env.HTTPS_PROXY && !process.env.NODE_USE_ENV_PROXY)
+    process.exit(spawnSync(process.execPath, process.argv.slice(1), { stdio: "inherit", env: { ...process.env, NODE_USE_ENV_PROXY: "1" } }).status ?? 1)
+  main()
+}

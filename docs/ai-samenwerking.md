@@ -41,7 +41,7 @@ Een andere repo krijgt hetzelfde blok in zijn eigen `AGENTS.md`.
 
 `node scripts/gpt.mjs review` stuurt de diff ten opzichte van de standaardbranch naar GPT
 (`gpt-6.1-sol`, met `--zwaar` `gpt-6-astra`). `vraag "<vraag>" <bestanden>` vraagt tegenadvies.
-De sleutel komt uit `OPENAI_API_KEY` of `OPENAI_API_KEY_FILE`.
+De sleutel staat als Network secret (Bearer, alleen voor `api.openai.com`) in de Claude-omgeving: de proxy zet hem in de header en het script ziet hem nooit. Lokaal kan ook `OPENAI_API_KEY` of `OPENAI_API_KEY_FILE`.
 
 Beveiliging: paden als `.env*`, `.crm-data/`, uploads en foto's gaan nooit mee. Het script stopt
 als het een sleutel, IBAN, telefoonnummer, e-mailadres (behalve @gronn.studio) of postcode met
