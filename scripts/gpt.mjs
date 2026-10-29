@@ -27,7 +27,7 @@ const GEVOELIG = [
   ["API-sleutel", /\b(sk-[A-Za-z0-9_-]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|vercel_blob_rw_[A-Za-z0-9_]+|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16})\b/],
   ["privésleutel", /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
   ["IBAN", /\bNL\d{2}[A-Z]{4}\d{10}\b/],
-  // Vast en mobiel, met of zonder spaties en streepjes (020 1234567, 06 1234 5678, +31 6 …).
+  // Vast en mobiel, met of zonder spaties en streepjes, ook met +31 of 0031.
   ["telefoonnummer", /(?<![\w.])(\+31|0031|0)[\s-]?[1-9](?:[\s-]?\d){8}(?!\d)/],
   ["e-mailadres", /\b[A-Za-z0-9._%+-]+@(?!gronn\.studio\b|example\.(com|nl)\b)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/],
   ["postcode met huisnummer", /\b\d{4}\s?[A-Z]{2}\s+\d{1,4}\b/],
