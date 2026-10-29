@@ -18,6 +18,9 @@ type Regel = { wat: string; soort: Soort; inkoop: string }
 type Schatting = { uren: number; posten: { wat: string; uren: number }[]; aannames: string }
 
 const MINIMUM_PER_UUR = 37
+// Apart zetten voor inkomstenbelasting en Zvw: voorzichtig, zodat de
+// aanslag nooit tegenvalt. Wat te veel staat, komt terug als vrij geld.
+const RESERVE_BELASTING = 25
 const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
 const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2 text-[14px]"
 const getal = (s: string) => Math.max(0, Number(s.replace(",", ".")) || 0)
@@ -85,6 +88,11 @@ export function PrijsRekenaar() {
   const tekort = urenGetal ? Math.max(0, MINIMUM_PER_UUR * urenGetal - over) : 0
 
   const totaal = verkoop + btw9 + btw21
+  // Na betaling: leveranciers, af te dragen btw (verkoop-btw min de btw op je
+  // inkoop) en een reserve voor de belasting op wat je overhoudt.
+  const btwInkoop = posten.reduce((t, p) => t + (p.inkoopBedrag * p.btw) / 100, 0)
+  const btwAfdragen = btw9 + btw21 - btwInkoop
+  const reserve = Math.max(0, over) * (RESERVE_BELASTING / 100)
   const regelsVoorKlant = posten.filter((p) => p.inkoopBedrag > 0)
 
   return (
@@ -225,6 +233,18 @@ export function PrijsRekenaar() {
             </p>
           )}
         </div>
+        <div className="rounded-[14px] border border-lijn p-4">
+          <p className={`${lbl} m-0 opacity-60`}>Na betaling wegzetten</p>
+          <dl className="m-0 mt-2 grid gap-2 text-[14px]">
+            <Rij t="Leveranciers, incl. btw" b={inkoop + btwInkoop} />
+            <Rij t="Btw-rekening, af te dragen" b={btwAfdragen} />
+            <Rij t={`Belasting op je winst (${RESERVE_BELASTING} %)`} b={reserve} />
+            <Rij t="Vrij voor jou" b={over - reserve} vet />
+          </dl>
+          <p className="m-0 mt-2 text-[12px] leading-[1.5] opacity-60">
+            Samen {euro(totaal)}, wat de klant betaalt. De btw op je inkoop trek je af in je aangifte, daarom staat alleen het verschil op de btw-rekening.
+          </p>
+        </div>
         <p className="m-0 text-[12px] leading-[1.5] opacity-60">
           Overhouden = verkoop excl. btw min inkoop, vóór vaste lasten en inkomstenbelasting. Zet de uren niet op de offerte, alleen de prijs per post.
         </p>
@@ -275,7 +295,7 @@ function Rij({ t, b, vet }: { t: string; b: number; vet?: boolean }) {
   return (
     <div className={`flex justify-between gap-4 ${vet ? "border-t border-lijn pt-2 font-semibold" : ""}`}>
       <dt>{t}</dt>
-      <dd className="m-0 tabular-nums">{euro(b)}</dd>
+      <dd className="m-0 whitespace-nowrap tabular-nums">{euro(b)}</dd>
     </div>
   )
 }
