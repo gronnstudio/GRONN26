@@ -32,7 +32,7 @@ Een andere repo krijgt hetzelfde blok in zijn eigen `AGENTS.md`.
 
 | Fase | Wat | Stand |
 | --- | --- | --- |
-| 1 | Protocol: `AGENTS.md`, dit document, ADR 0005 | Gebouwd |
+| 1 | Protocol: `AGENTS.md`, dit document, ADR 0008 | Gebouwd |
 | 2 | `scripts/gpt.mjs` (review en vraag via de Responses API), tests in `scripts/gpt.test.mjs` | Getest |
 | 3 | Skills `/review-with-gpt` en `/vraag-gpt` (`.claude/skills/`) | Gebouwd |
 | 4 | Codex code review aan op GRONN26, test op `src/components/stapel.tsx` | Gepland |

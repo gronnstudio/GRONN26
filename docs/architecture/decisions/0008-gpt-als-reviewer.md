@@ -1,4 +1,6 @@
-# ADR 0005 · GPT/Codex reviewt, Claude Code schrijft
+# ADR 0008 · GPT/Codex reviewt, Claude Code schrijft
+
+_Tot 29 okt 2026 genummerd als 0005; hernummerd omdat 0005 al het checklistbesluit was._
 
 29 okt 2026 · **Besloten** (Nick koos "Alleen gevoelige delen")
 
