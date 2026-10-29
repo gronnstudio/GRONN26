@@ -79,7 +79,16 @@ export async function schrijfJson(pad: string, data: unknown) {
  * Lees, pas aan, schrijf terug: als iemand er tussendoor schreef, één keer
  * opnieuw op de nieuwe stand. `f` mag het document muteren of een nieuw teruggeven.
  */
-export async function wijzigJson<T>(pad: string, start: () => T, f: (d: T) => T | void): Promise<T> {
+export function wijzigJson<T>(pad: string, start: () => T, f: (d: T) => T | void): Promise<T> {
+  // Binnen één proces na elkaar: de schijf (CRM_LOKAAL) kent geen ETag, en zonder
+  // deze rij overschreven twee gelijktijdige tests elkaars wijziging (29 okt 2026).
+  const klaar = (rij.get(pad) ?? Promise.resolve()).then(() => wijzig(pad, start, f))
+  rij.set(pad, klaar.catch(() => undefined))
+  return klaar
+}
+const rij = new Map<string, Promise<unknown>>()
+
+async function wijzig<T>(pad: string, start: () => T, f: (d: T) => T | void): Promise<T> {
   for (let poging = 0; poging < 2; poging++) {
     const { data, etag } = await lees(pad, start)
     const nieuw = (f(data) ?? data) as T
