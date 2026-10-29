@@ -19,6 +19,9 @@ export default defineConfig({
     command: "npx next start -p 3210",
     url: "http://localhost:3210",
     reuseExistingServer: !process.env.CI,
+    // Het dashboard onder test (tests/crm.spec.ts): een testinlog en opslag
+    // in .crm-data/ op schijf in plaats van Blob. Alleen voor deze server.
+    env: { GOOGLE_CLIENT_ID: "test", AUTH_SECRET: "alleen-voor-tests", CRM_LOKAAL: "1", EDITOR_ALLOWED_EMAIL: "hello@gronn.studio" },
     timeout: 60_000,
   },
 })

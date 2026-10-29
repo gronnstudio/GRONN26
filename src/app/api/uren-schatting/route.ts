@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk"
 import { NextResponse, type NextRequest } from "next/server"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
+import { leesCatalogus } from "@/lib/beheer/catalogus"
+import { toonEuro } from "@/lib/crm/geld"
 
 // Urenschatting voor het rekenblad /dashboard/prijs (eigenaar, 29 okt 2026:
 // "kun je jezelf hierin inbouwen zodat we aan de hand van een beschrijving een
@@ -29,7 +31,7 @@ Een werkdag is 8 uur. Tel 5 procent op voor tegenvallers en rond af op hele uren
 
 Regels voor machines en materiaal: maak voor elke machine, container en elk materiaal dat de beschrijving noemt of dat de klus duidelijk nodig heeft een eigen regel, met de inkoop excl. btw als schatting. Reken machinehuur per dag voor het aantal dagen dat hij nodig is volgens je uren, met transport als aparte regel.
 Richtprijzen excl. btw: minigraver tot 2 ton € 150 per dag; dumper € 100 per dag; trilplaat € 50 per dag; transport van een machine € 75 per keer heen en terug; puincontainer 6 m³ € 300, grondcontainer 6 m³ € 280, groenafval 6 m³ € 250; korrelmix of menggranulaat € 25 per ton (1 m³ is ongeveer 1,6 ton); straatzand € 30 per m³ los gestort; bezorging los gestort € 60 per vracht; opsluitbanden € 4 per meter; klinkers alleen als de beschrijving een soort of prijs noemt, anders weglaten.
-Gebruik voor soort: machine (huur of transport van machines), bezorging (containers en vrachten), materiaal (steen, grond, zand, hout, techniek) of planten.
+Gebruik voor soort: machine (huur of transport van machines), bezorging (vrachten en transport), afvoer (containers en stortkosten), materiaal (steen, grond, zand, hout, techniek) of planten.
 Antwoord in het Nederlands. Noem in aannames kort wat je hebt aangenomen omdat het niet in de beschrijving stond, ook laagdiktes en hoeveelheden.`
 
 const SCHEMA = {
@@ -52,7 +54,7 @@ const SCHEMA = {
         type: "object",
         properties: {
           wat: { type: "string" },
-          soort: { type: "string", enum: ["planten", "materiaal", "bezorging", "machine"] },
+          soort: { type: "string", enum: ["planten", "materiaal", "bezorging", "machine", "afvoer"] },
           inkoop: { type: "number", description: "Inkoop excl. btw in euro" },
         },
         required: ["wat", "soort", "inkoop"],
@@ -71,6 +73,12 @@ export async function POST(request: NextRequest) {
   if (!beschrijving?.trim()) return NextResponse.json({ fout: "Beschrijf eerst de klus." }, { status: 400 })
   if (!process.env.ANTHROPIC_API_KEY) return NextResponse.json({ fout: "Claude is niet ingesteld." }, { status: 503 })
 
+  // Nicks eigen prijzen uit de catalogus gaan vóór de richtprijzen hierboven.
+  const items = await leesCatalogus()
+  const catalogus = items.length
+    ? `\n\nPrijzen uit Nicks catalogus (inkoop excl. btw, gebruik deze vóór de richtprijzen, en dezelfde naam als omschrijving):\n${items.map((i) => `- ${i.naam}: ${toonEuro(i.inkoop)} per ${i.eenheid}`).join("\n")}`
+    : ""
+
   const client = new Anthropic()
   try {
     const antwoord = await client.beta.messages.create({
@@ -79,7 +87,7 @@ export async function POST(request: NextRequest) {
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       output_config: { effort: "low", format: { type: "json_schema", schema: SCHEMA } },
-      system: OPDRACHT,
+      system: `${OPDRACHT}${catalogus}`,
       messages: [{ role: "user", content: beschrijving.slice(0, 4000) }],
     })
     const tekst = antwoord.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("")

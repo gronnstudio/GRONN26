@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk"
 import { NextResponse, type NextRequest } from "next/server"
 import { geheugen } from "@/lib/beheer/geheugen"
+import { leesKlanten } from "@/lib/beheer/klanten"
+import { crmOverzicht, klantContext } from "@/lib/crm/context"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
 import { ZONDER_CLAUDE, zelfAntwoord } from "@/lib/beheer/zelf"
 
@@ -14,11 +16,17 @@ type Beurt = { rol: "nick" | "grønn"; tekst: string }
 
 export async function POST(request: NextRequest) {
   if (!(await isEigenaar(request.cookies.get(KOEKJE)?.value))) return new NextResponse("Niet ingelogd", { status: 401 })
-  const { vraag, eerder = [] } = (await request.json()) as { vraag?: string; eerder?: Beurt[] }
+  const { vraag, eerder = [], klantId } = (await request.json()) as { vraag?: string; eerder?: Beurt[]; klantId?: string }
   if (!vraag?.trim()) return NextResponse.json({ antwoord: "Ik hoorde niets." })
-  const zelf = zelfAntwoord(vraag)
+  // Op een klantkaart gaat de vraag altijd naar Claude, met die klant erbij.
+  const zelf = klantId ? null : zelfAntwoord(vraag)
   if (zelf) return NextResponse.json({ antwoord: zelf })
   if (!process.env.ANTHROPIC_API_KEY) return NextResponse.json({ antwoord: ZONDER_CLAUDE })
+
+  // Het CRM erbij: alle lopende klanten kort, en de open klant uitgebreid.
+  const klanten = await leesKlanten()
+  const open = typeof klantId === "string" ? klanten.find((k) => k.id === klantId) : undefined
+  const crm = `${crmOverzicht(klanten)}${open ? `\n\n${klantContext(open)}` : ""}`
 
   const client = new Anthropic()
   try {
@@ -28,7 +36,7 @@ export async function POST(request: NextRequest) {
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       output_config: { effort: "low" },
-      system: [{ type: "text", text: `${PERSOON}\n\nVandaag: ${new Date().toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}\n\n${geheugen()}` }],
+      system: [{ type: "text", text: `${PERSOON}\n\nVandaag: ${new Date().toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}\n\n${geheugen()}\n\n${crm}` }],
       messages: [
         ...eerder.slice(-8).map((b) => ({ role: b.rol === "nick" ? ("user" as const) : ("assistant" as const), content: b.tekst })),
         { role: "user", content: vraag.slice(0, 2000) },

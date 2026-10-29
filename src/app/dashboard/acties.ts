@@ -2,8 +2,10 @@
 
 import { cookies } from "next/headers"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
 import { leesStand, nieuweId, schrijfStand, type Aanvraag, type Stand } from "@/lib/beheer/stand"
+import { gebeurtenis, normaliseer, wijzigKlanten, zoekDubbel } from "@/lib/beheer/klanten"
 
 // Alleen de eigenaar mag schrijven; de proxy houdt /dashboard al dicht, dit is de tweede deur.
 async function wijzig(f: (s: Stand) => void) {
@@ -78,4 +80,48 @@ export async function bestellingKlaar(id: string, klaar: boolean) {
     const b = s.bestellingen.find((x) => x.id === id)
     if (b) b.klaar = klaar
   })
+}
+
+/**
+ * Een aanvraag wordt een klant (lead in fase Aanvraag), met de vraag op de
+ * tijdlijn. Bestaat de persoon al (zelfde mail, nummer of naam), dan komt de
+ * aanvraag bij die klant en komt er geen tweede kaart. De aanvraag zelf gaat
+ * na 30 dagen weg (privacyverklaring); de klantkaart is daarna de administratie.
+ */
+export async function aanvraagNaarKlant(id: string) {
+  if (!(await isEigenaar((await cookies()).get(KOEKJE)?.value))) throw new Error("Niet ingelogd")
+  const s = await leesStand()
+  const a = s.aanvragen.find((x) => x.id === id)
+  if (!a) return
+  const isMail = a.contact.includes("@")
+  let doel = ""
+  await wijzigKlanten((lijst) => {
+    const bestaand = zoekDubbel(lijst, { naam: a.naam, contact: a.contact })[0]
+    const notitie = gebeurtenis("Klant", `Aanvraag via ${a.bron.toLowerCase()} (${a.datum.slice(0, 10)}): ${a.wat || "geen bericht"}`, a.bron === "Formulier" ? "Formulier" : "Nick")
+    if (bestaand) {
+      doel = bestaand.id
+      return lijst.map((k) => (k.id === bestaand.id ? { ...k, activiteit: [notitie, ...k.activiteit] } : k))
+    }
+    doel = crypto.randomUUID()
+    const morgen = new Date(Date.now() + 86_400_000).toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
+    const klant = normaliseer({
+      id: doel,
+      naam: a.naam,
+      email: isMail ? a.contact : "",
+      telefoon: isMail ? "" : a.contact,
+      wat: a.wat.split("\n")[0].slice(0, 200),
+      bron: a.bron,
+      fase: "Aanvraag",
+      opvolgen: morgen,
+      volgende: "Terugbellen en een opname plannen.",
+      aangemaakt: new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" }),
+      activiteit: [notitie],
+    })
+    return [klant, ...lijst]
+  })
+  await wijzig((st) => {
+    const x = st.aanvragen.find((y) => y.id === id)
+    if (x) x.klaar = true
+  })
+  redirect(`/dashboard/klanten/${doel}`)
 }

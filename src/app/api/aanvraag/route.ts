@@ -15,6 +15,10 @@ export async function POST(request: NextRequest) {
   if (!naam || !contact) return NextResponse.json({ ok: false }, { status: 400 })
   const foto = typeof b.foto === "string" && /^[0-9a-f-]{36}$/.test(b.foto) ? b.foto : undefined
   const s = await leesStand()
+  // Twee keer op verzenden, of de browser die opnieuw probeert: dezelfde
+  // aanvraag binnen tien minuten telt één keer.
+  const tienMinuten = Date.now() - 10 * 60 * 1000
+  if (s.aanvragen.some((a) => a.naam === naam && a.contact === contact && a.wat === wat && new Date(a.datum).getTime() > tienMinuten)) return NextResponse.json({ ok: true })
   s.aanvragen.unshift({ id: nieuweId(), datum: new Date().toISOString(), naam, contact, wat, bron: "Formulier", foto })
   await schrijfStand(s)
   return NextResponse.json({ ok: true })

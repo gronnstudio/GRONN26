@@ -1,56 +1,21 @@
-import { get, put } from "@vercel/blob"
+import "server-only"
+import { leesJson, opslagAan, wijzigJson } from "@/lib/crm/opslag"
+import { geld, isOpen, laatsteCalculatie, normaliseer, type Gebeurtenis, type Klant, type KlantFase } from "@/lib/crm/klant"
+import type { Fase, Project } from "./data"
 
 // Klanten en hun klussen: één kaart per klant en een pijplijn van aanvraag tot
 // opgeleverd (eigenaar, 29 okt 2026: "bouw dashboard helemaal uit als een
 // crm/boekhouding soort van", gekozen: "Klantkaart + pijplijn"). Eén JSON-bestand
-// in de privé Blob-store, naast dashboard/stand.json. De boekhouding zelf
-// (factuurnummers, bewaarplicht, btw-aangifte) blijft in DigiBoox; hier staat
-// alleen wat Nick nodig heeft om het overzicht te houden.
+// in de privé Blob-store, naast dashboard/stand.json. Het model staat in
+// src/lib/crm/klant.ts; dit bestand leest en schrijft. De boekhouding zelf
+// (factuurnummers, bewaarplicht, btw-aangifte) blijft in DigiBoox.
 
-export const KLANT_FASEN = ["Aanvraag", "Opname", "Offerte", "Akkoord", "Gepland", "Uitvoering", "Opgeleverd"] as const
-export type KlantFase = (typeof KLANT_FASEN)[number]
-
-export type Stuk = {
-  id: string
-  soort: "Offerte" | "Factuur"
-  nummer: string
-  /** Bedrag incl. btw */
-  bedrag: number
-  datum: string
-  /** Factuur: betaald. Offerte: akkoord. */
-  rond?: boolean
-}
-
-export type Klant = {
-  id: string
-  naam: string
-  wat: string
-  plaats: string
-  contact: string
-  adres: string
-  fase: KlantFase
-  volgende: string
-  notities: string
-  stukken: Stuk[]
-  aangemaakt: string
-}
+export * from "@/lib/crm/klant"
+export { opslagAan }
 
 const PAD = "dashboard/klanten.json"
 
-export const opslagAan = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN)
-
-const leeg = (k: Partial<Klant> & Pick<Klant, "id" | "naam">): Klant => ({
-  wat: "",
-  plaats: "",
-  contact: "",
-  adres: "",
-  fase: "Aanvraag",
-  volgende: "",
-  notities: "",
-  stukken: [],
-  aangemaakt: "2026-10-29",
-  ...k,
-})
+const leeg = (k: Partial<Klant> & Pick<Klant, "id" | "naam">): Klant => normaliseer({ aangemaakt: "2026-10-29", ...k })
 
 // De klanten van vóór de klantkaart, uit de verstuurde offertes en facturen
 // (29 okt 2026). Contactgegevens en adressen vult Nick zelf in: die horen niet
@@ -122,34 +87,56 @@ const START: Klant[] = [
 ]
 
 export async function leesKlanten(): Promise<Klant[]> {
-  if (!opslagAan()) return START
-  try {
-    const r = await get(PAD, { access: "private", useCache: false })
-    if (!r?.stream) return START
-    return ((await new Response(r.stream).json()) as Klant[]).map((k) => leeg(k))
-  } catch {
-    return START
-  }
+  const ruw = await leesJson<Klant[]>(PAD, () => START)
+  return ruw.map((k) => normaliseer(k))
 }
 
-export async function schrijfKlanten(k: Klant[]) {
-  await put(PAD, JSON.stringify(k), { access: "private", allowOverwrite: true, addRandomSuffix: false, contentType: "application/json" })
+/** Lees, pas aan en schrijf terug in één keer (zie wijzigJson). */
+export async function wijzigKlanten(f: (k: Klant[]) => Klant[]) {
+  return wijzigJson<Klant[]>(PAD, () => START, (ruw) => f(ruw.map((k) => normaliseer(k))))
 }
 
-/** Wat er op de kaart en in de kolom bovenaan staat: gefactureerd, betaald, open. */
-export function geld(k: Klant) {
-  const facturen = k.stukken.filter((s) => s.soort === "Factuur")
-  const gefactureerd = facturen.reduce((t, s) => t + s.bedrag, 0)
-  const betaald = facturen.filter((s) => s.rond).reduce((t, s) => t + s.bedrag, 0)
-  const offerte = k.stukken.filter((s) => s.soort === "Offerte").at(-1)?.bedrag
-  return { gefactureerd, betaald, open: gefactureerd - betaald, offerte }
+/** Een regel voor de tijdlijn van een klant. */
+export const gebeurtenis = (soort: Gebeurtenis["soort"], tekst: string, wie: Gebeurtenis["wie"] = "Nick"): Gebeurtenis => ({
+  id: crypto.randomUUID(),
+  datum: new Date().toISOString(),
+  wie,
+  soort,
+  tekst: tekst.slice(0, 1000),
+})
+
+// De ring en "Volgende stap" op het dashboard rekenen sinds de CRM-bouw met de
+// echte klanten in plaats van de vaste lijst in data.ts. Vijf sectoren op de
+// ring, dus de acht fasen van de klantkaart vallen samen.
+const RING: Record<KlantFase, Fase | null> = {
+  Aanvraag: "Aanvraag",
+  Opname: "Aanvraag",
+  Offerte: "Offerte",
+  Akkoord: "Gepland",
+  Gepland: "Gepland",
+  Uitvoering: "Uitvoering",
+  Opgeleverd: "Opgeleverd",
+  Verloren: null,
 }
 
-/** Hoort een regel uit de urenregistratie bij deze klant? Op een woord uit de naam. */
-export function hoortBij(k: Klant, klantVeld: string) {
-  const veld = klantVeld.toLowerCase()
-  return k.naam
-    .toLowerCase()
-    .split(/[^a-zà-ÿ]+/)
-    .some((w) => w.length > 3 && veld.includes(w))
+export function alsProjecten(klanten: Klant[]): Project[] {
+  const nu = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
+  return klanten.flatMap((k) => {
+    const fase = RING[k.fase]
+    if (!fase) return []
+    const g = geld(k)
+    const c = laatsteCalculatie(k)
+    return [
+      {
+        naam: k.naam,
+        wat: k.wat,
+        plaats: k.plaats,
+        fase,
+        bedrag: g.offerte ?? (c ? c.v.totaal / 100 : undefined),
+        volgende: k.volgende || (isOpen(k.fase) ? "Geen volgende stap ingevuld." : "Klaar."),
+        aandacht: isOpen(k.fase) && ((!!k.opvolgen && k.opvolgen <= nu) || g.open > 0),
+        href: `/dashboard/klanten/${k.id}`,
+      },
+    ]
+  })
 }
