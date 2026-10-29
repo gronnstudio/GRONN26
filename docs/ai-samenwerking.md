@@ -33,6 +33,17 @@ Een andere repo krijgt hetzelfde blok in zijn eigen `AGENTS.md`.
 | Fase | Wat | Stand |
 | --- | --- | --- |
 | 1 | Protocol: `AGENTS.md`, dit document, ADR 0005 | Gebouwd |
-| 2 | `scripts/gpt.mjs` (review en vraag via de Responses API) | Gepland, wacht op API-sleutel |
-| 3 | Skills `/review-with-gpt` en `/vraag-gpt` | Gepland |
+| 2 | `scripts/gpt.mjs` (review en vraag via de Responses API) | Gebouwd, wacht op tegoed |
+| 3 | Skills `/review-with-gpt` en `/vraag-gpt` (`.claude/skills/`) | Gebouwd |
 | 4 | Codex code review aan op GRONN26, test op `src/components/stapel.tsx` | Gepland |
+
+## Het script
+
+`node scripts/gpt.mjs review` stuurt de diff ten opzichte van de standaardbranch naar GPT
+(`gpt-6.1-sol`, met `--zwaar` `gpt-6-astra`). `vraag "<vraag>" <bestanden>` vraagt tegenadvies.
+De sleutel komt uit `OPENAI_API_KEY` of `OPENAI_API_KEY_FILE`.
+
+Beveiliging: paden als `.env*`, `.crm-data/`, uploads en foto's gaan nooit mee. Het script stopt
+als het een sleutel, IBAN, telefoonnummer, e-mailadres (behalve @gronn.studio) of postcode met
+huisnummer ziet. Er gaan maximaal ongeveer 60.000 tokens in en 4.000 uit (≈ $0,16 met Sol), en
+`store: false`. Elke uitvoer eindigt met het aantal tokens en de kosten.
