@@ -9,6 +9,11 @@ import { KOEKJE, maakKoekje } from "../src/lib/eigenaar"
 
 process.env.AUTH_SECRET = "alleen-voor-tests"
 
+// Na elkaar in één worker: één test zet een voorstel rechtstreeks in
+// .crm-data/dashboard/klanten.json, en alleen dit bestand wijzigt klanten.
+// Zo kan geen andere test tussen lezen en schrijven door.
+test.describe.configure({ mode: "default" })
+
 /** Een tab boven de vragen van de intake (categorie, Zones, Open punten). */
 const tab = (page: Page, naam: RegExp) => page.getByRole("navigation", { name: "Categorieën" }).getByRole("button", { name: naam })
 
