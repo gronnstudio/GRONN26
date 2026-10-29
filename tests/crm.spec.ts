@@ -347,6 +347,30 @@ test("opname: beelden uit een video, een voorstel bevestigen zet het antwoord in
   expect(t.bevindingen[0].status).toBe("bevestigd")
 })
 
+test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => {
+  test.setTimeout(60_000)
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill(`Meet Klant ${Date.now()}`)
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await page.getByRole("link", { name: /^Tuinen/ }).click()
+  await page.locator('input[name="naam"]').fill("Terras")
+  await page.getByRole("button", { name: "+ Tuin en opname" }).click()
+  await tab(page, /^Zones/).click()
+  await page.getByRole("button", { name: "+ Zone toevoegen" }).click()
+  await page.getByLabel("Lengte").fill("7")
+  await page.getByLabel("Breedte").fill("10")
+  // De meetstaat rekent meteen mee, zonder herladen.
+  await expect(page.getByText("70 m² × 300 mm = 21 m³ vast")).toBeVisible()
+  await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible({ timeout: 10_000 })
+  await page.getByRole("link", { name: "Zet in calculatie →" }).click()
+  await expect(page.getByRole("heading", { name: "Nieuwe calculatie" })).toBeVisible()
+  const bestrating = page.locator("tbody tr").filter({ has: page.locator('input[value="Bestrating · Zone A"]') })
+  await expect(bestrating.getByLabel("Aantal", { exact: true })).toHaveValue("73,5")
+  await expect(page.locator('input[value="Opsluitband · Zone A"]')).toBeVisible()
+})
+
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
   await log(page)
   await page.setViewportSize({ width: 1440, height: 1000 })

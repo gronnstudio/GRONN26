@@ -129,6 +129,18 @@ verdichtingsfactor, stuks per m², besteleenheid) komen bij het
 catalogusartikel te staan. Ontbreekt er een, dan zegt de meetstaat dat in
 plaats van een standaardpercentage te raden.
 
+**Gebouwd in fase 4 (29 okt 2026):**
+- `src/lib/crm/meetstaat.ts` rekent per zone met de bestaande rekenhulpen:
+  - terras, pad en oprit: afgraven, korrelmix, straatzand, bestrating + 5 % en opsluitband op de omtrek;
+  - gazon: teelaarde en graszoden;
+  - border: compost, planten (5 per m²) en mulch;
+  - vijver: uitgraven en folie met 0,5 m rand.
+- De laagdiktes zijn vaste standaardmaten en staan in elke formule. Een eigen afgraafdiepte per zone (cm) gaat voor.
+- De meetstaat staat naast de intake en rekent meteen mee.
+- "Zet in calculatie" voegt de regels toe aan de laatste calculatie van de tuin, of maakt een nieuwe. Bewaren geeft een nieuwe versie. Regels die eerder uit dezelfde zone kwamen, worden vervangen.
+- Een catalogusartikel met het zoekwoord in de naam levert de prijs. Staat het in BB, dan geldt 1 BB = 1 m³, afgerond naar boven op halve BB. Dat staat ook in de omschrijving.
+- Niet gebouwd: soortelijk gewicht en verdichting per catalogusartikel, en de projectomschrijving en werkvolgorde door Claude. "Schat de uren" in het rekenblad doet al een deel daarvan.
+
 ## 4. Mobiel op locatie
 
 - De intake is de enige pagina van het dashboard die eerst voor de telefoon

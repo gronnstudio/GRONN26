@@ -5,6 +5,7 @@ import { Kop } from "@/components/crm/kop"
 import { PrijsRekenaar, type Begin } from "@/components/beheer/prijs"
 import { leesCatalogus } from "@/lib/beheer/catalogus"
 import { voorRekenblad } from "@/lib/crm/catalogus"
+import { meetstaat, naarRegel as naarMeetRegel } from "@/lib/crm/meetstaat"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { STANDAARD } from "@/lib/crm/calculatie"
 import { oppervlakUit } from "@/lib/crm/vragenlijst"
@@ -20,9 +21,9 @@ export const dynamic = "force-dynamic"
 
 const tijd = (d: string) => new Date(d).toLocaleString("nl-NL", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" })
 
-export default async function CalculatiePagina({ params, searchParams }: { params: Promise<{ id: string; calc: string }>; searchParams: Promise<{ v?: string; tuin?: string }> }) {
+export default async function CalculatiePagina({ params, searchParams }: { params: Promise<{ id: string; calc: string }>; searchParams: Promise<{ v?: string; tuin?: string; meetstaat?: string }> }) {
   const { id, calc } = await params
-  const { v, tuin } = await searchParams
+  const { v, tuin, meetstaat: metMeetstaat } = await searchParams
   const [klanten, catalogus] = await Promise.all([leesKlanten(), leesCatalogus()])
   const k = klanten.find((x) => x.id === id)
   if (!k) notFound()
@@ -52,6 +53,14 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     korting: versie?.korting ?? 0,
     regels: versie?.regels ?? [],
     nr: laatste,
+  }
+  // "Zet in calculatie" vanuit de tuin: de meetstaat komt erbij. Regels die eerder uit de
+  // meetstaat van dezelfde zone kwamen, worden vervangen; de rest blijft staan.
+  if (metMeetstaat === "1" && t) {
+    const staat = meetstaat(t.zones)
+    const nieuw = staat.flatMap((z) => z.regels.filter((r) => r.hoeveelheid > 0).map((r) => naarMeetRegel(r, catalogus)))
+    const zones = new Set(staat.filter((z) => z.regels.length).map((z) => z.zone))
+    begin.regels = [...begin.regels.filter((r) => !(r.groep && zones.has(r.groep) && r.omschrijving.includes(` · ${r.groep}`))), ...nieuw]
   }
   const keuze = [{ id: k.id, naam: k.naam, tuinen: k.tuinen.map((x) => ({ id: x.id, naam: x.naam })) }]
 

@@ -5,6 +5,7 @@ import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
+import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -203,6 +204,28 @@ test.describe("catalogus en klanten", () => {
     const met = normaliseer({ id: "k2", naam: "X", tuinen: [{ id: "t", naam: "Tuin", antwoorden: { bijzonderheden: "Bel 0612345678" }, zones: [{ id: "z", naam: "Pad", soort: "Pad", notitie: "sleutel bij buren, a@b.nl" }] } as never] })
     const p = opdracht({ ...STANDAARD, categorieen: [{ id: "x", naam: "X", vragen: [{ id: "bijzonderheden", tekst: "Bijzonderheden", soort: "lang" }] }] }, met.tuinen[0], [{ nr: 1, bijschrift: "voordeur Kerkweg 12", zone: "z" }])
     expect(p).not.toMatch(/0612345678|a@b\.nl|Kerkweg 12/)
+  })
+  test("meetstaat: van zonematen naar hoeveelheden met formule", () => {
+    const zone = (x: Partial<Parameters<typeof meetstaat>[0][number]>) => ({ id: "z", naam: "Zone A", soort: "Terras" as const, lengte: "", breedte: "", oppervlak: "", diepte: "", notitie: "", ...x })
+    const [terras] = meetstaat([zone({ lengte: "7", breedte: "10" })])
+    const per = Object.fromEntries(terras.regels.map((r) => [r.wat, r]))
+    expect(per["Afgraven"].hoeveelheid).toBe(21000)
+    expect(per["Afgraven"].formule).toContain("70 m² × 300 mm = 21 m³")
+    expect(per["Fundering korrelmix"].hoeveelheid).toBe(14000)
+    expect(per["Straatzand (straatlaag)"].hoeveelheid).toBe(2800)
+    expect(per["Bestrating"].hoeveelheid).toBe(73500)
+    expect(per["Opsluitband"].hoeveelheid).toBe(34000)
+    // Eigen afgraafdiepte in cm gaat voor.
+    expect(meetstaat([zone({ oppervlak: "10", diepte: "40" })])[0].regels[0].hoeveelheid).toBe(4000)
+    const [vijver] = meetstaat([zone({ soort: "Vijver", lengte: "3", breedte: "2", diepte: "1" })])
+    expect(vijver.regels.map((r) => [r.wat, r.hoeveelheid])).toEqual([["Uitgraven", 6000], ["Vijverfolie", 30000]])
+    expect(meetstaat([zone({ soort: "Vijver", oppervlak: "6" })])[0].mist).toContain("diepte")
+    expect(meetstaat([zone({})])[0].mist).toContain("oppervlak")
+    // Met de catalogus: prijs uit het artikel, big bags op halve BB naar boven.
+    const korrel = nieuwItem({ naam: "Korrelmix", eenheid: "BB", inkoop: 3306 })
+    const regel = naarMeetRegel({ ...per["Fundering korrelmix"], hoeveelheid: 13200 }, [korrel])
+    expect(regel).toMatchObject({ omschrijving: "Korrelmix · Zone A (1 BB = 1 m³)", eenheid: "BB", hoeveelheid: 13500, inkoop: 3306, catalogusId: korrel.id, groep: "Zone A" })
+    expect(naarMeetRegel(per["Bestrating"], [korrel])).toMatchObject({ omschrijving: "Bestrating · Zone A", eenheid: "m²", inkoop: 0 })
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]
