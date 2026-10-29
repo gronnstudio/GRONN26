@@ -1,5 +1,5 @@
 import "server-only"
-import { BlobPreconditionFailedError, get, put } from "@vercel/blob"
+import { BlobNotFoundError, BlobPreconditionFailedError, get, head, put } from "@vercel/blob"
 
 // Eén plek waar het CRM leest en schrijft (ADR 0001, eigenaar 29 okt 2026:
 // "Blob nu, Postgres later"). Elk onderdeel is één JSON-document in de privé
@@ -30,9 +30,18 @@ async function lees<T>(pad: string, start: () => T): Promise<Gelezen<T>> {
     }
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) return { data: start(), bestaat: false }
+  // De ETag voor ifMatch komt uit head(), de API-metadata. De ETag die get()
+  // teruggeeft komt van de download en past niet op put({ ifMatch }): elke
+  // wijziging faalde daarop (29 okt 2026). Head eerst: schrijft iemand daarna
+  // nog, dan faalt put en leest wijzigJson opnieuw.
+  const meta = await head(pad).catch((fout) => {
+    if (fout instanceof BlobNotFoundError) return null
+    throw fout
+  })
+  if (!meta) return { data: start(), bestaat: false }
   const r = await get(pad, { access: "private", useCache: false })
   if (!r?.stream) return { data: start(), bestaat: false }
-  return { data: (await new Response(r.stream).json()) as T, etag: r.blob.etag, bestaat: true }
+  return { data: (await new Response(r.stream).json()) as T, etag: meta.etag, bestaat: true }
 }
 
 export async function leesJson<T>(pad: string, start: () => T): Promise<T> {
