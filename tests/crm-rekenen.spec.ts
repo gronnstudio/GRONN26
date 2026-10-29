@@ -226,6 +226,10 @@ test.describe("catalogus en klanten", () => {
     const regel = naarMeetRegel({ ...per["Fundering korrelmix"], hoeveelheid: 13200 }, [korrel])
     expect(regel).toMatchObject({ omschrijving: "Korrelmix · Zone A (1 BB = 1 m³)", eenheid: "BB", hoeveelheid: 13500, inkoop: 3306, catalogusId: korrel.id, groep: "Zone A" })
     expect(naarMeetRegel(per["Bestrating"], [korrel])).toMatchObject({ omschrijving: "Bestrating · Zone A", eenheid: "m²", inkoop: 0 })
+    // Het snijverlies zit al in de meetstaat; het afval van het artikel komt er niet nog eens bij.
+    const klinker = nieuwItem({ naam: "BKK klinker", eenheid: "m²", inkoop: 1570, afval: 500 })
+    const k = naarMeetRegel(per["Bestrating"], [klinker])
+    expect(k).toMatchObject({ hoeveelheid: 73500, afval: 0, meetstaat: per["Bestrating"].zoneId })
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]

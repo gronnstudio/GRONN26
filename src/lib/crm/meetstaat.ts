@@ -13,6 +13,7 @@ import { zoneOppervlak, type Zone } from "./vragenlijst"
 
 export type MeetRegel = {
   zone: string
+  zoneId: string
   wat: string
   soort: Soort
   hoeveelheid: Milli
@@ -36,7 +37,7 @@ const cm = (t: string) => {
 export function meetstaat(zones: Zone[]): ZoneMeting[] {
   return zones.map((z) => {
     const opp = zoneOppervlak(z)
-    const r = (wat: string, soort: Soort, uit: h.Hoeveelheid, zoek: string): MeetRegel => ({ zone: z.naam, wat, soort, zoek, ...uit })
+    const r = (wat: string, soort: Soort, uit: h.Hoeveelheid, zoek: string): MeetRegel => ({ zone: z.naam, zoneId: z.id, wat, soort, zoek, ...uit })
     if (!opp) return { zone: z.naam, regels: [], mist: "Vul oppervlak of lengte × breedte in." }
     const lg = leesMilli(z.lengte) ?? 0
     const br = leesMilli(z.breedte) ?? 0
@@ -75,7 +76,7 @@ export function meetstaat(zones: Zone[]): ZoneMeting[] {
           const fb = br + 2 * d + 1000
           const m2 = deel(fl * fb, 1000)
           regels.push(r("Vijverfolie", "materiaal", { hoeveelheid: m2, eenheid: "m²", formule: `(${lg / 1000} + 2 × ${d / 1000} + 1) × (${br / 1000} + 2 × ${d / 1000} + 1) m = ${(m2 / 1000).toLocaleString("nl-NL")} m²` }, "vijverfolie"))
-        } else regels.push({ zone: z.naam, wat: "Vijverfolie", soort: "materiaal", hoeveelheid: 0, eenheid: "m²", formule: "Vul lengte en breedte in voor de folie.", zoek: "vijverfolie" })
+        } else regels.push({ zone: z.naam, zoneId: z.id, wat: "Vijverfolie", soort: "materiaal", hoeveelheid: 0, eenheid: "m²", formule: "Vul lengte en breedte in voor de folie.", zoek: "vijverfolie" })
         break
       }
       default:
@@ -94,7 +95,7 @@ const plat = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCa
  */
 export function naarRegel(m: MeetRegel, catalogus: Item[]): Regel {
   const item = catalogus.find((i) => plat(i.naam).includes(m.zoek) && (i.eenheid === m.eenheid || (i.eenheid === "BB" && m.eenheid === "m³")))
-  const basis = { omschrijving: `${m.wat} · ${m.zone}`, eenheid: m.eenheid, hoeveelheid: m.hoeveelheid, groep: m.zone }
+  const basis = { omschrijving: `${m.wat} · ${m.zone}`, eenheid: m.eenheid, hoeveelheid: m.hoeveelheid, groep: m.zone, meetstaat: m.zoneId }
   if (!item) return nieuweRegel(m.soort, basis)
   const bb = item.eenheid === "BB" && m.eenheid === "m³"
   return nieuweRegel(item.soort, {
@@ -105,7 +106,8 @@ export function naarRegel(m: MeetRegel, catalogus: Item[]): Regel {
     inkoop: item.inkoop,
     opslag: item.opslag,
     btw: item.btw,
-    afval: item.afval,
+    // Het verlies zit al in de meetstaathoeveelheid; niet nog eens het afval van het artikel.
+    afval: 0,
     catalogusId: item.id,
   })
 }

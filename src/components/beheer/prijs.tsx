@@ -18,7 +18,7 @@ import { Rekenhulp } from "./rekenhulp"
 type Schatting = { uren: number; posten: { wat: string; uren: number }[]; regels?: { wat: string; soort: string; inkoop: number }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
-type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
+type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
 
 // "Met btw" (eigenaar, 29 okt 2026: "ik wil met btw"): inkoop en verkoop
 // tonen en invoeren incl. btw. Opgeslagen en gerekend wordt altijd excl.
@@ -55,6 +55,7 @@ const naarInvul = (r: Regel): Invul => ({
   optioneel: !!r.optioneel,
   groep: r.groep ?? "",
   catalogusId: r.catalogusId,
+  meetstaat: r.meetstaat,
 })
 const naarRegel = (r: Invul): Regel => ({
   id: r.id,
@@ -69,6 +70,7 @@ const naarRegel = (r: Invul): Regel => ({
   groep: r.groep.trim() || undefined,
   optioneel: r.optioneel || undefined,
   catalogusId: r.catalogusId,
+  meetstaat: r.meetstaat,
 })
 const leeg = () => naarInvul(nieuweRegel("materiaal", { hoeveelheid: 1000 }))
 

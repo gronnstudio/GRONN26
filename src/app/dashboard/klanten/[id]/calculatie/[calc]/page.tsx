@@ -55,12 +55,11 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     nr: laatste,
   }
   // "Zet in calculatie" vanuit de tuin: de meetstaat komt erbij. Regels die eerder uit de
-  // meetstaat van dezelfde zone kwamen, worden vervangen; de rest blijft staan.
+  // meetstaat kwamen (ook van een hernoemde of leeggemaakte zone), worden vervangen; de rest blijft staan.
   if (metMeetstaat === "1" && t) {
     const staat = meetstaat(t.zones)
     const nieuw = staat.flatMap((z) => z.regels.filter((r) => r.hoeveelheid > 0).map((r) => naarMeetRegel(r, catalogus)))
-    const zones = new Set(staat.filter((z) => z.regels.length).map((z) => z.zone))
-    begin.regels = [...begin.regels.filter((r) => !(r.groep && zones.has(r.groep) && r.omschrijving.includes(` · ${r.groep}`))), ...nieuw]
+    begin.regels = [...begin.regels.filter((r) => !r.meetstaat), ...nieuw]
   }
   const keuze = [{ id: k.id, naam: k.naam, tuinen: k.tuinen.map((x) => ({ id: x.id, naam: x.naam })) }]
 
