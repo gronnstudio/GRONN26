@@ -4,6 +4,8 @@ import { notFound } from "next/navigation"
 import { Kop } from "@/components/crm/kop"
 import { Intake } from "@/components/crm/intake"
 import { TuinFotos } from "@/components/beheer/tuin-fotos"
+import { Bevindingen } from "@/components/crm/bevindingen"
+import { zetBevinding } from "../../../intake-acties"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { oppervlakUit, telling, vraagMap, vragenVoor } from "@/lib/crm/vragenlijst"
@@ -82,7 +84,18 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
             </section>
           )}
 
-          <TuinFotos klant={k.id} tuin={t.id} fotos={t.fotos} weg={fotoWeg.bind(null, k.id, t.id)} />
+          <TuinFotos klant={k.id} tuin={t.id} fotos={t.fotos} zones={t.zones} weg={fotoWeg.bind(null, k.id, t.id)} />
+
+          {t.fotos.some((f) => f.moment === "Opname") && (
+            <Bevindingen
+              klant={k.id}
+              tuin={t.id}
+              fotos={t.fotos}
+              bevindingen={t.bevindingen}
+              vragen={Object.fromEntries(t.bevindingen.flatMap((b) => (b.vraag ? [[b.vraag, naam(b.vraag)]] : [])))}
+              zet={zetBevinding.bind(null, k.id, t.id)}
+            />
+          )}
 
           {t.geschiedenis.length > 0 && (
             <section className="crm-paneel p-5">

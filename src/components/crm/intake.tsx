@@ -38,6 +38,13 @@ type Stand = IntakeBegin
 type Bewaard = "bewaard" | "bezig" | "wacht" | "fout"
 
 const PAUZE = 700
+
+/** Een antwoord van buiten de intake (een bevestigd voorstel van Claude), via de gewone weg bewaard. */
+export const INTAKE_ANTWOORD = "crm-intake-antwoord"
+export type IntakeAntwoord = { tuin: string; vraag: string; antwoord: string }
+/** De zones zoals de intake ze nu kent, voor de foto's ernaast (die anders pas na herladen een nieuwe zone zien). */
+export const INTAKE_ZONES = "crm-intake-zones"
+export type IntakeZones = { tuin: string; zones: Zone[] }
 const KORT: Record<IntakeSoort, string> = { snel: "Snel", uitgebreid: "Uitgebreid", vervolg: "Vervolg" }
 const opslagSleutel = (tuin: string) => `gronn-intake-${tuin}`
 
@@ -150,6 +157,19 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
       return () => clearTimeout(t)
     }
   }, [stuur, tuin])
+
+  useEffect(() => {
+    const zet = (e: Event) => {
+      const d = (e as CustomEvent<IntakeAntwoord>).detail
+      if (d?.tuin === tuin) wijzig({ antwoorden: { [d.vraag]: d.antwoord } })
+    }
+    window.addEventListener(INTAKE_ANTWOORD, zet)
+    return () => window.removeEventListener(INTAKE_ANTWOORD, zet)
+  }, [tuin, wijzig])
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent<IntakeZones>(INTAKE_ZONES, { detail: { tuin, zones: s.zones } }))
+  }, [tuin, s.zones])
 
   // Weer verbinding, of elke 15 tellen zolang er iets wacht.
   useEffect(() => {

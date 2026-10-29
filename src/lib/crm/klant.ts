@@ -37,7 +37,35 @@ export type Stuk = {
   link?: string
 }
 
-export type Foto = { id: string; datum: string; bijschrift: string; moment: "Opname" | "Voor" | "Tijdens" | "Na" }
+export type Foto = {
+  id: string
+  datum: string
+  bijschrift: string
+  moment: "Opname" | "Voor" | "Tijdens" | "Na"
+  /** Zone-id in de tuin */
+  zone?: string
+  /** Beeld uit een video: de tijdcode, bijv. "0:12" */
+  tijd?: string
+  /** Al door Claude bekeken */
+  bekeken?: boolean
+}
+
+/** Wat Claude op de foto's zag: een voorstel tot Nick het bevestigt of afwijst (intake.md §5). */
+export type Bevinding = {
+  id: string
+  datum: string
+  zone: string
+  tekst: string
+  zeker: "zichtbaar" | "vermoed"
+  /** Foto-id's waarop het te zien is */
+  bron: string[]
+  /** Een vraag uit de vragenlijst met een voorgesteld antwoord */
+  vraag?: string
+  antwoord?: string
+  /** Een maat die nog gemeten moet worden */
+  meting?: string
+  status: "voorstel" | "bevestigd" | "afgewezen"
+}
 
 export type Opname = { datum: string; antwoorden: Record<string, string>; diensten: string[]; /** Vraagteksten van toen */ vragen?: Record<string, string> }
 
@@ -61,6 +89,7 @@ export type Tuin = {
   /** Eerdere versies van de opname, nieuwste eerst. */
   geschiedenis: Opname[]
   fotos: Foto[]
+  bevindingen: Bevinding[]
   aangemaakt: string
   bijgewerkt: string
 }
@@ -194,6 +223,7 @@ function normaliseerTuin(t: Partial<Tuin> & { checklist?: unknown }): Tuin {
     zones: (Array.isArray(t.zones) ? t.zones : []).slice(0, 30).map(normaliseerZone),
     geschiedenis: Array.isArray(t.geschiedenis) ? t.geschiedenis.slice(0, 50) : [],
     fotos: Array.isArray(t.fotos) ? t.fotos : [],
+    bevindingen: Array.isArray(t.bevindingen) ? t.bevindingen.slice(0, 200) : [],
     aangemaakt: datumOf(t.aangemaakt) || "2026-10-29",
     bijgewerkt: datumOf(t.bijgewerkt) || datumOf(t.aangemaakt) || "2026-10-29",
   }

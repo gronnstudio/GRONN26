@@ -100,3 +100,17 @@ export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWij
   )
   return gevonden ? { ok: true, afgewezen: [...afgewezen] } : { ok: false, fout: "Deze tuin bestaat niet meer." }
 }
+
+/**
+ * Een voorstel van Claude bevestigen of afwijzen. Het antwoord zelf zet de
+ * intake (via de gewone weg, met tussentijds opslaan); hier alleen de status.
+ */
+export async function zetBevinding(klantId: string, tuinId: string, id: string, status: "bevestigd" | "afgewezen" | "voorstel") {
+  await eisEigenaar()
+  if (!["bevestigd", "afgewezen", "voorstel"].includes(status)) return
+  await wijzigKlanten((lijst) =>
+    lijst.map((k) =>
+      k.id !== klantId ? k : { ...k, tuinen: k.tuinen.map((t: Tuin) => (t.id !== tuinId ? t : { ...t, bevindingen: t.bevindingen.map((b) => (b.id === id ? { ...b, status } : b)) })) },
+    ),
+  )
+}

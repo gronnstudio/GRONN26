@@ -45,7 +45,9 @@ export function klantContext(k: Klant, lijst: Vragenlijst = STANDAARD) {
     const ids = new Set(vragen.map((v) => v.id))
     for (const [id, a] of Object.entries(t.antwoorden)) if (!ids.has(id) && t.vragen[id]) antwoorden.push(`${t.vragen[id]}: ${a}`)
     const zones = t.zones.map((z) => `${z.naam} (${z.soort})${[z.lengte && `${z.lengte} m lang`, z.breedte && `${z.breedte} m breed`, z.oppervlak && `${z.oppervlak} m²`, z.diepte && `diepte ${z.diepte}`].filter(Boolean).map((x) => ` ${x}`).join(",")}${z.notitie ? `: ${z.notitie.slice(0, 200)}` : ""}`)
-    delen.push(`## Tuin ${t.naam}\n${antwoorden.join("; ") || "Opname nog leeg."}${t.diensten.length ? `\nGewenst: ${t.diensten.join(", ")}` : ""}${zones.length ? `\nZones: ${zones.join("; ")}` : ""}`)
+    // Alleen wat Nick bevestigde; voorstellen van Claude tellen nog niet.
+    const gezien = t.bevindingen.filter((b) => b.status === "bevestigd").map((b) => `${b.zone}: ${b.tekst}${b.meting ? ` (nog meten: ${b.meting})` : ""}`)
+    delen.push(`## Tuin ${t.naam}\n${antwoorden.join("; ") || "Opname nog leeg."}${t.diensten.length ? `\nGewenst: ${t.diensten.join(", ")}` : ""}${zones.length ? `\nZones: ${zones.join("; ")}` : ""}${gezien.length ? `\nBevestigd op foto's: ${gezien.join("; ")}` : ""}`)
   }
   const c = laatsteCalculatie(k)
   if (c) {
