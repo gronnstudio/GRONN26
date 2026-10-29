@@ -135,7 +135,9 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     }
   }
 
-  const zet = (i: number, r: Partial<Invul>) => setRegels(regels.map((x, j) => (j === i ? { ...x, ...r } : x)))
+  // Verandert de prijs of het tarief op een andere manier dan via het incl.-veld, dan geldt de getypte incl.-tekst niet meer.
+  const zet = (i: number, r: Partial<Invul>) =>
+    setRegels(regels.map((x, j) => (j === i ? { ...x, ...r, ...(!("inkoopIncl" in r) && ("inkoop" in r || "btw" in r) ? { inkoopIncl: undefined } : {}) } : x)))
   const schuif = (i: number, d: -1 | 1) => {
     const j = i + d
     if (j < 0 || j >= regels.length) return

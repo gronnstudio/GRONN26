@@ -302,6 +302,10 @@ test("rekenblad met btw: incl. invoeren, excl. rekenen, big bags kiezen", async 
   await expect(regel.getByLabel("Aantal", { exact: true })).toHaveValue("0,5")
   // ½ × € 40 × 1,15 opslag = € 23,00 excl. = € 27,83 incl.
   await expect(regel.getByText("€ 27,83")).toBeVisible()
+  // Een ander tarief: de incl.-prijs volgt het excl.-bedrag, geen oude getypte tekst.
+  await regel.getByLabel("Soort").selectOption("planten")
+  await expect(regel.getByLabel("Inkoop per eenheid incl. btw")).toHaveValue("43,60")
+  await regel.getByLabel("Soort").selectOption("materiaal")
   await page.getByLabel("Bedragen met btw").uncheck()
   await expect(regel.getByLabel("Inkoop per eenheid", { exact: true })).toHaveValue("40,00")
   await expect(regel.getByText("€ 23,00")).toBeVisible()
