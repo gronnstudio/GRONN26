@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test"
 import { deel, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
 import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
 import * as h from "../src/lib/crm/rekenhulpen"
-import { zetPrijs, nieuwItem } from "../src/lib/crm/catalogus"
+import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
+import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -135,6 +136,42 @@ test.describe("catalogus en klanten", () => {
     const nieuw = zetPrijs(i, 2200, "Steenrijk")
     expect(nieuw.inkoop).toBe(2200)
     expect(nieuw.historie[0]).toEqual({ datum: "2026-10-01", inkoop: 2000, leverancier: "" })
+  })
+  test("prijslijst inlezen: nieuw, bijwerken op leverancier + artikelnummer, dubbele regel telt één keer", () => {
+    const kop = '\uFEFF"Naam";"Soort";"Eenheid";"Inkoop excl. btw";"Opslag %";"Btw %";"Afval %";"Leverancier";"Artikelnummer";"Link";"Bijgewerkt";"Groep"'
+    const rij = (naam: string, prijs: string, sku: string, groep = "BANDEN") => `"${naam}";"Steen, grond, hout, techniek";"st";"${prijs}";"15";"21";"0";"Tuinvariant (Maastricht)";"${sku}";"https://www.tuinvariant.nl";"2026-10-29";"${groep}"`
+    const rijen = leesCsv([kop, rij("Band; grijs", "2,28", "2136"), rij('Band "zwart"', "2,54", "2137"), rij("Band zwart", "2,54", "2137", "OPMERKING"), '"";"";"";"abc"', ""].join("\r\n"))
+    expect(rijen[1][0]).toBe("Band; grijs")
+    const eigen = nieuwItem({ naam: "Eigen band", leverancier: "Tuinvariant (maastricht)", sku: "2136", inkoop: 200, opslag: 3000, bijgewerkt: "2026-10-01" })
+    const { items, uitkomst } = importeer([eigen], rijen)
+    expect(uitkomst).toEqual({ nieuw: 1, bijgewerkt: 1, gelijk: 0, afgewezen: [5] })
+    expect(items).toHaveLength(2)
+    // Bijgewerkt: nieuwe prijs, oude in de historie, eigen opslag blijft.
+    expect(items[0]).toMatchObject({ id: eigen.id, naam: "Band; grijs", inkoop: 228, opslag: 3000, groep: "BANDEN" })
+    expect(items[0].historie[0]).toMatchObject({ inkoop: 200, datum: "2026-10-01" })
+    // Nieuw: de laatste van twee dezelfde regels.
+    expect(items[1]).toMatchObject({ naam: "Band zwart", inkoop: 254, opslag: 1500, btw: 2100, soort: "materiaal", sku: "2137", groep: "OPMERKING", bijgewerkt: "2026-10-29" })
+    // Nog een keer hetzelfde bestand: niets verandert.
+    expect(importeer(items, rijen).uitkomst).toMatchObject({ nieuw: 0, bijgewerkt: 0, gelijk: 2 })
+    expect(importeer(items, leesCsv("Iets;Anders\n1;2")).uitkomst.fout).toContain("Naam")
+    // Zonder kolommen Soort en Eenheid blijven die van het bestaande item staan; zonder Groep telt het toch als prijslijst.
+    const compost = nieuwItem({ naam: "Compost", soort: "planten", eenheid: "m³", leverancier: "Lev", sku: "9", inkoop: 1000 })
+    const kaal = importeer([compost], leesCsv("Naam;Inkoop;Leverancier;Artikelnummer\nCompost;12,50;Lev;9\nZand;3;Lev;10"))
+    expect(kaal.items[0]).toMatchObject({ eenheid: "m³", soort: "planten", inkoop: 1250, geimporteerd: true })
+    expect(voorClaude(kaal.items, "minigraver huren")).toHaveLength(0)
+  })
+  test("zoeken in duizenden items en wat Claude ervan ziet", () => {
+    const items = [
+      nieuwItem({ naam: "Minigraver", leverancier: "Bosmans" }),
+      nieuwItem({ naam: "Opsluitband 5x15x100 grijs", sku: "2136", groep: "OPSLUITBANDEN / MBI", leverancier: "Tuinvariant" }),
+      ...Array.from({ length: 3000 }, (_, n) => nieuwItem({ naam: `Tegel ${n}`, groep: "TEGELS" })),
+    ]
+    expect(zoekItems(items, "opsluit grijs").map((i) => i.sku)).toEqual(["2136"])
+    expect(zoekItems(items, "mbi 2136")).toHaveLength(1)
+    expect(zoekItems(items, "")).toHaveLength(items.length)
+    const claude = voorClaude(items, "Terras met opsluitbanden", 80)
+    expect(claude.map((i) => i.naam)).toEqual(["Minigraver", "Opsluitband 5x15x100 grijs"])
+    expect(voorClaude(items, "tegels leggen").length).toBe(81)
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]

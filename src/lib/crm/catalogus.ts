@@ -23,6 +23,10 @@ export type Item = {
   sku: string
   link: string
   notitie: string
+  /** Groep uit de prijslijst van de leverancier, bijv. "OPSLUITBANDEN / MBI" */
+  groep?: string
+  /** Komt uit een ingelezen prijslijst (niet zelf toegevoegd) */
+  geimporteerd?: boolean
   bijgewerkt: string
   historie: Prijs[]
 }
@@ -60,6 +64,40 @@ export function zetPrijs(item: Item, inkoop: Centen, leverancier = item.leveranc
     historie: [{ datum: item.bijgewerkt, inkoop: item.inkoop, leverancier: item.leverancier }, ...item.historie].slice(0, 50),
   }
 }
+
+const plat = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+
+/** Zoeken op woorden in naam, leverancier, artikelnummer en groep; elk woord moet passen. */
+export function zoekItems(items: Item[], q: string): Item[] {
+  const woorden = plat(q).split(/\s+/).filter(Boolean)
+  if (!woorden.length) return items
+  return items.filter((i) => {
+    const t = plat(`${i.naam} ${i.leverancier} ${i.sku} ${i.groep ?? ""}`)
+    return woorden.every((w) => t.includes(w))
+  })
+}
+
+/**
+ * Wat Claude bij het urenvoorstel van de catalogus te zien krijgt. Met
+ * duizenden ingelezen regels gaat niet alles mee: eigen items (niet uit een
+ * prijslijst) wel, uit de prijslijsten alleen wat een woord uit de
+ * beschrijving deelt, tot `max`.
+ */
+export function voorClaude(items: Item[], beschrijving: string, max = 80): Item[] {
+  const woorden = plat(beschrijving).split(/[^a-z0-9]+/).filter((w) => w.length >= 4)
+  // "opsluitbanden" vindt "Opsluitband": het ene woord begint met het andere.
+  const past = (w: string) => w.length >= 4 && woorden.some((b) => b.startsWith(w) || w.startsWith(b))
+  const eigen = items.filter(isEigen)
+  const passend = items.filter((i) => !isEigen(i) && plat(i.naam).split(/[^a-z0-9]+/).some(past))
+  return [...eigen, ...passend].slice(0, eigen.length + max)
+}
+
+/** Voor het rekenblad in de browser: alleen wat het gebruikt, want met de prijslijsten zijn het duizenden items. */
+/** Zelf toegevoegd, niet uit een prijslijst. */
+export const isEigen = (i: Item) => !i.geimporteerd && !i.groep
+
+export const voorRekenblad = (items: Item[]): Item[] =>
+  items.map((i) => ({ ...i, historie: [], notitie: "", link: "", sku: "", groep: undefined, bijgewerkt: "" }))
 
 /** Een catalogusitem als regel in een calculatie. */
 export const alsRegel = (i: Item, hoeveelheid = 1000): Regel =>

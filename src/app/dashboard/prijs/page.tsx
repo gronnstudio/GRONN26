@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { PrijsRekenaar } from "@/components/beheer/prijs"
 import { Kop } from "@/components/crm/kop"
 import { leesCatalogus } from "@/lib/beheer/catalogus"
+import { voorRekenblad } from "@/lib/crm/catalogus"
 import { isOpen, leesKlanten } from "@/lib/beheer/klanten"
 
 // Rekenblad voor een vaste prijs waar genoeg aan overblijft (eigenaar, 29 okt
@@ -21,7 +22,7 @@ export default async function Prijs() {
         sub="Vul je uren en je inkoop in. De opslag per soort rekent vanzelf mee, en je ziet meteen of er genoeg overblijft. Kies een klant om de berekening als versie bij die klant te bewaren."
       />
       <main className="mx-auto max-w-[1440px] px-8 py-6 print:max-w-none print:p-0">
-        <PrijsRekenaar klanten={keuze} catalogus={catalogus} />
+        <PrijsRekenaar klanten={keuze} catalogus={voorRekenblad(catalogus)} />
       </main>
     </>
   )

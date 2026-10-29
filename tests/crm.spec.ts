@@ -264,6 +264,35 @@ test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem
   await expect(page.getByRole("alert")).toContainText("Niet bewaard, de vragenlijst is intussen veranderd: Grondsoort")
 })
 
+test("catalogus: prijslijst inlezen, bijwerken met historie, zoeken", async ({ page }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  const sku = `T${Date.now()}`
+  const csv = (prijs: string) =>
+    Buffer.from(
+      '\uFEFF"Naam";"Soort";"Eenheid";"Inkoop excl. btw";"Opslag %";"Btw %";"Afval %";"Leverancier";"Artikelnummer";"Link";"Bijgewerkt";"Groep"\r\n' +
+        `"Proefband ${sku}";"Steen, grond, hout, techniek";"st";"${prijs}";"15";"21";"0";"Proefleverancier";"${sku}";"https://www.tuinvariant.nl";"2026-10-29";"PROEF / BANDEN"\r\n` +
+        `"";"";"";"";"";"";"";"";"";"";"";""\r\n"zonder prijs";"";"";"";"";"";"";"";"";"";"";""`,
+    )
+  await page.goto("/dashboard/catalogus")
+  await page.getByText("Prijslijst inlezen (CSV)").click()
+  await page.getByLabel("CSV-bestand").setInputFiles({ name: "proef.csv", mimeType: "text/csv", buffer: csv("2,28") })
+  await page.getByRole("button", { name: "Inlezen" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "Klaar" })).toContainText("1 nieuw item, 0 bijgewerkt, 0 ongewijzigd. 1 regel overgeslagen")
+
+  await page.getByLabel("CSV-bestand").setInputFiles({ name: "proef.csv", mimeType: "text/csv", buffer: csv("2,54") })
+  await page.getByRole("button", { name: "Inlezen" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "Klaar" })).toContainText("0 nieuwe items, 1 bijgewerkt")
+
+  await page.locator('input[name="q"]').fill(`proef banden ${sku}`)
+  await page.getByRole("button", { name: "Zoek", exact: true }).click()
+  await expect(page.locator("tbody tr")).toHaveCount(1)
+  await expect(page.locator("tbody").getByLabel("Inkoop")).toHaveValue("2,54")
+  await expect(page.locator("tbody")).toContainText(`PROEF / BANDEN · art. ${sku}`)
+  await expect(page.locator("tbody")).toContainText("1 eerdere prijs")
+  await expect(page.getByRole("status").filter({ hasText: "items" })).toContainText("1 van")
+})
+
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
   await log(page)
   await page.setViewportSize({ width: 1440, height: 1000 })
