@@ -111,7 +111,11 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await expect(page.locator("#v-oppervlak")).toHaveCount(0)
   await page.getByRole("button", { name: "Snel", exact: true }).click()
   await expect(page.locator("#v-grond")).toHaveCount(0)
-  await page.getByRole("button", { name: "Uitgebreid", exact: true }).click()
+  // Een open punt dat Snel niet toont, schakelt naar Uitgebreid en opent die vraag.
+  await tab(page, /^Open punten/).click()
+  await page.locator("#open-kop ~ ul button").filter({ hasText: "Gewenste uitstraling en stijl" }).click()
+  await expect(page.getByRole("button", { name: "Uitgebreid", exact: true })).toHaveAttribute("aria-pressed", "true")
+  await expect(page.locator("#v-stijl")).toBeVisible()
 
   // Een zone met maten: 7 × 10 = 70 m².
   await tab(page, /^Zones/).click()

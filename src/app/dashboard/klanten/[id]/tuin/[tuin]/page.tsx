@@ -100,7 +100,7 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
                         <dl className="m-0 mt-2 grid gap-1">
                           {anders.map((vid) => (
                             <div key={vid}>
-                              <dt className="text-gedempt">{naam(vid)}</dt>
+                              <dt className="text-gedempt">{o.vragen?.[vid] ?? naam(vid)}</dt>
                               <dd className="m-0">{o.antwoorden[vid] || "—"}</dd>
                             </div>
                           ))}

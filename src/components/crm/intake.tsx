@@ -192,7 +192,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
   const categorie = plek >= 0 ? categorieen[plek] : null
 
   const naarVraag = (catId: string, vraagId: string) => {
-    if (!categorieen.some((c) => c.id === catId)) kiesSoort("uitgebreid")
+    if (!categorieen.some((c) => c.id === catId && c.vragen.some((v) => v.id === vraagId))) kiesSoort("uitgebreid")
     setBlad(catId)
     setTimeout(() => document.getElementById(`v-${vraagId}`)?.scrollIntoView({ block: "center" }), 50)
   }

@@ -39,7 +39,7 @@ export type Stuk = {
 
 export type Foto = { id: string; datum: string; bijschrift: string; moment: "Opname" | "Voor" | "Tijdens" | "Na" }
 
-export type Opname = { datum: string; antwoorden: Record<string, string>; diensten: string[] }
+export type Opname = { datum: string; antwoorden: Record<string, string>; diensten: string[]; /** Vraagteksten van toen */ vragen?: Record<string, string> }
 
 /** Een tuin of perceel: blijft bestaan los van een klus, met de geschiedenis van de opname. */
 export type Tuin = {
