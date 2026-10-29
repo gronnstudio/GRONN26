@@ -215,6 +215,8 @@ test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem
   await page.getByRole("button", { name: "+ Tuin en opname" }).click()
   await tab(page, /^Meenemen/).click()
   await expect(page.getByRole("group", { name: vraag })).toBeVisible()
+  await page.getByRole("group", { name: vraag }).getByRole("button", { name: "Ja" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible()
   const tuin = page.url()
 
   await page.goto("/dashboard/vragenlijst")
@@ -226,6 +228,8 @@ test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem
   await page.goto(tuin)
   await tab(page, /^Meenemen/).click()
   await expect(page.getByRole("group", { name: vraag })).toHaveCount(0)
+  // Het antwoord op de vervallen vraag blijft terug te lezen.
+  await expect(page.locator("section").filter({ hasText: "Niet in de huidige vragen" })).toContainText(`${vraag}: Ja`)
 
   // Op de telefoon: niets loopt buiten beeld, knoppen zijn groot genoeg om te tikken.
   await page.setViewportSize({ width: 390, height: 844 })

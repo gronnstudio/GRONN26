@@ -82,7 +82,9 @@ export async function bewaarIntake(klantId: string, tuinId: string, w: IntakeWij
         if (veranderd && nieuweDag && Object.keys(oud.antwoorden).length)
           t.geschiedenis = [{ datum: oud.bijgewerkt, antwoorden: oud.antwoorden, diensten: oud.diensten }, ...oud.geschiedenis].slice(0, 50)
         if (veranderd && nieuweDag && !log) log = `Opname "${oud.naam}" bijgewerkt`
-        t.bijgewerkt = vandaag()
+        // Alleen een gewijzigd antwoord zet de datum vooruit; anders zou een soortwissel of notitie
+        // eerst de dag "opgebruiken" en kreeg het eerste echte antwoord van vandaag geen vorige versie.
+        if (veranderd) t.bijgewerkt = vandaag()
         return t
       })
       const nieuw = { ...k, tuinen }

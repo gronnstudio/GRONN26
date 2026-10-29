@@ -6,7 +6,7 @@ import { Intake } from "@/components/crm/intake"
 import { TuinFotos } from "@/components/beheer/tuin-fotos"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
-import { oppervlakUit, telling, vraagMap } from "@/lib/crm/vragenlijst"
+import { oppervlakUit, telling, vraagMap, vragenVoor } from "@/lib/crm/vragenlijst"
 import { toonDecimaal } from "@/lib/crm/geld"
 import { bewaarTuinKop, fotoWeg, tuinWeg } from "../../../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
@@ -32,8 +32,10 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
   const opp = oppervlakUit(t.antwoorden)
   const vragen = vraagMap(lijst)
   const naam = (vid: string) => vragen.get(vid)?.tekst ?? t.vragen[vid] ?? vid
-  // Antwoorden op vragen die niet (meer) in de lijst staan, zoals vinkjes van de oude checklist.
-  const los = Object.keys(t.antwoorden).filter((vid) => !vragen.has(vid))
+  // Antwoorden die de intake nu niet toont: vervallen vragen, vervolgvragen van een werkzaamheid die
+  // niet meer gekozen is, en vinkjes van de oude checklist. Zo blijft elk antwoord terug te lezen.
+  const getoond = new Set(vragenVoor(lijst, t, "uitgebreid").flatMap((c) => c.vragen.map((v) => v.id)))
+  const los = Object.keys(t.antwoorden).filter((vid) => !getoond.has(vid))
 
   return (
     <>
@@ -67,7 +69,7 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
 
           {los.length > 0 && (
             <section className="crm-paneel p-5">
-              <p className={`${lbl} m-0`}>Buiten de vragenlijst</p>
+              <p className={`${lbl} m-0`}>Niet in de huidige vragen</p>
               <ul className="m-0 mt-2 flex list-none flex-col gap-1.5 p-0 text-[13px]">
                 {los.map((vid) => (
                   <li key={vid}>
