@@ -7,6 +7,7 @@ import { leesKlanten, sleutel } from "@/lib/beheer/klanten"
 import { ALLE_VELDEN, DIENSTEN, INTAKE, ingevuld, oppervlakUit } from "@/lib/crm/intake"
 import { toonDecimaal } from "@/lib/crm/geld"
 import { bewaarOpname, fotoWeg, tuinWeg } from "../../../acties"
+import { BewaarKnop } from "@/components/crm/bewaar-knop"
 
 // De tuinopname (masterprompt CRM, module 04 en 05): één vaste vragenlijst per
 // tuin, foto's per moment, en elke eerdere versie blijft bewaard. Werkt ook op
@@ -74,7 +75,7 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
 
           <fieldset className="m-0 border-0 border-t border-lijn p-0 pt-5">
             <legend className={`${lbl} float-left mb-3 w-full text-gedempt`}>Gewenste werkzaamheden</legend>
-            <div className="grid gap-2 sm:grid-cols-3">
+            <div className="clear-left grid gap-2 sm:grid-cols-3">
               {DIENSTEN.map((d) => (
                 <label key={d} className="flex items-center gap-2 text-[14px]">
                   <input type="checkbox" name="dienst" value={d} defaultChecked={t.diensten.includes(d)} className="size-[18px] accent-[var(--accent)]" />
@@ -85,7 +86,7 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
           </fieldset>
 
           <div className="flex items-center justify-between gap-4">
-            <button className="crm-knop">Opname bewaren</button>
+            <BewaarKnop>Opname bewaren</BewaarKnop>
             <button formAction={tuinWeg.bind(null, k.id, t.id)} className="text-[13px] text-gedempt hover:text-accent-tekst hover:opacity-100">Tuin verwijderen</button>
           </div>
         </form>
