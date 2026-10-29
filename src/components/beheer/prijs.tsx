@@ -1,0 +1,155 @@
+"use client"
+
+import { useState } from "react"
+import { euro } from "@/lib/format"
+
+// Prijs berekenen zodat er genoeg overblijft (eigenaar, 29 okt 2026). De vaste
+// regels komen uit de analyse "Waar blijft het geld?": € 50 per uur, opslag per
+// soort materiaal, machines tegen huur + transport + 10 %. Onder € 37 per uur
+// blijft er na vaste lasten en Qredits te weinig over voor € 30.000 winst.
+const SOORTEN = {
+  planten: { naam: "Planten", opslag: 25, btw: 9 },
+  materiaal: { naam: "Steen, grond, hout, techniek", opslag: 15, btw: 21 },
+  bezorging: { naam: "Container of bezorging", opslag: 10, btw: 21 },
+  machine: { naam: "Machine (huur + transport)", opslag: 10, btw: 21 },
+} as const
+type Soort = keyof typeof SOORTEN
+type Regel = { wat: string; soort: Soort; inkoop: string }
+
+const MINIMUM_PER_UUR = 37
+const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
+const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2 text-[14px]"
+const getal = (s: string) => Math.max(0, Number(s.replace(",", ".")) || 0)
+
+export function PrijsRekenaar() {
+  const [uren, setUren] = useState("")
+  const [tarief, setTarief] = useState("50")
+  const [korting, setKorting] = useState("0")
+  const [regels, setRegels] = useState<Regel[]>([{ wat: "", soort: "materiaal", inkoop: "" }])
+
+  const zet = (i: number, r: Partial<Regel>) => setRegels(regels.map((x, j) => (j === i ? { ...x, ...r } : x)))
+
+  const arbeid = getal(uren) * getal(tarief)
+  const posten = regels.map((r) => {
+    const s = SOORTEN[r.soort]
+    const inkoop = getal(r.inkoop)
+    return { ...r, inkoopBedrag: inkoop, verkoop: inkoop * (1 + s.opslag / 100), btw: s.btw }
+  })
+  const inkoop = posten.reduce((t, p) => t + p.inkoopBedrag, 0)
+  const bruto = arbeid + posten.reduce((t, p) => t + p.verkoop, 0)
+  const kortingBedrag = (bruto * Math.min(getal(korting), 100)) / 100
+  const verkoop = bruto - kortingBedrag
+  // Korting gaat naar rato van elke regel af, zodat de btw per tarief klopt.
+  const factor = bruto ? verkoop / bruto : 0
+  const btw9 = posten.filter((p) => p.btw === 9).reduce((t, p) => t + p.verkoop, 0) * factor * 0.09
+  const btw21 = (arbeid + posten.filter((p) => p.btw === 21).reduce((t, p) => t + p.verkoop, 0)) * factor * 0.21
+  const over = verkoop - inkoop
+  const urenGetal = getal(uren)
+  const perUur = urenGetal ? over / urenGetal : 0
+  const goed = urenGetal > 0 && perUur >= MINIMUM_PER_UUR
+  const tekort = urenGetal ? Math.max(0, MINIMUM_PER_UUR * urenGetal - over) : 0
+
+  return (
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="flex flex-col gap-8">
+        <section>
+          <p className={`${lbl} m-0 opacity-60`}>1 · Jouw werk</p>
+          <div className="mt-3 grid grid-cols-1 items-end gap-3 sm:grid-cols-3">
+            <label className="grid gap-1 text-[13px]">
+              Uren (alles: ook laden, rijden, opruimen)
+              <input inputMode="decimal" value={uren} onChange={(e) => setUren(e.target.value)} placeholder="bijv. 24" className={veld} />
+            </label>
+            <label className="grid gap-1 text-[13px]">
+              Uurtarief excl. btw
+              <input inputMode="decimal" value={tarief} onChange={(e) => setTarief(e.target.value)} className={veld} />
+            </label>
+            <label className="grid gap-1 text-[13px]">
+              Korting %
+              <input inputMode="decimal" value={korting} onChange={(e) => setKorting(e.target.value)} className={veld} />
+            </label>
+          </div>
+          <p className="m-0 mt-2 text-[12px] opacity-60">
+            Een dag is 8 uur, dus € 400 per dag. Vrienden krijgen korting als eigen regel, niet een lager uurtarief.
+          </p>
+        </section>
+
+        <section>
+          <p className={`${lbl} m-0 opacity-60`}>2 · Materiaal en machines, inkoop excl. btw</p>
+          <ul className="m-0 mt-3 grid list-none gap-2 p-0">
+            {posten.map((p, i) => (
+              <li key={i} className="grid grid-cols-[minmax(0,1fr)_100px_28px] items-center gap-2 border-b border-lijn pb-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_110px_32px] sm:border-0 sm:pb-0">
+                <input aria-label="Omschrijving" value={p.wat} onChange={(e) => zet(i, { wat: e.target.value })} placeholder="bijv. klinkers 60 m²" className={`${veld} col-span-3 sm:col-span-1`} />
+                <select aria-label="Soort" value={p.soort} onChange={(e) => zet(i, { soort: e.target.value as Soort })} className={`${veld} bg-grond`}>
+                  {Object.entries(SOORTEN).map(([id, s]) => (
+                    <option key={id} value={id}>
+                      {s.naam} +{s.opslag}%
+                    </option>
+                  ))}
+                </select>
+                <input aria-label="Inkoop" inputMode="decimal" value={p.inkoop} onChange={(e) => zet(i, { inkoop: e.target.value })} placeholder="€" className={veld} />
+                <button
+                  type="button"
+                  aria-label="Regel weghalen"
+                  onClick={() => setRegels(regels.length > 1 ? regels.filter((_, j) => j !== i) : [{ wat: "", soort: "materiaal", inkoop: "" }])}
+                  className="opacity-50 hover:opacity-100"
+                >
+                  ×
+                </button>
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => setRegels([...regels, { wat: "", soort: "materiaal", inkoop: "" }])}
+            className="mt-3 rounded-full border border-lijn px-4 py-2 text-[14px] font-semibold hover:border-oranje"
+          >
+            + Regel
+          </button>
+          <p className="m-0 mt-2 text-[12px] opacity-60">
+            Planten 9 % btw, de rest 21 %. Een minigraver kost bij Bosmans ± € 125 per dag plus € 75 transport.
+          </p>
+        </section>
+      </div>
+
+      <aside className="flex flex-col gap-4 self-start rounded-[18px] border border-lijn p-5 lg:sticky lg:top-6">
+        <p className={`${lbl} m-0 opacity-60`}>Voor de klant</p>
+        <dl className="m-0 grid gap-2 text-[14px]">
+          <Rij t="Arbeid" b={arbeid * factor} />
+          <Rij t="Materiaal en machines" b={(bruto - arbeid) * factor} />
+          {kortingBedrag > 0 && <Rij t={`Waarvan korting (${getal(korting)} %)`} b={-kortingBedrag} />}
+          <Rij t="Totaal excl. btw" b={verkoop} vet />
+          {btw9 > 0 && <Rij t="Btw 9 % (planten)" b={btw9} />}
+          <Rij t="Btw 21 %" b={btw21} />
+          <Rij t="Totaal incl. btw" b={verkoop + btw9 + btw21} vet />
+        </dl>
+
+        <div className={`rounded-[14px] p-4 ${goed ? "bg-inkt/[.05]" : "bg-oranje/15"}`}>
+          <p className={`${lbl} m-0 opacity-60`}>Wat jij overhoudt</p>
+          <p className="syne m-0 mt-1 text-[30px]">{euro(over)}</p>
+          <p className="m-0 text-[14px]">
+            {urenGetal ? <>{euro(perUur)} per uur</> : "Vul je uren in"}
+          </p>
+          {urenGetal > 0 && (
+            <p className="m-0 mt-2 text-[13px] font-semibold">
+              {goed
+                ? "Goed: genoeg voor je vaste lasten en je winst."
+                : `Te laag. Minimaal € ${MINIMUM_PER_UUR} per uur; reken ${euro(tekort)} excl. btw meer.`}
+            </p>
+          )}
+        </div>
+        <p className="m-0 text-[12px] leading-[1.5] opacity-60">
+          Overhouden = verkoop excl. btw min inkoop, vóór vaste lasten en inkomstenbelasting. Zet de uren niet op de offerte, alleen de prijs per post.
+        </p>
+      </aside>
+    </div>
+  )
+}
+
+function Rij({ t, b, vet }: { t: string; b: number; vet?: boolean }) {
+  return (
+    <div className={`flex justify-between gap-4 ${vet ? "border-t border-lijn pt-2 font-semibold" : ""}`}>
+      <dt>{t}</dt>
+      <dd className="m-0 tabular-nums">{euro(b)}</dd>
+    </div>
+  )
+}
