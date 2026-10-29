@@ -4,7 +4,7 @@ import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort
 import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
-import { opdracht, schoonBevindingen } from "../src/lib/crm/ai/beeld"
+import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -194,6 +194,13 @@ test.describe("catalogus en klanten", () => {
     expect(tekst).toContain("Foto 1 (uit video, 0:03), zone Terras: bij de deur")
     expect(tekst).not.toContain("Geheime Klant")
     expect(tekst).not.toContain("Kerkstraat")
+    // Contactgegevens in vrije tekst gaan er ook niet in.
+    expect(zonderContact("Bel op 06 12345678 of +31 (0)46 123 45 67, mail test@example.invalid; adres Teststraat 1a, 6171 AB Stein. Terras 4,5 bij 3 m, 2026-10-29.")).toBe(
+      "Bel op [telefoon] of [telefoon], mail [e-mail]; adres [adres], [postcode] Stein. Terras 4,5 bij 3 m, 2026-10-29.",
+    )
+    const met = normaliseer({ id: "k2", naam: "X", tuinen: [{ id: "t", naam: "Tuin", antwoorden: { bijzonderheden: "Bel 0612345678" }, zones: [{ id: "z", naam: "Pad", soort: "Pad", notitie: "sleutel bij buren, a@b.nl" }] } as never] })
+    const p = opdracht({ ...STANDAARD, categorieen: [{ id: "x", naam: "X", vragen: [{ id: "bijzonderheden", tekst: "Bijzonderheden", soort: "lang" }] }] }, met.tuinen[0], [{ nr: 1, bijschrift: "voordeur Kerkweg 12", zone: "z" }])
+    expect(p).not.toMatch(/0612345678|a@b\.nl|Kerkweg 12/)
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]

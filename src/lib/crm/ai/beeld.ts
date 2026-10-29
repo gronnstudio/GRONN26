@@ -9,6 +9,18 @@ import { schoonAntwoord, vraagMap, vragenVoor, type Vragenlijst } from "../vrage
 
 export const MAX_FOTOS = 12
 
+/**
+ * Vrije tekst (antwoorden, notities, bijschriften) zonder contactgegevens:
+ * e-mail, telefoonnummers, postcodes en straat met huisnummer worden vervangen.
+ */
+export function zonderContact(t: string) {
+  return t
+    .replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, "[e-mail]")
+    .replace(/(\+|00)?\d[\d\s().-]{7,}\d/g, (m) => (m.replace(/\D/g, "").length >= 9 ? "[telefoon]" : m))
+    .replace(/\b\d{4}\s?[A-Za-z]{2}\b/g, "[postcode]")
+    .replace(/\b[A-Z][\p{L}'-]*(straat|weg|laan|plein|singel|gracht|dijk|steeg|hof|pad|dreef|kade|markt|baan|ring|wal)\s+\d+\s?[a-zA-Z]?\b/giu, "[adres]")
+}
+
 export const SCHEMA = {
   type: "object",
   additionalProperties: false,
@@ -35,13 +47,13 @@ export const SCHEMA = {
 } as const
 
 export function opdracht(lijst: Vragenlijst, t: Tuin, fotos: { nr: number; bijschrift: string; zone?: string; tijd?: string }[]) {
-  const zones = t.zones.map((z) => `- ${z.naam} (${z.soort})${z.notitie ? `: ${z.notitie.slice(0, 200)}` : ""}`).join("\n") || "- geen zones ingevuld"
+  const zones = t.zones.map((z) => `- ${zonderContact(z.naam)} (${z.soort})${z.notitie ? `: ${zonderContact(z.notitie.slice(0, 200))}` : ""}`).join("\n") || "- geen zones ingevuld"
   const zoneNaam = new Map(t.zones.map((z) => [z.id, z.naam]))
   const vragen = vragenVoor(lijst, t, "uitgebreid")
     .flatMap((c) => c.vragen)
-    .map((v) => `- ${v.id}: ${v.tekst} [${v.soort}${v.opties?.length ? `: ${v.opties.join(" / ")}` : v.soort === "jnov" ? ": Ja / Nee / Onbekend / N.v.t." : ""}${v.eenheid ? `, ${v.eenheid}` : ""}]${t.antwoorden[v.id] ? ` nu: ${t.antwoorden[v.id]}` : ""}`)
+    .map((v) => `- ${v.id}: ${v.tekst} [${v.soort}${v.opties?.length ? `: ${v.opties.join(" / ")}` : v.soort === "jnov" ? ": Ja / Nee / Onbekend / N.v.t." : ""}${v.eenheid ? `, ${v.eenheid}` : ""}]${t.antwoorden[v.id] ? ` nu: ${zonderContact(t.antwoorden[v.id].slice(0, 300))}` : ""}`)
     .join("\n")
-  const beelden = fotos.map((f) => `Foto ${f.nr}${f.tijd ? ` (uit video, ${f.tijd})` : ""}${f.zone && zoneNaam.get(f.zone) ? `, zone ${zoneNaam.get(f.zone)}` : ""}${f.bijschrift ? `: ${f.bijschrift.slice(0, 200)}` : ""}`).join("\n")
+  const beelden = fotos.map((f) => `Foto ${f.nr}${f.tijd ? ` (uit video, ${f.tijd})` : ""}${f.zone && zoneNaam.get(f.zone) ? `, zone ${zonderContact(zoneNaam.get(f.zone)!)}` : ""}${f.bijschrift ? `: ${zonderContact(f.bijschrift.slice(0, 200))}` : ""}`).join("\n")
   return `Je helpt Nick Peters van GRØNN Studio (hovenier, vijvers en natuurlijke tuinen) met een tuinopname. Hieronder staan genummerde foto's van één tuin.
 Noem per zone wat je ziet dat voor het werk telt: ondergrond, hoogteverschil, afwatering, bestaande verharding, beplanting, obstakels (bomen, kabels, putten), bereikbaarheid voor machines, staat van vijver of folie. Zet "zichtbaar" alleen als het echt op de foto staat; wat je afleidt is "vermoed".
 Past een bevinding op een vraag uit de lijst, geef dan het vraag-id en een antwoord in precies de vorm van die vraag. Geef bij een getal alleen een getal. Laat vraag en antwoord leeg bij twijfel.

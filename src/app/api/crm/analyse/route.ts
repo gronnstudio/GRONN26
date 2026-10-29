@@ -70,10 +70,12 @@ export async function POST(request: NextRequest) {
     throw fout
   }
   const tekst = antwoord.content.flatMap((b) => (b.type === "text" ? [b.text] : [])).join("")
-  let ruw: unknown = null
+  let ruw: { bevindingen?: unknown } | null = null
   try {
     ruw = antwoord.stop_reason === "refusal" ? null : JSON.parse(tekst)
   } catch {}
+  // Weigering of onleesbaar antwoord: een fout, en de foto's blijven nieuw zodat Nick het opnieuw kan proberen.
+  if (!ruw || !Array.isArray(ruw.bevindingen)) return NextResponse.json({ fout: "Analyse lukte niet, probeer het opnieuw." }, { status: 502 })
   const bevindingen = schoonBevindingen(ruw, lijst, t, mee.map((f) => f.id), vandaag())
   const tokens = antwoord.usage.input_tokens + antwoord.usage.output_tokens
 
