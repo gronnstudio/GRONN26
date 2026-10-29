@@ -38,7 +38,7 @@ export const PRIVACY: LegalDocument = {
   title: "Privacyverklaring",
   kind: "privacy",
   audience: "iedereen",
-  updated: "2026-10-10",
+  updated: "2026-10-29",
   status: "vastgesteld",
   intro:
     "Korte versie: wij gebruiken wat je ons stuurt om je te antwoorden en je project uit te voeren, wij volgen je niet over het web, en wij verkopen niets door. De lange versie staat hieronder, per soort gegeven.",
@@ -59,7 +59,7 @@ export const PRIVACY: LegalDocument = {
         "Waarvoor: om je aanvraag te beoordelen, je te antwoorden en waar dat volgt een offerte te maken.",
         "Grondslag: uitvoering van een overeenkomst, of stappen die daaraan voorafgaan op jouw verzoek (art. 6 lid 1 sub b AVG).",
         "Hoe lang: aanvragen waar niets uit voortkomt bewaren wij 30 dagen. Wordt het een opdracht, dan gaan de gegevens over in het klantdossier.",
-        "Het kennismakingsformulier stuurt zijn inhoud rechtstreeks vanuit je browser naar FormSubmit (zie hieronder), dat het als e-mail bij ons bezorgt. Een kopie komt in onze eigen afgeschermde opslag bij Vercel, zodat wij je aanvraag kunnen opvolgen; die wordt na 30 dagen automatisch verwijderd.",
+        "Het kennismakingsformulier stuurt zijn inhoud rechtstreeks vanuit je browser naar FormSubmit (zie hieronder), dat het als e-mail bij ons bezorgt. Een kopie komt in onze eigen afgeschermde opslag bij Vercel, zodat wij je aanvraag kunnen opvolgen; die wordt na 30 dagen automatisch verwijderd. Typ je een adres, dan zoekt je browser mee in de openbare adreslijst van het Kadaster (PDOK); daar gaat alleen wat je in dat veld typt naartoe.",
         "Stuur je bij het formulier een foto van je vijver of tuin mee (optioneel), dan verkleint je browser die eerst. Wij bewaren de foto in dezelfde afgeschermde opslag bij Vercel, alleen zichtbaar voor ons, en verwijderen hem na 30 dagen tenzij er een opdracht uit voortkomt. Voor de eerste inschatting die je meteen te zien krijgt, gaat de foto naar Anthropic (Claude), dat er een paar zinnen over schrijft. Anthropic gebruikt die gegevens niet om zijn modellen te trainen.",
         "Liever niet via het formulier? Mail of app ons dan gewoon.",
       ],

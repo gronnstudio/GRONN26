@@ -13,6 +13,7 @@ import { useTaal } from "@/components/taal-klant"
 import { focusEerste, useVeldControle } from "./controle"
 import { CONTACT_REGELS } from "./invulvelden"
 import { Vijverfoto, type FotoUitkomst } from "./vijverfoto"
+import { AdresVeld } from "@/components/adres-veld"
 
 // Het kennismakingsformulier (WF-023) met de staten van WF-034. Vormgeving
 // in de taal van de site (5 okt 2026): Montserrat, ronde oranje knop. Transport,
@@ -191,7 +192,7 @@ function Samenvatting({ v }: { v: Velden }) {
     [{ nl: "Naam", en: "Name" }, v.naam],
     [{ nl: "E-mail", en: "E-mail" }, v.email],
     [{ nl: "Telefoon", en: "Phone" }, v.telefoon],
-    [{ nl: "Plaats of postcode", en: "Town or postcode" }, v.plaats],
+    [{ nl: "Adres of plaats", en: "Address or town" }, v.plaats],
     [{ nl: "Bericht", en: "Message" }, v.bericht],
   ]
   return (
@@ -275,7 +276,7 @@ export function KennismakenFormulier() {
       `Naam: ${velden.naam}`,
       `E-mail: ${velden.email}`,
       velden.telefoon ? `Telefoon: ${velden.telefoon}` : null,
-      velden.plaats ? `Plaats of postcode: ${velden.plaats}` : null,
+      velden.plaats ? `Adres of plaats: ${velden.plaats}` : null,
       "",
       velden.bericht,
       foto?.id ? `\nFoto: https://gronn.studio/api/vijverfoto?id=${foto.id} (alleen ingelogd te zien)` : null,
@@ -371,7 +372,13 @@ export function KennismakenFormulier() {
         <Veld label={{ nl: "Naam", en: "Name" }} {...veld("naam")} verplicht autoComplete="name" />
         <Veld label="E-mail" {...veld("email")} inputMode="email" verplicht autoComplete="email" />
         <Veld label={{ nl: "Telefoon", en: "Phone" }} optioneel {...veld("telefoon")} type="tel" inputMode="tel" autoComplete="tel" />
-        <Veld label={{ nl: "Plaats of postcode", en: "Town or postcode" }} {...veld("plaats")} autoComplete="postal-code" />
+        <AdresVeld
+          naam="plaats"
+          labelClassName="flex flex-col gap-2"
+          label={<span className="lbl"><T t={{ nl: "Adres of plaats", en: "Address or town" }} /><span className="text-gedempt"> · <T t={{ nl: "optioneel", en: "optional" }} /></span></span>}
+          voorbeeld="Straat en huisnummer, of je plaats"
+          className="block w-full min-w-0 rounded-[12px] border border-gedempt bg-veld px-4 py-3 text-[18px] text-inkt outline-none placeholder:text-voorbeeld focus:border-inkt focus:shadow-[0_0_0_1px_var(--inkt)]"
+        />
         <Keuzes legenda={{ nl: "Waar gaat het over?", en: "What is it about?" }} naam="soort" keuzes={SOORTEN} gekozen={soort} onKies={setSoort} />
         {soort === "border" ? (
           <Keuzes legenda={{ nl: "Welk pakket?", en: "Which package?" }} naam="pakket" keuzes={PAKKETTEN} gekozen={pakket} onKies={setPakket} />

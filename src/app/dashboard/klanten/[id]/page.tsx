@@ -10,6 +10,7 @@ import { leesUren } from "@/lib/beheer/uren"
 import { euro } from "@/lib/format"
 import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukRond, stukWeg } from "../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
+import { AdresVeld } from "@/components/adres-veld"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
 // module 02: Overzicht | Tuinen | Calculaties | Stukken | Activiteit). Gewone
@@ -104,7 +105,7 @@ async function Overzicht({ k }: { k: Klant }) {
           <Veld naam="telefoon" label="Telefoon" waarde={k.telefoon} type="tel" />
           <Veld naam="email" label="E-mail" waarde={k.email} type="email" />
           <Keuze naam="voorkeur" label="Liefst via" waarde={k.voorkeur} opties={["", ...VOORKEUREN]} />
-          <Veld naam="adres" label="Factuuradres" waarde={k.adres} />
+          <AdresVeld naam="adres" label="Factuuradres" waarde={k.adres} className={veld} />
           <Veld naam="plaats" label="Plaats" waarde={k.plaats} />
           <Veld naam="tags" label="Tags, met komma's" waarde={k.tags.join(", ")} />
           {k.contact && <Veld naam="contact" label="Oud contactveld" waarde={k.contact} />}

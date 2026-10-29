@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { eisEigenaar } from "@/lib/crm/toegang"
 import { leesCenten } from "@/lib/crm/geld"
 import { leesOpname } from "@/lib/crm/intake"
+import { CHECKLIST_IDS } from "@/lib/crm/checklist"
 import {
   BRONNEN,
   KLANT_FASEN,
@@ -148,7 +149,7 @@ export async function klantWeg(id: string) {
 export async function nieuweTuin(id: string, d: FormData) {
   const naam = tekst(d, "naam", 80) || "Tuin"
   const tuinId = crypto.randomUUID()
-  const tuin: Tuin = { id: tuinId, naam, adres: tekst(d, "adres", 200), antwoorden: {}, diensten: [], geschiedenis: [], fotos: [], aangemaakt: vandaag(), bijgewerkt: vandaag() }
+  const tuin: Tuin = { id: tuinId, naam, adres: tekst(d, "adres", 200), antwoorden: {}, diensten: [], checklist: [], geschiedenis: [], fotos: [], aangemaakt: vandaag(), bijgewerkt: vandaag() }
   await pasAan(id, (k) => log({ ...k, tuinen: [...k.tuinen, tuin] }, gebeurtenis("Opname", `Tuin "${naam}" toegevoegd`)))
   redirect(`/dashboard/klanten/${id}/tuin/${tuinId}`)
 }
@@ -165,6 +166,7 @@ export async function bewaarOpname(id: string, tuinId: string, d: FormData) {
       adres: tekst(d, "adres", 200),
       antwoorden,
       diensten,
+      checklist: d.getAll("check").map(String).filter((c) => CHECKLIST_IDS.has(c)),
       bijgewerkt: vandaag(),
       // De vorige versie blijft bewaard, zodat je ziet wat er veranderde.
       geschiedenis:

@@ -8,6 +8,8 @@ import { ALLE_VELDEN, DIENSTEN, INTAKE, ingevuld, oppervlakUit } from "@/lib/crm
 import { toonDecimaal } from "@/lib/crm/geld"
 import { bewaarOpname, fotoWeg, tuinWeg } from "../../../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
+import { AdresVeld } from "@/components/adres-veld"
+import { CHECKLIST, CHECKLIST_IDS } from "@/lib/crm/checklist"
 
 // De tuinopname (masterprompt CRM, module 04 en 05): één vaste vragenlijst per
 // tuin, foto's per moment, en elke eerdere versie blijft bewaard. Werkt ook op
@@ -31,16 +33,13 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
     <>
       <Kop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=tuinen` }, { naam: t.naam }]} titel={`Opname · ${t.naam}`} sub="Eén vaste vragenlijst per tuin. Elke bewaarde versie blijft staan; foto's zijn privé." />
       <main className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
-        <form key={sleutel([t.naam, t.adres, t.antwoorden, t.diensten])} action={bewaarOpname.bind(null, k.id, t.id)} className="flex min-w-0 flex-col gap-8">
+        <form key={sleutel([t.naam, t.adres, t.antwoorden, t.diensten, t.checklist])} action={bewaarOpname.bind(null, k.id, t.id)} className="flex min-w-0 flex-col gap-8">
           <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
             <label className="grid gap-1 text-[13px]">
               Naam
               <input name="naam" defaultValue={t.naam} className={`${veld} text-[16px] font-semibold`} />
             </label>
-            <label className="grid gap-1 text-[13px]">
-              Adres van de tuin
-              <input name="adres" defaultValue={t.adres} className={veld} />
-            </label>
+            <AdresVeld naam="adres" label="Adres van de tuin" waarde={t.adres} className={veld} />
           </div>
 
           {INTAKE.map((g) => (
@@ -84,6 +83,29 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
               ))}
             </div>
           </fieldset>
+
+          <section aria-labelledby="checklist-kop" className="border-t border-lijn pt-5">
+            <div className="flex items-baseline justify-between gap-4">
+              <h2 id="checklist-kop" className={`${lbl} m-0 text-gedempt`}>Checklist bij de klant</h2>
+              <span className="crm-cijfer text-[12px] text-gedempt">{t.checklist.length} van {CHECKLIST_IDS.size} nagelopen</span>
+            </div>
+            <p className="m-0 mt-1 text-[13px] text-gedempt">Vink af wat je hebt nagelopen. Wat je niet kunt invullen wordt een stelpost in de offerte.</p>
+            <div className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+              {CHECKLIST.map((g) => (
+                <fieldset key={g.id} className="m-0 border-0 p-0">
+                  <legend className="mb-2 p-0 text-[14px] font-semibold">{g.naam}</legend>
+                  <div className="grid gap-1.5">
+                    {g.punten.map((c) => (
+                      <label key={c.id} className="flex items-start gap-2 text-[14px] leading-[1.4]">
+                        <input type="checkbox" name="check" value={c.id} defaultChecked={t.checklist.includes(c.id)} className="mt-[2px] size-[18px] shrink-0 accent-[var(--accent)]" />
+                        {c.tekst}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              ))}
+            </div>
+          </section>
 
           <div className="flex items-center justify-between gap-4">
             <BewaarKnop>Opname bewaren</BewaarKnop>

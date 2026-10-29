@@ -45,6 +45,8 @@ export type Tuin = {
   adres: string
   antwoorden: Record<string, string>
   diensten: string[]
+  /** Afgevinkte punten van de opname-checklist (ids uit `CHECKLIST`). */
+  checklist: string[]
   /** Eerdere versies van de opname, nieuwste eerst. */
   geschiedenis: Opname[]
   fotos: Foto[]
@@ -122,6 +124,7 @@ function normaliseerTuin(t: Partial<Tuin>): Tuin {
     adres: tekst(t.adres, 200),
     antwoorden: t.antwoorden && typeof t.antwoorden === "object" ? t.antwoorden : {},
     diensten: Array.isArray(t.diensten) ? t.diensten.map(String) : [],
+    checklist: Array.isArray(t.checklist) ? t.checklist.map(String).slice(0, 200) : [],
     geschiedenis: Array.isArray(t.geschiedenis) ? t.geschiedenis.slice(0, 50) : [],
     fotos: Array.isArray(t.fotos) ? t.fotos : [],
     aangemaakt: datumOf(t.aangemaakt) || "2026-10-29",
