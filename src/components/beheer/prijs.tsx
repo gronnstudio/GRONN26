@@ -15,7 +15,7 @@ const SOORTEN = {
 } as const
 type Soort = keyof typeof SOORTEN
 type Regel = { wat: string; soort: Soort; inkoop: string }
-type Schatting = { uren: number; posten: { wat: string; uren: number }[]; aannames: string }
+type Schatting = { uren: number; posten: { wat: string; uren: number }[]; regels?: { wat: string; soort: Soort; inkoop: number }[]; aannames: string }
 
 const MINIMUM_PER_UUR = 37
 // Apart zetten voor inkomstenbelasting en Zvw: voorzichtig, zodat de
@@ -50,6 +50,9 @@ export function PrijsRekenaar() {
       if (!r.ok || data.fout) throw new Error(data.fout || "Geen schatting gekregen.")
       setSchatting(data)
       setUren(String(Math.round(data.uren)))
+      // Machines en materiaal als eigen regels erbij; lege regels gaan weg.
+      const extra = (data.regels ?? []).filter((r) => r.soort in SOORTEN).map((r) => ({ wat: r.wat, soort: r.soort, inkoop: String(Math.round(r.inkoop)) }))
+      if (extra.length) setRegels((oud) => [...oud.filter((r) => r.wat.trim() || r.inkoop.trim()), ...extra])
     } catch (e) {
       setFout(e instanceof Error ? e.message : "Geen schatting gekregen.")
     } finally {
@@ -138,8 +141,11 @@ export function PrijsRekenaar() {
                   <span className="tabular-nums">{Math.round(schatting.uren)} u</span>
                 </li>
               </ul>
+              {!!schatting.regels?.length && (
+                <p className="m-0 mt-2 opacity-70">{schatting.regels.length} regels voor machines en materiaal staan hieronder bij 2, met geschatte inkoop.</p>
+              )}
               {schatting.aannames && <p className="m-0 mt-2 opacity-70">Aangenomen: {schatting.aannames}</p>}
-              <p className="m-0 mt-2 opacity-60">Een voorstel: klopt het niet met wat jij weet, pas de uren hieronder aan.</p>
+              <p className="m-0 mt-2 opacity-60">Een voorstel: klopt het niet met wat jij weet, pas de uren en bedragen hieronder aan.</p>
             </div>
           )}
           <div className="mt-5 grid grid-cols-1 items-end gap-3 sm:grid-cols-3">
