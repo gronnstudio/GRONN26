@@ -172,6 +172,8 @@ async function main() {
     const tegenronde = vlag(args, "--tegenronde")
     const { diff, weg } = diffVan(base)
     let invoer = `Review deze diff ten opzichte van ${base}.\n\n${diff}`
+    // Mag buiten de repo staan (scratchpad), maar nooit een verboden soort bestand zijn.
+    if (tegenronde && VERBODEN_PAD.some((re) => re.test(realpathSync(tegenronde).split("/").pop()))) stop(`${tegenronde} mag niet mee`)
     if (tegenronde)
       invoer += `\n\nTEGENRONDE. Claude reageerde zo op je vorige bevindingen. Beoordeel elk argument op het bewijs. Houd een bevinding alleen aan als je het tegenbewijs kunt weerleggen; trek haar anders in. Meld geen nieuwe P2/P3.\n\n${readFileSync(tegenronde, "utf8")}`
     console.log(alsMarkdown(await vraagModel(model, systeem, invoer), model, weg))
