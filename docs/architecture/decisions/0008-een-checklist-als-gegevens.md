@@ -1,4 +1,4 @@
-# ADR 0005 · Eén checklist, als gegevens
+# ADR 0008 · Eén checklist, als gegevens
 
 29 okt 2026 · **Voorgesteld** (fase 1 intake, zie [../intake.md](../intake.md))
 

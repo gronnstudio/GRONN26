@@ -4,7 +4,8 @@ import { notFound } from "next/navigation"
 import { Kop, Tabs } from "@/components/crm/kop"
 import { GrønnKnop } from "@/components/crm/gronn-knop"
 import { BRONNEN, KLANT_FASEN, KLANT_SOORTEN, PRIORITEITEN, VERLOREN_REDENEN, VOORKEUREN, geld, hoortBij, leesKlanten, sleutel, type Klant } from "@/lib/beheer/klanten"
-import { ingevuld } from "@/lib/crm/intake"
+import { telling, type Vragenlijst } from "@/lib/crm/vragenlijst"
+import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { leesUren } from "@/lib/beheer/uren"
 import { euro } from "@/lib/format"
@@ -36,7 +37,8 @@ const TABS = [
 export default async function Klantkaart({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string; bestond?: string }> }) {
   const { id } = await params
   const { tab, bestond } = await searchParams
-  const k = (await leesKlanten()).find((x) => x.id === id)
+  const [klanten, lijst] = await Promise.all([leesKlanten(), leesVragenlijst()])
+  const k = klanten.find((x) => x.id === id)
   if (!k) notFound()
   const actief = TABS.find((t) => t.id === tab)?.id ?? "overzicht"
   const g = geld(k)
@@ -81,7 +83,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
           </p>
         )}
         {actief === "overzicht" && <Overzicht k={k} />}
-        {actief === "tuinen" && <Tuinen k={k} />}
+        {actief === "tuinen" && <Tuinen k={k} lijst={lijst} />}
         {actief === "calculaties" && <Calculaties k={k} />}
         {actief === "stukken" && <Stukken k={k} />}
         {actief === "activiteit" && <Tijdlijn k={k} />}
@@ -193,12 +195,12 @@ function Notitie({ k }: { k: Klant }) {
   )
 }
 
-function Tuinen({ k }: { k: Klant }) {
+function Tuinen({ k, lijst }: { k: Klant; lijst: Vragenlijst }) {
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-10">
       <ul className="m-0 grid list-none grid-cols-2 gap-4 self-start p-0">
         {k.tuinen.map((t) => {
-          const n = ingevuld(t.antwoorden)
+          const n = telling(lijst, t)
           return (
             <li key={t.id} className="crm-paneel p-5">
               <Link href={`/dashboard/klanten/${k.id}/tuin/${t.id}`} className="syne text-[22px] hover:text-accent-tekst">{t.naam}</Link>

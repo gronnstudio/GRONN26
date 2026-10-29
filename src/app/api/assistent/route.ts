@@ -4,6 +4,7 @@ import { geheugen } from "@/lib/beheer/geheugen"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { leesStand } from "@/lib/beheer/stand"
 import { crmOverzicht, klantContext } from "@/lib/crm/context"
+import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
 import { ZONDER_CLAUDE, zelfAntwoord } from "@/lib/beheer/zelf"
 
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   // Het CRM erbij: alle lopende klanten kort, en de open klant uitgebreid.
   const open = typeof klantId === "string" ? klanten.find((k) => k.id === klantId) : undefined
-  const crm = `${crmOverzicht(klanten)}${open ? `\n\n${klantContext(open)}` : ""}`
+  const crm = `${crmOverzicht(klanten)}${open ? `\n\n${klantContext(open, await leesVragenlijst())}` : ""}`
 
   const client = new Anthropic()
   try {

@@ -1,7 +1,7 @@
 import "server-only"
 import { SOORTEN, reken } from "./calculatie"
 import { toonDecimaal, toonEuro } from "./geld"
-import { ALLE_VELDEN } from "./intake"
+import { STANDAARD, alleVragen, type Vragenlijst } from "./vragenlijst"
 import { geld, isOpen, laatsteCalculatie, type Klant } from "./klant"
 
 // Wat Grønn (de assistent) uit het CRM te zien krijgt. Zo weinig als nodig:
@@ -33,13 +33,19 @@ export function crmOverzicht(klanten: Klant[]) {
 }
 
 /** De klant die Nick nu open heeft: opname, calculatie en tijdlijn, samengevat. */
-export function klantContext(k: Klant) {
+export function klantContext(k: Klant, lijst: Vragenlijst = STANDAARD) {
+  const vragen = alleVragen(lijst)
   const delen: string[] = [`# Nu open: ${k.naam}`, `Soort ${k.soort}, fase ${k.fase}${k.bron ? `, binnengekomen via ${k.bron}` : ""}. Wens: ${k.wat || "onbekend"}.`]
   if (k.volgende) delen.push(`Volgende stap: ${k.volgende}`)
   if (k.notities) delen.push(`Notities: ${k.notities.slice(0, 1500)}`)
   for (const t of k.tuinen) {
-    const antwoorden = ALLE_VELDEN.filter((v) => t.antwoorden[v.id]).map((v) => `${v.label}: ${t.antwoorden[v.id]}${v.eenheid ? ` ${v.eenheid}` : ""}`)
-    delen.push(`## Tuin ${t.naam}\n${antwoorden.join("; ") || "Opname nog leeg."}${t.diensten.length ? `\nGewenst: ${t.diensten.join(", ")}` : ""}`)
+    const antwoorden = vragen
+      .filter((v) => t.antwoorden[v.id])
+      .map((v) => `${v.tekst}: ${t.antwoorden[v.id]}${v.eenheid ? ` ${v.eenheid}` : ""}${t.notities[v.id] ? ` (notitie: ${t.notities[v.id].slice(0, 300)})` : ""}${t.aandacht.includes(v.id) ? " [aandachtspunt]" : ""}`)
+    const ids = new Set(vragen.map((v) => v.id))
+    for (const [id, a] of Object.entries(t.antwoorden)) if (!ids.has(id) && t.vragen[id]) antwoorden.push(`${t.vragen[id]}: ${a}`)
+    const zones = t.zones.map((z) => `${z.naam} (${z.soort})${[z.lengte && `${z.lengte} m lang`, z.breedte && `${z.breedte} m breed`, z.oppervlak && `${z.oppervlak} m²`, z.diepte && `diepte ${z.diepte}`].filter(Boolean).map((x) => ` ${x}`).join(",")}${z.notitie ? `: ${z.notitie.slice(0, 200)}` : ""}`)
+    delen.push(`## Tuin ${t.naam}\n${antwoorden.join("; ") || "Opname nog leeg."}${t.diensten.length ? `\nGewenst: ${t.diensten.join(", ")}` : ""}${zones.length ? `\nZones: ${zones.join("; ")}` : ""}`)
   }
   const c = laatsteCalculatie(k)
   if (c) {

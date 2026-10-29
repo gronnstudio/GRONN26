@@ -1,4 +1,4 @@
-# ADR 0006 · Video via beelden uit de browser
+# ADR 0009 · Video via beelden uit de browser
 
 29 okt 2026 · **Voorgesteld** (fase 1 intake, zie [../intake.md](../intake.md))
 

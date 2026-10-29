@@ -9,6 +9,9 @@ import { KOEKJE, maakKoekje } from "../src/lib/eigenaar"
 
 process.env.AUTH_SECRET = "alleen-voor-tests"
 
+/** Een tab boven de vragen van de intake (categorie, Zones, Open punten). */
+const tab = (page: Page, naam: RegExp) => page.getByRole("navigation", { name: "Categorieën" }).getByRole("button", { name: naam })
+
 async function log(page: Page) {
   await page.context().addCookies([{ name: KOEKJE, value: await maakKoekje("hello@gronn.studio"), url: "http://localhost:3210" }])
 }
@@ -66,15 +69,61 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await page.locator('input[name="naam"]').fill("Oprit")
   await page.getByRole("button", { name: "+ Tuin en opname" }).click()
   await expect(page.locator('input[name="naam"]')).toHaveValue("Oprit")
-  await page.locator('input[name="i_oppervlak"]').fill("55")
-  await page.locator('select[name="i_toegang"]').selectOption("Minigraver past (≥ 1 m)")
-  await page.getByLabel("Bestrating", { exact: true }).check()
-  await page.getByRole("button", { name: "Opname bewaren" }).click()
-  await expect(page.getByText("55 m²")).toBeVisible()
-  // tweede versie: de eerste blijft in de geschiedenis
-  await page.locator('input[name="i_oppervlak"]').fill("56")
-  await page.getByRole("button", { name: "Opname bewaren" }).click()
-  await expect(page.getByText(/1 veld daarna veranderd/)).toBeVisible()
+  // De intake bewaart zichzelf: werkzaamheden, maten, ja/nee, aandachtspunt, notitie.
+  const bewaard = page.getByRole("status").filter({ hasText: /Bewaard ✓|Bewaren…|Nog niet bewaard/ })
+  await expect(tab(page, /E · Bestrating/)).toHaveCount(0)
+  await page.getByRole("button", { name: "Bestrating", exact: true }).click()
+  await expect(tab(page, /E · Bestrating/)).toBeVisible()
+  await tab(page, /C · Bestaande situatie/).click()
+  await page.getByLabel(/^Oppervlak totaal/).fill("55")
+  await page.getByLabel(/^Grondsoort/).selectOption("Onbekend")
+  const grond = page.locator("#v-grond")
+  await grond.getByRole("button", { name: "Markeer als aandachtspunt" }).click()
+  await grond.getByRole("button", { name: "+ Notitie" }).click()
+  await grond.getByLabel("Notitie bij Grondsoort").fill("Proefgat maken bij de schuur")
+  await tab(page, /B · Bereikbaarheid/).click()
+  await page.getByLabel(/^Toegang/).selectOption("Minigraver past (≥ 1 m)")
+  await page.getByRole("group", { name: /minigraver naar de werkplek/ }).getByRole("button", { name: "Ja" }).click()
+  await expect(bewaard).toHaveText("Bewaard ✓")
+
+  // Zonder bereik blijft het in de browser staan en gaat het mee zodra er weer verbinding is.
+  await tab(page, /C · Bestaande situatie/).click()
+  await page.context().setOffline(true)
+  await page.getByLabel(/^Oppervlak totaal/).fill("56")
+  await expect(bewaard).toContainText("Nog niet bewaard")
+  await page.context().setOffline(false)
+  await expect(bewaard).toHaveText("Bewaard ✓", { timeout: 20_000 })
+
+  await page.reload()
+  await tab(page, /C · Bestaande situatie/).click()
+  await expect(page.getByLabel(/^Oppervlak totaal/)).toHaveValue("56")
+  await expect(page.locator("#v-grond").getByRole("button", { name: "! Aandachtspunt" })).toBeVisible()
+  await expect(page.locator("#v-grond").getByLabel("Notitie bij Grondsoort")).toHaveValue("Proefgat maken bij de schuur")
+  await expect(page.getByRole("button", { name: "Bestrating", exact: true })).toHaveAttribute("aria-pressed", "true")
+  await expect(page.getByText("56 m²").first()).toBeVisible()
+
+  // Open punten: het aandachtspunt bovenaan. Vervolginspectie toont alleen wat open is.
+  await tab(page, /^Open punten/).click()
+  await expect(page.locator("#open-kop ~ ul button").first()).toContainText("Grondsoort")
+  await page.getByRole("button", { name: "Vervolg", exact: true }).click()
+  await tab(page, /C · Bestaande situatie/).click()
+  await expect(page.locator("#v-grond")).toBeVisible()
+  await expect(page.locator("#v-oppervlak")).toHaveCount(0)
+  await page.getByRole("button", { name: "Snel", exact: true }).click()
+  await expect(page.locator("#v-grond")).toHaveCount(0)
+  // Een open punt dat Snel niet toont, schakelt naar Uitgebreid en opent die vraag.
+  await tab(page, /^Open punten/).click()
+  await page.locator("#open-kop ~ ul button").filter({ hasText: "Gewenste uitstraling en stijl" }).click()
+  await expect(page.getByRole("button", { name: "Uitgebreid", exact: true })).toHaveAttribute("aria-pressed", "true")
+  await expect(page.locator("#v-stijl")).toBeVisible()
+
+  // Een zone met maten: 7 × 10 = 70 m².
+  await tab(page, /^Zones/).click()
+  await page.getByRole("button", { name: "+ Zone toevoegen" }).click()
+  await page.getByLabel("Lengte").fill("7")
+  await page.getByLabel("Breedte").fill("10")
+  await expect(page.getByText("70 m² (lengte × breedte)")).toBeVisible()
+  await expect(bewaard).toHaveText("Bewaard ✓")
 
   const jpg = await page.evaluate(async () => {
     const c = document.createElement("canvas")
@@ -150,6 +199,71 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   expect((await request.get("/offerte/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).status()).toBe(404)
 })
 
+test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem weg", async ({ page }) => {
+  await log(page)
+  const vraag = `Ladder mee ${Date.now()}?`
+  await page.goto("/dashboard/vragenlijst")
+  await page.locator("summary").filter({ hasText: "Meenemen" }).click()
+  const meenemen = page.locator("details").filter({ hasText: "Meenemen" })
+  await meenemen.getByLabel("Nieuwe vraag").fill(vraag)
+  await meenemen.getByRole("button", { name: "Meenemen bewaren" }).click()
+  await expect(page.locator("summary").filter({ hasText: "Meenemen" })).toContainText("5 vragen")
+  await expect(page.getByLabel(`Vraag: ${vraag}`)).toBeVisible()
+
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill(`Vragenlijst ${Date.now()}`)
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await page.getByRole("link", { name: /^Tuinen/ }).click()
+  await page.locator('input[name="naam"]').fill("Voortuin")
+  await page.getByRole("button", { name: "+ Tuin en opname" }).click()
+  await tab(page, /^Meenemen/).click()
+  await expect(page.getByRole("group", { name: vraag })).toBeVisible()
+  await page.getByRole("group", { name: vraag }).getByRole("button", { name: "Ja" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible()
+  const tuin = page.url()
+
+  await page.goto("/dashboard/vragenlijst")
+  await page.locator("summary").filter({ hasText: "Meenemen" }).click()
+  const rij = page.locator("details").filter({ hasText: "Meenemen" }).locator("div.border-t").filter({ has: page.getByLabel(`Vraag: ${vraag}`) })
+  await rij.getByLabel("Vervallen").check()
+  await page.getByRole("button", { name: "Meenemen bewaren" }).click()
+  await expect(page.getByText(/vragen in \d+ categorieën · versie/)).toBeVisible()
+  await page.goto(tuin)
+  await tab(page, /^Meenemen/).click()
+  await expect(page.getByRole("group", { name: vraag })).toHaveCount(0)
+  // Het antwoord op de vervallen vraag blijft terug te lezen.
+  await expect(page.locator("section").filter({ hasText: "Niet in de huidige vragen" })).toContainText(`${vraag}: Ja`)
+
+  // Op de telefoon: niets loopt buiten beeld, knoppen zijn groot genoeg om te tikken.
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto(tuin)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0)
+  const ja = page.locator("#v-meetwiel-of-rolmaat-30-m-duimstok-waterp").getByRole("button", { name: "Ja" })
+  expect((await ja.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+
+  // Een traag verzoek: wat onderweg is blijft in de lokale buffer tot de server het bevestigt.
+  await page.route("**/dashboard/klanten/**", async (r) => {
+    if (r.request().method() === "POST") await new Promise((z) => setTimeout(z, 4000))
+    await r.continue()
+  })
+  await ja.click()
+  await page.waitForTimeout(1200)
+  await page.locator("#v-telefoon-met-volle-batterij-voor-foto-s").getByRole("button", { name: "Ja" }).click()
+  const buffer = await page.evaluate(() => Object.entries(localStorage).find(([k]) => k.startsWith("gronn-intake-"))?.[1] ?? "")
+  expect(buffer).toContain("meetwiel-of-rolmaat-30-m-duimstok-waterp")
+  expect(buffer).toContain("telefoon-met-volle-batterij-voor-foto-s")
+  await page.unrouteAll({ behavior: "wait" })
+  await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible({ timeout: 20_000 })
+  expect(await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith("gronn-intake-")))).toBe(false)
+
+  // Een offline antwoord dat niet meer in de vragenlijst past, wordt gemeld en niet stil overgeslagen.
+  const sleutel = `gronn-intake-${tuin.split("/").pop()}`
+  await page.evaluate((k) => localStorage.setItem(k, JSON.stringify({ antwoorden: { grond: "Marmer" } })), sleutel)
+  await page.reload()
+  await expect(page.getByRole("alert")).toContainText("Niet bewaard, de vragenlijst is intussen veranderd: Grondsoort")
+})
+
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
   await log(page)
   await page.setViewportSize({ width: 1440, height: 1000 })
@@ -175,6 +289,7 @@ test("systeem: elke pagina één h1, geen fouten, geen overloop, licht en donker
     "/dashboard/klanten/clannad-stijn?tab=tuinen",
     "/dashboard/klanten/clannad-stijn?tab=stukken",
     "/dashboard/klanten/clannad-stijn?tab=activiteit",
+    "/dashboard/vragenlijst",
     "/dashboard/planning",
     "/dashboard/calculaties",
     "/dashboard/prijs",

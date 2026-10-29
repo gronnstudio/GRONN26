@@ -108,6 +108,8 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-accent-tekst: var(--accent-tekst);
   --color-op-accent: var(--op-accent);
   --color-let: var(--let);
+  --color-let-zacht: var(--let-zacht);
+  --color-accent-zacht: var(--accent-zacht);
   --color-lijn-sterk: var(--lijn-sterk);
   --color-zijbalk: var(--zijbalk);
   --font-cijfer: var(--font-geist-mono), ui-monospace, monospace;

@@ -4,7 +4,7 @@ import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort
 import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem } from "../src/lib/crm/catalogus"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
-import { oppervlakUit } from "../src/lib/crm/intake"
+import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
 // De rekenkern van het CRM zonder browser: geld in centen, afronden, btw per
 // tarief, marge tegenover opslag en de rekenhulpen. Draait in dezelfde
@@ -155,3 +155,66 @@ test.describe("catalogus en klanten", () => {
     expect(oppervlakUit({})).toBeNull()
   })
 })
+
+test.describe("vragenlijst van de intake", () => {
+  const leeg = { antwoorden: {} as Record<string, string>, notities: {}, aandacht: [] as string[], diensten: [] as string[] }
+  test("elk id één keer, elke dienst bestaat", () => {
+    const ids = alleVragen(STANDAARD).map((v) => v.id)
+    expect(new Set(ids).size).toBe(ids.length)
+    for (const c of STANDAARD.categorieen) for (const d of [...(c.toonBij ?? []), ...c.vragen.flatMap((v) => v.toonBij ?? [])]) expect(STANDAARD.diensten).toContain(d)
+  })
+  test("vervolgvragen verschijnen pas bij de gekozen werkzaamheden", () => {
+    const zonder = vragenVoor(STANDAARD, leeg, "uitgebreid").map((c) => c.id)
+    expect(zonder).not.toContain("bestrating")
+    expect(zonder).not.toContain("vijver")
+    const met = vragenVoor(STANDAARD, { ...leeg, diensten: ["Bestrating"] }, "uitgebreid")
+    expect(met.find((c) => c.id === "bestrating")?.vragen.map((v) => v.id)).toEqual(expect.arrayContaining(["funderingType", "afschot", "opsluiting", "bestratingMaat"]))
+    const vijver = vragenVoor(STANDAARD, { ...leeg, diensten: ["Vijver of waterelement"] }, "uitgebreid")
+    expect(vijver.find((c) => c.id === "vijver")?.vragen.map((v) => v.id)).toEqual(expect.arrayContaining(["pomp", "filter", "leiding", "overloop"]))
+    expect(telling(STANDAARD, { antwoorden: {}, diensten: ["Bestrating"] }).van).toBeGreaterThan(telling(STANDAARD, { antwoorden: {}, diensten: [] }).van)
+  })
+  test("snel, uitgebreid en vervolg", () => {
+    const snel = vragenVoor(STANDAARD, leeg, "snel").flatMap((c) => c.vragen)
+    expect(snel.length).toBeGreaterThan(3)
+    expect(snel.every((v) => v.snel)).toBe(true)
+    const s = { ...leeg, antwoorden: { woning: "Vrijstaand", grond: "Onbekend" }, aandacht: ["toegang"] }
+    const vervolg = vragenVoor(STANDAARD, s, "vervolg").flatMap((c) => c.vragen.map((v) => v.id))
+    expect(vervolg).not.toContain("woning")
+    expect(vervolg).toContain("grond")
+    expect(vervolg).toContain("parkeren")
+  })
+  test("open punten: gemarkeerd eerst, dan onbekend, dan leeg", () => {
+    const p = openPunten(STANDAARD, { ...leeg, antwoorden: { woning: "Vrijstaand", grond: "Onbekend", toegang: "Alleen kruiwagen" }, aandacht: ["toegang"] })
+    expect(p[0]).toMatchObject({ reden: "aandacht", vraag: { id: "toegang" } })
+    expect(p[1]).toMatchObject({ reden: "onbekend", vraag: { id: "grond" } })
+    expect(p.some((x) => x.vraag.id === "woning")).toBe(false)
+  })
+  test("antwoorden worden gecontroleerd tegen de vraag", () => {
+    const v = (id: string) => alleVragen(STANDAARD).find((x) => x.id === id)!
+    expect(schoonAntwoord(v("minigraver"), "Ja")).toBe("Ja")
+    expect(schoonAntwoord(v("minigraver"), "Misschien")).toBeNull()
+    expect(schoonAntwoord(v("grond"), "Klei")).toBe("Klei")
+    expect(schoonAntwoord(v("grond"), "Marmer")).toBeNull()
+    expect(schoonAntwoord(v("startdatum"), "morgen")).toBeNull()
+    expect(schoonAntwoord(v("oppervlak"), "  ")).toBe("")
+  })
+  test("oude opname: vinkjes van de checklist worden Ja, ook zonder nieuwe vraag", () => {
+    const k = normaliseer({ id: "k", naam: "K", tuinen: [{ id: "t", naam: "Achter", antwoorden: { oppervlak: "55" }, checklist: ["parkeren-voor-de-bus", "telefoon-met-volle-batterij-voor-foto-s"], diensten: [] } as never] })
+    expect(k.tuinen[0].antwoorden).toEqual({ oppervlak: "55", "parkeren-voor-de-bus": "Ja", "telefoon-met-volle-batterij-voor-foto-s": "Ja" })
+    expect(k.tuinen[0].vragen["parkeren-voor-de-bus"]).toBe("Parkeren voor de bus")
+    expect(k.tuinen[0].soort).toBe("uitgebreid")
+    expect(k.tuinen[0].zones).toEqual([])
+  })
+  test("een kapotte opgeslagen lijst valt terug op de startinhoud", () => {
+    expect(schoonLijst(null)).toBe(STANDAARD)
+    expect(schoonLijst({ categorieen: [] })).toBe(STANDAARD)
+    const eigen = schoonLijst({ versie: 3, diensten: ["Zwemvijver"], categorieen: [{ id: "z", naam: "Zwemvijver", vragen: [{ id: "a", tekst: "Diepte", soort: "raar" }] }] })
+    expect(eigen.categorieen[0].vragen[0].soort).toBe("tekst")
+    expect(eigen.versie).toBe(3)
+  })
+  test("oppervlak van een zone", () => {
+    expect(zoneOppervlak({ oppervlak: "", lengte: "7", breedte: "10" })).toBe(70000)
+    expect(zoneOppervlak({ oppervlak: "50", lengte: "7", breedte: "10" })).toBe(50000)
+  })
+})
+

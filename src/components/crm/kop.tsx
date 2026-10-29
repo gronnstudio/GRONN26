@@ -6,8 +6,8 @@ export type Stap = { naam: string; href?: string }
 
 export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: React.ReactNode; sub?: React.ReactNode; children?: React.ReactNode }) {
   return (
-    <header className="border-b border-lijn px-8 pt-5 pb-5 print:hidden">
-      <nav aria-label="Kruimelpad" className="h-[18px] text-[12px] text-gedempt">
+    <header className="border-b border-lijn px-4 pt-5 pb-5 sm:px-8 print:hidden">
+      <nav aria-label="Kruimelpad" className="min-h-[18px] text-[12px] text-gedempt">
         <ol className="m-0 flex list-none flex-wrap gap-1.5 p-0">
           {pad.map((p, i) => (
             <li key={i} className="flex gap-1.5">

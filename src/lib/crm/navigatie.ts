@@ -12,6 +12,7 @@ export const GROEPEN: { naam: string; onderdelen: Onderdeel[] }[] = [
       { href: "/dashboard", naam: "Vandaag", icoon: "vandaag", teller: "opvolgen" },
       { href: "/dashboard/aanvragen", naam: "Aanvragen", icoon: "aanvragen", teller: "aanvragen" },
       { href: "/dashboard/klanten", naam: "Klanten", icoon: "klanten" },
+      { href: "/dashboard/vragenlijst", naam: "Vragenlijst", icoon: "vragenlijst" },
       { href: "/dashboard/planning", naam: "Planning", icoon: "planning" },
     ],
   },
