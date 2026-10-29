@@ -137,7 +137,7 @@ export function PrijsRekenaar() {
                   </li>
                 ))}
                 <li className="flex justify-between gap-4 border-t border-lijn pt-1 font-semibold">
-                  <span>Voorstel, met 10 % marge</span>
+                  <span>Voorstel, met 5 % marge</span>
                   <span className="tabular-nums">{Math.round(schatting.uren)} u</span>
                 </li>
               </ul>
