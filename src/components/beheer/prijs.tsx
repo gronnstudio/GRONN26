@@ -177,7 +177,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       setVersie(uit.nr)
       setMelding(`Versie ${uit.nr} bewaard.`)
       // Op de klantpagina: naar het vaste adres van deze calculatie.
-      if (begin && !calcId) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
+      // Ook na een meetstaat-import naar het vaste adres: verversen mag de import niet herhalen.
+      if (begin && (!calcId || window.location.search.includes("meetstaat="))) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
     })
 
   const onthoud = (i: number) =>

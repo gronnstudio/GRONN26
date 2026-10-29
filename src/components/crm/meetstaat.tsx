@@ -21,7 +21,6 @@ export function Meetstaat({ tuin, zones: begin, naarCalculatie }: { tuin: string
 
   const staat = meetstaat(zones)
   if (!staat.length) return null
-  const iets = staat.some((z) => z.regels.some((r) => r.hoeveelheid > 0))
   return (
     <section className="crm-paneel p-5" aria-labelledby="meetstaat-kop">
       <p id="meetstaat-kop" className="crm-label m-0">Meetstaat</p>
@@ -43,12 +42,10 @@ export function Meetstaat({ tuin, zones: begin, naarCalculatie }: { tuin: string
           </ul>
         </div>
       ))}
-      {iets && (
-        // Een gewone link: wacht de intake nog op bewaren, dan waarschuwt de browser eerst.
-        <a href={naarCalculatie} className="mt-4 block rounded-full border border-lijn px-5 py-2.5 text-center text-[14px] font-semibold hover:border-accent">
-          Zet in calculatie →
-        </a>
-      )}
+      {/* Altijd: ook een lege meetstaat haalt oude meetregels uit de calculatie. Een gewone link: wacht de intake nog op bewaren, dan waarschuwt de browser eerst. */}
+      <a href={naarCalculatie} className="mt-4 block rounded-full border border-lijn px-5 py-2.5 text-center text-[14px] font-semibold hover:border-accent">
+        Zet in calculatie →
+      </a>
     </section>
   )
 }
