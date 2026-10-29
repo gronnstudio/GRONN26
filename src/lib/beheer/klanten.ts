@@ -1,7 +1,6 @@
 import "server-only"
 import { leesJson, opslagAan, wijzigJson } from "@/lib/crm/opslag"
-import { geld, isOpen, laatsteCalculatie, normaliseer, type Gebeurtenis, type Klant, type KlantFase } from "@/lib/crm/klant"
-import type { Fase, Project } from "./data"
+import { normaliseer, type Gebeurtenis, type Klant } from "@/lib/crm/klant"
 
 // Klanten en hun klussen: één kaart per klant en een pijplijn van aanvraag tot
 // opgeleverd (eigenaar, 29 okt 2026: "bouw dashboard helemaal uit als een
@@ -104,39 +103,3 @@ export const gebeurtenis = (soort: Gebeurtenis["soort"], tekst: string, wie: Geb
   soort,
   tekst: tekst.slice(0, 1000),
 })
-
-// De ring en "Volgende stap" op het dashboard rekenen sinds de CRM-bouw met de
-// echte klanten in plaats van de vaste lijst in data.ts. Vijf sectoren op de
-// ring, dus de acht fasen van de klantkaart vallen samen.
-const RING: Record<KlantFase, Fase | null> = {
-  Aanvraag: "Aanvraag",
-  Opname: "Aanvraag",
-  Offerte: "Offerte",
-  Akkoord: "Gepland",
-  Gepland: "Gepland",
-  Uitvoering: "Uitvoering",
-  Opgeleverd: "Opgeleverd",
-  Verloren: null,
-}
-
-export function alsProjecten(klanten: Klant[]): Project[] {
-  const nu = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
-  return klanten.flatMap((k) => {
-    const fase = RING[k.fase]
-    if (!fase) return []
-    const g = geld(k)
-    const c = laatsteCalculatie(k)
-    return [
-      {
-        naam: k.naam,
-        wat: k.wat,
-        plaats: k.plaats,
-        fase,
-        bedrag: g.offerte ?? (c ? c.v.totaal / 100 : undefined),
-        volgende: k.volgende || (isOpen(k.fase) ? "Geen volgende stap ingevuld." : "Klaar."),
-        aandacht: isOpen(k.fase) && ((!!k.opvolgen && k.opvolgen <= nu) || g.open > 0),
-        href: `/dashboard/klanten/${k.id}`,
-      },
-    ]
-  })
-}

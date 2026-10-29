@@ -36,7 +36,7 @@ export async function nieuwCatalogusItem(d: FormData) {
   const v = lees(d)
   if (!v) return
   await wijzigCatalogus((items) => [...items, nieuwItem(v)])
-  revalidatePath("/dashboard/catalogus")
+  revalidatePath("/dashboard", "layout")
 }
 
 export async function bewaarCatalogusItem(id: string, d: FormData) {
@@ -56,11 +56,11 @@ export async function bewaarCatalogusItem(id: string, d: FormData) {
           }
         : i,
     ))
-  revalidatePath("/dashboard/catalogus")
+  revalidatePath("/dashboard", "layout")
 }
 
 export async function catalogusItemWeg(id: string) {
   await eisEigenaar()
   await wijzigCatalogus((items) => items.filter((i) => i.id !== id))
-  revalidatePath("/dashboard/catalogus")
+  revalidatePath("/dashboard", "layout")
 }

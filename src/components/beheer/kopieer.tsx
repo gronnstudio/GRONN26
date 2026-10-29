@@ -13,7 +13,7 @@ export function Kopieer({ tekst }: { tekst: string }) {
         setKlaar(true)
         setTimeout(() => setKlaar(false), 2000)
       }}
-      className="knop-klein bg-oranje text-[#202020]"
+      className="knop-klein bg-accent text-op-accent"
     >
       {klaar ? "Gekopieerd ✓" : "Kopieer caption"}
     </button>

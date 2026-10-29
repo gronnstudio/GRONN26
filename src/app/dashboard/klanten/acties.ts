@@ -27,7 +27,7 @@ import {
 async function wijzig(f: (k: Klant[]) => Klant[]) {
   await eisEigenaar()
   await wijzigKlanten(f)
-  revalidatePath("/dashboard/klanten", "layout")
+  revalidatePath("/dashboard", "layout")
 }
 
 /** Eén klant aanpassen; `f` geeft de nieuwe klant terug. */

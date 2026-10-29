@@ -1,550 +1,238 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Assistent } from "@/components/beheer/assistent"
-import { Facturen } from "@/components/beheer/facturen"
-import { Kern } from "@/components/beheer/kern"
-import { KleurKeuze } from "@/components/beheer/kleur"
-import { Datum, Groet, Klok } from "@/components/beheer/klok"
-import { Kopieer } from "@/components/beheer/kopieer"
-import { POSTS, POSTTIJDEN, TEGELS, tegelVan } from "@/lib/beheer/social"
-import { leesStand, opslagAan } from "@/lib/beheer/stand"
-import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
-import { aanvraagKlaar, aanvraagNaarKlant, bestellingKlaar, bonIngewisseld, bonVerstuurd, nieuweAanvraag, nieuwPlan, planWeg, zetGepost } from "./acties"
-import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
-import { EIGEN_PAGINAS, KOPPELINGEN, OFFERTES, TE_BETALEN, TE_ONTVANGEN, TODOS } from "@/lib/beheer/data"
-import { alsProjecten, leesKlanten } from "@/lib/beheer/klanten"
-import { DOCUMENTEN } from "@/lib/data/legal"
+import { redirect } from "next/navigation"
+import { Blok, Cijfer, Cijfers, Kop, Leeg } from "@/components/crm/kop"
+import { TODOS } from "@/lib/beheer/data"
+import { hoortBij, leesKlanten } from "@/lib/beheer/klanten"
+import { POSTS, TEGELS, tegelVan } from "@/lib/beheer/social"
+import { leesStand } from "@/lib/beheer/stand"
+import { DOEL, RECONSTRUCTIE, leesUren, weekTotaal, weekVan } from "@/lib/beheer/uren"
+import { toonEuro } from "@/lib/crm/geld"
+import { LOPEND, geldOverzicht, gewogenPijplijn, opTeVolgen, pijplijn, plusDagen, vandaagNL, waardeVan } from "@/lib/crm/overzicht"
 import { euro } from "@/lib/format"
 
-// Het dashboard achter de login, waar alles samenkomt (eigenaar, 6 okt 2026:
-// "een jarvis achtig dashboard"). Opzet naar de Command Center in
-// gronnstudio/gronncore, maar met alleen echte gegevens (src/lib/beheer/data.ts).
-// Alleen voor de eigenaar: src/proxy.ts laat hier niemand anders in.
-export const metadata: Metadata = {
-  title: { absolute: "Dashboard · GRØNN Studio" },
-  robots: { index: false, follow: false },
-}
-
-const datum = (d: string) => new Date(d).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })
-const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
-
+// Vandaag: de startpagina van het systeem (vervangt het Jarvis-scherm met de
+// ring, 29 okt 2026). Eén vraag per blok: wie moet ik bellen, wat loopt er,
+// wat staat er open, wat komt eraan. Alles komt uit de klantkaarten, de
+// aanvragen, de planning en de urenregistratie; elk getal linkt naar de lijst
+// erachter. Rekenen gebeurt in src/lib/crm/overzicht.ts.
+export const metadata: Metadata = { title: "Vandaag" }
 export const dynamic = "force-dynamic"
 
-const veld = "min-w-0 rounded-[12px] border border-lijn bg-transparent px-3 py-2 text-[14px]"
-const dag = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" })
-const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
+// De oude tabbladen van het dashboard (?tab=) zijn eigen onderdelen geworden.
+const OUD: Record<string, string> = { klanten: "/dashboard/aanvragen", geld: "/dashboard/geld", social: "/dashboard/social", links: "/dashboard/links" }
 
-// Tabbladen (eigenaar, 21 okt 2026: "dashboard wordt rommelig, maak tabbladen").
-// Gewone links met ?tab=, net als op /dashboard/leveranciers.
-const TABS = [
-  { id: "vandaag", naam: "Vandaag" },
-  { id: "klanten", naam: "Klanten" },
-  { id: "geld", naam: "Geld en papieren" },
-  { id: "social", naam: "Social" },
-  { id: "links", naam: "Links" },
-] as const
+const kort = (d: string) => new Date(`${d.slice(0, 10)}T12:00`).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" })
+const groet = () => {
+  const uur = Number(new Date().toLocaleString("nl-NL", { hour: "numeric", hourCycle: "h23", timeZone: "Europe/Amsterdam" }))
+  return uur < 6 ? "Goedenacht" : uur < 12 ? "Goedemorgen" : uur < 18 ? "Goedemiddag" : "Goedenavond"
+}
 
-export default async function Dashboard({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
-  const tab = (await searchParams).tab
-  const actief = TABS.find((t) => t.id === tab)?.id ?? "vandaag"
-  const stand = await leesStand()
-  const urenTotaal = RECONSTRUCTIE.reduce((t, r) => t + weekTotaal(r), 0) + (await leesUren()).filter((r) => r.datum.startsWith("2026")).reduce((t, r) => t + r.uren, 0)
-  const PROJECTEN = alsProjecten(await leesKlanten())
-  const aandacht = PROJECTEN.filter((p) => p.aandacht)
-  const lopend = PROJECTEN.filter((p) => p.fase !== "Opgeleverd")
-  // Social (eigenaar, 10 okt 2026: "maak in dashboard een special stuk voor social
-  // media"): de eerstvolgende post om te plaatsen, en wat daarna komt.
+export default async function Vandaag({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const { tab } = await searchParams
+  if (tab && OUD[tab]) redirect(OUD[tab])
+
+  const [klanten, stand, uren] = await Promise.all([leesKlanten(), leesStand(), leesUren()])
+  const nu = vandaagNL()
+  const tot = plusDagen(nu, 14)
+  const opvolgen = opTeVolgen(klanten, nu)
+  const aanvragen = stand.aanvragen.filter((a) => !a.klaar)
+  const lopend = klanten.filter((k) => LOPEND.includes(k.fase))
+  const geld = geldOverzicht(klanten, nu)
+  const fasen = pijplijn(klanten).filter((f) => f.fase !== "Opgeleverd" && f.fase !== "Verloren")
+
+  const maandag = weekVan(nu).maandag
+  const dezeWeek = uren.filter((r) => r.datum >= maandag && r.datum <= nu).reduce((t, r) => t + r.uren, 0)
+  const ditJaar = RECONSTRUCTIE.reduce((t, r) => t + weekTotaal(r), 0) + uren.filter((r) => r.datum.startsWith("2026")).reduce((t, r) => t + r.uren, 0)
+  const getal = (n: number) => n.toLocaleString("nl-NL", { maximumFractionDigits: 1 })
+
+  // De komende twee weken: wat je zelf plande, en wanneer je wie wilde opvolgen.
+  const agenda = [
+    ...stand.planning.filter((p) => p.datum > nu && p.datum <= tot).map((p) => ({ datum: p.datum, wat: p.wat, href: "/dashboard/planning", soort: "Planning" })),
+    ...klanten.filter((k) => k.opvolgen > nu && k.opvolgen <= tot && LOPEND.concat(["Aanvraag", "Opname", "Offerte"]).includes(k.fase)).map((k) => ({ datum: k.opvolgen, wat: `${k.naam}${k.volgende ? `: ${k.volgende}` : ""}`, href: `/dashboard/klanten/${k.id}`, soort: "Opvolgen" })),
+  ].sort((a, b) => a.datum.localeCompare(b.datum))
+  const vandaagGepland = stand.planning.filter((p) => p.datum === nu)
+
   const posts = POSTS.map((p, i) => ({ p, n: i + 1, t: TEGELS[tegelVan(i + 1)] }))
-  const open = posts.filter(({ p }) => !p.gepost && !(p.map && stand.gepost[p.map]))
-  const volgende = open.find(({ p }) => p.map)
+  const volgende = posts.find(({ p }) => !p.gepost && p.map && !stand.gepost[p.map])
+
   return (
-    <div data-links className="min-h-svh bg-grond text-inkt">
-      {/* bovenbalk */}
-      <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-b border-lijn px-5 py-4 md:px-8">
-        <div className="flex items-center gap-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="hidden h-[22px] w-auto dark:block" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="h-[22px] w-auto dark:hidden" />
-          <span className={`${lbl} hidden text-oranje-tekst sm:inline`}>Dashboard · alleen eigenaar</span>
-        </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px]">
-          <span className="hidden font-semibold tabular-nums sm:inline">
-            <Klok />
-          </span>
-          <KleurKeuze />
-          <Link href="/" className="opacity-70 hover:opacity-100">Site</Link>
-          <a href="/api/uitloggen" className="opacity-70 hover:opacity-100">Uitloggen</a>
-        </div>
-      </header>
+    <>
+      <Kop
+        titel={`${groet()}, Nick`}
+        sub={new Date().toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Amsterdam" })}
+      >
+        <Link href="/dashboard/aanvragen?nieuw=1" className="crm-knop-rand">+ Aanvraag</Link>
+        <Link href="/dashboard/klanten?nieuw=1" className="crm-knop-rand">+ Klant</Link>
+        <Link href="/dashboard/prijs" className="crm-knop">Prijs berekenen</Link>
+      </Kop>
 
-      {/* Tabbladen zoals in een browser (eigenaar, 21 okt 2026: "maak echte
-          tabbladen zoals een browser dat doet, nu staan er knoppen"): het
-          actieve blad heeft de kleur van de pagina en dekt de lijn eronder af. */}
-      <div className="border-b border-lijn">
-      <nav aria-label="Onderdelen" className="mx-auto -mb-px flex max-w-[1440px] items-end gap-1 overflow-x-auto px-5 pt-6 md:px-8">
-        {TABS.map((t) => (
-          <Link
-            key={t.id}
-            href={t.id === "vandaag" ? "/dashboard" : `/dashboard?tab=${t.id}`}
-            aria-current={t.id === actief ? "page" : undefined}
-            className={`shrink-0 rounded-t-[12px] border border-b-0 px-5 text-[14px] font-semibold transition-colors ${
-              t.id === actief
-                ? "relative z-10 border-lijn bg-grond py-3 shadow-[0_2px_0_0_var(--grond)] before:absolute before:inset-x-4 before:top-0 before:h-[2px] before:rounded-full before:bg-oranje before:content-['']"
-                : "border-transparent bg-inkt/[.05] py-2.5 opacity-75 hover:bg-inkt/[.09] hover:opacity-100"
-            }`}
-          >
-            {t.naam}
-            {t.id === "klanten" && stand.aanvragen.some((a) => !a.klaar) && (
-              <span className="ml-1.5 text-oranje-tekst">{stand.aanvragen.filter((a) => !a.klaar).length}</span>
-            )}
-          </Link>
-        ))}
-      </nav>
-      </div>
+      <main className="mx-auto grid max-w-[1440px] gap-8 px-8 py-6">
+        <Cijfers>
+          <Cijfer label="Opvolgen" waarde={String(opvolgen.length)} let={opvolgen.length > 0} uitleg="vandaag of eerder" href="/dashboard/klanten" />
+          <Cijfer label="Nieuwe aanvragen" waarde={String(aanvragen.length)} let={aanvragen.length > 0} uitleg="nog niet gebeld" href="/dashboard/aanvragen" />
+          <Cijfer label="Offertes open" waarde={euro(geld.offertesOpenSom)} uitleg={`${geld.offertesOpen.length} zonder akkoord`} href="/dashboard/geld#offertes" />
+          <Cijfer label="Lopende klussen" waarde={String(lopend.length)} uitleg="akkoord, gepland of bezig" href="/dashboard/klanten" />
+          <Cijfer label="Te ontvangen" waarde={euro(geld.teOntvangenSom)} let={geld.teOntvangenSom > 0} uitleg={`${geld.teOntvangen.length} facturen niet afgevinkt`} href="/dashboard/geld" />
+          <Cijfer label="Uren deze week" waarde={getal(dezeWeek)} uitleg={`${getal(ditJaar)} van ${DOEL.toLocaleString("nl-NL")} dit jaar`} href="/dashboard/uren" />
+        </Cijfers>
 
-      <main className="mx-auto grid max-w-[1440px] grid-cols-[minmax(0,1fr)] gap-x-10 gap-y-12 px-5 py-8 md:px-8 lg:grid-cols-[minmax(0,1fr)_400px]">
-        {actief === "vandaag" && (<>
-        {/* de kern */}
-        <section className="flex items-center justify-center">
-          <Kern projecten={PROJECTEN} />
-        </section>
+        <div className="grid gap-8 @min-[1060px]:grid-cols-[minmax(0,1fr)_400px]">
+          <div className="grid content-start gap-8">
+            <Blok titel="Vandaag te doen" rechts={<span className="text-gedempt">{opvolgen.length + aanvragen.length + vandaagGepland.length} open</span>}>
+              {opvolgen.length + aanvragen.length + vandaagGepland.length === 0 ? (
+                <Leeg>Niemand om op te volgen en geen nieuwe aanvragen. Kijk bij de komende twee weken wat eraan komt.</Leeg>
+              ) : (
+                <ul className="crm-paneel m-0 list-none divide-y divide-lijn p-0">
+                  {aanvragen.map((a) => (
+                    <Rij key={a.id} soort="Aanvraag" let href="/dashboard/aanvragen" titel={a.naam} sub={[a.bron, a.wat.split("\n")[0]].filter(Boolean).join(" · ")} rechts={kort(a.datum)} />
+                  ))}
+                  {opvolgen.map((k) => (
+                    <Rij key={k.id} soort="Opvolgen" let={k.opvolgen < nu} href={`/dashboard/klanten/${k.id}`} titel={k.naam} sub={k.volgende || "Geen volgende stap ingevuld."} rechts={k.opvolgen < nu ? `sinds ${kort(k.opvolgen)}` : "vandaag"} />
+                  ))}
+                  {vandaagGepland.map((p) => (
+                    <Rij key={p.id} soort="Planning" href="/dashboard/planning" titel={p.wat} rechts="vandaag" />
+                  ))}
+                </ul>
+              )}
+            </Blok>
 
-        {/* vandaag */}
-        <aside className="flex flex-col gap-8">
-          <div>
-            <p className={`${lbl} m-0 opacity-60`}>
-              <Datum />
-            </p>
-            <h1 className="syne m-0 mt-1 text-[clamp(36px,4vw,48px)] leading-[1.05]">
-              <Groet />
-            </h1>
-          </div>
-          <dl className="m-0 grid grid-cols-3 border-y border-lijn">
-            {[
-              [String(lopend.length).padStart(2, "0"), "lopend"],
-              [String(aandacht.length).padStart(2, "0"), "aandacht"],
-              [String(TODOS.length).padStart(2, "0"), "te doen"],
-            ].map(([n, t], i) => (
-              <div key={t} className={`py-4 ${i ? "border-l border-lijn pl-4" : ""}`}>
-                <dd className={`syne m-0 text-[30px] ${t === "aandacht" && n !== "00" ? "text-oranje-tekst" : ""}`}>{n}</dd>
-                <dt className={`${lbl} opacity-60`}>{t}</dt>
-              </div>
-            ))}
-          </dl>
-          <Link
-            href="/dashboard/uren"
-            className="group flex items-center justify-between gap-4 rounded-[18px] border border-lijn p-5 transition-colors hover:border-oranje"
-          >
-            <span>
-              <span className={`${lbl} block opacity-60`}>Urenregistratie</span>
-              <b className="syne mt-1 block text-[19px]">{urenTotaal.toLocaleString("nl-NL", { maximumFractionDigits: 1 })} van 1.225 uur</b>
-            </span>
-            <span className="text-[13px] font-semibold transition-transform group-hover:translate-x-1">Invullen →</span>
-          </Link>
-          <div>
-            <p className={`${lbl} m-0 opacity-60`}>Volgende stap</p>
-            <ul className="m-0 mt-3 list-none space-y-4 p-0">
-              {lopend.map((p) => (
-                <li key={p.naam} className="border-l-2 pl-4" style={{ borderColor: p.aandacht ? "var(--oranje)" : "var(--lijn)" }}>
-                  <div className="flex justify-between gap-3">
-                    {p.href ? <Link href={p.href} className="font-semibold hover:text-oranje-tekst">{p.naam}</Link> : <b className="font-semibold">{p.naam}</b>}
-                    <span className={`${lbl} shrink-0 opacity-60`}>{p.fase}</span>
-                  </div>
-                  <p className="m-0 mt-1 text-[13px] leading-[1.5] opacity-75">{p.volgende}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <Assistent />
-          <Link
-            href="/offertes"
-            className="group flex items-center justify-between rounded-full bg-oranje px-6 py-4 font-semibold text-[#202020]"
-          >
-            Nieuwe offerte maken <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
-          <Link
-            href="/dashboard/prijs"
-            className="group -mt-4 flex items-center justify-between rounded-full border border-lijn px-6 py-4 font-semibold hover:border-oranje"
-          >
-            Prijs berekenen <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
-          <Link
-            href="/dashboard/klanten"
-            className="group -mt-4 flex items-center justify-between rounded-full border border-lijn px-6 py-4 font-semibold hover:border-oranje"
-          >
-            Klanten en pijplijn <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
-        </aside>
+            <Blok titel="Lopende klussen" rechts={<Link href="/dashboard/klanten" className="text-accent-tekst">Alle klanten →</Link>}>
+              {lopend.length === 0 ? (
+                <Leeg>Geen klus met akkoord, gepland of in uitvoering.</Leeg>
+              ) : (
+                <table className="crm-tabel">
+                  <thead>
+                    <tr>
+                      <th>Klant</th>
+                      <th>Fase</th>
+                      <th>Volgende stap</th>
+                      <th className="text-right">Uren geboekt</th>
+                      <th className="text-right">Waarde</th>
+                      <th className="text-right">Open</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {lopend.map((k) => {
+                      const open = k.stukken.filter((s) => s.soort === "Factuur" && !s.rond).reduce((t, s) => t + s.bedrag, 0)
+                      const geboekt = uren.filter((r) => hoortBij(k, r.klant)).reduce((t, r) => t + r.uren, 0)
+                      const w = waardeVan(k)
+                      return (
+                        <tr key={k.id}>
+                          <td>
+                            <Link href={`/dashboard/klanten/${k.id}`} className="crm-link">{k.naam}</Link>
+                            {k.plaats && <span className="block text-[12px] text-gedempt">{k.plaats}</span>}
+                          </td>
+                          <td><span className="crm-badge">{k.fase}</span></td>
+                          <td className="max-w-[360px] text-[13px]">{k.volgende || <span className="text-gedempt">—</span>}</td>
+                          <td className="crm-cijfer text-right">{geboekt ? getal(geboekt) : "—"}</td>
+                          <td className="crm-cijfer text-right">{w ? euro(w) : "—"}</td>
+                          <td className={`crm-cijfer text-right ${open > 0 ? "text-let" : "text-gedempt"}`}>{open > 0 ? euro(open) : "—"}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              )}
+              <p className="m-0 mt-2 text-[12px] text-gedempt">Uren geboekt: regels uit je urenregistratie waarvan het veld Klant een woord uit de klantnaam bevat. Waarde: laatste offerte, anders de laatste calculatie, incl. btw.</p>
+            </Blok>
 
-        {/* te doen, met kosten */}
-        <section className="lg:col-span-2">
-          <div className="flex items-baseline justify-between">
-            <p className={`${lbl} m-0 opacity-60`}>Te doen · met wat het kost</p>
-            <p className="m-0 text-[11px] opacity-50">Kosten zijn schattingen</p>
-          </div>
-          <ul className="m-0 mt-4 grid list-none grid-cols-[minmax(0,1fr)] gap-3 p-0 md:grid-cols-2">
-            {TODOS.map((t) => (
-              <li
-                key={t.wat}
-                className={`rounded-[18px] border p-5 ${t.dringend ? "border-oranje/60 bg-oranje/10" : "border-lijn bg-inkt/[.03]"}`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <b className="font-semibold hyphens-auto [overflow-wrap:anywhere]" lang="nl">{t.wat}</b>
-                  {t.dringend && <span className={`${lbl} shrink-0 text-oranje-tekst`}>Eerst</span>}
-                </div>
-                <p className="m-0 mt-1.5 text-[13px] opacity-70">{t.waarom}</p>
-                <p className="syne m-0 mt-3 text-[17px] text-oranje-tekst">{t.kosten}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-        </>)}
-
-        {actief === "social" && (<>
-        {/* social */}
-        <section className="lg:col-span-2">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <p className={`${lbl} m-0 opacity-60`}>Social · The KNIGHT move</p>
-            <p className="m-0 text-[12px] opacity-60">
-              {posts.length - open.length} gepost · {open.filter(({ p }) => p.map).length} klaar ·{" "}
-              {open.filter(({ p }) => !p.map).length} nog te maken
-            </p>
-          </div>
-          <div className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            {volgende ? (
-              <div className="flex gap-5 rounded-[18px] border border-oranje/60 bg-oranje/10 p-5">
-                <a href={`/dashboard/social#post-${volgende.n}`} className="shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`/social/${volgende.p.map}/1.jpg`} alt={volgende.p.titel} className="h-[150px] w-[120px] rounded-[10px] object-cover" />
-                </a>
-                <div className="flex min-w-0 flex-col justify-between gap-3">
-                  <div>
-                    <span className={`${lbl} text-oranje-tekst`}>Nu posten · {volgende.n}</span>
-                    <b className="syne mt-1 block text-[19px] leading-[1.2]">{volgende.p.titel}</b>
-                    <span className="mt-1 block text-[12px] opacity-70">
-                      {volgende.t.emoji} {volgende.t.naam} · {volgende.p.reel ? "Reel" : `${volgende.p.slides ?? 1} beeld${(volgende.p.slides ?? 1) > 1 ? "en" : ""}`}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-3">
-                    {volgende.p.caption && <Kopieer tekst={volgende.p.caption} />}
-                    {opslagAan() && (
-                      <form action={zetGepost.bind(null, volgende.p.map!, true)}>
-                        <button className="knop-klein border border-inkt/30">Gepost ✓</button>
-                      </form>
-                    )}
-                    <a href={`/dashboard/social#post-${volgende.n}`} className="text-[13px] font-semibold">Beelden ↓</a>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <p className="m-0 rounded-[18px] border border-lijn p-5 text-[14px] opacity-70">Alles wat klaar is, staat online.</p>
-            )}
-            <Link
-              href="/dashboard/social"
-              className="group flex flex-col justify-between gap-4 rounded-[18px] border border-lijn p-5 transition-colors hover:border-oranje"
-            >
-              <span className={`${lbl} opacity-60`}>Daarna</span>
-              <ol className="m-0 grid min-w-0 list-none gap-1.5 p-0 text-[13px]">
-                {open.filter((o) => o !== volgende).slice(0, 4).map(({ p, n, t }) => (
-                  <li key={n} className="flex min-w-0 gap-2">
-                    <span className="w-[22px] shrink-0 tabular-nums opacity-50">{n}</span>
-                    <span aria-hidden>{t.emoji}</span>
-                    <span className="min-w-0 truncate">{p.titel}</span>
-                    {!p.map && <span className="ml-auto shrink-0 opacity-50">te maken</span>}
+            <Blok titel="Pijplijn" rechts={<span className="text-gedempt">leads gewogen naar kans: <span className="crm-cijfer text-inkt">{toonEuro(gewogenPijplijn(klanten))}</span></span>}>
+              <ol className="crm-paneel m-0 grid list-none grid-cols-6 divide-x @max-[900px]:[&_a]:px-3 divide-lijn overflow-hidden p-0">
+                {fasen.map((f) => (
+                  <li key={f.fase}>
+                    <Link href="/dashboard/klanten" className="block px-4 py-3 hover:bg-grond">
+                      <span className="crm-label block">{f.fase}</span>
+                      <span className="crm-cijfer mt-1 block text-[18px]">{f.aantal}</span>
+                      <span className="crm-cijfer block text-[12px] text-gedempt">{f.waarde ? euro(f.waarde) : "—"}</span>
+                    </Link>
                   </li>
                 ))}
               </ol>
-              <span className="flex items-center justify-between text-[13px] font-semibold">
-                Raster, alle posts en captions <span className="transition-transform group-hover:translate-x-1">→</span>
-              </span>
-            </Link>
+            </Blok>
           </div>
-          <p className={`${lbl} m-0 mt-5 opacity-60`}>Wanneer posten</p>
-          <ul className="m-0 mt-3 grid list-none grid-cols-3 gap-3 p-0">
-            {POSTTIJDEN.map((t) => (
-              <li key={t.dag} className="rounded-[18px] border border-lijn p-4">
-                <span className={`${lbl} opacity-60`}>{t.dag}</span>
-                <b className="syne mt-1 block text-[22px] tabular-nums">{t.tijd}</b>
-                <span className="mt-1 block text-[12px] leading-[1.4] opacity-60">{t.waarom}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-        </>)}
 
-        {actief === "klanten" && (<>
-        {/* bestellingen: borderpakketten die online zijn betaald (Mollie); open en mislukt laat Mollie zien */}
-        {stand.bestellingen.some((b) => b.status === "betaald") && (
-        <section className="min-w-0 lg:col-span-2">
-          <div className="flex items-baseline justify-between gap-4">
-            <p className={`${lbl} m-0 opacity-60`}>Bestellingen · borderpakketten</p>
-            <p className="m-0 text-[12px] opacity-60">{stand.bestellingen.filter((b) => b.status === "betaald" && !b.klaar).length} te doen</p>
-          </div>
-          <ul className="m-0 mt-4 grid list-none gap-3 p-0 md:grid-cols-2">
-            {stand.bestellingen.filter((b) => b.status === "betaald").map((b) => (
-              <li key={b.id} className={`rounded-[18px] border p-4 ${!b.klaar ? "border-oranje/60 bg-oranje/10" : "border-lijn opacity-60"}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <b className="font-semibold">{b.pakket} · {b.maat} m² · {b.soort}</b>
-                    <span className="mt-0.5 block text-[12px] opacity-60">
-                      {euro(b.bedrag)} · betaald · {dag(b.datum.slice(0, 10))}
-                    </span>
-                  </div>
-                  <form action={bestellingKlaar.bind(null, b.id, !b.klaar)}>
-                    <button className="knop-klein shrink-0 border border-inkt/30">{b.klaar ? "Terugzetten" : "Geleverd ✓"}</button>
-                  </form>
-                </div>
-                <p className="m-0 mt-2 text-[13px] leading-[1.5]">
-                  {b.naam} · <a href={`mailto:${b.email}`} className="text-oranje-tekst">{b.email}</a> · <a href={`tel:${b.telefoon.replace(/\s/g, "")}`} className="text-oranje-tekst">{b.telefoon}</a>
-                  <br />
-                  {b.adres}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-        )}
-        {/* cadeaubonnen: online betaald; het nummer staat op de bon die de klant laat zien */}
-        {stand.bonnen.some((b) => b.status === "betaald") && (
-        <section className="min-w-0 lg:col-span-2">
-          <div className="flex items-baseline justify-between gap-4">
-            <p className={`${lbl} m-0 opacity-60`}>Cadeaubonnen</p>
-            <p className="m-0 text-[12px] opacity-60">{stand.bonnen.filter((b) => b.status === "betaald" && !b.ingewisseld).length} open</p>
-          </div>
-          <ul className="m-0 mt-4 grid list-none gap-3 p-0 md:grid-cols-2">
-            {stand.bonnen.filter((b) => b.status === "betaald").map((b) => (
-              <li key={b.id} className={`rounded-[18px] border p-4 ${!b.ingewisseld ? "border-oranje/60 bg-oranje/10" : "border-lijn opacity-60"}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <b className="font-semibold tabular-nums">{b.nummer} · {euro(b.bedrag)}</b>
-                    <span className="mt-0.5 block text-[12px] opacity-60">voor {b.voor} · van {b.van} · geldig t/m {b.geldigTot}</span>
-                  </div>
-                  <form action={bonIngewisseld.bind(null, b.id, !b.ingewisseld)}>
-                    <button className="knop-klein shrink-0 border border-inkt/30">{b.ingewisseld ? "Terugzetten" : "Ingewisseld ✓"}</button>
-                  </form>
-                </div>
-                <p className="m-0 mt-2 text-[13px] leading-[1.5]">
-                  Gekocht door {b.naam} · <a href={`mailto:${b.email}`} className="text-oranje-tekst">{b.email}</a> · <a href={`/tuinen/cadeaubon/bon?b=${b.id}`} className="text-oranje-tekst">bon bekijken</a>
-                </p>
-                {b.adres && (
-                  <div className="mt-2 flex items-center justify-between gap-3 text-[13px] leading-[1.5]">
-                    <span>{b.verstuurd ? "Doosje verstuurd" : "In doosje versturen naar"} · {b.adres}</span>
-                    <form action={bonVerstuurd.bind(null, b.id, !b.verstuurd)}>
-                      <button className="knop-klein shrink-0 border border-inkt/30">{b.verstuurd ? "Terugzetten" : "Verstuurd ✓"}</button>
-                    </form>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-        )}
-        {/* aanvragen */}
-        <section className="min-w-0">
-          <div className="flex items-baseline justify-between gap-4">
-            <p className={`${lbl} m-0 opacity-60`}>Aanvragen · terugbellen</p>
-            <p className="m-0 text-[12px] opacity-60">{stand.aanvragen.filter((a) => !a.klaar).length} open</p>
-          </div>
-          <ul className="m-0 mt-4 grid list-none gap-3 p-0">
-            {stand.aanvragen.map((a) => (
-              <li key={a.id} className={`rounded-[18px] border p-4 ${a.klaar ? "border-lijn opacity-50" : "border-oranje/60 bg-oranje/10"}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <b className="font-semibold">{a.naam}</b>
-                    <span className="mt-0.5 block text-[12px] opacity-60">
-                      {a.bron} · {dag(a.datum.slice(0, 10))}
-                    </span>
-                  </div>
-                  <div className="flex shrink-0 gap-1">
-                    {!a.klaar && (
-                      <form action={aanvraagNaarKlant.bind(null, a.id)}>
-                        <button className="knop-klein shrink-0 border border-inkt/30">Maak klant →</button>
-                      </form>
-                    )}
-                    <form action={aanvraagKlaar.bind(null, a.id, !a.klaar)}>
-                      <button className="knop-klein shrink-0 border border-inkt/30">{a.klaar ? "Terugzetten" : "Gebeld ✓"}</button>
-                    </form>
-                  </div>
-                </div>
-                {a.contact && (
-                  <a href={/^[\d\s+()-]+$/.test(a.contact) ? `tel:${a.contact.replace(/\s/g, "")}` : `mailto:${a.contact}`} className="mt-2 block break-all text-[14px] font-semibold text-oranje-tekst">
-                    {a.contact}
-                  </a>
-                )}
-                {a.foto && (
-                  <a href={`/api/vijverfoto?id=${a.foto}`} target="_blank" rel="noreferrer" className="mt-3 block">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- privé foto achter de inlog, niet via next/image */}
-                    <img src={`/api/vijverfoto?id=${a.foto}`} alt={`Vijverfoto van ${a.naam}`} loading="lazy" className="block max-h-[240px] w-full rounded-[12px] object-cover" />
-                  </a>
-                )}
-                {a.wat && <p className="m-0 mt-2 whitespace-pre-line text-[13px] leading-[1.5] opacity-75">{a.wat}</p>}
-              </li>
-            ))}
-            {!stand.aanvragen.length && <li className="text-[13px] opacity-60">Nog geen aanvragen. Het formulier op de site komt hier vanzelf binnen.</li>}
-          </ul>
-          <details className="mt-3 rounded-[18px] border border-lijn p-4">
-            <summary className="cursor-pointer text-[13px] font-semibold">+ WhatsApp of telefoontje toevoegen</summary>
-            <form action={nieuweAanvraag} className="mt-3 grid gap-2">
-              <input name="naam" required placeholder="Naam" className={veld} />
-              <input name="contact" placeholder="Telefoon of e-mail" className={veld} />
-              <textarea name="wat" rows={2} placeholder="Waar gaat het over?" className={veld} />
-              <div className="flex gap-2">
-                <select name="bron" className={veld} defaultValue="WhatsApp">
-                  <option>WhatsApp</option><option>Telefoon</option><option>Anders</option>
-                </select>
-                <button className="knop-klein bg-oranje text-[#202020]">Toevoegen</button>
-              </div>
-            </form>
-          </details>
-        </section>
+          <div className="grid content-start gap-8">
+            <Blok titel="Komende twee weken" rechts={<Link href="/dashboard/planning" className="text-accent-tekst">Planning →</Link>}>
+              {agenda.length === 0 ? (
+                <Leeg>Nog niets gepland en niemand om op te volgen.</Leeg>
+              ) : (
+                <ul className="crm-paneel m-0 list-none divide-y divide-lijn p-0">
+                  {agenda.map((a, i) => (
+                    <li key={i}>
+                      <Link href={a.href} className="grid grid-cols-[84px_minmax(0,1fr)] gap-3 px-4 py-2.5 hover:bg-grond">
+                        <span className="crm-cijfer text-[12px] text-gedempt">{kort(a.datum)}</span>
+                        <span className="min-w-0 text-[13px]">
+                          <span className="truncate">{a.wat}</span>
+                          <span className="ml-2 text-[11px] text-gedempt">{a.soort}</span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Blok>
 
-        {/* planning */}
-        <section className="min-w-0">
-          <p className={`${lbl} m-0 opacity-60`}>Planning · komende weken</p>
-          <ul className="m-0 mt-4 list-none p-0">
-            {stand.planning.filter((p) => p.datum >= vandaag()).map((p) => (
-              <li key={p.id} className="flex items-center gap-3 border-b border-lijn py-3">
-                <span className={`${lbl} w-[92px] shrink-0 ${p.datum === vandaag() ? "text-oranje-tekst" : "opacity-60"}`}>{dag(p.datum)}</span>
-                <span className="min-w-0 flex-1 text-[14px]">{p.wat}</span>
-                <form action={planWeg.bind(null, p.id)}>
-                  <button aria-label={`${p.wat} weghalen`} className="grid size-[32px] place-items-center rounded-full border border-lijn text-[13px]">✕</button>
-                </form>
-              </li>
-            ))}
-            {!stand.planning.some((p) => p.datum >= vandaag()) && <li className="py-3 text-[13px] opacity-60">Nog niets gepland.</li>}
-          </ul>
-          <form action={nieuwPlan} className="mt-3 flex flex-wrap gap-2">
-            <input type="date" name="datum" required defaultValue={vandaag()} className={`${veld} w-full sm:w-auto`} />
-            <input name="wat" required placeholder="Wat en waar" className={`${veld} min-w-[160px] flex-1`} />
-            <button className="knop-klein bg-oranje text-[#202020]">Plannen</button>
-          </form>
-        </section>
-        </>)}
-
-        {actief === "geld" && (<>
-        {/* facturen */}
-        <Facturen
-          groepen={[
-            { titel: "Facturen · Te ontvangen", lijst: TE_ONTVANGEN },
-            { titel: "Facturen · Te betalen", lijst: TE_BETALEN },
-            { titel: "Offertes", lijst: OFFERTES, klaar: "geaccepteerd", vervalt: "geldig tot" },
-          ]}
-        />
-
-        {/* kleine letters */}
-        <section className="lg:col-span-2">
-          <div className="flex items-baseline justify-between gap-4">
-            <p className={`${lbl} m-0 opacity-60`}>Kleine letters</p>
-            <a href="/documenten/GRONN-bijlagen-particulier.zip" download className="text-[13px] text-oranje-tekst">
-              Bijlagen voor een particuliere offerte (zip) ↓
-            </a>
-          </div>
-          <ul className="m-0 mt-4 grid list-none gap-3 p-0 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              ...DOCUMENTEN.map(({ doc, pagina, pdf }) => ({
-                titel: doc.title,
-                sub: `${doc.status === "vastgesteld" ? "Vastgesteld" : "Concept"} · ${datum(doc.updated)}`,
-                pagina,
-                pdf,
-              })),
-              { titel: "Fototoestemming", sub: "Leeg formulier", pagina: "", pdf: "GRONN-fototoestemming.pdf" },
-            ].map((d) => (
-              <li key={d.titel} className="flex flex-col justify-between gap-4 rounded-[18px] border border-lijn p-5">
-                <div>
-                  <b className="font-semibold leading-[1.3]">{d.titel}</b>
-                  <span className="mt-1 block text-[12px] opacity-60">{d.sub}</span>
+            <Blok titel="Geld" rechts={<Link href="/dashboard/geld" className="text-accent-tekst">Geld en papieren →</Link>}>
+              <dl className="crm-paneel m-0 grid grid-cols-2 divide-x divide-lijn">
+                <div className="px-4 py-3">
+                  <dt className="crm-label">Gefactureerd deze maand</dt>
+                  <dd className="crm-cijfer m-0 mt-1 text-[18px]">{euro(geld.dezeMaand)}</dd>
                 </div>
-                <div className="flex gap-2 text-[12px]">
-                  {d.pagina && (
-                    <Link href={d.pagina} className="rounded-full border border-lijn px-3 py-1">Bekijk</Link>
-                  )}
-                  <a href={`/documenten/${d.pdf}`} download className="rounded-full bg-inkt px-3 py-1 text-grond">PDF</a>
+                <div className="px-4 py-3">
+                  <dt className="crm-label">Daarvan betaald</dt>
+                  <dd className="crm-cijfer m-0 mt-1 text-[18px]">{euro(geld.betaaldDezeMaand)}</dd>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-        <p className="m-0 text-[11px] opacity-40 lg:col-span-2">
-          Projecten komen uit Klanten; to-do&apos;s staan in src/lib/beheer/data.ts. Open offertes samen:{" "}
-          {euro(PROJECTEN.filter((p) => p.fase === "Offerte").reduce((s, p) => s + (p.bedrag ?? 0), 0))}.
-        </p>
-        </>)}
+              </dl>
+              <p className="m-0 mt-2 text-[12px] text-gedempt">Incl. btw, uit de facturen op de klantkaarten. Betaald is wat je zelf hebt afgevinkt; de bank zie je in DigiBoox.</p>
+            </Blok>
 
-        {actief === "links" && (<>
-        {/* koppelingen */}
-        <section className="lg:col-span-2">
-          <p className={`${lbl} m-0 opacity-60`}>Alles op één plek</p>
-          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-6">
-            {KOPPELINGEN.map((k) => (
-              <li key={k.naam}>
-                <a
-                  href={k.href}
-                  {...(k.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
-                >
-                  <span className="syne text-[17px]">{k.naam}</span>
-                  <span className="flex items-center justify-between text-[12px] opacity-60">
-                    {k.uitleg} <span className="transition-transform group-hover:translate-x-0.5">↗</span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-        {/* eigen pagina's */}
-        <section className="lg:col-span-2">
-          <p className={`${lbl} m-0 opacity-60`}>Eigen pagina&apos;s · niet in het menu</p>
-          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-6">
-            {EIGEN_PAGINAS.map((k) => (
-              <li key={k.naam}>
-                <Link
-                  href={k.href}
-                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
-                >
-                  <span className="syne text-[17px]">{k.naam}</span>
-                  <span className="flex items-center justify-between text-[12px] opacity-60">
-                    {k.uitleg} <span className="transition-transform group-hover:translate-x-0.5">→</span>
+            {volgende && (
+              <Blok titel="Social" rechts={<Link href="/dashboard/social" className="text-accent-tekst">Alle posts →</Link>}>
+                <Link href={`/dashboard/social#post-${volgende.n}`} className="crm-paneel flex gap-4 p-3 hover:border-accent">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/social/${volgende.p.map}/1.jpg`} alt="" className="h-[80px] w-[64px] shrink-0 rounded-[8px] object-cover" />
+                  <span className="min-w-0">
+                    <span className="crm-label block">Nu posten · {volgende.n}</span>
+                    <span className="mt-1 block font-semibold leading-[1.3]">{volgende.p.titel}</span>
+                    <span className="mt-0.5 block text-[12px] text-gedempt">{volgende.t.emoji} {volgende.t.naam}</span>
                   </span>
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-        {/* leveranciers */}
-        <section className="lg:col-span-2">
-          <div className="flex items-baseline justify-between gap-4">
-            <p className={`${lbl} m-0 opacity-60`}>Leveranciers · zakelijke accounts</p>
-            <Link href="/dashboard/leveranciers" className="text-[13px] font-semibold text-oranje-tekst">Alle leveranciers →</Link>
+              </Blok>
+            )}
+
+            <Blok titel="Te regelen" rechts={<span className="text-gedempt">kosten zijn schattingen</span>}>
+              <ul className="crm-paneel m-0 list-none divide-y divide-lijn p-0">
+                {TODOS.map((t) => (
+                  <li key={t.wat} className="px-4 py-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <b className="text-[13px] font-semibold">{t.wat}</b>
+                      {t.dringend && <span className="crm-badge crm-badge-let">Eerst</span>}
+                    </div>
+                    <p className="m-0 mt-1 text-[12px] text-gedempt">{t.waarom}</p>
+                    <p className="crm-cijfer m-0 mt-1 text-[12px]">{t.kosten}</p>
+                  </li>
+                ))}
+              </ul>
+            </Blok>
           </div>
-          <ul className="m-0 mt-4 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 lg:grid-cols-4">
-            {LEVERANCIERS.map((k) => (
-              <li key={k.naam}>
-                <a
-                  href={k.href}
-                  {...(k.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                  className="group flex h-full flex-col justify-between gap-6 rounded-[18px] border border-lijn p-4 transition-colors hover:border-oranje"
-                >
-                  <span className="syne text-[17px]">{k.naam}</span>
-                  <span className="flex items-end justify-between gap-2 text-[12px]">
-                    <span>
-                      <span className="flex items-center gap-1.5 font-semibold">
-                        <span aria-hidden className={`grid size-[18px] place-items-center rounded-full text-[11px] font-bold ${STAND[k.account].bol}`}>
-                          {STAND[k.account].teken}
-                        </span>
-                        {STAND[k.account].naam}
-                      </span>
-                      <span className="mt-1 block opacity-60">{k.wat}</span>
-                    </span>
-                    <span className="opacity-60 transition-transform group-hover:translate-x-0.5">↗</span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-        </>)}
+        </div>
       </main>
-    </div>
+    </>
+  )
+}
+
+function Rij({ soort, titel, sub, rechts, href, let: aandacht }: { soort: string; titel: string; sub?: string; rechts?: string; href: string; let?: boolean }) {
+  return (
+    <li>
+      <Link href={href} className="grid grid-cols-[96px_minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 hover:bg-grond">
+        <span className={`crm-badge justify-self-start ${aandacht ? "crm-badge-let" : "crm-badge-stil"}`}>{soort}</span>
+        <span className="min-w-0">
+          <span className="block truncate font-semibold">{titel}</span>
+          {sub && <span className="block truncate text-[13px] text-gedempt">{sub}</span>}
+        </span>
+        {rechts && <span className={`crm-cijfer text-[12px] ${aandacht ? "text-let" : "text-gedempt"}`}>{rechts}</span>}
+      </Link>
+    </li>
   )
 }

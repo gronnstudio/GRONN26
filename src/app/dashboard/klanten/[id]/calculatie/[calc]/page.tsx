@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { CrmKop } from "@/components/beheer/crm-kop"
+import { Kop } from "@/components/crm/kop"
 import { PrijsRekenaar, type Begin } from "@/components/beheer/prijs"
 import { leesCatalogus } from "@/lib/beheer/catalogus"
 import { leesKlanten } from "@/lib/beheer/klanten"
@@ -12,10 +12,7 @@ import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 // Een calculatie bij een klant: hetzelfde rekenblad als /dashboard/prijs, met
 // bewaren als nieuwe versie. ?v=2 opent een oudere versie om verder te
 // rekenen; bewaren maakt dan weer een nieuwe versie, de oude blijft staan.
-export const metadata: Metadata = {
-  title: { absolute: "Calculatie · Dashboard · GRØNN Studio" },
-  robots: { index: false, follow: false },
-}
+export const metadata: Metadata = { title: "Calculatie" }
 export const dynamic = "force-dynamic"
 
 const tijd = (d: string) => new Date(d).toLocaleString("nl-NL", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Amsterdam" })
@@ -56,38 +53,36 @@ export default async function CalculatiePagina({ params, searchParams }: { param
   const keuze = [{ id: k.id, naam: k.naam, tuinen: k.tuinen.map((x) => ({ id: x.id, naam: x.naam })) }]
 
   return (
-    <div data-links className="min-h-svh bg-grond text-inkt print:min-h-0 print:bg-white">
-      <CrmKop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=calculaties` }, { naam: c?.titel ?? "Nieuwe calculatie" }]} actief="/dashboard/klanten" />
-      <main className="mx-auto max-w-[1440px] px-5 py-8 md:px-8 print:max-w-none print:p-0">
-        <div className="flex flex-wrap items-end justify-between gap-4 print:hidden">
-          <h1 className="syne m-0 text-[clamp(32px,3.5vw,44px)] leading-[1.05]">{c ? c.titel : "Nieuwe calculatie"}</h1>
-          {c && c.versies.length > 0 && (
-            <nav aria-label="Versies" className="flex flex-wrap items-center gap-1 text-[13px]">
-              <span className="mr-2 opacity-60">Versie</span>
-              {c.versies.map((x) => (
-                <Link
-                  key={x.nr}
-                  href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.nr}`}
-                  aria-current={x.nr === versie?.nr ? "page" : undefined}
-                  title={`${tijd(x.datum)} · ${toonEuro(x.totaal)}`}
-                  className={`rounded-full border px-3 py-1 font-mono ${x.nr === versie?.nr ? "border-inkt bg-inkt text-grond" : "border-lijn hover:border-oranje"}`}
-                >
-                  {x.nr}
-                </Link>
-              ))}
-            </nav>
-          )}
-        </div>
+    <>
+      <Kop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=calculaties` }, { naam: c?.titel ?? "Nieuwe calculatie" }]} titel={c ? c.titel : "Nieuwe calculatie"}>
+        {c && c.versies.length > 0 && (
+          <nav aria-label="Versies" className="flex flex-wrap items-center gap-1 text-[13px]">
+            <span className="crm-label mr-2">Versie</span>
+            {c.versies.map((x) => (
+              <Link
+                key={x.nr}
+                href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.nr}`}
+                aria-current={x.nr === versie?.nr ? "page" : undefined}
+                title={`${tijd(x.datum)} · ${toonEuro(x.totaal)}`}
+                className={`crm-cijfer grid size-[32px] place-items-center rounded-full border ${x.nr === versie?.nr ? "border-accent bg-accent text-op-accent" : "border-lijn-sterk bg-vlak hover:border-accent"}`}
+              >
+                {x.nr}
+              </Link>
+            ))}
+          </nav>
+        )}
+      </Kop>
+      <main className="mx-auto max-w-[1440px] px-8 py-6 print:max-w-none print:p-0">
         {versie && versie.nr !== laatste && (
-          <p role="status" className="m-0 mt-3 text-[13px] text-oranje-tekst print:hidden">
+          <p role="status" className="crm-let m-0 px-4 py-2 text-[13px] print:hidden">
             Je kijkt naar versie {versie.nr} van {tijd(versie.datum)}. Bewaren maakt er versie {laatste + 1} van; deze blijft staan.
           </p>
         )}
-        <div className="mt-8 print:mt-0">
+        <div className="mt-4 print:mt-0">
           {/* key: een andere gekozen versie (?v=) begint met een schoon rekenblad; na bewaren blijft het blad staan */}
           <PrijsRekenaar key={`${c?.id ?? "nieuw"}-${v ?? "laatste"}`} klanten={keuze} catalogus={catalogus} begin={begin} />
         </div>
       </main>
-    </div>
+    </>
   )
 }

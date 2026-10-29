@@ -71,14 +71,14 @@ export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: nu
     }),
   )
   if (!gevonden) return { fout: "Klant niet gevonden." }
-  revalidatePath("/dashboard/klanten", "layout")
+  revalidatePath("/dashboard", "layout")
   return { id, nr }
 }
 
 export async function calculatieWeg(klantId: string, id: string) {
   await eisEigenaar()
   await wijzigKlanten((lijst) => lijst.map((k) => (k.id === klantId ? { ...k, calculaties: k.calculaties.filter((c) => c.id !== id) } : k)))
-  revalidatePath("/dashboard/klanten", "layout")
+  revalidatePath("/dashboard", "layout")
 }
 
 /**
@@ -100,6 +100,6 @@ export async function onthoudPrijs(r: Regel, leverancier = ""): Promise<{ id: st
     id = nieuw.id
     return [...items, nieuw]
   })
-  revalidatePath("/dashboard/catalogus")
+  revalidatePath("/dashboard", "layout")
   return { id }
 }

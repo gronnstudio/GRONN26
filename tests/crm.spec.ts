@@ -35,7 +35,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   }
   await log(page)
   await page.setViewportSize({ width: 1440, height: 1000 })
-  await page.goto("/dashboard?tab=klanten")
+  await page.goto("/dashboard/aanvragen")
   const kaart = page.locator("li", { hasText: naam })
   await expect(kaart).toHaveCount(1)
 
@@ -49,7 +49,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   // Nog een keer omzetten (dezelfde persoon belt opnieuw): geen tweede kaart.
   const opnieuw = await request.post("/api/aanvraag", { data: { naam, contact: telefoon, wat: "Nog een vraag" } })
   expect(opnieuw.ok()).toBeTruthy()
-  await page.goto("/dashboard?tab=klanten")
+  await page.goto("/dashboard/aanvragen")
   await page.locator("li", { hasText: "Nog een vraag" }).getByRole("button", { name: "Maak klant →" }).click()
   await expect(page).toHaveURL(klantUrl.split("?")[0])
 
@@ -133,16 +133,84 @@ test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
   await expect(page.getByRole("status")).toContainText("bestond al")
 })
 
-test("CRM-pagina's: één h1, geen fouten, geen overloop", async ({ page }) => {
+test("systeem: elke pagina één h1, geen fouten, geen overloop, licht en donker", async ({ page }) => {
+  test.setTimeout(90_000)
   await log(page)
   const fouten: string[] = []
   page.on("pageerror", (e) => fouten.push(e.message))
   await page.setViewportSize({ width: 1440, height: 900 })
-  for (const pad of ["/dashboard/klanten", "/dashboard/klanten?weergave=tabel", "/dashboard/klanten/clannad-stijn", "/dashboard/klanten/clannad-stijn?tab=tuinen", "/dashboard/klanten/clannad-stijn?tab=activiteit", "/dashboard/catalogus", "/dashboard/prijs"]) {
+  const paden = [
+    "/dashboard",
+    "/dashboard/aanvragen",
+    "/dashboard/klanten",
+    "/dashboard/klanten?weergave=tabel",
+    "/dashboard/klanten/clannad-stijn",
+    "/dashboard/klanten/clannad-stijn?tab=tuinen",
+    "/dashboard/klanten/clannad-stijn?tab=stukken",
+    "/dashboard/klanten/clannad-stijn?tab=activiteit",
+    "/dashboard/planning",
+    "/dashboard/calculaties",
+    "/dashboard/prijs",
+    "/dashboard/catalogus",
+    "/dashboard/leveranciers",
+    "/dashboard/geld",
+    "/dashboard/uren",
+    "/dashboard/social",
+    "/dashboard/links",
+  ]
+  for (const pad of paden) {
     const r = await page.goto(pad)
     expect(r?.status(), pad).toBe(200)
     await expect(page.locator("h1:visible"), pad).toHaveCount(1)
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), pad).toBe(0)
+    await expect(page.getByRole("navigation", { name: "Onderdelen" }).locator('[aria-current="page"]'), pad).toHaveCount(1)
+  }
+  // donker: dezelfde pagina's, andere tokens (de grond is houtskool, niet wit)
+  await page.evaluate(() => localStorage.setItem("gronn-weergave", JSON.stringify({ kleur: "donker" })))
+  for (const pad of ["/dashboard", "/dashboard/klanten/clannad-stijn"]) {
+    await page.goto(pad)
+    const grond = await page.locator(".crm").first().evaluate((e) => getComputedStyle(e).backgroundColor)
+    expect(grond, pad).toBe("rgb(22, 22, 20)")
   }
   expect(fouten).toEqual([])
+})
+
+test("oude adressen van het dashboard leiden naar het nieuwe onderdeel", async ({ page }) => {
+  await log(page)
+  for (const [oud, nieuw] of [["klanten", "/dashboard/aanvragen"], ["geld", "/dashboard/geld"], ["social", "/dashboard/social"], ["links", "/dashboard/links"]]) {
+    await page.goto(`/dashboard?tab=${oud}`)
+    await expect(page).toHaveURL(nieuw)
+  }
+})
+
+test("zoekvenster: ⌘K vindt een klant, Enter opent de kaart; zonder treffer zegt het dat", async ({ page }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/dashboard")
+  await page.keyboard.press("ControlOrMeta+k")
+  const veld = page.getByRole("combobox", { name: /Zoek een klant/ })
+  await expect(veld).toBeFocused()
+  await veld.fill("hairdiel")
+  await expect(page.getByRole("option").first()).toContainText("HairDiel")
+  await page.keyboard.press("Enter")
+  await expect(page).toHaveURL(/\/dashboard\/klanten\/hairdiel$/)
+  await expect(page.locator("h1")).toContainText("HairDiel")
+  // geen contactgegevens in het zoekvenster
+  await page.keyboard.press("ControlOrMeta+k")
+  await veld.fill("zzzz-bestaat-niet")
+  await expect(page.getByText(/Niets gevonden/)).toBeVisible()
+})
+
+test("schil: inklappen blijft bewaard, Grønn opent op de klantkaart met die klant", async ({ page }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/dashboard/klanten/noah-goffin")
+  await page.getByRole("button", { name: "Vraag Grønn over deze klant" }).click()
+  const paneel = page.getByRole("complementary", { name: "Grønn" })
+  await expect(paneel).toBeVisible()
+  await expect(paneel).toContainText("kent deze klant")
+  await page.getByRole("button", { name: "Zijbalk inklappen" }).click()
+  await page.reload()
+  await expect(page.getByRole("button", { name: "Zijbalk uitklappen" })).toBeVisible()
+  await expect(page.getByRole("complementary", { name: "Grønn" })).toBeVisible()
 })
