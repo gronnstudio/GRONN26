@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test"
-import { deel, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
+import { deel, leesCenten, leesMilli, plusProcent, zonderProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
 import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
 import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
@@ -28,6 +28,8 @@ test.describe("geld", () => {
     expect(leesCenten("abc")).toBeNull()
     expect(leesCenten("")).toBeNull()
     expect(leesMilli("58,85")).toBe(58850)
+    expect(zonderProcent(4840, 2100)).toBe(4000)
+    expect(zonderProcent(plusProcent(1999, 900), 900)).toBe(1999)
   })
   test("tonen", () => {
     expect(toonEuro(123456)).toBe("€ 1.234,56")
@@ -284,3 +286,29 @@ test.describe("vragenlijst van de intake", () => {
   })
 })
 
+
+test("rekenblad met btw: incl. invoeren, excl. rekenen, big bags kiezen", async ({ page }) => {
+  const { KOEKJE, maakKoekje } = await import("../src/lib/eigenaar")
+  process.env.AUTH_SECRET = "alleen-voor-tests"
+  await page.context().addCookies([{ name: KOEKJE, value: await maakKoekje("hello@gronn.studio"), url: "http://localhost:3210" }])
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/dashboard/prijs")
+  const regel = page.locator("tbody tr").first()
+  await regel.getByLabel("Eenheid", { exact: true }).fill("BB")
+  await page.getByLabel("Bedragen met btw").check()
+  await regel.getByLabel("Inkoop per eenheid incl. btw").fill("48,40")
+  await expect(regel.getByText("40,00 excl.")).toBeVisible()
+  await regel.getByRole("button", { name: "½" }).click()
+  await expect(regel.getByLabel("Aantal", { exact: true })).toHaveValue("0,5")
+  // ½ × € 40 × 1,15 opslag = € 23,00 excl. = € 27,83 incl.
+  await expect(regel.getByText("€ 27,83")).toBeVisible()
+  // Een ander tarief: de incl.-prijs volgt het excl.-bedrag, geen oude getypte tekst.
+  await regel.getByLabel("Soort").selectOption("planten")
+  await expect(regel.getByLabel("Inkoop per eenheid incl. btw")).toHaveValue("43,60")
+  await regel.getByLabel("Soort").selectOption("materiaal")
+  await page.getByLabel("Bedragen met btw").uncheck()
+  await expect(regel.getByLabel("Inkoop per eenheid", { exact: true })).toHaveValue("40,00")
+  await expect(regel.getByText("€ 23,00")).toBeVisible()
+  await regel.getByRole("button", { name: "los" }).click()
+  await expect(regel.getByLabel("Eenheid", { exact: true })).toHaveValue("m³")
+})
