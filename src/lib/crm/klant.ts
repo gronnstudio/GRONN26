@@ -131,6 +131,30 @@ const datumOf = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.t
 const tekstMap = (v: unknown, n: number): Record<string, string> =>
   v && typeof v === "object" ? Object.fromEntries(Object.entries(v as Record<string, unknown>).filter(([, w]) => typeof w === "string" && w).map(([id, w]) => [id.slice(0, 64), (w as string).slice(0, n)])) : {}
 const STANDAARD_VRAGEN = vraagMap(STANDAARD)
+// Punten van de oude afvinklijst die geen vraag met hetzelfde id kregen. Een
+// vinkje daarop blijft bewaard als antwoord "Ja" met de tekst van toen.
+const OUDE_PUNTEN: Record<string, string> = {
+  "hoe-gebruiken-ze-de-tuin-kinderen-hond-z": "Hoe gebruiken ze de tuin: kinderen, hond, zitten, eten, moestuin?",
+  "welke-sfeer-willen-ze-laat-ze-2-of-3-voo": "Welke sfeer willen ze? Laat ze 2 of 3 voorbeelden aanwijzen.",
+  "hoeveel-onderhoud-willen-ze-zelf-doen": "Hoeveel onderhoud willen ze zelf doen?",
+  "wat-moet-blijven-staan-bomen-terras-schu": "Wat moet blijven staan: bomen, terras, schuur, planten?",
+  "budget-welk-bedrag-hebben-ze-in-hun-hoof": "Budget: welk bedrag hebben ze in hun hoofd?",
+  "wanneer-willen-ze-het-af-hebben-zijn-er": "Wanneer willen ze het af hebben? Zijn er data waarop het niet kan?",
+  "alle-vlakken-in-m2-bestrating-gazon-bord": "Alle vlakken in m²: bestrating, gazon, borders, grind",
+  "strekkende-meters-hekwerk-kantopsluiting": "Strekkende meters: hekwerk, kantopsluiting, keermuur",
+  "hoogtes-keerhoogte-van-muren-boven-1-m-i": "Hoogtes: keerhoogte van muren (boven 1 m is een berekening nodig), hoogte van het hekwerk",
+  "wat-voor-grond-klei-zand-loss-steek-een": "Wat voor grond: klei, zand, löss? Steek een schop in de grond.",
+  "blijft-er-water-staan-na-regen": "Blijft er water staan na regen?",
+  "waar-zitten-de-regenpijpen-en-de-put": "Waar zitten de regenpijpen en de put?",
+  "bomen-in-de-buurt-waarvan-de-wortels-in": "Bomen in de buurt waarvan de wortels in de weg zitten",
+  "hoe-breed-is-de-doorgang-naar-de-tuin-pa": "Hoe breed is de doorgang naar de tuin? Past er een minigraver of dumper door?",
+  "parkeren-voor-de-bus": "Parkeren voor de bus",
+  "planten-sfeer-kleuren-bloeitijd-en-wat-z": "Planten: sfeer, kleuren, bloeitijd, en wat ze absoluut niet willen",
+  "hoe-ze-betalen-aanbetaling-of-reserverin": "Hoe ze betalen: aanbetaling of reservering, termijnen",
+  "wie-ruimt-wat-op-voor-de-start-spullen-p": "Wie ruimt wat op voor de start: spullen, planten, meubels",
+  "wie-geeft-er-water-na-de-oplevering": "Wie geeft er water na de oplevering?",
+  "wanneer-stuur-je-de-offerte": "Wanneer stuur je de offerte?",
+}
 
 function normaliseerZone(z: Partial<Zone>): Zone {
   return {
@@ -147,14 +171,22 @@ function normaliseerZone(z: Partial<Zone>): Zone {
 
 function normaliseerTuin(t: Partial<Tuin> & { checklist?: unknown }): Tuin {
   const antwoorden = tekstMap(t.antwoorden, 2000)
+  const vragen = tekstMap(t.vragen, 200)
   // Afvinklijst van vóór de vragenlijst (PR #155): een vinkje wordt "Ja".
-  if (Array.isArray(t.checklist)) for (const id of t.checklist) if (typeof id === "string" && STANDAARD_VRAGEN.has(id) && !antwoorden[id]) antwoorden[id] = "Ja"
+  if (Array.isArray(t.checklist))
+    for (const id of t.checklist) {
+      if (typeof id !== "string" || antwoorden[id]) continue
+      const oud = STANDAARD_VRAGEN.get(id)?.tekst ?? OUDE_PUNTEN[id]
+      if (!oud) continue
+      antwoorden[id] = "Ja"
+      vragen[id] = oud
+    }
   return {
     id: tekst(t.id, 64) || crypto.randomUUID(),
     naam: tekst(t.naam, 80) || "Tuin",
     adres: tekst(t.adres, 200),
     antwoorden,
-    vragen: tekstMap(t.vragen, 200),
+    vragen,
     notities: tekstMap(t.notities, 2000),
     aandacht: Array.isArray(t.aandacht) ? t.aandacht.filter((x) => typeof x === "string").slice(0, 300) : [],
     diensten: Array.isArray(t.diensten) ? t.diensten.map(String) : [],

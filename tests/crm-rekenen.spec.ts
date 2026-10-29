@@ -198,9 +198,10 @@ test.describe("vragenlijst van de intake", () => {
     expect(schoonAntwoord(v("startdatum"), "morgen")).toBeNull()
     expect(schoonAntwoord(v("oppervlak"), "  ")).toBe("")
   })
-  test("oude opname: vinkjes van de checklist worden Ja, antwoorden blijven", () => {
+  test("oude opname: vinkjes van de checklist worden Ja, ook zonder nieuwe vraag", () => {
     const k = normaliseer({ id: "k", naam: "K", tuinen: [{ id: "t", naam: "Achter", antwoorden: { oppervlak: "55" }, checklist: ["parkeren-voor-de-bus", "telefoon-met-volle-batterij-voor-foto-s"], diensten: [] } as never] })
-    expect(k.tuinen[0].antwoorden).toEqual({ oppervlak: "55", "telefoon-met-volle-batterij-voor-foto-s": "Ja" })
+    expect(k.tuinen[0].antwoorden).toEqual({ oppervlak: "55", "parkeren-voor-de-bus": "Ja", "telefoon-met-volle-batterij-voor-foto-s": "Ja" })
+    expect(k.tuinen[0].vragen["parkeren-voor-de-bus"]).toBe("Parkeren voor de bus")
     expect(k.tuinen[0].soort).toBe("uitgebreid")
     expect(k.tuinen[0].zones).toEqual([])
   })

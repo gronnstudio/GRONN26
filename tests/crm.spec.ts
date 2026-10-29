@@ -233,6 +233,20 @@ test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0)
   const ja = page.locator("#v-meetwiel-of-rolmaat-30-m-duimstok-waterp").getByRole("button", { name: "Ja" })
   expect((await ja.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+
+  // Een traag verzoek: wat onderweg is blijft in de lokale buffer tot de server het bevestigt.
+  await page.route("**/dashboard/klanten/**", async (r) => {
+    if (r.request().method() === "POST") await new Promise((z) => setTimeout(z, 4000))
+    await r.continue()
+  })
+  await ja.click()
+  await page.waitForTimeout(1200)
+  await page.locator("#v-telefoon-met-volle-batterij-voor-foto-s").getByRole("button", { name: "Ja" }).click()
+  const buffer = await page.evaluate(() => Object.entries(localStorage).find(([k]) => k.startsWith("gronn-intake-"))?.[1] ?? "")
+  expect(buffer).toContain("meetwiel-of-rolmaat-30-m-duimstok-waterp")
+  expect(buffer).toContain("telefoon-met-volle-batterij-voor-foto-s")
+  await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible({ timeout: 15_000 })
+  expect(await page.evaluate(() => Object.keys(localStorage).some((k) => k.startsWith("gronn-intake-")))).toBe(false)
 })
 
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {

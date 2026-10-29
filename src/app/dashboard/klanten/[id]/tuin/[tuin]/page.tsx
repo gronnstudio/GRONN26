@@ -32,6 +32,8 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
   const opp = oppervlakUit(t.antwoorden)
   const vragen = vraagMap(lijst)
   const naam = (vid: string) => vragen.get(vid)?.tekst ?? t.vragen[vid] ?? vid
+  // Antwoorden op vragen die niet (meer) in de lijst staan, zoals vinkjes van de oude checklist.
+  const los = Object.keys(t.antwoorden).filter((vid) => !vragen.has(vid))
 
   return (
     <>
@@ -62,6 +64,19 @@ export default async function TuinOpname({ params }: { params: Promise<{ id: str
               Vragenlijst aanpassen
             </Link>
           </section>
+
+          {los.length > 0 && (
+            <section className="crm-paneel p-5">
+              <p className={`${lbl} m-0`}>Buiten de vragenlijst</p>
+              <ul className="m-0 mt-2 flex list-none flex-col gap-1.5 p-0 text-[13px]">
+                {los.map((vid) => (
+                  <li key={vid}>
+                    {naam(vid)}: <strong>{t.antwoorden[vid]}</strong>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <TuinFotos klant={k.id} tuin={t.id} fotos={t.fotos} weg={fotoWeg.bind(null, k.id, t.id)} />
 

@@ -42,6 +42,8 @@ export function klantContext(k: Klant, lijst: Vragenlijst = STANDAARD) {
     const antwoorden = vragen
       .filter((v) => t.antwoorden[v.id])
       .map((v) => `${v.tekst}: ${t.antwoorden[v.id]}${v.eenheid ? ` ${v.eenheid}` : ""}${t.notities[v.id] ? ` (notitie: ${t.notities[v.id].slice(0, 300)})` : ""}${t.aandacht.includes(v.id) ? " [aandachtspunt]" : ""}`)
+    const ids = new Set(vragen.map((v) => v.id))
+    for (const [id, a] of Object.entries(t.antwoorden)) if (!ids.has(id) && t.vragen[id]) antwoorden.push(`${t.vragen[id]}: ${a}`)
     const zones = t.zones.map((z) => `${z.naam} (${z.soort})${[z.lengte && `${z.lengte} m lang`, z.breedte && `${z.breedte} m breed`, z.oppervlak && `${z.oppervlak} m²`, z.diepte && `diepte ${z.diepte}`].filter(Boolean).map((x) => ` ${x}`).join(",")}${z.notitie ? `: ${z.notitie.slice(0, 200)}` : ""}`)
     delen.push(`## Tuin ${t.naam}\n${antwoorden.join("; ") || "Opname nog leeg."}${t.diensten.length ? `\nGewenst: ${t.diensten.join(", ")}` : ""}${zones.length ? `\nZones: ${zones.join("; ")}` : ""}`)
   }

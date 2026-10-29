@@ -89,6 +89,9 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
   // De vervolginspectie houdt de lijst vast waarmee hij begon, anders verdwijnt een vraag zodra je hem beantwoordt.
   const [vervolgIds, setVervolgIds] = useState<Set<string> | null>(() => (begin.soort === "vervolg" ? new Set(vragenVoor(lijst, begin, "vervolg").flatMap((c) => c.vragen.map((v) => v.id))) : null))
   const wachtrij = useRef<IntakeWijziging>({})
+  // Wat nu naar de server onderweg is: blijft in de lokale buffer tot de server het bevestigt.
+  const onderweg = useRef<IntakeWijziging>({})
+  const bewaarLokaal = useCallback(() => schrijfLokaal(tuin, voegSamen(onderweg.current, wachtrij.current)), [tuin])
   const bezig = useRef(false)
   const klok = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -97,6 +100,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
     bezig.current = true
     while (!leeg(wachtrij.current)) {
       const w = wachtrij.current
+      onderweg.current = w
       wachtrij.current = {}
       setBewaard("bezig")
       let gelukt = false
@@ -107,26 +111,28 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
       } catch {
         setBewaard("wacht")
       }
+      onderweg.current = {}
       if (!gelukt) {
         wachtrij.current = voegSamen(w, wachtrij.current)
         break
       }
+      bewaarLokaal()
       if (leeg(wachtrij.current)) setBewaard("bewaard")
     }
     bezig.current = false
-    schrijfLokaal(tuin, wachtrij.current)
-  }, [klant, tuin])
+    bewaarLokaal()
+  }, [klant, tuin, bewaarLokaal])
 
   const wijzig = useCallback(
     (w: IntakeWijziging) => {
       setS((oud) => pasToe(oud, w))
       wachtrij.current = voegSamen(wachtrij.current, w)
-      schrijfLokaal(tuin, wachtrij.current)
+      bewaarLokaal()
       setBewaard("bezig")
       if (klok.current) clearTimeout(klok.current)
       klok.current = setTimeout(() => void stuur(), PAUZE)
     },
-    [stuur, tuin],
+    [stuur, bewaarLokaal],
   )
 
   // Bij openen: wat er nog in deze browser stond eerst toepassen en versturen.
@@ -158,7 +164,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
   // Niet weggaan met iets dat nog niet bewaard is zonder waarschuwing.
   useEffect(() => {
     const weg = (e: BeforeUnloadEvent) => {
-      if (!leeg(wachtrij.current)) e.preventDefault()
+      if (!leeg(wachtrij.current) || !leeg(onderweg.current)) e.preventDefault()
     }
     window.addEventListener("beforeunload", weg)
     return () => window.removeEventListener("beforeunload", weg)
