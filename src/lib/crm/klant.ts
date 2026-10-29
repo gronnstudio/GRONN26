@@ -1,5 +1,6 @@
 import { schoonRegel, type Regel } from "./calculatie"
 import type { Bp, Centen, Milli } from "./geld"
+import { INTAKE_SOORTEN, STANDAARD, ZONE_SOORTEN, vraagMap, type IntakeSoort, type Zone } from "./vragenlijst"
 
 // Het klantmodel van het CRM: contact, lead, tuinen, calculaties en een
 // tijdlijn, in één document per klant (ADR 0001). Dit bestand is veilig voor
@@ -45,10 +46,18 @@ export type Tuin = {
   id: string
   naam: string
   adres: string
+  /** Antwoord per vraag-id uit de vragenlijst (src/lib/crm/vragenlijst.ts). */
   antwoorden: Record<string, string>
+  /** De vraagtekst zoals hij was toen het antwoord gegeven werd. */
+  vragen: Record<string, string>
+  /** Eigen aantekening per vraag. */
+  notities: Record<string, string>
+  /** Vragen die als aandachtspunt gemarkeerd zijn. */
+  aandacht: string[]
   diensten: string[]
-  /** Afgevinkte punten van de opname-checklist (ids uit `CHECKLIST`). */
-  checklist: string[]
+  /** De soort intake die nu loopt. */
+  soort: IntakeSoort
+  zones: Zone[]
   /** Eerdere versies van de opname, nieuwste eerst. */
   geschiedenis: Opname[]
   fotos: Foto[]
@@ -119,14 +128,38 @@ const uitLijst = <T extends string>(lijst: readonly T[], v: unknown, standaard: 
 const geheel = (v: unknown, min: number, max: number) => (Number.isSafeInteger(v) ? Math.min(max, Math.max(min, v as number)) : 0)
 const datumOf = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v) ? v : "")
 
-function normaliseerTuin(t: Partial<Tuin>): Tuin {
+const tekstMap = (v: unknown, n: number): Record<string, string> =>
+  v && typeof v === "object" ? Object.fromEntries(Object.entries(v as Record<string, unknown>).filter(([, w]) => typeof w === "string" && w).map(([id, w]) => [id.slice(0, 64), (w as string).slice(0, n)])) : {}
+const STANDAARD_VRAGEN = vraagMap(STANDAARD)
+
+function normaliseerZone(z: Partial<Zone>): Zone {
+  return {
+    id: tekst(z.id, 64) || crypto.randomUUID(),
+    naam: tekst(z.naam, 60) || "Zone",
+    soort: uitLijst(ZONE_SOORTEN, z.soort, "Overig"),
+    lengte: tekst(z.lengte, 12),
+    breedte: tekst(z.breedte, 12),
+    oppervlak: tekst(z.oppervlak, 12),
+    diepte: tekst(z.diepte, 12),
+    notitie: tekst(z.notitie, 1000),
+  }
+}
+
+function normaliseerTuin(t: Partial<Tuin> & { checklist?: unknown }): Tuin {
+  const antwoorden = tekstMap(t.antwoorden, 2000)
+  // Afvinklijst van vóór de vragenlijst (PR #155): een vinkje wordt "Ja".
+  if (Array.isArray(t.checklist)) for (const id of t.checklist) if (typeof id === "string" && STANDAARD_VRAGEN.has(id) && !antwoorden[id]) antwoorden[id] = "Ja"
   return {
     id: tekst(t.id, 64) || crypto.randomUUID(),
     naam: tekst(t.naam, 80) || "Tuin",
     adres: tekst(t.adres, 200),
-    antwoorden: t.antwoorden && typeof t.antwoorden === "object" ? t.antwoorden : {},
+    antwoorden,
+    vragen: tekstMap(t.vragen, 200),
+    notities: tekstMap(t.notities, 2000),
+    aandacht: Array.isArray(t.aandacht) ? t.aandacht.filter((x) => typeof x === "string").slice(0, 300) : [],
     diensten: Array.isArray(t.diensten) ? t.diensten.map(String) : [],
-    checklist: Array.isArray(t.checklist) ? t.checklist.map(String).slice(0, 200) : [],
+    soort: uitLijst(INTAKE_SOORTEN, t.soort, "uitgebreid"),
+    zones: (Array.isArray(t.zones) ? t.zones : []).slice(0, 30).map(normaliseerZone),
     geschiedenis: Array.isArray(t.geschiedenis) ? t.geschiedenis.slice(0, 50) : [],
     fotos: Array.isArray(t.fotos) ? t.fotos : [],
     aangemaakt: datumOf(t.aangemaakt) || "2026-10-29",

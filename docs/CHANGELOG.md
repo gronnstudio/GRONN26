@@ -1,8 +1,17 @@
 # Wijzigingen
 
+## 29 okt 2026 · Intake-engine (fase 2)
+
+- Eén vragenlijst (`src/lib/crm/vragenlijst.ts`) vervangt `intake.ts` en `checklist.ts`: 11 categorieën, 153 vragen, met de ids van de oude vragen en vinkjes. Een vinkje van de oude checklist wordt bij het lezen "Ja".
+- Aan te passen zonder code op `/dashboard/vragenlijst` (`dashboard/vragenlijst.json`, met versienummer). Een vraag gaat nooit weg, hij wordt "vervallen"; een antwoord bewaart de vraagtekst van dat moment.
+- De opname is een intake: per vraag Ja/Nee/Onbekend/N.v.t. of een waarde, een notitie (met inspreken) en een aandachtspunt. Categorieën en vragen met "Alleen bij" verschijnen pas bij die werkzaamheden. Snelle intake, uitgebreide intake en vervolginspectie. Open punten. Zones met maten.
+- Tussentijds opslaan (`intake-acties.ts`): elke wijziging na 0,7 s; zonder verbinding in localStorage tot er weer bereik is. Eén versie per dag in de geschiedenis.
+- Op een scherm smaller dan 1024px valt op de intakepagina de zijbalk weg; de rest van het systeem blijft voor de desktop.
+- ADR's van het intakeplan hernummerd naar 0008–0010 (0005 is de GPT-reviewer).
+
 ## 29 okt 2026 · Plan intake en projectvoorbereiding
 
-- Audit en architectuur voor de opdracht "Intelligent Intake & Project Intelligence": [architecture/intake.md](architecture/intake.md), ADR 0005 (één checklist als gegevens), 0006 (video via beelden uit de browser), 0007 (Claude stelt voor, de code rekent). Nog geen code.
+- Audit en architectuur voor de opdracht "Intelligent Intake & Project Intelligence": [architecture/intake.md](architecture/intake.md), ADR 0008 (één checklist als gegevens), 0009 (video via beelden uit de browser), 0010 (Claude stelt voor, de code rekent). Nog geen code.
 
 ## 29 okt 2026 · Offerte met privélink
 

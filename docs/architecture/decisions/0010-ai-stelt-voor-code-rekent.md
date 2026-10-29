@@ -1,4 +1,4 @@
-# ADR 0007 · Claude stelt voor, de code rekent, Nick beslist
+# ADR 0010 · Claude stelt voor, de code rekent, Nick beslist
 
 29 okt 2026 · **Voorgesteld** (fase 1 intake, zie [../intake.md](../intake.md))
 

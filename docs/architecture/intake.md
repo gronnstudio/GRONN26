@@ -41,8 +41,8 @@ calculatie.
   `CHECKLIST` (punten om af te vinken) overlappen: toegang, grond, afwatering,
   leidingen staan in allebei. Die worden één lijst.
 - **Alles in één bestand.** Alle klanten staan in `dashboard/klanten.json`.
-  Met foto-analyses en intakes erbij groeit dat snel. Intakes en analyses
-  krijgen daarom een eigen bestand per tuin (zie §3).
+  Met foto-analyses erbij groeit dat snel. Analyses (fase 3) krijgen
+  daarom een eigen bestand per tuin (zie §3).
 - **Route.** De opdracht noemt `/clients/intakes`. `/clients` is in de
   roadmap het klantportaal (voor klanten zelf). De intake komt onder
   `/dashboard/klanten/[id]/tuin/[tuin]`, waar de inlog en de opname al zitten.
@@ -92,16 +92,19 @@ zes, in bestaande of nieuwe JSON-bestanden.
 | --- | --- | --- |
 | Customers | `Klant` (bestaat) | `dashboard/klanten.json` |
 | Projects | `Tuin` (bestaat) en later `Project` (roadmap fase 3) | idem |
-| ChecklistTemplates, ChecklistQuestions | `Sjabloon` met categorieën en vragen | `crm/checklist.json` |
-| IntakeSessions, ChecklistAnswers, Measurements | `Intake`: soort, datum, sjabloonversie, antwoorden per vraag, zones met maten | `crm/intakes/{tuinId}.json` |
+| ChecklistTemplates, ChecklistQuestions | `Vragenlijst` met categorieën en vragen (`src/lib/crm/vragenlijst.ts`) | `dashboard/vragenlijst.json` |
+| IntakeSessions, ChecklistAnswers, Measurements | In de `Tuin`: soort intake, antwoorden met de vraagtekst van dat moment, notities, aandachtspunten, zones met maten | `dashboard/klanten.json` |
 | MediaAssets | `Foto` (bestaat), uitgebreid met video, zone en vraag | idem, bestanden in `crm/fotos/` en `crm/video/` |
 | MediaAnalyses, AIObservations | `Bevinding`: bron (foto, frame + tijdcode, checklist), tekst, zeker/vermoed, status | `crm/intakes/{tuinId}.json` |
 | ProjectPlans, MaterialCalculations, CostEstimates | `Calculatie` met versies (bestaat); de meetstaat wordt een bron van regels | `dashboard/klanten.json` |
 | WorkSchedules, ProjectTasks | Fasen en taken in `Project` | roadmap fase 3 |
 | Approvals, AuditEvents | De tijdlijn (bestaat) plus een veld `goedgekeurd` op alles wat Claude voorstelt | in de klant |
 
-Een intake per tuin in een eigen bestand houdt `klanten.json` klein, en een
-schrijffout in een intake raakt de klantenlijst niet.
+**Gebouwd in fase 2 (anders dan eerst gedacht):** de antwoorden bleven in de
+`Tuin`, waar de calculatie, Grønn en de klantkaart ze al lazen. Een eigen
+bestand had al die plekken laten veranderen voor een paar kilobyte per tuin.
+De analyses van fase 3 (foto's en beelden met lange teksten) krijgen wel een
+eigen bestand per tuin.
 
 ### Zones en de meetstaat (uit de schermafbeelding van de eigenaar)
 
@@ -223,7 +226,7 @@ en de bevindingen van de open tuin. Er komt geen tweede chat.
 
 | Fase | Wat | Klaar als |
 | --- | --- | --- |
-| 1 · Analyse en architectuur | Dit document, ADR 0005–0007, roadmap | Nick zegt ja |
+| 1 · Analyse en architectuur | Dit document, ADR 0008–0010, roadmap | Klaar (PR #157) |
 | 2 · Intake-engine | Eén checklist (A–J + bestaand), te bewerken in het dashboard; ja/nee/onbekend/n.v.t., notitie, aandachtspunt; vervolgvragen per dienst; snel/uitgebreid/vervolg; zones met maten; tussentijds opslaan; open punten; mobiel eerst | test 1, 2, 6 en 10 uit de opdracht |
 | 3 · Media en AI | Meerdere foto's en camera, foto bij zone en vraag; video-upload en beelden in de browser; Analyseer met Claude; bevindingen als voorstel; Controleer volledigheid | test 3, 4 en 5 |
 | 4 · Meetstaat | Zones → rekenhulpen → materiaalstaat met formules; materiaalgegevens in de catalogus; "Zet in calculatie"; projectomschrijving en werkvolgorde door Claude | test 7 |

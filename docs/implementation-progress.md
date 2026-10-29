@@ -8,7 +8,7 @@ Laatst bijgewerkt: 29 okt 2026.
 | 01 Vandaag | Getest | nieuw systeem met zijbalk, ⌘K, Grønn-paneel; te betalen en to-do's nog uit `data.ts` |
 | 02 Contacten en klanten | Getest | tabbladen, soorten, zoeken, dubbelen, tijdlijn |
 | 03 Leads | Getest | 8 fasen, kans, waarde, opvolgen, verloren met reden, aanvraag → klant |
-| 04 Tuinopname | Getest | vragenlijst, geschiedenis, foto's |
+| 04 Tuinopname | Getest | intake-engine (fase 2): één vragenlijst A–J als gegevens, zelf aan te passen op `/dashboard/vragenlijst`; ja/nee/onbekend/n.v.t., notitie met spraak, aandachtspunt; vervolgvragen per werkzaamheid; snel/uitgebreid/vervolg; open punten; zones met maten; tussentijds opslaan, ook zonder bereik; werkt op de telefoon |
 | 05 Tuinrecord | Gebouwd | meerdere tuinen per klant, voor/tijdens/na |
 | 06 Calculatie | Getest | centen, btw per tarief, marge/opslag, rekenhulpen, versies |
 | 07 Catalogus | Gebouwd | prijshistorie, ★ onthouden, CSV-export |

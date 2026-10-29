@@ -4,8 +4,6 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { eisEigenaar } from "@/lib/crm/toegang"
 import { leesCenten } from "@/lib/crm/geld"
-import { leesOpname } from "@/lib/crm/intake"
-import { CHECKLIST_IDS } from "@/lib/crm/checklist"
 import {
   BRONNEN,
   KLANT_FASEN,
@@ -149,34 +147,17 @@ export async function klantWeg(id: string) {
 export async function nieuweTuin(id: string, d: FormData) {
   const naam = tekst(d, "naam", 80) || "Tuin"
   const tuinId = crypto.randomUUID()
-  const tuin: Tuin = { id: tuinId, naam, adres: tekst(d, "adres", 200), antwoorden: {}, diensten: [], checklist: [], geschiedenis: [], fotos: [], aangemaakt: vandaag(), bijgewerkt: vandaag() }
+  const tuin: Tuin = { id: tuinId, naam, adres: tekst(d, "adres", 200), antwoorden: {}, vragen: {}, notities: {}, aandacht: [], diensten: [], soort: "uitgebreid", zones: [], geschiedenis: [], fotos: [], aangemaakt: vandaag(), bijgewerkt: vandaag() }
   await pasAan(id, (k) => log({ ...k, tuinen: [...k.tuinen, tuin] }, gebeurtenis("Opname", `Tuin "${naam}" toegevoegd`)))
   redirect(`/dashboard/klanten/${id}/tuin/${tuinId}`)
 }
 
-export async function bewaarOpname(id: string, tuinId: string, d: FormData) {
-  const { antwoorden, diensten } = leesOpname(d)
-  await pasAan(id, (k) => {
-    const oud = k.tuinen.find((t) => t.id === tuinId)
-    if (!oud) return k
-    const veranderd = JSON.stringify(oud.antwoorden) !== JSON.stringify(antwoorden) || JSON.stringify(oud.diensten) !== JSON.stringify(diensten)
-    const tuin: Tuin = {
-      ...oud,
-      naam: tekst(d, "naam", 80) || oud.naam,
-      adres: tekst(d, "adres", 200),
-      antwoorden,
-      diensten,
-      checklist: d.getAll("check").map(String).filter((c) => CHECKLIST_IDS.has(c)),
-      bijgewerkt: vandaag(),
-      // De vorige versie blijft bewaard, zodat je ziet wat er veranderde.
-      geschiedenis:
-        veranderd && Object.keys(oud.antwoorden).length
-          ? [{ datum: oud.bijgewerkt, antwoorden: oud.antwoorden, diensten: oud.diensten }, ...oud.geschiedenis].slice(0, 50)
-          : oud.geschiedenis,
-    }
-    const k2 = { ...k, tuinen: k.tuinen.map((t) => (t.id === tuinId ? tuin : t)) }
-    return veranderd ? log(k2, gebeurtenis("Opname", `Opname "${tuin.naam}" bijgewerkt`)) : k2
-  })
+/** Naam en adres van een tuin; de antwoorden bewaart de intake zelf (intake-acties.ts). */
+export async function bewaarTuinKop(id: string, tuinId: string, d: FormData) {
+  await pasAan(id, (k) => ({
+    ...k,
+    tuinen: k.tuinen.map((t) => (t.id === tuinId ? { ...t, naam: tekst(d, "naam", 80) || t.naam, adres: tekst(d, "adres", 200), bijgewerkt: vandaag() } : t)),
+  }))
 }
 
 export async function tuinWeg(id: string, tuinId: string) {

@@ -23,6 +23,10 @@ export function Schil({ index, tellers, children }: { index: Treffer[]; tellers:
   const pad = usePathname()
   const actief = onderdeelVan(pad)
   const klantId = /^\/dashboard\/klanten\/([^/]+)/.exec(pad)?.[1]
+  // De intake van een tuin wordt op locatie op de telefoon ingevuld
+  // (docs/architecture/intake.md §4). Alleen daar valt de zijbalk op een smal
+  // scherm weg; de rest van het systeem blijft voor de desktop.
+  const veld = /^\/dashboard\/klanten\/[^/]+\/tuin\/[^/]+$/.test(pad)
   const [smal, setSmal] = useState(false)
   const [grønn, setGrønn] = useState(false)
   const [nieuw, setNieuw] = useState(false)
@@ -69,10 +73,10 @@ export function Schil({ index, tellers, children }: { index: Treffer[]; tellers:
 
   const item = "flex h-[36px] items-center gap-3 rounded-[8px] px-2.5 text-[14px] font-medium transition-colors"
   return (
-    <div className="crm grid min-h-svh min-w-[1200px] grid-cols-[auto_minmax(0,1fr)_auto] print:block print:min-w-0 print:bg-white">
+    <div className={`crm grid min-h-svh grid-cols-[auto_minmax(0,1fr)_auto] print:block print:min-w-0 print:bg-white ${veld ? "max-lg:block lg:min-w-[1200px]" : "min-w-[1200px]"}`}>
       <aside
         aria-label="Systeem"
-        className={`sticky top-0 flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden ${smal ? "w-[64px]" : "w-[248px]"}`}
+        className={`sticky top-0 flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden ${smal ? "w-[64px]" : "w-[248px]"} ${veld ? "max-lg:hidden" : ""}`}
       >
         <div className={`flex h-[60px] shrink-0 items-center ${smal ? "justify-center" : "justify-between pr-2 pl-4"}`}>
           {!smal && (
@@ -171,7 +175,7 @@ export function Schil({ index, tellers, children }: { index: Treffer[]; tellers:
       <div className="@container min-w-0">{children}</div>
 
       {grønn && (
-        <aside aria-label="Grønn" className="sticky top-0 flex h-svh w-[380px] flex-col border-l border-lijn bg-vlak print:hidden">
+        <aside aria-label="Grønn" className={`sticky top-0 flex h-svh w-[380px] flex-col border-l border-lijn bg-vlak print:hidden ${veld ? "max-lg:hidden" : ""}`}>
           <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-lijn px-4">
             <span className="flex items-center gap-2 font-semibold">
               <Icoon naam="grønn" className="size-[18px] text-accent-tekst" /> Grønn
