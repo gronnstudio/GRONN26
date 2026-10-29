@@ -369,6 +369,8 @@ function VraagKaart({ v, s, wijzig }: { v: Vraag; s: Stand; wijzig: (w: IntakeWi
               {v.opties?.map((o) => (
                 <option key={o}>{o}</option>
               ))}
+              {/* Een bewaard antwoord waarvan de optie later uit de vragenlijst ging, blijft leesbaar. */}
+              {waarde && !v.opties?.includes(waarde) && <option value={waarde}>{waarde} (oude keuze)</option>}
             </select>
           ) : v.soort === "lang" ? (
             <textarea id={veldId} value={waarde} onChange={(e) => zet(e.target.value)} rows={3} className="crm-veld resize-y text-[16px] leading-[1.5]" />

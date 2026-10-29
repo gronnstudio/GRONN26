@@ -152,11 +152,11 @@ export async function nieuweTuin(id: string, d: FormData) {
   redirect(`/dashboard/klanten/${id}/tuin/${tuinId}`)
 }
 
-/** Naam en adres van een tuin; de antwoorden bewaart de intake zelf (intake-acties.ts). */
+/** Naam en adres van een tuin; de antwoorden bewaart de intake zelf (intake-acties.ts). `bijgewerkt` blijft staan: die hoort bij de antwoorden en bepaalt de dagversie. */
 export async function bewaarTuinKop(id: string, tuinId: string, d: FormData) {
   await pasAan(id, (k) => ({
     ...k,
-    tuinen: k.tuinen.map((t) => (t.id === tuinId ? { ...t, naam: tekst(d, "naam", 80) || t.naam, adres: tekst(d, "adres", 200), bijgewerkt: vandaag() } : t)),
+    tuinen: k.tuinen.map((t) => (t.id === tuinId ? { ...t, naam: tekst(d, "naam", 80) || t.naam, adres: tekst(d, "adres", 200) } : t)),
   }))
 }
 
