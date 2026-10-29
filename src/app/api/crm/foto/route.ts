@@ -28,6 +28,9 @@ export async function POST(request: NextRequest) {
   const momentRuw = String(d?.get("moment") ?? "")
   const moment = (MOMENTEN as readonly string[]).includes(momentRuw) ? (momentRuw as (typeof MOMENTEN)[number]) : "Opname"
   const bijschrift = String(d?.get("bijschrift") ?? "").trim().slice(0, 200)
+  const zone = String(d?.get("zone") ?? "")
+  // Een beeld uit een video draagt zijn tijdcode (m:ss).
+  const tijd = String(d?.get("tijd") ?? "")
 
   const id = crypto.randomUUID()
   let gevonden = false
@@ -41,7 +44,8 @@ export async function POST(request: NextRequest) {
             tuinen: k.tuinen.map((t) => {
               if (t.id !== tuin) return t
               gevonden = true
-              return { ...t, fotos: [...t.fotos, { id, datum: new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" }), bijschrift, moment }] }
+              const extra = { ...(t.zones.some((z) => z.id === zone) ? { zone } : {}), ...(/^\d{1,3}:\d{2}$/.test(tijd) ? { tijd } : {}) }
+              return { ...t, fotos: [...t.fotos, { id, datum: new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" }), bijschrift, moment, ...extra }] }
             }),
           },
     ),

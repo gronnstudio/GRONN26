@@ -147,7 +147,7 @@ export async function klantWeg(id: string) {
 export async function nieuweTuin(id: string, d: FormData) {
   const naam = tekst(d, "naam", 80) || "Tuin"
   const tuinId = crypto.randomUUID()
-  const tuin: Tuin = { id: tuinId, naam, adres: tekst(d, "adres", 200), antwoorden: {}, vragen: {}, notities: {}, aandacht: [], diensten: [], soort: "uitgebreid", zones: [], geschiedenis: [], fotos: [], aangemaakt: vandaag(), bijgewerkt: vandaag() }
+  const tuin: Tuin = { id: tuinId, naam, adres: tekst(d, "adres", 200), antwoorden: {}, vragen: {}, notities: {}, aandacht: [], diensten: [], soort: "uitgebreid", zones: [], geschiedenis: [], fotos: [], bevindingen: [], aangemaakt: vandaag(), bijgewerkt: vandaag() }
   await pasAan(id, (k) => log({ ...k, tuinen: [...k.tuinen, tuin] }, gebeurtenis("Opname", `Tuin "${naam}" toegevoegd`)))
   redirect(`/dashboard/klanten/${id}/tuin/${tuinId}`)
 }

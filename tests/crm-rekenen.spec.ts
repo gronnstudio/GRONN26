@@ -4,6 +4,7 @@ import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort
 import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
+import { opdracht, schoonBevindingen } from "../src/lib/crm/ai/beeld"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -172,6 +173,27 @@ test.describe("catalogus en klanten", () => {
     const claude = voorClaude(items, "Terras met opsluitbanden", 80)
     expect(claude.map((i) => i.naam)).toEqual(["Minigraver", "Opsluitband 5x15x100 grijs"])
     expect(voorClaude(items, "tegels leggen").length).toBe(81)
+  })
+  test("voorstellen van Claude: alleen wat klopt wordt bewaard, als voorstel", () => {
+    const k = normaliseer({ id: "k", naam: "Geheime Klant", tuinen: [{ id: "t", naam: "Voortuin", adres: "Kerkstraat 1, Stein", zones: [{ id: "z", naam: "Terras", soort: "Terras" }] } as never] })
+    const t = k.tuinen[0]
+    const ruw = {
+      bevindingen: [
+        { zone: "Terras", tekst: "Tegels verzakt.", zeker: "zichtbaar", fotos: [1, 2, 9], vraag: "grond", antwoord: "Marmer", meting: "Hoogteverschil naar de deur" },
+        { zone: "Dak", tekst: "Telefoonkabel langs de gevel.", zeker: "zeker weten", fotos: [], vraag: "bestaat-niet", antwoord: "Ja", meting: "" },
+        { zone: "Terras", tekst: "", zeker: "vermoed", fotos: [], vraag: "", antwoord: "", meting: "" },
+      ],
+    }
+    const b = schoonBevindingen(ruw, STANDAARD, t, ["f1", "f2"], "2026-10-29")
+    expect(b).toHaveLength(2)
+    expect(b[0]).toMatchObject({ zone: "Terras", zeker: "zichtbaar", bron: ["f1", "f2"], meting: "Hoogteverschil naar de deur", status: "voorstel" })
+    expect(b[0].vraag).toBeUndefined() // "Marmer" is geen optie van Grondsoort
+    expect(b[1]).toMatchObject({ zone: "Algemeen", zeker: "vermoed" })
+    expect(schoonBevindingen("onzin", STANDAARD, t, [], "2026-10-29")).toEqual([])
+    const tekst = opdracht(STANDAARD, t, [{ nr: 1, bijschrift: "bij de deur", zone: "z", tijd: "0:03" }])
+    expect(tekst).toContain("Foto 1 (uit video, 0:03), zone Terras: bij de deur")
+    expect(tekst).not.toContain("Geheime Klant")
+    expect(tekst).not.toContain("Kerkstraat")
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]

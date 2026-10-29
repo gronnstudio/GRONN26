@@ -23,6 +23,7 @@ test("zonder inlog: dashboard dicht, API's weigeren", async ({ request }) => {
   expect((await request.post("/api/assistent", { data: { vraag: "Wie zijn mijn klanten?" } })).status()).toBe(401)
   expect((await request.get("/api/crm/foto?id=00000000-0000-0000-0000-000000000000")).status()).toBe(401)
   expect((await request.post("/api/crm/foto", { multipart: { klant: "a", tuin: "b" } })).status()).toBe(401)
+  expect((await request.post("/api/crm/analyse", { data: { klant: "a", tuin: "b", fotos: [] } })).status()).toBe(401)
   expect((await request.get("/dashboard/catalogus/export", { maxRedirects: 0 })).status()).not.toBe(200)
 })
 
@@ -133,13 +134,16 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
     const b = await new Promise<Blob>((ok) => c.toBlob((x) => ok(x!), "image/jpeg"))
     return Array.from(new Uint8Array(await b.arrayBuffer()))
   })
-  await page.locator('input[type="file"]').setInputFiles({ name: "voor.jpg", mimeType: "image/jpeg", buffer: Buffer.from(jpg) })
+  await page.locator('input[type="file"][accept="image/*"]').setInputFiles({ name: "voor.jpg", mimeType: "image/jpeg", buffer: Buffer.from(jpg) })
   const foto = page.locator('img[src^="/api/crm/foto?id="]')
   await expect(foto).toHaveCount(1, { timeout: 15_000 })
   const src = (await foto.getAttribute("src"))!
   expect((await page.request.get(src)).status()).toBe(200)
   // een ander (zonder inlog) krijgt de foto niet
   expect((await request.get(src)).status()).toBe(401)
+  // Analyseren: zonder sleutel in de test zegt de knop dat Claude niet is ingesteld, en er verandert niets.
+  await page.getByRole("button", { name: "Analyseer 1 nieuwe foto met Claude" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "Claude is niet ingesteld" })).toBeVisible()
 
   // 5. Calculatie met de maten uit de opname: rekenhulp 56 m² + 7 % = 59,92 m².
   await page.getByRole("link", { name: "Calculatie met deze maten →" }).click()
@@ -291,6 +295,48 @@ test("catalogus: prijslijst inlezen, bijwerken met historie, zoeken", async ({ p
   await expect(page.locator("tbody")).toContainText(`PROEF / BANDEN · art. ${sku}`)
   await expect(page.locator("tbody")).toContainText("1 eerdere prijs")
   await expect(page.getByRole("status").filter({ hasText: "items" })).toContainText("1 van")
+})
+
+test("opname: beelden uit een video, een voorstel bevestigen zet het antwoord in de intake", async ({ page }) => {
+  test.setTimeout(60_000)
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill(`Video Klant ${Date.now()}`)
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await page.getByRole("link", { name: /^Tuinen/ }).click()
+  await page.locator('input[name="naam"]').fill("Achtertuin")
+  await page.getByRole("button", { name: "+ Tuin en opname" }).click()
+  await expect(page).toHaveURL(/\/tuin\//)
+  const [, klantId, tuinId] = page.url().match(/klanten\/([^/]+)\/tuin\/([^/?#]+)/)!
+
+  // Video van 7 seconden: elke 3 seconden een beeld, dus 0:00, 0:03 en 0:06.
+  await page.getByLabel("Video").setInputFiles("tests/media/tuin.webm")
+  await expect(page.locator('img[src^="/api/crm/foto?id="]')).toHaveCount(3, { timeout: 20_000 })
+  for (const t of ["0:00", "0:03", "0:06"]) await expect(page.getByText(`Video ${t}`, { exact: true })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Analyseer 3 nieuwe foto's met Claude" })).toBeVisible()
+
+  // Een voorstel zoals de analyse het bewaart (Claude zelf draait niet in de test).
+  const { readFile, writeFile } = await import("node:fs/promises")
+  const pad = ".crm-data/dashboard/klanten.json"
+  const voorstel = { id: crypto.randomUUID(), datum: "2026-10-29", zone: "Algemeen", tekst: "Tegels liggen scheef bij de schuur.", zeker: "zichtbaar", bron: [], vraag: "telefoon-met-volle-batterij-voor-foto-s", antwoord: "Ja", status: "voorstel" }
+  await expect(async () => {
+    const lijst = JSON.parse(await readFile(pad, "utf8"))
+    const t = lijst.find((k: { id: string }) => k.id === klantId).tuinen.find((x: { id: string }) => x.id === tuinId)
+    if (!t.bevindingen?.some((b: { id: string }) => b.id === voorstel.id)) {
+      t.bevindingen = [voorstel, ...(t.bevindingen ?? [])]
+      await writeFile(pad, JSON.stringify(lijst))
+    }
+    await page.reload()
+    await expect(page.getByText("Tegels liggen scheef bij de schuur.")).toBeVisible({ timeout: 2000 })
+  }).toPass({ timeout: 20_000 })
+
+  await page.getByRole("button", { name: "Bevestigen" }).click()
+  await expect(page.getByText("1 bevestigd")).toBeVisible()
+  await expect(page.getByRole("status").filter({ hasText: "Bewaard ✓" })).toBeVisible({ timeout: 10_000 })
+  const t = JSON.parse(await readFile(pad, "utf8")).find((k: { id: string }) => k.id === klantId).tuinen.find((x: { id: string }) => x.id === tuinId)
+  expect(t.antwoorden["telefoon-met-volle-batterij-voor-foto-s"]).toBe("Ja")
+  expect(t.bevindingen[0].status).toBe("bevestigd")
 })
 
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {

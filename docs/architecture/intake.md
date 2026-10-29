@@ -179,6 +179,25 @@ plaats van een standaardpercentage te raden.
 - Bevindingen komen als **voorstel** in de checklist: Bevestigen, Aanpassen
   of Afwijzen. Pas na bevestigen worden ze een antwoord.
 
+**Gebouwd in fase 3 (29 okt 2026, eenvoudiger dan hierboven):**
+- De video zelf wordt niet bewaard. De browser haalt er elke 3 seconden een
+  beeld uit (hooguit 20). Die beelden worden opnamefoto's met hun tijdcode,
+  dus er is geen client-upload naar Blob en geen limiet van 200 MB nodig.
+- Er is geen detectie van sterke beeldwisselingen; de vaste stap is genoeg.
+- Foto's hangen aan een zone. Aan een vraag hangen ze niet: dat doet de
+  bevinding.
+- "Analyseer met Claude" is één knop voor de opnamefoto's die nog niet
+  bekeken zijn (hooguit 12 per keer), via `src/lib/crm/ai/beeld.ts` en
+  `/api/crm/analyse`.
+- De bevindingen staan in `Tuin.bevindingen`, niet in een eigen bestand: ze
+  zijn kort.
+- Bevestigen zet een voorgesteld antwoord in de intake, via dezelfde weg als
+  zelf invullen. Afwijzen bewaart alleen de status.
+- Elke aanroep komt met model en tokens in de tijdlijn. Er is nog geen
+  maandbudget.
+- Volledigheid controleren gebeurt in dezelfde aanroep (de "metingen") plus
+  de bestaande Open punten, zonder een tweede aanroep.
+
 ## 6. De AI-laag
 
 Eén map `src/lib/crm/ai/`, één bestand per taak, allemaal via dezelfde
