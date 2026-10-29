@@ -15,6 +15,7 @@ const SOORTEN = {
 } as const
 type Soort = keyof typeof SOORTEN
 type Regel = { wat: string; soort: Soort; inkoop: string }
+type Schatting = { uren: number; posten: { wat: string; uren: number }[]; aannames: string }
 
 const MINIMUM_PER_UUR = 37
 const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
@@ -26,6 +27,31 @@ export function PrijsRekenaar() {
   const [tarief, setTarief] = useState("50")
   const [korting, setKorting] = useState("0")
   const [regels, setRegels] = useState<Regel[]>([{ wat: "", soort: "materiaal", inkoop: "" }])
+  const [beschrijving, setBeschrijving] = useState("")
+  const [schatting, setSchatting] = useState<Schatting | null>(null)
+  const [bezig, setBezig] = useState(false)
+  const [fout, setFout] = useState("")
+
+  // Grønn stelt de uren voor op basis van de beschrijving; Nick past het getal aan.
+  const schat = async () => {
+    setBezig(true)
+    setFout("")
+    try {
+      const r = await fetch("/api/uren-schatting", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ beschrijving }),
+      })
+      const data = (await r.json()) as Schatting & { fout?: string }
+      if (!r.ok || data.fout) throw new Error(data.fout || "Geen schatting gekregen.")
+      setSchatting(data)
+      setUren(String(Math.round(data.uren)))
+    } catch (e) {
+      setFout(e instanceof Error ? e.message : "Geen schatting gekregen.")
+    } finally {
+      setBezig(false)
+    }
+  }
 
   const zet = (i: number, r: Partial<Regel>) => setRegels(regels.map((x, j) => (j === i ? { ...x, ...r } : x)))
 
@@ -54,7 +80,44 @@ export function PrijsRekenaar() {
       <div className="flex flex-col gap-8">
         <section>
           <p className={`${lbl} m-0 opacity-60`}>1 · Jouw werk</p>
-          <div className="mt-3 grid grid-cols-1 items-end gap-3 sm:grid-cols-3">
+          <label className="mt-3 grid gap-1 text-[13px]">
+            Wat moet er gebeuren? Grønn stelt de uren voor
+            <textarea
+              value={beschrijving}
+              onChange={(e) => setBeschrijving(e.target.value)}
+              rows={3}
+              placeholder="bijv. 62 m² klinkers in keperverband, oude bestrating eruit, grondkering van 20 m, 20 m² grassen"
+              className={`${veld} resize-y`}
+            />
+          </label>
+          <button
+            type="button"
+            onClick={schat}
+            disabled={bezig || !beschrijving.trim()}
+            className="mt-2 rounded-full bg-oranje px-5 py-2 text-[14px] font-semibold text-[#202020] disabled:opacity-50"
+          >
+            {bezig ? "Grønn rekent…" : "Schat de uren"}
+          </button>
+          {fout && <p role="alert" className="m-0 mt-2 text-[13px] text-oranje-tekst">{fout}</p>}
+          {schatting && (
+            <div className="mt-3 rounded-[14px] border border-lijn p-4 text-[13px]">
+              <ul className="m-0 grid list-none gap-1 p-0">
+                {schatting.posten.map((p) => (
+                  <li key={p.wat} className="flex justify-between gap-4">
+                    <span>{p.wat}</span>
+                    <span className="tabular-nums">{p.uren} u</span>
+                  </li>
+                ))}
+                <li className="flex justify-between gap-4 border-t border-lijn pt-1 font-semibold">
+                  <span>Voorstel, met 10 % marge</span>
+                  <span className="tabular-nums">{Math.round(schatting.uren)} u</span>
+                </li>
+              </ul>
+              {schatting.aannames && <p className="m-0 mt-2 opacity-70">Aangenomen: {schatting.aannames}</p>}
+              <p className="m-0 mt-2 opacity-60">Een voorstel: klopt het niet met wat jij weet, pas de uren hieronder aan.</p>
+            </div>
+          )}
+          <div className="mt-5 grid grid-cols-1 items-end gap-3 sm:grid-cols-3">
             <label className="grid gap-1 text-[13px]">
               Uren (alles: ook laden, rijden, opruimen)
               <input inputMode="decimal" value={uren} onChange={(e) => setUren(e.target.value)} placeholder="bijv. 24" className={veld} />
