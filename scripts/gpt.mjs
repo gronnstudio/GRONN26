@@ -8,7 +8,8 @@
 // Sleutel: OPENAI_API_KEY, of OPENAI_API_KEY_FILE met het pad naar een bestand.
 
 import { execFileSync } from "node:child_process"
-import { readFileSync } from "node:fs"
+import { readFileSync, realpathSync } from "node:fs"
+import { relative } from "node:path"
 
 const MODEL = process.env.GPT_MODEL ?? "gpt-6.1-sol"
 const MODEL_ZWAAR = "gpt-6-astra"
@@ -26,7 +27,8 @@ const GEVOELIG = [
   ["API-sleutel", /\b(sk-[A-Za-z0-9_-]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|vercel_blob_rw_[A-Za-z0-9_]+|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16})\b/],
   ["privésleutel", /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
   ["IBAN", /\bNL\d{2}[A-Z]{4}\d{10}\b/],
-  ["telefoonnummer", /(?<![\w.])(\+31|0031|0)6[\s-]?\d{8}\b|(?<![\w.])\+31[\s-]?\d{9}\b/],
+  // Vast en mobiel, met of zonder spaties en streepjes (020 1234567, 06 1234 5678, +31 6 …).
+  ["telefoonnummer", /(?<![\w.])(\+31|0031|0)[\s-]?[1-9](?:[\s-]?\d){8}(?!\d)/],
   ["e-mailadres", /\b[A-Za-z0-9._%+-]+@(?!gronn\.studio\b|example\.(com|nl)\b)[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/],
   ["postcode met huisnummer", /\b\d{4}\s?[A-Z]{2}\s+\d{1,4}\b/],
 ]
@@ -81,18 +83,24 @@ function git(...args) {
   return execFileSync("git", args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 })
 }
 
-function verboden(pad) {
-  return VERBODEN_PAD.some((re) => re.test(pad))
+// Op het echte pad binnen de repo, zodat ./.crm-data/… of een symlink er niet langs glipt.
+export function verboden(pad) {
+  let echt
+  try {
+    echt = relative(process.cwd(), realpathSync(pad))
+  } catch {
+    echt = pad
+  }
+  return [pad, echt].some((p) => echt.startsWith("..") || VERBODEN_PAD.some((re) => re.test(p.replace(/^(\.\/)+/, ""))))
 }
 
-// Alles wat meegaat wordt gecontroleerd, ook contextregels; alleen
-// verwijderde regels niet, die staan straks nergens meer.
+// Alles wat meegaat wordt gecontroleerd: toegevoegde, verwijderde en contextregels.
 export function controleer(tekst) {
   const fouten = []
   let pad = ""
   tekst.split("\n").forEach((regel, i) => {
     if (regel.startsWith("+++ b/")) pad = regel.slice(6)
-    if (regel.startsWith("+++") || regel.startsWith("-")) return
+    if (regel.startsWith("+++ ") || regel.startsWith("--- ")) return
     for (const [soort, re] of GEVOELIG) if (re.test(regel)) fouten.push(`${soort} in ${pad || "invoer"} (regel ${i + 1} van de invoer)`)
   })
   return fouten
