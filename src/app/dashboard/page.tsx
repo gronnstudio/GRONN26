@@ -167,6 +167,12 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
           >
             Prijs berekenen <span className="transition-transform group-hover:translate-x-1">→</span>
           </Link>
+          <Link
+            href="/dashboard/klanten"
+            className="group -mt-4 flex items-center justify-between rounded-full border border-lijn px-6 py-4 font-semibold hover:border-oranje"
+          >
+            Klanten en pijplijn <span className="transition-transform group-hover:translate-x-1">→</span>
+          </Link>
         </aside>
 
         {/* te doen, met kosten */}
