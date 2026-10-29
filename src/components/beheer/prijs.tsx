@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useMemo, useState, useTransition } from "react"
+import { useEffect, useMemo, useState, useTransition } from "react"
 import { BTW_TARIEVEN, EENHEDEN, SOORTEN, STANDAARD, isSoort, nieuweRegel, reken, tekort, wegzetten, type Regel, type Soort } from "@/lib/crm/calculatie"
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
-import { leesBp, leesCenten, leesMilli, toonDecimaal, toonEuro, type Milli } from "@/lib/crm/geld"
+import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
 
@@ -18,7 +18,22 @@ import { Rekenhulp } from "./rekenhulp"
 type Schatting = { uren: number; posten: { wat: string; uren: number }[]; regels?: { wat: string; soort: string; inkoop: number }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
-type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string }
+type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
+
+// "Met btw" (eigenaar, 29 okt 2026: "ik wil met btw"): inkoop en verkoop
+// tonen en invoeren incl. btw. Opgeslagen en gerekend wordt altijd excl.
+const MET_BTW = "gronn-rekenblad-met-btw"
+const inclTekst = (r: Invul) => {
+  const c = leesCenten(r.inkoop)
+  return c ? toonDecimaal(plusProcent(c, r.btw), 2, 2) : ""
+}
+const exclUit = (tekst: string, btw: number) => {
+  const c = leesCenten(tekst)
+  return c === null ? "" : toonDecimaal(zonderProcent(Math.max(0, c), btw), 2, 2)
+}
+// Grind en zand per big bag (BB): snel ½, 1 of een veelvoud kiezen, of los gestort (eigenaar, 29 okt 2026).
+const isBigBag = (eenheid: string) => /^bb$|big ?bag/i.test(eenheid.trim())
+const BB_KEUZES: [string, string][] = [["½", "0,5"], ["1", "1"], ["2", "2"], ["3", "3"]]
 
 export type KlantKeuze = { id: string; naam: string; tuinen: { id: string; naam: string }[] }
 export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; regels: Regel[]; nr?: number }
@@ -75,6 +90,19 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [fout, setFout] = useState("")
   const [melding, setMelding] = useState("")
   const [bewaart, start] = useTransition()
+  const [metBtw, setMetBtw] = useState(false)
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(MET_BTW) === "1") setTimeout(() => setMetBtw(true), 0)
+    } catch {}
+  }, [])
+  const kiesBtw = (aan: boolean) => {
+    setMetBtw(aan)
+    setRegels((oud) => oud.map((r) => ({ ...r, inkoopIncl: undefined })))
+    try {
+      localStorage.setItem(MET_BTW, aan ? "1" : "0")
+    } catch {}
+  }
   const router = useRouter()
 
   const klant = klanten.find((k) => k.id === klantId)
@@ -252,7 +280,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
 
           <section className="min-w-0">
             <div className="flex items-baseline justify-between gap-4">
-              <p className={`${lbl} m-0`}>2 · Materiaal, machines en overig, inkoop excl. btw</p>
+              <p className={`${lbl} m-0`}>2 · Materiaal, machines en overig, inkoop {metBtw ? "incl." : "excl."} btw</p>
+              <label className="ml-auto flex items-center gap-1.5 text-[13px]">
+                <input type="checkbox" checked={metBtw} onChange={(e) => kiesBtw(e.target.checked)} /> Bedragen met btw
+              </label>
               <Link href="/dashboard/catalogus" className="text-[12px] text-accent-tekst">Catalogus →</Link>
             </div>
             <datalist id="catalogus-namen">
@@ -268,11 +299,11 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <th className="py-1 pr-2 font-semibold">Soort</th>
                     <th className="py-1 pr-2 font-semibold">Aantal</th>
                     <th className="py-1 pr-2 font-semibold">Eenheid</th>
-                    <th className="py-1 pr-2 font-semibold">Inkoop / eenh.</th>
+                    <th className="py-1 pr-2 font-semibold">Inkoop / eenh.{metBtw ? " incl." : ""}</th>
                     <th className="py-1 pr-2 font-semibold">Opslag %</th>
                     <th className="py-1 pr-2 font-semibold">Afval %</th>
                     <th className="py-1 pr-2 font-semibold">Btw</th>
-                    <th className="py-1 pr-2 text-right font-semibold">Verkoop</th>
+                    <th className="py-1 pr-2 text-right font-semibold">Verkoop{metBtw ? " incl." : ""}</th>
                     <th className="py-1 font-semibold"><span className="sr-only">Acties</span></th>
                   </tr>
                 </thead>
@@ -294,22 +325,43 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                             ))}
                           </select>
                         </td>
-                        <td className="py-1.5 pr-2"><input aria-label="Aantal" inputMode="decimal" value={r.hoeveelheid} onChange={(e) => zet(i, { hoeveelheid: e.target.value })} className={`${klein} w-[80px]`} /></td>
+                        <td className="py-1.5 pr-2">
+                          <input aria-label="Aantal" inputMode="decimal" value={r.hoeveelheid} onChange={(e) => zet(i, { hoeveelheid: e.target.value })} className={`${klein} w-[80px]`} />
+                          {isBigBag(r.eenheid) && (
+                            <span className="mt-1 flex gap-1" role="group" aria-label="Aantal big bags">
+                              {BB_KEUZES.map(([t, v]) => (
+                                <button key={t} type="button" aria-pressed={r.hoeveelheid === v} onClick={() => zet(i, { hoeveelheid: v })} className={`min-h-[24px] rounded-full border px-2 text-[12px] ${r.hoeveelheid === v ? "border-inkt bg-inkt text-grond" : "border-lijn"}`}>
+                                  {t}
+                                </button>
+                              ))}
+                              <button type="button" onClick={() => zet(i, { eenheid: "m³", inkoop: "", inkoopIncl: undefined })} title="Los gestort: per m³, vul de prijs in" className="min-h-[24px] rounded-full border border-lijn px-2 text-[12px]">
+                                los
+                              </button>
+                            </span>
+                          )}
+                        </td>
                         <td className="py-1.5 pr-2">
                           <input aria-label="Eenheid" list="eenheden" value={r.eenheid} onChange={(e) => zet(i, { eenheid: e.target.value.slice(0, 12) })} className={`${klein} w-[64px]`} />
                         </td>
-                        <td className="py-1.5 pr-2"><input aria-label="Inkoop per eenheid" inputMode="decimal" value={r.inkoop} onChange={(e) => zet(i, { inkoop: e.target.value })} placeholder="€" className={`${klein} w-[90px]`} /></td>
+                        <td className="py-1.5 pr-2">
+                          {metBtw ? (
+                            <input aria-label="Inkoop per eenheid incl. btw" inputMode="decimal" value={r.inkoopIncl ?? inclTekst(r)} onChange={(e) => zet(i, { inkoopIncl: e.target.value, inkoop: exclUit(e.target.value, r.btw) })} placeholder="€" className={`${klein} w-[90px]`} />
+                          ) : (
+                            <input aria-label="Inkoop per eenheid" inputMode="decimal" value={r.inkoop} onChange={(e) => zet(i, { inkoop: e.target.value })} placeholder="€" className={`${klein} w-[90px]`} />
+                          )}
+                          {metBtw && r.inkoop && <span className="block text-[11px] text-gedempt">{r.inkoop} excl.</span>}
+                        </td>
                         <td className="py-1.5 pr-2"><input aria-label="Opslag procent" inputMode="decimal" value={r.opslag} onChange={(e) => zet(i, { opslag: e.target.value })} className={`${klein} w-[64px]`} /></td>
                         <td className="py-1.5 pr-2"><input aria-label="Afval procent" inputMode="decimal" value={r.afval} onChange={(e) => zet(i, { afval: e.target.value })} className={`${klein} w-[56px]`} /></td>
                         <td className="py-1.5 pr-2">
-                          <select aria-label="Btw" value={r.btw} onChange={(e) => zet(i, { btw: Number(e.target.value) })} className={`${klein} bg-grond`}>
+                          <select aria-label="Btw" value={r.btw} onChange={(e) => { const btw = Number(e.target.value); zet(i, metBtw && r.inkoopIncl ? { btw, inkoop: exclUit(r.inkoopIncl, btw) } : { btw }) }} className={`${klein} bg-grond`}>
                             {BTW_TARIEVEN.map((b) => (
                               <option key={b} value={b}>{b / 100} %</option>
                             ))}
                           </select>
                         </td>
                         <td className={`py-1.5 pr-2 text-right crm-cijfer whitespace-nowrap ${r.optioneel ? "text-gedempt" : ""}`}>
-                          {uit ? toonEuro(uit.verkoop) : "—"}
+                          {uit ? toonEuro(metBtw ? plusProcent(uit.verkoop, r.btw) : uit.verkoop) : "—"}
                           {uit && uit.brutoHoeveelheid !== uit.hoeveelheid && <span className="block text-[11px] text-gedempt">{toonDecimaal(uit.brutoHoeveelheid, 3)} {r.eenheid} incl. afval</span>}
                         </td>
                         <td className="py-1.5 whitespace-nowrap">

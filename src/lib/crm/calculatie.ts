@@ -28,7 +28,7 @@ export const SOORTEN = {
 export type Soort = keyof typeof SOORTEN
 export const isSoort = (s: string): s is Soort => s in SOORTEN
 
-export const EENHEDEN = ["st", "m²", "m³", "m", "uur", "dag", "kg", "ton", "bos", "post"] as const
+export const EENHEDEN = ["st", "m²", "m³", "m", "uur", "dag", "kg", "ton", "bos", "BB", "post"] as const
 
 export const BTW_TARIEVEN: Bp[] = [2100, 900, 0]
 

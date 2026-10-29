@@ -35,6 +35,8 @@ export const procent = (waarde: number, bp: Bp): number => deel(waarde * bp, HON
 
 /** Waarde plus een percentage: 55 m² + 7 % = 58,85 m². */
 export const plusProcent = (waarde: number, bp: Bp): number => deel(waarde * (HONDERD_PROCENT + bp), HONDERD_PROCENT)
+/** Terug van een bedrag incl. btw naar excl.: € 48,40 bij 21 % → € 40,00. */
+export const zonderProcent = (waarde: number, bp: Bp): number => deel(waarde * HONDERD_PROCENT, HONDERD_PROCENT + bp)
 
 /** Verhouding a/b als bp (marge, opslag). 0 als b 0 is. */
 export const verhouding = (a: number, b: number): Bp => (b ? deel(a * HONDERD_PROCENT, b) : 0)
