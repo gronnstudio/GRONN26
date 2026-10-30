@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test"
 import { deel, leesCenten, leesMilli, plusProcent, zonderProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
-import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
+import { dubbelen, ontdubbeld, margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
 import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
@@ -369,4 +369,10 @@ test("rekenblad met btw: incl. invoeren, excl. rekenen, big bags kiezen", async 
   await expect(regel.getByText("€ 23,00")).toBeVisible()
   await regel.getByRole("button", { name: "los" }).click()
   await expect(regel.getByLabel("Eenheid", { exact: true })).toHaveValue("m³")
+})
+
+test("dubbele regels vinden en alleen de laatste houden", () => {
+  const r = [{ omschrijving: "Hekwerk", v: 1 }, { omschrijving: "Zand", v: 1 }, { omschrijving: "hekwerk ", v: 2 }, { omschrijving: "", v: 0 }, { omschrijving: "", v: 0 }]
+  expect(dubbelen(r)).toEqual([["hekwerk", 2]])
+  expect(ontdubbeld(r).map((x) => x.v)).toEqual([1, 2, 0, 0])
 })

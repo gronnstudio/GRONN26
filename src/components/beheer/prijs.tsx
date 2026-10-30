@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState, useTransition } from "react"
-import { BTW_TARIEVEN, EENHEDEN, SOORTEN, STANDAARD, isSoort, nieuweRegel, reken, tekort, wegzetten, type Regel, type Soort } from "@/lib/crm/calculatie"
+import { BTW_TARIEVEN, EENHEDEN, dubbelen, ontdubbeld, SOORTEN, STANDAARD, isSoort, nieuweRegel, reken, tekort, wegzetten, type Regel, type Soort } from "@/lib/crm/calculatie"
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
@@ -165,6 +165,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     if (item && item.id !== regels[i].catalogusId) zet(i, { ...naarInvul(alsRegel(item, leesMilli(regels[i].hoeveelheid) ?? 1000)), id: regels[i].id, meetstaat: regels[i].meetstaat, ...(regels[i].meetstaat ? { afval: "0" } : {}) })
     else zet(i, { omschrijving: tekst })
   }
+  const dubbel = dubbelen(regels)
+  const ontdubbel = () => setRegels(ontdubbeld(regels))
   const voegToe = (r: Regel) => setRegels((oud) => [...oud.filter((x) => x.omschrijving.trim() || x.inkoop.trim()), naarInvul(r)])
 
   const urenMilli = Math.max(0, leesMilli(uren) ?? 0)
@@ -398,7 +400,16 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 ))}
               </datalist>
             </div>
-            <button type="button" onClick={() => setRegels([...regels, leeg()])} className="mt-3 crm-knop-rand">+ Regel</button>
+            {dubbel.length > 0 && (
+              <p role="status" className="m-0 mt-3 text-[13px]">
+                Dubbel in de lijst: {dubbel.map(([naam, n]) => `${naam} ${n}×`).join(", ")}.{" "}
+                <button type="button" onClick={ontdubbel} className="crm-knop-rand">Houd alleen de laatste</button>
+              </p>
+            )}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button type="button" onClick={() => setRegels([...regels, leeg()])} className="crm-knop-rand">+ Regel</button>
+              <button type="button" onClick={() => window.confirm("Alle regels wissen?") && setRegels([leeg()])} className="crm-knop-rand">Alles wissen</button>
+            </div>
             <p className="m-0 mt-2 text-[12px] text-gedempt">
               Kies een naam uit de catalogus en prijs en eenheid vullen zich in. ★ zet de prijs in de catalogus, zodat je hem de volgende keer weet. Planten 9 % btw, de rest 21 %.
             </p>
