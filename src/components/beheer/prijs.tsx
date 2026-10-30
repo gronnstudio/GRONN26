@@ -76,6 +76,12 @@ const naarRegel = (r: Invul): Regel => ({
   meetstaat: r.meetstaat,
   schatting: r.schatting,
 })
+// Drie secties in het rekenblad (Nick, 30 okt 2026). De soort van een regel bepaalt de sectie; transport, afvoer en de rest vallen onder materialen.
+const SECTIES: { id: string; naam: string; enkel: string; soort: Soort; bij: (s: Soort) => boolean }[] = [
+  { id: "materialen", naam: "Materialen", enkel: "Materiaal", soort: "materiaal", bij: (s) => s !== "planten" && s !== "machine" },
+  { id: "planten", naam: "Planten", enkel: "Plant", soort: "planten", bij: (s) => s === "planten" },
+  { id: "machines", naam: "Machines", enkel: "Machine", soort: "machine", bij: (s) => s === "machine" },
+]
 const leeg = () => naarInvul(nieuweRegel("materiaal", { hoeveelheid: 1000 }))
 
 export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten?: KlantKeuze[]; catalogus?: Item[]; begin?: Begin }) {
@@ -299,7 +305,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
 
           <section className="min-w-0">
             <div className="flex items-baseline justify-between gap-4">
-              <p className={`${lbl} m-0`}>2 · Materiaal, machines en overig, inkoop {metBtw ? "incl." : "excl."} btw</p>
+              <p className={`${lbl} m-0`}>2 · Materialen, planten en machines, inkoop {metBtw ? "incl." : "excl."} btw</p>
               <label className="ml-auto flex items-center gap-1.5 text-[13px]">
                 <input type="checkbox" checked={metBtw} onChange={(e) => kiesBtw(e.target.checked)} /> Bedragen met btw
               </label>
@@ -326,8 +332,22 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <th className="py-1 font-semibold"><span className="sr-only">Acties</span></th>
                   </tr>
                 </thead>
-                <tbody>
-                  {regels.map((r, i) => {
+                {SECTIES.map((sec) => {
+                  const hier = regels.map((r, i) => [r, i] as const).filter(([r]) => sec.bij(r.soort))
+                  const som = hier.reduce((t, [r]) => {
+                    const x = [...u.regels].find((y) => y.id === r.id)
+                    return t + (x ? (metBtw ? plusProcent(x.verkoop, r.btw) : x.verkoop) : 0)
+                  }, 0)
+                  return (
+                <tbody key={sec.id}>
+                  <tr className="border-t-2 border-inkt">
+                    <th colSpan={8} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
+                    <td className="pt-4 pb-1 pr-2 text-right crm-cijfer font-semibold">{hier.length ? toonEuro(som) : ""}</td>
+                    <td className="pt-4 pb-1">
+                      <button type="button" onClick={() => setRegels([...regels, naarInvul(nieuweRegel(sec.soort, { hoeveelheid: 1000 }))])} className="text-[12px] text-accent-tekst">+ {sec.enkel}</button>
+                    </td>
+                  </tr>
+                  {hier.map(([r, i]) => {
                     const uit = [...u.regels, ...u.optioneel].find((x) => x.id === r.id)
                     return (
                       <tr key={r.id} className="border-t border-lijn align-top">
@@ -393,6 +413,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     )
                   })}
                 </tbody>
+                  )
+                })}
               </table>
               <datalist id="eenheden">
                 {EENHEDEN.map((e) => (
@@ -407,7 +429,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               </p>
             )}
             <div className="mt-3 flex flex-wrap gap-2">
-              <button type="button" onClick={() => setRegels([...regels, leeg()])} className="crm-knop-rand">+ Regel</button>
               <button type="button" onClick={() => window.confirm("Alle regels wissen?") && setRegels([leeg()])} className="crm-knop-rand">Alles wissen</button>
             </div>
             <p className="m-0 mt-2 text-[12px] text-gedempt">
