@@ -69,8 +69,9 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
           </span>
         }
       >
-        <dl className="crm-paneel m-0 mr-2 grid grid-cols-3 divide-x divide-lijn">
+        <dl className="crm-paneel m-0 mr-2 grid grid-cols-2 divide-lijn sm:grid-cols-4 sm:divide-x">
           {[
+            [euro(g.akkoord), "akkoord"],
             [euro(g.gefactureerd), "gefactureerd"],
             [euro(g.betaald), "betaald"],
             [euro(g.open), "open"],
@@ -78,6 +79,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
             <div key={t} className="px-4 py-2">
               <dt className="crm-label">{t}</dt>
               <dd className={`crm-cijfer m-0 text-[15px] ${t === "open" && g.open > 0 ? "text-let" : ""}`}>{n}</dd>
+              {t === "akkoord" && g.teFactureren > 0 && <dd className="m-0 text-[11px] text-gedempt">nog {euro(g.teFactureren)} te factureren</dd>}
             </div>
           ))}
         </dl>
@@ -316,8 +318,8 @@ function Stukken({ k }: { k: Klant }) {
                 {s.link && (
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
-                    <a href={`/offerte/${s.link}`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Bekijk als klant ↗</a>
-                    <a href={`/offerte/${s.link}?specificatie=1`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Specificatie voor factuur ↗</a>
+                    <a href={`/offerte/${s.link}`} className="crm-knop-stil crm-knop-klein">Bekijk als klant</a>
+                    <a href={`/offerte/${s.link}?specificatie=1`} className="crm-knop-stil crm-knop-klein">Specificatie voor factuur</a>
                     {!s.rond && (
                       <form action={trekOfferteIn.bind(null, k.id, s.link)}>
                         <button className="crm-knop-stil crm-knop-klein">Intrekken</button>

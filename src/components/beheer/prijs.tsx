@@ -7,6 +7,7 @@ import { BTW_TARIEVEN, EENHEDEN, dubbelen, ontdubbeld, SOORTEN, STANDAARD, isSoo
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
+import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
@@ -488,15 +489,13 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             {!klantId ? "Kies een klant om te bewaren" : bewaart ? "Bewaren…" : versie ? `Bewaar als versie ${versie + 1}` : "Bewaar bij klant"}
           </button>
           {melding && <p role="status" className="m-0 -mt-2 text-[13px]">{melding}</p>}
-          <button type="button" onClick={() => window.print()} disabled={!u.verkoop} className="crm-knop-rand disabled:opacity-50">
-            Print of bewaar als PDF
-          </button>
+          <PdfKnoppen naam={`Calculatie ${titel || "GRØNN Studio"}`} doel=".calculatie-druk" uit={!u.verkoop} className="grid grid-cols-2 gap-2" />
           <p className="m-0 -mt-2 text-[12px] leading-[1.5] text-gedempt">De klant ziet alleen de prijzen, niet je inkoop, opslag of uren.</p>
         </aside>
       </div>
 
       {/* Wat de klant krijgt: alleen verkoopprijzen. Op het scherm verborgen. */}
-      <article className="hidden bg-white p-[18mm] text-[11pt] text-op-accent print:block">
+      <article className="calculatie-druk hidden bg-white p-[18mm] text-[11pt] text-op-accent print:block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="h-[22px] w-auto" />
         <h1 className="syne m-0 mt-10 text-[24pt] leading-[1.1]">{titel || "Prijsoverzicht"}</h1>

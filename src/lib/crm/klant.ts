@@ -293,8 +293,12 @@ export function geld(k: Klant) {
   const facturen = k.stukken.filter((s) => s.soort === "Factuur")
   const gefactureerd = facturen.reduce((t, s) => t + s.bedrag, 0)
   const betaald = facturen.filter((s) => s.rond).reduce((t, s) => t + s.bedrag, 0)
-  const offerte = k.stukken.filter((s) => s.soort === "Offerte").at(-1)?.bedrag
-  return { gefactureerd, betaald, open: Math.round((gefactureerd - betaald) * 100) / 100, offerte }
+  const offertes = k.stukken.filter((s) => s.soort === "Offerte")
+  const offerte = offertes.at(-1)?.bedrag
+  // Wat de klant heeft goedgekeurd; nog niet gefactureerd is het verschil met wat al op een factuur staat.
+  const akkoord = offertes.filter((s) => s.rond).reduce((t, s) => t + s.bedrag, 0)
+  const rond = (n: number) => Math.round(n * 100) / 100
+  return { akkoord, teFactureren: rond(Math.max(0, akkoord - gefactureerd)), gefactureerd, betaald, open: rond(gefactureerd - betaald), offerte }
 }
 
 /** De meest recente calculatieversie van een klant, als die er is. */

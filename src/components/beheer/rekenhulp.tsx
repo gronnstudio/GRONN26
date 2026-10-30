@@ -63,7 +63,7 @@ export function Rekenhulp({ catalogus, onRegel, onUren }: { catalogus: Item[]; o
 
   return (
     <section className="crm-paneel p-5">
-      <p className="m-0 text-[10px] font-semibold uppercase tracking-[.18em] text-gedempt">3 · Rekenhulp</p>
+      <p className="m-0 text-[10px] font-semibold uppercase tracking-[.18em] text-gedempt">4 · Rekenhulp</p>
       <div className="mt-3 flex flex-wrap items-end gap-3">
         <label className="grid gap-1 text-[13px]">
           Wat reken je uit?

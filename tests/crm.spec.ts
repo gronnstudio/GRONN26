@@ -189,7 +189,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await page.getByRole("link", { name: /Oprit/ }).first().click()
   await page.getByRole("button", { name: "Offerte met link maken (v2)" }).click()
   await expect(page).toHaveURL(/tab=stukken/)
-  const href = (await page.getByRole("link", { name: "Bekijk als klant ↗" }).getAttribute("href"))!
+  const href = (await page.getByRole("link", { name: "Bekijk als klant" }).getAttribute("href"))!
   expect(href).toMatch(/^\/offerte\/[A-Za-z0-9_-]{32}$/)
   const klant = await page.context().browser()!.newContext({ baseURL: "http://localhost:3210" })
   const kp = await klant.newPage()
@@ -386,7 +386,7 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   await expect(page.locator('input[value="Afgraven en grond afvoeren"]')).toBeVisible()
   const calcUrl = page.url()
   await page.getByRole("button", { name: "Offerte met link maken (v1)" }).click()
-  const href = (await page.getByRole("link", { name: "Bekijk als klant ↗" }).getAttribute("href"))!
+  const href = (await page.getByRole("link", { name: "Bekijk als klant" }).getAttribute("href"))!
   await page.goto(href)
   await expect(page.getByRole("heading", { name: "Planning" })).toBeVisible()
   await expect(page.getByText("Afgraven en grond afvoeren · 1,5 werkdagen")).toBeVisible()
