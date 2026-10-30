@@ -137,7 +137,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         return { ...naarInvul(nieuweRegel(soort, { omschrijving: x.wat, eenheid: "post", inkoop: totaal })), schatting: true }
       })
       // Opnieuw schatten vervangt de regels van de vorige schatting, in plaats van ze er nog eens onder te zetten.
-      if (extra.length) setRegels((oud) => [...oud.filter((r) => !r.schatting && (r.omschrijving.trim() || r.inkoop.trim())), ...extra])
+      setRegels((oud) => {
+        const rest = [...oud.filter((r) => !r.schatting && (r.omschrijving.trim() || r.inkoop.trim())), ...extra]
+        return rest.length ? rest : [leeg()]
+      })
     } catch (e) {
       setFout(e instanceof Error ? e.message : "Geen schatting gekregen.")
     } finally {
