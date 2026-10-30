@@ -543,3 +543,10 @@ html.en .t-en { display: contents; }
   .crm-link:hover { color: var(--accent-tekst); }
 }
 @media (prefers-reduced-motion: reduce) { .crm * { transition: none !important; } }
+
+/* Offerte via de privélink: bij printen of PDF alleen het blad, in de huisstijl van het briefpapier. */
+@media print {
+  body:has(.offerte-druk) { background: #fff !important; color: #202020 !important; }
+  body:has(.offerte-druk) > *:not(main), body:has(.offerte-druk) main > *:not(.offerte-druk) { display: none !important; }
+  .offerte-druk { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

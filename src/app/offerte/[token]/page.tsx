@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
+import { OfferteKnoppen } from "@/components/crm/offerte-knoppen"
 import { BUSINESS } from "@/lib/business"
 import { toonEuro } from "@/lib/crm/geld"
 import { leesOfferte, verlopen, type OffertePost } from "@/lib/crm/offerte"
@@ -21,8 +22,15 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
   const oud = o.status === "open" && verlopen(o)
 
   return (
-    <article className="mx-auto max-w-[860px] px-6 pt-[clamp(32px,6vw,72px)] pb-24 print:p-0">
-      <header className="flex flex-wrap items-start justify-between gap-6 border-b border-lijn pb-6">
+    <article className="offerte-druk mx-auto max-w-[860px] px-6 pt-[clamp(32px,6vw,72px)] pb-24 print:max-w-none print:p-0">
+      {/* De kop van het briefpapier (Brand Guide 2026): antraciet vlak, primair woordmerk, oranje regel. */}
+      <div className="-mx-6 rounded-b-[24px] bg-[#202020] px-6 pt-8 pb-7 sm:px-10 print:mx-0 print:px-[48px] print:pt-[40px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[36px] w-auto" />
+        <p className="m-0 mt-5 text-[11px] font-semibold tracking-[.18em] text-[#ff5b04] uppercase">Vijvers en natuurlijke tuinen · Stein en omgeving</p>
+      </div>
+      <div className="print:px-[48px]">
+      <header className="mt-8 flex flex-wrap items-start justify-between gap-6 border-b border-lijn pb-6">
         <div>
           <p className="lbl m-0 text-gedempt">Offerte · {o.nummer}</p>
           <h1 className="syne m-0 mt-2 text-[clamp(30px,4.4vw,48px)] leading-[1.05] tracking-[-.03em]">{o.titel}</h1>
@@ -73,6 +81,8 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
 
       {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel} />}
 
+      <OfferteKnoppen naam={`Offerte ${o.nummer} GRØNN Studio`} />
+
       <section aria-labelledby="akkoord-kop" className="mt-12 rounded-[16px] border border-lijn bg-vlak p-6 print:hidden">
         <h2 id="akkoord-kop" className="syne m-0 text-[24px]">
           {o.status === "akkoord" ? "Akkoord, dank je wel" : o.status === "ingetrokken" ? "Deze offerte is ingetrokken" : oud ? "Deze offerte is verlopen" : "Akkoord?"}
@@ -104,11 +114,28 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
         )}
       </section>
 
-      <footer className="mt-10 text-[13px] leading-[1.6] text-gedempt">
-        {BUSINESS.name} · {BUSINESS.address.street}, {BUSINESS.address.postalCode} {BUSINESS.address.city} · KvK {BUSINESS.kvk} · btw {BUSINESS.btw}
-        <br />
-        Vragen? <a className="lnk" href={BUSINESS.emailHref}>{BUSINESS.email}</a> · <a className="lnk" href={BUSINESS.phoneHref}>{BUSINESS.phone}</a>
+      <footer className="mt-12 grid gap-x-8 gap-y-3 border-t border-lijn pt-5 text-[13px] leading-[1.6] sm:grid-cols-3 print:grid-cols-3">
+        <p className="m-0">
+          <strong>{BUSINESS.name}</strong>
+          <br />
+          {BUSINESS.address.street}
+          <br />
+          {BUSINESS.address.postalCode} {BUSINESS.address.city}
+        </p>
+        <p className="m-0">
+          <span className="font-semibold text-accent-tekst">Telefoon</span> <a href={BUSINESS.phoneHref}>{BUSINESS.phone}</a>
+          <br />
+          <span className="font-semibold text-accent-tekst">E-mail</span> <a href={BUSINESS.emailHref}>{BUSINESS.email}</a>
+        </p>
+        <p className="m-0">
+          <span className="font-semibold text-accent-tekst">KvK</span> {BUSINESS.kvk}
+          <br />
+          <span className="font-semibold text-accent-tekst">Btw</span> {BUSINESS.btw}
+        </p>
+        <p className="m-0 text-gedempt sm:col-span-3 print:col-span-3">Op al onze offertes en werkzaamheden zijn onze algemene voorwaarden van toepassing: gronn.studio/voorwaarden</p>
       </footer>
+      </div>
+      <div className="mt-8 hidden h-[10px] bg-[#ff5b04] print:block" />
     </article>
   )
 }
