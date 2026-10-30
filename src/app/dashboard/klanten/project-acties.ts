@@ -33,7 +33,7 @@ export async function startProject(klantId: string, calcId: string, nr: number) 
         return x
       }
       pid = nieuw.id
-      return log({ ...x, fase: ["Akkoord", "Gepland", "Offerte"].includes(x.fase) ? "Uitvoering" : x.fase, projecten: [...x.projecten, nieuw] }, `Project "${c.titel}" gestart uit versie ${v.nr}`)
+      return log({ ...x, fase: ["Akkoord", "Gepland", "Offerte", "Opgeleverd"].includes(x.fase) ? "Uitvoering" : x.fase, projecten: [...x.projecten, nieuw] }, `Project "${c.titel}" gestart uit versie ${v.nr}`)
     }),
   )
   revalidatePath("/dashboard", "layout")
@@ -79,7 +79,9 @@ export async function projectActie(klantId: string, pid: string, soort: Soort, d
       const nieuw = normaliseerProject(wijzig(oud))
       const uit = { ...k, projecten: k.projecten.map((p) => (p.id === pid ? nieuw : p)) }
       if (soort !== "opgeleverd") return uit
-      return nieuw.opgeleverd ? log({ ...uit, fase: "Opgeleverd" }, `Project "${nieuw.titel}" opgeleverd`) : log({ ...uit, fase: "Uitvoering" }, `Project "${nieuw.titel}" weer in uitvoering`)
+      // De klant is pas klaar als elk project is opgeleverd.
+      const allesKlaar = uit.projecten.every((p) => p.opgeleverd)
+      return nieuw.opgeleverd ? log(allesKlaar ? { ...uit, fase: "Opgeleverd" } : uit, `Project "${nieuw.titel}" opgeleverd`) : log({ ...uit, fase: "Uitvoering" }, `Project "${nieuw.titel}" weer in uitvoering`)
     }),
   )
   revalidatePath(`/dashboard/klanten/${klantId}`, "layout")
