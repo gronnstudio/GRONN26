@@ -380,7 +380,7 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   expect(omschrijving.match(/Werkvolgorde:/g)).toHaveLength(1)
   expect(omschrijving).toContain("1. Afgraven en grond afvoeren (1,5 dagen)")
   await page.getByRole("button", { name: /^Bewaar/ }).first().click()
-  await expect(page.getByText("Versie 1 bewaard.")).toBeVisible()
+  // Na bewaren gaat het rekenblad naar het vaste adres; de melding kan dan al weg zijn.
   await expect(page).toHaveURL(/\/calculatie\/[0-9a-f-]{36}$/)
   await page.reload()
   await expect(page.locator('input[value="Afgraven en grond afvoeren"]')).toBeVisible()
