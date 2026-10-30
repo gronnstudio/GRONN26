@@ -6,6 +6,7 @@ import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { nacalculatie } from "@/lib/crm/project"
+import { eisEigenaar } from "@/lib/crm/toegang"
 import { projectActie } from "../../../project-acties"
 
 // Een project in uitvoering: taken uit de planning afvinken, uren en meerwerk
@@ -20,13 +21,13 @@ const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe
 const uren = (m: number) => `${toonDecimaal(m, 3)} uur`
 
 export default async function ProjectPagina({ params }: { params: Promise<{ id: string; pid: string }> }) {
+  await eisEigenaar()
   const { id, pid } = await params
   const k = (await leesKlanten()).find((x) => x.id === id)
   const p = k?.projecten.find((x) => x.id === pid)
   if (!k || !p) notFound()
   const c = k.calculaties.find((x) => x.id === p.calculatieId)
-  const v = c?.versies.find((x) => x.nr === p.versie)
-  const n = nacalculatie(p, v)
+  const n = nacalculatie(p)
   const actie = (soort: Parameters<typeof projectActie>[2]) => projectActie.bind(null, k.id, p.id, soort)
   const Vink = ({ soort, regel, aan, label }: { soort: "taak" | "punt-klaar" | "meerwerk-akkoord"; regel: string; aan: boolean; label: string }) => (
     <form action={actie(soort)}>

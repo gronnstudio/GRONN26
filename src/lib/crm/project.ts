@@ -1,4 +1,3 @@
-import { reken } from "./calculatie"
 import { deel, type Centen, type Milli } from "./geld"
 import type { PlanFase } from "./planning"
 
@@ -24,12 +23,15 @@ export type Project = {
   meerwerk: Meerwerk[]
   oplevering: Punt[]
   opgeleverd?: string
+  /** De begroting bij de start, zodat de nacalculatie blijft kloppen als de calculatie later verandert of verdwijnt. */
+  begroot: { uren: Milli; winst: Centen }
 }
 
 const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
 
-export function nieuwProject(c: { id: string; titel: string }, v: { nr: number; planning?: PlanFase[] }): Project {
+export function nieuwProject(c: { id: string; titel: string }, v: { nr: number; planning?: PlanFase[]; uren: Milli; winst: Centen }): Project {
   return {
+    begroot: { uren: v.uren, winst: v.winst },
     id: crypto.randomUUID(),
     titel: c.titel,
     calculatieId: c.id,
@@ -65,6 +67,7 @@ export function normaliseerProject(p: Partial<Project>): Project {
     meerwerk: lijst(p.meerwerk, (r) => (t(r.omschrijving, 200) ? { id: id(r.id), datum: datum(r.datum), omschrijving: t(r.omschrijving, 200), bedrag: geheel(r.bedrag, 1e10), akkoord: r.akkoord === true } : null), 200),
     oplevering: lijst(p.oplevering, (r) => (t(r.tekst, 200) ? { id: id(r.id), tekst: t(r.tekst, 200), klaar: r.klaar === true } : null), 200),
     ...(p.opgeleverd ? { opgeleverd: datum(p.opgeleverd) } : {}),
+    begroot: { uren: geheel(p.begroot?.uren, 1e9), winst: Number.isSafeInteger(p.begroot?.winst) ? (p.begroot!.winst as number) : 0 },
   }
 }
 
@@ -82,20 +85,20 @@ export type Nacalculatie = {
   puntenOpen: number
 }
 
-/** Begroot (uit de calculatieversie) tegenover werkelijk (uit het project). */
-export function nacalculatie(p: Project, v?: { uren: Milli; uurtarief: Centen; regels: Parameters<typeof reken>[0]["regels"]; onvoorzien: number; korting: number }): Nacalculatie {
+/** Begroot (de momentopname bij de start) tegenover werkelijk (uit het project). */
+export function nacalculatie(p: Project): Nacalculatie {
   const urenWerkelijk = p.uren.reduce((s, u) => s + u.uren, 0)
-  const u = v ? reken(v) : null
+  const { uren, winst } = p.begroot
   return {
-    urenBegroot: v?.uren ?? 0,
+    urenBegroot: uren,
     urenWerkelijk,
     dagenBegroot: p.taken.reduce((s, x) => s + x.dagen, 0),
     takenKlaar: p.taken.filter((x) => x.klaar).length,
     taken: p.taken.length,
     meerwerkAkkoord: p.meerwerk.filter((m) => m.akkoord).reduce((s, m) => s + m.bedrag, 0),
     meerwerkOpen: p.meerwerk.filter((m) => !m.akkoord).reduce((s, m) => s + m.bedrag, 0),
-    perUurBegroot: u && v && v.uren ? u.perUur : null,
-    perUurWerkelijk: u && urenWerkelijk ? deel(u.winst * 1000, urenWerkelijk) : null,
+    perUurBegroot: uren ? deel(winst * 1000, uren) : null,
+    perUurWerkelijk: urenWerkelijk ? deel(winst * 1000, urenWerkelijk) : null,
     puntenOpen: p.oplevering.filter((x) => !x.klaar).length,
   }
 }

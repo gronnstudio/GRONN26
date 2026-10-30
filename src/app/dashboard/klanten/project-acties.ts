@@ -21,14 +21,22 @@ export async function startProject(klantId: string, calcId: string, nr: number) 
   const c = k?.calculaties.find((x) => x.id === calcId)
   const v = c?.versies.find((x) => x.nr === nr)
   if (!k || !c || !v) return
-  const bestaand = k.projecten.find((p) => p.calculatieId === c.id)
-  let pid = bestaand?.id
-  if (!bestaand) {
-    const p = nieuwProject(c, v)
-    pid = p.id
-    await wijzigKlanten((lijst) => lijst.map((x) => (x.id === k.id ? log({ ...x, fase: ["Akkoord", "Gepland", "Offerte"].includes(x.fase) ? "Uitvoering" : x.fase, projecten: [...x.projecten, p] }, `Project "${c.titel}" gestart uit versie ${v.nr}`) : x)))
-    revalidatePath("/dashboard", "layout")
-  }
+  const nieuw = nieuwProject(c, v)
+  let pid = nieuw.id
+  // De controle staat in de wijziging zelf: twee klikken tegelijk maken zo nooit twee projecten.
+  await wijzigKlanten((lijst) =>
+    lijst.map((x) => {
+      if (x.id !== k.id) return x
+      const bestaand = x.projecten.find((p) => p.calculatieId === c.id)
+      if (bestaand) {
+        pid = bestaand.id
+        return x
+      }
+      pid = nieuw.id
+      return log({ ...x, fase: ["Akkoord", "Gepland", "Offerte"].includes(x.fase) ? "Uitvoering" : x.fase, projecten: [...x.projecten, nieuw] }, `Project "${c.titel}" gestart uit versie ${v.nr}`)
+    }),
+  )
+  revalidatePath("/dashboard", "layout")
   redirect(`/dashboard/klanten/${k.id}/project/${pid}`)
 }
 
@@ -70,7 +78,8 @@ export async function projectActie(klantId: string, pid: string, soort: Soort, d
       if (!oud) return k
       const nieuw = normaliseerProject(wijzig(oud))
       const uit = { ...k, projecten: k.projecten.map((p) => (p.id === pid ? nieuw : p)) }
-      return soort === "opgeleverd" && nieuw.opgeleverd ? log({ ...uit, fase: "Opgeleverd" }, `Project "${nieuw.titel}" opgeleverd`) : uit
+      if (soort !== "opgeleverd") return uit
+      return nieuw.opgeleverd ? log({ ...uit, fase: "Opgeleverd" }, `Project "${nieuw.titel}" opgeleverd`) : log({ ...uit, fase: "Uitvoering" }, `Project "${nieuw.titel}" weer in uitvoering`)
     }),
   )
   revalidatePath(`/dashboard/klanten/${klantId}`, "layout")
