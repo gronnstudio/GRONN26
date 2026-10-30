@@ -6,7 +6,7 @@ import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catal
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
-import { schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
+import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -245,6 +245,10 @@ test.describe("catalogus en klanten", () => {
     expect(startDagen(plan)).toEqual([1, 2.5, 4, 10, 11])
     expect(totaalDagen(plan)).toBe(10.5)
     expect(werkplan([zone({})])).toEqual([])
+    const met = metWerkvolgorde("Oude tegels eruit.", plan)
+    const nogmaals = metWerkvolgorde(`${met}\n\nSchutting blijft staan.`, plan.slice(0, 1))
+    expect(nogmaals.match(/Werkvolgorde:/g)).toHaveLength(1)
+    expect(nogmaals).toMatch(/^Oude tegels eruit\.\n\nWerkvolgorde:\n1\. Afgraven[\s\S]*weer\.\n\nSchutting blijft staan\.$/)
     expect(schoonPlan([{ naam: "  Graven ", dagen: 0.3 }, { naam: "" }, { naam: "Lang", dagen: 99 }]).map((f) => [f.naam, f.dagen])).toEqual([["Graven", 0.5], ["Lang", 60]])
   })
   test("dubbele klant op mail, nummer of naam", () => {

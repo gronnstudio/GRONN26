@@ -58,6 +58,14 @@ export function alsWerkomschrijving(plan: PlanFase[]) {
   return ["Werkvolgorde:", ...plan.map((f, i) => `${i + 1}. ${f.naam} (${dagTekst(f.dagen)})`), `Samen ongeveer ${dagTekst(totaalDagen(plan))} werk, afhankelijk van het weer.`].join("\n")
 }
 
+const BLOK = /Werkvolgorde:\n[\s\S]*?afhankelijk van het weer\./
+
+/** De werkvolgorde in de werkomschrijving zetten: een eerder blok wordt vervangen, tekst ervoor en erna blijft staan. */
+export function metWerkvolgorde(tekst: string, plan: PlanFase[]) {
+  const blok = alsWerkomschrijving(plan)
+  return BLOK.test(tekst) ? tekst.replace(BLOK, blok) : [tekst.trim(), blok].filter(Boolean).join("\n\n")
+}
+
 /** Een planning uit de browser of opslag: wat niet klopt valt weg of wordt begrensd. */
 export function schoonPlan(v: unknown): PlanFase[] {
   if (!Array.isArray(v)) return []

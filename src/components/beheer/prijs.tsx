@@ -9,7 +9,7 @@ import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zon
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
-import type { PlanFase } from "@/lib/crm/planning"
+import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
 
 // Het rekenblad: van uren en inkoop naar een prijs waar genoeg aan overblijft
 // (eigenaar, 29 okt 2026). Sinds de CRM-bouw (zelfde dag) rekent het met
@@ -395,7 +395,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             </p>
           </section>
 
-          <Planning plan={plan} onPlan={setPlan} voorstel={begin?.planVoorstel} onWerkomschrijving={(t) => setBeschrijving((b) => [b.split("Werkvolgorde:")[0].trim(), t].filter(Boolean).join("\n\n"))} />
+          <Planning plan={plan} onPlan={setPlan} voorstel={begin?.planVoorstel} onWerkomschrijving={(p) => setBeschrijving((b) => metWerkvolgorde(b, p))} />
 
           <Rekenhulp catalogus={catalogus} onRegel={voegToe} onUren={(m) => setUren(toonDecimaal(urenMilli + m, 3))} />
         </div>

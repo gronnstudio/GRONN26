@@ -1,11 +1,11 @@
 "use client"
 
-import { alsWerkomschrijving, startDagen, totaalDagen, type PlanFase } from "@/lib/crm/planning"
+import { startDagen, totaalDagen, type PlanFase } from "@/lib/crm/planning"
 
 // De werkplanning in het rekenblad: fasen met werkdagen, machines en wat er
 // geleverd moet worden. "Uit de meetstaat" zet het voorstel van de code neer;
 // daarna is alles met de hand aan te passen en gaat het mee met de versie.
-export function Planning({ plan, onPlan, voorstel, onWerkomschrijving }: { plan: PlanFase[]; onPlan: (p: PlanFase[]) => void; voorstel?: PlanFase[]; onWerkomschrijving: (tekst: string) => void }) {
+export function Planning({ plan, onPlan, voorstel, onWerkomschrijving }: { plan: PlanFase[]; onPlan: (p: PlanFase[]) => void; voorstel?: PlanFase[]; onWerkomschrijving: (plan: PlanFase[]) => void }) {
   const zet = (i: number, d: Partial<PlanFase>) => onPlan(plan.map((f, j) => (j === i ? { ...f, ...d } : f)))
   const start = startDagen(plan)
   return (
@@ -55,7 +55,7 @@ export function Planning({ plan, onPlan, voorstel, onWerkomschrijving }: { plan:
           + Fase
         </button>
         {plan.length > 0 && (
-          <button type="button" onClick={() => onWerkomschrijving(alsWerkomschrijving(plan.filter((f) => f.naam.trim())))} className="crm-knop-rand">
+          <button type="button" onClick={() => onWerkomschrijving(plan.filter((f) => f.naam.trim()))} className="crm-knop-rand">
             Zet in werkomschrijving
           </button>
         )}
