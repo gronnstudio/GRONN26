@@ -452,7 +452,9 @@ html.en .t-en { display: contents; }
    Eigenaar: "het moest dashboard helemaal vervangen door een nieuw systeem"
    en de masterprompt CRM: licht = warm crème, gebroken wit, antraciet en
    botanisch groen; donker = diep houtskool, gelaagd antraciet, warm wit en
-   gedempt groen. Een eigen identiteit, los van de site: daarom eigen tokens
+   gedempt groen. Sinds 30 okt 2026 (Nick: "meer accent oranje") is het
+   accent het merkoranje #FF5B04 met antraciet erop (5,2:1), oranje tekst
+   #A33A00 (5,8:1); "te laat" werd rood #B3261E (5,7:1). Een eigen identiteit, los van de site: daarom eigen tokens
    onder .crm, sterker dan html.plan (0,2,0 tegen 0,1,1), zodat Layout
    Tuinplan het systeem niet blauw kleurt. Groen = handelen en waar je bent;
    oranje (--let) = er moet iets gebeuren (te laat, open bedrag). Paren
@@ -468,12 +470,12 @@ html.en .t-en { display: contents; }
   --voorbeeld: #8a8578;
   --lijn: #e0d9ca;
   --lijn-sterk: #cbc2b0;
-  --accent: #2f6a4f;
-  --accent-tekst: #2a5f47;
-  --op-accent: #ffffff;
-  --accent-zacht: rgb(47 106 79 / 0.1);
-  --let: #b84000;
-  --let-zacht: rgb(255 91 4 / 0.09);
+  --accent: #ff5b04;
+  --accent-tekst: #a33a00;
+  --op-accent: #202020;
+  --accent-zacht: rgb(255 91 4 / 0.12);
+  --let: #b3261e;
+  --let-zacht: rgb(179 38 30 / 0.09);
   --oranje: #b84000;
   --oranje-tekst: #b84000;
   color-scheme: light;
@@ -488,12 +490,12 @@ html.en .t-en { display: contents; }
   --voorbeeld: #7d796f;
   --lijn: #33322e;
   --lijn-sterk: #46443e;
-  --accent: #8fbf9f;
-  --accent-tekst: #9fcdaf;
-  --op-accent: #13231a;
-  --accent-zacht: rgb(143 191 159 / 0.12);
-  --let: #ff8a4c;
-  --let-zacht: rgb(255 138 76 / 0.1);
+  --accent: #ff7a2e;
+  --accent-tekst: #ff9a5c;
+  --op-accent: #1a1a18;
+  --accent-zacht: rgb(255 122 46 / 0.14);
+  --let: #ff8a80;
+  --let-zacht: rgb(255 138 128 / 0.1);
   --oranje: #ff8a4c;
   --oranje-tekst: #ff8a4c;
   color-scheme: dark;
