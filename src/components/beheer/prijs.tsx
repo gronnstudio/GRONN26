@@ -8,6 +8,8 @@ import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
+import { Planning } from "@/components/crm/planning"
+import type { PlanFase } from "@/lib/crm/planning"
 
 // Het rekenblad: van uren en inkoop naar een prijs waar genoeg aan overblijft
 // (eigenaar, 29 okt 2026). Sinds de CRM-bouw (zelfde dag) rekent het met
@@ -36,7 +38,7 @@ const isBigBag = (eenheid: string) => /^bb$|big ?bag/i.test(eenheid.trim())
 const BB_KEUZES: [string, string][] = [["½", "0,5"], ["1", "1"], ["2", "2"], ["3", "3"]]
 
 export type KlantKeuze = { id: string; naam: string; tuinen: { id: string; naam: string }[] }
-export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; regels: Regel[]; nr?: number }
+export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; regels: Regel[]; nr?: number; planning?: PlanFase[]; planVoorstel?: PlanFase[] }
 
 const lbl = "crm-label"
 const veld = "crm-veld"
@@ -87,6 +89,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [onvoorzien, setOnvoorzien] = useState(toonDecimaal(begin?.onvoorzien ?? 0, 2))
   const [regels, setRegels] = useState<Invul[]>(begin?.regels.length ? begin.regels.map(naarInvul) : [leeg()])
   const [beschrijving, setBeschrijving] = useState(begin?.beschrijving ?? "")
+  const [plan, setPlan] = useState<PlanFase[]>(begin?.planning ?? [])
   const [schatting, setSchatting] = useState<Schatting | null>(null)
   const [bezig, setBezig] = useState(false)
   const [fout, setFout] = useState("")
@@ -171,7 +174,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const bewaar = () =>
     start(async () => {
       setMelding("")
-      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, ...invoer })
+      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, ...invoer })
       if ("fout" in uit) return setMelding(uit.fout)
       setCalcId(uit.id)
       setVersie(uit.nr)
@@ -391,6 +394,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               Kies een naam uit de catalogus en prijs en eenheid vullen zich in. ★ zet de prijs in de catalogus, zodat je hem de volgende keer weet. Planten 9 % btw, de rest 21 %.
             </p>
           </section>
+
+          <Planning plan={plan} onPlan={setPlan} voorstel={begin?.planVoorstel} onWerkomschrijving={(t) => setBeschrijving((b) => [b.split("Werkvolgorde:")[0].trim(), t].filter(Boolean).join("\n\n"))} />
 
           <Rekenhulp catalogus={catalogus} onRegel={voegToe} onUren={(m) => setUren(toonDecimaal(urenMilli + m, 3))} />
         </div>

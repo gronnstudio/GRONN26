@@ -1,3 +1,4 @@
+import { schoonPlan, type PlanFase } from "./planning"
 import { schoonRegel, type Regel } from "./calculatie"
 import type { Bp, Centen, Milli } from "./geld"
 import { INTAKE_SOORTEN, STANDAARD, ZONE_SOORTEN, vraagMap, type IntakeSoort, type Zone } from "./vragenlijst"
@@ -103,6 +104,8 @@ export type Versie = {
   onvoorzien: Bp
   korting: Bp
   regels: Regel[]
+  /** Werkplanning per fase (fase 5); ontbreekt bij oudere versies. */
+  planning?: PlanFase[]
   /** Momentopname van de uitkomst, voor lijsten zonder opnieuw te rekenen. */
   totaal: Centen
   winst: Centen
@@ -238,6 +241,7 @@ function normaliseerCalculatie(c: Partial<Calculatie>): Calculatie {
     versies: (Array.isArray(c.versies) ? c.versies : []).map((v) => ({
       ...v,
       regels: (v.regels ?? []).map((r) => schoonRegel(r as Regel & Record<string, unknown>)),
+      ...(v.planning ? { planning: schoonPlan(v.planning) } : {}),
     })),
   }
 }

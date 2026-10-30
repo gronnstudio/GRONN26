@@ -6,6 +6,7 @@ import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catal
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
+import { schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -230,6 +231,21 @@ test.describe("catalogus en klanten", () => {
     const klinker = nieuwItem({ naam: "BKK klinker", eenheid: "m²", inkoop: 1570, afval: 500 })
     const k = naarMeetRegel(per["Bestrating"], [klinker])
     expect(k).toMatchObject({ hoeveelheid: 73500, afval: 0, meetstaat: per["Bestrating"].zoneId })
+  })
+  test("werkplan uit de meetstaat: fasen, dagen en startdagen", () => {
+    const zone = (x: Partial<Parameters<typeof meetstaat>[0][number]>) => ({ id: crypto.randomUUID(), naam: "Zone A", soort: "Terras" as const, lengte: "", breedte: "", oppervlak: "", diepte: "", notitie: "", ...x })
+    const plan = werkplan([zone({ lengte: "7", breedte: "10" }), zone({ soort: "Border", oppervlak: "20" })])
+    expect(plan.map((f) => [f.naam, f.dagen])).toEqual([
+      ["Afgraven en grond afvoeren", 1.5],
+      ["Fundering en straatlaag", 1.5],
+      ["Opsluitbanden en bestraten", 6],
+      ["Beplanting", 1],
+      ["Opruimen en opleveren", 0.5],
+    ])
+    expect(startDagen(plan)).toEqual([1, 2.5, 4, 10, 11])
+    expect(totaalDagen(plan)).toBe(10.5)
+    expect(werkplan([zone({})])).toEqual([])
+    expect(schoonPlan([{ naam: "  Graven ", dagen: 0.3 }, { naam: "" }, { naam: "Lang", dagen: 99 }]).map((f) => [f.naam, f.dagen])).toEqual([["Graven", 0.5], ["Lang", 60]])
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]

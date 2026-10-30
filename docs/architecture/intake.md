@@ -268,3 +268,18 @@ en de bevindingen van de open tuin. Er komt geen tweede chat.
 Elke fase is een eigen PR met tests, en wordt pas samengevoegd als alles
 groen is. Het bestaande dashboard blijft werken: oude opnames worden bij het
 lezen omgezet, niet in één keer.
+
+## Gebouwd in fase 5
+
+- `src/lib/crm/planning.ts`: `werkplan(zones)` maakt uit de meetstaat fasen
+  (afgraven, fundering, bestraten, vijver, grond en gazon, beplanting,
+  opleveren) met werkdagen, machines en levering. De dagproducties staan in
+  `PER_DAG` en bij elke fase als uitleg; het zijn aannames voor één man met
+  machine.
+- In het rekenblad: "3 · Planning" met "Planning uit de meetstaat", alles aan
+  te passen, bewaard met de versie (`Versie.planning`). "Zet in
+  werkomschrijving" zet de werkvolgorde onder de beschrijving (één keer;
+  opnieuw vervangt het blok).
+- Op de offerte: fase en werkdagen, geen machines of leveringen.
+- Niet gebouwd: een agenda met echte datums en het weer. De startdatum
+  spreekt Nick af; de planning telt in werkdagen.

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { eisEigenaar } from "@/lib/crm/toegang"
 import { STANDAARD, reken, schoonRegel, type Regel } from "@/lib/crm/calculatie"
+import { schoonPlan, type PlanFase } from "@/lib/crm/planning"
 import { nieuwItem, zetPrijs } from "@/lib/crm/catalogus"
 import { wijzigCatalogus } from "@/lib/beheer/catalogus"
 import { gebeurtenis, wijzigKlanten, type Calculatie, type Versie } from "@/lib/beheer/klanten"
@@ -23,6 +24,7 @@ export type Concept = {
   onvoorzien: number
   korting: number
   regels: Regel[]
+  planning?: PlanFase[]
 }
 
 const geheel = (v: unknown, max: number) => (Number.isSafeInteger(v) ? Math.min(max, Math.max(0, v as number)) : 0)
@@ -53,6 +55,7 @@ export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: nu
         datum: new Date().toISOString(),
         beschrijving: String(c.beschrijving ?? "").slice(0, 4000),
         ...invoer,
+        ...(c.planning?.length ? { planning: schoonPlan(c.planning) } : {}),
         totaal: u.totaal,
         winst: u.winst,
       }

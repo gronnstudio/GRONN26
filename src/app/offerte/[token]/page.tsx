@@ -41,6 +41,20 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
 
       {o.beschrijving && <p className="mt-6 mb-0 max-w-[64ch] text-[17px] leading-[1.6] whitespace-pre-line">{o.beschrijving}</p>}
 
+      {o.planning && o.planning.length > 0 && (
+        <section className="mt-8">
+          <h2 className="lbl m-0 text-gedempt">Planning</h2>
+          <ol className="m-0 mt-2 grid gap-1 pl-5 text-[15px]">
+            {o.planning.map((f, i) => (
+              <li key={i}>
+                {f.naam} · {f.dagen.toLocaleString("nl-NL")} {f.dagen === 1 ? "werkdag" : "werkdagen"}
+              </li>
+            ))}
+          </ol>
+          <p className="m-0 mt-2 text-[13px] text-gedempt">Samen {o.planning.reduce((t, f) => t + f.dagen, 0).toLocaleString("nl-NL")} werkdagen. De startdatum spreken we samen af; het weer kan de planning verschuiven.</p>
+        </section>
+      )}
+
       <Posten titel="Wat er gebeurt" posten={o.posten} />
       <table className="mt-2 w-full border-collapse text-[15px]">
         <tbody>
