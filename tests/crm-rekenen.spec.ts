@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test"
+import { faseInvoer, faseTekst, werkomschrijving } from "../src/lib/crm/werkomschrijving"
 import { deel, leesCenten, leesMilli, plusProcent, zonderProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
 import { calculatieTitel, dubbelen, ontdubbeld, margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
 import * as h from "../src/lib/crm/rekenhulpen"
@@ -397,4 +398,30 @@ test("calculatietitel uit klant en tuin of beschrijving", () => {
   expect(calculatieTitel("Clannad & Stijn", "Cottagetuin", "x")).toBe("Clannad & Stijn · Cottagetuin")
   expect(calculatieTitel("Clannad & Stijn", "Tuin", "Renovatie cottagetuin met waaltjes. Daarna gazon.")).toBe("Clannad & Stijn · Renovatie cottagetuin met waaltjes")
   expect(calculatieTitel("Jan", undefined, "")).toBe("Jan")
+})
+
+test("werkomschrijving: per fase genummerde posten met prijs uit de regels, en een deel per fase", () => {
+  const steen = { ...nieuweRegel("materiaal", { omschrijving: "Waaltjes", hoeveelheid: 1000, inkoop: 10000, opslag: 0, groep: "Fase 2 — Maart 2027" }), post: "Bestrating" }
+  const tekst = werkomschrijving({
+    klant: "Test",
+    posten: [
+      { wat: "Grondwerk", toelichting: "Grond aanvoeren.", uren: 2, fase: "Fase 1 — November 2026" },
+      { wat: "Bestrating", toelichting: "Waaltjes straten.", uren: 1, fase: "Fase 2 — Maart 2027" },
+    ],
+    regels: [steen],
+    uurtarief: 5000,
+    onvoorzien: 0,
+    korting: 0,
+  })
+  expect(tekst).toContain("# Werkomschrijving & prijsopbouw")
+  expect(tekst).toContain("## Fase 1 — November 2026")
+  expect(tekst).toContain("| **1. Grondwerk** — Grond aanvoeren. | € 100,00 |")
+  expect(tekst).toContain("| **2. Bestrating** — Waaltjes straten. | € 150,00 |")
+  expect(tekst).toContain("| Subtotaal excl. btw | € 250,00 |")
+  const fase2 = faseTekst(tekst, "Fase 2 — Maart 2027")
+  expect(fase2).toContain("Bestrating")
+  expect(fase2).not.toContain("Grondwerk")
+  const v = { uren: 3000, uurtarief: 5000, onvoorzien: 0, korting: 0, regels: [steen], fasen: [{ naam: "Fase 1 — November 2026", uren: 2000 }, { naam: "Fase 2 — Maart 2027", uren: 1000 }] }
+  expect(reken(faseInvoer(v, "Fase 1 — November 2026")).verkoop).toBe(10000)
+  expect(reken(faseInvoer(v, "Fase 2 — Maart 2027")).verkoop).toBe(15000)
 })

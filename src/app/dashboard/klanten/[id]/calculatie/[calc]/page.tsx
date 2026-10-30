@@ -55,6 +55,7 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     korting: versie?.korting ?? 0,
     regels: versie?.regels ?? [],
     planning: versie?.planning,
+    fasen: versie?.fasen,
     planVoorstel: t ? werkplan(t.zones) : undefined,
     nr: laatste,
   }
@@ -87,10 +88,16 @@ export default async function CalculatiePagina({ params, searchParams }: { param
           </nav>
         )}
         {c && versie && (
-          <form action={maakOfferteVan.bind(null, k.id, c.id, versie.nr)}>
+          <form action={maakOfferteVan.bind(null, k.id, c.id, versie.nr, "")}>
             <BewaarKnop>Offerte met link maken (v{versie.nr})</BewaarKnop>
           </form>
         )}
+        {c && versie && versie.fasen && versie.fasen.length > 1 &&
+          versie.fasen.map((f) => (
+            <form key={f.naam} action={maakOfferteVan.bind(null, k.id, c.id, versie.nr, f.naam)}>
+              <BewaarKnop className="crm-knop-rand">Offerte {f.naam.split(" — ")[0]}</BewaarKnop>
+            </form>
+          ))}
         {c && versie && (
           <form action={startProject.bind(null, k.id, c.id, versie.nr)}>
             <BewaarKnop className="crm-knop-rand">{k.projecten.some((p) => p.calculatieId === c.id) ? "Naar het project →" : `Start project (v${versie.nr})`}</BewaarKnop>

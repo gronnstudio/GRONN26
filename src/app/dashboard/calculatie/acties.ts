@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { eisEigenaar } from "@/lib/crm/toegang"
 import { STANDAARD, calculatieTitel, reken, schoonRegel, type Regel } from "@/lib/crm/calculatie"
 import { schoonPlan, type PlanFase } from "@/lib/crm/planning"
+import type { FaseUren } from "@/lib/crm/werkomschrijving"
 import { nieuwItem, zetPrijs } from "@/lib/crm/catalogus"
 import { wijzigCatalogus } from "@/lib/beheer/catalogus"
 import { gebeurtenis, wijzigKlanten, type Calculatie, type Versie } from "@/lib/beheer/klanten"
@@ -25,8 +26,11 @@ export type Concept = {
   korting: number
   regels: Regel[]
   planning?: PlanFase[]
+  fasen?: FaseUren[]
 }
 
+const schoonFasen = (f: unknown): FaseUren[] =>
+  (Array.isArray(f) ? f : []).slice(0, 12).flatMap((x) => (x && typeof x.naam === "string" && x.naam.trim() ? [{ naam: x.naam.trim().slice(0, 60), uren: geheel(x.uren, 10_000_000) }] : []))
 const geheel = (v: unknown, max: number) => (Number.isSafeInteger(v) ? Math.min(max, Math.max(0, v as number)) : 0)
 
 // "Calculatie" was de oude standaardnaam; die telt niet als eigen titel.
@@ -56,9 +60,10 @@ export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: nu
       const versie: Versie = {
         nr,
         datum: new Date().toISOString(),
-        beschrijving: String(c.beschrijving ?? "").slice(0, 4000),
+        beschrijving: String(c.beschrijving ?? "").slice(0, 12000),
         ...invoer,
         ...(c.planning?.length ? { planning: schoonPlan(c.planning) } : {}),
+        ...(schoonFasen(c.fasen).length ? { fasen: schoonFasen(c.fasen) } : {}),
         totaal: u.totaal,
         winst: u.winst,
       }

@@ -1,5 +1,5 @@
 // Een beschrijving zoals Nick hem typt of plakt, met de gewone tekens van
-// Markdown: # en ## als kopjes, **vet**, en tabellen met |. Geen pakket: dit
+// Markdown: # en ## als kopjes, **vet**, tabellen met |, lijstjes met - en --- als lijn. Geen pakket: dit
 // is alles wat in een werkomschrijving voorkomt. Al het andere blijft tekst.
 import type { ReactNode } from "react"
 
@@ -34,6 +34,10 @@ export function TekstOpmaak({ tekst, className = "" }: { tekst: string; classNam
       const n = r.match(/^#+/)![0].length
       const t = vet(r.replace(/^#+\s*/, ""))
       uit.push(n === 1 ? <h2 key={i} className="syne m-0 mt-6 text-[24px] leading-[1.15]">{t}</h2> : <h3 key={i} className="m-0 mt-6 text-[17px] font-semibold">{t}</h3>)
+    } else if (/^\s*-{3,}\s*$/.test(r)) {
+      uit.push(<hr key={i} className="my-4 border-0 border-t border-lijn" />)
+    } else if (/^\s*[-•]\s/.test(r)) {
+      uit.push(<p key={i} className="m-0 mt-1 pl-4 -indent-3">• {vet(r.replace(/^\s*[-•]\s*/, ""))}</p>)
     } else if (r.trim()) {
       uit.push(<p key={i} className="m-0 mt-1.5">{vet(r)}</p>)
     } else {
