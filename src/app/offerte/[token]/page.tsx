@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
-import { OfferteKnoppen } from "@/components/crm/offerte-knoppen"
+import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
+import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { BUSINESS } from "@/lib/business"
 import { toonEuro } from "@/lib/crm/geld"
 import { leesOfferte, verlopen, type OffertePost } from "@/lib/crm/offerte"
@@ -60,7 +61,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
         </dl>
       </header>
 
-      {o.beschrijving && <p className="mt-6 mb-0 max-w-[64ch] text-[17px] leading-[1.6] whitespace-pre-line">{o.beschrijving}</p>}
+      {o.beschrijving && <TekstOpmaak tekst={o.beschrijving} className="mt-6 max-w-[72ch] text-[16px] leading-[1.6]" />}
 
       {o.planning && o.planning.length > 0 && (
         <section className="mt-8">
@@ -94,7 +95,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
 
       {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel} />}
 
-      <OfferteKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${o.nummer} GRØNN Studio`} />
+      <PdfKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${o.nummer} GRØNN Studio`} />
 
       {!spec && (
       <section data-geen-pdf aria-labelledby="akkoord-kop" className="mt-12 rounded-[16px] border border-lijn bg-vlak p-6 print:hidden">

@@ -126,7 +126,9 @@ export async function stukRond(id: string, stuk: string, rond: boolean) {
     const s = k.stukken.find((x) => x.id === stuk)
     if (!s) return k
     const wat = s.soort === "Factuur" ? (rond ? "betaald" : "niet betaald") : rond ? "akkoord" : "niet akkoord"
-    return log({ ...k, stukken: k.stukken.map((x) => (x.id === stuk ? { ...x, rond } : x)) }, gebeurtenis("Stuk", `${s.soort} ${s.nummer} ${wat}`))
+    // Een goedgekeurde offerte zet de klus op Akkoord, als die nog niet verder was.
+    const naar: KlantFase = s.soort === "Offerte" && rond && ["Aanvraag", "Opname", "Offerte"].includes(k.fase) ? "Akkoord" : k.fase
+    return log({ ...k, fase: naar, stukken: k.stukken.map((x) => (x.id === stuk ? { ...x, rond } : x)) }, gebeurtenis("Stuk", `${s.soort} ${s.nummer} ${wat}`))
   })
 }
 
