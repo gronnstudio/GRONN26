@@ -78,8 +78,9 @@ export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: nu
   return { id, nr }
 }
 
-export async function calculatieWeg(klantId: string, id: string) {
+export async function calculatieWeg(klantId: string, id: string, d?: FormData) {
   await eisEigenaar()
+  if (d && String(d.get("bevestig") ?? "").trim().toLowerCase() !== "verwijderen") return
   await wijzigKlanten((lijst) => lijst.map((k) => (k.id === klantId ? { ...k, calculaties: k.calculaties.filter((c) => c.id !== id) } : k)))
   revalidatePath("/dashboard", "layout")
 }

@@ -351,7 +351,8 @@ test("rekenblad met btw: incl. invoeren, excl. rekenen, big bags kiezen", async 
   await page.context().addCookies([{ name: KOEKJE, value: await maakKoekje("hello@gronn.studio"), url: "http://localhost:3210" }])
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.goto("/dashboard/prijs")
-  const regel = page.locator("tbody tr").first()
+  // De enige regel; wisselt hij van soort, dan schuift hij naar die sectie.
+  const regel = page.locator("tbody tr").filter({ has: page.getByLabel("Soort") })
   await regel.getByLabel("Eenheid", { exact: true }).fill("BB")
   await page.getByLabel("Bedragen met btw").check()
   await regel.getByLabel("Inkoop per eenheid incl. btw").fill("48,40")

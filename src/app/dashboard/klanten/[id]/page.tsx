@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { VerwijderKnop } from "@/components/crm/verwijder-knop"
+import { calculatieWeg } from "@/app/dashboard/calculatie/acties"
 import { notFound } from "next/navigation"
 import { Kop, Tabs } from "@/components/crm/kop"
 import { GrønnKnop } from "@/components/crm/gronn-knop"
@@ -240,6 +242,7 @@ function Calculaties({ k }: { k: Klant }) {
             {["Calculatie", "Tuin", "Versies", "Laatst", "Overhouden", "Totaal incl. btw"].map((h, i) => (
               <th key={h} className={`${i > 3 ? "text-right" : ""}`}>{h}</th>
             ))}
+            <th><span className="sr-only">Verwijderen</span></th>
           </tr>
         </thead>
         <tbody>
@@ -253,12 +256,15 @@ function Calculaties({ k }: { k: Klant }) {
                 <td className="pr-4">{v ? tijd(v.datum) : ""}</td>
                 <td className="text-right crm-cijfer">{v ? toonEuro(v.winst) : ""}</td>
                 <td className="text-right crm-cijfer">{v ? toonEuro(v.totaal) : ""}</td>
+                <td className="pl-4 text-right">
+                  <VerwijderKnop actie={calculatieWeg.bind(null, k.id, c.id)} wat="deze calculatie" />
+                </td>
               </tr>
             )
           })}
           {!k.calculaties.length && (
             <tr>
-              <td colSpan={6} className="py-6 text-center text-gedempt">Nog geen calculatie. Een nieuwe begint met de maten uit de opname.</td>
+              <td colSpan={7} className="py-6 text-center text-gedempt">Nog geen calculatie. Een nieuwe begint met de maten uit de opname.</td>
             </tr>
           )}
         </tbody>

@@ -159,7 +159,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await page.getByLabel("Oppervlak m²").fill("56")
   await expect(page.getByText("= 59,92 m²")).toBeVisible()
   await page.getByRole("button", { name: "+ Als regel" }).click()
-  const regel = page.locator("tbody tr").last()
+  const regel = page.locator("tbody").first().locator("tr").last()
   await expect(regel.getByLabel("Aantal")).toHaveValue("59,92")
   await regel.getByLabel("Inkoop per eenheid").fill("25")
   await page.getByPlaceholder("bijv. 24").fill("40")
@@ -174,7 +174,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await expect(page.getByRole("status")).toHaveText("Versie 2 bewaard.")
 
   // 6. ★ zet de prijs in de catalogus.
-  await page.locator("tbody tr").last().getByRole("button", { name: "Prijs onthouden in de catalogus" }).click()
+  await page.locator("tbody").first().locator("tr").last().getByRole("button", { name: "Prijs onthouden in de catalogus" }).click()
   await expect(page.getByRole("status")).toContainText("staat in de catalogus")
 
   // 7. De klant staat in de tabel met de calculatie als waarde.
