@@ -12,6 +12,7 @@ import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/actie
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
 import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
+import { faseInvoer, werkomschrijving, type FaseUren } from "@/lib/crm/werkomschrijving"
 
 // Het rekenblad: van uren en inkoop naar een prijs waar genoeg aan overblijft
 // (eigenaar, 29 okt 2026). Sinds de CRM-bouw (zelfde dag) rekent het met
@@ -19,7 +20,7 @@ import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
 // eenheid en prijs per eenheid, de catalogus vult prijzen in en "Onthoud"
 // zet een prijs terug in de catalogus. Bij een klant bewaar je elke versie.
 
-type Schatting = { uren: number; posten: { wat: string; uren: number }[]; regels?: { wat: string; soort: string; inkoop: number }[]; aannames: string }
+type Schatting = { uren: number; posten: { wat: string; toelichting?: string; uren: number; fase?: string }[]; regels?: { wat: string; soort: string; inkoop: number; fase?: string; post?: string }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
 type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; schatting?: boolean; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
@@ -40,7 +41,7 @@ const isBigBag = (eenheid: string) => /^bb$|big ?bag/i.test(eenheid.trim())
 const BB_KEUZES: [string, string][] = [["½", "0,5"], ["1", "1"], ["2", "2"], ["3", "3"]]
 
 export type KlantKeuze = { id: string; naam: string; tuinen: { id: string; naam: string }[] }
-export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; regels: Regel[]; nr?: number; planning?: PlanFase[]; planVoorstel?: PlanFase[] }
+export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; regels: Regel[]; nr?: number; planning?: PlanFase[]; planVoorstel?: PlanFase[]; fasen?: FaseUren[] }
 
 const lbl = "crm-label"
 const veld = "crm-veld"
@@ -100,6 +101,9 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [regels, setRegels] = useState<Invul[]>(begin?.regels.length ? begin.regels.map(naarInvul) : [leeg()])
   const [beschrijving, setBeschrijving] = useState(begin?.beschrijving ?? "")
   const [plan, setPlan] = useState<PlanFase[]>(begin?.planning ?? [])
+  // Uren per fase, als de klus in delen gaat; de uren hierboven zijn dan de som.
+  const [fasen, setFasen] = useState<FaseUren[]>(begin?.fasen ?? [])
+  const [vorige, setVorige] = useState<string | null>(null)
   const [schatting, setSchatting] = useState<Schatting | null>(null)
   const [bezig, setBezig] = useState(false)
   const [fout, setFout] = useState("")
@@ -136,19 +140,32 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       const som = (data.posten ?? []).reduce((t, p) => t + (Number(p.uren) || 0), 0)
       setUren(String(Math.round(som || data.uren)))
       // Machines en materiaal als eigen regels erbij; lege regels gaan weg.
+      const posten = (data.posten ?? []).map((p) => ({ wat: p.wat, toelichting: p.toelichting ?? "", uren: Number(p.uren) || 0, fase: (p.fase ?? "").trim().slice(0, 60) }))
+      const faseNamen = [...new Set(posten.map((p) => p.fase))].filter(Boolean)
+      const metFase = faseNamen.length > 1
+      const nieuweFasen = metFase ? faseNamen.map((naam) => ({ naam, uren: Math.round(posten.filter((p) => p.fase === naam).reduce((t, p) => t + p.uren, 0) * 1000) })) : []
+      if (metFase) posten.forEach((p) => (p.fase ||= faseNamen[0]))
+      else posten.forEach((p) => (p.fase = ""))
+      setFasen(nieuweFasen)
+      const gekoppeld: (Regel & { post?: string })[] = []
       const extra = (data.regels ?? []).map((x) => {
         const soort: Soort = isSoort(x.soort) ? x.soort : "overig"
         const uitCatalogus = perNaam.get(x.wat.toLowerCase())
         const totaal = Math.round(x.inkoop) * 100
+        const groep = metFase ? (faseNamen.includes((x.fase ?? "").trim()) ? (x.fase ?? "").trim() : faseNamen[0]) : undefined
         // Uit de catalogus: zijn prijs per eenheid, en het aantal (dagen, tonnen) teruggerekend uit Claudes totaal, op halve eenheden.
-        if (uitCatalogus?.inkoop) return { ...naarInvul(alsRegel(uitCatalogus, Math.max(500, Math.round((totaal * 2) / uitCatalogus.inkoop) * 500))), schatting: true }
-        return { ...naarInvul(nieuweRegel(soort, { omschrijving: x.wat, eenheid: "post", inkoop: totaal })), schatting: true }
+        const r = uitCatalogus?.inkoop ? { ...alsRegel(uitCatalogus, Math.max(500, Math.round((totaal * 2) / uitCatalogus.inkoop) * 500)), groep } : nieuweRegel(soort, { omschrijving: x.wat, eenheid: "post", inkoop: totaal, groep })
+        gekoppeld.push({ ...r, post: x.post })
+        return { ...naarInvul(r), schatting: true }
       })
       // Opnieuw schatten vervangt de regels van de vorige schatting, in plaats van ze er nog eens onder te zetten.
-      setRegels((oud) => {
-        const rest = [...oud.filter((r) => !r.schatting && (r.omschrijving.trim() || r.inkoop.trim())), ...extra]
-        return rest.length ? rest : [leeg()]
-      })
+      const blijft = regels.filter((r) => !r.schatting && (r.omschrijving.trim() || r.inkoop.trim()))
+      setRegels([...blijft, ...extra].length ? [...blijft, ...extra] : [leeg()])
+      // De beschrijving in Nicks vaste opmaak; de bedragen rekent de code uit de regels en uren.
+      if (posten.length) {
+        setVorige(beschrijving)
+        setBeschrijving(werkomschrijving({ klant: klant?.naam ?? klantNaam, posten, regels: [...blijft.map(naarRegel), ...gekoppeld], uurtarief: invoer.uurtarief, onvoorzien: invoer.onvoorzien, korting: invoer.korting }))
+      }
     } catch (e) {
       setFout(e instanceof Error ? e.message : "Geen schatting gekregen.")
     } finally {
@@ -193,7 +210,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const bewaar = () =>
     start(async () => {
       setMelding("")
-      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, ...invoer })
+      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, fasen, ...invoer })
       if ("fout" in uit) return setMelding(uit.fout)
       setCalcId(uit.id)
       setVersie(uit.nr)
@@ -264,6 +281,11 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             <button type="button" onClick={schat} disabled={bezig || !beschrijving.trim()} className="mt-2 crm-knop disabled:opacity-50">
               {bezig ? "Grønn rekent…" : "Schat de uren"}
             </button>
+            {vorige !== null && (
+              <button type="button" onClick={() => { setBeschrijving(vorige); setVorige(null) }} className="mt-2 ml-2 crm-knop-rand">
+                Mijn eigen tekst terug
+              </button>
+            )}
             {fout && <p role="alert" className="m-0 mt-2 text-[13px] text-let">{fout}</p>}
             {schatting && (
               <div className="mt-3 rounded-[14px] border border-lijn p-4 text-[13px]">
@@ -283,6 +305,34 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 {schatting.aannames && <p className="m-0 mt-2 text-gedempt">Aangenomen: {schatting.aannames}</p>}
                 <p className="m-0 mt-2 text-gedempt">Een voorstel: klopt het niet met wat jij weet, pas de uren en bedragen hieronder aan.</p>
               </div>
+            )}
+            {fasen.length > 0 && (
+              <fieldset className="mt-5 rounded-[14px] border border-lijn p-4">
+                <legend className="px-1 text-[13px] font-semibold">Uren per fase</legend>
+                <div className="grid gap-2">
+                  {fasen.map((f, i) => {
+                    const deel = reken(faseInvoer({ ...invoer, fasen }, f.naam))
+                    return (
+                      <label key={f.naam} className="grid grid-cols-[1fr_90px_auto] items-center gap-3 text-[13px]">
+                        <span>{f.naam}</span>
+                        <input
+                          aria-label={`Uren ${f.naam}`}
+                          inputMode="decimal"
+                          value={toonDecimaal(f.uren, 3)}
+                          onChange={(e) => {
+                            const nieuw = fasen.map((x, j) => (j === i ? { ...x, uren: Math.max(0, leesMilli(e.target.value) ?? 0) } : x))
+                            setFasen(nieuw)
+                            setUren(toonDecimaal(nieuw.reduce((t, x) => t + x.uren, 0), 3))
+                          }}
+                          className={klein}
+                        />
+                        <span className="crm-cijfer text-right text-gedempt">{toonEuro(deel.totaal)} incl. btw</span>
+                      </label>
+                    )
+                  })}
+                </div>
+                <p className="m-0 mt-2 text-[12px] text-gedempt">Elke regel hieronder hoort bij een fase. Zo maak je bij de klant een offerte per fase.</p>
+              </fieldset>
             )}
             <div className="mt-5 grid grid-cols-2 items-end gap-3 sm:grid-cols-4">
               <label className="grid gap-1 text-[13px]">
@@ -358,6 +408,14 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                           <label className="mt-1 flex items-center gap-1.5 text-[12px] text-gedempt">
                             <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
                           </label>
+                          {fasen.length > 0 && (
+                            <select aria-label="Fase" value={r.groep} onChange={(e) => zet(i, { groep: e.target.value })} className={`${klein} mt-1 w-full bg-grond`}>
+                              <option value="">Geen fase</option>
+                              {fasen.map((f) => (
+                                <option key={f.naam} value={f.naam}>{f.naam}</option>
+                              ))}
+                            </select>
+                          )}
                         </td>
                         <td className="py-1.5 pr-2">
                           <select aria-label="Soort" value={r.soort} onChange={(e) => { const s = e.target.value as Soort; zet(i, { soort: s, opslag: toonDecimaal(SOORTEN[s].opslag, 2), btw: SOORTEN[s].btw }) }} className={`${klein} w-[150px] bg-grond`}>
