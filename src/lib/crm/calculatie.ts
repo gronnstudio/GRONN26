@@ -62,6 +62,8 @@ export type Regel = {
   catalogusId?: string
   /** Uit de meetstaat van deze zone (Zone.id): "Zet in calculatie" vervangt zulke regels. */
   meetstaat?: string
+  /** Uit "Schat de uren": opnieuw schatten vervangt zulke regels. */
+  schatting?: boolean
 }
 
 export type Invoer = {
@@ -224,5 +226,18 @@ export function schoonRegel(r: Partial<Regel> & Record<string, unknown>): Regel 
     optioneel: r.optioneel === true || undefined,
     catalogusId: typeof r.catalogusId === "string" ? r.catalogusId.slice(0, 64) : undefined,
     meetstaat: typeof r.meetstaat === "string" && r.meetstaat ? r.meetstaat.slice(0, 64) : undefined,
+    schatting: r.schatting === true || undefined,
   }
+}
+
+// Dezelfde naam meer dan eens, zoals na gestapelde schattingen. Ontdubbelen
+// houdt de laatste, want die komt uit de nieuwste schatting.
+const naamSleutel = (r: { omschrijving: string }) => r.omschrijving.trim().toLowerCase()
+export function dubbelen(regels: { omschrijving: string }[]): [string, number][] {
+  const m = new Map<string, [string, number]>()
+  for (const r of regels) if (naamSleutel(r)) m.set(naamSleutel(r), [r.omschrijving.trim(), (m.get(naamSleutel(r))?.[1] ?? 0) + 1])
+  return [...m.values()].filter(([, n]) => n > 1)
+}
+export function ontdubbeld<T extends { omschrijving: string }>(regels: T[]): T[] {
+  return regels.filter((r, i) => !naamSleutel(r) || !regels.slice(i + 1).some((x) => naamSleutel(x) === naamSleutel(r)))
 }

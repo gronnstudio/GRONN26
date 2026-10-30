@@ -13,6 +13,7 @@ import { oppervlakUit } from "@/lib/crm/vragenlijst"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { maakOfferteVan } from "../../../offerte-acties"
+import { startProject } from "../../../project-acties"
 
 // Een calculatie bij een klant: hetzelfde rekenblad als /dashboard/prijs, met
 // bewaren als nieuwe versie. ?v=2 opent een oudere versie om verder te
@@ -88,6 +89,11 @@ export default async function CalculatiePagina({ params, searchParams }: { param
         {c && versie && (
           <form action={maakOfferteVan.bind(null, k.id, c.id, versie.nr)}>
             <BewaarKnop>Offerte met link maken (v{versie.nr})</BewaarKnop>
+          </form>
+        )}
+        {c && versie && (
+          <form action={startProject.bind(null, k.id, c.id, versie.nr)}>
+            <BewaarKnop className="crm-knop-rand">{k.projecten.some((p) => p.calculatieId === c.id) ? "Naar het project →" : `Start project (v${versie.nr})`}</BewaarKnop>
           </form>
         )}
       </Kop>

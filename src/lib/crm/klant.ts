@@ -1,4 +1,5 @@
 import { schoonPlan, type PlanFase } from "./planning"
+import { normaliseerProject, type Project } from "./project"
 import { schoonRegel, type Regel } from "./calculatie"
 import type { Bp, Centen, Milli } from "./geld"
 import { INTAKE_SOORTEN, STANDAARD, ZONE_SOORTEN, vraagMap, type IntakeSoort, type Zone } from "./vragenlijst"
@@ -151,6 +152,7 @@ export type Klant = {
   stukken: Stuk[]
   tuinen: Tuin[]
   calculaties: Calculatie[]
+  projecten: Project[]
   activiteit: Gebeurtenis[]
   aangemaakt: string
 }
@@ -273,6 +275,7 @@ export function normaliseer(k: Partial<Klant> & Pick<Klant, "id" | "naam">): Kla
     stukken: Array.isArray(k.stukken) ? k.stukken : [],
     tuinen: (Array.isArray(k.tuinen) ? k.tuinen : []).map(normaliseerTuin),
     calculaties: (Array.isArray(k.calculaties) ? k.calculaties : []).map(normaliseerCalculatie),
+    projecten: (Array.isArray(k.projecten) ? k.projecten : []).map(normaliseerProject),
     activiteit: Array.isArray(k.activiteit) ? k.activiteit.slice(0, 500) : [],
     aangemaakt: datumOf(k.aangemaakt) || "2026-10-29",
   }

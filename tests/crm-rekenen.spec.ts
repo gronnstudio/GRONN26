@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test"
 import { deel, leesCenten, leesMilli, plusProcent, zonderProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
-import { margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
+import { dubbelen, ontdubbeld, margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
 import * as h from "../src/lib/crm/rekenhulpen"
 import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catalogus"
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
+import { nacalculatie, nieuwProject, normaliseerProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
@@ -251,6 +252,16 @@ test.describe("catalogus en klanten", () => {
     expect(nogmaals).toMatch(/^Oude tegels eruit\.\n\nWerkvolgorde:\n1\. Afgraven[\s\S]*weer\.\n\nSchutting blijft staan\.$/)
     expect(schoonPlan([{ naam: "  Graven ", dagen: 0.3 }, { naam: "" }, { naam: "Lang", dagen: 99 }]).map((f) => [f.naam, f.dagen])).toEqual([["Graven", 0.5], ["Lang", 60]])
   })
+  test("project: taken uit de planning, nacalculatie en opschonen", () => {
+    const p = nieuwProject({ id: "c", titel: "Terras" }, { nr: 2, uren: 16000, winst: 80000, planning: [{ id: "a", naam: "Graven", dagen: 1.5, machines: "", levering: "" }, { id: "b", naam: "Straten", dagen: 3, machines: "", levering: "" }] })
+    expect(p.taken.map((t) => [t.naam, t.dagen, t.klaar])).toEqual([["Graven", 1.5, false], ["Straten", 3, false]])
+    const met = normaliseerProject({ ...p, taken: [{ ...p.taken[0], klaar: true }, p.taken[1]], uren: [{ id: "u", datum: "2026-10-30", uren: 20000, wat: "" }, { id: "x", datum: "fout", uren: -5, wat: "" } as never], meerwerk: [{ id: "m", datum: "2026-10-30", omschrijving: "Afwatering", bedrag: 25000, akkoord: true }, { id: "n", datum: "2026-10-30", omschrijving: "Hek", bedrag: 10000, akkoord: false }] })
+    expect(met.uren).toHaveLength(1)
+    const n = nacalculatie(met)
+    expect(n).toMatchObject({ urenBegroot: 16000, urenWerkelijk: 20000, dagenBegroot: 4.5, takenKlaar: 1, taken: 2, meerwerkAkkoord: 25000, meerwerkOpen: 10000, perUurBegroot: 5000, perUurWerkelijk: 4000 })
+    expect(normaliseerProject({}).taken).toEqual([])
+    expect(normaliseerProject({}).begroot).toEqual({ uren: 0, winst: 0 })
+  })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]
     expect(zoekDubbel(lijst, { contact: "+31 6 12345678" }).map((k) => k.id)).toEqual(["a"])
@@ -358,4 +369,10 @@ test("rekenblad met btw: incl. invoeren, excl. rekenen, big bags kiezen", async 
   await expect(regel.getByText("€ 23,00")).toBeVisible()
   await regel.getByRole("button", { name: "los" }).click()
   await expect(regel.getByLabel("Eenheid", { exact: true })).toHaveValue("m³")
+})
+
+test("dubbele regels vinden en alleen de laatste houden", () => {
+  const r = [{ omschrijving: "Hekwerk", v: 1 }, { omschrijving: "Zand", v: 1 }, { omschrijving: "hekwerk ", v: 2 }, { omschrijving: "", v: 0 }, { omschrijving: "", v: 0 }]
+  expect(dubbelen(r)).toEqual([["hekwerk", 2]])
+  expect(ontdubbeld(r).map((x) => x.v)).toEqual([1, 2, 0, 0])
 })
