@@ -8,6 +8,7 @@ import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
+import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
@@ -138,7 +139,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       setSchatting(data)
       // De uren zijn de som van de posten, door de code opgeteld; het totaal van het model telt niet.
       const som = (data.posten ?? []).reduce((t, p) => t + (Number(p.uren) || 0), 0)
-      setUren(String(Math.round(som || data.uren)))
+      // Staat er al een calculatie (uren en regels), dan blijven die bedragen staan: de schatting zet alleen fasen en opmaak (Nick, 30 okt 2026).
+      const bestaand = regels.filter((r) => r.omschrijving.trim() || r.inkoop.trim())
+      const behoud = urenMilli > 0 && bestaand.length > 0
+      if (!behoud) setUren(String(Math.round(som || data.uren)))
       // Machines en materiaal als eigen regels erbij; lege regels gaan weg.
       const posten = (data.posten ?? []).map((p) => ({ wat: p.wat, toelichting: p.toelichting ?? "", uren: Number(p.uren) || 0, fase: (p.fase ?? "").trim().slice(0, 60) }))
       const faseNamen = [...new Set(posten.map((p) => p.fase))].filter(Boolean)
@@ -146,7 +150,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       const nieuweFasen = metFase ? faseNamen.map((naam) => ({ naam, uren: Math.round(posten.filter((p) => p.fase === naam).reduce((t, p) => t + p.uren, 0) * 1000) })) : []
       if (metFase) posten.forEach((p) => (p.fase ||= faseNamen[0]))
       else posten.forEach((p) => (p.fase = ""))
-      setFasen(nieuweFasen)
+      // Bij behoud: de bestaande uren naar verhouding over de fasen en posten.
+      const schaal = behoud && som > 0 ? urenMilli / 1000 / som : 1
+      if (behoud) posten.forEach((p) => (p.uren = p.uren * schaal))
+      setFasen(behoud ? nieuweFasen.map((f) => ({ ...f, uren: Math.round(f.uren * schaal) })) : nieuweFasen)
       const gekoppeld: (Regel & { post?: string })[] = []
       const extra = (data.regels ?? []).map((x) => {
         const soort: Soort = isSoort(x.soort) ? x.soort : "overig"
@@ -160,11 +167,22 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       })
       // Opnieuw schatten vervangt de regels van de vorige schatting, in plaats van ze er nog eens onder te zetten.
       const blijft = regels.filter((r) => !r.schatting && (r.omschrijving.trim() || r.inkoop.trim()))
-      setRegels([...blijft, ...extra].length ? [...blijft, ...extra] : [leeg()])
+      if (behoud) {
+        // Elke bestaande regel krijgt de fase en post van de geschatte regel met dezelfde naam, anders de eerste fase.
+        const perNaamSchatting = new Map((data.regels ?? []).map((x) => [x.wat.trim().toLowerCase(), x]))
+        gekoppeld.length = 0
+        const met = bestaand.map((r) => {
+          const x = perNaamSchatting.get(r.omschrijving.trim().toLowerCase())
+          const groep = metFase ? (x && faseNamen.includes((x.fase ?? "").trim()) ? (x.fase ?? "").trim() : r.groep && faseNamen.includes(r.groep) ? r.groep : faseNamen[0]) : r.groep
+          gekoppeld.push({ ...naarRegel({ ...r, groep: groep ?? "" }), post: x?.post })
+          return { ...r, groep: groep ?? "" }
+        })
+        setRegels(met)
+      } else setRegels([...blijft, ...extra].length ? [...blijft, ...extra] : [leeg()])
       // De beschrijving in Nicks vaste opmaak; de bedragen rekent de code uit de regels en uren.
       if (posten.length) {
         setVorige(beschrijving)
-        setBeschrijving(werkomschrijving({ klant: klant?.naam ?? klantNaam, posten, regels: [...blijft.map(naarRegel), ...gekoppeld], uurtarief: invoer.uurtarief, onvoorzien: invoer.onvoorzien, korting: invoer.korting }))
+        setBeschrijving(werkomschrijving({ klant: klant?.naam ?? klantNaam, posten, regels: behoud ? gekoppeld : [...blijft.map(naarRegel), ...gekoppeld], uurtarief: invoer.uurtarief, onvoorzien: invoer.onvoorzien, korting: invoer.korting }))
       }
     } catch (e) {
       setFout(e instanceof Error ? e.message : "Geen schatting gekregen.")
@@ -229,6 +247,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     })
 
   const naamVoorPrint = klant?.naam ?? klantNaam
+  const werkOpbouw = /^\|.*\|\s*$/m.test(beschrijving)
   const regelsVoorKlant = u.regels.filter((r) => r.verkoop > 0)
 
   return (
@@ -372,7 +391,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               <table className="w-full min-w-[920px] border-collapse text-[13px]">
                 <thead>
                   <tr>
-                    <th className="py-1 pr-2 font-semibold">Omschrijving</th>
+                    <th className="w-[40%] min-w-[260px] py-1 pr-2 font-semibold">Omschrijving</th>
+                    {fasen.length > 0 && <th className="py-1 pr-2 font-semibold">Fase</th>}
                     <th className="py-1 pr-2 font-semibold">Soort</th>
                     <th className="py-1 pr-2 font-semibold">Aantal</th>
                     <th className="py-1 pr-2 font-semibold">Eenheid</th>
@@ -393,7 +413,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   return (
                 <tbody key={sec.id}>
                   <tr className="border-t-2 border-inkt">
-                    <th colSpan={8} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
+                    <th colSpan={fasen.length > 0 ? 9 : 8} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
                     <td className="pt-4 pb-1 pr-2 text-right crm-cijfer font-semibold">{hier.length ? toonEuro(som) : ""}</td>
                     <td className="pt-4 pb-1">
                       <button type="button" onClick={() => setRegels([...regels, naarInvul(nieuweRegel(sec.soort, { hoeveelheid: 1000 }))])} className="text-[12px] text-accent-tekst">+ {sec.enkel}</button>
@@ -408,15 +428,17 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                           <label className="mt-1 flex items-center gap-1.5 text-[12px] text-gedempt">
                             <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
                           </label>
-                          {fasen.length > 0 && (
-                            <select aria-label="Fase" value={r.groep} onChange={(e) => zet(i, { groep: e.target.value })} className={`${klein} mt-1 w-full bg-grond`}>
-                              <option value="">Geen fase</option>
+                        </td>
+                        {fasen.length > 0 && (
+                          <td className="py-1.5 pr-2">
+                            <select aria-label="Fase" value={r.groep} onChange={(e) => zet(i, { groep: e.target.value })} className={`${klein} w-[120px] bg-grond`}>
+                              <option value="">Geen</option>
                               {fasen.map((f) => (
-                                <option key={f.naam} value={f.naam}>{f.naam}</option>
+                                <option key={f.naam} value={f.naam}>{f.naam.split(" — ")[0]}</option>
                               ))}
                             </select>
-                          )}
-                        </td>
+                          </td>
+                        )}
                         <td className="py-1.5 pr-2">
                           <select aria-label="Soort" value={r.soort} onChange={(e) => { const s = e.target.value as Soort; zet(i, { soort: s, opslag: toonDecimaal(SOORTEN[s].opslag, 2), btw: SOORTEN[s].btw }) }} className={`${klein} w-[150px] bg-grond`}>
                             {Object.entries(SOORTEN).map(([id, s]) => (
@@ -553,18 +575,24 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       </div>
 
       {/* Wat de klant krijgt: alleen verkoopprijzen. Op het scherm verborgen. */}
-      <article className="calculatie-druk hidden bg-white p-[18mm] text-[11pt] text-op-accent print:block">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="h-[22px] w-auto" />
-        <h1 className="syne m-0 mt-10 text-[24pt] leading-[1.1]">{titel || "Prijsoverzicht"}</h1>
+      <article className="calculatie-druk hidden bg-white pb-[18mm] text-[11pt] text-op-accent print:block">
+        {/* Dezelfde kop als de offerte (Nick, 30 okt 2026: "hou deze layout aan"). */}
+        <div className="rounded-b-[24px] bg-[#202020] px-[18mm] pt-[12mm] pb-[8mm]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[36px] w-auto" />
+          <p className="m-0 mt-5 text-[8pt] font-semibold tracking-[.18em] text-[#ff5b04] uppercase">Vijvers en natuurlijke tuinen · Stein en omgeving</p>
+        </div>
+        <div className="px-[18mm]">
+        <h1 className="syne m-0 mt-10 text-[24pt] leading-[1.1]">{titel.replace(/[#*]+\s*/g, "") || "Prijsoverzicht"}</h1>
         <p className="m-0 mt-2">
           {naamVoorPrint && <>Voor {naamVoorPrint} · </>}
           {new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}
         </p>
-        {beschrijving.trim() && <p className="m-0 mt-6 whitespace-pre-line leading-[1.5]">{beschrijving.trim()}</p>}
+        {beschrijving.trim() && <TekstOpmaak tekst={beschrijving.trim()} className="mt-6 leading-[1.5]" />}
         <dl className="m-0 mt-8 grid gap-2">
-          {u.arbeid > 0 && <Rij t="Werkzaamheden" b={u.arbeid} />}
-          {regelsVoorKlant.map((r) => (
+          {/* Staat de prijsopbouw al in de werkomschrijving, dan alleen de totalen. */}
+          {!werkOpbouw && u.arbeid > 0 && <Rij t="Werkzaamheden" b={u.arbeid} />}
+          {!werkOpbouw && regelsVoorKlant.map((r) => (
             <Rij key={r.id} t={`${r.omschrijving || SOORTEN[r.soort].naam}${r.eenheid !== "post" ? ` · ${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}` : ""}`} b={r.verkoop} />
           ))}
           {u.onvoorzien > 0 && <Rij t="Onvoorzien" b={u.onvoorzien} />}
@@ -586,6 +614,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           </>
         )}
         <p className="m-0 mt-10 text-[9pt] leading-[1.5] text-gedempt">Dit is een prijsindicatie, geen offerte. GRØNN Studio · Stein · hello@gronn.studio · gronn.studio</p>
+        </div>
       </article>
     </>
   )

@@ -16,16 +16,24 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
     const blad = document.querySelector<HTMLElement>(doel)
     if (!blad) return
     setBezig(true)
-    // Een blad dat alleen bij printen zichtbaar is (de calculatie), even buiten beeld tonen om het te kunnen tekenen.
+    // Een blad dat alleen bij printen zichtbaar is (de calculatie): een zichtbare kopie direct onder html tekenen, buiten de opmaak van het dashboard.
     const verborgen = getComputedStyle(blad).display === "none"
-    const oud = blad.getAttribute("style")
-    if (verborgen) blad.setAttribute("style", "display:block;position:absolute;left:-10000px;top:0;width:794px")
+    const kopie = verborgen ? (blad.cloneNode(true) as HTMLElement) : null
+    if (kopie) {
+      kopie.classList.remove("hidden")
+      kopie.setAttribute("style", "display:block;position:fixed;left:0;top:0;width:794px;z-index:9999")
+      document.documentElement.appendChild(kopie)
+    }
+    const bron = kopie ?? blad
+    // html2canvas meet verkeerd in een gescrolde pagina: even naar boven, daarna terug.
+    const scroll = window.scrollY
+    window.scrollTo(0, 0)
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas-pro"), import("jspdf")])
-      const doek = await html2canvas(blad, { scale: 2, backgroundColor: "#ffffff", ignoreElements: (el) => el.hasAttribute("data-geen-pdf"),
+      const doek = await html2canvas(bron, { scale: 2, backgroundColor: "#ffffff", ignoreElements: (el) => el.hasAttribute("data-geen-pdf"),
         // Het woordmerk als PNG (dezelfde vector, gerasterd): html2canvas tekent deze SVG niet goed. En geen witrand boven de kop.
         onclone: (d) => {
-          d.querySelectorAll<HTMLImageElement>('img[src="/brand/woordmerk-primair.svg"]').forEach((i) => (i.src = "/brand/woordmerk-primair.png"))
+          d.querySelectorAll<HTMLImageElement>('img[src$="/brand/woordmerk-primair.svg"], img[src$="/brand/woordmerk-primair-antraciet.svg"]').forEach((i) => (i.src = i.src.replace(/\.svg$/, ".png")))
           const b = d.querySelector<HTMLElement>(".offerte-druk")
           if (b) b.style.paddingTop = "0"
         },
@@ -45,7 +53,8 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
       }
       doc.save(`${naam.replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, " ").trim()}.pdf`)
     } finally {
-      if (verborgen) (oud === null ? blad.removeAttribute("style") : blad.setAttribute("style", oud))
+      kopie?.remove()
+      window.scrollTo(0, scroll)
       setBezig(false)
     }
   }

@@ -8,7 +8,8 @@ const cellen = (r: string) => r.trim().replace(/^\||\|$/g, "").split("|").map((c
 const scheiding = (r: string) => /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(r)
 
 export function TekstOpmaak({ tekst, className = "" }: { tekst: string; className?: string }) {
-  const regels = tekst.replace(/\r/g, "").split("\n")
+  // Elke soort regeleinde (Windows, Mac, Unicode) en voorloopspaties tellen niet.
+  const regels = tekst.split(/\r\n|\r|\n|\u2028|\u2029/).map((r) => r.replace(/^[\s\u00a0]+/, ""))
   const uit: ReactNode[] = []
   for (let i = 0; i < regels.length; i++) {
     const r = regels[i]

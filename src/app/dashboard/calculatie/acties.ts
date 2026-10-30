@@ -34,7 +34,7 @@ const schoonFasen = (f: unknown): FaseUren[] =>
 const geheel = (v: unknown, max: number) => (Number.isSafeInteger(v) ? Math.min(max, Math.max(0, v as number)) : 0)
 
 // "Calculatie" was de oude standaardnaam; die telt niet als eigen titel.
-const eigenTitel = (t: string) => (t.trim().toLowerCase() === "calculatie" ? "" : t.trim().slice(0, 120))
+const eigenTitel = (t: string) => (t.trim().toLowerCase() === "calculatie" || /[#*|]/.test(t) ? "" : t.trim().slice(0, 120))
 
 export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: number } | { fout: string }> {
   await eisEigenaar()

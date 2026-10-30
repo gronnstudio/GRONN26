@@ -104,7 +104,7 @@ export default async function CalculatiePagina({ params, searchParams }: { param
           </form>
         )}
       </Kop>
-      <main className="mx-auto max-w-[1440px] px-8 py-6 print:max-w-none print:p-0">
+      <main className="mx-auto max-w-[2200px] px-8 py-6 print:max-w-none print:p-0">
         {versie && versie.nr !== laatste && (
           <p role="status" className="crm-let m-0 px-4 py-2 text-[13px] print:hidden">
             Je kijkt naar versie {versie.nr} van {tijd(versie.datum)}. Bewaren maakt er versie {laatste + 1} van; deze blijft staan.
