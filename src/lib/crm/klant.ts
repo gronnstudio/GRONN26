@@ -282,7 +282,7 @@ export function normaliseer(k: Partial<Klant> & Pick<Klant, "id" | "naam">): Kla
     tuinen: (Array.isArray(k.tuinen) ? k.tuinen : []).map(normaliseerTuin),
     // Oude calculaties zonder eigen titel krijgen er bij het lezen een uit klantnaam en tuin (30 okt 2026).
     calculaties: (Array.isArray(k.calculaties) ? k.calculaties : []).map(normaliseerCalculatie).map((c) =>
-      c.titel === "Calculatie" ? { ...c, titel: calculatieTitel(tekst(k.naam, 120) || "Klant", (Array.isArray(k.tuinen) ? k.tuinen : []).find((t) => t?.id === c.tuinId)?.naam, c.versies.at(-1)?.beschrijving ?? "") } : c,
+      c.titel === "Calculatie" || /[#*|]/.test(c.titel) ? { ...c, titel: calculatieTitel(tekst(k.naam, 120) || "Klant", (Array.isArray(k.tuinen) ? k.tuinen : []).find((t) => t?.id === c.tuinId)?.naam, c.versies.at(-1)?.beschrijving ?? "") } : c,
     ),
     projecten: (Array.isArray(k.projecten) ? k.projecten : []).map(normaliseerProject),
     activiteit: Array.isArray(k.activiteit) ? k.activiteit.slice(0, 500) : [],
