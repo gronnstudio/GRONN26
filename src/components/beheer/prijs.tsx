@@ -10,6 +10,7 @@ import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
+import { maakOfferteVan } from "@/app/dashboard/klanten/offerte-acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
 import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
@@ -240,6 +241,15 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       if (begin && (!calcId || window.location.search.includes("meetstaat="))) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
     })
 
+  // Offerte voor één fase (Nick, 30 okt 2026): eerst bewaren, dan de deel-offerte uit die versie.
+  const offerteVoorFase = (fase: string) =>
+    start(async () => {
+      setMelding("")
+      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, fasen, ...invoer })
+      if ("fout" in uit) return setMelding(uit.fout)
+      await maakOfferteVan(klantId, uit.id, uit.nr, fase)
+    })
+
   const onthoud = (i: number) =>
     start(async () => {
       const uit = await onthoudPrijs(naarRegel(regels[i]))
@@ -334,7 +344,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   {fasen.map((f, i) => {
                     const deel = reken(faseInvoer({ ...invoer, fasen }, f.naam))
                     return (
-                      <label key={f.naam} className="grid grid-cols-[1fr_90px_auto] items-center gap-3 text-[13px]">
+                      <label key={f.naam} className="grid grid-cols-[1fr_90px_auto_auto] items-center gap-3 text-[13px]">
                         <span>{f.naam}</span>
                         <input
                           aria-label={`Uren ${f.naam}`}
@@ -348,6 +358,11 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                           className={klein}
                         />
                         <span className="crm-cijfer text-right text-gedempt">{toonEuro(deel.totaal)} incl. btw</span>
+                        {klantId && (
+                          <button type="button" disabled={bewaart} onClick={() => offerteVoorFase(f.naam)} className="crm-knop-rand crm-knop-klein">
+                            Offerte
+                          </button>
+                        )}
                       </label>
                     )
                   })}
