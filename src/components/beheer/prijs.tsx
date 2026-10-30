@@ -20,7 +20,7 @@ import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
 type Schatting = { uren: number; posten: { wat: string; uren: number }[]; regels?: { wat: string; soort: string; inkoop: number }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
-type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
+type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; schatting?: boolean; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
 
 // "Met btw" (eigenaar, 29 okt 2026: "ik wil met btw"): inkoop en verkoop
 // tonen en invoeren incl. btw. Opgeslagen en gerekend wordt altijd excl.
@@ -58,6 +58,7 @@ const naarInvul = (r: Regel): Invul => ({
   groep: r.groep ?? "",
   catalogusId: r.catalogusId,
   meetstaat: r.meetstaat,
+  schatting: r.schatting,
 })
 const naarRegel = (r: Invul): Regel => ({
   id: r.id,
@@ -73,6 +74,7 @@ const naarRegel = (r: Invul): Regel => ({
   optioneel: r.optioneel || undefined,
   catalogusId: r.catalogusId,
   meetstaat: r.meetstaat,
+  schatting: r.schatting,
 })
 const leeg = () => naarInvul(nieuweRegel("materiaal", { hoeveelheid: 1000 }))
 
@@ -122,17 +124,20 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       const data = (await r.json()) as Schatting & { fout?: string }
       if (!r.ok || data.fout) throw new Error(data.fout || "Geen schatting gekregen.")
       setSchatting(data)
-      setUren(String(Math.round(data.uren)))
+      // De uren zijn de som van de posten, door de code opgeteld; het totaal van het model telt niet.
+      const som = (data.posten ?? []).reduce((t, p) => t + (Number(p.uren) || 0), 0)
+      setUren(String(Math.round(som || data.uren)))
       // Machines en materiaal als eigen regels erbij; lege regels gaan weg.
       const extra = (data.regels ?? []).map((x) => {
         const soort: Soort = isSoort(x.soort) ? x.soort : "overig"
         const uitCatalogus = perNaam.get(x.wat.toLowerCase())
         const totaal = Math.round(x.inkoop) * 100
         // Uit de catalogus: zijn prijs per eenheid, en het aantal (dagen, tonnen) teruggerekend uit Claudes totaal, op halve eenheden.
-        if (uitCatalogus?.inkoop) return naarInvul(alsRegel(uitCatalogus, Math.max(500, Math.round((totaal * 2) / uitCatalogus.inkoop) * 500)))
-        return naarInvul(nieuweRegel(soort, { omschrijving: x.wat, eenheid: "post", inkoop: totaal }))
+        if (uitCatalogus?.inkoop) return { ...naarInvul(alsRegel(uitCatalogus, Math.max(500, Math.round((totaal * 2) / uitCatalogus.inkoop) * 500))), schatting: true }
+        return { ...naarInvul(nieuweRegel(soort, { omschrijving: x.wat, eenheid: "post", inkoop: totaal })), schatting: true }
       })
-      if (extra.length) setRegels((oud) => [...oud.filter((r) => r.omschrijving.trim() || r.inkoop.trim()), ...extra])
+      // Opnieuw schatten vervangt de regels van de vorige schatting, in plaats van ze er nog eens onder te zetten.
+      if (extra.length) setRegels((oud) => [...oud.filter((r) => !r.schatting && (r.omschrijving.trim() || r.inkoop.trim())), ...extra])
     } catch (e) {
       setFout(e instanceof Error ? e.message : "Geen schatting gekregen.")
     } finally {
@@ -141,8 +146,9 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   }
 
   // Verandert de prijs of het tarief op een andere manier dan via het incl.-veld, dan geldt de getypte incl.-tekst niet meer.
+  // Een regel die Nick met de hand aanpast is geen schatting meer: opnieuw schatten laat hem staan.
   const zet = (i: number, r: Partial<Invul>) =>
-    setRegels(regels.map((x, j) => (j === i ? { ...x, ...r, ...(!("inkoopIncl" in r) && ("inkoop" in r || "btw" in r) ? { inkoopIncl: undefined } : {}) } : x)))
+    setRegels(regels.map((x, j) => (j === i ? { ...x, ...r, schatting: undefined, ...(!("inkoopIncl" in r) && ("inkoop" in r || "btw" in r) ? { inkoopIncl: undefined } : {}) } : x)))
   const schuif = (i: number, d: -1 | 1) => {
     const j = i + d
     if (j < 0 || j >= regels.length) return
