@@ -307,6 +307,7 @@ function Stukken({ k }: { k: Klant }) {
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
                     <a href={`/offerte/${s.link}`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Bekijk als klant ↗</a>
+                    <a href={`/offerte/${s.link}?specificatie=1`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Specificatie voor factuur ↗</a>
                     {!s.rond && (
                       <form action={trekOfferteIn.bind(null, k.id, s.link)}>
                         <button className="crm-knop-stil crm-knop-klein">Intrekken</button>

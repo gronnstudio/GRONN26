@@ -15,8 +15,10 @@ export const dynamic = "force-dynamic"
 
 const datum = (d: string) => new Date(`${d.slice(0, 10)}T12:00`).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })
 
-export default async function OffertePagina({ params }: { params: Promise<{ token: string }> }) {
+export default async function OffertePagina({ params, searchParams }: { params: Promise<{ token: string }>; searchParams: Promise<{ specificatie?: string }> }) {
   const { token } = await params
+  // Dezelfde offerte als bijlage bij de factuur die Nick in DigiBoox maakt (30 okt 2026): zonder akkoordblok en geldigheid.
+  const spec = (await searchParams).specificatie === "1"
   const o = await leesOfferte(token)
   if (!o) notFound()
   const oud = o.status === "open" && verlopen(o)
@@ -32,7 +34,7 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
       <div className="print:px-[48px]">
       <header className="mt-8 flex flex-wrap items-start justify-between gap-6 border-b border-lijn pb-6">
         <div>
-          <p className="lbl m-0 text-gedempt">Offerte · {o.nummer}</p>
+          <p className="lbl m-0 text-gedempt">{spec ? `Specificatie bij factuur · offerte ${o.nummer}` : `Offerte · ${o.nummer}`}</p>
           <h1 className="syne m-0 mt-2 text-[clamp(30px,4.4vw,48px)] leading-[1.05] tracking-[-.03em]">{o.titel}</h1>
           <p className="m-0 mt-3 text-[16px] text-gedempt">
             Voor {o.klant}
@@ -42,8 +44,19 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
         <dl className="m-0 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-[14px]">
           <dt className="text-gedempt">Datum</dt>
           <dd className="m-0">{datum(o.datum)}</dd>
-          <dt className="text-gedempt">Geldig tot</dt>
-          <dd className="m-0">{datum(o.geldigTot)}</dd>
+          {spec ? (
+            o.akkoord && (
+              <>
+                <dt className="text-gedempt">Akkoord</dt>
+                <dd className="m-0">{datum(o.akkoord.op)} · {o.akkoord.naam}</dd>
+              </>
+            )
+          ) : (
+            <>
+              <dt className="text-gedempt">Geldig tot</dt>
+              <dd className="m-0">{datum(o.geldigTot)}</dd>
+            </>
+          )}
         </dl>
       </header>
 
@@ -81,8 +94,9 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
 
       {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel} />}
 
-      <OfferteKnoppen naam={`Offerte ${o.nummer} GRØNN Studio`} />
+      <OfferteKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${o.nummer} GRØNN Studio`} />
 
+      {!spec && (
       <section aria-labelledby="akkoord-kop" className="mt-12 rounded-[16px] border border-lijn bg-vlak p-6 print:hidden">
         <h2 id="akkoord-kop" className="syne m-0 text-[24px]">
           {o.status === "akkoord" ? "Akkoord, dank je wel" : o.status === "ingetrokken" ? "Deze offerte is ingetrokken" : oud ? "Deze offerte is verlopen" : "Akkoord?"}
@@ -113,6 +127,7 @@ export default async function OffertePagina({ params }: { params: Promise<{ toke
           </form>
         )}
       </section>
+      )}
 
       <footer className="mt-12 grid gap-x-8 gap-y-3 border-t border-lijn pt-5 text-[13px] leading-[1.6] sm:grid-cols-3 print:grid-cols-3">
         <p className="m-0">

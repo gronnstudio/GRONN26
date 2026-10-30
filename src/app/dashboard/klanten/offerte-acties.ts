@@ -21,7 +21,7 @@ export async function maakOfferteVan(klantId: string, calcId: string, nr: number
   await wijzigKlanten((lijst) =>
     lijst.map((x) =>
       x.id === k.id
-        ? log({ ...x, stukken: [...x.stukken, { id: crypto.randomUUID(), soort: "Offerte", nummer: o.nummer, bedrag: o.totaal / 100, datum: o.datum, link: o.token }] }, `Offerte ${o.nummer} gemaakt uit "${c.titel}" versie ${v.nr}`)
+        ? log({ ...x, fase: x.fase === "Aanvraag" || x.fase === "Opname" ? "Offerte" : x.fase, stukken: [...x.stukken, { id: crypto.randomUUID(), soort: "Offerte", nummer: o.nummer, bedrag: o.totaal / 100, datum: o.datum, link: o.token }] }, `Offerte ${o.nummer} gemaakt uit "${c.titel}" versie ${v.nr}`)
         : x,
     ),
   )
