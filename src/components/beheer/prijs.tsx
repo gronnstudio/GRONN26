@@ -392,7 +392,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 <thead>
                   <tr>
                     <th className="w-[40%] min-w-[260px] py-1 pr-2 font-semibold">Omschrijving</th>
-                    {fasen.length > 0 && <th className="py-1 pr-2 font-semibold">Fase</th>}
+                    <th className="py-1 pr-2 font-semibold">Fase</th>
                     <th className="py-1 pr-2 font-semibold">Soort</th>
                     <th className="py-1 pr-2 font-semibold">Aantal</th>
                     <th className="py-1 pr-2 font-semibold">Eenheid</th>
@@ -413,7 +413,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   return (
                 <tbody key={sec.id}>
                   <tr className="border-t-2 border-inkt">
-                    <th colSpan={fasen.length > 0 ? 9 : 8} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
+                    <th colSpan={9} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
                     <td className="pt-4 pb-1 pr-2 text-right crm-cijfer font-semibold">{hier.length ? toonEuro(som) : ""}</td>
                     <td className="pt-4 pb-1">
                       <button type="button" onClick={() => setRegels([...regels, naarInvul(nieuweRegel(sec.soort, { hoeveelheid: 1000 }))])} className="text-[12px] text-accent-tekst">+ {sec.enkel}</button>
@@ -429,16 +429,21 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                             <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
                           </label>
                         </td>
-                        {fasen.length > 0 && (
-                          <td className="py-1.5 pr-2">
-                            <select aria-label="Fase" value={r.groep} onChange={(e) => zet(i, { groep: e.target.value })} className={`${klein} w-[120px] bg-grond`}>
-                              <option value="">Geen</option>
-                              {fasen.map((f) => (
-                                <option key={f.naam} value={f.naam}>{f.naam.split(" — ")[0]}</option>
-                              ))}
-                            </select>
-                          </td>
-                        )}
+                        <td className="py-1.5 pr-2">
+                          <input
+                            aria-label="Fase"
+                            list="fase-namen"
+                            value={r.groep}
+                            placeholder="bijv. Fase 1"
+                            onChange={(e) => zet(i, { groep: e.target.value.slice(0, 60) })}
+                            // Een nieuwe fasenaam krijgt na het typen een eigen urenveld.
+                            onBlur={(e) => {
+                              const naam = e.target.value.trim()
+                              if (naam && !fasen.some((f) => f.naam === naam)) setFasen([...fasen, { naam, uren: 0 }])
+                            }}
+                            className={`${klein} w-[120px]`}
+                          />
+                        </td>
                         <td className="py-1.5 pr-2">
                           <select aria-label="Soort" value={r.soort} onChange={(e) => { const s = e.target.value as Soort; zet(i, { soort: s, opslag: toonDecimaal(SOORTEN[s].opslag, 2), btw: SOORTEN[s].btw }) }} className={`${klein} w-[150px] bg-grond`}>
                             {Object.entries(SOORTEN).map(([id, s]) => (
@@ -498,6 +503,11 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   )
                 })}
               </table>
+              <datalist id="fase-namen">
+                {fasen.map((f) => (
+                  <option key={f.naam} value={f.naam} />
+                ))}
+              </datalist>
               <datalist id="eenheden">
                 {EENHEDEN.map((e) => (
                   <option key={e} value={e} />
