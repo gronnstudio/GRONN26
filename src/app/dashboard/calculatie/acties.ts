@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { eisEigenaar } from "@/lib/crm/toegang"
-import { STANDAARD, reken, schoonRegel, type Regel } from "@/lib/crm/calculatie"
+import { STANDAARD, calculatieTitel, reken, schoonRegel, type Regel } from "@/lib/crm/calculatie"
 import { schoonPlan, type PlanFase } from "@/lib/crm/planning"
 import { nieuwItem, zetPrijs } from "@/lib/crm/catalogus"
 import { wijzigCatalogus } from "@/lib/beheer/catalogus"
@@ -28,6 +28,9 @@ export type Concept = {
 }
 
 const geheel = (v: unknown, max: number) => (Number.isSafeInteger(v) ? Math.min(max, Math.max(0, v as number)) : 0)
+
+// "Calculatie" was de oude standaardnaam; die telt niet als eigen titel.
+const eigenTitel = (t: string) => (t.trim().toLowerCase() === "calculatie" ? "" : t.trim().slice(0, 120))
 
 export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: number } | { fout: string }> {
   await eisEigenaar()
@@ -61,7 +64,7 @@ export async function bewaarCalculatie(c: Concept): Promise<{ id: string; nr: nu
       }
       const calc: Calculatie = {
         id,
-        titel: String(c.titel ?? "").trim().slice(0, 120) || oud?.titel || "Calculatie",
+        titel: eigenTitel(String(c.titel ?? "")) || eigenTitel(oud?.titel ?? "") || calculatieTitel(k.naam, k.tuinen.find((t) => t.id === (c.tuinId || oud?.tuinId))?.naam, versie.beschrijving),
         tuinId: c.tuinId && k.tuinen.some((t) => t.id === c.tuinId) ? c.tuinId : oud?.tuinId,
         aangemaakt: oud?.aangemaakt ?? new Date().toISOString().slice(0, 10),
         versies: [...(oud?.versies ?? []), versie].slice(-30),

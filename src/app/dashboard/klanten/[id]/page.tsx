@@ -280,7 +280,7 @@ function Projecten({ k }: { k: Klant }) {
         const klaar = p.taken.filter((t) => t.klaar).length
         return (
           <li key={p.id} className="flex flex-wrap items-baseline gap-3 border-b border-lijn pb-2">
-            <Link href={`/dashboard/klanten/${k.id}/project/${p.id}`} className="font-semibold hover:text-accent-tekst">{p.titel}</Link>
+            <Link href={`/dashboard/klanten/${k.id}/project/${p.id}`} className="font-semibold hover:text-accent-tekst">{p.titel === "Calculatie" ? (k.calculaties.find((c) => c.id === p.calculatieId)?.titel ?? p.titel) : p.titel}</Link>
             <span className="text-gedempt">{p.wanneer ? `gepland ${p.wanneer}` : `gestart ${datum(p.gestart)}`}</span>
             <span className="ml-auto crm-cijfer">{p.opgeleverd ? `opgeleverd ${datum(p.opgeleverd)}` : `${klaar} van ${p.taken.length} taken`}</span>
           </li>
@@ -307,6 +307,7 @@ function Stukken({ k }: { k: Klant }) {
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
                     <a href={`/offerte/${s.link}`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Bekijk als klant ↗</a>
+                    <a href={`/offerte/${s.link}?specificatie=1`} target="_blank" rel="noreferrer" className="crm-knop-stil crm-knop-klein">Specificatie voor factuur ↗</a>
                     {!s.rond && (
                       <form action={trekOfferteIn.bind(null, k.id, s.link)}>
                         <button className="crm-knop-stil crm-knop-klein">Intrekken</button>

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState, useTransition } from "react"
 import { BTW_TARIEVEN, EENHEDEN, dubbelen, ontdubbeld, SOORTEN, STANDAARD, isSoort, nieuweRegel, reken, tekort, wegzetten, type Regel, type Soort } from "@/lib/crm/calculatie"
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
+import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
@@ -429,7 +430,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               </p>
             )}
             <div className="mt-3 flex flex-wrap gap-2">
-              <button type="button" onClick={() => window.confirm("Alle regels wissen?") && setRegels([leeg()])} className="crm-knop-rand">Alles wissen</button>
+              <VerwijderKnop actie={() => setRegels([leeg()])} wat="alle regels" label="Alles wissen" knop="crm-knop-rand" />
             </div>
             <p className="m-0 mt-2 text-[12px] text-gedempt">
               Kies een naam uit de catalogus en prijs en eenheid vullen zich in. ★ zet de prijs in de catalogus, zodat je hem de volgende keer weet. Planten 9 % btw, de rest 21 %.

@@ -241,3 +241,14 @@ export function dubbelen(regels: { omschrijving: string }[]): [string, number][]
 export function ontdubbeld<T extends { omschrijving: string }>(regels: T[]): T[] {
   return regels.filter((r, i) => !naamSleutel(r) || !regels.slice(i + 1).some((x) => naamSleutel(x) === naamSleutel(r)))
 }
+
+/**
+ * Een leesbare titel als Nick er zelf geen gaf: klantnaam en het soort tuin,
+ * uit de naam van de tuin of anders de eerste zin van de beschrijving.
+ */
+export function calculatieTitel(klant: string, tuin: string | undefined, beschrijving: string): string {
+  const zin = beschrijving.trim().split(/[.\n]/)[0]?.trim() ?? ""
+  const kort = zin.length > 40 ? `${zin.slice(0, 40).replace(/\s+\S*$/, "")}…` : zin
+  const soort = tuin && tuin.trim().toLowerCase() !== "tuin" ? tuin.trim() : kort
+  return (soort ? `${klant} · ${soort}` : klant).slice(0, 120)
+}

@@ -28,6 +28,8 @@ export default async function ProjectPagina({ params }: { params: Promise<{ id: 
   if (!k || !p) notFound()
   const c = k.calculaties.find((x) => x.id === p.calculatieId)
   const n = nacalculatie(p)
+  // Projecten van vóór 30 okt erfden de oude standaardnaam "Calculatie"; dan de naam van de calculatie.
+  const titel = p.titel === "Calculatie" && c ? c.titel : p.titel
   const actie = (soort: Parameters<typeof projectActie>[2]) => projectActie.bind(null, k.id, p.id, soort)
   const Vink = ({ soort, regel, aan, label }: { soort: "taak" | "punt-klaar" | "meerwerk-akkoord"; regel: string; aan: boolean; label: string }) => (
     <form action={actie(soort)}>
@@ -46,7 +48,7 @@ export default async function ProjectPagina({ params }: { params: Promise<{ id: 
 
   return (
     <>
-      <Kop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=projecten` }, { naam: p.titel }]} titel={p.titel}>
+      <Kop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=projecten` }, { naam: "Projecten", href: `/dashboard/klanten/${k.id}?tab=projecten` }, { naam: titel }]} titel={titel}>
         {c && (
           <Link href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${p.versie}`} className="crm-knop-rand">
             Calculatie v{p.versie}
@@ -63,10 +65,23 @@ export default async function ProjectPagina({ params }: { params: Promise<{ id: 
                   <Vink soort="taak" regel={t.id} aan={t.klaar} label={`${t.naam} klaar`} />
                   <span className={t.klaar ? "text-gedempt line-through" : ""}>{t.naam}</span>
                   <span className="ml-auto crm-cijfer text-[13px] text-gedempt">{t.dagen.toLocaleString("nl-NL")} d</span>
+                  <Weg regel={t.id} />
                 </li>
               ))}
-              {!p.taken.length && <li className="text-[14px] text-gedempt">Deze calculatieversie had geen planning. Maak er een in de calculatie en start het project opnieuw, of werk met uren en de opleverlijst.</li>}
+              {!p.taken.length && (
+                <li className="flex flex-wrap items-center gap-3 text-[14px] text-gedempt">
+                  Nog geen taken: de calculatie had geen planning.
+                  <form action={actie("uit-beschrijving")}>
+                    <BewaarKnop className="crm-knop">Haal de fasen uit de beschrijving</BewaarKnop>
+                  </form>
+                </li>
+              )}
             </ul>
+            <form action={actie("taak-erbij")} className="mt-3 grid grid-cols-[minmax(0,1fr)_90px_auto] items-end gap-2 text-[13px]">
+              <label className="grid gap-1">Taak<input name="naam" required placeholder="bijv. grondwerk" className={veld} /></label>
+              <label className="grid gap-1">Dagen<input name="dagen" inputMode="decimal" defaultValue="1" className={veld} /></label>
+              <BewaarKnop>Taak erbij</BewaarKnop>
+            </form>
           </section>
 
           {p.taken.length > 1 && (

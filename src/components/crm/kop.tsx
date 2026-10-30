@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { TerugVooruit } from "./terug-vooruit"
 
 // De kop van elke pagina in het systeem: kruimelpad, titel, één zin uitleg
 // en rechts de acties van die pagina. Daaronder eventueel tabbladen.
@@ -7,6 +8,7 @@ export type Stap = { naam: string; href?: string }
 export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: React.ReactNode; sub?: React.ReactNode; children?: React.ReactNode }) {
   return (
     <header className="border-b border-lijn px-4 pt-5 pb-5 sm:px-8 print:hidden">
+      <div className="flex items-center justify-between gap-4">
       <nav aria-label="Kruimelpad" className="min-h-[18px] text-[12px] text-gedempt">
         <ol className="m-0 flex list-none flex-wrap gap-1.5 p-0">
           {pad.map((p, i) => (
@@ -17,6 +19,8 @@ export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: R
           ))}
         </ol>
       </nav>
+      <TerugVooruit />
+      </div>
       <div className="mt-2 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
         <div className="min-w-0">
           <h1 className="syne m-0 text-[30px] leading-[1.1] tracking-[-0.01em]">{titel}</h1>
