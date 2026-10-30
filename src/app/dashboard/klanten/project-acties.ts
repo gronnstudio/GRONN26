@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { gebeurtenis, leesKlanten, wijzigKlanten, type Klant } from "@/lib/beheer/klanten"
 import { leesCenten, leesMilli } from "@/lib/crm/geld"
-import { normaliseerProject, nieuwProject, splitsProject, type Project } from "@/lib/crm/project"
+import { normaliseerProject, nieuwProject, splitsProject, takenUitBeschrijving, type Project } from "@/lib/crm/project"
 import { eisEigenaar } from "@/lib/crm/toegang"
 
 // Een project uitvoeren: starten uit een calculatieversie, taken afvinken,
@@ -40,15 +40,20 @@ export async function startProject(klantId: string, calcId: string, nr: number) 
   redirect(`/dashboard/klanten/${k.id}/project/${pid}`)
 }
 
-type Soort = "taak" | "taak-erbij" | "uren" | "meerwerk" | "meerwerk-akkoord" | "punt" | "punt-klaar" | "weg" | "opgeleverd"
+type Soort = "taak" | "taak-erbij" | "uit-beschrijving" | "uren" | "meerwerk" | "meerwerk-akkoord" | "punt" | "punt-klaar" | "weg" | "opgeleverd"
 
 /** Eén handeling op een project. */
 export async function projectActie(klantId: string, pid: string, soort: Soort, d: FormData) {
   await eisEigenaar()
   const veld = (n: string) => String(d.get(n) ?? "").trim()
   const regel = veld("regel")
-  const wijzig = (p: Project): Project => {
+  const wijzig = (p: Project, k: Klant): Project => {
     switch (soort) {
+      case "uit-beschrijving": {
+        const v = k.calculaties.find((c) => c.id === p.calculatieId)?.versies.find((x) => x.nr === p.versie)
+        const nieuw = takenUitBeschrijving(v?.beschrijving ?? "").map((f) => ({ id: crypto.randomUUID(), naam: f.naam, dagen: f.dagen, klaar: false }))
+        return nieuw.length ? { ...p, taken: [...p.taken, ...nieuw] } : p
+      }
       case "taak-erbij": {
         const naam = veld("naam")
         const dagen = Math.min(60, Math.max(0.5, Number(veld("dagen").replace(",", ".")) || 1))
@@ -81,7 +86,7 @@ export async function projectActie(klantId: string, pid: string, soort: Soort, d
       if (k.id !== klantId) return k
       const oud = k.projecten.find((p) => p.id === pid)
       if (!oud) return k
-      const nieuw = normaliseerProject(wijzig(oud))
+      const nieuw = normaliseerProject(wijzig(oud, k))
       const uit = { ...k, projecten: k.projecten.map((p) => (p.id === pid ? nieuw : p)) }
       if (soort !== "opgeleverd") return uit
       // De klant is pas klaar als elk project is opgeleverd.

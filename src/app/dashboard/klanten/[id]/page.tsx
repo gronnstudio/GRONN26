@@ -280,7 +280,7 @@ function Projecten({ k }: { k: Klant }) {
         const klaar = p.taken.filter((t) => t.klaar).length
         return (
           <li key={p.id} className="flex flex-wrap items-baseline gap-3 border-b border-lijn pb-2">
-            <Link href={`/dashboard/klanten/${k.id}/project/${p.id}`} className="font-semibold hover:text-accent-tekst">{p.titel}</Link>
+            <Link href={`/dashboard/klanten/${k.id}/project/${p.id}`} className="font-semibold hover:text-accent-tekst">{p.titel === "Calculatie" ? (k.calculaties.find((c) => c.id === p.calculatieId)?.titel ?? p.titel) : p.titel}</Link>
             <span className="text-gedempt">{p.wanneer ? `gepland ${p.wanneer}` : `gestart ${datum(p.gestart)}`}</span>
             <span className="ml-auto crm-cijfer">{p.opgeleverd ? `opgeleverd ${datum(p.opgeleverd)}` : `${klaar} van ${p.taken.length} taken`}</span>
           </li>

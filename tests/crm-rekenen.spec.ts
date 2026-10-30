@@ -6,7 +6,7 @@ import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catal
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
-import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
+import { nacalculatie, nieuwProject, normaliseerProject, splitsProject, takenUitBeschrijving } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
@@ -397,4 +397,14 @@ test("calculatietitel uit klant en tuin of beschrijving", () => {
   expect(calculatieTitel("Clannad & Stijn", "Cottagetuin", "x")).toBe("Clannad & Stijn · Cottagetuin")
   expect(calculatieTitel("Clannad & Stijn", "Tuin", "Renovatie cottagetuin met waaltjes. Daarna gazon.")).toBe("Clannad & Stijn · Renovatie cottagetuin met waaltjes")
   expect(calculatieTitel("Jan", undefined, "")).toBe("Jan")
+})
+
+test("fasen uit de beschrijving worden taken", () => {
+  expect(takenUitBeschrijving("Renovatie.\nWerkvolgorde:\n1. Grondwerk (2 dagen)\n2. Bestraten (1,5 dag)\nFase 3: Beplanting\n- Opleveren")).toEqual([
+    { naam: "Grondwerk", dagen: 2 },
+    { naam: "Bestraten", dagen: 1.5 },
+    { naam: "Beplanting", dagen: 1 },
+    { naam: "Opleveren", dagen: 1 },
+  ])
+  expect(takenUitBeschrijving("Gewoon een zin.")).toEqual([])
 })

@@ -31,7 +31,26 @@ export type Project = {
 
 const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
 
-export function nieuwProject(c: { id: string; titel: string }, v: { nr: number; planning?: PlanFase[]; uren: Milli; winst: Centen }): Project {
+/**
+ * Fasen die Nick al in de beschrijving zette: genummerde regels ("1. Grondwerk
+ * (2 dagen)"), "Fase 2: …" of opsommingstekens. Werkdagen tussen haakjes,
+ * anders 1. Zo krijgt een project zonder planning toch zijn taken.
+ */
+export function takenUitBeschrijving(tekst: string): { naam: string; dagen: number }[] {
+  return tekst
+    .split("\n")
+    .map((r) => r.match(/^\s*(?:\d+\s*[.)]|fase\s*\d+\s*[:.)-]?|[-•*])\s*(.+?)\s*$/i)?.[1] ?? "")
+    .filter((n) => n.length > 1)
+    .slice(0, 30)
+    .map((r) => {
+      const d = r.match(/\(?\s*(\d+(?:[.,]\d+)?)\s*(?:werk)?dag(?:en)?\s*\)?/i)
+      const naam = (d ? r.replace(d[0], "") : r).replace(/[\s:·,-]+$/, "").trim().slice(0, 80)
+      return { naam, dagen: d ? Math.min(60, Math.max(0.5, Number(d[1].replace(",", ".")))) : 1 }
+    })
+    .filter((x) => x.naam)
+}
+
+export function nieuwProject(c: { id: string; titel: string }, v: { nr: number; planning?: PlanFase[]; uren: Milli; winst: Centen; beschrijving?: string }): Project {
   return {
     begroot: { uren: v.uren, winst: v.winst },
     id: crypto.randomUUID(),
@@ -39,7 +58,7 @@ export function nieuwProject(c: { id: string; titel: string }, v: { nr: number; 
     calculatieId: c.id,
     versie: v.nr,
     gestart: vandaag(),
-    taken: (v.planning ?? []).map((f) => ({ id: crypto.randomUUID(), naam: f.naam, dagen: f.dagen, klaar: false })),
+    taken: (v.planning?.length ? v.planning : takenUitBeschrijving(v.beschrijving ?? "")).map((f) => ({ id: crypto.randomUUID(), naam: f.naam, dagen: f.dagen, klaar: false })),
     uren: [],
     meerwerk: [],
     oplevering: [],
