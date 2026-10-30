@@ -6,7 +6,7 @@ import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catal
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
-import { nacalculatie, nieuwProject, normaliseerProject } from "../src/lib/crm/project"
+import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
@@ -375,4 +375,19 @@ test("dubbele regels vinden en alleen de laatste houden", () => {
   const r = [{ omschrijving: "Hekwerk", v: 1 }, { omschrijving: "Zand", v: 1 }, { omschrijving: "hekwerk ", v: 2 }, { omschrijving: "", v: 0 }, { omschrijving: "", v: 0 }]
   expect(dubbelen(r)).toEqual([["hekwerk", 2]])
   expect(ontdubbeld(r).map((x) => x.v)).toEqual([1, 2, 0, 0])
+})
+
+test("project in delen: taken en begroting naar werkdagen", () => {
+  const p = nieuwProject({ id: "c", titel: "Tuin" }, { nr: 1, uren: 100_000, winst: 40_000, planning: [
+    { id: "a", naam: "Grondwerk", dagen: 1, machines: "", levering: "" },
+    { id: "b", naam: "Bestraten", dagen: 3, machines: "", levering: "" },
+  ] })
+  const b = p.taken[1].id
+  const uit = splitsProject(p, [b], "maart 2027")!
+  expect(uit[0].taken.map((t) => t.naam)).toEqual(["Grondwerk"])
+  expect(uit[1].titel).toBe("Tuin · maart 2027")
+  expect(uit[1].begroot).toEqual({ uren: 75_000, winst: 30_000 })
+  expect(uit[0].begroot.uren + uit[1].begroot.uren).toBe(100_000)
+  expect(splitsProject(p, [], "x")).toBeNull()
+  expect(splitsProject(p, p.taken.map((t) => t.id), "x")).toBeNull()
 })

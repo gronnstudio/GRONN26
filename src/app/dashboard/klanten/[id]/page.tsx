@@ -275,7 +275,7 @@ function Projecten({ k }: { k: Klant }) {
         return (
           <li key={p.id} className="flex flex-wrap items-baseline gap-3 border-b border-lijn pb-2">
             <Link href={`/dashboard/klanten/${k.id}/project/${p.id}`} className="font-semibold hover:text-accent-tekst">{p.titel}</Link>
-            <span className="text-gedempt">gestart {datum(p.gestart)}</span>
+            <span className="text-gedempt">{p.wanneer ? `gepland ${p.wanneer}` : `gestart ${datum(p.gestart)}`}</span>
             <span className="ml-auto crm-cijfer">{p.opgeleverd ? `opgeleverd ${datum(p.opgeleverd)}` : `${klaar} van ${p.taken.length} taken`}</span>
           </li>
         )

@@ -461,11 +461,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             <p className="m-0 mt-2 text-[12px] leading-[1.5] text-gedempt">De btw op je inkoop trek je af in je aangifte, daarom staat alleen het verschil op de btw-rekening.</p>
           </div>
           <p className="m-0 text-[12px] leading-[1.5] text-gedempt">Overhouden = verkoop excl. btw min inkoop, vóór vaste lasten en inkomstenbelasting. Zet de uren niet op de offerte, alleen de prijs per post.</p>
-          {klantId && (
-            <button type="button" onClick={bewaar} disabled={bewaart} className="crm-knop disabled:opacity-50">
-              {bewaart ? "Bewaren…" : versie ? `Bewaar als versie ${versie + 1}` : "Bewaar bij klant"}
-            </button>
-          )}
+          {/* Altijd zichtbaar: zonder klant zegt de knop wat er nog nodig is, in plaats van te verdwijnen. */}
+          <button type="button" onClick={bewaar} disabled={bewaart || !klantId} className="crm-knop disabled:opacity-50">
+            {!klantId ? "Kies een klant om te bewaren" : bewaart ? "Bewaren…" : versie ? `Bewaar als versie ${versie + 1}` : "Bewaar bij klant"}
+          </button>
           {melding && <p role="status" className="m-0 -mt-2 text-[13px]">{melding}</p>}
           <button type="button" onClick={() => window.print()} disabled={!u.verkoop} className="crm-knop-rand disabled:opacity-50">
             Print of bewaar als PDF
