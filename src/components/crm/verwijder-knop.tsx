@@ -4,17 +4,17 @@ import { useState } from "react"
 
 // Weghalen dat niet terug kan: eerst de knop, dan "verwijderen" typen. De
 // actie controleert het woord zelf ook, de knop alleen is geen bevestiging.
-export function VerwijderKnop({ actie, wat }: { actie: (d: FormData) => Promise<void>; wat: string }) {
+export function VerwijderKnop({ actie, wat, label = "Verwijderen", knop = "text-[12px] text-gedempt underline hover:text-let" }: { actie: (d: FormData) => void | Promise<void>; wat: string; label?: string; knop?: string }) {
   const [open, setOpen] = useState(false)
   const [tekst, setTekst] = useState("")
   if (!open)
     return (
-      <button type="button" onClick={() => setOpen(true)} className="text-[12px] text-gedempt underline hover:text-let">
-        Verwijderen
+      <button type="button" onClick={() => setOpen(true)} className={knop}>
+        {label}
       </button>
     )
   return (
-    <form action={actie} className="flex flex-wrap items-center justify-end gap-2">
+    <form action={async (d) => { await actie(d); setOpen(false); setTekst("") }} className="flex flex-wrap items-center justify-end gap-2">
       <label className="text-[12px]">
         Typ <strong>verwijderen</strong> om {wat} weg te halen
         <input name="bevestig" value={tekst} onChange={(e) => setTekst(e.target.value)} autoFocus autoComplete="off" className="crm-veld ml-2 w-[120px]" />

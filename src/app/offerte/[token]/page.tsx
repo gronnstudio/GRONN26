@@ -97,7 +97,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
       <OfferteKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${o.nummer} GRØNN Studio`} />
 
       {!spec && (
-      <section aria-labelledby="akkoord-kop" className="mt-12 rounded-[16px] border border-lijn bg-vlak p-6 print:hidden">
+      <section data-geen-pdf aria-labelledby="akkoord-kop" className="mt-12 rounded-[16px] border border-lijn bg-vlak p-6 print:hidden">
         <h2 id="akkoord-kop" className="syne m-0 text-[24px]">
           {o.status === "akkoord" ? "Akkoord, dank je wel" : o.status === "ingetrokken" ? "Deze offerte is ingetrokken" : oud ? "Deze offerte is verlopen" : "Akkoord?"}
         </h2>

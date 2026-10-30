@@ -40,7 +40,7 @@ export async function startProject(klantId: string, calcId: string, nr: number) 
   redirect(`/dashboard/klanten/${k.id}/project/${pid}`)
 }
 
-type Soort = "taak" | "uren" | "meerwerk" | "meerwerk-akkoord" | "punt" | "punt-klaar" | "weg" | "opgeleverd"
+type Soort = "taak" | "taak-erbij" | "uren" | "meerwerk" | "meerwerk-akkoord" | "punt" | "punt-klaar" | "weg" | "opgeleverd"
 
 /** Eén handeling op een project. */
 export async function projectActie(klantId: string, pid: string, soort: Soort, d: FormData) {
@@ -49,6 +49,11 @@ export async function projectActie(klantId: string, pid: string, soort: Soort, d
   const regel = veld("regel")
   const wijzig = (p: Project): Project => {
     switch (soort) {
+      case "taak-erbij": {
+        const naam = veld("naam")
+        const dagen = Math.min(60, Math.max(0.5, Number(veld("dagen").replace(",", ".")) || 1))
+        return naam ? { ...p, taken: [...p.taken, { id: crypto.randomUUID(), naam, dagen, klaar: false }] } : p
+      }
       case "taak":
         return { ...p, taken: p.taken.map((x) => (x.id === regel ? { ...x, klaar: !x.klaar } : x)) }
       case "uren": {
@@ -66,7 +71,7 @@ export async function projectActie(klantId: string, pid: string, soort: Soort, d
       case "punt-klaar":
         return { ...p, oplevering: p.oplevering.map((x) => (x.id === regel ? { ...x, klaar: !x.klaar } : x)) }
       case "weg":
-        return { ...p, uren: p.uren.filter((x) => x.id !== regel), meerwerk: p.meerwerk.filter((x) => x.id !== regel), oplevering: p.oplevering.filter((x) => x.id !== regel) }
+        return { ...p, uren: p.uren.filter((x) => x.id !== regel), meerwerk: p.meerwerk.filter((x) => x.id !== regel), oplevering: p.oplevering.filter((x) => x.id !== regel), taken: p.taken.filter((x) => x.id !== regel) }
       case "opgeleverd":
         return p.opgeleverd ? { ...p, opgeleverd: undefined } : { ...p, opgeleverd: vandaag() }
     }
