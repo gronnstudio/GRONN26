@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { faseBadge } from "@/lib/crm/klant"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { Blok, Cijfer, Cijfers, Kop, Leeg } from "@/components/crm/kop"
@@ -123,7 +124,7 @@ export default async function Vandaag({ searchParams }: { searchParams: Promise<
                             <Link href={`/dashboard/klanten/${k.id}`} className="crm-link">{k.naam}</Link>
                             {k.plaats && <span className="block text-[12px] text-gedempt">{k.plaats}</span>}
                           </td>
-                          <td><span className="crm-badge">{k.fase}</span></td>
+                          <td><span className={faseBadge(k.fase)}>{k.fase}</span></td>
                           <td className="max-w-[360px] text-[13px]">{k.volgende || <span className="text-gedempt">—</span>}</td>
                           <td className="crm-cijfer text-right">{geboekt ? getal(geboekt) : "—"}</td>
                           <td className="crm-cijfer text-right">{w ? euro(w) : "—"}</td>

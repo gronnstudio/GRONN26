@@ -45,7 +45,7 @@ export default async function Leveranciers({ searchParams }: { searchParams: Pro
                 <td className="max-w-[420px]">{l.wat}</td>
                 <td>
                   {l.account ? (
-                    <span className={`crm-badge ${l.account === "actief" ? "" : l.account === "wacht" ? "crm-badge-stil" : "crm-badge-let"}`}>
+                    <span className={`crm-badge ${l.account === "actief" ? "crm-badge-goed" : l.account === "wacht" ? "crm-badge-stil" : "crm-badge-let"}`}>
                       <span aria-hidden>{STAND[l.account].teken}</span> Account: {STAND[l.account].naam.toLowerCase()}
                     </span>
                   ) : (

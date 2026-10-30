@@ -17,6 +17,11 @@ export const dynamic = "force-dynamic"
 
 const lbl = "crm-label"
 const veld = "crm-veld"
+const SECTIES = [
+  { naam: "Materialen", bij: (s: string) => s !== "planten" && s !== "machine" },
+  { naam: "Planten", bij: (s: string) => s === "planten" },
+  { naam: "Machines", bij: (s: string) => s === "machine" },
+]
 const vandaag = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" })
 const uren = (m: number) => `${toonDecimaal(m, 3)} uur`
 
@@ -28,6 +33,9 @@ export default async function ProjectPagina({ params }: { params: Promise<{ id: 
   if (!k || !p) notFound()
   const c = k.calculaties.find((x) => x.id === p.calculatieId)
   const n = nacalculatie(p)
+  // De regels van de calculatieversie, in dezelfde drie secties als het rekenblad.
+  const regels = (c?.versies.find((v) => v.nr === p.versie)?.regels ?? []).filter((r) => r.omschrijving.trim())
+  const gebruikt = new Set(p.taken.map((t) => t.naam))
   // Projecten van vóór 30 okt erfden de oude standaardnaam "Calculatie"; dan de naam van de calculatie.
   const titel = p.titel === "Calculatie" && c ? c.titel : p.titel
   const actie = (soort: Parameters<typeof projectActie>[2]) => projectActie.bind(null, k.id, p.id, soort)
@@ -68,15 +76,30 @@ export default async function ProjectPagina({ params }: { params: Promise<{ id: 
                   <Weg regel={t.id} />
                 </li>
               ))}
-              {!p.taken.length && (
-                <li className="flex flex-wrap items-center gap-3 text-[14px] text-gedempt">
-                  Nog geen taken: de calculatie had geen planning.
-                  <form action={actie("uit-beschrijving")}>
-                    <BewaarKnop className="crm-knop">Haal de fasen uit de beschrijving</BewaarKnop>
-                  </form>
-                </li>
-              )}
+              {!p.taken.length && <li className="text-[14px] text-gedempt">Nog geen taken. Kies ze hieronder uit de calculatie, of zet er zelf een bij.</li>}
             </ul>
+            {regels.length > 0 && (
+              <details className="mt-3 text-[14px]" open={!p.taken.length}>
+                <summary className="cursor-pointer crm-label">Taken uit de calculatie</summary>
+                <form action={actie("uit-calculatie")} className="mt-2 grid gap-3">
+                  {SECTIES.map((sec) => {
+                    const hier = regels.filter((r) => sec.bij(r.soort))
+                    return hier.length ? (
+                      <fieldset key={sec.naam} className="m-0 grid gap-1.5 border-0 p-0">
+                        <legend className="mb-1 text-[13px] font-semibold">{sec.naam}</legend>
+                        {hier.map((r) => (
+                          <label key={r.id} className="flex items-center gap-2">
+                            <input type="checkbox" name="regel" value={r.id} disabled={gebruikt.has(r.omschrijving.trim())} className="size-[20px]" />
+                            <span className={gebruikt.has(r.omschrijving.trim()) ? "text-gedempt line-through" : ""}>{r.omschrijving}</span>
+                          </label>
+                        ))}
+                      </fieldset>
+                    ) : null
+                  })}
+                  <div><BewaarKnop>Zet als taken</BewaarKnop></div>
+                </form>
+              </details>
+            )}
             <form action={actie("taak-erbij")} className="mt-3 grid grid-cols-[minmax(0,1fr)_90px_auto] items-end gap-2 text-[13px]">
               <label className="grid gap-1">Taak<input name="naam" required placeholder="bijv. grondwerk" className={veld} /></label>
               <label className="grid gap-1">Dagen<input name="dagen" inputMode="decimal" defaultValue="1" className={veld} /></label>

@@ -108,6 +108,8 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-accent-tekst: var(--accent-tekst);
   --color-op-accent: var(--op-accent);
   --color-let: var(--let);
+  --color-goed: var(--goed);
+  --color-goed-zacht: var(--goed-zacht);
   --color-let-zacht: var(--let-zacht);
   --color-accent-zacht: var(--accent-zacht);
   --color-lijn-sterk: var(--lijn-sterk);
@@ -476,6 +478,8 @@ html.en .t-en { display: contents; }
   --accent-zacht: rgb(255 91 4 / 0.12);
   --let: #b3261e;
   --let-zacht: rgb(179 38 30 / 0.09);
+  --goed: #2f6a4f;
+  --goed-zacht: rgb(47 106 79 / 0.11);
   --oranje: #b84000;
   --oranje-tekst: #b84000;
   color-scheme: light;
@@ -496,6 +500,8 @@ html.en .t-en { display: contents; }
   --accent-zacht: rgb(255 122 46 / 0.14);
   --let: #ff8a80;
   --let-zacht: rgb(255 138 128 / 0.1);
+  --goed: #7fcf9a;
+  --goed-zacht: rgb(127 207 154 / 0.12);
   --oranje: #ff8a4c;
   --oranje-tekst: #ff8a4c;
   color-scheme: dark;
@@ -533,7 +539,9 @@ html.en .t-en { display: contents; }
     display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 6px;
     font-size: 12px; font-weight: 600; white-space: nowrap; background: var(--accent-zacht); color: var(--accent-tekst);
   }
+  /* Stoplicht (Nick, 30 okt 2026): rood = te laat of verloren, oranje = er moet iets gebeuren, groen = afgesproken of klaar. Groen #2F6A4F 5,6:1, donker #7FCF9A 9,7:1. */
   .crm-badge-let { background: var(--let-zacht); color: var(--let); }
+  .crm-badge-goed { background: var(--goed-zacht); color: var(--goed); }
   .crm-badge-stil { background: color-mix(in oklab, var(--inkt) 7%, transparent); color: var(--gedempt); }
   .crm-tabel { width: 100%; border-collapse: collapse; font-size: 14px; }
   .crm-tabel th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gedempt); padding: 8px 12px; border-bottom: 1px solid var(--lijn-sterk); }
