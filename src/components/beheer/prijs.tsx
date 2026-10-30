@@ -86,6 +86,8 @@ const SECTIES: { id: string; naam: string; enkel: string; soort: Soort; bij: (s:
   { id: "planten", naam: "Planten", enkel: "Plant", soort: "planten", bij: (s) => s === "planten" },
   { id: "machines", naam: "Machines", enkel: "Machine", soort: "machine", bij: (s) => s === "machine" },
 ]
+// Het nummer van een fase: "Fase 2 — Maart 2027" is 2.
+const faseNr = (naam = "") => naam.match(/\d+/)?.[0] ?? ""
 const leeg = () => naarInvul(nieuweRegel("materiaal", { hoeveelheid: 1000 }))
 
 export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten?: KlantKeuze[]; catalogus?: Item[]; begin?: Begin }) {
@@ -388,18 +390,18 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               ))}
             </datalist>
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full min-w-[920px] border-collapse text-[13px]">
+              <table className="w-full min-w-[720px] border-collapse text-[13px]">
                 <thead>
                   <tr>
-                    <th className="w-[40%] min-w-[260px] py-1 pr-2 font-semibold">Omschrijving</th>
-                    <th className="py-1 pr-2 font-semibold">Fase</th>
-                    <th className="py-1 pr-2 font-semibold">Soort</th>
-                    <th className="py-1 pr-2 font-semibold">Aantal</th>
-                    <th className="py-1 pr-2 font-semibold">Eenheid</th>
-                    <th className="py-1 pr-2 font-semibold">Inkoop / eenh.{metBtw ? " incl." : ""}</th>
-                    <th className="py-1 pr-2 font-semibold">Opslag %</th>
-                    <th className="py-1 pr-2 font-semibold">Afval %</th>
-                    <th className="py-1 pr-2 font-semibold">Btw</th>
+                    <th className="min-w-[160px] py-1 pr-1.5 font-semibold">Omschrijving</th>
+                    <th className="py-1 pr-1.5 font-semibold">Fase</th>
+                    <th className="py-1 pr-1.5 font-semibold">Soort</th>
+                    <th className="py-1 pr-1.5 font-semibold">Aantal</th>
+                    <th className="py-1 pr-1.5 font-semibold">Eenheid</th>
+                    <th className="py-1 pr-1.5 font-semibold">Inkoop / eenh.{metBtw ? " incl." : ""}</th>
+                    <th className="py-1 pr-1.5 font-semibold">Opslag %</th>
+                    <th className="py-1 pr-1.5 font-semibold">Afval %</th>
+                    <th className="py-1 pr-1.5 font-semibold">Btw</th>
                     <th className="py-1 pr-2 text-right font-semibold">Verkoop{metBtw ? " incl." : ""}</th>
                     <th className="py-1 font-semibold"><span className="sr-only">Acties</span></th>
                   </tr>
@@ -423,36 +425,40 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     const uit = [...u.regels, ...u.optioneel].find((x) => x.id === r.id)
                     return (
                       <tr key={r.id} className="border-t border-lijn align-top">
-                        <td className="py-1.5 pr-2">
+                        <td className="py-1.5 pr-1.5">
                           <input aria-label="Omschrijving" list="catalogus-namen" value={r.omschrijving} onChange={(e) => zetOmschrijving(i, e.target.value)} placeholder="bijv. klinkers" className={`${klein} w-full`} />
                           <label className="mt-1 flex items-center gap-1.5 text-[12px] text-gedempt">
                             <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
                           </label>
                         </td>
-                        <td className="py-1.5 pr-2">
-                          <input
+                        <td className="py-1.5 pr-1.5">
+                          {/* Fase 1 tot 6 (Nick, 30 okt 2026): een nummer kiezen; een fase uit de schatting houdt zijn volle naam. */}
+                          <select
                             aria-label="Fase"
-                            list="fase-namen"
-                            value={r.groep}
-                            placeholder="bijv. Fase 1"
-                            onChange={(e) => zet(i, { groep: e.target.value.slice(0, 60) })}
-                            // Een nieuwe fasenaam krijgt na het typen een eigen urenveld.
-                            onBlur={(e) => {
-                              const naam = e.target.value.trim()
-                              if (naam && !fasen.some((f) => f.naam === naam)) setFasen([...fasen, { naam, uren: 0 }])
+                            value={faseNr(r.groep)}
+                            onChange={(e) => {
+                              const n = e.target.value
+                              const naam = n ? (fasen.find((f) => faseNr(f.naam) === n)?.naam ?? `Fase ${n}`) : ""
+                              zet(i, { groep: naam })
+                              if (naam && !fasen.some((f) => f.naam === naam)) setFasen([...fasen, { naam, uren: 0 }].sort((x, y) => faseNr(x.naam).localeCompare(faseNr(y.naam))))
                             }}
-                            className={`${klein} w-[120px]`}
-                          />
+                            className={`${klein} w-[52px] bg-grond`}
+                          >
+                            <option value="">–</option>
+                            {["1", "2", "3", "4", "5", "6"].map((n) => (
+                              <option key={n} value={n}>{n}</option>
+                            ))}
+                          </select>
                         </td>
-                        <td className="py-1.5 pr-2">
-                          <select aria-label="Soort" value={r.soort} onChange={(e) => { const s = e.target.value as Soort; zet(i, { soort: s, opslag: toonDecimaal(SOORTEN[s].opslag, 2), btw: SOORTEN[s].btw }) }} className={`${klein} w-[150px] bg-grond`}>
+                        <td className="py-1.5 pr-1.5">
+                          <select aria-label="Soort" value={r.soort} onChange={(e) => { const s = e.target.value as Soort; zet(i, { soort: s, opslag: toonDecimaal(SOORTEN[s].opslag, 2), btw: SOORTEN[s].btw }) }} className={`${klein} w-[104px] bg-grond`}>
                             {Object.entries(SOORTEN).map(([id, s]) => (
                               <option key={id} value={id}>{s.naam}</option>
                             ))}
                           </select>
                         </td>
-                        <td className="py-1.5 pr-2">
-                          <input aria-label="Aantal" inputMode="decimal" value={r.hoeveelheid} onChange={(e) => zet(i, { hoeveelheid: e.target.value })} className={`${klein} w-[80px]`} />
+                        <td className="py-1.5 pr-1.5">
+                          <input aria-label="Aantal" inputMode="decimal" value={r.hoeveelheid} onChange={(e) => zet(i, { hoeveelheid: e.target.value })} className={`${klein} w-[56px]`} />
                           {isBigBag(r.eenheid) && (
                             <span className="mt-1 flex gap-1" role="group" aria-label="Aantal big bags">
                               {BB_KEUZES.map(([t, v]) => (
@@ -466,20 +472,20 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                             </span>
                           )}
                         </td>
-                        <td className="py-1.5 pr-2">
-                          <input aria-label="Eenheid" list="eenheden" value={r.eenheid} onChange={(e) => zet(i, { eenheid: e.target.value.slice(0, 12) })} className={`${klein} w-[64px]`} />
+                        <td className="py-1.5 pr-1.5">
+                          <input aria-label="Eenheid" list="eenheden" value={r.eenheid} onChange={(e) => zet(i, { eenheid: e.target.value.slice(0, 12) })} className={`${klein} w-[48px]`} />
                         </td>
-                        <td className="py-1.5 pr-2">
+                        <td className="py-1.5 pr-1.5">
                           {metBtw ? (
-                            <input aria-label="Inkoop per eenheid incl. btw" inputMode="decimal" value={r.inkoopIncl ?? inclTekst(r)} onChange={(e) => zet(i, { inkoopIncl: e.target.value, inkoop: exclUit(e.target.value, r.btw) })} placeholder="€" className={`${klein} w-[90px]`} />
+                            <input aria-label="Inkoop per eenheid incl. btw" inputMode="decimal" value={r.inkoopIncl ?? inclTekst(r)} onChange={(e) => zet(i, { inkoopIncl: e.target.value, inkoop: exclUit(e.target.value, r.btw) })} placeholder="€" className={`${klein} w-[68px]`} />
                           ) : (
-                            <input aria-label="Inkoop per eenheid" inputMode="decimal" value={r.inkoop} onChange={(e) => zet(i, { inkoop: e.target.value })} placeholder="€" className={`${klein} w-[90px]`} />
+                            <input aria-label="Inkoop per eenheid" inputMode="decimal" value={r.inkoop} onChange={(e) => zet(i, { inkoop: e.target.value })} placeholder="€" className={`${klein} w-[68px]`} />
                           )}
                           {metBtw && r.inkoop && <span className="block text-[11px] text-gedempt">{r.inkoop} excl.</span>}
                         </td>
-                        <td className="py-1.5 pr-2"><input aria-label="Opslag procent" inputMode="decimal" value={r.opslag} onChange={(e) => zet(i, { opslag: e.target.value })} className={`${klein} w-[64px]`} /></td>
-                        <td className="py-1.5 pr-2"><input aria-label="Afval procent" inputMode="decimal" value={r.afval} onChange={(e) => zet(i, { afval: e.target.value })} className={`${klein} w-[56px]`} /></td>
-                        <td className="py-1.5 pr-2">
+                        <td className="py-1.5 pr-1.5"><input aria-label="Opslag procent" inputMode="decimal" value={r.opslag} onChange={(e) => zet(i, { opslag: e.target.value })} className={`${klein} w-[48px]`} /></td>
+                        <td className="py-1.5 pr-1.5"><input aria-label="Afval procent" inputMode="decimal" value={r.afval} onChange={(e) => zet(i, { afval: e.target.value })} className={`${klein} w-[44px]`} /></td>
+                        <td className="py-1.5 pr-1.5">
                           <select aria-label="Btw" value={r.btw} onChange={(e) => { const btw = Number(e.target.value); zet(i, metBtw && r.inkoopIncl ? { btw, inkoop: exclUit(r.inkoopIncl, btw) } : { btw }) }} className={`${klein} bg-grond`}>
                             {BTW_TARIEVEN.map((b) => (
                               <option key={b} value={b}>{b / 100} %</option>
@@ -491,10 +497,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                           {uit && uit.brutoHoeveelheid !== uit.hoeveelheid && <span className="block text-[11px] text-gedempt">{toonDecimaal(uit.brutoHoeveelheid, 3)} {r.eenheid} incl. afval</span>}
                         </td>
                         <td className="py-1.5 whitespace-nowrap">
-                          <button type="button" aria-label="Prijs onthouden in de catalogus" title="Onthoud in catalogus" onClick={() => onthoud(i)} disabled={!r.omschrijving.trim()} className={`size-[28px] hover:opacity-100 disabled:opacity-20 ${r.catalogusId ? "text-let opacity-100" : "text-gedempt"}`}>★</button>
-                          <button type="button" aria-label="Regel omhoog" disabled={i === 0} onClick={() => schuif(i, -1)} className="size-[28px] opacity-60 hover:opacity-100 disabled:opacity-20">↑</button>
-                          <button type="button" aria-label="Regel omlaag" disabled={i === regels.length - 1} onClick={() => schuif(i, 1)} className="size-[28px] opacity-60 hover:opacity-100 disabled:opacity-20">↓</button>
-                          <button type="button" aria-label="Regel weghalen" onClick={() => setRegels(regels.length > 1 ? regels.filter((_, j) => j !== i) : [leeg()])} className="size-[28px] opacity-60 hover:opacity-100">×</button>
+                          <button type="button" aria-label="Prijs onthouden in de catalogus" title="Onthoud in catalogus" onClick={() => onthoud(i)} disabled={!r.omschrijving.trim()} className={`size-[22px] hover:opacity-100 disabled:opacity-20 ${r.catalogusId ? "text-let opacity-100" : "text-gedempt"}`}>★</button>
+                          <button type="button" aria-label="Regel omhoog" disabled={i === 0} onClick={() => schuif(i, -1)} className="size-[22px] opacity-60 hover:opacity-100 disabled:opacity-20">↑</button>
+                          <button type="button" aria-label="Regel omlaag" disabled={i === regels.length - 1} onClick={() => schuif(i, 1)} className="size-[22px] opacity-60 hover:opacity-100 disabled:opacity-20">↓</button>
+                          <button type="button" aria-label="Regel weghalen" onClick={() => setRegels(regels.length > 1 ? regels.filter((_, j) => j !== i) : [leeg()])} className="size-[22px] opacity-60 hover:opacity-100">×</button>
                         </td>
                       </tr>
                     )
@@ -503,11 +509,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   )
                 })}
               </table>
-              <datalist id="fase-namen">
-                {fasen.map((f) => (
-                  <option key={f.naam} value={f.naam} />
-                ))}
-              </datalist>
               <datalist id="eenheden">
                 {EENHEDEN.map((e) => (
                   <option key={e} value={e} />
