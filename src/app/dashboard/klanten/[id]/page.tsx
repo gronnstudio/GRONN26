@@ -30,6 +30,7 @@ const TABS = [
   { id: "overzicht", naam: "Overzicht" },
   { id: "tuinen", naam: "Tuinen" },
   { id: "calculaties", naam: "Calculaties" },
+  { id: "projecten", naam: "Projecten" },
   { id: "stukken", naam: "Offertes en facturen" },
   { id: "activiteit", naam: "Tijdlijn" },
 ] as const
@@ -42,7 +43,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
   if (!k) notFound()
   const actief = TABS.find((t) => t.id === tab)?.id ?? "overzicht"
   const g = geld(k)
-  const tel = { tuinen: k.tuinen.length, calculaties: k.calculaties.length, stukken: k.stukken.length, activiteit: k.activiteit.length } as Record<string, number>
+  const tel = { tuinen: k.tuinen.length, calculaties: k.calculaties.length, projecten: k.projecten.length, stukken: k.stukken.length, activiteit: k.activiteit.length } as Record<string, number>
 
   return (
     <>
@@ -85,6 +86,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
         {actief === "overzicht" && <Overzicht k={k} />}
         {actief === "tuinen" && <Tuinen k={k} lijst={lijst} />}
         {actief === "calculaties" && <Calculaties k={k} />}
+        {actief === "projecten" && <Projecten k={k} />}
         {actief === "stukken" && <Stukken k={k} />}
         {actief === "activiteit" && <Tijdlijn k={k} />}
       </main>
@@ -100,7 +102,7 @@ async function Overzicht({ k }: { k: Klant }) {
   const perUur = urenTotaal && g.gefactureerd ? g.gefactureerd / 1.21 / urenTotaal : 0
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_420px] gap-10">
-      <form key={sleutel({ ...k, activiteit: 0, stukken: 0, tuinen: 0, calculaties: 0 })} action={bewaarKlant.bind(null, k.id)} className="flex flex-col gap-6">
+      <form key={sleutel({ ...k, activiteit: 0, stukken: 0, tuinen: 0, calculaties: 0, projecten: 0 })} action={bewaarKlant.bind(null, k.id)} className="flex flex-col gap-6">
         <fieldset className="m-0 grid grid-cols-3 gap-4 border-0 p-0">
           <legend className={`${lbl} mb-3`}>Contact</legend>
           <Veld naam="naam" label="Naam" waarde={k.naam} />
@@ -262,6 +264,24 @@ function Calculaties({ k }: { k: Klant }) {
         </tbody>
       </table>
     </div>
+  )
+}
+
+function Projecten({ k }: { k: Klant }) {
+  return (
+    <ul className="m-0 grid list-none gap-2 p-0 text-[14px]">
+      {k.projecten.map((p) => {
+        const klaar = p.taken.filter((t) => t.klaar).length
+        return (
+          <li key={p.id} className="flex flex-wrap items-baseline gap-3 border-b border-lijn pb-2">
+            <Link href={`/dashboard/klanten/${k.id}/project/${p.id}`} className="font-semibold hover:text-accent-tekst">{p.titel}</Link>
+            <span className="text-gedempt">gestart {datum(p.gestart)}</span>
+            <span className="ml-auto crm-cijfer">{p.opgeleverd ? `opgeleverd ${datum(p.opgeleverd)}` : `${klaar} van ${p.taken.length} taken`}</span>
+          </li>
+        )
+      })}
+      {!k.projecten.length && <li className="py-6 text-center text-gedempt">Nog geen project. Start er een vanuit een calculatie, na akkoord.</li>}
+    </ul>
   )
 }
 

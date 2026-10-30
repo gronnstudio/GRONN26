@@ -283,3 +283,18 @@ lezen omgezet, niet in één keer.
 - Op de offerte: fase en werkdagen, geen machines of leveringen.
 - Niet gebouwd: een agenda met echte datums en het weer. De startdatum
   spreekt Nick af; de planning telt in werkdagen.
+
+## Gebouwd in fase 6
+
+- `src/lib/crm/project.ts`: `Klant.projecten`. Een project start uit één
+  calculatieversie ("Start project (vN)" op de calculatie); de taken komen
+  uit de planning van die versie.
+- Projectpagina `/dashboard/klanten/[id]/project/[pid]`: taken afvinken, uren,
+  meerwerk (met vinkje "klant akkoord"), opleverlijst, en "Markeer als
+  opgeleverd" (zet de klant op Opgeleverd). Alles gewone formulieren, ook op
+  de telefoon.
+- `nacalculatie()`: begrote uren en dagen tegenover de geschreven uren, en
+  wat er per uur overblijft (winst uit de calculatie ÷ uren, zonder meerwerk).
+- Niet gebouwd: voortgangsfoto's per project (de foto's bij de tuin blijven
+  de plek) en uren uit de algemene urenregistratie overnemen; de uren van
+  een klus schrijf je bij het project.

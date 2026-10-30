@@ -6,6 +6,7 @@ import { zetPrijs, nieuwItem, voorClaude, zoekItems } from "../src/lib/crm/catal
 import { importeer, leesCsv } from "../src/lib/crm/catalogus-import"
 import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/beeld"
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
+import { nacalculatie, nieuwProject, normaliseerProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
@@ -250,6 +251,15 @@ test.describe("catalogus en klanten", () => {
     expect(nogmaals.match(/Werkvolgorde:/g)).toHaveLength(1)
     expect(nogmaals).toMatch(/^Oude tegels eruit\.\n\nWerkvolgorde:\n1\. Afgraven[\s\S]*weer\.\n\nSchutting blijft staan\.$/)
     expect(schoonPlan([{ naam: "  Graven ", dagen: 0.3 }, { naam: "" }, { naam: "Lang", dagen: 99 }]).map((f) => [f.naam, f.dagen])).toEqual([["Graven", 0.5], ["Lang", 60]])
+  })
+  test("project: taken uit de planning, nacalculatie en opschonen", () => {
+    const p = nieuwProject({ id: "c", titel: "Terras" }, { nr: 2, planning: [{ id: "a", naam: "Graven", dagen: 1.5, machines: "", levering: "" }, { id: "b", naam: "Straten", dagen: 3, machines: "", levering: "" }] })
+    expect(p.taken.map((t) => [t.naam, t.dagen, t.klaar])).toEqual([["Graven", 1.5, false], ["Straten", 3, false]])
+    const met = normaliseerProject({ ...p, taken: [{ ...p.taken[0], klaar: true }, p.taken[1]], uren: [{ id: "u", datum: "2026-10-30", uren: 20000, wat: "" }, { id: "x", datum: "fout", uren: -5, wat: "" } as never], meerwerk: [{ id: "m", datum: "2026-10-30", omschrijving: "Afwatering", bedrag: 25000, akkoord: true }, { id: "n", datum: "2026-10-30", omschrijving: "Hek", bedrag: 10000, akkoord: false }] })
+    expect(met.uren).toHaveLength(1)
+    const n = nacalculatie(met, { uren: 16000, uurtarief: 5000, regels: [], onvoorzien: 0, korting: 0 })
+    expect(n).toMatchObject({ urenBegroot: 16000, urenWerkelijk: 20000, dagenBegroot: 4.5, takenKlaar: 1, taken: 2, meerwerkAkkoord: 25000, meerwerkOpen: 10000, perUurBegroot: 5000, perUurWerkelijk: 4000 })
+    expect(normaliseerProject({}).taken).toEqual([])
   })
   test("dubbele klant op mail, nummer of naam", () => {
     const lijst = [normaliseer({ id: "a", naam: "Diliana Timmermans", telefoon: "06 12 34 56 78" }), normaliseer({ id: "b", naam: "Noah", email: "noah@voorbeeld.nl" })]
