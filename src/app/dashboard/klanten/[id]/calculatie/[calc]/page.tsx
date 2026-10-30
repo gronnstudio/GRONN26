@@ -1,3 +1,4 @@
+import { werkplan } from "@/lib/crm/planning"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -52,6 +53,8 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     onvoorzien: versie?.onvoorzien ?? 0,
     korting: versie?.korting ?? 0,
     regels: versie?.regels ?? [],
+    planning: versie?.planning,
+    planVoorstel: t ? werkplan(t.zones) : undefined,
     nr: laatste,
   }
   // "Zet in calculatie" vanuit de tuin: de meetstaat komt erbij. Regels die eerder uit de

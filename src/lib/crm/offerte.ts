@@ -27,6 +27,8 @@ export type Offerte = {
   titel: string
   beschrijving: string
   posten: OffertePost[]
+  /** Werkvolgorde voor de klant: alleen fase en dagen, geen machines of leveringen. */
+  planning?: { naam: string; dagen: number }[]
   optioneel: OffertePost[]
   onvoorzien: Centen
   korting: Centen
@@ -78,6 +80,7 @@ export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string):
     adres: tuin?.adres || k.adres || k.plaats,
     titel: c.titel,
     beschrijving: v.beschrijving,
+    ...(v.planning?.length ? { planning: v.planning.map((f) => ({ naam: f.naam, dagen: f.dagen })) } : {}),
     posten: [
       ...(u.arbeid ? [{ omschrijving: "Arbeid", hoeveelheid: "", bedrag: u.arbeid }] : []),
       ...u.regels.map((r) => ({ omschrijving: r.omschrijving || "Post", hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),

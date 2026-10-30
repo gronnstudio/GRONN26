@@ -369,6 +369,27 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   const bestrating = page.locator("tbody tr").filter({ has: page.locator('input[value="Bestrating · Zone A"]') })
   await expect(bestrating.getByLabel("Aantal", { exact: true })).toHaveValue("73,5")
   await expect(page.locator('input[value="Opsluitband · Zone A"]')).toBeVisible()
+
+  // Fase 5: planning uit de meetstaat, als werkvolgorde op de offerte.
+  await page.getByRole("button", { name: "Planning uit de meetstaat" }).click()
+  await expect(page.locator('input[value="Afgraven en grond afvoeren"]')).toBeVisible()
+  await expect(page.getByText("21 m³ ÷ 20 m³ per dag")).toBeVisible()
+  await page.getByRole("button", { name: "Zet in werkomschrijving" }).click()
+  await page.getByRole("button", { name: "Zet in werkomschrijving" }).click()
+  const omschrijving = await page.getByLabel(/Wat moet er gebeuren/).inputValue()
+  expect(omschrijving.match(/Werkvolgorde:/g)).toHaveLength(1)
+  expect(omschrijving).toContain("1. Afgraven en grond afvoeren (1,5 dagen)")
+  await page.getByRole("button", { name: /^Bewaar/ }).first().click()
+  await expect(page.getByText("Versie 1 bewaard.")).toBeVisible()
+  await expect(page).toHaveURL(/\/calculatie\/[0-9a-f-]{36}$/)
+  await page.reload()
+  await expect(page.locator('input[value="Afgraven en grond afvoeren"]')).toBeVisible()
+  await page.getByRole("button", { name: "Offerte met link maken (v1)" }).click()
+  const href = (await page.getByRole("link", { name: "Bekijk als klant ↗" }).getAttribute("href"))!
+  await page.goto(href)
+  await expect(page.getByRole("heading", { name: "Planning" })).toBeVisible()
+  await expect(page.getByText("Afgraven en grond afvoeren · 1,5 werkdagen")).toBeVisible()
+  await expect(page.getByText("Minigraver")).toHaveCount(0)
 })
 
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
