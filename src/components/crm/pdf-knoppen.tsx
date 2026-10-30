@@ -8,7 +8,7 @@ import { useState, useSyncExternalStore } from "react"
 // pas bij de klik, zodat de pagina zelf licht blijft (ADR 0011).
 const geen = () => () => {}
 
-export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, className = "mt-8 flex flex-wrap gap-3" }: { naam: string; doel?: string; uit?: boolean; className?: string }) {
+export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, className = "mt-8 flex flex-wrap gap-3", crm = false }: { naam: string; doel?: string; uit?: boolean; className?: string; crm?: boolean }) {
   const [bezig, setBezig] = useState(false)
   // Terug alleen als Nick hier vanuit het dashboard kwam; de klant opent de link los.
   const terug = useSyncExternalStore(geen, () => document.referrer.includes("/dashboard"), () => false)
@@ -56,10 +56,10 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
           ← Terug
         </button>
       )}
-      <button type="button" onClick={pdf} disabled={bezig || uit} className="knop bg-oranje text-antraciet disabled:opacity-60">
+      <button type="button" onClick={pdf} disabled={bezig || uit} className={`${crm ? "crm-knop-groen" : "knop bg-oranje text-antraciet"} disabled:opacity-60`}>
         {bezig ? "PDF maken…" : "Download PDF"}
       </button>
-      <button type="button" onClick={() => window.print()} disabled={uit} className="knop border border-inkt disabled:opacity-50">
+      <button type="button" onClick={() => window.print()} disabled={uit} className={`${crm ? "crm-knop-rand" : "knop border border-inkt"} disabled:opacity-50`}>
         Printen
       </button>
     </div>

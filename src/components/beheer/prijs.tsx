@@ -547,7 +547,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             {!klantId ? "Kies een klant om te bewaren" : bewaart ? "Bewaren…" : versie ? `Bewaar als versie ${versie + 1}` : "Bewaar bij klant"}
           </button>
           {melding && <p role="status" className="m-0 -mt-2 text-[13px]">{melding}</p>}
-          <PdfKnoppen naam={`Calculatie ${titel || "GRØNN Studio"}`} doel=".calculatie-druk" uit={!u.verkoop} className="grid grid-cols-2 gap-2" />
+          <PdfKnoppen naam={`Calculatie ${titel || "GRØNN Studio"}`} doel=".calculatie-druk" uit={!u.verkoop} className="grid grid-cols-2 gap-2" crm />
           <p className="m-0 -mt-2 text-[12px] leading-[1.5] text-gedempt">De klant ziet alleen de prijzen, niet je inkoop, opslag of uren.</p>
         </aside>
       </div>
