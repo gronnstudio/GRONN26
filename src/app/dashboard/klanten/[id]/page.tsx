@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
+import { faseBadge } from "@/lib/crm/klant"
 import Link from "next/link"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { calculatieWeg } from "@/app/dashboard/calculatie/acties"
 import { notFound } from "next/navigation"
-import { Kop, Tabs } from "@/components/crm/kop"
+import { FaseBalk, Kop, Tabs } from "@/components/crm/kop"
 import { GrønnKnop } from "@/components/crm/gronn-knop"
 import { BRONNEN, KLANT_FASEN, KLANT_SOORTEN, PRIORITEITEN, VERLOREN_REDENEN, VOORKEUREN, geld, hoortBij, leesKlanten, sleutel, type Klant } from "@/lib/beheer/klanten"
 import { telling, type Vragenlijst } from "@/lib/crm/vragenlijst"
@@ -47,15 +48,24 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
   const g = geld(k)
   const tel = { tuinen: k.tuinen.length, calculaties: k.calculaties.length, projecten: k.projecten.length, stukken: k.stukken.length, activiteit: k.activiteit.length } as Record<string, number>
 
+  // De kopfoto: de nieuwste Na-foto, anders de nieuwste opnamefoto, van welke tuin ook.
+  const fotos = k.tuinen.flatMap((t) => t.fotos).sort((a, b) => b.datum.localeCompare(a.datum))
+  const kopFoto = fotos.find((f) => f.moment === "Na") ?? fotos.find((f) => f.moment === "Opname") ?? fotos[0]
+
   return (
     <>
+      {kopFoto && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={`/api/crm/foto?id=${kopFoto.id}`} alt={kopFoto.bijschrift || `Tuin van ${k.naam}`} className="block h-[140px] w-full object-cover sm:h-[180px] print:hidden" />
+      )}
       <Kop
         pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam }]}
         titel={k.naam}
         sub={
           <span className="flex flex-wrap items-center gap-2">
-            <span className={`crm-badge ${k.fase === "Verloren" || k.fase === "Opgeleverd" ? "crm-badge-stil" : ""}`}>{k.fase}</span>
+            <span className={faseBadge(k.fase)}>{k.fase}</span>
             <span>{[k.soort, k.plaats, k.wat].filter(Boolean).join(" · ")}</span>
+            <span className="mt-2 block w-full max-w-[640px]"><FaseBalk fasen={KLANT_FASEN} nu={k.fase} /></span>
           </span>
         }
       >

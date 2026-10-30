@@ -61,11 +61,11 @@ export function Cijfer({ waarde, label, href, let: aandacht, uitleg }: { waarde:
     </>
   )
   return href ? (
-    <Link href={href} className="block px-5 py-4 transition-colors hover:bg-grond @max-[900px]:px-3">
+    <Link href={href} className={`block px-5 py-4 transition-colors hover:bg-grond @max-[900px]:px-3 ${aandacht ? "shadow-[inset_0_3px_0_var(--accent)]" : ""}`}>
       {binnen}
     </Link>
   ) : (
-    <div className="px-5 py-4 @max-[900px]:px-3">{binnen}</div>
+    <div className={`px-5 py-4 @max-[900px]:px-3 ${aandacht ? "shadow-[inset_0_3px_0_var(--accent)]" : ""}`}>{binnen}</div>
   )
 }
 
@@ -88,5 +88,29 @@ export function Blok({ titel, rechts, children, className = "" }: { titel: strin
       </div>
       {children}
     </section>
+  )
+}
+
+/**
+ * De fasen van een klant als stappenbalk, in het stoplicht: aanvraag tot
+ * offerte oranje, vanaf akkoord groen; nog niet bereikt staat als rand.
+ * Verloren staat er los achter, als hij dat is.
+ */
+export function FaseBalk({ fasen, nu }: { fasen: readonly string[]; nu: string }) {
+  const stappen = fasen.filter((f) => f !== "Verloren")
+  const i = stappen.indexOf(nu)
+  return (
+    <ol aria-label="Fase" className="m-0 flex list-none gap-1 p-0 text-[11px] font-semibold">
+      {stappen.map((f, j) => (
+        <li
+          key={f}
+          aria-current={j === i ? "step" : undefined}
+          className={`flex-1 rounded-full px-2 py-1 text-center whitespace-nowrap ${j === i ? (j >= 3 ? "bg-goed text-grond" : "bg-accent text-op-accent") : j < i ? (j >= 3 ? "bg-goed-zacht text-goed" : "bg-accent-zacht text-accent-tekst") : "border border-lijn text-gedempt"}`}
+        >
+          {f}
+        </li>
+      ))}
+      {nu === "Verloren" && <li className="rounded-full bg-let-zacht px-2 py-1 text-let">Verloren</li>}
+    </ol>
   )
 }

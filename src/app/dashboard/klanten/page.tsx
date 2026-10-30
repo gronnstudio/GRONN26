@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { faseBadge } from "@/lib/crm/klant"
 import Link from "next/link"
 import { Cijfer, Cijfers, Kop } from "@/components/crm/kop"
 import { Pijplijn } from "@/components/beheer/pijplijn"
@@ -138,7 +139,7 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
                         {k.wat && <span className="block max-w-[340px] truncate text-[12px] text-gedempt">{k.wat}</span>}
                       </td>
                       <td>{k.soort}</td>
-                      <td><span className={`crm-badge ${k.fase === "Verloren" || k.fase === "Opgeleverd" ? "crm-badge-stil" : ""}`}>{k.fase}</span></td>
+                      <td><span className={faseBadge(k.fase)}>{k.fase}</span></td>
                       <td>{k.plaats}</td>
                       <td className="text-[13px]">{[k.telefoon, k.email].filter(Boolean).join(" · ") || k.contact}</td>
                       <td>{k.bron}</td>

@@ -16,6 +16,10 @@ import { INTAKE_SOORTEN, STANDAARD, ZONE_SOORTEN, vraagMap, type IntakeSoort, ty
 export const KLANT_FASEN = ["Aanvraag", "Opname", "Offerte", "Akkoord", "Gepland", "Uitvoering", "Opgeleverd", "Verloren"] as const
 export type KlantFase = (typeof KLANT_FASEN)[number]
 /** Fasen waarin een klus nog loopt: niet afgerond en niet verloren. */
+/** Stoplicht per fase: rood verloren, oranje nog te doen (aanvraag tot offerte), groen afgesproken tot opgeleverd. */
+export const faseKleur = (f: string): "let" | "actie" | "goed" =>
+  f === "Verloren" ? "let" : ["Aanvraag", "Opname", "Offerte"].includes(f) ? "actie" : "goed"
+export const faseBadge = (f: string) => ({ let: "crm-badge crm-badge-let", actie: "crm-badge", goed: "crm-badge crm-badge-goed" })[faseKleur(f)]
 export const isOpen = (f: KlantFase) => f !== "Opgeleverd" && f !== "Verloren"
 
 export const KLANT_SOORTEN = ["Particulier", "Zakelijk", "Leverancier", "Onderaannemer", "Architect", "Tuinontwerper", "Partner"] as const
