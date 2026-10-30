@@ -23,6 +23,8 @@ export type Project = {
   meerwerk: Meerwerk[]
   oplevering: Punt[]
   opgeleverd?: string
+  /** Wanneer dit deel wordt uitgevoerd, in Nicks woorden ("november", "maart 2027"). */
+  wanneer?: string
   /** De begroting bij de start, zodat de nacalculatie blijft kloppen als de calculatie later verandert of verdwijnt. */
   begroot: { uren: Milli; winst: Centen }
 }
@@ -67,8 +69,39 @@ export function normaliseerProject(p: Partial<Project>): Project {
     meerwerk: lijst(p.meerwerk, (r) => (t(r.omschrijving, 200) ? { id: id(r.id), datum: datum(r.datum), omschrijving: t(r.omschrijving, 200), bedrag: geheel(r.bedrag, 1e10), akkoord: r.akkoord === true } : null), 200),
     oplevering: lijst(p.oplevering, (r) => (t(r.tekst, 200) ? { id: id(r.id), tekst: t(r.tekst, 200), klaar: r.klaar === true } : null), 200),
     ...(p.opgeleverd ? { opgeleverd: datum(p.opgeleverd) } : {}),
+    ...(t(p.wanneer, 40) ? { wanneer: t(p.wanneer, 40) } : {}),
     begroot: { uren: geheel(p.begroot?.uren, 1e9), winst: Number.isSafeInteger(p.begroot?.winst) ? (p.begroot!.winst as number) : 0 },
   }
+}
+
+/**
+ * Een project in twee delen, zoals grondwerk in november en de rest in maart.
+ * De gekozen taken gaan naar een nieuw project; de begroting verdeelt naar
+ * werkdagen, zodat beide delen samen nog steeds de calculatie zijn.
+ */
+export function splitsProject(p: Project, taakIds: string[], wanneer: string): [Project, Project] | null {
+  const weg = p.taken.filter((x) => taakIds.includes(x.id))
+  if (!weg.length || weg.length === p.taken.length) return null
+  const totaal = p.taken.reduce((s, x) => s + x.dagen, 0)
+  const aandeel = (n: number) => (totaal ? deel(n * Math.round(weg.reduce((s, x) => s + x.dagen, 0) * 1000), Math.round(totaal * 1000)) : 0)
+  const uren = aandeel(p.begroot.uren)
+  const winst = aandeel(p.begroot.winst)
+  const w = wanneer.trim().slice(0, 40)
+  const nieuw: Project = {
+    ...p,
+    id: crypto.randomUUID(),
+    titel: `${p.titel} · ${w || "deel 2"}`.slice(0, 120),
+    gestart: vandaag(),
+    taken: weg,
+    uren: [],
+    meerwerk: [],
+    oplevering: [],
+    opgeleverd: undefined,
+    ...(w ? { wanneer: w } : { wanneer: undefined }),
+    begroot: { uren, winst },
+  }
+  const rest: Project = { ...p, taken: p.taken.filter((x) => !taakIds.includes(x.id)), begroot: { uren: p.begroot.uren - uren, winst: p.begroot.winst - winst } }
+  return [rest, nieuw]
 }
 
 export type Nacalculatie = {

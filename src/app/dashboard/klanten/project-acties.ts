@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { gebeurtenis, leesKlanten, wijzigKlanten, type Klant } from "@/lib/beheer/klanten"
 import { leesCenten, leesMilli } from "@/lib/crm/geld"
-import { normaliseerProject, nieuwProject, type Project } from "@/lib/crm/project"
+import { normaliseerProject, nieuwProject, splitsProject, type Project } from "@/lib/crm/project"
 import { eisEigenaar } from "@/lib/crm/toegang"
 
 // Een project uitvoeren: starten uit een calculatieversie, taken afvinken,
@@ -85,4 +85,25 @@ export async function projectActie(klantId: string, pid: string, soort: Soort, d
     }),
   )
   revalidatePath(`/dashboard/klanten/${klantId}`, "layout")
+}
+
+/** De gekozen taken worden een eigen deel, met een eigen moment. */
+export async function splitsAf(klantId: string, pid: string, d: FormData) {
+  await eisEigenaar()
+  const ids = d.getAll("taak").map(String)
+  const wanneer = String(d.get("wanneer") ?? "")
+  let nieuwId = ""
+  await wijzigKlanten((lijst) =>
+    lijst.map((k) => {
+      if (k.id !== klantId) return k
+      const oud = k.projecten.find((p) => p.id === pid)
+      const uit = oud && splitsProject(oud, ids, wanneer)
+      if (!uit) return k
+      nieuwId = uit[1].id
+      const projecten = k.projecten.flatMap((p) => (p.id === pid ? uit : [p]))
+      return log({ ...k, projecten }, `Project "${oud.titel}" gesplitst: "${uit[1].titel}"`)
+    }),
+  )
+  revalidatePath(`/dashboard/klanten/${klantId}`, "layout")
+  if (nieuwId) redirect(`/dashboard/klanten/${klantId}/project/${nieuwId}`)
 }

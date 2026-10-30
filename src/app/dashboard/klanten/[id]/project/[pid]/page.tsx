@@ -7,7 +7,7 @@ import { leesKlanten } from "@/lib/beheer/klanten"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { nacalculatie } from "@/lib/crm/project"
 import { eisEigenaar } from "@/lib/crm/toegang"
-import { projectActie } from "../../../project-acties"
+import { projectActie, splitsAf } from "../../../project-acties"
 
 // Een project in uitvoering: taken uit de planning afvinken, uren en meerwerk
 // noteren, de opleverlijst bijhouden, en begroot naast werkelijk. Gemaakt voor
@@ -68,6 +68,22 @@ export default async function ProjectPagina({ params }: { params: Promise<{ id: 
               {!p.taken.length && <li className="text-[14px] text-gedempt">Deze calculatieversie had geen planning. Maak er een in de calculatie en start het project opnieuw, of werk met uren en de opleverlijst.</li>}
             </ul>
           </section>
+
+          {p.taken.length > 1 && (
+            <details className="text-[14px]">
+              <summary className="cursor-pointer crm-label">In delen uitvoeren</summary>
+              <form action={splitsAf.bind(null, k.id, p.id)} className="mt-3 grid gap-2">
+                <p className="m-0 text-[13px] text-gedempt">Vink de taken aan die later komen. Die worden een eigen project; de begroting verdeelt naar werkdagen.</p>
+                {p.taken.map((t) => (
+                  <label key={t.id} className="flex items-center gap-2">
+                    <input type="checkbox" name="taak" value={t.id} className="size-[20px]" /> {t.naam}
+                  </label>
+                ))}
+                <label className="grid gap-1 text-[13px]">Wanneer<input name="wanneer" placeholder="bijv. maart 2027" className={veld} /></label>
+                <BewaarKnop>Maak er een apart deel van</BewaarKnop>
+              </form>
+            </details>
+          )}
 
           <section aria-labelledby="uren-kop">
             <p id="uren-kop" className={`${lbl} m-0`}>Uren · {uren(n.urenWerkelijk)}</p>
