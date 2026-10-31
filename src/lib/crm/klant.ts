@@ -41,6 +41,8 @@ export type Stuk = {
   rond?: boolean
   /** Offerte met een privélink: de sleutel van /offerte/[token]. */
   link?: string
+  /** Gekoppelde Mollie-betaling (tr_…), zodat een betaling maar één keer telt. */
+  mollie?: string
 }
 
 export type Foto = {
