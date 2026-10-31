@@ -6,6 +6,9 @@ import { leesKlanten } from "@/lib/beheer/klanten"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { geldOverzicht, vandaagNL, type Openstaand } from "@/lib/crm/overzicht"
 import { euro } from "@/lib/format"
+import { lijstBetalingen } from "@/lib/mollie"
+import { BewaarKnop } from "@/components/crm/bewaar-knop"
+import { koppelMollie } from "./acties"
 
 // Geld en papieren: wat je nog krijgt en wat er aan offertes openstaat (uit de
 // klantkaarten), wat je zelf nog moet betalen, en de kleine letters. Facturen
@@ -20,6 +23,12 @@ export default async function Geld() {
   const klanten = await leesKlanten()
   const nu = vandaagNL()
   const g = geldOverzicht(klanten, nu)
+  const mollie = await lijstBetalingen()
+  const gekoppeld = new Map(klanten.flatMap((k) => k.stukken.filter((x) => x.mollie).map((x) => [x.mollie!, k] as const)))
+  const doelen = klanten.flatMap((k) => [
+    ...k.stukken.filter((x) => x.soort === "Factuur" && !x.rond).map((x) => ({ waarde: `${k.id}|${x.id}`, naam: `${k.naam} · factuur ${x.nummer} (${euro(x.bedrag)})` })),
+    { waarde: `${k.id}|`, naam: `${k.naam} · nieuw ontvangen bedrag` },
+  ])
 
   return (
     <>
@@ -44,6 +53,48 @@ export default async function Geld() {
             </Blok>
           </div>
         </div>
+
+        <Blok titel="Betalingen via Mollie" rechts={<a href="https://my.mollie.com/dashboard" target="_blank" rel="noreferrer" className="text-accent-tekst">Mollie ↗</a>}>
+          {!mollie ? (
+            <Leeg>Mollie is niet bereikbaar (geen sleutel of geen verbinding).</Leeg>
+          ) : !mollie.length ? (
+            <Leeg>Nog geen betalingen in Mollie.</Leeg>
+          ) : (
+            <table className="crm-tabel">
+              <thead>
+                <tr><th>Datum</th><th>Omschrijving</th><th>Status</th><th className="text-right">Bedrag</th><th>Klant</th></tr>
+              </thead>
+              <tbody>
+                {mollie.map((b) => {
+                  const k = gekoppeld.get(b.id)
+                  return (
+                    <tr key={b.id}>
+                      <td className="crm-cijfer text-[13px] text-gedempt">{datum(b.betaald ?? b.datum)}</td>
+                      <td>{b.omschrijving}{b.naam && <span className="ml-2 text-[13px] text-gedempt">{b.naam}</span>}</td>
+                      <td className={`text-[13px] ${b.status === "paid" ? "" : "text-gedempt"}`}>{STATUS[b.status] ?? b.status}</td>
+                      <td className="crm-cijfer text-right">{euro(b.bedrag)}</td>
+                      <td>
+                        {k ? (
+                          <Link href={`/dashboard/klanten/${k.id}?tab=stukken`} className="crm-link">{k.naam}</Link>
+                        ) : b.status === "paid" ? (
+                          <form action={koppelMollie.bind(null, b.id)} className="flex gap-1">
+                            <select name="doel" required defaultValue="" aria-label="Koppel aan" className="crm-veld crm-knop-klein max-w-[260px]">
+                              <option value="" disabled>Koppel aan…</option>
+                              {doelen.map((d) => <option key={d.waarde} value={d.waarde}>{d.naam}</option>)}
+                            </select>
+                            <BewaarKnop className="crm-knop-rand crm-knop-klein">Koppel</BewaarKnop>
+                          </form>
+                        ) : (
+                          <span className="text-gedempt">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+        </Blok>
 
         <Blok titel="Zelf te betalen" rechts={<span className="text-gedempt">stand 7 okt 2026, uit de mail · src/lib/beheer/data.ts</span>}>
           <table className="crm-tabel">
@@ -90,6 +141,8 @@ export default async function Geld() {
     </>
   )
 }
+
+const STATUS: Record<string, string> = { paid: "Betaald", open: "Open", pending: "Bezig", authorized: "Goedgekeurd", canceled: "Geannuleerd", expired: "Verlopen", failed: "Mislukt" }
 
 function Lijst({ rijen, nu, leeg, oud }: { rijen: Openstaand[]; nu: string; leeg: string; oud?: boolean }) {
   if (!rijen.length) return <Leeg>{leeg}</Leeg>
