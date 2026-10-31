@@ -1,4 +1,5 @@
 import { werkplan } from "@/lib/crm/planning"
+import { faseTotalen } from "@/lib/crm/werkomschrijving"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -79,12 +80,17 @@ export default async function CalculatiePagina({ params, searchParams }: { param
                 key={x.nr}
                 href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.nr}`}
                 aria-current={x.nr === versie?.nr ? "page" : undefined}
-                title={`${tijd(x.datum)} · ${toonEuro(x.totaal)}`}
+                title={`${tijd(x.datum)} · ${toonEuro(x.totaal)}${faseTotalen(x).map((f) => ` · ${f.naam.split(" — ")[0]} ${toonEuro(f.totaal)}`).join("")}`}
                 className={`crm-cijfer grid size-[32px] place-items-center rounded-full border ${x.nr === versie?.nr ? "border-accent bg-accent text-op-accent" : "border-lijn-sterk bg-vlak hover:border-accent"}`}
               >
                 {x.nr}
               </Link>
             ))}
+            {versie && faseTotalen(versie).length > 0 && (
+              <span className="ml-3 text-gedempt">
+                {faseTotalen(versie).map((f) => `${f.naam.split(" — ")[0]} ${toonEuro(f.totaal)}`).join(" · ")}
+              </span>
+            )}
           </nav>
         )}
         {c && versie && (

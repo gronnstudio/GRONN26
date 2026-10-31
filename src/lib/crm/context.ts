@@ -3,6 +3,7 @@ import { SOORTEN, reken } from "./calculatie"
 import { toonDecimaal, toonEuro } from "./geld"
 import { STANDAARD, alleVragen, type Vragenlijst } from "./vragenlijst"
 import { geld, isOpen, laatsteCalculatie, type Klant } from "./klant"
+import { faseTotalen } from "./werkomschrijving"
 
 // Wat Grønn (de assistent) uit het CRM te zien krijgt. Zo weinig als nodig:
 // geen telefoonnummers, e-mail of adressen, want die heeft hij voor advies
@@ -23,7 +24,7 @@ export function crmOverzicht(klanten: Klant[]) {
         `- ${k.naam}${k.plaats ? ` (${k.plaats})` : ""}: ${k.wat || "geen omschrijving"}. Fase ${k.fase}.`,
         k.volgende && `Volgende: ${k.volgende}.`,
         k.opvolgen && `Opvolgen ${k.opvolgen}${k.opvolgen <= nu ? " (vandaag of te laat)" : ""}.`,
-        c && `Calculatie "${c.c.titel}" v${c.v.nr}: ${toonEuro(c.v.totaal)} incl. btw, overhouden ${toonEuro(c.v.winst)}.`,
+        c && `Calculatie "${c.c.titel}" v${c.v.nr}: ${toonEuro(c.v.totaal)} incl. btw, overhouden ${toonEuro(c.v.winst)}.${c.v.fasen?.length ? ` Fasen: ${faseTotalen(c.v).map((f) => `${f.naam} ${toonEuro(f.totaal)}`).join(", ")}.` : ""}`,
         g.open > 0 && `Nog te ontvangen € ${g.open.toFixed(2)}.`,
       ]
         .filter(Boolean)
@@ -49,12 +50,16 @@ export function klantContext(k: Klant, lijst: Vragenlijst = STANDAARD) {
     const gezien = t.bevindingen.filter((b) => b.status === "bevestigd").map((b) => `${b.zone}: ${b.tekst}${b.meting ? ` (nog meten: ${b.meting})` : ""}`)
     delen.push(`## Tuin ${t.naam}\n${antwoorden.join("; ") || "Opname nog leeg."}${t.diensten.length ? `\nGewenst: ${t.diensten.join(", ")}` : ""}${zones.length ? `\nZones: ${zones.join("; ")}` : ""}${gezien.length ? `\nBevestigd op foto's: ${gezien.join("; ")}` : ""}`)
   }
-  const c = laatsteCalculatie(k)
-  if (c) {
-    const u = reken(c.v)
-    const regels = u.regels.map((r) => `${r.omschrijving || SOORTEN[r.soort].naam}: ${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}, inkoop ${toonEuro(r.kostprijs)}, verkoop ${toonEuro(r.verkoop)}`)
+  // Alle calculaties en hun versies, met per versie de fasen, zodat Grønn alles kan meerekenen.
+  for (const c of k.calculaties) {
+    const v = c.versies.at(-1)
+    if (!v) continue
+    const u = reken(v)
+    const regels = u.regels.map((r) => `${r.omschrijving || SOORTEN[r.soort].naam}${r.groep ? ` [${r.groep}]` : ""}: ${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}, inkoop ${toonEuro(r.kostprijs)}, verkoop ${toonEuro(r.verkoop)}`)
+    const fasen = faseTotalen(v).map((f) => `${f.naam}: ${toonDecimaal(f.uren, 3)} uur, excl. btw ${toonEuro(f.verkoop)}, incl. btw ${toonEuro(f.totaal)}, overhouden ${toonEuro(f.winst)}`)
+    const eerder = c.versies.slice(0, -1).map((x) => `v${x.nr} (${x.datum.slice(0, 10)}): ${toonEuro(x.totaal)} incl. btw${x.fasen?.length ? `; ${faseTotalen(x).map((f) => `${f.naam} ${toonEuro(f.totaal)}`).join(", ")}` : ""}`)
     delen.push(
-      `## Calculatie "${c.c.titel}" versie ${c.v.nr}\nArbeid ${toonDecimaal(c.v.uren, 3)} uur à ${toonEuro(c.v.uurtarief)}. ${regels.join("; ")}.\nVerkoop excl. btw ${toonEuro(u.verkoop)}, totaal incl. btw ${toonEuro(u.totaal)}, overhouden ${toonEuro(u.winst)} (${toonEuro(u.perUur)} per uur, marge ${toonDecimaal(u.marge, 2)} %).`,
+      `## Calculatie "${c.titel}" versie ${v.nr}\nArbeid ${toonDecimaal(v.uren, 3)} uur à ${toonEuro(v.uurtarief)}. ${regels.join("; ")}.\nVerkoop excl. btw ${toonEuro(u.verkoop)}, totaal incl. btw ${toonEuro(u.totaal)}, overhouden ${toonEuro(u.winst)} (${toonEuro(u.perUur)} per uur, marge ${toonDecimaal(u.marge, 2)} %).${fasen.length ? `\nFasen: ${fasen.join("; ")}.` : ""}${eerder.length ? `\nEerdere versies: ${eerder.join("; ")}.` : ""}`,
     )
   }
   const g = geld(k)

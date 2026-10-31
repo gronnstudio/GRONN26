@@ -53,3 +53,8 @@ export function faseTekst(tekst: string, fase: string) {
   const eind = regels.findIndex((r, i) => i > start && /^##\s/.test(r))
   return regels.slice(start, eind < 0 ? undefined : eind).join("\n").trim()
 }
+
+/** Per fase het totaal incl. btw, zodat elke versie zijn fasen naast het geheel laat zien. */
+export function faseTotalen(v: Parameters<typeof faseInvoer>[0]) {
+  return (v.fasen ?? []).map((f) => ({ naam: f.naam, uren: f.uren, ...reken(faseInvoer(v, f.naam)) }))
+}
