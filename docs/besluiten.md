@@ -17,7 +17,7 @@ Stand: 29 okt 2026.
 | 29 sep / 9 okt 2026 | **Claude merget zijn eigen PR's** na groene CI, tot Nick anders zegt. | Snelheid; Nick hoeft niet elke PR te openen. |
 | 9 okt 2026 | **Geen previews per branch** op Vercel, alleen productie. Een preview alleen op verzoek. | Kosten (Vercel Pro zo laag mogelijk). |
 | 21 okt 2026 | **CI één keer per commit**, met caches; docs-only draait niet. | Minder Actions-minuten, geen geforceerde herhalingen. |
-| 29 okt 2026 | **Archief van de vorige site**: Nick wil het in deze repo. Omdat deze repo openbaar is en `gronn-studio` privé, wacht dat op zijn keuze; tot dan blijft het in `gronn-studio`. | Niets intern per ongeluk publiceren. |
+| 31 okt 2026 | **Archief van de vorige site in deze repo** onder `archief/gronn-studio/`, buiten de build, openbaar (Nick: "laat maar alles public"). Klantgegevens vervangen door voorbeelden. | Alles op één plek. [ADR 0009](architecture/decisions/0009-archief-van-de-vorige-site.md) |
 | 29 okt 2026 | **Versies en releases**: zie [ADR 0010](architecture/decisions/0010-versies-en-releases.md). | Nick: "there is also no release". |
 | 3 okt 2026 | Opleveringen als losse bestanden, nooit gezipt. | Nick. |
 | 30 sep 2026 | Geen halfwerkende tussenoplossingen laten zien; alleen het werkende resultaat of één duidelijke blokkade. | "Bespaar me deze tussenoplossingen." |
@@ -74,4 +74,3 @@ Stand: 29 okt 2026.
 - Wat DigiBoox als import accepteert, voor de facturenexport.
 - Welke UI-ideeën voor het CRM eerst: telefoonvriendelijke opname, klantkaart-overzicht, snelle acties op Vandaag, vast totaal op Prijs.
 - Prijs van opgestuurde borderpakketten.
-- Of het archief van de vorige site in deze repo komt, en hoe (zie boven).

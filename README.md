@@ -52,6 +52,7 @@ public/             foto's, video, iconen, wireframes (statische HTML)
 tests/              Playwright; nieuwe specs importeren uit ./fixtures
 scripts/            gpt.mjs (review door GPT), documenten.mjs
 docs/               de kennisbank (hieronder)
+archief/            de vorige site, alleen ter naslag, niet gebouwd
 ```
 
 ## Documentatie
@@ -77,6 +78,7 @@ Wijzigingen per release staan in [CHANGELOG.md](CHANGELOG.md).
 
 ## Archief
 
-De vorige site staat in de privé-repo `gronnstudio/gronn-studio` (live tot
-9 okt 2026; serveert nog links.gronn.studio). Wat daar besloten werd en nog
-geldt, staat in [docs/besluiten.md](docs/besluiten.md).
+`archief/gronn-studio/` is een momentopname van de vorige site (repo
+`gronnstudio/gronn-studio`, live tot 9 okt 2026; serveert nog
+links.gronn.studio). Hij wordt niet gebouwd, niet getypecheckt en niet naar
+Vercel geüpload. Uitleg in [archief/README.md](archief/README.md).

@@ -1,0 +1,2612 @@
+{
+  "siteCopy": {
+    "heroTitle": [
+      {
+        "en": "Landscapes designed",
+        "nl": "Landschappen ontworpen"
+      },
+      {
+        "en": "as living systems.",
+        "nl": "als levende systemen."
+      }
+    ],
+    "heroSubtitle": {
+      "en": "GRØNN Studio designs regenerative gardens, ecological water systems and resilient outdoor spaces that work with nature rather than against it.",
+      "nl": "GRØNN Studio ontwerpt regeneratieve tuinen, ecologische watersystemen en veerkrachtige buitenruimtes die mét de natuur werken in plaats van ertegen."
+    },
+    "heroLocation": {
+      "en": "Regenerative Landscape Design — Stein (LB), NL",
+      "nl": "Regeneratief landschapsontwerp — Stein (LB), NL"
+    },
+    "availability": {
+      "en": "Taking new projects",
+      "nl": "Ruimte voor nieuwe projecten"
+    },
+    "ctaTitle": [
+      {
+        "en": "Let the landscape become",
+        "nl": "Laat het landschap deel"
+      },
+      {
+        "en": "part of the solution.",
+        "nl": "van de oplossing worden."
+      }
+    ],
+    "ctaSubtitle": {
+      "en": "Tell us about your garden, pond or ecological challenge — every project begins with understanding the site.",
+      "nl": "Vertel ons over je tuin, vijver of ecologische uitdaging — elk project begint met het begrijpen van de locatie."
+    }
+  },
+  "studio": {
+    "heroTitle": [
+      {
+        "en": "Ecological design",
+        "nl": "Ecologisch ontwerp"
+      },
+      {
+        "en": "begins with observation.",
+        "nl": "begint met observatie."
+      }
+    ],
+    "about": {
+      "en": "GRØNN Studio is a specialist ecological design practice for gardens, water systems, habitat creation and regenerative landscape transformation. We start from how a site actually works — its water, soil, light and life — and design from those relationships outward. The result is not a decorated plot but a functioning landscape that grows richer with every season.",
+      "nl": "GRØNN Studio is een gespecialiseerd ecologisch ontwerpbureau voor tuinen, watersystemen, habitatcreatie en regeneratieve landschapstransformatie. We vertrekken vanuit hoe een locatie werkelijk werkt — het water, de bodem, het licht en het leven — en ontwerpen vanuit die relaties naar buiten. Het resultaat is geen gedecoreerd perceel, maar een functionerend landschap dat elk seizoen rijker wordt."
+    },
+    "founderName": {
+      "en": "Nick",
+      "nl": "Nick"
+    },
+    "founderRoles": [
+      {
+        "en": "Ecological designer",
+        "nl": "Ecologisch ontwerper"
+      },
+      {
+        "en": "Systems thinker",
+        "nl": "Systeemdenker"
+      },
+      {
+        "en": "Practical maker",
+        "nl": "Praktische maker"
+      },
+      {
+        "en": "Garden observer",
+        "nl": "Tuinobservator"
+      },
+      {
+        "en": "Founder of GRØNN Studio",
+        "nl": "Oprichter van GRØNN Studio"
+      }
+    ],
+    "founderBio": {
+      "en": "Nick founded GRØNN to close the gap between ecological knowledge and everyday gardens — translating how living systems work into designs that can be built, maintained and loved.",
+      "nl": "Nick richtte GRØNN op om de kloof te dichten tussen ecologische kennis en alledaagse tuinen — door te vertalen hoe levende systemen werken naar ontwerpen die gebouwd, onderhouden en geliefd kunnen worden."
+    },
+    "mission": {
+      "en": "To make ecological intelligence understandable, practical and visually powerful.",
+      "nl": "Ecologische intelligentie begrijpelijk, praktisch en visueel krachtig maken."
+    },
+    "philosophy": [
+      {
+        "en": "Nature is a system",
+        "nl": "Natuur is een systeem"
+      },
+      {
+        "en": "Beauty and function belong together",
+        "nl": "Schoonheid en functie horen bij elkaar"
+      },
+      {
+        "en": "Soil and water come first",
+        "nl": "Bodem en water komen eerst"
+      },
+      {
+        "en": "Every intervention should perform multiple functions",
+        "nl": "Elke ingreep moet meerdere functies vervullen"
+      },
+      {
+        "en": "Landscapes should improve over time",
+        "nl": "Landschappen moeten met de tijd beter worden"
+      }
+    ],
+    "manifestoTitle": [
+      {
+        "en": "We do not add nature to a design.",
+        "nl": "We voegen geen natuur toe aan een ontwerp."
+      },
+      {
+        "en": "Nature is the design.",
+        "nl": "Natuur ís het ontwerp."
+      }
+    ],
+    "manifestoBody": {
+      "en": "We design soil that can recover. Water that stays in the landscape. Plant communities that support life. Habitats that become richer over time.",
+      "nl": "We ontwerpen bodem die kan herstellen. Water dat in het landschap blijft. Plantengemeenschappen die leven ondersteunen. Habitats die rijker worden met de tijd."
+    },
+    "manifestoClose": {
+      "en": "We design living systems.",
+      "nl": "We ontwerpen levende systemen."
+    }
+  },
+  "home": {
+    "observationTitle": {
+      "en": "Every landscape begins with attention.",
+      "nl": "Elk landschap begint met aandacht."
+    },
+    "observationBody": {
+      "en": "Before anything is designed, the site is read: how water moves, where light falls, what the soil holds, which life is already present. The design starts from what the landscape is already trying to do.",
+      "nl": "Voordat er iets wordt ontworpen, wordt de locatie gelezen: hoe water beweegt, waar licht valt, wat de bodem bevat, welk leven er al is. Het ontwerp vertrekt vanuit wat het landschap al probeert te doen."
+    },
+    "observationPins": [
+      {
+        "en": "Soil",
+        "nl": "Bodem"
+      },
+      {
+        "en": "Water",
+        "nl": "Water"
+      },
+      {
+        "en": "Light",
+        "nl": "Licht"
+      },
+      {
+        "en": "Movement",
+        "nl": "Beweging"
+      },
+      {
+        "en": "Existing habitat",
+        "nl": "Bestaande habitat"
+      }
+    ],
+    "systemTitle": {
+      "en": "Eight elements, one system",
+      "nl": "Acht elementen, één systeem"
+    },
+    "systemHint": {
+      "en": "Select an element to see how it connects to the rest of the landscape.",
+      "nl": "Selecteer een element om te zien hoe het verbonden is met de rest van het landschap."
+    },
+    "systemElements": [
+      {
+        "label": {
+          "en": "Soil",
+          "nl": "Bodem"
+        },
+        "text": {
+          "en": "Living soil stores water, feeds roots and hosts the biology every other element depends on. We build it first: de-compaction, organic matter, permanent cover.",
+          "nl": "Levende bodem bergt water, voedt wortels en herbergt de biologie waar elk ander element van afhangt. We bouwen die eerst op: verdichting doorbreken, organische stof, permanente bedekking."
+        }
+      },
+      {
+        "label": {
+          "en": "Water",
+          "nl": "Water"
+        },
+        "text": {
+          "en": "Water can be retained, slowed, filtered and reused within the landscape. Downpipes feed planting, low points become rain gardens, ponds circulate through planted filters instead of machinery.",
+          "nl": "Water kan binnen het landschap worden vastgehouden, vertraagd, gefilterd en hergebruikt. Regenpijpen voeden beplanting, laagtes worden regentuinen, vijvers circuleren door beplante filters in plaats van door techniek."
+        }
+      },
+      {
+        "label": {
+          "en": "Plants",
+          "nl": "Planten"
+        },
+        "text": {
+          "en": "Plant communities — not specimens — occupy every layer and season. They shade soil, pump carbon into it, filter water and feed everything with wings or legs.",
+          "nl": "Plantengemeenschappen — geen solitairen — bezetten elke laag en elk seizoen. Ze beschaduwen de bodem, pompen er koolstof in, filteren water en voeden alles met vleugels of poten."
+        }
+      },
+      {
+        "label": {
+          "en": "Fungi",
+          "nl": "Schimmels"
+        },
+        "text": {
+          "en": "Mycorrhizal networks connect roots into one trading system, moving water and nutrients where they are needed. Undisturbed soil and woody mulch keep the network intact.",
+          "nl": "Mycorrhizanetwerken verbinden wortels tot één handelssysteem dat water en voedingsstoffen brengt waar ze nodig zijn. Ongestoorde bodem en houtige mulch houden het netwerk intact."
+        }
+      },
+      {
+        "label": {
+          "en": "Wildlife",
+          "nl": "Dieren"
+        },
+        "text": {
+          "en": "Insects, birds and amphibians are the workforce: pollination, pest control, decomposition. They stay when food, shelter, water and safe routes exist together.",
+          "nl": "Insecten, vogels en amfibieën zijn de werkkrachten: bestuiving, plaagbeheersing, afbraak. Ze blijven wanneer voedsel, beschutting, water en veilige routes samen aanwezig zijn."
+        }
+      },
+      {
+        "label": {
+          "en": "Materials",
+          "nl": "Materialen"
+        },
+        "text": {
+          "en": "Durable, repairable, low-impact — and preferably already on site. Excavated stone becomes spillways; old paving becomes footings; nothing leaves that can still work.",
+          "nl": "Duurzaam, repareerbaar, met lage impact — en het liefst al op de locatie aanwezig. Uitgegraven steen wordt een overloop; oude bestrating wordt fundering; niets vertrekt dat nog kan werken."
+        }
+      },
+      {
+        "label": {
+          "en": "Climate",
+          "nl": "Klimaat"
+        },
+        "text": {
+          "en": "Every design is stress-tested against cloudbursts and drought. Retained water, shaded soil and layered planting are the buffer that keeps the system stable as extremes sharpen.",
+          "nl": "Elk ontwerp wordt getest op hoosbuien en droogte. Vastgehouden water, beschaduwde bodem en gelaagde beplanting vormen de buffer die het systeem stabiel houdt terwijl de extremen scherper worden."
+        }
+      },
+      {
+        "label": {
+          "en": "People",
+          "nl": "Mensen"
+        },
+        "text": {
+          "en": "Landscapes must stay usable, understandable and maintainable. Paths, sightlines and seasonal rhythm are designed so people remain part of the system, not visitors to it.",
+          "nl": "Landschappen moeten bruikbaar, begrijpelijk en onderhoudbaar blijven. Paden, zichtlijnen en seizoensritme zijn zo ontworpen dat mensen deel van het systeem blijven, geen bezoekers ervan."
+        }
+      }
+    ],
+    "processTitle": {
+      "en": "How GRØNN works",
+      "nl": "Zo werkt GRØNN"
+    },
+    "processStages": [
+      {
+        "title": {
+          "en": "Observe",
+          "nl": "Observeren"
+        },
+        "text": {
+          "en": "Study the landscape before introducing change.",
+          "nl": "Bestudeer het landschap voordat je iets verandert."
+        }
+      },
+      {
+        "title": {
+          "en": "Map",
+          "nl": "In kaart brengen"
+        },
+        "text": {
+          "en": "Identify patterns, constraints, flows and opportunities.",
+          "nl": "Breng patronen, beperkingen, stromen en kansen in kaart."
+        }
+      },
+      {
+        "title": {
+          "en": "Connect",
+          "nl": "Verbinden"
+        },
+        "text": {
+          "en": "Create relationships between soil, water, planting, habitat and people.",
+          "nl": "Leg relaties tussen bodem, water, beplanting, habitat en mensen."
+        }
+      },
+      {
+        "title": {
+          "en": "Design",
+          "nl": "Ontwerpen"
+        },
+        "text": {
+          "en": "Translate ecological intelligence into a clear spatial system.",
+          "nl": "Vertaal ecologische intelligentie naar een helder ruimtelijk systeem."
+        }
+      },
+      {
+        "title": {
+          "en": "Establish",
+          "nl": "Vestigen"
+        },
+        "text": {
+          "en": "Build, plant, monitor and guide the landscape through its early development.",
+          "nl": "Bouw, beplant, monitor en begeleid het landschap door zijn eerste ontwikkeling."
+        }
+      },
+      {
+        "title": {
+          "en": "Evolve",
+          "nl": "Evolueren"
+        },
+        "text": {
+          "en": "Allow the landscape to mature and adapt over time.",
+          "nl": "Laat het landschap rijpen en zich aanpassen in de loop van de tijd."
+        }
+      }
+    ],
+    "brandTitle": [
+      {
+        "en": "Nature is not decoration.",
+        "nl": "Natuur is geen decoratie."
+      },
+      {
+        "en": "Nature is infrastructure.",
+        "nl": "Natuur is infrastructuur."
+      }
+    ],
+    "brandBody": {
+      "en": "Every garden is a network of relationships between soil, water, plants, wildlife, materials and people. GRØNN designs those relationships as one functioning system.",
+      "nl": "Elke tuin is een netwerk van relaties tussen bodem, water, planten, dieren, materialen en mensen. GRØNN ontwerpt die relaties als één functionerend systeem."
+    },
+    "principles": [
+      {
+        "en": "Observe before acting.",
+        "nl": "Observeer voordat je handelt."
+      },
+      {
+        "en": "Keep water in the landscape.",
+        "nl": "Houd water in het landschap."
+      },
+      {
+        "en": "Build living soil.",
+        "nl": "Bouw levende bodem."
+      },
+      {
+        "en": "Design relationships.",
+        "nl": "Ontwerp relaties."
+      },
+      {
+        "en": "Create habitat.",
+        "nl": "Creëer habitat."
+      },
+      {
+        "en": "Reduce unnecessary materials.",
+        "nl": "Beperk overbodige materialen."
+      },
+      {
+        "en": "Allow nature to evolve.",
+        "nl": "Laat de natuur evolueren."
+      },
+      {
+        "en": "Make beauty functional.",
+        "nl": "Maak schoonheid functioneel."
+      }
+    ],
+    "studioIntroTitle": [
+      {
+        "en": "Designing",
+        "nl": "Ontwerpen"
+      },
+      {
+        "en": "with life.",
+        "nl": "met leven."
+      }
+    ],
+    "studioIntroBody": {
+      "en": "GRØNN Studio is an ecological design practice founded by Nick. The studio combines observation, systems thinking, practical craftsmanship and ecological knowledge to create gardens and landscapes that become richer, stronger and more resilient over time.",
+      "nl": "GRØNN Studio is een ecologisch ontwerpbureau, opgericht door Nick. De studio combineert observatie, systeemdenken, praktisch vakmanschap en ecologische kennis om tuinen en landschappen te maken die in de loop van de tijd rijker, sterker en veerkrachtiger worden."
+    },
+    "studioIntroTag": {
+      "en": "Ecological intelligence translated into practical design.",
+      "nl": "Ecologische intelligentie vertaald naar praktisch ontwerp."
+    },
+    "ticker": {
+      "en": "Grow green · Live wild · Thrive together · Rooted in nature · ",
+      "nl": "Groei groen · Leef wild · Bloei samen · Geworteld in de natuur · "
+    },
+    "testimonialsTitle": {
+      "en": "What the gardens' people say",
+      "nl": "Wat de mensen van de tuinen zeggen"
+    },
+    "testimonials": [
+      {
+        "quote": {
+          "en": "The pond stopped being a chore and became the reason we sit outside. This spring we counted dragonflies we had never seen before.",
+          "nl": "De vijver is geen klus meer maar de reden dat we buiten zitten. Dit voorjaar telden we libellen die we nog nooit hadden gezien."
+        },
+        "name": "Familie Verhoeven",
+        "context": {
+          "en": "Two Ponds, One Living System — Utrecht",
+          "nl": "Twee vijvers, één levend systeem — Utrecht"
+        }
+      },
+      {
+        "quote": {
+          "en": "We asked for less lawn and got back an hour every weekend — and a garden that hums in July.",
+          "nl": "We vroegen om minder gazon en kregen elk weekend een uur terug — en een tuin die zoemt in juli."
+        },
+        "name": "M. de Bruin",
+        "context": {
+          "en": "From Lawn to Living Garden — Eindhoven",
+          "nl": "Van gazon naar levende tuin — Eindhoven"
+        }
+      },
+      {
+        "quote": {
+          "en": "GRØNN read the site before drawing a single line. The design felt less like an imposition and more like a translation.",
+          "nl": "GRØNN las eerst de plek voordat er één lijn werd getekend. Het ontwerp voelde niet opgelegd, maar als een vertaling."
+        },
+        "name": "S. Jansen",
+        "context": {
+          "en": "Ecological consultancy — Limburg",
+          "nl": "Ecologisch advies — Limburg"
+        }
+      }
+    ]
+  },
+  "approach": {
+    "heroTitle": [
+      {
+        "en": "A landscape is a system,",
+        "nl": "Een landschap is een systeem,"
+      },
+      {
+        "en": "not a composition.",
+        "nl": "geen compositie."
+      }
+    ],
+    "heroIntro": {
+      "en": "Seven elements form the core framework of every GRØNN design. The process that carries them from observation to maturity runs in five phases.",
+      "nl": "Zeven elementen vormen het kernraamwerk van elk GRØNN-ontwerp. Het proces dat ze van observatie naar volwassenheid brengt, verloopt in vijf fasen."
+    },
+    "framework": [
+      {
+        "title": {
+          "en": "Soil",
+          "nl": "Bodem"
+        },
+        "text": {
+          "en": "Build and protect the living foundation.",
+          "nl": "Bouw en bescherm het levende fundament."
+        }
+      },
+      {
+        "title": {
+          "en": "Water",
+          "nl": "Water"
+        },
+        "text": {
+          "en": "Slow it, spread it, store it and circulate it.",
+          "nl": "Vertraag het, verspreid het, berg het en laat het circuleren."
+        }
+      },
+      {
+        "title": {
+          "en": "Plants",
+          "nl": "Planten"
+        },
+        "text": {
+          "en": "Design communities rather than isolated specimens.",
+          "nl": "Ontwerp gemeenschappen in plaats van losse solitairen."
+        }
+      },
+      {
+        "title": {
+          "en": "Habitat",
+          "nl": "Habitat"
+        },
+        "text": {
+          "en": "Create food, shelter, water and ecological connectivity.",
+          "nl": "Creëer voedsel, beschutting, water en ecologische verbinding."
+        }
+      },
+      {
+        "title": {
+          "en": "Materials",
+          "nl": "Materialen"
+        },
+        "text": {
+          "en": "Use durable, repairable and low-impact materials.",
+          "nl": "Gebruik duurzame, repareerbare materialen met lage impact."
+        }
+      },
+      {
+        "title": {
+          "en": "Time",
+          "nl": "Tijd"
+        },
+        "text": {
+          "en": "Design for succession, maturity and change.",
+          "nl": "Ontwerp voor successie, rijping en verandering."
+        }
+      },
+      {
+        "title": {
+          "en": "People",
+          "nl": "Mensen"
+        },
+        "text": {
+          "en": "Create landscapes that remain usable, understandable and maintainable.",
+          "nl": "Creëer landschappen die bruikbaar, begrijpelijk en onderhoudbaar blijven."
+        }
+      }
+    ],
+    "frameworkNote": {
+      "en": "Every element performs more than one function.",
+      "nl": "Elk element vervult meer dan één functie."
+    },
+    "phases": [
+      {
+        "index": {
+          "en": "Phase 1",
+          "nl": "Fase 1"
+        },
+        "title": {
+          "en": "Consultation and Observation",
+          "nl": "Consult en observatie"
+        },
+        "steps": [
+          {
+            "en": "Client conversation",
+            "nl": "Gesprek met de klant"
+          },
+          {
+            "en": "Site visit",
+            "nl": "Locatiebezoek"
+          },
+          {
+            "en": "Measurements",
+            "nl": "Opmetingen"
+          },
+          {
+            "en": "Existing-condition assessment",
+            "nl": "Beoordeling bestaande situatie"
+          },
+          {
+            "en": "Initial recommendations",
+            "nl": "Eerste aanbevelingen"
+          }
+        ]
+      },
+      {
+        "index": {
+          "en": "Phase 2",
+          "nl": "Fase 2"
+        },
+        "title": {
+          "en": "Preparation and Technical Planning",
+          "nl": "Voorbereiding en technische planning"
+        },
+        "steps": [
+          {
+            "en": "Design refinement",
+            "nl": "Ontwerpverfijning"
+          },
+          {
+            "en": "Material planning",
+            "nl": "Materiaalplanning"
+          },
+          {
+            "en": "Technical details",
+            "nl": "Technische details"
+          },
+          {
+            "en": "Cost estimate",
+            "nl": "Kostenraming"
+          },
+          {
+            "en": "Phasing",
+            "nl": "Fasering"
+          }
+        ]
+      },
+      {
+        "index": {
+          "en": "Phase 3",
+          "nl": "Fase 3"
+        },
+        "title": {
+          "en": "Construction and Installation",
+          "nl": "Aanleg en installatie"
+        },
+        "steps": [
+          {
+            "en": "Groundworks",
+            "nl": "Grondwerk"
+          },
+          {
+            "en": "Water systems",
+            "nl": "Watersystemen"
+          },
+          {
+            "en": "Structural elements",
+            "nl": "Structurele elementen"
+          },
+          {
+            "en": "Planting preparation",
+            "nl": "Plantvoorbereiding"
+          },
+          {
+            "en": "Main implementation",
+            "nl": "Hoofduitvoering"
+          }
+        ]
+      },
+      {
+        "index": {
+          "en": "Phase 4",
+          "nl": "Fase 4"
+        },
+        "title": {
+          "en": "Ecological Finishing",
+          "nl": "Ecologische afwerking"
+        },
+        "steps": [
+          {
+            "en": "Planting",
+            "nl": "Beplanting"
+          },
+          {
+            "en": "Habitat features",
+            "nl": "Habitatelementen"
+          },
+          {
+            "en": "Mulching",
+            "nl": "Mulchen"
+          },
+          {
+            "en": "System calibration",
+            "nl": "Systeemafstelling"
+          },
+          {
+            "en": "Final detailing",
+            "nl": "Laatste detaillering"
+          }
+        ]
+      },
+      {
+        "index": {
+          "en": "Phase 5",
+          "nl": "Fase 5"
+        },
+        "title": {
+          "en": "Review and Development",
+          "nl": "Evaluatie en ontwikkeling"
+        },
+        "steps": [
+          {
+            "en": "System check",
+            "nl": "Systeemcontrole"
+          },
+          {
+            "en": "Adjustments",
+            "nl": "Bijstellingen"
+          },
+          {
+            "en": "Ecological monitoring",
+            "nl": "Ecologische monitoring"
+          },
+          {
+            "en": "Maintenance guidance",
+            "nl": "Onderhoudsbegeleiding"
+          }
+        ]
+      }
+    ]
+  },
+  "stack": {
+    "heroTitle": [
+      {
+        "en": "What this site",
+        "nl": "Waar deze site"
+      },
+      {
+        "en": "is actually built from.",
+        "nl": "werkelijk van gemaakt is."
+      }
+    ],
+    "heroIntro": {
+      "en": "Nineteen choices, four layers, and the trade-off each one carries. Pick a layer to narrow the view, open a technology to read why it is here and what it costs.",
+      "nl": "Negentien keuzes, vier lagen, en de afweging die elke keuze meebrengt. Kies een laag om de weergave te versmallen, open een techniek om te lezen waarom die er is en wat die kost."
+    },
+    "filterHint": {
+      "en": "Select a layer to filter, then open any technology for the reasoning behind it.",
+      "nl": "Selecteer een laag om te filteren en open daarna een techniek voor de redenering erachter."
+    },
+    "layers": [
+      {
+        "title": {
+          "en": "Frontend",
+          "nl": "Frontend"
+        },
+        "summary": {
+          "en": "Everything that reaches the browser: the framework, the rendering runtime, the design system and the motion vocabulary.",
+          "nl": "Alles wat de browser bereikt: het framework, de renderruntime, het ontwerpsysteem en de bewegingstaal."
+        }
+      },
+      {
+        "title": {
+          "en": "Hosting",
+          "nl": "Hosting"
+        },
+        "summary": {
+          "en": "Two moving parts, on purpose. There is no server to run and no database to back up — the site is built ahead of time and served from a CDN.",
+          "nl": "Bewust maar twee onderdelen. Er draait geen server en er is geen database om te back-uppen — de site wordt vooraf gebouwd en vanaf een CDN geserveerd."
+        }
+      },
+      {
+        "title": {
+          "en": "Content",
+          "nl": "Inhoud"
+        },
+        "summary": {
+          "en": "How the words on this site get changed: an in-house editor on the live site, a sign-in that guards it, and one CMS kept dormant.",
+          "nl": "Hoe de teksten op deze site veranderen: een eigen editor op de live site, een login die hem bewaakt en één CMS dat slapend blijft."
+        }
+      },
+      {
+        "title": {
+          "en": "Tooling",
+          "nl": "Gereedschap"
+        },
+        "summary": {
+          "en": "What runs before anything ships: the language, the linter, the stylesheet build and the browser-driven checks that verify both languages.",
+          "nl": "Wat draait voordat er iets live gaat: de taal, de linter, de stijlbladbuild en de browsercontroles die beide talen verifiëren."
+        }
+      }
+    ],
+    "tech": [
+      {
+        "role": {
+          "en": "The frame: App Router, server components, one build, one deploy.",
+          "nl": "Het raamwerk: App Router, servercomponenten, één build, één deploy."
+        },
+        "why": {
+          "en": "Static pages that still get to use React, with routing, metadata, images and middleware in one place. The Dutch routes are a middleware rewrite rather than an i18n library — fewer dependencies, real addresses.",
+          "nl": "Statische pagina's die tóch React mogen gebruiken, met routering, metadata, afbeeldingen en middleware op één plek. De Nederlandse routes zijn een rewrite in middleware in plaats van een i18n-bibliotheek — minder afhankelijkheden, echte adressen."
+        },
+        "cost": {
+          "en": "The version is pinned exactly, not as a range: majors move fast and the App Router API moves with them. Every upgrade is read against the documentation shipped inside the package itself.",
+          "nl": "De versie staat exact vast, niet als bereik: majors gaan snel en de App Router-API gaat mee. Elke upgrade wordt gelezen tegen de documentatie die in het pakket zelf meekomt."
+        }
+      },
+      {
+        "role": {
+          "en": "The UI runtime — server components for the shell, client components for anything with a hand on it.",
+          "nl": "De UI-runtime — servercomponenten voor de schil, clientcomponenten voor alles waar een hand aan zit."
+        },
+        "why": {
+          "en": "Server components keep the content document, the copy and the metadata out of the browser bundle. Only the parts you can actually touch — this page's filters, the menu, the theme switch — are shipped as JavaScript.",
+          "nl": "Servercomponenten houden het contentdocument, de teksten en de metadata buiten de browserbundel. Alleen wat je echt kunt aanraken — de filters op deze pagina, het menu, de themawissel — wordt als JavaScript verstuurd."
+        },
+        "cost": {
+          "en": "Pinned to an exact version alongside react-dom: those two must never drift apart, and a version range is exactly how they do.",
+          "nl": "Vastgezet op een exacte versie, samen met react-dom: die twee mogen nooit uit elkaar lopen, en met een versiebereik gebeurt dat."
+        }
+      },
+      {
+        "role": {
+          "en": "The design system: five palettes generated from one set of semantic tokens.",
+          "nl": "Het ontwerpsysteem: vijf paletten uit één set semantische tokens."
+        },
+        "why": {
+          "en": "Colours are named after their role — background, surface, line, accent — never after a hex code. Switching palette swaps the token values underneath; no component knows which theme it is standing in.",
+          "nl": "Kleuren heten naar hun rol — achtergrond, oppervlak, lijn, accent — nooit naar een hexcode. Van palet wisselen verandert alleen de tokenwaarden eronder; geen enkel component weet in welk thema het staat."
+        },
+        "cost": {
+          "en": "Utility classes make the markup dense, and the discipline is unforgiving: one hardcoded colour and a theme breaks in the dark.",
+          "nl": "Utility-klassen maken de markup dicht, en de discipline is onverbiddelijk: één hardgecodeerde kleur en een thema breekt in het donker."
+        }
+      },
+      {
+        "role": {
+          "en": "Every animation on the site, from the headline reveals to the cards that open on this page.",
+          "nl": "Elke animatie op de site, van de onthulling van de koppen tot de kaarten die op deze pagina opengaan."
+        },
+        "why": {
+          "en": "One animation library, not three. Variants, layout animation and enter/exit transitions cover the whole vocabulary, and the reduced-motion branch is a plain condition inside the component instead of a separate stylesheet.",
+          "nl": "Eén animatiebibliotheek, geen drie. Variants, layout-animatie en enter/exit-overgangen dekken de hele woordenschat, en de reduced-motion-tak is gewoon een voorwaarde in het component in plaats van een apart stijlblad."
+        },
+        "cost": {
+          "en": "It is the single largest client dependency, so motion belongs in client components only — and the studio rule is that no second animation library may ever stand beside it.",
+          "nl": "Het is de grootste clientafhankelijkheid, dus beweging hoort alleen in clientcomponenten thuis — en de regel van de studio is dat er nooit een tweede animatiebibliotheek naast mag staan."
+        }
+      },
+      {
+        "role": {
+          "en": "Smooth scrolling — the inertia under every page.",
+          "nl": "Vloeiend scrollen — de traagheid onder elke pagina."
+        },
+        "why": {
+          "en": "Scroll-linked motion needs a scroll position something owns. Lenis provides one, drives it from a single animation frame loop, and stays invisible otherwise.",
+          "nl": "Scrollgebonden beweging heeft een scrollpositie nodig die iets bezit. Lenis levert die, stuurt hem vanuit één animatieframelus en blijft verder onzichtbaar."
+        },
+        "cost": {
+          "en": "It owns scrolling outright: CSS smooth scrolling must never be switched on beside it, or the two fight each other and the page stutters. Reduced motion turns it off entirely.",
+          "nl": "Zij bezit het scrollen volledig: vloeiend scrollen via CSS mag er nooit naast aan staan, anders vechten ze en hapert de pagina. Bij reduced motion gaat zij helemaal uit."
+        }
+      },
+      {
+        "role": {
+          "en": "The 3D terrain, written as React components instead of imperative scene code.",
+          "nl": "Het 3D-terrein, geschreven als React-componenten in plaats van imperatieve scènecode."
+        },
+        "why": {
+          "en": "React Three Fiber lets the field render through the same props and state as the rest of the site, so the scene can follow the active theme instead of carrying its own colours.",
+          "nl": "Met React Three Fiber rendert het veld via dezelfde props en state als de rest van de site, zodat de scène het actieve thema kan volgen in plaats van eigen kleuren mee te dragen."
+        },
+        "cost": {
+          "en": "By far the heaviest thing on any page. It renders only where it is used, its frame loop stops the moment it leaves the viewport, phones get a lighter mesh, and under reduced motion it never mounts at all.",
+          "nl": "Veruit het zwaarste op elke pagina. Het rendert alleen waar het gebruikt wordt, de framelus stopt zodra het uit beeld gaat, telefoons krijgen een lichter maaswerk en bij reduced motion wordt het helemaal niet geladen."
+        }
+      },
+      {
+        "role": {
+          "en": "Palette switching — Paper, Meadow, Forest, Night and Nocturne — as a class on the document.",
+          "nl": "Paletwissels — Paper, Weide, Bos, Nacht en Nocturne — als een klasse op het document."
+        },
+        "why": {
+          "en": "It writes the chosen palette before the first paint, so a dark theme never flashes white on reload, and it remembers the choice across visits.",
+          "nl": "Het schrijft het gekozen palet vóór de eerste paint, zodat een donker thema bij het herladen nooit wit opflitst, en het onthoudt de keuze tussen bezoeken."
+        },
+        "cost": {
+          "en": "The server cannot know which palette a visitor picked, so anything that renders a theme name has to wait for hydration before it can say it out loud.",
+          "nl": "De server kan niet weten welk palet een bezoeker koos, dus alles wat een themanaam toont moet wachten op hydratie voordat het die kan noemen."
+        }
+      },
+      {
+        "role": {
+          "en": "The icon set: arrows, chevrons and status marks.",
+          "nl": "De iconenset: pijlen, chevrons en statusmarkeringen."
+        },
+        "why": {
+          "en": "Icons are imported one by one, so an arrow costs an arrow. Every one of them sits next to a written label — nothing on this site is icon-only.",
+          "nl": "Iconen worden stuk voor stuk geïmporteerd, dus een pijl kost een pijl. Elk icoon staat naast een geschreven label — niets op deze site is alleen een icoon."
+        },
+        "cost": {
+          "en": "An icon library is a standing invitation to replace words with pictures. The studio's rule runs the other way, so most of the set stays unused.",
+          "nl": "Een iconenbibliotheek is een blijvende uitnodiging om woorden door plaatjes te vervangen. De regel van de studio gaat de andere kant op, dus het grootste deel van de set blijft ongebruikt."
+        }
+      },
+      {
+        "role": {
+          "en": "Conditional class names, with later utilities correctly beating earlier ones.",
+          "nl": "Voorwaardelijke klassenamen, waarbij latere utilities eerdere terecht verslaan."
+        },
+        "why": {
+          "en": "Two small functions behind one helper: the first builds the class string, the second resolves the conflicts, so a component can accept an override without a cascade of exceptions.",
+          "nl": "Twee kleine functies achter één hulpfunctie: de eerste bouwt de klassenstring, de tweede lost de conflicten op, zodat een component een override kan aannemen zonder een reeks uitzonderingen."
+        },
+        "cost": {
+          "en": "Two dependencies for something that looks like joining strings — right up until two padding utilities collide and the wrong one wins.",
+          "nl": "Twee afhankelijkheden voor iets dat op stringplakken lijkt — tot twee padding-utilities botsen en de verkeerde wint."
+        }
+      },
+      {
+        "role": {
+          "en": "Hosting, CDN and deploys. A push to the main branch is a production release.",
+          "nl": "Hosting, CDN en deploys. Een push naar de main-branch is een productierelease."
+        },
+        "why": {
+          "en": "It is the framework's own platform: every pull request gets its own preview URL to verify on, there is no build server to maintain, and there is no environment left to drift.",
+          "nl": "Het is het platform van het framework zelf: elke pull request krijgt een eigen preview-URL om op te controleren, er is geen buildserver om te onderhouden en er is geen omgeving die kan wegdrijven."
+        },
+        "cost": {
+          "en": "Platform dependency in exchange for that simplicity — image optimisation, middleware and the content store are all Vercel-shaped, and moving away would mean rebuilding those three.",
+          "nl": "Platformafhankelijkheid in ruil voor die eenvoud — beeldoptimalisatie, middleware en de contentopslag zijn allemaal op Vercel gevormd, en weggaan betekent die drie opnieuw bouwen."
+        }
+      },
+      {
+        "role": {
+          "en": "The private store holding the published content document and the studio's uploaded photographs.",
+          "nl": "De private opslag met het gepubliceerde contentdocument en de geüploade foto's van de studio."
+        },
+        "why": {
+          "en": "Changing a sentence on the site should not require a commit. Publishing writes a single JSON document to the store and refreshes one cache tag; the change is live within seconds.",
+          "nl": "Een zin op de site aanpassen hoort geen commit te vereisen. Publiceren schrijft één JSON-document naar de opslag en vernieuwt één cachetag; de wijziging is binnen seconden live."
+        },
+        "cost": {
+          "en": "A second source of truth beside git. The same document stays committed in the repository as the fallback, so a missing store degrades to the last committed copy instead of an empty page.",
+          "nl": "Een tweede bron van waarheid naast git. Hetzelfde document blijft als fallback in de repository staan, zodat een ontbrekende opslag terugvalt op de laatst vastgelegde kopie in plaats van een lege pagina."
+        }
+      },
+      {
+        "role": {
+          "en": "Editing on the live site: sign in, click any sentence, rewrite it in both languages, publish.",
+          "nl": "Bewerken op de live site: inloggen, op elke zin klikken, hem in beide talen herschrijven, publiceren."
+        },
+        "why": {
+          "en": "A full content platform for one owner and one site is more machinery than the words need. This one is a handful of components with no schema to keep in step and no second dashboard to learn.",
+          "nl": "Een volwaardig contentplatform voor één eigenaar en één site is meer machinerie dan de teksten vragen. Deze bestaat uit een handvol componenten, zonder schema dat synchroon moet blijven en zonder tweede dashboard om te leren."
+        },
+        "cost": {
+          "en": "It is ours to maintain, and content edits deliberately bypass git — the words have their own history, separate from the code's.",
+          "nl": "Wij onderhouden hem zelf, en tekstwijzigingen gaan bewust buiten git om — de woorden hebben hun eigen geschiedenis, los van die van de code."
+        }
+      },
+      {
+        "role": {
+          "en": "The Google sign-in that guards the editor — an allowlist of exactly one address.",
+          "nl": "De Google-login die de editor bewaakt — een toegangslijst van precies één adres."
+        },
+        "why": {
+          "en": "There are no visitor accounts to build here. One person edits this site, and the studio's existing Google account is the key.",
+          "nl": "Er zijn hier geen bezoekersaccounts te bouwen. Eén persoon bewerkt deze site, en het bestaande Google-account van de studio is de sleutel."
+        },
+        "cost": {
+          "en": "An authentication library on a site with no users, carried entirely for one route. Honest weight, and the reason the editor route sits outside the public language tree.",
+          "nl": "Een authenticatiebibliotheek op een site zonder gebruikers, alleen meegedragen voor één route. Eerlijk gewicht, en de reden dat de editorroute buiten de publieke taalstructuur valt."
+        }
+      },
+      {
+        "role": {
+          "en": "The language everything is written in — including the shape of the content document.",
+          "nl": "De taal waarin alles geschreven is — ook de vorm van het contentdocument."
+        },
+        "why": {
+          "en": "Every visible string is typed as an English/Dutch pair. A missing translation is therefore a build error, not a blank space a visitor finds first.",
+          "nl": "Elke zichtbare tekst is getypeerd als een Engels/Nederlands-paar. Een ontbrekende vertaling is daardoor een buildfout, geen lege plek die een bezoeker als eerste vindt."
+        },
+        "cost": {
+          "en": "Nothing at runtime — the types are stripped during the build. The cost is paid up front: nothing merges until the type check is silent.",
+          "nl": "Niets tijdens runtime — de types worden er bij de build uitgehaald. De kosten worden vooraf betaald: er wordt niets samengevoegd voordat de typecontrole zwijgt."
+        }
+      },
+      {
+        "role": {
+          "en": "The lint gate, running the framework's own rule set before every pull request.",
+          "nl": "De lintpoort, die vóór elke pull request de eigen regelset van het framework draait."
+        },
+        "why": {
+          "en": "Most of what it catches is framework-specific and invisible in review: the wrong kind of link, an image without dimensions, a hook called from the wrong place.",
+          "nl": "Het meeste wat hij vangt is frameworkspecifiek en onzichtbaar bij het reviewen: het verkeerde soort link, een afbeelding zonder afmetingen, een hook die van de verkeerde plek wordt aangeroepen."
+        },
+        "cost": {
+          "en": "Its configuration is pinned to the framework version, so a framework upgrade has to move both packages or neither.",
+          "nl": "De configuratie is vastgezet op de frameworkversie, dus een frameworkupgrade moet beide pakketten verplaatsen of geen van beide."
+        }
+      },
+      {
+        "role": {
+          "en": "The single build step between the stylesheet and the browser.",
+          "nl": "De enige buildstap tussen het stijlblad en de browser."
+        },
+        "why": {
+          "en": "Tailwind 4 configures itself from the stylesheet, so the palettes and the type scale live in the CSS file next to the rules that use them. There is no separate JavaScript config to keep in sync.",
+          "nl": "Tailwind 4 configureert zichzelf vanuit het stijlblad, dus de paletten en de typeschaal staan in het CSS-bestand naast de regels die ze gebruiken. Er is geen aparte JavaScript-config die synchroon moet blijven."
+        },
+        "cost": {
+          "en": "One more thing that must run before anything renders — and because the configuration moved into CSS, most Tailwind examples written before version 4 no longer apply here.",
+          "nl": "Nog iets dat moet draaien voordat er iets rendert — en doordat de configuratie naar CSS verhuisde, gelden de meeste Tailwind-voorbeelden van vóór versie 4 hier niet meer."
+        }
+      },
+      {
+        "role": {
+          "en": "Types for the libraries that ship none of their own.",
+          "nl": "Types voor de bibliotheken die er zelf geen meeleveren."
+        },
+        "why": {
+          "en": "They are what makes the editor and the compiler agree with what actually runs. The 3D types in particular keep a scene honest that would otherwise fail silently at runtime.",
+          "nl": "Zij zorgen dat de editor en de compiler het eens zijn met wat er werkelijk draait. Vooral de 3D-types houden een scène eerlijk die anders pas tijdens runtime stilletjes zou falen."
+        },
+        "cost": {
+          "en": "They have to keep step with the libraries they describe: the 3D types follow the renderer's version, not their own release rhythm.",
+          "nl": "Ze moeten gelijke tred houden met de bibliotheken die ze beschrijven: de 3D-types volgen de versie van de renderer, niet hun eigen releaseritme."
+        }
+      },
+      {
+        "role": {
+          "en": "Node scripts that drive a headless browser: language rendering, 3D mounting, performance runs.",
+          "nl": "Node-scripts die een headless browser aansturen: taalweergave, 3D-mounten, prestatiemetingen."
+        },
+        "why": {
+          "en": "Searching the raw HTML cannot prove which language a page renders, because both languages travel in the payload of every page. The checks open a real browser and read the rendered document instead.",
+          "nl": "Zoeken in de ruwe HTML kan niet bewijzen welke taal een pagina toont, want beide talen reizen mee in de payload van elke pagina. De controles openen daarom een echte browser en lezen het gerenderde document."
+        },
+        "cost": {
+          "en": "An honest gap: these are checks, not a test suite. Full end-to-end coverage is on the roadmap and is not in this repository yet.",
+          "nl": "Een eerlijk gat: dit zijn controles, geen testsuite. Volledige end-to-end-dekking staat op de routekaart en zit nog niet in deze repository."
+        }
+      }
+    ],
+    "principlesTitle": {
+      "en": "The rules underneath the list",
+      "nl": "De regels onder de lijst"
+    },
+    "principles": [
+      {
+        "en": "One animation library. Never a second one beside it.",
+        "nl": "Eén animatiebibliotheek. Nooit een tweede ernaast."
+      },
+      {
+        "en": "Colours are named after their role, never after a hex code — that is how five palettes come out of one set of components.",
+        "nl": "Kleuren heten naar hun rol, nooit naar een hexcode — zo komen er vijf paletten uit één set componenten."
+      },
+      {
+        "en": "Every animation has a still version. Reduced motion is a supported way to read this site, not a degraded one.",
+        "nl": "Elke animatie heeft een stille versie. Reduced motion is een volwaardige manier om deze site te lezen, geen uitgeklede."
+      },
+      {
+        "en": "Every control carries a visible word. Nothing here is an icon you have to decode.",
+        "nl": "Elk bedieningselement draagt een zichtbaar woord. Niets hier is een icoon dat je moet ontcijferen."
+      },
+      {
+        "en": "Both languages are real addresses, not a switch in the browser — Dutch pages can be found, linked and indexed.",
+        "nl": "Beide talen zijn echte adressen, geen schakelaar in de browser — Nederlandse pagina's zijn vindbaar, deelbaar en indexeerbaar."
+      },
+      {
+        "en": "Nothing merges until the type check, the linter and the production build are all silent.",
+        "nl": "Er wordt niets samengevoegd voordat de typecontrole, de linter en de productiebuild alle drie zwijgen."
+      }
+    ],
+    "closing": {
+      "en": "The same manifest is kept byte-identical in the Equilibrium repository, so either site can be checked against the other. Convergence is the plan; the version gap is the work.",
+      "nl": "Hetzelfde manifest wordt byte-identiek bijgehouden in de Equilibrium-repository, zodat beide sites tegen elkaar te controleren zijn. Convergentie is het plan; het versieverschil is het werk."
+    }
+  },
+  "pages": {
+    "projects": {
+      "heroTitle": [
+        {
+          "en": "From isolated elements",
+          "nl": "Van losse elementen"
+        },
+        {
+          "en": "to functioning systems.",
+          "nl": "naar functionerende systemen."
+        }
+      ],
+      "heroIntro": {
+        "en": "Every project starts with a site that isn't working as a system — water leaving too fast, soil sealed shut, life locked out — and ends with the relationships restored.",
+        "nl": "Elk project begint met een locatie die niet als systeem functioneert — water dat te snel verdwijnt, een dichtgeslagen bodem, buitengesloten leven — en eindigt met herstelde relaties."
+      }
+    },
+    "journal": {
+      "heroTitle": [
+        {
+          "en": "Field notes from",
+          "nl": "Veldnotities uit"
+        },
+        {
+          "en": "living landscapes.",
+          "nl": "levende landschappen."
+        }
+      ],
+      "heroIntro": {
+        "en": "Ecological observations, project knowledge and practical guidance — the thinking behind the studio's work, documented as it develops.",
+        "nl": "Ecologische observaties, projectkennis en praktische begeleiding — het denken achter het werk van de studio, gedocumenteerd terwijl het zich ontwikkelt."
+      }
+    },
+    "services": {
+      "heroTitle": [
+        {
+          "en": "Ecological design",
+          "nl": "Ecologisch ontwerp"
+        },
+        {
+          "en": "for living landscapes.",
+          "nl": "voor levende landschappen."
+        }
+      ],
+      "heroIntro": {
+        "en": "Six ways of working, one method underneath: observe the site, understand its relationships, and design every element to perform more than one function.",
+        "nl": "Zes manieren van werken, één onderliggende methode: observeer de locatie, begrijp de relaties en ontwerp elk element zodat het meer dan één functie vervult."
+      }
+    },
+    "contact": {
+      "heroTitle": [
+        {
+          "en": "Every project begins with",
+          "nl": "Elk project begint met"
+        },
+        {
+          "en": "understanding the site.",
+          "nl": "het begrijpen van de locatie."
+        }
+      ],
+      "heroIntro": {
+        "en": "Tell us about your garden, pond or landscape challenge in four short steps. A first project assessment or site consultation may be recommended before design or implementation begins.",
+        "nl": "Vertel ons in vier korte stappen over je tuin-, vijver- of landschapsvraagstuk. Vóór ontwerp of uitvoering kan een eerste projectbeoordeling of locatieconsult worden aanbevolen."
+      }
+    }
+  },
+  "projects": [
+    {
+      "slug": "two-ponds-one-living-system",
+      "title": {
+        "en": "Two Ponds, One Living System",
+        "nl": "Twee vijvers, één levend systeem"
+      },
+      "location": "Utrecht, Netherlands",
+      "category": "water",
+      "objective": {
+        "en": "Connect two failing ornamental ponds into a single circulating, self-filtering water system.",
+        "nl": "Twee falende siervijvers verbinden tot één circulerend, zelffilterend watersysteem."
+      },
+      "intervention": {
+        "en": "Planted stream connection, wetland biofilter, wildlife edges",
+        "nl": "Beplante beekverbinding, moerasbiofilter, natuurvriendelijke oevers"
+      },
+      "status": {
+        "en": "Developing",
+        "nl": "In ontwikkeling"
+      },
+      "imageId": 28,
+      "featured": true,
+      "metrics": [
+        {
+          "label": {
+            "en": "Water retained on site",
+            "nl": "Water vastgehouden op locatie"
+          },
+          "value": {
+            "en": "≈ 18 m³",
+            "nl": "≈ 18 m³"
+          }
+        },
+        {
+          "label": {
+            "en": "Hard surface removed",
+            "nl": "Verharding verwijderd"
+          },
+          "value": {
+            "en": "42 m²",
+            "nl": "42 m²"
+          }
+        },
+        {
+          "label": {
+            "en": "Habitat zones created",
+            "nl": "Habitatzones gecreëerd"
+          },
+          "value": {
+            "en": "6",
+            "nl": "6"
+          }
+        },
+        {
+          "label": {
+            "en": "Native species added",
+            "nl": "Inheemse soorten toegevoegd"
+          },
+          "value": {
+            "en": "58",
+            "nl": "58"
+          }
+        },
+        {
+          "label": {
+            "en": "Water circulation",
+            "nl": "Watercirculatie"
+          },
+          "value": {
+            "en": "Continuous, gravity-assisted",
+            "nl": "Continu, ondersteund door zwaartekracht"
+          }
+        },
+        {
+          "label": {
+            "en": "Materials reused",
+            "nl": "Materialen hergebruikt"
+          },
+          "value": {
+            "en": "80% of excavated stone",
+            "nl": "80% van het uitgegraven steen"
+          }
+        }
+      ],
+      "transformation": {
+        "beforeId": 17,
+        "afterId": 28,
+        "caption": {
+          "en": "The same ground, two summers apart: a mown corridor became circulating water, planted banks and stone refuges.",
+          "nl": "Dezelfde grond, twee zomers later: een gemaaide strook werd circulerend water, beplante oevers en schuilplekken van steen."
+        }
+      },
+      "outcomes": [
+        {
+          "label": {
+            "en": "Aquatic and marginal species observed",
+            "nl": "Waargenomen water- en oeversoorten"
+          },
+          "before": {
+            "en": "11",
+            "nl": "11"
+          },
+          "after": {
+            "en": "34",
+            "nl": "34"
+          },
+          "note": {
+            "en": "Counted along both ponds and the stream edge, seasons one and two.",
+            "nl": "Geteld langs beide vijvers en de beekrand, seizoen één en twee."
+          }
+        },
+        {
+          "label": {
+            "en": "Rainwater retained per storm event",
+            "nl": "Regenwater vastgehouden per bui"
+          },
+          "before": {
+            "en": "0 m³",
+            "nl": "0 m³"
+          },
+          "after": {
+            "en": "18 m³",
+            "nl": "18 m³"
+          },
+          "note": {
+            "en": "Roof and terrace runoff now feeds the system instead of the sewer.",
+            "nl": "Afvoer van dak en terras voedt nu het systeem in plaats van het riool."
+          }
+        },
+        {
+          "label": {
+            "en": "Excavated stone returned as habitat",
+            "nl": "Uitgegraven steen teruggebracht als habitat"
+          },
+          "after": {
+            "en": "80%",
+            "nl": "80%"
+          },
+          "note": {
+            "en": "Dry-stacked into edges and refuges rather than hauled away.",
+            "nl": "Droog gestapeld tot randen en schuilplekken in plaats van afgevoerd."
+          }
+        },
+        {
+          "label": {
+            "en": "Maintenance hours per season",
+            "nl": "Onderhoudsuren per seizoen"
+          },
+          "before": {
+            "en": "26 h",
+            "nl": "26 u"
+          },
+          "after": {
+            "en": "6 h",
+            "nl": "6 u"
+          },
+          "note": {
+            "en": "The biofilter does the work the weekly regime used to.",
+            "nl": "Het biofilter doet het werk dat eerst wekelijks onderhoud vroeg."
+          }
+        },
+        {
+          "label": {
+            "en": "Soil organic matter, planted banks",
+            "nl": "Organische stof in de beplante oevers"
+          },
+          "before": {
+            "en": "2.1%",
+            "nl": "2,1%"
+          },
+          "after": {
+            "en": "4.8%",
+            "nl": "4,8%"
+          },
+          "note": {
+            "en": "Three seasons tracked; undisturbed soil and mulch left in place.",
+            "nl": "Drie seizoenen gevolgd; ongestoorde bodem en mulch bleven liggen."
+          }
+        }
+      ],
+      "sections": [
+        {
+          "index": "01",
+          "title": {
+            "en": "Project Introduction",
+            "nl": "Projectintroductie"
+          },
+          "body": {
+            "en": "A private garden with two separate ornamental ponds, both installed a decade apart and both struggling. The client wanted clear water, less maintenance and more life — without losing the character of the garden.",
+            "nl": "Een privétuin met twee losse siervijvers, met tien jaar tussenpoos aangelegd en allebei in de problemen. De klant wilde helder water, minder onderhoud en meer leven — zonder het karakter van de tuin te verliezen."
+          }
+        },
+        {
+          "index": "02",
+          "title": {
+            "en": "Existing Situation",
+            "nl": "Bestaande situatie"
+          },
+          "body": {
+            "en": "The upper pond sat in full sun with no planting and turned green every summer. The lower pond was shaded, silted and slowly leaking. Neither had shallow edges, so wildlife could reach the water but not use it.",
+            "nl": "De bovenste vijver lag in de volle zon zonder beplanting en sloeg elke zomer groen uit. De onderste vijver lag in de schaduw, was dichtgeslibd en lekte langzaam. Geen van beide had ondiepe oevers, dus dieren konden het water wel bereiken maar niet gebruiken."
+          }
+        },
+        {
+          "index": "03",
+          "title": {
+            "en": "Ecological Challenge",
+            "nl": "Ecologische uitdaging"
+          },
+          "body": {
+            "en": "Both ponds were isolated elements: no circulation, no filtration, no connection to the soil and planting around them.",
+            "nl": "Beide vijvers waren geïsoleerde elementen: geen circulatie, geen filtering, geen verbinding met de bodem en beplanting eromheen."
+          },
+          "points": [
+            {
+              "en": "Water leaving the site too quickly through the leak",
+              "nl": "Water dat via het lek te snel van de locatie verdween"
+            },
+            {
+              "en": "No circulation between sun-warmed and shaded water",
+              "nl": "Geen circulatie tussen zonverwarmd en beschaduwd water"
+            },
+            {
+              "en": "Limited habitat — steep liner edges, no marginal planting",
+              "nl": "Beperkte habitat — steile folieranden, geen oeverbeplanting"
+            },
+            {
+              "en": "Nutrient load with nothing planted to absorb it",
+              "nl": "Voedingsstoffenbelasting zonder beplanting die deze opneemt"
+            }
+          ]
+        },
+        {
+          "index": "04",
+          "title": {
+            "en": "Design Strategy",
+            "nl": "Ontwerpstrategie"
+          },
+          "body": {
+            "en": "Treat the two ponds as one system. Water is lifted once from the lower pond and returns by gravity through a planted stream, a wetland biofilter and a shallow spillway — so every metre of the route filters, oxygenates or hosts life.",
+            "nl": "Behandel de twee vijvers als één systeem. Water wordt eenmalig opgepompt uit de onderste vijver en stroomt via zwaartekracht terug door een beplante beek, een moerasbiofilter en een ondiepe overloop — zodat elke meter van de route filtert, zuurstof toevoegt of leven herbergt."
+          }
+        },
+        {
+          "index": "05",
+          "title": {
+            "en": "System Diagram",
+            "nl": "Systeemdiagram"
+          },
+          "body": {
+            "en": "The upper pond overflows into a planted stream that drops through a gravel wetland. The wetland's root zone strips nutrients before the water re-enters the lower pond across a stone spillway that doubles as a bird bath and insect drinking edge.",
+            "nl": "De bovenste vijver loopt over in een beplante beek die door een grindmoeras zakt. De wortelzone van het moeras onttrekt voedingsstoffen voordat het water via een stenen overloop — die tegelijk vogelbad en drinkrand voor insecten is — terugstroomt in de onderste vijver."
+          }
+        },
+        {
+          "index": "06",
+          "title": {
+            "en": "Materials and Planting",
+            "nl": "Materialen en beplanting"
+          },
+          "body": {
+            "en": "Excavated stone was reused for the spillway and stream bed. Planting follows wet-to-dry gradients: submerged oxygenators, marginal rushes and sedges, moisture-loving perennials on the banks, and a native hedge line for shelter.",
+            "nl": "Uitgegraven steen is hergebruikt voor de overloop en de beekbedding. De beplanting volgt gradiënten van nat naar droog: ondergedoken zuurstofplanten, russen en zeggen langs de oever, vochtminnende vaste planten op de taluds en een inheemse haag voor beschutting."
+          }
+        },
+        {
+          "index": "07",
+          "title": {
+            "en": "Construction Process",
+            "nl": "Uitvoeringsproces"
+          },
+          "body": {
+            "en": "Phase one repaired the lower pond and shaped the new edges. Phase two built the stream and wetland filter. Phase three planted the system and calibrated flow rates over several weeks of observation.",
+            "nl": "Fase één herstelde de onderste vijver en vormde de nieuwe oevers. Fase twee bouwde de beek en het moerasfilter. Fase drie beplantte het systeem en stelde de doorstroming af tijdens enkele weken van observatie."
+          }
+        },
+        {
+          "index": "08",
+          "title": {
+            "en": "Result",
+            "nl": "Resultaat"
+          },
+          "body": {
+            "en": "Clear water within one season, dragonflies and amphibians in the first summer, and a garden that now sounds like moving water instead of a pump.",
+            "nl": "Helder water binnen één seizoen, libellen en amfibieën in de eerste zomer, en een tuin die nu klinkt naar stromend water in plaats van naar een pomp."
+          }
+        },
+        {
+          "index": "09",
+          "title": {
+            "en": "Long-Term Development",
+            "nl": "Ontwikkeling op lange termijn"
+          },
+          "body": {
+            "en": "The wetland filter matures over two to three years as root mass builds. Maintenance shifts from cleaning to editing: thinning vigorous planting and letting the system settle into its own balance.",
+            "nl": "Het moerasfilter rijpt in twee tot drie jaar naarmate de wortelmassa groeit. Het onderhoud verschuift van schoonmaken naar bijsturen: krachtige beplanting uitdunnen en het systeem zijn eigen evenwicht laten vinden."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "lawn-to-living-garden",
+      "title": {
+        "en": "From Lawn to Living Garden",
+        "nl": "Van gazon naar levende tuin"
+      },
+      "location": "Arnhem, Netherlands",
+      "category": "gardens",
+      "objective": {
+        "en": "Convert a paved, lawn-dominated garden into a layered, water-retaining landscape.",
+        "nl": "Een betegelde, door gazon gedomineerde tuin omvormen tot een gelaagd, waterbergend landschap."
+      },
+      "intervention": {
+        "en": "Hardscape removal, soil recovery, layered planting",
+        "nl": "Verharding verwijderen, bodemherstel, gelaagde beplanting"
+      },
+      "status": {
+        "en": "Completed",
+        "nl": "Afgerond"
+      },
+      "imageId": 17,
+      "metrics": [
+        {
+          "label": {
+            "en": "Hard surface removed",
+            "nl": "Verharding verwijderd"
+          },
+          "value": {
+            "en": "65 m²",
+            "nl": "65 m²"
+          }
+        },
+        {
+          "label": {
+            "en": "Soil de-compacted and mulched",
+            "nl": "Bodem losgemaakt en gemulcht"
+          },
+          "value": {
+            "en": "180 m²",
+            "nl": "180 m²"
+          }
+        },
+        {
+          "label": {
+            "en": "Native species added",
+            "nl": "Inheemse soorten toegevoegd"
+          },
+          "value": {
+            "en": "74",
+            "nl": "74"
+          }
+        }
+      ],
+      "sections": [
+        {
+          "index": "01",
+          "title": {
+            "en": "Project Introduction",
+            "nl": "Projectintroductie"
+          },
+          "body": {
+            "en": "A typical suburban garden: tight lawn, concrete tiles, two shrubs and a fence. The brief was simple — more life, less maintenance, somewhere to actually be.",
+            "nl": "Een typische buitenwijktuin: strak gazon, betontegels, twee heesters en een schutting. De opdracht was simpel — meer leven, minder onderhoud, een plek om echt te zijn."
+          }
+        },
+        {
+          "index": "02",
+          "title": {
+            "en": "Existing Situation",
+            "nl": "Bestaande situatie"
+          },
+          "body": {
+            "en": "Compacted subsoil under the lawn, rainwater running straight to the drain, and planting with no relationship to the site or to each other.",
+            "nl": "Verdichte ondergrond onder het gazon, regenwater dat rechtstreeks het riool in liep, en beplanting zonder relatie met de plek of met elkaar."
+          }
+        },
+        {
+          "index": "03",
+          "title": {
+            "en": "Ecological Challenge",
+            "nl": "Ecologische uitdaging"
+          },
+          "body": {
+            "en": "The garden shed water and repelled life.",
+            "nl": "De tuin stootte water af en weerde leven."
+          },
+          "points": [
+            {
+              "en": "Compacted soil with almost no organic matter",
+              "nl": "Verdichte bodem met nauwelijks organische stof"
+            },
+            {
+              "en": "Excessive hardscape draining to the sewer",
+              "nl": "Overmatige verharding die afwatert op het riool"
+            },
+            {
+              "en": "Isolated planting with no layers and no succession",
+              "nl": "Geïsoleerde beplanting zonder lagen en zonder successie"
+            }
+          ]
+        },
+        {
+          "index": "04",
+          "title": {
+            "en": "Design Strategy",
+            "nl": "Ontwerpstrategie"
+          },
+          "body": {
+            "en": "Remove two-thirds of the paving, break the compaction, and rebuild the garden as planted layers around a gravel path that doubles as an infiltration zone. Every downpipe now feeds the garden, not the drain.",
+            "nl": "Twee derde van de bestrating eruit, de verdichting doorbreken en de tuin heropbouwen als beplante lagen rond een grindpad dat tegelijk infiltratiezone is. Elke regenpijp voedt nu de tuin in plaats van het riool."
+          }
+        },
+        {
+          "index": "08",
+          "title": {
+            "en": "Result",
+            "nl": "Resultaat"
+          },
+          "body": {
+            "en": "A garden that swallows cloudbursts, feeds pollinators from March to November and needs one maintenance day per season.",
+            "nl": "Een tuin die hoosbuien opvangt, bestuivers voedt van maart tot november en één onderhoudsdag per seizoen vraagt."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "hedgerow-habitat-network",
+      "title": {
+        "en": "Hedgerow Habitat Network",
+        "nl": "Habitatnetwerk van hagen"
+      },
+      "location": "Veluwe edge, Netherlands",
+      "category": "habitat",
+      "objective": {
+        "en": "Link an isolated rural garden to the surrounding landscape with native hedgerows and a wildlife pond.",
+        "nl": "Een geïsoleerde landelijke tuin verbinden met het omliggende landschap via inheemse hagen en een natuurvijver."
+      },
+      "intervention": {
+        "en": "Native hedging, deadwood structures, amphibian pond",
+        "nl": "Inheemse hagen, doodhoutstructuren, amfibieënpoel"
+      },
+      "status": {
+        "en": "Completed",
+        "nl": "Afgerond"
+      },
+      "imageId": 12,
+      "sections": [
+        {
+          "index": "01",
+          "title": {
+            "en": "Project Introduction",
+            "nl": "Projectintroductie"
+          },
+          "body": {
+            "en": "A large rural plot surrounded by farmland, ecologically cut off despite its size. The owners wanted birds, hedgehogs and amphibians back.",
+            "nl": "Een groot landelijk perceel omringd door landbouwgrond, ecologisch afgesneden ondanks de omvang. De eigenaren wilden vogels, egels en amfibieën terug."
+          }
+        },
+        {
+          "index": "04",
+          "title": {
+            "en": "Design Strategy",
+            "nl": "Ontwerpstrategie"
+          },
+          "body": {
+            "en": "Plant mixed native hedgerows along two boundaries to reconnect the plot to a nearby woodland strip, add a shallow amphibian pond in the wettest corner, and build deadwood and brash structures as shelter stepping-stones.",
+            "nl": "Gemengde inheemse hagen langs twee perceelgrenzen om het terrein te verbinden met een nabijgelegen bosstrook, een ondiepe amfibieënpoel in de natste hoek, en doodhout- en takkenstructuren als beschutte stapstenen."
+          }
+        },
+        {
+          "index": "08",
+          "title": {
+            "en": "Result",
+            "nl": "Resultaat"
+          },
+          "body": {
+            "en": "Twelve bird species nesting in year two, smooth newts in the pond in the first spring, and a garden that now functions as a corridor rather than an island.",
+            "nl": "Twaalf vogelsoorten die in jaar twee broeden, kleine watersalamanders in de poel in het eerste voorjaar, en een tuin die nu functioneert als corridor in plaats van als eiland."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "shade-garden-plant-communities",
+      "title": {
+        "en": "Shade Garden Plant Communities",
+        "nl": "Plantengemeenschappen voor de schaduwtuin"
+      },
+      "location": "Amersfoort, Netherlands",
+      "category": "planting",
+      "objective": {
+        "en": "Replace struggling lawn under mature trees with self-sustaining woodland-edge planting.",
+        "nl": "Kwakkelend gazon onder volwassen bomen vervangen door zelfvoorzienende bosrandbeplanting."
+      },
+      "intervention": {
+        "en": "Layered shade planting, soil building, leaf-litter cycling",
+        "nl": "Gelaagde schaduwbeplanting, bodemopbouw, bladstrooiselkringloop"
+      },
+      "status": {
+        "en": "Completed",
+        "nl": "Afgerond"
+      },
+      "imageId": 33,
+      "sections": [
+        {
+          "index": "01",
+          "title": {
+            "en": "Project Introduction",
+            "nl": "Projectintroductie"
+          },
+          "body": {
+            "en": "Grass will not grow under old beeches — and it shouldn't have to. This design works with the shade instead of fighting it.",
+            "nl": "Gras groeit niet onder oude beuken — en dat hoeft ook niet. Dit ontwerp werkt mét de schaduw in plaats van ertegen."
+          }
+        },
+        {
+          "index": "04",
+          "title": {
+            "en": "Design Strategy",
+            "nl": "Ontwerpstrategie"
+          },
+          "body": {
+            "en": "A woodland-edge community: spring bulbs and ephemerals, ferns and sedges as the persistent matrix, and flowering shade perennials in the brighter pockets. Leaf litter stays where it falls and becomes the mulch layer.",
+            "nl": "Een bosrandgemeenschap: voorjaarsbollen en -bloeiers, varens en zeggen als blijvende matrix, en bloeiende schaduwplanten in de lichtere plekken. Bladstrooisel blijft liggen waar het valt en wordt de mulchlaag."
+          }
+        },
+        {
+          "index": "08",
+          "title": {
+            "en": "Result",
+            "nl": "Resultaat"
+          },
+          "body": {
+            "en": "Full ground cover in eighteen months, no watering after establishment, and the first spring carpet the garden has had in decades.",
+            "nl": "Volledige bodembedekking in achttien maanden, geen bewatering na aanslaan, en het eerste voorjaarstapijt dat de tuin in decennia heeft gehad."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "pond-rescue-consultation",
+      "title": {
+        "en": "Pond Rescue Consultation",
+        "nl": "Reddingsadvies voor een vijver"
+      },
+      "location": "Zeist, Netherlands",
+      "category": "consultation",
+      "objective": {
+        "en": "Diagnose a chronically murky swimming pond and deliver a phased recovery plan.",
+        "nl": "Een chronisch troebele zwemvijver diagnosticeren en een gefaseerd herstelplan leveren."
+      },
+      "intervention": {
+        "en": "System analysis, biofilter redesign advice, planting plan",
+        "nl": "Systeemanalyse, advies voor biofilterherontwerp, beplantingsplan"
+      },
+      "status": {
+        "en": "Completed",
+        "nl": "Afgerond"
+      },
+      "imageId": 10,
+      "sections": [
+        {
+          "index": "01",
+          "title": {
+            "en": "Project Introduction",
+            "nl": "Projectintroductie"
+          },
+          "body": {
+            "en": "A beautiful swimming pond with a persistent algae problem the installer couldn't solve. One site visit, a full system analysis, and a phased plan the owners could implement themselves.",
+            "nl": "Een prachtige zwemvijver met een hardnekkig algenprobleem dat de installateur niet kon oplossen. Eén locatiebezoek, een volledige systeemanalyse en een gefaseerd plan dat de eigenaren zelf konden uitvoeren."
+          }
+        },
+        {
+          "index": "04",
+          "title": {
+            "en": "Design Strategy",
+            "nl": "Ontwerpstrategie"
+          },
+          "body": {
+            "en": "The regeneration zone was undersized and starved of flow. The plan rebalanced circulation, tripled the planted filter area and swapped sterile gravel for a living substrate.",
+            "nl": "De regeneratiezone was te klein en kreeg te weinig doorstroming. Het plan herstelde de circulatie, verdrievoudigde het beplante filteroppervlak en verving steriel grind door een levend substraat."
+          }
+        },
+        {
+          "index": "08",
+          "title": {
+            "en": "Result",
+            "nl": "Resultaat"
+          },
+          "body": {
+            "en": "Clear water by the following summer, without chemicals and without rebuilding the pond.",
+            "nl": "Helder water in de zomer erna, zonder chemicaliën en zonder de vijver opnieuw te bouwen."
+          }
+        }
+      ]
+    },
+    {
+      "slug": "courtyard-rain-garden",
+      "title": {
+        "en": "Courtyard Rain Garden",
+        "nl": "Regentuin op een binnenplaats"
+      },
+      "location": "Nijmegen, Netherlands",
+      "category": "in-progress",
+      "objective": {
+        "en": "Turn a flood-prone paved courtyard into a rain-fed garden that stores every drop on site.",
+        "nl": "Een betegelde binnenplaats met wateroverlast omvormen tot een regengevoede tuin die elke druppel ter plekke bergt."
+      },
+      "intervention": {
+        "en": "Depaving, infiltration planting beds, rainwater cascade",
+        "nl": "Onttegelen, infiltratieplantvakken, regenwatercascade"
+      },
+      "status": {
+        "en": "In Progress",
+        "nl": "In uitvoering"
+      },
+      "imageId": 25,
+      "sections": [
+        {
+          "index": "01",
+          "title": {
+            "en": "Project Introduction",
+            "nl": "Projectintroductie"
+          },
+          "body": {
+            "en": "An enclosed urban courtyard that flooded in every downpour. Currently under construction: the paving is out, the soil is breathing again, and the rain cascade is being built this season.",
+            "nl": "Een omsloten stadsbinnenplaats die bij elke hoosbui onderliep. Momenteel in uitvoering: de tegels zijn eruit, de bodem ademt weer en de regencascade wordt dit seizoen gebouwd."
+          }
+        },
+        {
+          "index": "04",
+          "title": {
+            "en": "Design Strategy",
+            "nl": "Ontwerpstrategie"
+          },
+          "body": {
+            "en": "Roof water is made visible — a steel runnel feeds a planted cascade that fills sunken infiltration beds. Overflow only reaches the drain after 40 mm of rain.",
+            "nl": "Dakwater wordt zichtbaar gemaakt — een stalen goot voedt een beplante cascade die verdiepte infiltratievakken vult. Pas na 40 mm regen bereikt overtollig water het riool."
+          }
+        }
+      ]
+    }
+  ],
+  "articles": [
+    {
+      "slug": "why-a-pond-should-not-stand-alone",
+      "title": {
+        "en": "Why a Pond Should Not Stand Alone",
+        "nl": "Waarom een vijver niet op zichzelf moet staan"
+      },
+      "category": {
+        "en": "Water",
+        "nl": "Water"
+      },
+      "date": "2026-05-14",
+      "question": {
+        "en": "Why do most garden ponds fail within five years?",
+        "nl": "Waarom falen de meeste tuinvijvers binnen vijf jaar?"
+      },
+      "excerpt": {
+        "en": "A pond is not a water feature. It is the wettest point of a system that starts at the gutter and ends in the soil.",
+        "nl": "Een vijver is geen waterornament. Het is het natste punt van een systeem dat begint bij de dakgoot en eindigt in de bodem."
+      },
+      "body": [
+        {
+          "heading": {
+            "en": "The isolated pond",
+            "nl": "De geïsoleerde vijver"
+          },
+          "text": {
+            "en": "Most ponds are installed as objects: a hole, a liner, a pump. Cut off from the soil, the planting and the rainwater around them, they depend entirely on machinery and maintenance to stay alive. When either stops, the pond turns green.",
+            "nl": "De meeste vijvers worden aangelegd als objecten: een gat, folie, een pomp. Afgesneden van de bodem, de beplanting en het regenwater eromheen zijn ze volledig afhankelijk van techniek en onderhoud om in leven te blijven. Zodra één van beide stopt, slaat de vijver groen uit."
+          }
+        },
+        {
+          "heading": {
+            "en": "What a pond actually needs",
+            "nl": "Wat een vijver werkelijk nodig heeft"
+          },
+          "text": {
+            "en": "Stable water chemistry comes from relationships — marginal plants absorbing nutrients, shaded and sunlit zones exchanging water, shallow edges where life can enter and leave. Circulation, filtration and habitat are not accessories; they are the pond.",
+            "nl": "Stabiele waterchemie komt voort uit relaties — oeverplanten die voedingsstoffen opnemen, beschaduwde en zonnige zones die water uitwisselen, ondiepe randen waar leven in en uit kan. Circulatie, filtering en habitat zijn geen accessoires; ze zíjn de vijver."
+          }
+        },
+        {
+          "heading": {
+            "en": "In practice",
+            "nl": "In de praktijk"
+          },
+          "text": {
+            "en": "In our Two Ponds project, connecting two failing ponds with a planted stream and a wetland filter solved problems ten years of pump upgrades could not. The intervention was ecological, not mechanical.",
+            "nl": "In ons project Twee Vijvers loste het verbinden van twee falende vijvers met een beplante beek en een moerasfilter problemen op waar tien jaar aan pompupgrades niets aan konden doen. De ingreep was ecologisch, niet mechanisch."
+          }
+        }
+      ],
+      "principle": {
+        "en": "Design the water system, not the water feature.",
+        "nl": "Ontwerp het watersysteem, niet het waterornament."
+      }
+    },
+    {
+      "slug": "soil-as-living-infrastructure",
+      "title": {
+        "en": "Soil as Living Infrastructure",
+        "nl": "Bodem als levende infrastructuur"
+      },
+      "category": {
+        "en": "Soil",
+        "nl": "Bodem"
+      },
+      "date": "2026-04-02",
+      "question": {
+        "en": "What is the most expensive thing to ignore in a garden?",
+        "nl": "Wat is het duurste om te negeren in een tuin?"
+      },
+      "excerpt": {
+        "en": "Every function a garden performs — drainage, growth, resilience, carbon — runs through the soil first.",
+        "nl": "Elke functie die een tuin vervult — afwatering, groei, veerkracht, koolstof — loopt eerst door de bodem."
+      },
+      "body": [
+        {
+          "heading": {
+            "en": "The hidden system",
+            "nl": "Het verborgen systeem"
+          },
+          "text": {
+            "en": "A single gram of healthy soil holds more organisms than there are people on earth. That biology builds structure, stores water, feeds roots and buffers drought. Compacted, sealed or stripped soil does none of it.",
+            "nl": "Eén gram gezonde bodem bevat meer organismen dan er mensen op aarde zijn. Die biologie bouwt structuur, bergt water, voedt wortels en buffert droogte. Verdichte, afgedekte of afgegraven bodem doet niets van dat alles."
+          }
+        },
+        {
+          "heading": {
+            "en": "Building soil deliberately",
+            "nl": "Bewust bodem opbouwen"
+          },
+          "text": {
+            "en": "We de-compact before we plant, mulch instead of digging, and keep roots in the ground year round. Soil recovery is slow but compounding — the cheapest infrastructure a garden will ever get.",
+            "nl": "We maken de bodem los vóór we planten, mulchen in plaats van spitten en houden het hele jaar wortels in de grond. Bodemherstel is traag maar cumulatief — de goedkoopste infrastructuur die een tuin ooit zal krijgen."
+          }
+        }
+      ],
+      "principle": {
+        "en": "Build living soil before anything that stands on it.",
+        "nl": "Bouw levende bodem vóór alles wat erop staat."
+      }
+    },
+    {
+      "slug": "designing-gardens-for-water",
+      "title": {
+        "en": "Designing Gardens for Water",
+        "nl": "Tuinen ontwerpen voor water"
+      },
+      "category": {
+        "en": "Water",
+        "nl": "Water"
+      },
+      "date": "2026-03-11",
+      "question": {
+        "en": "Where does the rain that falls on your garden actually go?",
+        "nl": "Waar gaat de regen die op je tuin valt eigenlijk heen?"
+      },
+      "excerpt": {
+        "en": "In most gardens, straight to the sewer. A regenerative garden slows, spreads and stores that water instead.",
+        "nl": "In de meeste tuinen rechtstreeks het riool in. Een regeneratieve tuin vertraagt, verspreidt en bergt dat water juist."
+      },
+      "body": [
+        {
+          "heading": {
+            "en": "Slow, spread, store",
+            "nl": "Vertragen, verspreiden, bergen"
+          },
+          "text": {
+            "en": "Downpipes can feed planting beds. Paths can infiltrate. Low points can become rain gardens that flood beautifully for a day and feed the subsoil for a month. The technique is old; only the will is new.",
+            "nl": "Regenpijpen kunnen plantvakken voeden. Paden kunnen infiltreren. Laagtes kunnen regentuinen worden die één dag prachtig onder water staan en de ondergrond een maand lang voeden. De techniek is oud; alleen de wil is nieuw."
+          }
+        },
+        {
+          "heading": {
+            "en": "Drought is a design problem",
+            "nl": "Droogte is een ontwerpprobleem"
+          },
+          "text": {
+            "en": "The same garden that floods in October is bone dry in July — because the water was never kept. Retention is the answer to both extremes at once.",
+            "nl": "Dezelfde tuin die in oktober onderloopt, is in juli kurkdroog — omdat het water nooit is vastgehouden. Retentie is het antwoord op beide extremen tegelijk."
+          }
+        }
+      ],
+      "principle": {
+        "en": "Keep water in the landscape.",
+        "nl": "Houd water in het landschap."
+      }
+    },
+    {
+      "slug": "the-role-of-plant-communities",
+      "title": {
+        "en": "The Role of Plant Communities",
+        "nl": "De rol van plantengemeenschappen"
+      },
+      "category": {
+        "en": "Plants",
+        "nl": "Planten"
+      },
+      "date": "2026-02-18",
+      "question": {
+        "en": "Why do some plantings thrive on neglect while others die of care?",
+        "nl": "Waarom gedijen sommige beplantingen bij verwaarlozing terwijl andere sterven aan zorg?"
+      },
+      "excerpt": {
+        "en": "Plants evolved in communities, not in beds. Design the community and the maintenance designs itself.",
+        "nl": "Planten zijn geëvolueerd in gemeenschappen, niet in borders. Ontwerp de gemeenschap en het onderhoud ontwerpt zichzelf."
+      },
+      "body": [
+        {
+          "heading": {
+            "en": "Specimens versus systems",
+            "nl": "Solitairen versus systemen"
+          },
+          "text": {
+            "en": "A traditional border is a collection of individuals competing for the same light and water, held apart by bare mulch and labour. A plant community layers species that occupy different niches — in space, in season, in root depth — so the planting closes itself against weeds.",
+            "nl": "Een traditionele border is een verzameling individuen die om hetzelfde licht en water concurreren, uit elkaar gehouden door kale mulch en arbeid. Een plantengemeenschap stapelt soorten die verschillende niches innemen — in ruimte, in seizoen, in worteldiepte — zodat de beplanting zichzelf sluit tegen onkruid."
+          }
+        },
+        {
+          "heading": {
+            "en": "Designing the layers",
+            "nl": "De lagen ontwerpen"
+          },
+          "text": {
+            "en": "Matrix grasses and sedges carry the ground layer. Seasonal theme plants flower through it. Structural species give the winter its architecture. Each layer earns its place ecologically before it earns it visually.",
+            "nl": "Matrixgrassen en zeggen dragen de bodemlaag. Seizoensplanten bloeien erdoorheen. Structuursoorten geven de winter zijn architectuur. Elke laag verdient zijn plek eerst ecologisch en daarna pas visueel."
+          }
+        }
+      ],
+      "principle": {
+        "en": "Design communities, not compositions.",
+        "nl": "Ontwerp gemeenschappen, geen composities."
+      }
+    },
+    {
+      "slug": "habitat-before-decoration",
+      "title": {
+        "en": "Habitat Before Decoration",
+        "nl": "Habitat vóór decoratie"
+      },
+      "category": {
+        "en": "Habitat",
+        "nl": "Habitat"
+      },
+      "date": "2026-01-27",
+      "question": {
+        "en": "What turns a green garden into a living one?",
+        "nl": "Wat maakt van een groene tuin een levende tuin?"
+      },
+      "excerpt": {
+        "en": "Food, shelter, water and connection — if one is missing, wildlife visits but never stays.",
+        "nl": "Voedsel, beschutting, water en verbinding — ontbreekt er één, dan komen dieren op bezoek maar blijven ze nooit."
+      },
+      "body": [
+        {
+          "heading": {
+            "en": "The four requirements",
+            "nl": "De vier vereisten"
+          },
+          "text": {
+            "en": "A bird needs more than a feeder: nesting cover, insect prey, water and a safe route between them. Habitat design means providing all four in reach of each other, all year round.",
+            "nl": "Een vogel heeft meer nodig dan een voederhuisje: nestgelegenheid, insecten als prooi, water en een veilige route ertussen. Habitatontwerp betekent alle vier binnen elkaars bereik bieden, het hele jaar door."
+          }
+        },
+        {
+          "heading": {
+            "en": "Beauty is not the opposite",
+            "nl": "Schoonheid is niet het tegendeel"
+          },
+          "text": {
+            "en": "Deadwood can be sculptural. A brash hedge can be an elegant boundary. The most biodiverse features in our projects are usually the ones visitors photograph first.",
+            "nl": "Doodhout kan sculpturaal zijn. Een takkenril kan een elegante erfgrens zijn. De meest biodiverse elementen in onze projecten zijn meestal degene die bezoekers als eerste fotograferen."
+          }
+        }
+      ],
+      "principle": {
+        "en": "Create habitat; the beauty follows.",
+        "nl": "Creëer habitat; de schoonheid volgt."
+      }
+    },
+    {
+      "slug": "what-happens-after-a-garden-is-built",
+      "title": {
+        "en": "What Happens After a Garden Is Built",
+        "nl": "Wat er gebeurt nadat een tuin is aangelegd"
+      },
+      "category": {
+        "en": "Field Notes",
+        "nl": "Veldnotities"
+      },
+      "date": "2025-12-09",
+      "question": {
+        "en": "Is a garden finished the day the crew leaves?",
+        "nl": "Is een tuin af op de dag dat de hoveniers vertrekken?"
+      },
+      "excerpt": {
+        "en": "A conventional garden peaks on handover day. A living system is at its worst — it only improves from there.",
+        "nl": "Een conventionele tuin piekt op de dag van oplevering. Een levend systeem is dan op zijn slechtst — het wordt alleen maar beter."
+      },
+      "body": [
+        {
+          "heading": {
+            "en": "Year one is establishment",
+            "nl": "Jaar één is aanslaan"
+          },
+          "text": {
+            "en": "Roots go down before anything goes up. The first season looks sparse because the growth is underground. Watering, editing and patience matter more than any intervention.",
+            "nl": "Wortels gaan eerst omlaag voordat er iets omhoog gaat. Het eerste seizoen oogt schraal omdat de groei ondergronds zit. Water geven, bijsturen en geduld doen er meer toe dan welke ingreep dan ook."
+          }
+        },
+        {
+          "heading": {
+            "en": "Years two to five",
+            "nl": "Jaar twee tot vijf"
+          },
+          "text": {
+            "en": "The layers close, the soil life returns, the maintenance drops. Our role shifts from builder to editor: thinning, adjusting, letting the system reveal what it wants to become.",
+            "nl": "De lagen sluiten zich, het bodemleven keert terug, het onderhoud neemt af. Onze rol verschuift van bouwer naar redacteur: uitdunnen, bijstellen, het systeem laten tonen wat het wil worden."
+          }
+        }
+      ],
+      "principle": {
+        "en": "Design for the tenth year, not the photo shoot.",
+        "nl": "Ontwerp voor het tiende jaar, niet voor de fotoshoot."
+      }
+    }
+  ],
+  "services": [
+    {
+      "slug": "garden-design",
+      "kind": "ontwerp",
+      "index": "01",
+      "title": {
+        "en": "Garden design",
+        "nl": "Tuinontwerp"
+      },
+      "summary": {
+        "en": "A design for your whole garden. I look at the soil, the water, the light and at how you use the garden, and turn that into one plan that can grow along over the years.",
+        "nl": "Een ontwerp voor je hele tuin. Ik kijk naar de bodem, het water, het licht en naar hoe jij de tuin gebruikt, en maak daar één plan van dat met de jaren mee kan groeien."
+      },
+      "tagline": {
+        "en": "The whole garden, thought through",
+        "nl": "De hele tuin, doordacht"
+      },
+      "includes": [
+        {
+          "en": "Looking at how your garden works now",
+          "nl": "Kijken hoe je tuin nu werkt"
+        },
+        {
+          "en": "A first sketch",
+          "nl": "Een eerste schets"
+        },
+        {
+          "en": "What goes where",
+          "nl": "Waar wat komt"
+        },
+        {
+          "en": "Which plants, and why",
+          "nl": "Welke planten, en waarom"
+        },
+        {
+          "en": "Materials that suit the place",
+          "nl": "Materialen die bij de plek passen"
+        },
+        {
+          "en": "Where the rainwater goes",
+          "nl": "Waar het regenwater heen gaat"
+        },
+        {
+          "en": "Room for birds, insects and other life",
+          "nl": "Plek voor vogels, insecten en ander leven"
+        },
+        {
+          "en": "A plan in steps, so not everything has to happen at once",
+          "nl": "Een plan in stappen, zodat niet alles tegelijk hoeft"
+        }
+      ],
+      "excludes": [
+        {
+          "en": "Endless rounds of changes. One sketch round and one revision round are included; after that I work by the hour, and I say so up front.",
+          "nl": "Onbeperkt blijven bijschaven. Eén schetsronde en één revisieronde zitten erbij; daarna werk ik op uurbasis, en dat zeg ik vooraf."
+        },
+        {
+          "en": "A photoreal render. It costs ten extra hours and sells no better than a good hand drawing with a clear planting plan. You are buying the thinking, not the draughtsmanship.",
+          "nl": "Een fotorealistische render. Die kost tien extra uur en verkoopt niet beter dan een goede handschets met een helder plantplan. Je koopt het denkwerk, niet de tekenvaardigheid."
+        },
+        {
+          "en": "A design without a budget. Without one, I would draw something that will probably never be built.",
+          "nl": "Een ontwerp zonder budget. Zonder budget teken ik iets wat waarschijnlijk nooit gebouwd wordt."
+        }
+      ]
+    },
+    {
+      "slug": "water-systems",
+      "kind": "ontwerp",
+      "index": "02",
+      "title": {
+        "en": "Ponds and water",
+        "nl": "Vijvers en water"
+      },
+      "summary": {
+        "en": "Ponds, streams, waterfalls and wet zones. I look at how water moves through your garden, how it stays clean and how the rainwater gets a place.",
+        "nl": "Vijvers, beken, watervallen en natte zones. Ik kijk hoe het water door je tuin loopt, hoe het schoon blijft en hoe het regenwater een plek krijgt."
+      },
+      "tagline": {
+        "en": "Water that finds its way",
+        "nl": "Water dat zijn weg vindt"
+      },
+      "includes": [
+        {
+          "en": "Redesigning an existing pond",
+          "nl": "Een bestaande vijver opnieuw ontwerpen"
+        },
+        {
+          "en": "Water kept clean by plants and soil",
+          "nl": "Water dat met planten en bodem schoon blijft"
+        },
+        {
+          "en": "Biological filters",
+          "nl": "Biologische filters"
+        },
+        {
+          "en": "How the water circulates",
+          "nl": "Hoe het water rondgaat"
+        },
+        {
+          "en": "Streams and waterfalls",
+          "nl": "Beken en watervallen"
+        },
+        {
+          "en": "Plants for the wet edges",
+          "nl": "Planten voor de natte randen"
+        },
+        {
+          "en": "A safe edge for animals that come to drink",
+          "nl": "Een veilige rand voor dieren die komen drinken"
+        },
+        {
+          "en": "Rainwater that stays in the garden",
+          "nl": "Regenwater dat in de tuin blijft"
+        },
+        {
+          "en": "Finding out why a pond isn’t working",
+          "nl": "Uitzoeken waarom een vijver niet goed loopt"
+        }
+      ]
+    },
+    {
+      "slug": "planting-habitat",
+      "kind": "ontwerp",
+      "index": "03",
+      "title": {
+        "en": "Planting",
+        "nl": "Beplanting"
+      },
+      "summary": {
+        "en": "Planting in layers, from ground cover to tree. Plants that suit the place and give food and shelter to bees, birds and other life.",
+        "nl": "Planten in lagen, van bodembedekker tot boom. Planten die passen bij de plek en voedsel en beschutting geven aan bijen, vogels en ander leven."
+      },
+      "tagline": {
+        "en": "Planting that feeds something",
+        "nl": "Beplanting die iets voedt"
+      },
+      "includes": [
+        {
+          "en": "A planting plan for each spot",
+          "nl": "Een beplantingsplan per plek"
+        },
+        {
+          "en": "Native plants, and plants that can handle drought and heat",
+          "nl": "Inheemse planten, en planten die droogte en hitte aankunnen"
+        },
+        {
+          "en": "Flowers for bees and butterflies",
+          "nl": "Bloei voor bijen en vlinders"
+        },
+        {
+          "en": "Room for birds",
+          "nl": "Plek voor vogels"
+        },
+        {
+          "en": "Room for frogs and toads",
+          "nl": "Plek voor kikkers en padden"
+        },
+        {
+          "en": "Planting in layers",
+          "nl": "Planten in lagen"
+        },
+        {
+          "en": "Something to see in every season",
+          "nl": "Iets te zien in elk seizoen"
+        },
+        {
+          "en": "Plants that also give something back, like fruit and herbs",
+          "nl": "Planten die ook iets opleveren, zoals fruit en kruiden"
+        }
+      ]
+    },
+    {
+      "slug": "garden-transformation",
+      "kind": "ontwerp",
+      "index": "04",
+      "title": {
+        "en": "Reworking an existing garden",
+        "nl": "Bestaande tuin omvormen"
+      },
+      "summary": {
+        "en": "You already have a garden, but not much happens in it. I look at what can stay, what can go and how the garden gets more life, step by step.",
+        "nl": "Je hebt al een tuin, maar er gebeurt weinig in. Ik kijk wat kan blijven, wat weg mag en hoe de tuin stap voor stap meer leven krijgt."
+      },
+      "tagline": {
+        "en": "From lawn and paving to a garden that lives",
+        "nl": "Van gazon en tegels naar een tuin die leeft"
+      },
+      "includes": [
+        {
+          "en": "Walking through your current garden together",
+          "nl": "Samen door je huidige tuin lopen"
+        },
+        {
+          "en": "Paving out where it serves no purpose",
+          "nl": "Tegels eruit waar ze niets doen"
+        },
+        {
+          "en": "Getting the soil healthy again",
+          "nl": "De bodem weer gezond maken"
+        },
+        {
+          "en": "Holding on to rainwater instead of draining it away",
+          "nl": "Regenwater vasthouden in plaats van afvoeren"
+        },
+        {
+          "en": "More kinds of plants and animals",
+          "nl": "Meer soorten planten en dieren"
+        },
+        {
+          "en": "Reusing what is already there",
+          "nl": "Wat er al ligt opnieuw gebruiken"
+        },
+        {
+          "en": "Reworking in steps, at your pace",
+          "nl": "Omvormen in stappen, in jouw tempo"
+        }
+      ]
+    },
+    {
+      "slug": "consultancy",
+      "kind": "ontwerp",
+      "index": "05",
+      "title": {
+        "en": "Advice on site",
+        "nl": "Advies op locatie"
+      },
+      "summary": {
+        "en": "I come and look, listen to what you want and tell you honestly what I would do. You get advice you can carry out yourself, in steps if that suits you better.",
+        "nl": "Ik kom kijken, luister naar wat je wilt en zeg eerlijk wat ik zou doen. Je krijgt een advies dat je zelf kunt uitvoeren, in stappen als dat beter past."
+      },
+      "tagline": {
+        "en": "A second pair of eyes",
+        "nl": "Een tweede paar ogen"
+      },
+      "includes": [
+        {
+          "en": "A visit to your garden",
+          "nl": "Een bezoek aan je tuin"
+        },
+        {
+          "en": "Finding out where the problem is",
+          "nl": "Uitzoeken waar het probleem zit"
+        },
+        {
+          "en": "Advice on pond and water",
+          "nl": "Advies over vijver en water"
+        },
+        {
+          "en": "Advice on planting",
+          "nl": "Advies over beplanting"
+        },
+        {
+          "en": "A plan to bring more life into it",
+          "nl": "Een plan om er meer leven in te krijgen"
+        },
+        {
+          "en": "Advice on materials",
+          "nl": "Advies over materialen"
+        },
+        {
+          "en": "What upkeep suits you",
+          "nl": "Welk onderhoud bij jou past"
+        },
+        {
+          "en": "What first, and what later",
+          "nl": "Wat eerst, en wat later"
+        }
+      ]
+    },
+    {
+      "slug": "implementation",
+      "kind": "aanleg",
+      "index": "06",
+      "title": {
+        "en": "Building your garden",
+        "nl": "Tuin aanleggen"
+      },
+      "summary": {
+        "en": "I build what we came up with together, with the same attention as in the design. From the soil to the last plant.",
+        "nl": "Ik leg aan wat we samen bedacht hebben, met dezelfde aandacht als in het ontwerp. Van de grond tot de laatste plant."
+      },
+      "tagline": {
+        "en": "Built the way it was drawn",
+        "nl": "Aangelegd zoals getekend"
+      },
+      "includes": [
+        {
+          "en": "A schedule you know in advance",
+          "nl": "Een planning die je vooraf kent"
+        },
+        {
+          "en": "Preparing the ground",
+          "nl": "De grond klaarmaken"
+        },
+        {
+          "en": "Building ponds and water",
+          "nl": "Vijvers en water aanleggen"
+        },
+        {
+          "en": "Planting",
+          "nl": "Planten"
+        },
+        {
+          "en": "Places for animals",
+          "nl": "Plekken voor dieren"
+        },
+        {
+          "en": "Laying the materials",
+          "nl": "Materialen plaatsen"
+        },
+        {
+          "en": "A natural finish",
+          "nl": "Een natuurlijke afwerking"
+        },
+        {
+          "en": "Looking back together after handover",
+          "nl": "Na de oplevering samen terugkijken"
+        }
+      ]
+    },
+    {
+      "slug": "leaf-net",
+      "kind": "onderhoud",
+      "index": "07",
+      "title": {
+        "en": "Leaf Netting",
+        "nl": "Bladnet plaatsen"
+      },
+      "summary": {
+        "en": "A net over the pond before the leaves fall, and off again in December. The one pond job with an absolute deadline.",
+        "nl": "Een net over de vijver vóór de bladval, en er in december weer af. De enige vijverklus met een absolute deadline."
+      },
+      "tagline": {
+        "en": "Before the leaves fall",
+        "nl": "Vóór de bladval"
+      },
+      "includes": [
+        {
+          "en": "Measured on arrival",
+          "nl": "Opmeten bij aankomst"
+        },
+        {
+          "en": "Net cut to your pond",
+          "nl": "Net op maat gesneden"
+        },
+        {
+          "en": "Edges pinned every 60–80 cm",
+          "nl": "Randen om de 60–80 cm vastgezet"
+        },
+        {
+          "en": "Spans on ponds wider than 4 m",
+          "nl": "Spanten bij vijvers breder dan 4 m"
+        },
+        {
+          "en": "December collection booked on the spot",
+          "nl": "Ophalen in december meteen ingepland"
+        }
+      ],
+      "excludes": [
+        {
+          "en": "A net strung tight to the water. If it hangs in the pond it catches nothing and drowns what swims into it.",
+          "nl": "Een net dat strak op het water ligt. Hangt het in de vijver, dan vangt het niets en verdrinkt wat erin zwemt."
+        },
+        {
+          "en": "A guarantee against every leaf. A net catches what falls from above, not what blows in sideways.",
+          "nl": "Een garantie tegen elk blad. Een net vangt wat van boven valt, niet wat er zijwaarts in waait."
+        }
+      ]
+    },
+    {
+      "slug": "pond-autumn-service",
+      "kind": "onderhoud",
+      "index": "08",
+      "title": {
+        "en": "Autumn Pond Service",
+        "nl": "Najaarsbeurt vijver"
+      },
+      "summary": {
+        "en": "Silt removed, dead growth cut back, filter cleaned, water measured before and after. The full reset before winter.",
+        "nl": "Slib afgezogen, afgestorven groei teruggeknipt, filter gereinigd, water gemeten vóór en na. De volledige reset voor de winter."
+      },
+      "tagline": {
+        "en": "The full reset before winter",
+        "nl": "De volledige reset voor de winter"
+      },
+      "includes": [
+        {
+          "en": "Water measured before anything is touched",
+          "nl": "Water gemeten vóórdat er iets gebeurt"
+        },
+        {
+          "en": "pH, KH, GH, nitrite, ammonium",
+          "nl": "pH, KH, GH, nitriet, ammonium"
+        },
+        {
+          "en": "Silt drawn from the deepest point",
+          "nl": "Slib vanaf het diepste punt"
+        },
+        {
+          "en": "Filter media rinsed in pond water",
+          "nl": "Filtermedia gespoeld in vijverwater"
+        },
+        {
+          "en": "UV lamp checked, hours logged",
+          "nl": "UV-lamp gecontroleerd, uren genoteerd"
+        },
+        {
+          "en": "Measured again, logged",
+          "nl": "Opnieuw gemeten, vastgelegd"
+        },
+        {
+          "en": "A written report with the readings and one piece of advice",
+          "nl": "Een verslag met de metingen en één advies"
+        }
+      ],
+      "excludes": [
+        {
+          "en": "A sterile pond. Remove everything and you throw the biology away, and next year you have more algae than ever. I deliberately take out 60–70% of the sludge.",
+          "nl": "Een steriele vijver. Zuig je alles weg, dan gooi je de biologie weg, en volgend jaar heb je meer algen dan ooit. Ik haal bewust 60–70% van het slib weg."
+        },
+        {
+          "en": "Filter media rinsed in tap water. Chlorine kills the bacterial culture that does the actual work.",
+          "nl": "Filtermedia gespoeld in kraanwater. Chloor doodt de bacteriecultuur die het eigenlijke werk doet."
+        },
+        {
+          "en": "Silt down the drain. It goes into the border, where the nutrients belong.",
+          "nl": "Slib in het riool. Dat gaat de border in, waar de voeding thuishoort."
+        }
+      ]
+    },
+    {
+      "slug": "winterising",
+      "kind": "onderhoud",
+      "index": "09",
+      "title": {
+        "en": "Winterising",
+        "nl": "Winterklaar maken"
+      },
+      "summary": {
+        "en": "Technology out, ice-free keeper in, the pond set up to get through the cold without a pump running against it.",
+        "nl": "Techniek eruit, ijsvrijhouder erin, de vijver zo ingericht dat hij de kou doorkomt zonder pomp die ertegenin werkt."
+      },
+      "tagline": {
+        "en": "Through the frost, safely",
+        "nl": "Veilig door de vorst"
+      },
+      "includes": [
+        {
+          "en": "Pump and filter lifted and stored",
+          "nl": "Pomp en filter eruit en opgeslagen"
+        },
+        {
+          "en": "Pipework drained against frost",
+          "nl": "Leidingwerk leeg tegen vorst"
+        },
+        {
+          "en": "Ice-free keeper placed and tested",
+          "nl": "IJsvrijhouder geplaatst en getest"
+        },
+        {
+          "en": "Final water reading logged",
+          "nl": "Laatste watermeting vastgelegd"
+        },
+        {
+          "en": "Leaf net collected if one was placed",
+          "nl": "Bladnet opgehaald indien geplaatst"
+        }
+      ],
+      "excludes": [
+        {
+          "en": "A hole hacked in the ice. The shockwave is what harms the fish; an ice-free keeper is there so nobody ever has to.",
+          "nl": "Een gat in het ijs hakken. De schokgolf is wat de vissen schaadt; een ijsvrijhouder staat er juist zodat dat nooit hoeft."
+        },
+        {
+          "en": "A pump left running all winter. It drags cold water down to where the fish are sitting it out.",
+          "nl": "Een pomp die de hele winter doordraait. Die trekt koud water omlaag, precies waar de vissen de winter uitzitten."
+        }
+      ]
+    },
+    {
+      "slug": "pond-survey",
+      "kind": "ontwerp",
+      "index": "10",
+      "title": {
+        "en": "Pond Survey",
+        "nl": "Vijverdoorlichting"
+      },
+      "summary": {
+        "en": "A paid diagnostic visit for a pond that is green, leaking, smelling or empty of life. Measured, not guessed, and written up.",
+        "nl": "Een betaald diagnosebezoek voor een vijver die groen is, lekt, stinkt of waar niets in leeft. Gemeten, niet geraden, en op papier."
+      },
+      "tagline": {
+        "en": "Measured, not guessed",
+        "nl": "Gemeten, niet geraden"
+      },
+      "includes": [
+        {
+          "en": "Full water panel — pH, KH, GH, nitrite, nitrate, ammonium, phosphate",
+          "nl": "Volledig waterpanel — pH, KH, GH, nitriet, nitraat, ammonium, fosfaat"
+        },
+        {
+          "en": "Silt depth measured in three places",
+          "nl": "Sliblaag op drie plekken gemeten"
+        },
+        {
+          "en": "Sun hours and planting cover",
+          "nl": "Zonuren en plantbezetting"
+        },
+        {
+          "en": "Pump capacity against pond volume",
+          "nl": "Pompcapaciteit tegenover vijverinhoud"
+        },
+        {
+          "en": "Surroundings — trees, lawn feed, run-off from paving",
+          "nl": "Omgeving — bomen, gazonbemesting, afspoeling van verharding"
+        },
+        {
+          "en": "A written report: what I saw, the pattern, why it happens, what to do",
+          "nl": "Een verslag: wat ik zag, het patroon, waarom het gebeurt, wat je doet"
+        },
+        {
+          "en": "Three routes costed — do it yourself, partly, or fully",
+          "nl": "Drie scenario's uitgewerkt — zelf doen, gedeeltelijk, volledig"
+        }
+      ],
+      "excludes": [
+        {
+          "en": "Test strips. Too inaccurate to base a plan on, and it stays guesswork at the edge of your pond. I use drop tests.",
+          "nl": "Teststrips. Te onnauwkeurig om een plan op te baseren, en het blijft gokken aan je vijverrand. Ik gebruik druppeltests."
+        },
+        {
+          "en": "A bottle of algae treatment. Algae is not the illness — it is the symptom of too much feeding.",
+          "nl": "Een fles algenmiddel. Alg is niet de ziekte — het is het symptoom van te veel voeding."
+        }
+      ]
+    },
+    {
+      "slug": "maintenance-subscription",
+      "kind": "onderhoud",
+      "index": "11",
+      "title": {
+        "en": "Stewardship",
+        "nl": "Onderhoudsabonnement"
+      },
+      "summary": {
+        "en": "A pond is not an appliance you install and forget. It changes every year, and a pond nobody looks after for a long time gets out of balance.",
+        "nl": "Een vijver is geen apparaat dat je installeert en vergeet. Hij verandert elk jaar, en een vijver waar lang niemand naar omkijkt, raakt uit balans."
+      },
+      "tagline": {
+        "en": "Four visits, one system",
+        "nl": "Vier bezoeken, één systeem"
+      },
+      "includes": [
+        {
+          "en": "Scheduled visits through the year",
+          "nl": "Ingeplande bezoeken door het jaar"
+        },
+        {
+          "en": "Technology in and out per season",
+          "nl": "Techniek in- en uitbouwen per seizoen"
+        },
+        {
+          "en": "Water measured and logged every visit",
+          "nl": "Water gemeten en vastgelegd bij elk bezoek"
+        },
+        {
+          "en": "A seasonal report with readings and a trend line",
+          "nl": "Een seizoensverslag met metingen en een trendlijn"
+        },
+        {
+          "en": "Questions answered within two working days",
+          "nl": "Vragen tussendoor beantwoord binnen twee werkdagen"
+        }
+      ],
+      "excludes": [
+        {
+          "en": "Unlimited call-out. Priority on a fault means priority in the schedule, not a free repair.",
+          "nl": "Onbeperkt uitrukken. Voorrang bij een storing betekent voorrang bij het inplannen, geen gratis reparatie."
+        },
+        {
+          "en": "A fixed price forever. The contract is indexed once a year, on 1 January, to the CBS price index.",
+          "nl": "Een prijs die eeuwig vaststaat. Het contract wordt jaarlijks per 1 januari geïndexeerd volgens de CBS-prijsindex."
+        }
+      ]
+    }
+  ]
+}

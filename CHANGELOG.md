@@ -7,6 +7,7 @@ De details van het CRM staan in [docs/CHANGELOG.md](docs/CHANGELOG.md).
 
 ## Nog niet uitgebracht
 
+- Archief: de vorige site (gronn-studio) als naslag in `archief/`, buiten de build.
 - Documentatie: README opnieuw, kennisbank met werkwijze, besluiten, opbouw van
   de site, overzicht van de ADR's en alle omgevingsvariabelen. ADR "GPT als
   reviewer" heet nu 0008 (twee ADR's droegen 0005).

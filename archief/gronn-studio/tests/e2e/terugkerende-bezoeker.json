@@ -1,0 +1,9 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3210",
+      "localStorage": [{ "name": "gronn-install-dismissed", "value": "32503680000000" }]
+    }
+  ]
+}

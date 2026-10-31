@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* Het archief van de oude site (archief/) hoort niet in de CSS van deze site. */
+@source not "../../archief";
 
 /* GRØNN Brand Guide 2026, 60/30/10: gebroken wit en antraciet voeren de
    boventoon, aarde-oranje is het ene accent (een oranje vlak draagt

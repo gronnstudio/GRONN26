@@ -100,3 +100,4 @@ nam en waarom.
 - Geen nieuwe afhankelijkheid zonder ADR (ADR 0003).
 - Geen bedragen als kommagetal (ADR 0002); getallen van een model zijn een
   voorstel, nooit een uitkomst (ADR 0007).
+- Niets in `archief/` aanpassen of importeren; het is naslag.
