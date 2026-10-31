@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useId, useRef, useState, type FocusEvent, type FormEvent, type ReactNode, type RefObject } from "react"
 import { flushSync } from "react-dom"
 
@@ -216,6 +217,7 @@ function Samenvatting({ v }: { v: Velden }) {
 
 export function KennismakenFormulier() {
   const [status, setStatus] = useState<Status>("invullen")
+  const router = useRouter()
   const [soort, setSoort] = useState("anders")
   const [pakket, setPakket] = useState("")
   const [budget, setBudget] = useState("")
@@ -312,7 +314,8 @@ export function KennismakenFormulier() {
       const uit = (await res.json().catch(() => null)) as { success?: string | boolean } | null
       if (!res.ok || !(uit?.success === true || uit?.success === "true")) throw new Error("niet bezorgd")
       form.reset()
-      setStatus("verzonden")
+      // Een eigen adres na een echte aanvraag, zodat Google Ads alleen verzonden aanvragen telt (Nick, 31 okt 2026).
+      router.push("/kennismaken/bedankt")
     } catch {
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- mailto:, geen interne pagina
       window.location.href = mailto
