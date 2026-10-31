@@ -53,17 +53,42 @@ export function Assistent({ klantId, snel = SNEL }: { klantId?: string; snel?: s
     zetStand(s);
   };
 
+  // De natuurlijkste Nederlandse stem die het apparaat heeft: neurale stemmen
+  // (Edge "Online (Natural)", Google, Apple Premium/Enhanced) eerst, de oude
+  // robotstemmen als laatste. Zonder markdown en in korte zinnen, wat rustiger.
+  const kiesStem = () => {
+    const nl = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith("nl"))
+    const punt = (v: SpeechSynthesisVoice) =>
+      (/natural|online|neural/i.test(v.name) ? 8 : 0) + (/premium|enhanced|verbeterd/i.test(v.name) ? 6 : 0) + (/google/i.test(v.name) ? 4 : 0) + (v.lang === "nl-NL" ? 2 : 0) + (v.localService ? 0 : 1)
+    return nl.sort((a, b) => punt(b) - punt(a))[0]
+  };
+
   const spreek = (zin: string) => {
     if (!("speechSynthesis" in window)) return stel("rust");
-    const u = new SpeechSynthesisUtterance(zin.replace(/Grønn/g, "Greun"));
-    u.lang = "nl-NL";
-    const stem = speechSynthesis.getVoices().find((v) => v.lang.startsWith("nl"));
-    if (stem) u.voice = stem;
-    u.onend = () => stel("rust");
-    stel("praat");
+    const schoon = zin
+      .replace(/Grønn/g, "Greun")
+      .replace(/[#*_`|>]/g, "")
+      .replace(/\bexcl\./g, "exclusief")
+      .replace(/\bincl\./g, "inclusief");
     speechSynthesis.cancel();
-    speechSynthesis.speak(u);
+    const stem = kiesStem();
+    const zinnen = schoon.split(/(?<=[.!?])\s+|\n+/).map((x) => x.trim()).filter(Boolean);
+    if (!zinnen.length) return stel("rust");
+    zinnen.forEach((z, i) => {
+      const u = new SpeechSynthesisUtterance(z);
+      u.lang = "nl-NL";
+      if (stem) u.voice = stem;
+      u.rate = 1.05;
+      if (i === zinnen.length - 1) u.onend = () => stel("rust");
+      speechSynthesis.speak(u);
+    });
+    stel("praat");
   };
+
+  // Stemmen laden in Chrome pas na een tel; zo staan ze klaar bij het eerste antwoord.
+  useEffect(() => {
+    if ("speechSynthesis" in window) speechSynthesis.getVoices();
+  }, []);
 
   const vraag = async (v: string) => {
     if (!v.trim()) return;
