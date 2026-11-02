@@ -115,6 +115,8 @@ export type Versie = {
   regels: Regel[]
   /** Werkplanning per fase (fase 5); ontbreekt bij oudere versies. */
   planning?: PlanFase[]
+  /** Eerste werkdag van de planning (jjjj-mm-dd). */
+  planStart?: string
   /** Uren per fase, als de klus in delen gaat (Regel.groep is de fase van een regel). */
   fasen?: { naam: string; uren: Milli }[]
   /** Momentopname van de uitkomst, voor lijsten zonder opnieuw te rekenen. */

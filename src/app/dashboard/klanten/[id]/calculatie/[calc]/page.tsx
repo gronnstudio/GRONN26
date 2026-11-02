@@ -57,6 +57,7 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     betaald: versie?.betaald,
     regels: versie?.regels ?? [],
     planning: versie?.planning,
+    planStart: versie?.planStart,
     fasen: versie?.fasen,
     planVoorstel: t ? werkplan(t.zones) : undefined,
     nr: laatste,

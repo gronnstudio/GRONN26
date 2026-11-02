@@ -43,7 +43,7 @@ const isBigBag = (eenheid: string) => /^bb$|big ?bag/i.test(eenheid.trim())
 const BB_KEUZES: [string, string][] = [["½", "0,5"], ["1", "1"], ["2", "2"], ["3", "3"]]
 
 export type KlantKeuze = { id: string; naam: string; tuinen: { id: string; naam: string }[] }
-export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; betaald?: number; regels: Regel[]; nr?: number; planning?: PlanFase[]; planVoorstel?: PlanFase[]; fasen?: FaseUren[] }
+export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; betaald?: number; regels: Regel[]; nr?: number; planning?: PlanFase[]; planStart?: string; planVoorstel?: PlanFase[]; fasen?: FaseUren[] }
 
 const lbl = "crm-label"
 const veld = "crm-veld"
@@ -107,6 +107,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [regels, setRegels] = useState<Invul[]>(begin?.regels.length ? begin.regels.map(naarInvul) : [leeg()])
   const [beschrijving, setBeschrijving] = useState(begin?.beschrijving ?? "")
   const [plan, setPlan] = useState<PlanFase[]>(begin?.planning ?? [])
+  const [planStart, setPlanStart] = useState(begin?.planStart ?? "")
   // Uren per fase, als de klus in delen gaat; de uren hierboven zijn dan de som.
   const [fasen, setFasen] = useState<FaseUren[]>(begin?.fasen ?? [])
   const [vorige, setVorige] = useState<string | null>(null)
@@ -251,7 +252,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const bewaar = () =>
     start(async () => {
       setMelding("")
-      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, fasen, betaald: alBetaald, ...invoer })
+      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, planStart: planStart || undefined, fasen, betaald: alBetaald, ...invoer })
       if ("fout" in uit) return setMelding(uit.fout)
       setCalcId(uit.id)
       setVersie(uit.nr)
@@ -534,7 +535,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             </p>
           </section>
 
-          <Planning plan={plan} onPlan={setPlan} voorstel={begin?.planVoorstel} onWerkomschrijving={(p) => setBeschrijving((b) => metWerkvolgorde(b, p))} />
+          <Planning titel={titel} plan={plan} onPlan={setPlan} start={planStart} onStart={setPlanStart} voorstel={begin?.planVoorstel} onWerkomschrijving={(p) => setBeschrijving((b) => metWerkvolgorde(b, p))} />
 
           <Rekenhulp catalogus={catalogus} onRegel={voegToe} onUren={(m) => setUren(toonDecimaal(urenMilli + m, 3))} />
         </div>

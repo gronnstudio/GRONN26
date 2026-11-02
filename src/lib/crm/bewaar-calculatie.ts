@@ -24,6 +24,7 @@ export type Concept = {
   betaald?: number
   regels: Regel[]
   planning?: PlanFase[]
+  planStart?: string
   fasen?: FaseUren[]
 }
 
@@ -61,6 +62,7 @@ export async function bewaarVersie(c: Concept): Promise<{ id: string; nr: number
         ...invoer,
         ...(geheel(c.betaald, 100_000_000) > 0 ? { betaald: geheel(c.betaald, 100_000_000) } : {}),
         ...(c.planning?.length ? { planning: schoonPlan(c.planning) } : {}),
+        ...(typeof c.planStart === "string" && /^\d{4}-\d{2}-\d{2}$/.test(c.planStart) ? { planStart: c.planStart } : {}),
         ...(schoonFasen(c.fasen).length ? { fasen: schoonFasen(c.fasen) } : {}),
         totaal: u.totaal,
         winst: u.winst,

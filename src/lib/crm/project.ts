@@ -25,6 +25,8 @@ export type Project = {
   opgeleverd?: string
   /** Wanneer dit deel wordt uitgevoerd, in Nicks woorden ("november", "maart 2027"). */
   wanneer?: string
+  /** Eerste werkdag (JJJJ-MM-DD), voor de agenda; de taken volgen elkaar op in werkdagen. */
+  start?: string
   /** De begroting bij de start, zodat de nacalculatie blijft kloppen als de calculatie later verandert of verdwijnt. */
   begroot: { uren: Milli; winst: Centen }
 }
@@ -70,6 +72,7 @@ export function normaliseerProject(p: Partial<Project>): Project {
     oplevering: lijst(p.oplevering, (r) => (t(r.tekst, 200) ? { id: id(r.id), tekst: t(r.tekst, 200), klaar: r.klaar === true } : null), 200),
     ...(p.opgeleverd ? { opgeleverd: datum(p.opgeleverd) } : {}),
     ...(t(p.wanneer, 40) ? { wanneer: t(p.wanneer, 40) } : {}),
+    ...(/^\d{4}-\d{2}-\d{2}$/.test(String(p.start ?? "")) ? { start: String(p.start) } : {}),
     begroot: { uren: geheel(p.begroot?.uren, 1e9), winst: Number.isSafeInteger(p.begroot?.winst) ? (p.begroot!.winst as number) : 0 },
   }
 }
@@ -134,4 +137,52 @@ export function nacalculatie(p: Project): Nacalculatie {
     perUurWerkelijk: urenWerkelijk ? deel(winst * 1000, urenWerkelijk) : null,
     puntenOpen: p.oplevering.filter((x) => !x.klaar).length,
   }
+}
+
+/** Werkdagen (ma–vr) vanaf een datum: dag 0 is de startdag (of de eerstvolgende werkdag). */
+function werkdag(start: string, n: number) {
+  const d = new Date(`${start}T12:00:00Z`)
+  const volgende = () => { while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() + 1) }
+  volgende()
+  for (let i = 0; i < n; i++) { d.setUTCDate(d.getUTCDate() + 1); volgende() }
+  return d.toISOString().slice(0, 10)
+}
+
+/** De taken van een project op de kalender, achter elkaar in werkdagen (halve dagen naar boven). */
+export function projectAgenda(p: Project) {
+  if (!p.start) return []
+  const taken = p.taken.length ? p.taken : [{ id: p.id, naam: p.titel, dagen: 1, klaar: false }]
+  let dag = 0
+  return taken.map((t) => {
+    const duur = Math.max(1, Math.ceil(t.dagen))
+    const van = werkdag(p.start!, dag)
+    const tot = werkdag(p.start!, dag + duur - 1)
+    dag += duur
+    return { id: t.id, naam: t.naam, van, tot }
+  })
+}
+
+/** De fasen van een planning als echte werkdagen vanaf de startdatum. */
+export function planDagen(plan: PlanFase[], start: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(start)) return []
+  let dag = 0
+  return plan.map((f) => {
+    const duur = Math.max(1, Math.ceil(f.dagen))
+    const r = { id: f.id, van: werkdag(start, dag), tot: werkdag(start, dag + duur - 1) }
+    dag += duur
+    return r
+  })
+}
+
+/** Een .ics-bestand: werkt met Google Agenda, Apple Agenda en Outlook. Hele dagen, eind exclusief. */
+export function agendaBestand(items: { id: string; titel: string; van: string; tot: string; plaats?: string }[]) {
+  const d = (x: string) => x.replaceAll("-", "")
+  const na = (x: string) => { const t = new Date(`${x}T12:00:00Z`); t.setUTCDate(t.getUTCDate() + 1); return d(t.toISOString().slice(0, 10)) }
+  const esc = (x: string) => x.replace(/[\\;,]/g, (m) => `\\${m}`).replace(/\n/g, "\\n")
+  const nu = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z"
+  return [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//GRONN Studio//CRM//NL", "CALSCALE:GREGORIAN",
+    ...items.flatMap((i) => ["BEGIN:VEVENT", `UID:${i.id}@gronn.studio`, `DTSTAMP:${nu}`, `DTSTART;VALUE=DATE:${d(i.van)}`, `DTEND;VALUE=DATE:${na(i.tot)}`, `SUMMARY:${esc(i.titel)}`, ...(i.plaats ? [`LOCATION:${esc(i.plaats)}`] : []), "END:VEVENT"]),
+    "END:VCALENDAR",
+  ].join("\r\n")
 }
