@@ -475,3 +475,36 @@ test("weer: uurstappen per Nederlandse dag, zes-uurstappen niet dubbel, labels",
   expect(weerLabel({ mm: 2, min: 4, max: 9 })).toEqual({ tekst: "Regen 2 mm", let: false })
   expect(weerLabel(d["2026-11-04"])).toEqual({ tekst: "Droog 5°", let: false })
 })
+
+test("jaaroverzicht: facturen en uren per maand, per uur excl. btw", async () => {
+  const { jaarOverzicht } = await import("../src/lib/crm/overzicht")
+  const k = normaliseer({
+    id: "a",
+    naam: "Test Klant",
+    stukken: [
+      { id: "1", soort: "Factuur", nummer: "F1", bedrag: 1210, datum: "2026-07-14", rond: true },
+      { id: "2", soort: "Factuur", nummer: "F2", bedrag: 605, datum: "2026-07-30" },
+      { id: "3", soort: "Offerte", nummer: "O1", bedrag: 9999, datum: "2026-07-01" },
+      { id: "4", soort: "Factuur", nummer: "F0", bedrag: 500, datum: "2025-12-30", rond: true },
+    ],
+  })
+  const j = jaarOverzicht([k], [{ datum: "2026-07-06", uren: 30 }, { datum: "2026-07-20", uren: 0.5 }, { datum: "2026-08-03", uren: 4 }, { datum: "2025-07-01", uren: 99 }], "2026")
+  expect(j).toHaveLength(12)
+  expect(j[6]).toEqual({ maand: "2026-07", gefactureerd: 1815, ontvangen: 1210, uren: 30.5, perUur: 49 })
+  expect(j[7]).toEqual({ maand: "2026-08", gefactureerd: 0, ontvangen: 0, uren: 4 })
+  expect(j[11].gefactureerd).toBe(0)
+})
+
+test("onderhoud: tag geeft elk seizoen een beurt op de eerste maandag, verloren telt niet", async () => {
+  const { onderhoudsbeurten } = await import("../src/lib/crm/agenda")
+  const vast = normaliseer({ id: "v", naam: "Anna de Vries", tags: ["Onderhoud"], fase: "Opgeleverd" })
+  const weg = normaliseer({ id: "w", naam: "Weg", tags: ["onderhoud"], fase: "Verloren" })
+  const los = normaliseer({ id: "l", naam: "Los", tags: ["vijver"] })
+  const b = onderhoudsbeurten([vast, weg, los], "2026-11-02", "2027-06-30")
+  expect(b.map((x) => [x.datum, x.wat])).toEqual([
+    ["2026-12-07", "Winterbeurt Anna de Vries"],
+    ["2027-03-01", "Voorjaarsbeurt Anna de Vries"],
+    ["2027-06-07", "Zomerbeurt Anna de Vries"],
+  ])
+  expect(b[0]).toMatchObject({ wie: "Anna", href: "/dashboard/klanten/v" })
+})

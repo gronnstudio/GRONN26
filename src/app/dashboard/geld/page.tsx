@@ -4,7 +4,8 @@ import { Blok, Cijfer, Cijfers, Kop, Leeg } from "@/components/crm/kop"
 import { TE_BETALEN } from "@/lib/beheer/data"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { DOCUMENTEN } from "@/lib/data/legal"
-import { geldOverzicht, vandaagNL, type Openstaand } from "@/lib/crm/overzicht"
+import { geldOverzicht, jaarOverzicht, vandaagNL, type Openstaand } from "@/lib/crm/overzicht"
+import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
 import { euro } from "@/lib/format"
 import { lijstBetalingen } from "@/lib/mollie"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
@@ -20,10 +21,13 @@ const datum = (d: string) => new Date(`${d.slice(0, 10)}T12:00`).toLocaleDateStr
 const dagenGeleden = (d: string, nu: string) => Math.round((Date.parse(`${nu}T12:00Z`) - Date.parse(`${d.slice(0, 10)}T12:00Z`)) / 86_400_000)
 
 export default async function Geld() {
-  const klanten = await leesKlanten()
+  const [klanten, uren, mollie] = await Promise.all([leesKlanten(), leesUren(), lijstBetalingen()])
   const nu = vandaagNL()
   const g = geldOverzicht(klanten, nu)
-  const mollie = await lijstBetalingen()
+  const jaar = nu.slice(0, 4)
+  const maanden = jaarOverzicht(klanten, [...RECONSTRUCTIE.map((r) => ({ datum: r.maandag, uren: weekTotaal(r) })), ...uren], jaar)
+    .filter((m) => m.maand <= nu.slice(0, 7))
+    .filter((m, i, l) => l.slice(0, i + 1).some((x) => x.gefactureerd || x.uren)) // lege maanden vóór de start weg
   const gekoppeld = new Map(klanten.flatMap((k) => k.stukken.filter((x) => x.mollie).map((x) => [x.mollie!, k] as const)))
   const doelen = klanten.flatMap((k) => [
     ...k.stukken.filter((x) => x.soort === "Factuur" && !x.rond).map((x) => ({ waarde: `${k.id}|${x.id}`, naam: `${k.naam} · factuur ${x.nummer} (${euro(x.bedrag)})` })),
@@ -43,7 +47,7 @@ export default async function Geld() {
           <Cijfer label="Daarvan afgevinkt" waarde={euro(g.betaaldDezeMaand)} />
         </Cijfers>
 
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid gap-8 2xl:grid-cols-2">
           <Blok titel="Te ontvangen">
             <Lijst rijen={g.teOntvangen} nu={nu} leeg="Alle facturen zijn afgevinkt." oud />
           </Blok>
@@ -53,6 +57,10 @@ export default async function Geld() {
             </Blok>
           </div>
         </div>
+
+        <Blok titel={`Jaaroverzicht ${jaar}`} rechts={<span className="text-gedempt">per uur = gefactureerd excl. 21 % btw ÷ uren</span>}>
+          {maanden.length ? <Jaar maanden={maanden} /> : <Leeg>Nog geen facturen of uren dit jaar.</Leeg>}
+        </Blok>
 
         <Blok titel="Betalingen via Mollie" rechts={<a href="https://my.mollie.com/dashboard" target="_blank" rel="noreferrer" className="text-accent-tekst">Mollie ↗</a>}>
           {!mollie ? (
@@ -142,6 +150,43 @@ export default async function Geld() {
   )
 }
 
+const maandNaam = (m: string) => new Date(`${m}-15T12:00Z`).toLocaleDateString("nl-NL", { month: "long" })
+const uur = (n: number) => n.toLocaleString("nl-NL", { maximumFractionDigits: 1 })
+
+// Omzet, betaald en uren per maand van dit jaar, met onderaan het totaal. Een marge staat er
+// niet bij, want een factuur weet niet wat de inkoop was (zie jaarOverzicht).
+function Jaar({ maanden }: { maanden: ReturnType<typeof jaarOverzicht> }) {
+  const som = maanden.reduce((t, m) => ({ gefactureerd: t.gefactureerd + m.gefactureerd, ontvangen: t.ontvangen + m.ontvangen, uren: t.uren + m.uren }), { gefactureerd: 0, ontvangen: 0, uren: 0 })
+  const perUur = som.uren > 0 && som.gefactureerd > 0 ? Math.round(som.gefactureerd / 1.21 / som.uren) : undefined
+  return (
+    <table className="crm-tabel">
+      <thead>
+        <tr><th>Maand</th><th className="text-right">Gefactureerd</th><th className="text-right">Afgevinkt</th><th className="text-right">Uren</th><th className="text-right">Per uur</th></tr>
+      </thead>
+      <tbody>
+        {maanden.map((m) => (
+          <tr key={m.maand}>
+            <td className="capitalize">{maandNaam(m.maand)}</td>
+            <td className="crm-cijfer text-right">{m.gefactureerd ? euro(m.gefactureerd) : "—"}</td>
+            <td className={`crm-cijfer text-right ${m.ontvangen < m.gefactureerd ? "text-let" : ""}`}>{m.gefactureerd ? euro(m.ontvangen) : "—"}</td>
+            <td className="crm-cijfer text-right">{m.uren ? uur(m.uren) : "—"}</td>
+            <td className="crm-cijfer text-right">{m.perUur ? euro(m.perUur) : "—"}</td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr className="font-semibold">
+          <td>Totaal</td>
+          <td className="crm-cijfer text-right">{euro(Math.round(som.gefactureerd * 100) / 100)}</td>
+          <td className="crm-cijfer text-right">{euro(Math.round(som.ontvangen * 100) / 100)}</td>
+          <td className="crm-cijfer text-right">{uur(som.uren)}</td>
+          <td className="crm-cijfer text-right">{perUur ? euro(perUur) : "—"}</td>
+        </tr>
+      </tfoot>
+    </table>
+  )
+}
+
 const STATUS: Record<string, string> = { paid: "Betaald", open: "Open", pending: "Bezig", authorized: "Goedgekeurd", canceled: "Geannuleerd", expired: "Verlopen", failed: "Mislukt" }
 
 function Lijst({ rijen, nu, leeg, oud }: { rijen: Openstaand[]; nu: string; leeg: string; oud?: boolean }) {
@@ -160,7 +205,7 @@ function Lijst({ rijen, nu, leeg, oud }: { rijen: Openstaand[]; nu: string; leeg
               <td><Link href={`/dashboard/klanten/${s.klant.id}?tab=stukken`} className="crm-link">{s.klant.naam}</Link></td>
               <td className="crm-cijfer text-[13px] text-gedempt">
                 {datum(s.datum)}
-                {oud && dagen > 14 && <span className="ml-2 text-let">{dagen} dagen</span>}
+                {oud && dagen > 14 && <span className="block text-let">{dagen} dagen</span>}
               </td>
               <td className="crm-cijfer text-right">{euro(s.bedrag)}</td>
             </tr>

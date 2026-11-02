@@ -70,3 +70,35 @@ export function geldOverzicht(klanten: Klant[], nu: string) {
     offertesOpenSom: som(offertesOpen),
   }
 }
+
+export type JaarMaand = { maand: string; gefactureerd: number; ontvangen: number; uren: number; perUur?: number }
+
+/**
+ * Het jaaroverzicht (Nick, 2 nov 2026): per maand wat er is gefactureerd (incl. btw, op de
+ * factuurdatum), hoeveel daarvan is afgevinkt als betaald, de uren, en wat een uur opbracht:
+ * gefactureerd excl. 21 % btw gedeeld door de uren. Een marge staat er niet bij: facturen hangen
+ * niet aan een calculatie, dus inkoop per maand is niet bekend. Uren komen binnen als losse regels
+ * (de pagina geeft de reconstructieweken mee op hun maandag).
+ */
+export function jaarOverzicht(klanten: Klant[], uren: { datum: string; uren: number }[], jaar: string): JaarMaand[] {
+  const maanden: JaarMaand[] = Array.from({ length: 12 }, (_, i) => ({ maand: `${jaar}-${String(i + 1).padStart(2, "0")}`, gefactureerd: 0, ontvangen: 0, uren: 0 }))
+  const vak = (datum: string) => (datum.startsWith(`${jaar}-`) ? maanden[Number(datum.slice(5, 7)) - 1] : undefined)
+  for (const k of klanten)
+    for (const s of k.stukken) {
+      const m = s.soort === "Factuur" ? vak(s.datum) : undefined
+      if (!m) continue
+      m.gefactureerd += s.bedrag
+      if (s.rond) m.ontvangen += s.bedrag
+    }
+  for (const r of uren) {
+    const m = vak(r.datum)
+    if (m) m.uren += r.uren
+  }
+  for (const m of maanden) {
+    m.gefactureerd = Math.round(m.gefactureerd * 100) / 100
+    m.ontvangen = Math.round(m.ontvangen * 100) / 100
+    m.uren = Math.round(m.uren * 10) / 10
+    if (m.uren > 0 && m.gefactureerd > 0) m.perUur = Math.round(m.gefactureerd / 1.21 / m.uren)
+  }
+  return maanden
+}

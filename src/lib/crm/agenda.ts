@@ -34,3 +34,34 @@ export function zonderContact(tekst: string) {
     .replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g, "…")
     .replace(/\+?\d[\d\s-]{7,}\d/g, (m) => (m.replace(/\D/g, "").length >= 9 ? "…" : m))
 }
+
+// Vaste onderhoudsklanten (Nick, 2 nov 2026): een klant met de tag "onderhoud" komt elk seizoen
+// terug in de planning, op de eerste maandag van maart, juni, oktober en december. Geen eigen
+// schema per klant: wie anders wil, plant de echte dag zelf in. Verloren klanten tellen niet mee.
+export const SEIZOENEN = [
+  { maand: 3, naam: "Voorjaarsbeurt" },
+  { maand: 6, naam: "Zomerbeurt" },
+  { maand: 10, naam: "Herfstbeurt" },
+  { maand: 12, naam: "Winterbeurt" },
+] as const
+
+export const isOnderhoud = (k: Klant) => k.fase !== "Verloren" && k.tags.some((t) => t.trim().toLowerCase() === "onderhoud")
+
+export type Beurt = { id: string; datum: string; wie: string; wat: string; href: string }
+
+/** De onderhoudsbeurten tussen van en tot (JJJJ-MM-DD, beide meegeteld). */
+export function onderhoudsbeurten(klanten: Klant[], van: string, tot: string): Beurt[] {
+  const uit: Beurt[] = []
+  for (let jaar = Number(van.slice(0, 4)); jaar <= Number(tot.slice(0, 4)); jaar++)
+    for (const s of SEIZOENEN) {
+      const d = new Date(Date.UTC(jaar, s.maand - 1, 1, 12))
+      while (d.getUTCDay() !== 1) d.setUTCDate(d.getUTCDate() + 1)
+      const datum = iso(d)
+      if (datum < van || datum > tot) continue
+      for (const k of klanten.filter(isOnderhoud)) {
+        const wie = k.naam.trim().split(/\s+/)[0] || k.naam
+        uit.push({ id: `${k.id}-${datum}`, datum, wie, wat: `${s.naam} ${k.naam}`, href: `/dashboard/klanten/${k.id}` })
+      }
+    }
+  return uit
+}

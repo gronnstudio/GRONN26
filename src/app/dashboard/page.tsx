@@ -11,6 +11,7 @@ import { DOEL, RECONSTRUCTIE, leesUren, weekTotaal, weekVan } from "@/lib/beheer
 import { toonEuro } from "@/lib/crm/geld"
 import { LOPEND, geldOverzicht, gewogenPijplijn, opTeVolgen, pijplijn, plusDagen, vandaagNL, waardeVan } from "@/lib/crm/overzicht"
 import { euro } from "@/lib/format"
+import { klusdagen, onderhoudsbeurten } from "@/lib/crm/agenda"
 
 // Vandaag: de startpagina van het systeem (vervangt het Jarvis-scherm met de
 // ring, 29 okt 2026). Eén vraag per blok: wie moet ik bellen, wat loopt er,
@@ -47,12 +48,18 @@ export default async function Vandaag({ searchParams }: { searchParams: Promise<
   const ditJaar = RECONSTRUCTIE.reduce((t, r) => t + weekTotaal(r), 0) + uren.filter((r) => r.datum.startsWith("2026")).reduce((t, r) => t + r.uren, 0)
   const getal = (n: number) => n.toLocaleString("nl-NL", { maximumFractionDigits: 1 })
 
-  // De komende twee weken: wat je zelf plande, en wanneer je wie wilde opvolgen.
+  // De komende twee weken: wat je zelf plande, de klusdagen uit de calculaties, de seizoensbeurten
+  // van onderhoudsklanten, en wanneer je wie wilde opvolgen. Dezelfde bronnen als de planning.
+  const klus = [...klusdagen(klanten).map((p) => ({ ...p, soort: "Klus" })), ...onderhoudsbeurten(klanten, nu, tot).map((p) => ({ ...p, soort: "Onderhoud" }))]
   const agenda = [
+    ...klus.filter((p) => p.datum > nu && p.datum <= tot).map((p) => ({ datum: p.datum, wat: p.wat, href: p.href, soort: p.soort })),
     ...stand.planning.filter((p) => p.datum > nu && p.datum <= tot).map((p) => ({ datum: p.datum, wat: p.wat, href: "/dashboard/planning", soort: "Planning" })),
     ...klanten.filter((k) => k.opvolgen > nu && k.opvolgen <= tot && LOPEND.concat(["Aanvraag", "Opname", "Offerte"]).includes(k.fase)).map((k) => ({ datum: k.opvolgen, wat: `${k.naam}${k.volgende ? `: ${k.volgende}` : ""}`, href: `/dashboard/klanten/${k.id}`, soort: "Opvolgen" })),
   ].sort((a, b) => a.datum.localeCompare(b.datum))
-  const vandaagGepland = stand.planning.filter((p) => p.datum === nu)
+  const vandaagGepland = [
+    ...klus.filter((p) => p.datum === nu).map((p) => ({ id: p.id, wat: p.wat, href: p.href, soort: p.soort })),
+    ...stand.planning.filter((p) => p.datum === nu).map((p) => ({ id: p.id, wat: p.wat, href: "/dashboard/planning", soort: "Planning" })),
+  ]
 
   const posts = POSTS.map((p, i) => ({ p, n: i + 1, t: TEGELS[tegelVan(i + 1)] }))
   const volgende = posts.find(({ p }) => !p.gepost && p.map && !stand.gepost[p.map])
@@ -92,7 +99,7 @@ export default async function Vandaag({ searchParams }: { searchParams: Promise<
                     <Rij key={k.id} soort="Opvolgen" let={k.opvolgen < nu} href={`/dashboard/klanten/${k.id}`} titel={k.naam} sub={k.volgende || "Geen volgende stap ingevuld."} rechts={k.opvolgen < nu ? `sinds ${kort(k.opvolgen)}` : "vandaag"} />
                   ))}
                   {vandaagGepland.map((p) => (
-                    <Rij key={p.id} soort="Planning" href="/dashboard/planning" titel={p.wat} rechts="vandaag" />
+                    <Rij key={`${p.soort}-${p.id}`} soort={p.soort} href={p.href} titel={p.wat} rechts="vandaag" />
                   ))}
                 </ul>
               )}
