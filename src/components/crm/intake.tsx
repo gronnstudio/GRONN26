@@ -242,7 +242,7 @@ export function Intake({ klant, tuin, lijst, begin }: { klant: string; tuin: str
           <span className="crm-cijfer text-gedempt">
             {n.gevuld} van {n.van} beantwoord · {open.length} open
           </span>
-          <span role="status" className={bewaard === "wacht" || bewaard === "fout" ? "font-semibold text-let" : "text-gedempt"}>
+          <span role="status" data-stil className={bewaard === "wacht" || bewaard === "fout" ? "font-semibold text-let" : "text-gedempt"}>
             {statusTekst}
           </span>
         </div>

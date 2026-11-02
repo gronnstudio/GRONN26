@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { meld } from "./melding"
 
 // Tabbladen bovenaan voor snel schakelen tussen klanten (Nick, 2 nov 2026).
 // Elke klant die je opent komt erbij; het tabblad onthoudt waar je was (klantkaart,
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react"
 // Alleen in deze browser bewaard.
 type Tab = { id: string; href: string }
 const KEY = "gronn-klant-tabs"
+const MAX = 5 // Nick, 2 nov 2026
 
 export function KlantTabs({ namen }: { namen: Record<string, string> }) {
   const pad = usePathname()
@@ -24,7 +26,9 @@ export function KlantTabs({ namen }: { namen: Record<string, string> }) {
     } catch {}
     if (huidig) {
       const href = `${location.pathname}${location.search}`
-      lijst = lijst.some((t) => t.id === huidig) ? lijst.map((t) => (t.id === huidig ? { ...t, href } : t)) : [...lijst, { id: huidig, href }].slice(-8)
+      if (lijst.some((t) => t.id === huidig)) lijst = lijst.map((t) => (t.id === huidig ? { ...t, href } : t))
+      else if (lijst.length >= MAX) meld(`Maximaal ${MAX} klanten tegelijk open. Sluit eerst een tabblad.`)
+      else lijst = [...lijst, { id: huidig, href }]
     }
     try {
       localStorage.setItem(KEY, JSON.stringify(lijst))

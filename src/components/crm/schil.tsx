@@ -8,6 +8,7 @@ import { KleurKeuze } from "@/components/beheer/kleur"
 import { GROEPEN, NIEUW, onderdeelVan } from "@/lib/crm/navigatie"
 import { Icoon } from "./iconen"
 import { KlantTabs } from "./klant-tabs"
+import { Melding } from "./melding"
 import { OPEN_ZOEKVENSTER, Zoekvenster, type Treffer } from "./zoekvenster"
 
 // De schil van het bedrijfssysteem (eigenaar, 29 okt 2026: "het moest
@@ -173,7 +174,7 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
         </div>
       </aside>
 
-      <div className="@container min-w-0"><KlantTabs namen={namen} />{children}</div>
+      <div className="@container min-w-0"><KlantTabs namen={namen} />{children}<Melding /></div>
 
       {grønn && (
         <aside aria-label="Grønn" className={`sticky top-0 flex h-svh w-[380px] flex-col border-l border-lijn bg-vlak print:hidden ${veld ? "max-lg:hidden" : ""}`}>

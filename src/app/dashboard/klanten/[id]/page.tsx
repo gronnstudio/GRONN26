@@ -93,7 +93,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
       />
       <main className="mx-auto max-w-[1440px] px-8 py-6">
         {bestond && (
-          <p role="status" className="crm-let m-0 mb-6 px-4 py-2 text-[14px]">
+          <p role="status" data-stil className="crm-let m-0 mb-6 px-4 py-2 text-[14px]">
             Deze klant bestond al (zelfde naam, e-mail of telefoon). Je ziet de bestaande kaart.
           </p>
         )}
