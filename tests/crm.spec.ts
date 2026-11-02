@@ -525,5 +525,10 @@ test("telefoon: menu bovenaan, pagina's vallen niet van het scherm", async ({ br
   await page.getByRole("link", { name: /Afspraak/ }).click()
   await expect(page).toHaveURL(/nieuw=1/)
   await expect(menu).toBeHidden()
+  // Open menu en dan breed genoeg voor de zijbalk: het menu gaat dicht, de pagina is niet meer inert.
+  await page.getByRole("button", { name: "Menu", exact: true }).click()
+  await page.setViewportSize({ width: 1280, height: 844 })
+  await expect(page.locator(".crm [inert]")).toHaveCount(0)
+  await expect(page.getByRole("dialog")).toHaveCount(0)
   await ctx.close()
 })

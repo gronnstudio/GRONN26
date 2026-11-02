@@ -38,9 +38,16 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
     if (menu) {
       sluitKnop.current?.focus()
       const esc = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false)
+      // Wordt het scherm breed genoeg voor de zijbalk (draaien, venster groter), dan gaat het menu dicht.
+      const breed = matchMedia("(min-width: 1024px)")
+      const dicht = () => breed.matches && setMenu(false)
       addEventListener("keydown", esc)
+      breed.addEventListener("change", dicht)
       wasOpen.current = true
-      return () => removeEventListener("keydown", esc)
+      return () => {
+        removeEventListener("keydown", esc)
+        breed.removeEventListener("change", dicht)
+      }
     }
     if (wasOpen.current) menuKnop.current?.focus()
     wasOpen.current = false
