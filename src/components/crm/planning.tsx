@@ -16,7 +16,10 @@ export function Planning({ titel, plan, onPlan, start, onStart, voorstel, onWerk
   const zet = (i: number, d: Partial<PlanFase>) => onPlan(plan.map((f, j) => (j === i ? { ...f, ...d } : f)))
   // Nick, 2 nov 2026: "Maak van die fases dagen!" Met een startdatum krijgt elke regel echte werkdagen (za/zo slaan we over).
   const dagen = planDagen(plan, start)
-  const nummer = plan.reduce<number[]>((acc, f, i) => [...acc, i ? acc[i - 1] + Math.max(1, Math.ceil(plan[i - 1].dagen)) : 1], [])
+  // Altijd op datum (Nick, 2 nov 2026: "dagen gaan niet automatisch naar volgorde, verwarrend").
+  const van = (i: number) => dagen[i]?.van ?? "9"
+  const volgorde = plan.map((_, i) => i).sort((a, b) => (van(a) < van(b) ? -1 : van(a) > van(b) ? 1 : a - b))
+  const nummer = plan.map((_, i) => volgorde.indexOf(i) + 1)
   const agenda = () => {
     const ics = agendaBestand(plan.map((f, i) => ({ ...dagen[i], titel: `${f.naam || `Dag ${nummer[i]}`}${titel ? ` · ${titel}` : ""}` })).filter((x) => x.van))
     const a = document.createElement("a")
@@ -38,7 +41,7 @@ export function Planning({ titel, plan, onPlan, start, onStart, voorstel, onWerk
       <Maand plan={plan} onPlan={onPlan} start={start} />
       {plan.length > 0 && (
         <ol className="m-0 mt-3 grid list-none gap-3 p-0">
-          {plan.map((f, i) => (
+          {volgorde.map((i) => [plan[i], i] as const).map(([f, i]) => (
             <li key={f.id} id={`plan-${f.id}`} className="grid gap-2 rounded-[14px] border border-lijn p-3 text-[13px] sm:grid-cols-[1fr_88px]">
               <label className="grid gap-1">
                 Dag {nummer[i]}{dagen[i] ? ` · ${wanneer(dagen[i])}` : ""}
@@ -49,7 +52,7 @@ export function Planning({ titel, plan, onPlan, start, onStart, voorstel, onWerk
                 <input type="number" min={0.5} max={60} step={0.5} value={f.dagen} onChange={(e) => zet(i, { dagen: Math.max(0.5, Number(e.target.value) || 0.5) })} className="crm-veld crm-cijfer" />
               </label>
               <label className="grid gap-1">
-                Machines
+                Beschrijving
                 <input value={f.machines} onChange={(e) => zet(i, { machines: e.target.value })} className="crm-veld" />
               </label>
               <label className="grid gap-1 sm:col-span-1">
@@ -93,9 +96,9 @@ export function Planning({ titel, plan, onPlan, start, onStart, voorstel, onWerk
           <article className="planning-druk hidden bg-white p-[18mm] text-[11pt] text-op-accent">
             <h1 className="m-0 text-[18pt]">Planning{titel ? ` · ${titel}` : ""}</h1>
             <table className="mt-6 w-full border-collapse text-left">
-              <thead><tr><th className="border-b py-2">Wanneer</th><th className="border-b py-2">Wat</th><th className="border-b py-2">Machines</th><th className="border-b py-2">Levering</th></tr></thead>
+              <thead><tr><th className="border-b py-2">Wanneer</th><th className="border-b py-2">Wat</th><th className="border-b py-2">Beschrijving</th><th className="border-b py-2">Levering</th></tr></thead>
               <tbody>
-                {plan.map((f, i) => (
+                {volgorde.map((i) => [plan[i], i] as const).map(([f, i]) => (
                   <tr key={f.id}><td className="border-b py-2 pr-3 align-top">{wanneer(dagen[i])}</td><td className="border-b py-2 pr-3 align-top">{f.naam}</td><td className="border-b py-2 pr-3 align-top">{f.machines}</td><td className="border-b py-2 align-top">{f.levering}</td></tr>
                 ))}
               </tbody>
