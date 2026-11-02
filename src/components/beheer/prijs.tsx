@@ -9,12 +9,13 @@ import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
+import { planDagen } from "@/lib/crm/project"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
 import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
-import { faseInvoer, opmaakTekst, werkomschrijving, type FaseUren, type Opmaak } from "@/lib/crm/werkomschrijving"
+import { faseInvoer, opmaakTekst, werkomschrijving, zonderTermijnen, type FaseUren, type Opmaak } from "@/lib/crm/werkomschrijving"
 
 // Het rekenblad: van uren en inkoop naar een prijs waar genoeg aan overblijft
 // (eigenaar, 29 okt 2026). Sinds de CRM-bouw (zelfde dag) rekent het met
@@ -105,7 +106,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [betaald, setBetaald] = useState(begin?.betaald ? toonDecimaal(begin.betaald, 2) : "")
   const [onvoorzien, setOnvoorzien] = useState(toonDecimaal(begin?.onvoorzien ?? 0, 2))
   const [regels, setRegels] = useState<Invul[]>(begin?.regels.length ? begin.regels.map(naarInvul) : [leeg()])
-  const [beschrijving, setBeschrijving] = useState(begin?.beschrijving ?? "")
+  const [beschrijving, setBeschrijving] = useState(zonderTermijnen(begin?.beschrijving ?? ""))
   const [plan, setPlan] = useState<PlanFase[]>(begin?.planning ?? [])
   const [planStart, setPlanStart] = useState(begin?.planStart ?? "")
   // Uren per fase, als de klus in delen gaat; de uren hierboven zijn dan de som.
@@ -273,6 +274,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const naamVoorPrint = klant?.naam ?? klantNaam
   const werkOpbouw = /^\|.*\|\s*$/m.test(beschrijving)
   const regelsVoorKlant = u.regels.filter((r) => r.verkoop > 0)
+  const materiaalIncl = u.regels.filter((r) => !r.optioneel).reduce((t, r) => t + r.verkoop + Math.round((r.verkoop * r.btw) / 10_000), 0)
+  const printDagen = planDagen(plan, planStart)
+  const kort = (x: string) => new Date(`${x}T12:00:00Z`).toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })
+  const printDag = (van: string, tot: string) => (van === tot ? kort(van) : `${kort(van)} t/m ${kort(tot)}`)
 
   return (
     <>
@@ -624,6 +629,26 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           {alBetaald > 0 && <Rij t="Al betaald" b={-alBetaald} />}
           {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
         </dl>
+        {/* Betaling (Nick, 2 nov 2026): geen termijnen meer. Aanbetaling, dan een factuur voor materiaal en overig incl. btw, de rest contant bij levering. */}
+        <p className="m-0 mt-8 font-semibold">Betaling</p>
+        <dl className="m-0 mt-2 grid gap-2">
+          {alBetaald > 0 && <Rij t="Aanbetaling, al voldaan" b={alBetaald} />}
+          {materiaalIncl > 0 && <Rij t="Factuur materiaal en overig, incl. btw" b={materiaalIncl} />}
+          <Rij t="Rest, contant bij levering" b={Math.max(0, u.totaal - alBetaald - materiaalIncl)} vet />
+        </dl>
+        {plan.some((f) => f.naam.trim()) && (
+          <>
+            <p className="m-0 mt-8 font-semibold">Planning</p>
+            <ol className="m-0 mt-2 grid list-none gap-1 p-0">
+              {plan.map((f, i) => f.naam.trim() && (
+                <li key={f.id} className="flex justify-between gap-6 border-b border-lijn py-1">
+                  <span>{f.naam}{f.machines ? ` · ${f.machines}` : ""}</span>
+                  <span className="shrink-0">{printDagen[i] ? printDag(printDagen[i].van, printDagen[i].tot) : `${f.dagen.toLocaleString("nl-NL")} dag${f.dagen === 1 ? "" : "en"}`}</span>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
         {u.optioneel.length > 0 && (
           <>
             <p className="m-0 mt-8 font-semibold">Optioneel, niet in het totaal</p>
