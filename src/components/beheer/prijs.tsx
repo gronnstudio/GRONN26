@@ -248,7 +248,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const u = reken(invoer)
   const w = wegzetten(u)
   const alBetaald = Math.max(0, leesCenten(betaald) ?? 0)
-  const faseSom = [...new Set(invoer.regels.map((r) => r.groep ?? "").filter(Boolean))].sort().map((naam) => ({ naam, totaal: reken(faseInvoer({ ...invoer, fasen }, naam)).totaal }))
+  const faseNamen = [...new Set(u.regels.map((r) => r.groep ?? ""))].sort((a, b) => (a ? b ? a.localeCompare(b) : -1 : 1))
+  const faseSom = faseNamen.some(Boolean) ? faseNamen.map((naam) => ({ naam: naam || "Zonder fase", totaal: u.regels.filter((r) => (r.groep ?? "") === naam).reduce((t, r) => t + r.verkoop, 0) })) : []
   const goed = urenMilli > 0 && u.perUur >= STANDAARD.minimumPerUur
   const te = tekort(u, urenMilli)
 
@@ -556,14 +557,14 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           <dl className="m-0 grid gap-2 text-[14px]">
             <Rij t="Arbeid" b={u.arbeid} />
             <Rij t="Materiaal en overig" b={u.materiaal} />
+            {/* Per fase, excl. btw (Nick, 2 nov 2026): telt precies op tot Materiaal en overig. */}
+            {faseSom.length > 0 && faseSom.map((f) => <Rij key={f.naam} t={`· ${f.naam}`} b={f.totaal} />)}
             {u.onvoorzien > 0 && <Rij t="Onvoorzien" b={u.onvoorzien} />}
             {u.korting > 0 && <Rij t="Korting" b={-u.korting} />}
             <Rij t="Totaal excl. btw" b={u.verkoop} vet />
             {u.btw.map((b) => (
               <Rij key={b.tarief} t={`Btw ${b.tarief / 100} % over ${toonEuro(b.grondslag)}`} b={b.btw} />
             ))}
-            {/* Gekozen fasen in de som (Nick, 2 nov 2026), elk incl. btw. */}
-            {faseSom.map((f) => <Rij key={f.naam} t={`${f.naam}, incl. btw`} b={f.totaal} />)}
             <Rij t="Totaal incl. btw" b={u.totaal} vet />
             {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Al betaald"} b={-alBetaald} />}
             {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
