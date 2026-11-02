@@ -164,10 +164,12 @@ export function projectAgenda(p: Project) {
 
 /** De fasen van een planning als echte werkdagen vanaf de startdatum. */
 export function planDagen(plan: PlanFase[], start: string) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(start)) return []
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(start) && !plan.some((f) => f.datum)) return []
   let dag = 0
   return plan.map((f) => {
     const duur = Math.max(1, Math.ceil(f.dagen))
+    // Een bol uit het maandoverzicht heeft zijn eigen datum; de rest volgt achter elkaar vanaf de start.
+    if (f.datum) return { id: f.id, van: f.datum, tot: werkdag(f.datum, duur - 1) }
     const r = { id: f.id, van: werkdag(start, dag), tot: werkdag(start, dag + duur - 1) }
     dag += duur
     return r
