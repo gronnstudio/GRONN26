@@ -76,9 +76,6 @@ export function Planning({ titel, plan, onPlan, start, onStart, voorstel, onWerk
             {plan.length ? "Opnieuw uit de meetstaat" : "Planning uit de meetstaat"}
           </button>
         )}
-        <button type="button" onClick={() => onPlan([...plan, { id: crypto.randomUUID(), naam: "", dagen: 1, machines: "", levering: "" }])} className="crm-knop-rand">
-          + Dag
-        </button>
         {plan.length > 0 && (
           <button type="button" onClick={() => onWerkomschrijving(plan.filter((f) => f.naam.trim()))} className="crm-knop-rand">
             Zet in werkomschrijving
@@ -127,12 +124,16 @@ function Maand({ plan, onPlan, start }: { plan: PlanFase[]; onPlan: (p: PlanFase
   const leeg = (eerste.getUTCDay() + 6) % 7
   const aantal = new Date(Date.UTC(eerste.getUTCFullYear(), eerste.getUTCMonth() + 1, 0)).getUTCDate()
   const schuif = (n: number) => { const d = new Date(eerste); d.setUTCMonth(d.getUTCMonth() + n); setMaand(iso(d).slice(0, 7)) }
+  // Eerst alle bollen kiezen, daarna invullen (Nick, 2 nov 2026): een tik zet of haalt een bol, het scherm springt niet.
+  // Een ingevulde bol haal je weg met Weg bij de regel.
   const tik = (datum: string) => {
     const f = bezet.get(datum)
-    if (f) return document.getElementById(`plan-${f.id}`)?.querySelector("input")?.focus()
+    if (f) {
+      if (!f.naam.trim() && f.datum === datum) onPlan(plan.filter((x) => x.id !== f.id))
+      return
+    }
     const nieuw: PlanFase = { id: crypto.randomUUID(), naam: "", dagen: 1, machines: "", levering: "", datum }
-    onPlan([...plan, nieuw].sort((a, b) => (a.datum ?? "9") < (b.datum ?? "9") ? -1 : 1))
-    setTimeout(() => document.getElementById(`plan-${nieuw.id}`)?.querySelector("input")?.focus(), 0)
+    onPlan([...plan, nieuw])
   }
   return (
     <div className="mt-3 max-w-[420px] rounded-[14px] border border-lijn p-3 text-[13px]">
@@ -155,7 +156,7 @@ function Maand({ plan, onPlan, start }: { plan: PlanFase[]; onPlan: (p: PlanFase
           )
         })}
       </div>
-      <p className="m-0 mt-2 text-[12px] text-gedempt">Tik op een dag voor een groene bol en vul hem daaronder in. Een open bol is nog niet ingevuld.</p>
+      <p className="m-0 mt-2 text-[12px] text-gedempt">Tik de dagen aan voor open groene bollen, en vul ze daarna hieronder in. Nog een tik haalt een lege bol weg.</p>
     </div>
   )
 }

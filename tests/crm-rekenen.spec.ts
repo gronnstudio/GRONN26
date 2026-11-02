@@ -442,3 +442,14 @@ test("projectAgenda zet taken achter elkaar in werkdagen, ics heeft hele dagen",
   expect(ics).toContain("DTSTART;VALUE=DATE:20261106")
   expect(ics).toContain("DTEND;VALUE=DATE:20261110")
 })
+
+test("werkomschrijving volgt de lijst: postbedragen weg, fasetotaal en prijsoverzicht uit de som", async () => {
+  const { metActueleBedragen } = await import("../src/lib/crm/werkomschrijving")
+  const tekst = "# Werkomschrijving\n\n## Fase 1\n\n| Werkzaamheden | Excl. btw |\n|---|---:|\n| **1. Graven** — weg | € 999,00 |\n\n## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n| **Totaal incl. btw** | **€ 1,00** |\n\n---\n\n**Prijsvoorbehoud:** test"
+  const uit = metActueleBedragen(tekst, { verkoop: 10000, btw: 2100, totaal: 12100, fasen: [{ naam: "Fase 1", verkoop: 10000 }] })
+  expect(uit).not.toContain("999")
+  expect(uit).toContain("Totaal deze fase** | **€ 100,00**")
+  expect(uit).toContain("**Totaal incl. btw** | **€ 121,00**")
+  expect(uit).toContain("Prijsvoorbehoud:** test")
+  expect(metActueleBedragen(uit, { verkoop: 10000, btw: 2100, totaal: 12100, fasen: [{ naam: "Fase 1", verkoop: 10000 }] })).toBe(uit)
+})

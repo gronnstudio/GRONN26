@@ -92,3 +92,42 @@ export function opmaakTekst(klant: string, o: Opmaak) {
 
 /** Haalt de oude betaling in drie termijnen uit een werkomschrijving (Nick, 2 nov 2026: "haal de 50 30 20 eruit"). */
 export const zonderTermijnen = (tekst: string) => tekst.replace(/\n*### Betaling\n\n\| Termijn[^\n]*\n(\|[^\n]*\n?)*/g, "\n").trimEnd()
+
+/**
+ * De lijst is leidend (Nick, 2 nov 2026: "datgene wat laatst aangepast wordt is leidend, dat is meestal
+ * de materialen-, machines- en plantenlijst"). Zet de bedragen in de werkomschrijving gelijk aan de
+ * calculatie: losse postbedragen gaan weg, elke fasetabel krijgt het fasetotaal, en het prijsoverzicht
+ * komt uit de som. De tekst van Nick blijft staan.
+ */
+export function metActueleBedragen(tekst: string, som: { verkoop: number; btw: number; totaal: number; fasen: { naam: string; verkoop: number }[] }) {
+  if (!/^\|.*\|\s*$/m.test(tekst)) return tekst
+  const nr = (x: string) => x.match(/\d+/)?.[0] ?? ""
+  const blokken = tekst.split(/\n(?=## )/)
+  const uit = blokken.flatMap((b) => {
+    const kop = b.match(/^## (.+)$/m)?.[1]?.trim() ?? ""
+    if (/^Prijsoverzicht/i.test(kop)) {
+      // Alleen de oude tabel gaat weg; wat eronder staat (voorbehoud) blijft.
+      const r = b.split("\n")
+      const eind = r.findLastIndex((x) => /^\|.*\|\s*$/.test(x))
+      const rest = r.slice(eind + 1).join("\n").trim()
+      return rest ? [rest + "\n"] : []
+    }
+    if (!/\| Werkzaamheden \|/.test(b)) return [b]
+    const fase = som.fasen.find((f) => f.naam === kop) ?? (nr(kop) ? som.fasen.find((f) => nr(f.naam) === nr(kop)) : undefined)
+    const regels = b
+      .split("\n")
+      .filter((r) => !/^\| \*\*Totaal (fase|deze fase)/.test(r))
+      .map((r) => (/^\| \*\*\d+\./.test(r) ? r.replace(/\|[^|]*\|\s*$/, "|  |") : r))
+    if (fase) {
+      const laatste = regels.findLastIndex((r) => /^\|.*\|\s*$/.test(r))
+      regels.splice(laatste + 1, 0, `| **Totaal deze fase** | **${toonEuro(fase.verkoop)}** |`)
+    }
+    return [regels.join("\n")]
+  })
+  const fasenRij = som.fasen.map((f) => `| ${f.naam} | ${toonEuro(f.verkoop)} |`).join("\n")
+  const overzicht = `## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n${fasenRij ? `${fasenRij}\n` : ""}| Subtotaal excl. btw | ${toonEuro(som.verkoop)} |\n| Btw | ${toonEuro(som.btw)} |\n| **Totaal incl. btw** | **${toonEuro(som.totaal)}** |`
+  // Het overzicht komt na de laatste werktabel, vóór het voorbehoud en de extra kopjes.
+  const na = uit.findLastIndex((b) => /\| Werkzaamheden \|/.test(b))
+  uit.splice(na + 1, 0, overzicht)
+  return uit.join("\n").replace(/\n{3,}/g, "\n\n")
+}
