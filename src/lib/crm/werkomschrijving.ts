@@ -37,10 +37,8 @@ export function werkomschrijving(o: { klant: string; posten: WerkPost[]; regels:
     delen.push(`${f ? `## ${f}\n\n` : ""}| Werkzaamheden | Excl. btw |\n|---|---:|\n${rijen.join("\n")}`)
   }
   const btw = totaal.btw.reduce((t, b) => t + b.btw, 0)
-  const termijn = (p: number) => Math.round((totaal.totaal * p) / 100)
   delen.push(
-    `## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n| Subtotaal excl. btw | ${toonEuro(totaal.verkoop)} |\n| Btw | ${toonEuro(btw)} |\n| **Totaal incl. btw** | **${toonEuro(totaal.totaal)}** |`,
-    `### Betaling\n\n| Termijn | Incl. btw |\n|---|---:|\n| 50% bij opdrachtbevestiging | ${toonEuro(termijn(50))} |\n| 30% na grondwerk en bestrating in hoofdzaak | ${toonEuro(termijn(30))} |\n| 20% bij oplevering | ${toonEuro(totaal.totaal - termijn(50) - termijn(30))} |`,
+    `## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n| Subtotaal excl. btw | ${toonEuro(totaal.verkoop)} |\n| Btw | ${toonEuro(btw)} |\n| **Totaal incl. btw** | **${toonEuro(totaal.totaal)}** |`
   )
   return delen.join("\n\n")
 }
@@ -83,13 +81,14 @@ export function opmaakTekst(klant: string, o: Opmaak) {
     const sub = bedragen.reduce((t, b) => t + b, 0)
     const btw = Math.round(sub * 0.21)
     const tot = sub + btw
-    const t = (p: number) => Math.round((tot * p) / 100)
     delen.push(
-      `## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n| Subtotaal excl. btw | ${toonEuro(sub)} |\n| Btw 21% | ${toonEuro(btw)} |\n| **Totaal incl. btw** | **${toonEuro(tot)}** |`,
-      `### Betaling\n\n| Termijn | Incl. btw |\n|---|---:|\n| 50% bij opdrachtbevestiging | ${toonEuro(t(50))} |\n| 30% na grondwerk en bestrating in hoofdzaak | ${toonEuro(t(30))} |\n| 20% bij oplevering | ${toonEuro(tot - t(50) - t(30))} |`,
+      `## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n| Subtotaal excl. btw | ${toonEuro(sub)} |\n| Btw 21% | ${toonEuro(btw)} |\n| **Totaal incl. btw** | **${toonEuro(tot)}** |`
     )
   }
   if (o.voorbehoud.trim()) delen.push(`---\n\n**Prijsvoorbehoud:** ${o.voorbehoud.trim()}`)
   for (const e of o.extra) delen.push(`## ${e.titel}\n\n${e.tekst.trim()}`)
   return delen.join("\n\n")
 }
+
+/** Haalt de oude betaling in drie termijnen uit een werkomschrijving (Nick, 2 nov 2026: "haal de 50 30 20 eruit"). */
+export const zonderTermijnen = (tekst: string) => tekst.replace(/\n*### Betaling\n\n\| Termijn[^\n]*\n(\|[^\n]*\n?)*/g, "\n").trimEnd()
