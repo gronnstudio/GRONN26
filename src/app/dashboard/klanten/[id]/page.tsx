@@ -69,14 +69,14 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
           </span>
         }
       >
-        <dl className="crm-paneel m-0 mr-2 grid grid-cols-2 divide-lijn sm:grid-cols-4 sm:divide-x">
+        <dl className="crm-paneel m-0 mr-2 grid min-w-0 flex-1 grid-cols-2 divide-lijn sm:min-w-[760px] sm:grid-cols-4 sm:divide-x">
           {[
             [euro(g.akkoord), "akkoord"],
             [euro(g.gefactureerd), "gefactureerd"],
             [euro(g.betaald), "betaald"],
             [euro(g.open), "open"],
           ].map(([n, t]) => (
-            <div key={t} className="px-4 py-2">
+            <div key={t} className="min-h-[72px] px-4 py-2">
               <dt className="crm-label">{t}</dt>
               <dd className={`crm-cijfer m-0 text-[15px] ${t === "open" && g.open > 0 ? "text-let" : ""}`}>{n}</dd>
               {t === "akkoord" && g.teFactureren > 0 && <dd className="m-0 text-[11px] text-gedempt">nog {euro(g.teFactureren)} te factureren</dd>}

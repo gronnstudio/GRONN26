@@ -110,6 +110,8 @@ export type Versie = {
   uurtarief: Centen
   onvoorzien: Bp
   korting: Bp
+  /** Al betaald door de klant, incl. btw (voorschot); gaat af van wat nog moet komen. */
+  betaald?: Centen
   regels: Regel[]
   /** Werkplanning per fase (fase 5); ontbreekt bij oudere versies. */
   planning?: PlanFase[]

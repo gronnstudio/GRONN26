@@ -54,6 +54,7 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     uurtarief: versie?.uurtarief ?? STANDAARD.uurtarief,
     onvoorzien: versie?.onvoorzien ?? 0,
     korting: versie?.korting ?? 0,
+    betaald: versie?.betaald,
     regels: versie?.regels ?? [],
     planning: versie?.planning,
     fasen: versie?.fasen,

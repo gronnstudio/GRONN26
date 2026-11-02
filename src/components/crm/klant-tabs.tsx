@@ -37,19 +37,36 @@ export function KlantTabs({ namen }: { namen: Record<string, string> }) {
     return () => clearTimeout(t)
   }, [pad, huidig, namen])
 
-  const sluit = (weg: string) => {
-    const lijst = tabs.filter((t) => t.id !== weg)
+  const zet = (lijst: Tab[]) => {
     setTabs(lijst)
     try {
       localStorage.setItem(KEY, JSON.stringify(lijst))
     } catch {}
+  }
+  const sluit = (weg: string) => zet(tabs.filter((t) => t.id !== weg))
+  // Verslepen om de volgorde te wisselen (Nick, 2 nov 2026).
+  const [sleep, setSleep] = useState<string | null>(null)
+  const naar = (doel: string) => {
+    if (!sleep || sleep === doel) return
+    const lijst = tabs.filter((t) => t.id !== sleep)
+    lijst.splice(lijst.findIndex((t) => t.id === doel) + (tabs.findIndex((t) => t.id === sleep) < tabs.findIndex((t) => t.id === doel) ? 1 : 0), 0, tabs.find((t) => t.id === sleep)!)
+    zet(lijst)
   }
 
   if (tabs.length < 2) return null
   return (
     <nav aria-label="Open klanten" className="flex gap-1 overflow-x-auto border-b border-lijn px-8 pt-3 print:hidden">
       {tabs.map((t) => (
-        <span key={t.id} className={`flex shrink-0 items-center rounded-t-[10px] border border-b-0 text-[13px] ${t.id === huidig ? "border-lijn bg-vlak font-semibold" : "border-transparent text-gedempt hover:text-inkt"}`}>
+        <span
+          key={t.id}
+          draggable
+          onDragStart={(e) => { setSleep(t.id); e.dataTransfer.effectAllowed = "move" }}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => { e.preventDefault(); naar(t.id); setSleep(null) }}
+          onDragEnd={() => setSleep(null)}
+          title="Versleep om de volgorde te wisselen"
+          className={`${sleep === t.id ? "opacity-50 " : ""}flex shrink-0 items-center rounded-t-[10px] border border-b-0 text-[13px] ${t.id === huidig ? "border-lijn bg-vlak font-semibold" : "border-transparent text-gedempt hover:text-inkt"} cursor-grab`}
+        >
           <Link href={t.href} aria-current={t.id === huidig ? "page" : undefined} className="max-w-[200px] truncate py-2 pl-3 pr-1">
             {namen[t.id]}
           </Link>
