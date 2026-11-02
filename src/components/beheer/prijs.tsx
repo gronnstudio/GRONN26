@@ -1,5 +1,6 @@
 "use client"
 
+import { Komeet } from "@/components/komeet"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo, useState, useTransition } from "react"
@@ -14,7 +15,7 @@ import { maakOfferteVan } from "@/app/dashboard/klanten/offerte-acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
 import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
-import { faseInvoer, werkomschrijving, type FaseUren } from "@/lib/crm/werkomschrijving"
+import { faseInvoer, opmaakTekst, werkomschrijving, type FaseUren, type Opmaak } from "@/lib/crm/werkomschrijving"
 
 // Het rekenblad: van uren en inkoop naar een prijs waar genoeg aan overblijft
 // (eigenaar, 29 okt 2026). Sinds de CRM-bouw (zelfde dag) rekent het met
@@ -130,6 +131,23 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
 
   const klant = klanten.find((k) => k.id === klantId)
   const perNaam = useMemo(() => new Map(catalogus.map((i) => [i.naam.toLowerCase(), i])), [catalogus])
+
+  // Eerst de vrije tekst in Nicks layout zetten (Nick, 2 nov 2026); daarna verschijnt Schat de uren.
+  const zetOm = async () => {
+    setBezig(true)
+    setFout("")
+    try {
+      const r = await fetch("/api/werkomschrijving", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ beschrijving }) })
+      const data = (await r.json()) as Opmaak & { fout?: string }
+      if (!r.ok || data.fout) throw new Error(data.fout || "Omzetten lukte niet.")
+      setVorige(beschrijving)
+      setBeschrijving(opmaakTekst(klant?.naam ?? "", data))
+    } catch (e) {
+      setFout(e instanceof Error ? e.message : "Omzetten lukte niet.")
+    } finally {
+      setBezig(false)
+    }
+  }
 
   // Grønn stelt de uren voor op basis van de beschrijving; Nick past het getal aan.
   const schat = async () => {
@@ -309,9 +327,17 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 className={`${veld} resize-y`}
               />
             </label>
-            <button type="button" onClick={schat} disabled={bezig || !beschrijving.trim()} className="mt-2 crm-knop disabled:opacity-50">
-              {bezig ? "Grønn rekent…" : "Schat de uren"}
-            </button>
+            {beschrijving.trim() && !werkOpbouw && (
+              <button type="button" onClick={zetOm} disabled={bezig} className="mt-2 mr-2 crm-knop-rand disabled:opacity-50">
+                {bezig ? "Grønn zet om…" : "Zet om naar werkomschrijving"}
+              </button>
+            )}
+            {werkOpbouw && (
+              <button type="button" onClick={schat} disabled={bezig} className="relative mt-2 crm-knop disabled:opacity-50" style={{ ["--komeet-r" as string]: "999px" }}>
+                {bezig ? "Grønn rekent…" : "Schat de uren"}
+                {!bezig && <Komeet />}
+              </button>
+            )}
             {vorige !== null && (
               <button type="button" onClick={() => { setBeschrijving(vorige); setVorige(null) }} className="mt-2 ml-2 crm-knop-rand">
                 Mijn eigen tekst terug
