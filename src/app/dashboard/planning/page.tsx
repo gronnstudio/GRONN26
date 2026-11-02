@@ -10,6 +10,7 @@ import { agendaSleutel } from "@/lib/crm/agenda-sleutel"
 import { headers } from "next/headers"
 import { AgendaLink } from "@/components/crm/agenda-link"
 import { AgendaKnop } from "@/components/crm/agenda-knop"
+import { voorspelling, weerLabel, type DagWeer } from "@/lib/crm/weer"
 
 // De planning: wat je zelf inplant (werk, levering, machinehuur, bezoek) en
 // wanneer je een klant wilde opvolgen, samen per dag. Data in de tijdzone van
@@ -30,7 +31,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
   const h = await headers()
   const sleutel = agendaSleutel()
   const feed = sleutel ? `https://${h.get("host")}/api/agenda/${sleutel}.ics` : ""
-  const [stand, klanten] = await Promise.all([leesStand(), leesKlanten()])
+  const [stand, klanten, weer] = await Promise.all([leesStand(), leesKlanten(), voorspelling()])
   const nu = vandaagNL()
   const tot = plusDagen(nu, 60)
   type Punt = { id: string; datum: string; wat: string; soort: "Planning" | "Opvolgen" | "Klus"; href?: string; wie?: string }
@@ -49,7 +50,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
       <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag." />
       <main className="mx-auto grid max-w-[1440px] @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
         <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8">
-          <Maandkalender maand={/^\d{4}-\d{2}$/.test(m ?? "") ? m! : nu.slice(0, 7)} nu={nu} klus={klus} eigen={stand.planning} />
+          <Maandkalender maand={/^\d{4}-\d{2}$/.test(m ?? "") ? m! : nu.slice(0, 7)} nu={nu} klus={klus} eigen={stand.planning} weer={weer} />
           {feed && <AgendaLink url={feed} />}
           <AgendaKnop items={[...klus.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })), ...stand.planning.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum }))]} />
           <div className="min-w-0">
@@ -62,6 +63,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
                   <h2 className={`m-0 mb-2 text-[14px] font-semibold first-letter:uppercase ${d === nu ? "text-accent-tekst" : ""}`}>
                     {d === nu ? "Vandaag · " : ""}
                     {dagNaam(d)}
+                    {weer[d] && punten.some((p) => p.datum === d && p.soort === "Klus") && <WeerBadge w={weer[d]} />}
                   </h2>
                   <ul className="crm-paneel m-0 list-none divide-y divide-lijn p-0">
                     {punten
@@ -106,7 +108,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
 }
 
 // Grote maandkalender: per dag de voornaam van de klant en wat er gebeurt, plus je eigen planning.
-function Maandkalender({ maand, nu, klus, eigen }: { maand: string; nu: string; klus: { datum: string; wie?: string; wat: string; kleur: string; href?: string }[]; eigen: { id: string; datum: string; wat: string }[] }) {
+function Maandkalender({ maand, nu, klus, eigen, weer }: { maand: string; nu: string; klus: { datum: string; wie?: string; wat: string; kleur: string; href?: string }[]; eigen: { id: string; datum: string; wat: string }[]; weer: Record<string, DagWeer> }) {
   const eerste = new Date(`${maand}-01T12:00:00Z`)
   const leeg = (eerste.getUTCDay() + 6) % 7
   const aantal = new Date(Date.UTC(eerste.getUTCFullYear(), eerste.getUTCMonth() + 1, 0)).getUTCDate()
@@ -127,7 +129,10 @@ function Maandkalender({ maand, nu, klus, eigen }: { maand: string; nu: string; 
           const zelf = eigen.filter((p) => p.datum === datum)
           return (
             <div key={datum} className={`grid min-h-[64px] min-w-0 content-start gap-1 rounded-[10px] border p-1 text-[11px] sm:min-h-[96px] sm:p-1.5 sm:text-[12px] ${datum === nu ? "border-accent" : "border-lijn"}`}>
-              <span className={datum === nu ? "font-semibold text-accent-tekst" : "text-gedempt"}>{i + 1}</span>
+              <span className="flex items-baseline justify-between gap-1">
+                <span className={datum === nu ? "font-semibold text-accent-tekst" : "text-gedempt"}>{i + 1}</span>
+                {hier.length > 0 && weer[datum] && <WeerKort w={weer[datum]} />}
+              </span>
               {hier.map((p, j) => (
                 <Link key={j} href={p.href ?? "#"} title={p.wat} className="flex min-w-0 items-center gap-1 rounded-[6px] px-1 hover:bg-black/5">
                   <span className="size-[10px] shrink-0 rounded-full" style={{ background: p.kleur }} />
@@ -140,5 +145,23 @@ function Maandkalender({ maand, nu, klus, eigen }: { maand: string; nu: string; 
         })}
       </div>
     </section>
+  )
+}
+
+// Het weer op een klusdag: in de lijst als label, in de kalender kort (alleen het getal) met de
+// volle tekst voor schermlezers en als tooltip. Rood bij vorst of 5 mm regen en meer.
+function WeerBadge({ w }: { w: DagWeer }) {
+  const l = weerLabel(w)
+  return <span className={`crm-badge ml-2 align-middle normal-case ${l.let ? "crm-badge-let" : "crm-badge-stil"}`}>{l.tekst}</span>
+}
+
+function WeerKort({ w }: { w: DagWeer }) {
+  const l = weerLabel(w)
+  const kort = w.min <= 0 ? `${String(w.min).replace("-", "−")}°` : w.mm >= 1 ? `${Math.round(w.mm)}mm` : "droog"
+  return (
+    <span title={l.tekst} className={`truncate text-[10px] font-semibold ${l.let ? "text-let" : "text-gedempt"}`}>
+      <span aria-hidden>{kort}</span>
+      <span className="sr-only">{l.tekst}</span>
+    </span>
   )
 }

@@ -453,3 +453,21 @@ test("werkomschrijving volgt de lijst: postbedragen weg, fasetotaal en prijsover
   expect(uit).toContain("Prijsvoorbehoud:** test")
   expect(metActueleBedragen(uit, { verkoop: 10000, btw: 2100, totaal: 12100, fasen: [{ naam: "Fase 1", verkoop: 10000 }] })).toBe(uit)
 })
+
+test("weer: uurstappen per Nederlandse dag, zes-uurstappen niet dubbel, labels", async () => {
+  const { perDag, weerLabel } = await import("../src/lib/crm/weer")
+  const stap = (time: string, t: number, een?: number, zes?: number) => ({ time, data: { instant: { details: { air_temperature: t } }, ...(een !== undefined ? { next_1_hours: { details: { precipitation_amount: een } } } : {}), ...(zes !== undefined ? { next_6_hours: { details: { precipitation_amount: zes } } } : {}) } })
+  const d = perDag([
+    stap("2026-11-03T06:00:00Z", -1.4, 0.5, 9), // uurstap: 0,5 telt, de 9 van zes uur niet
+    stap("2026-11-03T07:00:00Z", 2, 1.5, 9),
+    stap("2026-11-03T23:30:00Z", 5, 0), // 00:30 in Nederland: al 4 november
+    stap("2026-11-05T06:00:00Z", 8, undefined, 6), // zes-uurstap
+  ])
+  expect(d["2026-11-03"]).toEqual({ mm: 2, min: -1, max: 2 })
+  expect(d["2026-11-04"]).toEqual({ mm: 0, min: 5, max: 5 })
+  expect(d["2026-11-05"].mm).toBe(6)
+  expect(weerLabel(d["2026-11-03"])).toEqual({ tekst: "Vorst −1°", let: true })
+  expect(weerLabel(d["2026-11-05"])).toEqual({ tekst: "Regen 6 mm", let: true })
+  expect(weerLabel({ mm: 2, min: 4, max: 9 })).toEqual({ tekst: "Regen 2 mm", let: false })
+  expect(weerLabel(d["2026-11-04"])).toEqual({ tekst: "Droog 5°", let: false })
+})
