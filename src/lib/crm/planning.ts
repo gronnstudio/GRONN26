@@ -7,7 +7,7 @@ import type { Zone } from "./vragenlijst"
 // één man met een machine. Ze staan bij elke fase, en Nick past de dagen aan
 // in de calculatie. Claude plant hier niets.
 
-export type PlanFase = { id: string; naam: string; dagen: number; machines: string; levering: string; uitleg?: string }
+export type PlanFase = { id: string; naam: string; dagen: number; machines: string; levering: string; uitleg?: string; /** Vaste datum uit het maandoverzicht (jjjj-mm-dd). */ datum?: string }
 
 /** Wat er per dag af kan, in duizendsten van de eenheid. */
 const PER_DAG = { afgraven: 20_000, fundering: 50_000, bestrating: 15_000, band: 40_000, grond: 15_000, zoden: 150_000, planten: 150_000, mulch: 10_000 }
@@ -74,6 +74,7 @@ export function schoonPlan(v: unknown): PlanFase[] {
     const r = (f ?? {}) as Record<string, unknown>
     const naam = t(r.naam, 80)
     const dagen = typeof r.dagen === "number" && Number.isFinite(r.dagen) ? Math.min(60, Math.max(0.5, Math.round(r.dagen * 2) / 2)) : 1
-    return naam ? [{ id: t(r.id, 64) || crypto.randomUUID(), naam, dagen, machines: t(r.machines, 120), levering: t(r.levering, 160), ...(t(r.uitleg, 160) ? { uitleg: t(r.uitleg, 160) } : {}) }] : []
+    const datum = typeof r.datum === "string" && /^\d{4}-\d{2}-\d{2}$/.test(r.datum) ? { datum: r.datum } : {}
+    return naam || datum.datum ? [{ ...datum, id: t(r.id, 64) || crypto.randomUUID(), naam, dagen, machines: t(r.machines, 120), levering: t(r.levering, 160), ...(t(r.uitleg, 160) ? { uitleg: t(r.uitleg, 160) } : {}) }] : []
   })
 }
