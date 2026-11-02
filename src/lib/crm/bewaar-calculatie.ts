@@ -1,0 +1,82 @@
+import "server-only"
+import { STANDAARD, calculatieTitel, reken, schoonRegel, type Regel } from "./calculatie"
+import { schoonPlan, type PlanFase } from "./planning"
+import type { FaseUren } from "./werkomschrijving"
+import { gebeurtenis, wijzigKlanten, type Calculatie, type Versie } from "@/lib/beheer/klanten"
+
+// Een calculatie bewaren bij een klant. Elke keer bewaren is een nieuwe versie
+// (masterprompt: "versioned estimates"), zodat een verstuurde prijs altijd
+// terug te vinden is. De uitkomst wordt hier op de server opnieuw berekend:
+// wat de browser stuurt aan totalen telt niet. GEEN toegangscontrole hier:
+// de aanroeper (server-actie of /api/crm/claude) controleert dat eerst.
+
+export type Concept = {
+  klantId: string
+  calculatieId?: string
+  titel: string
+  tuinId?: string
+  beschrijving: string
+  uren: number
+  uurtarief: number
+  onvoorzien: number
+  korting: number
+  regels: Regel[]
+  planning?: PlanFase[]
+  fasen?: FaseUren[]
+}
+
+const schoonFasen = (f: unknown): FaseUren[] =>
+  (Array.isArray(f) ? f : []).slice(0, 12).flatMap((x) => (x && typeof x.naam === "string" && x.naam.trim() ? [{ naam: x.naam.trim().slice(0, 60), uren: geheel(x.uren, 10_000_000) }] : []))
+const geheel = (v: unknown, max: number) => (Number.isSafeInteger(v) ? Math.min(max, Math.max(0, v as number)) : 0)
+
+// "Calculatie" was de oude standaardnaam; die telt niet als eigen titel.
+const eigenTitel = (t: string) => (t.trim().toLowerCase() === "calculatie" || /[#*|]/.test(t) ? "" : t.trim().slice(0, 120))
+
+export async function bewaarVersie(c: Concept): Promise<{ id: string; nr: number } | { fout: string }> {
+  if (!c?.klantId) return { fout: "Kies eerst een klant." }
+  const regels = (Array.isArray(c.regels) ? c.regels : []).slice(0, 200).map((r) => schoonRegel(r as Regel & Record<string, unknown>))
+  const invoer = {
+    uren: geheel(c.uren, 10_000_000),
+    uurtarief: geheel(c.uurtarief, 100_000) || STANDAARD.uurtarief,
+    onvoorzien: geheel(c.onvoorzien, 5000),
+    korting: geheel(c.korting, 10000),
+    regels,
+  }
+  const u = reken(invoer)
+  const id = c.calculatieId || crypto.randomUUID()
+  let nr = 0
+  let gevonden = false
+  await wijzigKlanten((lijst) =>
+    lijst.map((k) => {
+      if (k.id !== c.klantId) return k
+      gevonden = true
+      const oud = k.calculaties.find((x) => x.id === id)
+      nr = (oud?.versies.at(-1)?.nr ?? 0) + 1
+      const versie: Versie = {
+        nr,
+        datum: new Date().toISOString(),
+        beschrijving: String(c.beschrijving ?? "").slice(0, 12000),
+        ...invoer,
+        ...(c.planning?.length ? { planning: schoonPlan(c.planning) } : {}),
+        ...(schoonFasen(c.fasen).length ? { fasen: schoonFasen(c.fasen) } : {}),
+        totaal: u.totaal,
+        winst: u.winst,
+      }
+      const calc: Calculatie = {
+        id,
+        titel: eigenTitel(String(c.titel ?? "")) || eigenTitel(oud?.titel ?? "") || calculatieTitel(k.naam, k.tuinen.find((t) => t.id === (c.tuinId || oud?.tuinId))?.naam, versie.beschrijving),
+        tuinId: c.tuinId && k.tuinen.some((t) => t.id === c.tuinId) ? c.tuinId : oud?.tuinId,
+        aangemaakt: oud?.aangemaakt ?? new Date().toISOString().slice(0, 10),
+        versies: [...(oud?.versies ?? []), versie].slice(-30),
+      }
+      return {
+        ...k,
+        calculaties: oud ? k.calculaties.map((x) => (x.id === id ? calc : x)) : [...k.calculaties, calc],
+        activiteit: [gebeurtenis("Calculatie", `${calc.titel}, versie ${nr} bewaard`), ...k.activiteit].slice(0, 500),
+      }
+    }),
+  )
+  if (!gevonden) return { fout: "Klant niet gevonden." }
+  return { id, nr }
+}
+
