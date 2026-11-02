@@ -466,6 +466,10 @@ test("weer: uurstappen per Nederlandse dag, zes-uurstappen niet dubbel, labels",
   expect(d["2026-11-03"]).toEqual({ mm: 2, min: -1, max: 2 })
   expect(d["2026-11-04"]).toEqual({ mm: 0, min: 5, max: 5 })
   expect(d["2026-11-05"].mm).toBe(6)
+  // 18 UTC = 19 uur in Nederland: vijf uur op de 5e, één uur op de 6e. Een dag zonder temperatuur valt weg.
+  const nacht = perDag([stap("2026-11-05T12:00:00Z", 9), stap("2026-11-05T18:00:00Z", 7, undefined, 6), stap("2026-11-06T00:00:00Z", 6)])
+  expect(nacht["2026-11-05"].mm).toBe(5)
+  expect(nacht["2026-11-06"].mm).toBe(1)
   expect(weerLabel(d["2026-11-03"])).toEqual({ tekst: "Vorst −1°", let: true })
   expect(weerLabel(d["2026-11-05"])).toEqual({ tekst: "Regen 6 mm", let: true })
   expect(weerLabel({ mm: 2, min: 4, max: 9 })).toEqual({ tekst: "Regen 2 mm", let: false })

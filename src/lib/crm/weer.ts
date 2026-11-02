@@ -24,8 +24,16 @@ export function perDag(stappen: Stap[]): Record<string, DagWeer> {
       w.min = Math.min(w.min, t)
       w.max = Math.max(w.max, t)
     }
-    // Eerst per uur, verderop per zes uur; nooit allebei optellen.
-    w.mm += s.data.next_1_hours?.details?.precipitation_amount ?? s.data.next_6_hours?.details?.precipitation_amount ?? 0
+    // Eerst per uur, verderop per zes uur; nooit allebei optellen. Een zes-uurblok loopt soms over
+    // middernacht (18 UTC is 19–01 uur in de winter), dus dat verdelen we per uur over de dagen.
+    const een = s.data.next_1_hours?.details?.precipitation_amount
+    const zes = s.data.next_6_hours?.details?.precipitation_amount
+    if (typeof een === "number") w.mm += een
+    else if (typeof zes === "number")
+      for (let u = 0; u < 6; u++) {
+        const dag = dagNL(new Date(Date.parse(s.time) + u * UUR).toISOString())
+        ;(uit[dag] ??= { mm: 0, min: Infinity, max: -Infinity }).mm += zes / 6
+      }
   }
   for (const [d, w] of Object.entries(uit)) {
     if (!Number.isFinite(w.min)) delete uit[d]
