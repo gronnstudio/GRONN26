@@ -22,6 +22,7 @@ export type Concept = {
   korting: number
   /** Al betaald door de klant, incl. btw, in centen (voorschot). */
   betaald?: number
+  betaaldTekst?: string
   regels: Regel[]
   planning?: PlanFase[]
   planStart?: string
@@ -60,6 +61,7 @@ export async function bewaarVersie(c: Concept): Promise<{ id: string; nr: number
         datum: new Date().toISOString(),
         beschrijving: String(c.beschrijving ?? "").slice(0, 12000),
         ...invoer,
+        ...(typeof c.betaaldTekst === "string" && c.betaaldTekst.trim() ? { betaaldTekst: c.betaaldTekst.trim().slice(0, 80) } : {}),
         ...(geheel(c.betaald, 100_000_000) > 0 ? { betaald: geheel(c.betaald, 100_000_000) } : {}),
         ...(c.planning?.length ? { planning: schoonPlan(c.planning) } : {}),
         ...(typeof c.planStart === "string" && /^\d{4}-\d{2}-\d{2}$/.test(c.planStart) ? { planStart: c.planStart } : {}),
