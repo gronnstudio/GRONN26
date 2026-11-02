@@ -495,4 +495,6 @@ test("agendalink: zonder de juiste sleutel 404, met de sleutel een agenda", asyn
   const r = await request.get(url)
   expect(r.status()).toBe(200)
   expect(await r.text()).toContain("BEGIN:VCALENDAR")
+  const apple = await page.getByRole("link", { name: "Toevoegen aan Apple Agenda" }).getAttribute("href")
+  expect(apple).toMatch(/^webcal:\/\/[^/]+\/api\/agenda\/[0-9a-f]{40}\.ics$/)
 })
