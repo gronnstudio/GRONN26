@@ -44,7 +44,7 @@ export default async function Catalogus({ searchParams }: { searchParams: Promis
             ))}
           </select>
           <button className="crm-knop-rand">Zoek</button>
-          <span className="text-[13px] text-gedempt" role="status">
+          <span className="text-[13px] text-gedempt" role="status" data-stil>
             {gevonden.length > TONEN
               ? `${TONEN} van ${gevonden.length.toLocaleString("nl-NL")} getoond, zoek verder om te verfijnen`
               : `${gevonden.length.toLocaleString("nl-NL")} van ${alle.length.toLocaleString("nl-NL")} items`}

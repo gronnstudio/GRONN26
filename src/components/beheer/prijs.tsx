@@ -557,7 +557,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               </datalist>
             </div>
             {dubbel.length > 0 && (
-              <p role="status" className="m-0 mt-3 text-[13px]">
+              <p role="status" data-stil className="m-0 mt-3 text-[13px]">
                 Dubbel in de lijst: {dubbel.map(([naam, n]) => `${naam} ${n}×`).join(", ")}.{" "}
                 <button type="button" onClick={ontdubbel} className="crm-knop-rand">Houd alleen de laatste</button>
               </p>
