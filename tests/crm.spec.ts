@@ -485,3 +485,14 @@ test("schil: inklappen blijft bewaard, Grønn opent op de klantkaart met die kla
   await expect(page.getByRole("button", { name: "Zijbalk uitklappen" })).toBeVisible()
   await expect(page.getByRole("complementary", { name: "Grønn" })).toBeVisible()
 })
+
+test("agendalink: zonder de juiste sleutel 404, met de sleutel een agenda", async ({ page, request }) => {
+  expect((await request.get("/api/agenda/fout.ics")).status()).toBe(404)
+  await log(page)
+  await page.goto("/dashboard/planning")
+  const link = await page.getByRole("link", { name: "Toevoegen aan Google Agenda" }).getAttribute("href")
+  const url = decodeURIComponent(new URL(link!).searchParams.get("cid")!).replace(/^webcal:\/\/[^/]+/, "")
+  const r = await request.get(url)
+  expect(r.status()).toBe(200)
+  expect(await r.text()).toContain("BEGIN:VCALENDAR")
+})

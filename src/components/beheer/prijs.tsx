@@ -262,29 +262,30 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const faseBasis = faseSom.reduce((t, f) => t + f.totaal, 0)
   if (faseBasis > 0 && faseRest !== 0) {
     let over = faseRest
-    faseSom.forEach((f, i) => {
+    for (let i = 0; i < faseSom.length; i++) {
+      const f = faseSom[i]
       const deel = i === faseSom.length - 1 ? over : Math.round((faseRest * f.totaal) / faseBasis)
       f.totaal += deel
       over -= deel
-    })
+    }
   }
   // De lijst is leidend: na elke wijziging in regels of uren gaan de bedragen in de werkomschrijving mee (Nick, 2 nov 2026).
-  const faseExcl = (() => {
-    let over = u.verkoop
-    return faseSom.map((f, i) => {
-      const v = i === faseSom.length - 1 ? over : u.totaal ? Math.round((f.totaal * u.verkoop) / u.totaal) : 0
-      over -= v
-      return { naam: f.naam, verkoop: v }
-    })
-  })()
+  const faseExcl: { naam: string; verkoop: number }[] = []
+  let exclOver = u.verkoop
+  for (let i = 0; i < faseSom.length; i++) {
+    const v = i === faseSom.length - 1 ? exclOver : u.totaal ? Math.round((faseSom[i].totaal * u.verkoop) / u.totaal) : 0
+    exclOver -= v
+    faseExcl.push({ naam: faseSom[i].naam, verkoop: v })
+  }
+  // Tijdens het renderen bijwerken zodra de som verandert (React: "adjusting state when a prop changes"),
+  // geen effect: dat gaf een extra render en faalt de lint.
   const somSleutel = JSON.stringify([u.verkoop, u.btwTotaal, u.totaal, faseExcl])
-  useEffect(() => {
-    setBeschrijving((b) => {
-      const n = metActueleBedragen(b, { verkoop: u.verkoop, btw: u.btwTotaal, totaal: u.totaal, fasen: faseExcl })
-      return n === b ? b : n
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [somSleutel])
+  const [vorigeSom, setVorigeSom] = useState("")
+  if (vorigeSom !== somSleutel) {
+    setVorigeSom(somSleutel)
+    const n = metActueleBedragen(beschrijving, { verkoop: u.verkoop, btw: u.btwTotaal, totaal: u.totaal, fasen: faseExcl })
+    if (n !== beschrijving) setBeschrijving(n)
+  }
   const zetFaseUren = (naam: string, tekst: string) => {
     const uren = Math.max(0, leesMilli(tekst) ?? 0)
     setFasen(fasen.some((f) => f.naam === naam) ? fasen.map((f) => (f.naam === naam ? { ...f, uren } : f)) : [...fasen, { naam, uren }])
@@ -605,6 +606,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <span className="crm-cijfer text-right">{toonEuro(f.totaal)}</span>
                   </div>
                 ))}
+                <div className="grid grid-cols-[1fr_auto] gap-2 border-t border-lijn pt-1 font-semibold">
+                  <span>Totaal fasen</span>
+                  <span className="crm-cijfer text-right">{toonEuro(faseSom.reduce((t, f) => t + f.totaal, 0))}</span>
+                </div>
                 {Math.abs(faseRest) > 2 && <p className="m-0 text-[12px] text-gedempt">Arbeid zonder uren per fase ({toonEuro(faseRest)}) is naar verhouding over de fasen verdeeld.</p>}
               </div>
             )}
