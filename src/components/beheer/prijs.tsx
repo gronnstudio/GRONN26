@@ -15,7 +15,7 @@ import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/actie
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
 import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
-import { faseInvoer, opmaakTekst, werkomschrijving, zonderTermijnen, type FaseUren, type Opmaak } from "@/lib/crm/werkomschrijving"
+import { faseInvoer, metActueleBedragen, opmaakTekst, werkomschrijving, zonderTermijnen, type FaseUren, type Opmaak } from "@/lib/crm/werkomschrijving"
 
 // Het rekenblad: van uren en inkoop naar een prijs waar genoeg aan overblijft
 // (eigenaar, 29 okt 2026). Sinds de CRM-bouw (zelfde dag) rekent het met
@@ -268,6 +268,23 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       over -= deel
     })
   }
+  // De lijst is leidend: na elke wijziging in regels of uren gaan de bedragen in de werkomschrijving mee (Nick, 2 nov 2026).
+  const faseExcl = (() => {
+    let over = u.verkoop
+    return faseSom.map((f, i) => {
+      const v = i === faseSom.length - 1 ? over : u.totaal ? Math.round((f.totaal * u.verkoop) / u.totaal) : 0
+      over -= v
+      return { naam: f.naam, verkoop: v }
+    })
+  })()
+  const somSleutel = JSON.stringify([u.verkoop, u.btwTotaal, u.totaal, faseExcl])
+  useEffect(() => {
+    setBeschrijving((b) => {
+      const n = metActueleBedragen(b, { verkoop: u.verkoop, btw: u.btwTotaal, totaal: u.totaal, fasen: faseExcl })
+      return n === b ? b : n
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [somSleutel])
   const zetFaseUren = (naam: string, tekst: string) => {
     const uren = Math.max(0, leesMilli(tekst) ?? 0)
     setFasen(fasen.some((f) => f.naam === naam) ? fasen.map((f) => (f.naam === naam ? { ...f, uren } : f)) : [...fasen, { naam, uren }])
