@@ -125,7 +125,7 @@ async function Overzicht({ k }: { k: Klant }) {
           <Keuze naam="voorkeur" label="Liefst via" waarde={k.voorkeur} opties={["", ...VOORKEUREN]} />
           <AdresVeld naam="adres" label="Factuuradres" waarde={k.adres} className={veld} />
           <Veld naam="plaats" label="Plaats" waarde={k.plaats} />
-          <Veld naam="tags" label="Tags, met komma's" waarde={k.tags.join(", ")} />
+          <Veld naam="tags" label="Tags, met komma's (onderhoud: elk seizoen in de planning)" waarde={k.tags.join(", ")} />
           {k.contact && <Veld naam="contact" label="Oud contactveld" waarde={k.contact} />}
         </fieldset>
 

@@ -9,17 +9,18 @@ export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: R
   return (
     <header className="border-b border-lijn px-4 pt-5 pb-5 sm:px-8 print:hidden">
       <div className="flex items-center justify-between gap-4">
-      <nav aria-label="Kruimelpad" className="min-h-[18px] text-[12px] text-gedempt">
-        <ol className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+      <nav aria-label="Kruimelpad" className="min-h-[18px] min-w-0 text-[12px] text-gedempt">
+        {/* Op één regel; een lange klantnaam wordt afgekort (met de hele naam als tooltip). */}
+        <ol className="m-0 flex min-w-0 list-none gap-1.5 p-0 whitespace-nowrap">
           {pad.map((p, i) => (
-            <li key={i} className="flex gap-1.5">
+            <li key={i} className={`flex gap-1.5 ${i === 0 ? "shrink-0" : "min-w-0"}`}>
               {i > 0 && <span aria-hidden>/</span>}
-              {p.href ? <Link href={p.href} className="hover:text-inkt">{p.naam}</Link> : <span aria-current="page">{p.naam}</span>}
+              {p.href ? <Link href={p.href} title={p.naam} className="truncate hover:text-inkt">{p.naam}</Link> : <span aria-current="page" title={p.naam} className="truncate">{p.naam}</span>}
             </li>
           ))}
         </ol>
       </nav>
-      <TerugVooruit />
+      <div className="shrink-0"><TerugVooruit /></div>
       </div>
       <div className="mt-2 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
         <div className="min-w-0">

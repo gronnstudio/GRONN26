@@ -5,7 +5,7 @@ import { isOpen, leesKlanten } from "@/lib/beheer/klanten"
 import { leesStand } from "@/lib/beheer/stand"
 import { plusDagen, vandaagNL } from "@/lib/crm/overzicht"
 import { nieuwPlan, planWeg } from "../acties"
-import { klusdagen } from "@/lib/crm/agenda"
+import { klusdagen, onderhoudsbeurten, type Beurt } from "@/lib/crm/agenda"
 import { agendaSleutel } from "@/lib/crm/agenda-sleutel"
 import { headers } from "next/headers"
 import { AgendaLink } from "@/components/crm/agenda-link"
@@ -34,7 +34,8 @@ export default async function Planning({ searchParams }: { searchParams: Promise
   const [stand, klanten, weer] = await Promise.all([leesStand(), leesKlanten(), voorspelling()])
   const nu = vandaagNL()
   const tot = plusDagen(nu, 60)
-  type Punt = { id: string; datum: string; wat: string; soort: "Planning" | "Opvolgen" | "Klus"; href?: string; wie?: string }
+  const maand = /^\d{4}-\d{2}$/.test(m ?? "") ? m! : nu.slice(0, 7)
+  type Punt = { id: string; datum: string; wat: string; soort: "Planning" | "Opvolgen" | "Klus" | "Onderhoud"; href?: string; wie?: string }
   const klus = klusdagen(klanten).map((p) => ({ ...p, soort: "Klus" as const }))
   const punten: Punt[] = [
     ...stand.planning.filter((p) => p.datum >= nu && p.datum <= tot).map((p) => ({ ...p, soort: "Planning" as const })),
@@ -42,15 +43,16 @@ export default async function Planning({ searchParams }: { searchParams: Promise
       .filter((k) => k.opvolgen && k.opvolgen <= tot && isOpen(k.fase))
       .map((k) => ({ id: k.id, datum: k.opvolgen < nu ? nu : k.opvolgen, wat: `${k.naam}${k.volgende ? `: ${k.volgende}` : ""}`, soort: "Opvolgen" as const, href: `/dashboard/klanten/${k.id}` })),
     ...klus.filter((p) => p.datum >= nu && p.datum <= tot),
+    ...onderhoudsbeurten(klanten, nu, tot).map((p) => ({ ...p, soort: "Onderhoud" as const })),
   ].sort((a, b) => a.datum.localeCompare(b.datum) || a.soort.localeCompare(b.soort))
   const dagen = [...new Set(punten.map((p) => p.datum))]
 
   return (
     <>
-      <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag." />
+      <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag. Klanten met de tag onderhoud komen elk seizoen terug." />
       <main className="mx-auto grid max-w-[1440px] @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
         <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8">
-          <Maandkalender maand={/^\d{4}-\d{2}$/.test(m ?? "") ? m! : nu.slice(0, 7)} nu={nu} klus={klus} eigen={stand.planning} weer={weer} />
+          <Maandkalender maand={maand} nu={nu} klus={klus} eigen={stand.planning} weer={weer} beurten={onderhoudsbeurten(klanten, `${maand}-01`, `${maand}-31`)} />
           {feed && <AgendaLink url={feed} />}
           <AgendaKnop items={[...klus.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })), ...stand.planning.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum }))]} />
           <div className="min-w-0">
@@ -70,7 +72,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
                       .filter((p) => p.datum === d)
                       .map((p) => (
                         <li key={`${p.soort}-${p.id}`} className="flex items-center gap-4 px-4 py-2.5">
-                          <span className={`crm-badge w-[84px] justify-center ${p.soort === "Opvolgen" ? "crm-badge-let" : ""}`}>{p.soort}</span>
+                          <span className={`crm-badge w-[96px] shrink-0 justify-center ${p.soort === "Opvolgen" ? "crm-badge-let" : ""}`}>{p.soort}</span>
                           {p.href ? (
                             <Link href={p.href} className="crm-link min-w-0 flex-1 truncate">{p.wat}</Link>
                           ) : (
@@ -108,7 +110,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
 }
 
 // Grote maandkalender: per dag de voornaam van de klant en wat er gebeurt, plus je eigen planning.
-function Maandkalender({ maand, nu, klus, eigen, weer }: { maand: string; nu: string; klus: { datum: string; wie?: string; wat: string; kleur: string; href?: string }[]; eigen: { id: string; datum: string; wat: string }[]; weer: Record<string, DagWeer> }) {
+function Maandkalender({ maand, nu, klus, eigen, weer, beurten }: { maand: string; nu: string; klus: { datum: string; wie?: string; wat: string; kleur: string; href?: string }[]; eigen: { id: string; datum: string; wat: string }[]; weer: Record<string, DagWeer>; beurten: Beurt[] }) {
   const eerste = new Date(`${maand}-01T12:00:00Z`)
   const leeg = (eerste.getUTCDay() + 6) % 7
   const aantal = new Date(Date.UTC(eerste.getUTCFullYear(), eerste.getUTCMonth() + 1, 0)).getUTCDate()
@@ -137,6 +139,13 @@ function Maandkalender({ maand, nu, klus, eigen, weer }: { maand: string; nu: st
                 <Link key={j} href={p.href ?? "#"} title={p.wat} className="flex min-w-0 items-center gap-1 rounded-[6px] px-1 hover:bg-black/5">
                   <span className="size-[10px] shrink-0 rounded-full" style={{ background: p.kleur }} />
                   <span className="truncate font-semibold">{p.wie}</span>
+                </Link>
+              ))}
+              {beurten.filter((p) => p.datum === datum).map((p) => (
+                <Link key={p.id} href={p.href} title={p.wat} className="flex min-w-0 items-center gap-1 rounded-[6px] px-1 hover:bg-black/5">
+                  <span aria-hidden className="size-[10px] shrink-0 rounded-full border-2 border-gedempt" />
+                  <span className="truncate">{p.wie} · onderhoud</span>
+                  <span className="sr-only">: {p.wat}</span>
                 </Link>
               ))}
               {zelf.map((p) => <span key={p.id} title={p.wat} className="truncate px-1 text-gedempt">{p.wat}</span>)}
