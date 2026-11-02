@@ -60,7 +60,7 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
   }
   return (
     <div data-geen-pdf className={`${className} print:hidden`}>
-      {terug && (
+      {terug && !crm && (
         <button type="button" onClick={() => history.back()} className="knop border border-inkt">
           ← Terug
         </button>
