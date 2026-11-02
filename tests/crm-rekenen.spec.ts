@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test"
-import { faseInvoer, faseTekst, werkomschrijving } from "../src/lib/crm/werkomschrijving"
+import { faseInvoer, faseTekst, opmaakTekst, werkomschrijving } from "../src/lib/crm/werkomschrijving"
 import { deel, leesCenten, leesMilli, plusProcent, zonderProcent, toonDecimaal, toonEuro, verdeel } from "../src/lib/crm/geld"
 import { calculatieTitel, dubbelen, ontdubbeld, margeUitOpslag, nieuweRegel, opslagUitMarge, reken, schoonRegel, tekort, wegzetten } from "../src/lib/crm/calculatie"
 import * as h from "../src/lib/crm/rekenhulpen"
@@ -424,4 +424,11 @@ test("werkomschrijving: per fase genummerde posten met prijs uit de regels, en e
   const v = { uren: 3000, uurtarief: 5000, onvoorzien: 0, korting: 0, regels: [steen], fasen: [{ naam: "Fase 1 — November 2026", uren: 2000 }, { naam: "Fase 2 — Maart 2027", uren: 1000 }] }
   expect(reken(faseInvoer(v, "Fase 1 — November 2026")).verkoop).toBe(10000)
   expect(reken(faseInvoer(v, "Fase 2 — Maart 2027")).verkoop).toBe(15000)
+})
+
+test("opmaakTekst zet posten in de layout en rekent totalen", () => {
+  const t = opmaakTekst("Test", { fasen: [{ naam: "Fase 1 — Maart 2027", posten: [{ titel: "Gazon", toelichting: "20 m² graszoden.", bedrag: 100, nagaan: false }, { titel: "Hek", toelichting: "15 m.", bedrag: null, nagaan: true }] }], extra: [], voorbehoud: "" })
+  expect(t).toContain("| **1. Gazon** — 20 m² graszoden. | € 100,00 |")
+  expect(t).toContain("Nog te calculeren*")
+  expect(t).toContain("**€ 121,00**")
 })

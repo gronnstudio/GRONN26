@@ -168,7 +168,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await expect(page.locator("aside").getByText("€ 3.722,70", { exact: true })).toBeVisible()
   await page.getByRole("button", { name: "Bewaar bij klant" }).click()
   await expect(page).toHaveURL(/\/calculatie\/[0-9a-f-]{36}$/)
-  await expect(page.getByRole("link", { name: "1", exact: true })).toBeVisible()
+  await expect(page.getByText("Versie 1 van 1")).toBeVisible()
   await page.getByPlaceholder("bijv. 24").fill("44")
   await page.getByRole("button", { name: "Bewaar als versie 2" }).click()
   await expect(page.getByRole("status")).toHaveText("Versie 2 bewaard.")

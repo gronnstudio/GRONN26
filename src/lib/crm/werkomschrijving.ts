@@ -58,3 +58,38 @@ export function faseTekst(tekst: string, fase: string) {
 export function faseTotalen(v: Parameters<typeof faseInvoer>[0]) {
   return (v.fasen ?? []).map((f) => ({ naam: f.naam, uren: f.uren, ...reken(faseInvoer(v, f.naam)) }))
 }
+
+/** Vrije tekst die Grønn in posten heeft opgedeeld; bedragen alleen als Nick ze zelf noemde. */
+export type Opmaak = {
+  fasen: { naam: string; posten: { titel: string; toelichting: string; bedrag: number | null; nagaan: boolean }[] }[]
+  extra: { titel: string; tekst: string }[]
+  voorbehoud: string
+}
+
+/** Zet de opgedeelde tekst in Nicks layout. De code rekent de totalen en termijnen, niet het model. */
+export function opmaakTekst(klant: string, o: Opmaak) {
+  let nr = 0
+  const bedragen: number[] = []
+  const delen = [`# Werkomschrijving & prijsopbouw`, `**${klant || "Klant"} — GRØNN Studio**`]
+  for (const f of o.fasen) {
+    const rijen = f.posten.map((p) => {
+      const c = p.bedrag != null && p.bedrag > 0 ? Math.round(p.bedrag * 100) : null
+      if (c) bedragen.push(c)
+      return `| **${++nr}. ${p.titel}** — ${p.toelichting} | ${c ? toonEuro(c) : "Nog te calculeren"}${p.nagaan ? "*" : ""} |`
+    })
+    delen.push(`${f.naam ? `## ${f.naam}\n\n` : ""}| Werkzaamheden | Excl. btw |\n|---|---:|\n${rijen.join("\n")}`)
+  }
+  if (bedragen.length) {
+    const sub = bedragen.reduce((t, b) => t + b, 0)
+    const btw = Math.round(sub * 0.21)
+    const tot = sub + btw
+    const t = (p: number) => Math.round((tot * p) / 100)
+    delen.push(
+      `## Prijsoverzicht\n\n| Omschrijving | Bedrag |\n|---|---:|\n| Subtotaal excl. btw | ${toonEuro(sub)} |\n| Btw 21% | ${toonEuro(btw)} |\n| **Totaal incl. btw** | **${toonEuro(tot)}** |`,
+      `### Betaling\n\n| Termijn | Incl. btw |\n|---|---:|\n| 50% bij opdrachtbevestiging | ${toonEuro(t(50))} |\n| 30% na grondwerk en bestrating in hoofdzaak | ${toonEuro(t(30))} |\n| 20% bij oplevering | ${toonEuro(tot - t(50) - t(30))} |`,
+    )
+  }
+  if (o.voorbehoud.trim()) delen.push(`---\n\n**Prijsvoorbehoud:** ${o.voorbehoud.trim()}`)
+  for (const e of o.extra) delen.push(`## ${e.titel}\n\n${e.tekst.trim()}`)
+  return delen.join("\n\n")
+}

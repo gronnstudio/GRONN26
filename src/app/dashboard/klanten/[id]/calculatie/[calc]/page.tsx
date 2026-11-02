@@ -73,25 +73,28 @@ export default async function CalculatiePagina({ params, searchParams }: { param
     <>
       <Kop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=calculaties` }, { naam: c?.titel ?? "Nieuwe calculatie" }]} titel={c ? c.titel : "Nieuwe calculatie"}>
         {c && c.versies.length > 0 && (
-          <nav aria-label="Versies" className="flex flex-wrap items-center gap-1 text-[13px]">
-            <span className="crm-label mr-2">Versie</span>
-            {c.versies.map((x) => (
-              <Link
-                key={x.nr}
-                href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.nr}`}
-                aria-current={x.nr === versie?.nr ? "page" : undefined}
-                title={`${tijd(x.datum)} · ${toonEuro(x.totaal)}${faseTotalen(x).map((f) => ` · ${f.naam.split(" — ")[0]} ${toonEuro(f.totaal)}`).join("")}`}
-                className={`crm-cijfer grid size-[32px] place-items-center rounded-full border ${x.nr === versie?.nr ? "border-accent bg-accent text-op-accent" : "border-lijn-sterk bg-vlak hover:border-accent"}`}
-              >
-                {x.nr}
-              </Link>
-            ))}
-            {versie && faseTotalen(versie).length > 0 && (
-              <span className="ml-3 text-gedempt">
-                {faseTotalen(versie).map((f) => `${f.naam.split(" — ")[0]} ${toonEuro(f.totaal)}`).join(" · ")}
-              </span>
-            )}
-          </nav>
+          <details className="relative text-[13px]">
+            <summary className="crm-knop-rand cursor-pointer list-none">
+              Versie {versie?.nr} van {c.versies.length} ▾
+              {versie && faseTotalen(versie).length > 0 && (
+                <span className="ml-2 text-gedempt">{faseTotalen(versie).map((f) => `${f.naam.split(" — ")[0]} ${toonEuro(f.totaal)}`).join(" · ")}</span>
+              )}
+            </summary>
+            <ul aria-label="Versies" className="absolute left-0 z-20 m-0 mt-1 grid max-h-[360px] min-w-[260px] list-none overflow-auto rounded-[12px] border border-lijn bg-vlak p-1 shadow-lg">
+              {[...c.versies].reverse().map((x) => (
+                <li key={x.nr}>
+                  <Link
+                    href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.nr}`}
+                    aria-current={x.nr === versie?.nr ? "page" : undefined}
+                    className={`flex justify-between gap-4 rounded-[8px] px-3 py-2 hover:bg-accent/10 ${x.nr === versie?.nr ? "font-semibold" : ""}`}
+                  >
+                    <span>v{x.nr} · {tijd(x.datum)}</span>
+                    <span className="crm-cijfer">{toonEuro(x.totaal)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </details>
         )}
         {c && versie && (
           <form action={maakOfferteVan.bind(null, k.id, c.id, versie.nr, "")}>
