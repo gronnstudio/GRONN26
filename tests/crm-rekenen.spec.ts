@@ -432,3 +432,13 @@ test("opmaakTekst zet posten in de layout en rekent totalen", () => {
   expect(t).toContain("Nog te calculeren*")
   expect(t).toContain("**€ 121,00**")
 })
+
+test("projectAgenda zet taken achter elkaar in werkdagen, ics heeft hele dagen", async () => {
+  const { projectAgenda, agendaBestand, normaliseerProject } = await import("../src/lib/crm/project")
+  const p = normaliseerProject({ id: "p1", titel: "Fase 1", start: "2026-11-06", taken: [{ id: "a", naam: "Graven", dagen: 1.5, klaar: false }, { id: "b", naam: "Straten", dagen: 1, klaar: false }] })
+  const a = projectAgenda(p)
+  expect(a).toEqual([{ id: "a", naam: "Graven", van: "2026-11-06", tot: "2026-11-09" }, { id: "b", naam: "Straten", van: "2026-11-10", tot: "2026-11-10" }])
+  const ics = agendaBestand([{ id: "x", titel: "Graven", van: "2026-11-06", tot: "2026-11-09" }])
+  expect(ics).toContain("DTSTART;VALUE=DATE:20261106")
+  expect(ics).toContain("DTEND;VALUE=DATE:20261110")
+})

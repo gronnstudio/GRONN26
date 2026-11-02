@@ -1,25 +1,44 @@
 "use client"
 
-import { startDagen, totaalDagen, type PlanFase } from "@/lib/crm/planning"
+import { totaalDagen, type PlanFase } from "@/lib/crm/planning"
+import { agendaBestand, planDagen } from "@/lib/crm/project"
+import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
+
+const dag = (x: string) => new Date(`${x}T12:00:00Z`).toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" })
+const wanneer = (d?: { van: string; tot: string }) => (d ? (d.van === d.tot ? dag(d.van) : `${dag(d.van)} t/m ${dag(d.tot)}`) : "")
 
 // De werkplanning in het rekenblad: fasen met werkdagen, machines en wat er
 // geleverd moet worden. "Uit de meetstaat" zet het voorstel van de code neer;
 // daarna is alles met de hand aan te passen en gaat het mee met de versie.
-export function Planning({ plan, onPlan, voorstel, onWerkomschrijving }: { plan: PlanFase[]; onPlan: (p: PlanFase[]) => void; voorstel?: PlanFase[]; onWerkomschrijving: (plan: PlanFase[]) => void }) {
+export function Planning({ titel, plan, onPlan, start, onStart, voorstel, onWerkomschrijving }: { titel: string; plan: PlanFase[]; start: string; onStart: (s: string) => void; onPlan: (p: PlanFase[]) => void; voorstel?: PlanFase[]; onWerkomschrijving: (plan: PlanFase[]) => void }) {
   const zet = (i: number, d: Partial<PlanFase>) => onPlan(plan.map((f, j) => (j === i ? { ...f, ...d } : f)))
-  const start = startDagen(plan)
+  // Nick, 2 nov 2026: "Maak van die fases dagen!" Met een startdatum krijgt elke regel echte werkdagen (za/zo slaan we over).
+  const dagen = planDagen(plan, start)
+  const nummer = plan.reduce<number[]>((acc, f, i) => [...acc, i ? acc[i - 1] + Math.max(1, Math.ceil(plan[i - 1].dagen)) : 1], [])
+  const agenda = () => {
+    const ics = agendaBestand(plan.map((f, i) => ({ ...dagen[i], titel: `${f.naam || `Dag ${nummer[i]}`}${titel ? ` · ${titel}` : ""}` })).filter((x) => x.van))
+    const a = document.createElement("a")
+    a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }))
+    a.download = `Planning ${titel || "GRØNN"}.ics`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
   return (
     <section aria-labelledby="planning-kop">
       <p id="planning-kop" className="crm-label m-0">
         3 · Planning
       </p>
-      <p className="m-0 mt-1 text-[12px] text-gedempt">Werkdagen per fase, met machines en wat er op welke dag geleverd moet worden. Komt mee op de offerte als werkvolgorde.</p>
+      <p className="m-0 mt-1 text-[12px] text-gedempt">Werkdagen met machines en wat er geleverd moet worden. Komt mee op de offerte als werkvolgorde.</p>
+      <label className="mt-3 grid max-w-[220px] gap-1 text-[13px]">
+        Eerste werkdag
+        <input type="date" value={start} onChange={(e) => onStart(e.target.value)} className="crm-veld" />
+      </label>
       {plan.length > 0 && (
         <ol className="m-0 mt-3 grid list-none gap-3 p-0">
           {plan.map((f, i) => (
             <li key={f.id} className="grid gap-2 rounded-[14px] border border-lijn p-3 text-[13px] sm:grid-cols-[1fr_88px]">
               <label className="grid gap-1">
-                Fase {i + 1} · begint dag {start[i].toLocaleString("nl-NL")}
+                Dag {nummer[i]}{dagen[i] ? ` · ${wanneer(dagen[i])}` : ""}
                 <input value={f.naam} onChange={(e) => zet(i, { naam: e.target.value })} className="crm-veld" />
               </label>
               <label className="grid gap-1">
@@ -31,7 +50,7 @@ export function Planning({ plan, onPlan, voorstel, onWerkomschrijving }: { plan:
                 <input value={f.machines} onChange={(e) => zet(i, { machines: e.target.value })} className="crm-veld" />
               </label>
               <label className="grid gap-1 sm:col-span-1">
-                Levering (op dag {start[i].toLocaleString("nl-NL")})
+                Levering
                 <input value={f.levering} onChange={(e) => zet(i, { levering: e.target.value })} className="crm-veld" />
               </label>
               <div className="flex items-center justify-between gap-2 sm:col-span-2">
@@ -52,14 +71,35 @@ export function Planning({ plan, onPlan, voorstel, onWerkomschrijving }: { plan:
           </button>
         )}
         <button type="button" onClick={() => onPlan([...plan, { id: crypto.randomUUID(), naam: "", dagen: 1, machines: "", levering: "" }])} className="crm-knop-rand">
-          + Fase
+          + Dag
         </button>
         {plan.length > 0 && (
           <button type="button" onClick={() => onWerkomschrijving(plan.filter((f) => f.naam.trim()))} className="crm-knop-rand">
             Zet in werkomschrijving
           </button>
         )}
+        {plan.length > 0 && dagen.length > 0 && (
+          <button type="button" onClick={agenda} className="crm-knop-rand" title="Opent in Google Agenda, Apple Agenda of Outlook">
+            Zet in agenda (.ics)
+          </button>
+        )}
       </div>
+      {plan.length > 0 && dagen.length > 0 && (
+        <>
+          <PdfKnoppen naam={`Planning ${titel || "GRØNN Studio"}`} doel=".planning-druk" className="mt-2 grid grid-cols-2 gap-2" crm />
+          <article className="planning-druk hidden bg-white p-[18mm] text-[11pt] text-op-accent">
+            <h1 className="m-0 text-[18pt]">Planning{titel ? ` · ${titel}` : ""}</h1>
+            <table className="mt-6 w-full border-collapse text-left">
+              <thead><tr><th className="border-b py-2">Wanneer</th><th className="border-b py-2">Wat</th><th className="border-b py-2">Machines</th><th className="border-b py-2">Levering</th></tr></thead>
+              <tbody>
+                {plan.map((f, i) => (
+                  <tr key={f.id}><td className="border-b py-2 pr-3 align-top">{wanneer(dagen[i])}</td><td className="border-b py-2 pr-3 align-top">{f.naam}</td><td className="border-b py-2 pr-3 align-top">{f.machines}</td><td className="border-b py-2 align-top">{f.levering}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </article>
+        </>
+      )}
     </section>
   )
 }
