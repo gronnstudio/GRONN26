@@ -5,7 +5,10 @@ import { isOpen, leesKlanten } from "@/lib/beheer/klanten"
 import { leesStand } from "@/lib/beheer/stand"
 import { plusDagen, vandaagNL } from "@/lib/crm/overzicht"
 import { nieuwPlan, planWeg } from "../acties"
-import { planDagen } from "@/lib/crm/project"
+import { klusdagen } from "@/lib/crm/agenda"
+import { agendaSleutel } from "@/lib/crm/agenda-sleutel"
+import { headers } from "next/headers"
+import { AgendaLink } from "@/components/crm/agenda-link"
 import { AgendaKnop } from "@/components/crm/agenda-knop"
 
 // De planning: wat je zelf inplant (werk, levering, machinehuur, bezoek) en
@@ -21,31 +24,17 @@ export const dynamic = "force-dynamic"
 const dagNaam = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long" })
 
 const iso = (d: Date) => d.toISOString().slice(0, 10)
-const KLEUREN = ["#2f7a4a", "#ff5b04", "#3b6fb6", "#a3487a", "#8a6d1f", "#2a8a8a"]
 
 export default async function Planning({ searchParams }: { searchParams: Promise<{ nieuw?: string; maand?: string }> }) {
   const { nieuw, maand: m } = await searchParams
+  const h = await headers()
+  const sleutel = agendaSleutel()
+  const feed = sleutel ? `https://${h.get("host")}/api/agenda/${sleutel}.ics` : ""
   const [stand, klanten] = await Promise.all([leesStand(), leesKlanten()])
   const nu = vandaagNL()
   const tot = plusDagen(nu, 60)
   type Punt = { id: string; datum: string; wat: string; soort: "Planning" | "Opvolgen" | "Klus"; href?: string; wie?: string }
-  // Alle klusdagen uit de calculaties, elke dag apart (een fase van 2 dagen geeft twee dagen).
-  const klus: (Punt & { kleur: string })[] = klanten.flatMap((k, ki) =>
-    k.calculaties.flatMap((c) => {
-      const v = c.versies.at(-1)
-      if (!v?.planning?.length) return []
-      const wie = k.naam.trim().split(/\s+/)[0] || k.naam
-      return planDagen(v.planning, v.planStart ?? "").flatMap((d, i) => {
-        const f = v.planning![i]
-        const uit: (Punt & { kleur: string })[] = []
-        for (let x = new Date(`${d.van}T12:00:00Z`); iso(x) <= d.tot; x.setUTCDate(x.getUTCDate() + 1)) {
-          if (x.getUTCDay() === 0 || x.getUTCDay() === 6) continue
-          uit.push({ id: `${f.id}-${iso(x)}`, datum: iso(x), wat: `${wie}: ${f.naam || "nog invullen"}`, wie, soort: "Klus", href: `/dashboard/klanten/${k.id}/calculatie/${c.id}`, kleur: KLEUREN[ki % KLEUREN.length] })
-        }
-        return uit
-      })
-    }),
-  )
+  const klus = klusdagen(klanten).map((p) => ({ ...p, soort: "Klus" as const }))
   const punten: Punt[] = [
     ...stand.planning.filter((p) => p.datum >= nu && p.datum <= tot).map((p) => ({ ...p, soort: "Planning" as const })),
     ...klanten
@@ -61,6 +50,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
       <main className="mx-auto grid max-w-[1440px] @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
         <div className="grid gap-8">
           <Maandkalender maand={/^\d{4}-\d{2}$/.test(m ?? "") ? m! : nu.slice(0, 7)} nu={nu} klus={klus} eigen={stand.planning} />
+          {feed && <AgendaLink url={feed} />}
           <AgendaKnop items={[...klus.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })), ...stand.planning.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum }))]} />
           <div>
           {dagen.length === 0 ? (

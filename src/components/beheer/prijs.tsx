@@ -605,6 +605,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <span className="crm-cijfer text-right">{toonEuro(f.totaal)}</span>
                   </div>
                 ))}
+                <div className="grid grid-cols-[1fr_auto] gap-2 border-t border-lijn pt-1 font-semibold">
+                  <span>Totaal fasen</span>
+                  <span className="crm-cijfer text-right">{toonEuro(faseSom.reduce((t, f) => t + f.totaal, 0))}</span>
+                </div>
                 {Math.abs(faseRest) > 2 && <p className="m-0 text-[12px] text-gedempt">Arbeid zonder uren per fase ({toonEuro(faseRest)}) is naar verhouding over de fasen verdeeld.</p>}
               </div>
             )}
