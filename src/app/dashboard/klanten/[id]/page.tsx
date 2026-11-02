@@ -33,7 +33,6 @@ const TABS = [
   { id: "overzicht", naam: "Overzicht" },
   { id: "tuinen", naam: "Tuinen" },
   { id: "calculaties", naam: "Calculaties" },
-  { id: "projecten", naam: "Projecten" },
   { id: "stukken", naam: "Offertes en facturen" },
   { id: "activiteit", naam: "Tijdlijn" },
 ] as const
@@ -100,7 +99,6 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
         {actief === "overzicht" && <Overzicht k={k} />}
         {actief === "tuinen" && <Tuinen k={k} lijst={lijst} />}
         {actief === "calculaties" && <Calculaties k={k} />}
-        {actief === "projecten" && <Projecten k={k} />}
         {actief === "stukken" && <Stukken k={k} />}
         {actief === "activiteit" && <Tijdlijn k={k} />}
       </main>
