@@ -112,6 +112,8 @@ export type Versie = {
   korting: Bp
   /** Al betaald door de klant, incl. btw (voorschot); gaat af van wat nog moet komen. */
   betaald?: Centen
+  /** Waarvoor het al betaalde bedrag was, bijv. "aanbetaald voor graven". */
+  betaaldTekst?: string
   regels: Regel[]
   /** Werkplanning per fase (fase 5); ontbreekt bij oudere versies. */
   planning?: PlanFase[]

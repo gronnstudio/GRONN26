@@ -44,7 +44,7 @@ const isBigBag = (eenheid: string) => /^bb$|big ?bag/i.test(eenheid.trim())
 const BB_KEUZES: [string, string][] = [["½", "0,5"], ["1", "1"], ["2", "2"], ["3", "3"]]
 
 export type KlantKeuze = { id: string; naam: string; tuinen: { id: string; naam: string }[] }
-export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; betaald?: number; regels: Regel[]; nr?: number; planning?: PlanFase[]; planStart?: string; planVoorstel?: PlanFase[]; fasen?: FaseUren[] }
+export type Begin = { klantId: string; calculatieId?: string; titel: string; tuinId?: string; beschrijving: string; uren: Milli; uurtarief: number; onvoorzien: number; korting: number; betaald?: number; betaaldTekst?: string; regels: Regel[]; nr?: number; planning?: PlanFase[]; planStart?: string; planVoorstel?: PlanFase[]; fasen?: FaseUren[] }
 
 const lbl = "crm-label"
 const veld = "crm-veld"
@@ -108,6 +108,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [regels, setRegels] = useState<Invul[]>(begin?.regels.length ? begin.regels.map(naarInvul) : [leeg()])
   const [beschrijving, setBeschrijving] = useState(zonderTermijnen(begin?.beschrijving ?? ""))
   const [plan, setPlan] = useState<PlanFase[]>(begin?.planning ?? [])
+  const [betaaldTekst, setBetaaldTekst] = useState(begin?.betaaldTekst ?? "")
   const [planStart, setPlanStart] = useState(begin?.planStart ?? "")
   // Uren per fase, als de klus in delen gaat; de uren hierboven zijn dan de som.
   const [fasen, setFasen] = useState<FaseUren[]>(begin?.fasen ?? [])
@@ -247,13 +248,14 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const u = reken(invoer)
   const w = wegzetten(u)
   const alBetaald = Math.max(0, leesCenten(betaald) ?? 0)
+  const faseSom = [...new Set(invoer.regels.map((r) => r.groep ?? "").filter(Boolean))].sort().map((naam) => ({ naam, totaal: reken(faseInvoer({ ...invoer, fasen }, naam)).totaal }))
   const goed = urenMilli > 0 && u.perUur >= STANDAARD.minimumPerUur
   const te = tekort(u, urenMilli)
 
   const bewaar = () =>
     start(async () => {
       setMelding("")
-      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, planStart: planStart || undefined, fasen, betaald: alBetaald, ...invoer })
+      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, planStart: planStart || undefined, fasen, betaald: alBetaald, betaaldTekst: betaaldTekst.trim() || undefined, ...invoer })
       if ("fout" in uit) return setMelding(uit.fout)
       setCalcId(uit.id)
       setVersie(uit.nr)
@@ -382,6 +384,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               <label className="grid gap-1 text-[13px]">
                 Al betaald € (incl. btw)
                 <input inputMode="decimal" value={betaald} onChange={(e) => setBetaald(e.target.value)} placeholder="0" className={veld} />
+              </label>
+              <label className="grid gap-1 text-[13px]">
+                Waarvoor betaald
+                <input value={betaaldTekst} onChange={(e) => setBetaaldTekst(e.target.value)} placeholder="bijv. aanbetaald voor graven" maxLength={80} className={veld} />
               </label>
             </div>
             <p className="m-0 mt-2 text-[12px] text-gedempt">Uren is alles: ook laden, rijden en opruimen. Een dag is 8 uur. Vrienden krijgen korting, niet een lager uurtarief.</p>
@@ -556,8 +562,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             {u.btw.map((b) => (
               <Rij key={b.tarief} t={`Btw ${b.tarief / 100} % over ${toonEuro(b.grondslag)}`} b={b.btw} />
             ))}
+            {/* Gekozen fasen in de som (Nick, 2 nov 2026), elk incl. btw. */}
+            {faseSom.map((f) => <Rij key={f.naam} t={`${f.naam}, incl. btw`} b={f.totaal} />)}
             <Rij t="Totaal incl. btw" b={u.totaal} vet />
-            {alBetaald > 0 && <Rij t="Al betaald" b={-alBetaald} />}
+            {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Al betaald"} b={-alBetaald} />}
             {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
           </dl>
           {u.optioneel.length > 0 && (
@@ -626,13 +634,13 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             <Rij key={b.tarief} t={`Btw ${b.tarief / 100} %`} b={b.btw} />
           ))}
           <Rij t="Totaal incl. btw" b={u.totaal} vet />
-          {alBetaald > 0 && <Rij t="Al betaald" b={-alBetaald} />}
+          {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Al betaald"} b={-alBetaald} />}
           {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
         </dl>
         {/* Betaling (Nick, 2 nov 2026): geen termijnen meer. Aanbetaling, dan een factuur voor materiaal en overig incl. btw, de rest contant bij levering. */}
         <p className="m-0 mt-8 font-semibold">Betaling</p>
         <dl className="m-0 mt-2 grid gap-2">
-          {alBetaald > 0 && <Rij t="Aanbetaling, al voldaan" b={alBetaald} />}
+          {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Aanbetaling, al voldaan"} b={alBetaald} />}
           {materiaalIncl > 0 && <Rij t="Factuur materiaal en overig, incl. btw" b={materiaalIncl} />}
           <Rij t="Rest, contant bij levering" b={Math.max(0, u.totaal - alBetaald - materiaalIncl)} vet />
         </dl>
