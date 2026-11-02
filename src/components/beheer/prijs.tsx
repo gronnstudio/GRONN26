@@ -246,6 +246,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     regels: regels.map(naarRegel),
   }
   const u = reken(invoer)
+  const vroegste = (sec: (typeof SECTIES)[number]) => Math.min(99, ...regels.filter((r) => sec.bij(r.soort)).map((r) => Number(faseNr(r.groep)) || 99)) * 10 + SECTIES.indexOf(sec)
   const w = wegzetten(u)
   const alBetaald = Math.max(0, leesCenten(betaald) ?? 0)
   const faseNamen = [...new Set(u.regels.map((r) => r.groep ?? ""))].sort((a, b) => (a ? b ? a.localeCompare(b) : -1 : 1))
@@ -445,7 +446,8 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <th className="py-1 font-semibold"><span className="sr-only">Acties</span></th>
                   </tr>
                 </thead>
-                {SECTIES.map((sec) => {
+                {/* Secties op volgorde van hun vroegste fase (Nick, 2 nov 2026): machines in fase 1 staan dan bovenaan. */}
+                {[...SECTIES].sort((a, b) => vroegste(a) - vroegste(b)).map((sec) => {
                   const hier = regels.map((r, i) => [r, i] as const).filter(([r]) => sec.bij(r.soort))
                   const som = hier.reduce((t, [r]) => {
                     const x = [...u.regels].find((y) => y.id === r.id)
