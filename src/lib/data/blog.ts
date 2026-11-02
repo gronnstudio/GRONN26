@@ -1,5 +1,6 @@
 import type { Foto } from "./vijverrenovatie"
 import { ARCHIEF } from "./journaal-archief"
+import { blokkenUit, leestijdVan } from "./journaal-tekst"
 
 // Het Journaal, de blog (eigenaar, 21 okt 2026: "schrijf elke maand 2 blogs", "Blogs in
 // eigen menu"). Praktische stukken bij het seizoen, alleen in het Nederlands,
@@ -61,7 +62,85 @@ const NICK_TUSSEN_DE_PLANTEN: Foto = {
   bijschrift: "Aan het werk tussen de oeverplanten.",
 }
 
+const EGEL_DICHTBIJ: Foto = {
+  src: "/blog/egel-close.jpg",
+  width: 1600,
+  height: 1200,
+  alt: "Een egel van dichtbij op een betonnen rand, 's avonds, met een hand op de achtergrond",
+  bijschrift: "Een egel op zijn avondronde.",
+}
+
+const EGEL_OP_DE_RAND: Foto = {
+  src: "/blog/egel-op-de-stoeprand.jpg",
+  width: 1600,
+  height: 1200,
+  alt: "Een egel op een betonnen rand langs een pad, 's avonds, met struiken en een lantaarn op de achtergrond",
+  bijschrift: "Egels lopen elke nacht een flink stuk, langs paden en door tuinen.",
+}
+
+// Nicks eigen foto's (2 nov 2026), verkleind en zonder metadata.
+const EGEL = `
+In november wordt het stil in de tuin. Ook de egel trekt zich terug: als het kouder wordt, zoekt hij een plek voor zijn winterslaap, die meestal tot in maart of april duurt. Dat lukt alleen als hij genoeg reserves heeft en een veilige plek vindt. Precies daar kan je tuin het verschil maken.
+
+## De egel heeft het moeilijk
+
+De egel gaat hard achteruit. In oktober 2024 zette de IUCN, de internationale organisatie achter de Rode Lijst, de Europese egel op de lijst als gevoelig (Near Threatened) (Mammal Society, 2024). De grootste oorzaken liggen dichtbij huis: tuinen die zijn dichtgezet met schuttingen, verharding, verkeer en minder insecten om te eten.
+
+Het goede nieuws: een egel heeft een groot gebied nodig, en dat bestaat voor een groot deel uit tuinen. Wat jij in je tuin doet, telt dus echt mee.
+
+## 1. Maak een doorgang
+
+Een egel loopt in één nacht door heel wat tuinen op zoek naar eten. Een dichte schutting of muur is voor hem het einde van de wereld. Maak onderaan een opening van ongeveer 13 bij 13 centimeter (Hedgehog Street, z.d.). Groot genoeg voor een egel, te klein voor de meeste katten en honden. Vraag je buren om hetzelfde te doen; zo ontstaat er een egelroute door de straat.
+
+## 2. Laat een rommelhoek liggen
+
+Een egel slaapt het liefst onder een hoop blad, takken of snoeiafval, onder een struik of tegen de heg. Laat zo'n hoop deze winter liggen en ruim hem pas op als het in april warm is. Kijk altijd eerst voorzichtig voordat je met een riek of schop in een hoop prikt.
+
+Blad laten liggen in de borders helpt ook: daar leven de kevers, regenwormen en rupsen waar de egel van eet.
+
+## 3. Een vijver met een uitstapje
+
+Egels kunnen zwemmen, maar uit een vijver met steile randen komen ze niet meer. Zorg dat er aan minstens één kant een flauwe oever is, of leg een plank of een paar stenen als trapje. Dat helpt ook andere dieren die komen drinken. Ligt er een bladnet over de vijver? Laat een opening bij de oever, zodat een egel er niet onder vast komt te zitten.
+
+## 4. Pas op met machines
+
+- Robotmaaiers zijn voor egels gevaarlijk, vooral als ze 's avonds of 's nachts maaien. Laat de maaier alleen overdag rijden.
+- Bladblazers en bosmaaiers raken egels die in een hoop blad of lang gras slapen. Kijk eerst, of gebruik een hark.
+- Gaten en putten: dek kelderputten en afvoerkolken af, en laat geen netten slap op de grond liggen.
+
+## 5. Geen gif
+
+Slakkenkorrels en insectengif doden niet alleen slakken en luizen, maar ook het eten van de egel, en soms de egel zelf. Een tuin met egels heeft minder slakken; laat het werk aan hem over.
+
+## Bijvoeren: wel water, geen melk
+
+Een schaaltje water helpt, zeker in een droge periode. Geef nooit melk: egels kunnen er niet tegen. Wil je in de herfst bijvoeren, gebruik dan kattenvoer of speciaal egelvoer, geen brood.
+
+## Een egel overdag?
+
+Een egel die je overdag ziet rondlopen, of een heel kleine egel laat in de herfst, heeft vaak hulp nodig. Pak hem met handschoenen op, zet hem in een doos met een handdoek en bel een egelopvang.
+
+## Hulp bij een egelvriendelijke tuin
+
+Ik maak tuinen in Stein en omgeving die goed zijn voor mens en dier: met doorgangen in de schutting, een vijver met een flauwe rand, een rommelhoek die er mooi uitziet en planten die insecten aantrekken. Met een vaste prijs vooraf. Stuur een foto van je tuin via WhatsApp naar 06 181 180 14, dan kijk ik mee.
+`
+
 const RECENT: Stuk[] = [
+  {
+    slug: "egelvriendelijke-tuin",
+    titel: "Een egelvriendelijke tuin: zo help je de egel de winter door",
+    beschrijving: "Egels gaan in november in winterslaap en hebben het moeilijk. Een gat in de schutting, een bladhoop en een veilige vijverrand helpen ze de winter door.",
+    datum: "2026-11-02",
+    rubriek: "Tuin",
+    leestijd: leestijdVan(EGEL),
+    beeld: EGEL_DICHTBIJ,
+    // de tweede foto na "Maak een doorgang"
+    blokken: [...blokkenUit(EGEL.split("## 2.")[0]), { soort: "foto", foto: EGEL_OP_DE_RAND }, ...blokkenUit("## 2." + EGEL.split("## 2.")[1])],
+    bronnen: [
+      "Hedgehog Street. (z.d.). Link your garden. https://www.hedgehogstreet.org/help-hedgehogs/link-your-garden/",
+      "Mammal Society. (2024). Breaking: European hedgehog listed as Near Threatened on IUCN Red List. https://mammal.org.uk/press-hub/breaking-european-hedgehog-listed-as-near-threatened-on-iucn-red-listnbsp",
+    ],
+  },
   {
     slug: "levende-tuin",
     titel: "Werken mét de natuur: wat een levende tuin is",
