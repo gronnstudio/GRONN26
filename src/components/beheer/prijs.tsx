@@ -11,7 +11,6 @@ import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
 import { bewaarCalculatie, onthoudPrijs } from "@/app/dashboard/calculatie/acties"
-import { maakOfferteVan } from "@/app/dashboard/klanten/offerte-acties"
 import { Rekenhulp } from "./rekenhulp"
 import { Planning } from "@/components/crm/planning"
 import { metWerkvolgorde, type PlanFase } from "@/lib/crm/planning"
@@ -262,15 +261,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
       if (begin && (!calcId || window.location.search.includes("meetstaat="))) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
     })
 
-  // Offerte voor één fase (Nick, 30 okt 2026): eerst bewaren, dan de deel-offerte uit die versie.
-  const offerteVoorFase = (fase: string) =>
-    start(async () => {
-      setMelding("")
-      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, fasen, betaald: alBetaald, ...invoer })
-      if ("fout" in uit) return setMelding(uit.fout)
-      await maakOfferteVan(klantId, uit.id, uit.nr, fase)
-    })
-
   const onthoud = (i: number) =>
     start(async () => {
       const uit = await onthoudPrijs(naarRegel(regels[i]))
@@ -365,39 +355,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 {schatting.aannames && <p className="m-0 mt-2 text-gedempt">Aangenomen: {schatting.aannames}</p>}
                 <p className="m-0 mt-2 text-gedempt">Een voorstel: klopt het niet met wat jij weet, pas de uren en bedragen hieronder aan.</p>
               </div>
-            )}
-            {fasen.length > 0 && (
-              <fieldset className="mt-5 rounded-[14px] border border-lijn p-4">
-                <legend className="px-1 text-[13px] font-semibold">Uren per fase</legend>
-                <div className="grid gap-2">
-                  {fasen.map((f, i) => {
-                    const deel = reken(faseInvoer({ ...invoer, fasen }, f.naam))
-                    return (
-                      <label key={f.naam} className="grid grid-cols-[1fr_90px_auto_auto] items-center gap-3 text-[13px]">
-                        <span>{f.naam}</span>
-                        <input
-                          aria-label={`Uren ${f.naam}`}
-                          inputMode="decimal"
-                          value={toonDecimaal(f.uren, 3)}
-                          onChange={(e) => {
-                            const nieuw = fasen.map((x, j) => (j === i ? { ...x, uren: Math.max(0, leesMilli(e.target.value) ?? 0) } : x))
-                            setFasen(nieuw)
-                            setUren(toonDecimaal(nieuw.reduce((t, x) => t + x.uren, 0), 3))
-                          }}
-                          className={klein}
-                        />
-                        <span className="crm-cijfer text-right text-gedempt">{toonEuro(deel.totaal)} incl. btw</span>
-                        {klantId && (
-                          <button type="button" disabled={bewaart} onClick={() => offerteVoorFase(f.naam)} className="crm-knop-rand crm-knop-klein">
-                            Offerte
-                          </button>
-                        )}
-                      </label>
-                    )
-                  })}
-                </div>
-                <p className="m-0 mt-2 text-[12px] text-gedempt">Elke regel hieronder hoort bij een fase. Zo maak je bij de klant een offerte per fase.</p>
-              </fieldset>
             )}
             <div className="mt-5 grid grid-cols-2 items-end gap-3 sm:grid-cols-4">
               <label className="grid gap-1 text-[13px]">
