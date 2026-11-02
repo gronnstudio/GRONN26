@@ -118,7 +118,8 @@ export async function nieuwStuk(id: string, d: FormData) {
   const dt = datum(tekst(d, "datum", 10))
   if (!nummer || !b || !dt) return
   const stuk: Stuk = { id: crypto.randomUUID(), soort: tekst(d, "soort", 10) === "Offerte" ? "Offerte" : "Factuur", nummer, bedrag: b, datum: dt }
-  await pasAan(id, (k) => log({ ...k, stukken: [...k.stukken, stuk].sort((a, c) => a.datum.localeCompare(c.datum)) }, gebeurtenis("Stuk", `${stuk.soort} ${nummer} toegevoegd`)))
+  // Hetzelfde nummer twee keer telde dubbel bij Betaald (HairDiel, 2 nov 2026).
+  await pasAan(id, (k) => k.stukken.some((s) => s.soort === stuk.soort && s.nummer.trim().toLowerCase() === nummer.trim().toLowerCase()) ? k : log({ ...k, stukken: [...k.stukken, stuk].sort((a, c) => a.datum.localeCompare(c.datum)) }, gebeurtenis("Stuk", `${stuk.soort} ${nummer} toegevoegd`)))
 }
 
 export async function stukRond(id: string, stuk: string, rond: boolean) {
