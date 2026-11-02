@@ -29,12 +29,6 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
   const klantId = /^\/dashboard\/klanten\/([^/]+)/.exec(pad)?.[1]
   const [smal, setSmal] = useState(false)
   const [menu, setMenu] = useState(false)
-  // Na het kiezen van een onderdeel gaat het menu op de telefoon vanzelf dicht.
-  const [vorigPad, setVorigPad] = useState(pad)
-  if (vorigPad !== pad) {
-    setVorigPad(pad)
-    setMenu(false)
-  }
   const [grønn, setGrønn] = useState(false)
   const [nieuw, setNieuw] = useState(false)
 
@@ -101,6 +95,8 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
       <aside
         id="crm-menu"
         aria-label="Systeem"
+        // Elke link in het menu sluit het op de telefoon, ook als alleen ?nieuw=1 of #nieuw verandert.
+        onClick={(e) => (e.target as Element).closest("a") && setMenu(false)}
         className={`flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:w-[min(300px,85vw)] max-lg:shadow-[0_0_40px_rgb(0_0_0/.3)] lg:sticky lg:top-0 ${menu ? "" : "max-lg:hidden"} ${klein ? "lg:w-[64px]" : "lg:w-[248px]"}`}
       >
         <div className={`flex h-[60px] shrink-0 items-center ${klein ? "justify-center" : "justify-between pr-2 pl-4"}`}>

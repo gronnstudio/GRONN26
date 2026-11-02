@@ -512,5 +512,11 @@ test("telefoon: menu bovenaan, pagina's vallen niet van het scherm", async ({ br
   await expect(page).toHaveURL(/\/dashboard\/planning/)
   await expect(menu).toBeHidden()
   expect(await page.evaluate(() => innerWidth)).toBe(390)
+  // Ook als alleen de query verandert (Nieuw → Afspraak op de planning zelf).
+  await page.getByRole("button", { name: "Menu", exact: true }).click()
+  await page.getByRole("button", { name: "Nieuw" }).click()
+  await page.getByRole("link", { name: /Afspraak/ }).click()
+  await expect(page).toHaveURL(/nieuw=1/)
+  await expect(menu).toBeHidden()
   await ctx.close()
 })
