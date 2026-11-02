@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Assistent } from "@/components/beheer/assistent"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { GROEPEN, NIEUW, onderdeelVan } from "@/lib/crm/navigatie"
@@ -29,6 +29,22 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
   const klantId = /^\/dashboard\/klanten\/([^/]+)/.exec(pad)?.[1]
   const [smal, setSmal] = useState(false)
   const [menu, setMenu] = useState(false)
+  // Het telefoonmenu als dialoog: focus erin, Esc sluit, de pagina erachter is inert, en bij
+  // sluiten gaat de focus terug naar de Menu-knop.
+  const menuKnop = useRef<HTMLButtonElement>(null)
+  const sluitKnop = useRef<HTMLButtonElement>(null)
+  const wasOpen = useRef(false)
+  useEffect(() => {
+    if (menu) {
+      sluitKnop.current?.focus()
+      const esc = (e: KeyboardEvent) => e.key === "Escape" && setMenu(false)
+      addEventListener("keydown", esc)
+      wasOpen.current = true
+      return () => removeEventListener("keydown", esc)
+    }
+    if (wasOpen.current) menuKnop.current?.focus()
+    wasOpen.current = false
+  }, [menu])
   const [grønn, setGrønn] = useState(false)
   const [nieuw, setNieuw] = useState(false)
 
@@ -77,8 +93,8 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
   const klein = smal && !menu
   return (
     <div className="crm min-h-svh print:block print:min-w-0 print:bg-white lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto]">
-      <div className="sticky top-0 z-30 flex h-[56px] items-center gap-2 border-b border-lijn bg-zijbalk px-3 print:hidden lg:hidden">
-        <button type="button" onClick={() => setMenu(true)} aria-expanded={menu} aria-controls="crm-menu" className="crm-knop-rand crm-knop-klein">
+      <div inert={menu} className="sticky top-0 z-30 flex h-[56px] items-center gap-2 border-b border-lijn bg-zijbalk px-3 print:hidden lg:hidden">
+        <button ref={menuKnop} type="button" onClick={() => setMenu(true)} aria-expanded={menu} aria-controls="crm-menu" className="crm-knop-rand crm-knop-klein">
           <Icoon naam="uitklappen" className="size-[16px]" /> Menu
         </button>
         <Link href="/dashboard" className="flex flex-1 items-center justify-center" aria-label="GRØNN Studio, naar Vandaag">
@@ -95,6 +111,7 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
       <aside
         id="crm-menu"
         aria-label="Systeem"
+        {...(menu ? { role: "dialog", "aria-modal": true } : {})}
         // Elke link in het menu sluit het op de telefoon, ook als alleen ?nieuw=1 of #nieuw verandert.
         onClick={(e) => (e.target as Element).closest("a") && setMenu(false)}
         className={`flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:w-[min(300px,85vw)] max-lg:shadow-[0_0_40px_rgb(0_0_0/.3)] lg:sticky lg:top-0 ${menu ? "" : "max-lg:hidden"} ${klein ? "lg:w-[64px]" : "lg:w-[248px]"}`}
@@ -111,7 +128,7 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
           <button type="button" onClick={() => zetSmal(!smal)} aria-label={klein ? "Zijbalk uitklappen" : "Zijbalk inklappen"} title={klein ? "Uitklappen" : "Inklappen"} className="crm-knop-stil crm-knop-klein size-[32px] !px-0 max-lg:hidden">
             <Icoon naam={klein ? "uitklappen" : "inklappen"} className="size-[16px]" />
           </button>
-          <button type="button" onClick={() => setMenu(false)} aria-label="Menu sluiten" className="crm-knop-stil crm-knop-klein size-[32px] !px-0 lg:hidden">
+          <button ref={sluitKnop} type="button" onClick={() => setMenu(false)} aria-label="Menu sluiten" className="crm-knop-stil crm-knop-klein size-[32px] !px-0 lg:hidden">
             <Icoon naam="sluit" className="size-[16px]" />
           </button>
         </div>
@@ -196,7 +213,7 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
         </div>
       </aside>
 
-      <div className="@container min-w-0"><KlantTabs namen={namen} />{children}<Melding /></div>
+      <div inert={menu} className="@container min-w-0"><KlantTabs namen={namen} />{children}<Melding /></div>
 
       {grønn && (
         <aside aria-label="Grønn" className="flex h-svh flex-col border-l border-lijn bg-vlak print:hidden max-lg:fixed max-lg:inset-0 max-lg:z-50 lg:sticky lg:top-0 lg:w-[380px]">

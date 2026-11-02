@@ -512,6 +512,13 @@ test("telefoon: menu bovenaan, pagina's vallen niet van het scherm", async ({ br
   await expect(page).toHaveURL(/\/dashboard\/planning/)
   await expect(menu).toBeHidden()
   expect(await page.evaluate(() => innerWidth)).toBe(390)
+  // Als dialoog: focus erin, Esc sluit en de focus gaat terug naar de Menu-knop.
+  const knop = page.getByRole("button", { name: "Menu", exact: true })
+  await knop.click()
+  await expect(page.getByRole("button", { name: "Menu sluiten" })).toBeFocused()
+  await page.keyboard.press("Escape")
+  await expect(menu).toBeHidden()
+  await expect(knop).toBeFocused()
   // Ook als alleen de query verandert (Nieuw → Afspraak op de planning zelf).
   await page.getByRole("button", { name: "Menu", exact: true }).click()
   await page.getByRole("button", { name: "Nieuw" }).click()
