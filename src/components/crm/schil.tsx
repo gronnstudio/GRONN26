@@ -7,6 +7,7 @@ import { Assistent } from "@/components/beheer/assistent"
 import { KleurKeuze } from "@/components/beheer/kleur"
 import { GROEPEN, NIEUW, onderdeelVan } from "@/lib/crm/navigatie"
 import { Icoon } from "./iconen"
+import { KlantTabs } from "./klant-tabs"
 import { OPEN_ZOEKVENSTER, Zoekvenster, type Treffer } from "./zoekvenster"
 
 // De schil van het bedrijfssysteem (eigenaar, 29 okt 2026: "het moest
@@ -19,7 +20,7 @@ const KEY = "gronn-crm-schil"
 /** Opent Grønn van buiten de schil, bijvoorbeeld vanaf een klantkaart. */
 export const OPEN_GRØNN = "crm-gronn"
 
-export function Schil({ index, tellers, children }: { index: Treffer[]; tellers: { aanvragen: number; opvolgen: number }; children: React.ReactNode }) {
+export function Schil({ index, tellers, namen, children }: { index: Treffer[]; tellers: { aanvragen: number; opvolgen: number }; namen: Record<string, string>; children: React.ReactNode }) {
   const pad = usePathname()
   const actief = onderdeelVan(pad)
   const klantId = /^\/dashboard\/klanten\/([^/]+)/.exec(pad)?.[1]
@@ -172,7 +173,7 @@ export function Schil({ index, tellers, children }: { index: Treffer[]; tellers:
         </div>
       </aside>
 
-      <div className="@container min-w-0">{children}</div>
+      <div className="@container min-w-0"><KlantTabs namen={namen} />{children}</div>
 
       {grønn && (
         <aside aria-label="Grønn" className={`sticky top-0 flex h-svh w-[380px] flex-col border-l border-lijn bg-vlak print:hidden ${veld ? "max-lg:hidden" : ""}`}>

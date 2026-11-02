@@ -46,7 +46,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div data-links className={`${syne.variable} ${montserrat.variable} ${mono.variable}`}>
-      <Schil index={index} tellers={tellers}>
+      <Schil index={index} tellers={tellers} namen={Object.fromEntries(klanten.map((k) => [k.id, k.naam]))}>
         {children}
       </Schil>
     </div>
