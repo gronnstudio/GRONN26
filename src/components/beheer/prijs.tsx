@@ -249,7 +249,17 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const w = wegzetten(u)
   const alBetaald = Math.max(0, leesCenten(betaald) ?? 0)
   const faseNamen = [...new Set(u.regels.map((r) => r.groep ?? ""))].sort((a, b) => (a ? b ? a.localeCompare(b) : -1 : 1))
-  const faseSom = faseNamen.some(Boolean) ? faseNamen.map((naam) => ({ naam: naam || "Zonder fase", totaal: u.regels.filter((r) => (r.groep ?? "") === naam).reduce((t, r) => t + r.verkoop, 0) })) : []
+  // Per fase alles bij elkaar (Nick, 2 nov 2026): materiaal, planten, machines én de arbeid van die fase,
+  // met korting en btw. Wat zonder fase blijft (uren of regels) staat apart, zodat de som klopt.
+  const faseSom = faseNamen.filter(Boolean).map((naam) => {
+    const uit = reken(faseInvoer({ ...invoer, fasen }, naam))
+    return { naam, uren: fasen.find((f) => f.naam === naam)?.uren ?? 0, totaal: uit.totaal }
+  })
+  const faseRest = u.totaal - faseSom.reduce((t, f) => t + f.totaal, 0)
+  const zetFaseUren = (naam: string, tekst: string) => {
+    const uren = Math.max(0, leesMilli(tekst) ?? 0)
+    setFasen(fasen.some((f) => f.naam === naam) ? fasen.map((f) => (f.naam === naam ? { ...f, uren } : f)) : [...fasen, { naam, uren }])
+  }
   const goed = urenMilli > 0 && u.perUur >= STANDAARD.minimumPerUur
   const te = tekort(u, urenMilli)
 
@@ -558,7 +568,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             <Rij t="Arbeid" b={u.arbeid} />
             <Rij t="Materiaal en overig" b={u.materiaal} />
             {/* Per fase, excl. btw (Nick, 2 nov 2026): telt precies op tot Materiaal en overig. */}
-            {faseSom.length > 0 && faseSom.map((f) => <Rij key={f.naam} t={`· ${f.naam}`} b={f.totaal} />)}
             {u.onvoorzien > 0 && <Rij t="Onvoorzien" b={u.onvoorzien} />}
             {u.korting > 0 && <Rij t="Korting" b={-u.korting} />}
             <Rij t="Totaal excl. btw" b={u.verkoop} vet />
@@ -566,6 +575,24 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               <Rij key={b.tarief} t={`Btw ${b.tarief / 100} % over ${toonEuro(b.grondslag)}`} b={b.btw} />
             ))}
             <Rij t="Totaal incl. btw" b={u.totaal} vet />
+            {faseSom.length > 0 && (
+              <div className="grid gap-1 border-y border-lijn py-2 text-[13px]">
+                <p className="m-0 text-[12px] text-gedempt">Per fase, incl. btw. Vul de uren per fase in, dan telt de arbeid mee.</p>
+                {faseSom.map((f) => (
+                  <div key={f.naam} className="grid grid-cols-[1fr_72px_auto] items-center gap-2">
+                    <span>{f.naam}</span>
+                    <input aria-label={`Uren ${f.naam}`} inputMode="decimal" defaultValue={f.uren ? toonDecimaal(f.uren, 3) : ""} placeholder="uren" onBlur={(e) => zetFaseUren(f.naam, e.target.value)} className="crm-veld crm-cijfer !py-1" />
+                    <span className="crm-cijfer text-right">{toonEuro(f.totaal)}</span>
+                  </div>
+                ))}
+                {Math.abs(faseRest) > 2 && (
+                  <div className="grid grid-cols-[1fr_auto] gap-2 text-gedempt">
+                    <span>Nog niet in een fase (arbeid of regels)</span>
+                    <span className="crm-cijfer text-right">{toonEuro(faseRest)}</span>
+                  </div>
+                )}
+              </div>
+            )}
             {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Al betaald"} b={-alBetaald} />}
             {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
           </dl>
