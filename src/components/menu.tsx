@@ -112,6 +112,7 @@ export function Menu() {
         <div className="grid gap-y-8">
           {/* zoeken (eigenaar, 21 okt 2026); het venster zelf staat in zoek.tsx. De focus
               gaat eerst naar de menuknop, zodat hij daar terugkomt als het venster sluit. */}
+          <div className="flex gap-3">
           <button
             type="button"
             onClick={() => {
@@ -119,7 +120,7 @@ export function Menu() {
               knop.current?.focus()
               dispatchEvent(new Event(OPEN_ZOEK))
             }}
-            className="flex h-[var(--knop)] w-full cursor-pointer items-center gap-3 rounded-full border border-gebroken-wit/25 bg-gebroken-wit/5 px-5 text-left text-[15px] text-gebroken-wit/80 transition-colors hover:border-gebroken-wit/50 hover:text-gebroken-wit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
+            className="flex h-[var(--knop)] min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-full border border-gebroken-wit/25 bg-gebroken-wit/5 px-5 text-left text-[15px] text-gebroken-wit/80 transition-colors hover:border-gebroken-wit/50 hover:text-gebroken-wit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit"
           >
             <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="shrink-0 text-oranje">
               <circle cx="9.5" cy="9.5" r="6" />
@@ -127,6 +128,24 @@ export function Menu() {
             </svg>
             <span className="flex-1"><T t={{ nl: "Zoek op de site", en: "Search the site" }} /></span>
           </button>
+          {/* overzicht van de sneltoetsen (eigenaar, 2 nov 2026); het staat in het lege
+              zoekvenster. Alleen met muis of trackpad: op een touchscreen heb je er niets aan. */}
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false)
+              knop.current?.focus()
+              dispatchEvent(new Event(OPEN_ZOEK))
+            }}
+            className="hidden h-[var(--knop)] shrink-0 cursor-pointer items-center gap-2.5 rounded-full border border-gebroken-wit/25 bg-gebroken-wit/5 px-5 text-[15px] text-gebroken-wit/80 transition-colors hover:border-gebroken-wit/50 hover:text-gebroken-wit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit pointer-fine:flex"
+          >
+            <svg viewBox="0 0 22 22" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-oranje">
+              <rect x="2" y="5" width="18" height="12" rx="2.5" />
+              <path d="M6 9h.01M9.5 9h.01M13 9h.01M16.5 9h.01M7 13h8" />
+            </svg>
+            <T t={{ nl: "Sneltoetsen", en: "Shortcuts" }} />
+          </button>
+          </div>
           {/* op telefoon en tablet staat Kennismaken hier, zodat de kop bovenaan de ruimte heeft (eigenaar, 18 okt 2026) */}
           <Link href="/kennismaken" className="knop w-full bg-oranje text-antraciet lg:hidden">
             <T t={{ nl: "Kennismaken", en: "Get in touch" }} />

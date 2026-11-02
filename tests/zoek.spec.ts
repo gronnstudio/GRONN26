@@ -58,3 +58,15 @@ test("vanuit het menu, g dan w gaat naar Werk, Backspace terug", async ({ page }
   await page.keyboard.press("Backspace")
   await expect(page).toHaveURL(/localhost:3210\/$/, { timeout: 20_000 })
 })
+
+test("Sneltoetsen in het menu opent het overzicht", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await page.waitForTimeout(400)
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.getByRole("button", { name: "Sneltoetsen" }).click()
+  const zoek = page.getByRole("dialog", { name: "Zoek op deze site" })
+  await expect(zoek).toBeVisible()
+  await expect(zoek.getByText("Ga naar (G, dan…)")).toBeVisible()
+  await expect(zoek.getByText("Terug")).toBeVisible()
+})
