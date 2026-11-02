@@ -302,20 +302,23 @@ async function alsPlan(page: Page) {
   })
 }
 
-test("layout: de wissel in de voet zet Blueprint aan en weer uit, en het blijft bewaard", async ({ page }) => {
+test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet Blueprint uit en dat blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
   await expect(page.locator("nav[data-menu]")).toBeVisible()
   await expect(page.locator(".bk")).toBeHidden()
-  await page.getByRole("button", { name: "Bekijk als blueprint" }).click()
+  await expect(page.getByRole("button", { name: "Bekijk als blueprint" })).toHaveCount(0)
+
+  await page.evaluate(() => localStorage.setItem("gronn-weergave", JSON.stringify({ layout: "plan" })))
+  await page.reload()
   await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await expect(page.locator(".bk")).toBeVisible()
   await expect(page.locator("nav[data-menu]")).toBeHidden()
   await expect(page.locator("h1:visible")).toHaveCount(1)
-  await page.reload()
-  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await page.getByRole("button", { name: "Klassieke layout" }).click()
+  await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
+  await page.reload()
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
 })
 

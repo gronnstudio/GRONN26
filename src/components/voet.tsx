@@ -3,7 +3,6 @@ import { BUSINESS } from "@/lib/business"
 import { Logo } from "./logo"
 import { Kopieer } from "./kopieer"
 import { T, type Tekst } from "./taal"
-import { LayoutWissel } from "./weergave"
 
 const PAGINAS: [string, Tekst][] = [
   ["/vijvers", { nl: "Vijvers", en: "Ponds" }],
@@ -107,8 +106,8 @@ export function Voet() {
         {/* het reuzenwoordmerk, met rechts in de lege ruimte KVK en BTW om te kopiëren (eigenaar, 5 okt 2026) */}
         <div className="mt-[clamp(56px,8vw,120px)] flex flex-wrap items-end justify-between gap-x-10 gap-y-6 border-t border-lijn pt-[clamp(28px,4vw,48px)]">
           <Logo className="h-auto w-full max-w-[1100px] lg:w-[68%]" />
+          {/* geen "Bekijk als blueprint" meer hier (eigenaar, 2 nov 2026); Blueprint kies je in Weergave */}
           <div className="flex flex-col items-start gap-2 text-sm lg:items-end lg:pb-[1%]">
-            <LayoutWissel className="mb-1 inline-flex h-[var(--knop-klein)] cursor-pointer items-center rounded-full border border-lijn bg-transparent px-[var(--knop-binnen-klein)] text-sm text-inkt transition-colors hover:border-oranje hover:bg-oranje hover:text-antraciet" />
             {/* Alleen voor de eigenaar: Google-login, daarna het dashboard (zie src/proxy.ts). */}
             <a
               href="/dashboard"
