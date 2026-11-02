@@ -188,6 +188,8 @@ html.plan :is(.knop, .knop-klein) { font-family: var(--font-mono); font-weight: 
 /* Elke layout zijn eigen kop, voet en voorpagina; de andere staat uit. */
 html.plan .alleen-klassiek, html:not(.plan) .alleen-plan { display: none !important; }
 html { touch-action: pan-x pan-y; }
+/* Het dashboard mag wel zoomen (Nick, 2 nov 2026: "kan daar nu niet scrollen of zoomen"). */
+html:has([data-links]) { touch-action: manipulation; }
 
 body {
   margin: 0;
@@ -563,4 +565,20 @@ html.en .t-en { display: contents; }
   body:has(.offerte-druk) { background: #fff !important; color: #202020 !important; }
   body:has(.offerte-druk) > *:not(main), body:has(.offerte-druk) main > *:not(.offerte-druk) { display: none !important; }
   .offerte-druk { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* Het dashboard op de telefoon (Nick, 2 nov 2026: "de helft is niet leesbaar omdat het van het
+   scherm valt"). Smallere marges, één kolom, en brede tabellen scrollen zelf opzij in plaats van
+   van het scherm te vallen. Buiten de lagen, zodat het de px-8 van de pagina's overschrijft. */
+@media (max-width: 1023.98px) {
+  .crm main { padding-inline: 16px; }
+  .crm main.grid { grid-template-columns: minmax(0, 1fr); }
+  /* relative: anders ontsnappen de sr-only labels in de cellen aan het scrollvak en wordt de hele pagina breder. */
+  .crm table { position: relative; display: block; max-width: 100%; overflow-x: auto; }
+}
+@media (max-width: 639.98px) {
+  .crm-cijfers { grid-auto-flow: row; grid-template-columns: 1fr 1fr; }
+  .crm-cijfers > * { border-inline-width: 0 !important; }
+  .crm-cijfers > :nth-child(odd):not(:last-child) { border-inline-end-width: 1px !important; }
+  .crm-cijfers > :nth-child(n + 3) { border-top: 1px solid var(--lijn); }
 }

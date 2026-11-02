@@ -15,8 +15,10 @@ import { OPEN_ZOEKVENSTER, Zoekvenster, type Treffer } from "./zoekvenster"
 // dashboard helemaal vervangen door een nieuw systeem"): links een
 // inklapbare zijbalk met alle onderdelen, "+ Nieuw" en zoeken (⌘K), in het
 // midden de pagina, rechts Grønn als zijpaneel (⌘J). Grønn weet op een
-// klantkaart vanzelf over welke klant het gaat. Alleen voor desktop
-// (eigenaar, 29 okt 2026: "enkel voor desktop").
+// klantkaart vanzelf over welke klant het gaat. Eerst alleen voor desktop;
+// sinds 2 nov 2026 ook op de telefoon (Nick: "kun je dashboard ook mobiel
+// vriendelijk maken"): onder lg een balk bovenaan, de zijbalk schuift als
+// menu over de pagina en Grønn vult het scherm.
 const KEY = "gronn-crm-schil"
 /** Opent Grønn van buiten de schil, bijvoorbeeld vanaf een klantkaart. */
 export const OPEN_GRØNN = "crm-gronn"
@@ -25,11 +27,14 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
   const pad = usePathname()
   const actief = onderdeelVan(pad)
   const klantId = /^\/dashboard\/klanten\/([^/]+)/.exec(pad)?.[1]
-  // De intake van een tuin wordt op locatie op de telefoon ingevuld
-  // (docs/architecture/intake.md §4). Alleen daar valt de zijbalk op een smal
-  // scherm weg; de rest van het systeem blijft voor de desktop.
-  const veld = /^\/dashboard\/klanten\/[^/]+\/tuin\/[^/]+$/.test(pad)
   const [smal, setSmal] = useState(false)
+  const [menu, setMenu] = useState(false)
+  // Na het kiezen van een onderdeel gaat het menu op de telefoon vanzelf dicht.
+  const [vorigPad, setVorigPad] = useState(pad)
+  if (vorigPad !== pad) {
+    setVorigPad(pad)
+    setMenu(false)
+  }
   const [grønn, setGrønn] = useState(false)
   const [nieuw, setNieuw] = useState(false)
 
@@ -74,14 +79,32 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
   }, [smal])
 
   const item = "flex h-[36px] items-center gap-3 rounded-[8px] px-2.5 text-[14px] font-medium transition-colors"
+  // Op de telefoon is het menu altijd breed: ingeklapt heeft daar geen zin.
+  const klein = smal && !menu
   return (
-    <div className={`crm grid min-h-svh grid-cols-[auto_minmax(0,1fr)_auto] print:block print:min-w-0 print:bg-white ${veld ? "max-lg:block lg:min-w-[1200px]" : "min-w-[1200px]"}`}>
+    <div className="crm min-h-svh print:block print:min-w-0 print:bg-white lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto]">
+      <div className="sticky top-0 z-30 flex h-[56px] items-center gap-2 border-b border-lijn bg-zijbalk px-3 print:hidden lg:hidden">
+        <button type="button" onClick={() => setMenu(true)} aria-expanded={menu} aria-controls="crm-menu" className="crm-knop-rand crm-knop-klein">
+          <Icoon naam="uitklappen" className="size-[16px]" /> Menu
+        </button>
+        <Link href="/dashboard" className="flex flex-1 items-center justify-center" aria-label="GRØNN Studio, naar Vandaag">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/woordmerk-primair.svg" alt="" className="hidden h-[14px] w-auto dark:block" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/woordmerk-primair-antraciet.svg" alt="" className="h-[14px] w-auto dark:hidden" />
+        </Link>
+        <button type="button" onClick={() => dispatchEvent(new Event(OPEN_ZOEKVENSTER))} className="crm-knop-rand crm-knop-klein">
+          <Icoon naam="zoek" className="size-[16px]" /> Zoeken
+        </button>
+      </div>
+      {menu && <div aria-hidden onClick={() => setMenu(false)} className="fixed inset-0 z-40 bg-black/40 lg:hidden" />}
       <aside
+        id="crm-menu"
         aria-label="Systeem"
-        className={`sticky top-0 flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden ${smal ? "w-[64px]" : "w-[248px]"} ${veld ? "max-lg:hidden" : ""}`}
+        className={`flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:w-[min(300px,85vw)] max-lg:shadow-[0_0_40px_rgb(0_0_0/.3)] lg:sticky lg:top-0 ${menu ? "" : "max-lg:hidden"} ${klein ? "lg:w-[64px]" : "lg:w-[248px]"}`}
       >
-        <div className={`flex h-[60px] shrink-0 items-center ${smal ? "justify-center" : "justify-between pr-2 pl-4"}`}>
-          {!smal && (
+        <div className={`flex h-[60px] shrink-0 items-center ${klein ? "justify-center" : "justify-between pr-2 pl-4"}`}>
+          {!klein && (
             <Link href="/dashboard" className="flex items-center gap-2.5" aria-label="GRØNN Studio, naar Vandaag">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/woordmerk-primair.svg" alt="" className="hidden h-[16px] w-auto dark:block" />
@@ -89,18 +112,21 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
               <img src="/brand/woordmerk-primair-antraciet.svg" alt="" className="h-[16px] w-auto dark:hidden" />
             </Link>
           )}
-          <button type="button" onClick={() => zetSmal(!smal)} aria-label={smal ? "Zijbalk uitklappen" : "Zijbalk inklappen"} title={smal ? "Uitklappen" : "Inklappen"} className="crm-knop-stil crm-knop-klein size-[32px] !px-0">
-            <Icoon naam={smal ? "uitklappen" : "inklappen"} className="size-[16px]" />
+          <button type="button" onClick={() => zetSmal(!smal)} aria-label={klein ? "Zijbalk uitklappen" : "Zijbalk inklappen"} title={klein ? "Uitklappen" : "Inklappen"} className="crm-knop-stil crm-knop-klein size-[32px] !px-0 max-lg:hidden">
+            <Icoon naam={klein ? "uitklappen" : "inklappen"} className="size-[16px]" />
+          </button>
+          <button type="button" onClick={() => setMenu(false)} aria-label="Menu sluiten" className="crm-knop-stil crm-knop-klein size-[32px] !px-0 lg:hidden">
+            <Icoon naam="sluit" className="size-[16px]" />
           </button>
         </div>
 
-        <div className={`grid gap-1.5 ${smal ? "px-2" : "px-3"}`}>
-          <button type="button" onClick={() => setNieuw(!nieuw)} aria-expanded={nieuw} aria-controls="crm-nieuw" className={`crm-knop w-full ${smal ? "!px-0" : "justify-start"}`} title="Nieuw">
+        <div className={`grid gap-1.5 ${klein ? "px-2" : "px-3"}`}>
+          <button type="button" onClick={() => setNieuw(!nieuw)} aria-expanded={nieuw} aria-controls="crm-nieuw" className={`crm-knop w-full ${klein ? "!px-0" : "justify-start"}`} title="Nieuw">
             <Icoon naam="plus" className="size-[16px]" />
-            <span className={smal ? "sr-only" : ""}>Nieuw</span>
+            <span className={klein ? "sr-only" : ""}>Nieuw</span>
           </button>
           {nieuw && (
-            <ul id="crm-nieuw" className={`crm-paneel m-0 list-none p-1 shadow-[0_12px_30px_-12px_rgb(0_0_0/.25)] ${smal ? "absolute top-[100px] left-[60px] z-20 w-[260px]" : ""}`}>
+            <ul id="crm-nieuw" className={`crm-paneel m-0 list-none p-1 shadow-[0_12px_30px_-12px_rgb(0_0_0/.25)] ${klein ? "absolute top-[100px] left-[60px] z-20 w-[260px]" : ""}`}>
               {NIEUW.map((n) => (
                 <li key={n.naam}>
                   <Link href={n.href} onClick={() => setNieuw(false)} className="block rounded-[6px] px-3 py-2 hover:bg-accent/10">
@@ -111,17 +137,17 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
               ))}
             </ul>
           )}
-          <button type="button" onClick={() => dispatchEvent(new Event(OPEN_ZOEKVENSTER))} className={`${item} w-full cursor-pointer border border-lijn bg-vlak text-gedempt hover:text-inkt ${smal ? "justify-center !px-0" : ""}`} title="Zoeken (⌘K)">
+          <button type="button" onClick={() => dispatchEvent(new Event(OPEN_ZOEKVENSTER))} className={`${item} w-full cursor-pointer border border-lijn bg-vlak text-gedempt hover:text-inkt ${klein ? "justify-center !px-0" : ""}`} title="Zoeken (⌘K)">
             <Icoon naam="zoek" className="size-[16px]" />
-            <span className={smal ? "sr-only" : "flex-1 text-left"}>Zoeken</span>
-            {!smal && <kbd className="crm-cijfer text-[11px]">⌘K</kbd>}
+            <span className={klein ? "sr-only" : "flex-1 text-left"}>Zoeken</span>
+            {!klein && <kbd className="crm-cijfer text-[11px]">⌘K</kbd>}
           </button>
         </div>
 
-        <nav aria-label="Onderdelen" className={`mt-4 flex-1 overflow-y-auto ${smal ? "px-2" : "px-3"}`}>
+        <nav aria-label="Onderdelen" className={`mt-4 flex-1 overflow-y-auto ${klein ? "px-2" : "px-3"}`}>
           {GROEPEN.map((g) => (
             <div key={g.naam} className="mb-4">
-              <p className={`crm-label m-0 mb-1 px-2.5 ${smal ? "sr-only" : ""}`}>{g.naam}</p>
+              <p className={`crm-label m-0 mb-1 px-2.5 ${klein ? "sr-only" : ""}`}>{g.naam}</p>
               <ul className="m-0 grid list-none gap-0.5 p-0">
                 {g.onderdelen.map((o) => {
                   const hier = actief?.href === o.href
@@ -131,14 +157,14 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
                       <Link
                         href={o.href}
                         aria-current={hier ? "page" : undefined}
-                        title={smal ? o.naam : undefined}
-                        className={`${item} relative ${smal ? "justify-center !px-0" : ""} ${hier ? "bg-vlak text-inkt shadow-[0_1px_0_rgb(0_0_0/.04)] ring-1 ring-lijn" : "text-gedempt hover:bg-vlak/70 hover:text-inkt"}`}
+                        title={klein ? o.naam : undefined}
+                        className={`${item} relative ${klein ? "justify-center !px-0" : ""} ${hier ? "bg-vlak text-inkt shadow-[0_1px_0_rgb(0_0_0/.04)] ring-1 ring-lijn" : "text-gedempt hover:bg-vlak/70 hover:text-inkt"}`}
                       >
                         <Icoon naam={o.icoon} className={`size-[18px] ${hier ? "text-accent-tekst" : ""}`} />
-                        <span className={smal ? "sr-only" : "flex-1"}>{o.naam}</span>
+                        <span className={klein ? "sr-only" : "flex-1"}>{o.naam}</span>
                         {n > 0 && (
-                          <span className={smal ? "absolute top-1 right-1 size-[8px] rounded-full bg-let" : "crm-badge crm-badge-let h-[20px] px-1.5 crm-cijfer"}>
-                            <span className={smal ? "sr-only" : ""}>{n}</span>
+                          <span className={klein ? "absolute top-1 right-1 size-[8px] rounded-full bg-let" : "crm-badge crm-badge-let h-[20px] px-1.5 crm-cijfer"}>
+                            <span className={klein ? "sr-only" : ""}>{n}</span>
                           </span>
                         )}
                       </Link>
@@ -150,25 +176,25 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
           ))}
         </nav>
 
-        <div className={`grid gap-1 border-t border-lijn py-3 ${smal ? "px-2" : "px-3"}`}>
-          <button type="button" onClick={() => zetGrønn(!grønn)} aria-pressed={grønn} className={`${item} w-full cursor-pointer ${grønn ? "bg-vlak text-inkt ring-1 ring-lijn" : "text-gedempt hover:bg-vlak/70 hover:text-inkt"} ${smal ? "justify-center !px-0" : ""}`} title="Grønn (⌘J)">
+        <div className={`grid gap-1 border-t border-lijn py-3 ${klein ? "px-2" : "px-3"}`}>
+          <button type="button" onClick={() => (zetGrønn(!grønn), setMenu(false))} aria-pressed={grønn} className={`${item} w-full cursor-pointer ${grønn ? "bg-vlak text-inkt ring-1 ring-lijn" : "text-gedempt hover:bg-vlak/70 hover:text-inkt"} ${klein ? "justify-center !px-0" : ""}`} title="Grønn (⌘J)">
             <Icoon naam="grønn" className={`size-[18px] ${grønn ? "text-accent-tekst" : ""}`} />
-            <span className={smal ? "sr-only" : "flex-1 text-left"}>Vraag Grønn</span>
-            {!smal && <kbd className="crm-cijfer text-[11px]">⌘J</kbd>}
+            <span className={klein ? "sr-only" : "flex-1 text-left"}>Vraag Grønn</span>
+            {!klein && <kbd className="crm-cijfer text-[11px]">⌘J</kbd>}
           </button>
-          {!smal && (
+          {!klein && (
             <div className="mt-1 px-1">
               <KleurKeuze />
             </div>
           )}
-          <div className={`mt-1 flex ${smal ? "flex-col items-center gap-1" : "gap-1 px-1"}`}>
+          <div className={`mt-1 flex ${klein ? "flex-col items-center gap-1" : "gap-1 px-1"}`}>
             <Link href="/" className="crm-knop-stil crm-knop-klein" title="Naar de website">
               <Icoon naam="site" className="size-[15px]" />
-              <span className={smal ? "sr-only" : ""}>Site</span>
+              <span className={klein ? "sr-only" : ""}>Site</span>
             </Link>
             <a href="/api/uitloggen" className="crm-knop-stil crm-knop-klein" title="Uitloggen">
               <Icoon naam="uit" className="size-[15px]" />
-              <span className={smal ? "sr-only" : ""}>Uitloggen</span>
+              <span className={klein ? "sr-only" : ""}>Uitloggen</span>
             </a>
           </div>
         </div>
@@ -177,7 +203,7 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
       <div className="@container min-w-0"><KlantTabs namen={namen} />{children}<Melding /></div>
 
       {grønn && (
-        <aside aria-label="Grønn" className={`sticky top-0 flex h-svh w-[380px] flex-col border-l border-lijn bg-vlak print:hidden ${veld ? "max-lg:hidden" : ""}`}>
+        <aside aria-label="Grønn" className="flex h-svh flex-col border-l border-lijn bg-vlak print:hidden max-lg:fixed max-lg:inset-0 max-lg:z-50 lg:sticky lg:top-0 lg:w-[380px]">
           <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-lijn px-4">
             <span className="flex items-center gap-2 font-semibold">
               <Icoon naam="grønn" className="size-[18px] text-accent-tekst" /> Grønn

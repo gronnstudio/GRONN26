@@ -123,8 +123,8 @@ export default async function Catalogus({ searchParams }: { searchParams: Promis
           </tbody>
         </table>
 
-        <form id="nieuw" action={nieuwCatalogusItem} className="mt-8 grid grid-cols-[2fr_1.3fr_80px_100px_100px_1fr_auto] items-end gap-2 crm-paneel p-5">
-          <p className={`${lbl} col-span-7 m-0 text-gedempt`}>Nieuw item</p>
+        <form id="nieuw" action={nieuwCatalogusItem} className="mt-8 grid grid-cols-2 items-end gap-2 crm-paneel p-5 lg:grid-cols-[2fr_1.3fr_80px_100px_100px_1fr_auto]">
+          <p className={`${lbl} col-span-full m-0 text-gedempt`}>Nieuw item</p>
           <input name="naam" required placeholder="bijv. Waaltjes antraciet" aria-label="Naam" className={`crm-veld`} />
           <select name="soort" aria-label="Soort" className="crm-veld">
             {(Object.keys(SOORTEN) as Soort[]).map((s) => (
