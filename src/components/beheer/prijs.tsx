@@ -255,7 +255,18 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     const uit = reken(faseInvoer({ ...invoer, fasen }, naam))
     return { naam, uren: fasen.find((f) => f.naam === naam)?.uren ?? 0, totaal: uit.totaal }
   })
+  // Wat nog in geen fase zit (meestal arbeid zonder uren per fase) gaat naar verhouding over de fasen,
+  // zodat de fasen samen altijd het totaal zijn (Nick, 2 nov 2026). Uren per fase gaan daar voor.
   const faseRest = u.totaal - faseSom.reduce((t, f) => t + f.totaal, 0)
+  const faseBasis = faseSom.reduce((t, f) => t + f.totaal, 0)
+  if (faseBasis > 0 && faseRest !== 0) {
+    let over = faseRest
+    faseSom.forEach((f, i) => {
+      const deel = i === faseSom.length - 1 ? over : Math.round((faseRest * f.totaal) / faseBasis)
+      f.totaal += deel
+      over -= deel
+    })
+  }
   const zetFaseUren = (naam: string, tekst: string) => {
     const uren = Math.max(0, leesMilli(tekst) ?? 0)
     setFasen(fasen.some((f) => f.naam === naam) ? fasen.map((f) => (f.naam === naam ? { ...f, uren } : f)) : [...fasen, { naam, uren }])
@@ -565,6 +576,19 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         <aside className="flex flex-col gap-4 self-start crm-paneel p-5 xl:sticky xl:top-6">
           <p className={`${lbl} m-0`}>Voor de klant</p>
           <dl className="m-0 grid gap-2 text-[14px]">
+            {faseSom.length > 0 && (
+              <div className="grid gap-1 border-b border-lijn pb-2 text-[13px]">
+                <p className="m-0 text-[12px] text-gedempt">Per fase, incl. btw. Samen is dit het totaal.</p>
+                {faseSom.map((f) => (
+                  <div key={f.naam} className="grid grid-cols-[1fr_72px_auto] items-center gap-2">
+                    <span>{f.naam}</span>
+                    <input aria-label={`Uren ${f.naam}`} inputMode="decimal" defaultValue={f.uren ? toonDecimaal(f.uren, 3) : ""} placeholder="uren" onBlur={(e) => zetFaseUren(f.naam, e.target.value)} className="crm-veld crm-cijfer !py-1" />
+                    <span className="crm-cijfer text-right">{toonEuro(f.totaal)}</span>
+                  </div>
+                ))}
+                {Math.abs(faseRest) > 2 && <p className="m-0 text-[12px] text-gedempt">Arbeid zonder uren per fase ({toonEuro(faseRest)}) is naar verhouding over de fasen verdeeld.</p>}
+              </div>
+            )}
             <Rij t="Arbeid" b={u.arbeid} />
             <Rij t="Materiaal en overig" b={u.materiaal} />
             {/* Per fase, excl. btw (Nick, 2 nov 2026): telt precies op tot Materiaal en overig. */}
@@ -575,24 +599,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               <Rij key={b.tarief} t={`Btw ${b.tarief / 100} % over ${toonEuro(b.grondslag)}`} b={b.btw} />
             ))}
             <Rij t="Totaal incl. btw" b={u.totaal} vet />
-            {faseSom.length > 0 && (
-              <div className="grid gap-1 border-y border-lijn py-2 text-[13px]">
-                <p className="m-0 text-[12px] text-gedempt">Per fase, incl. btw. Vul de uren per fase in, dan telt de arbeid mee.</p>
-                {faseSom.map((f) => (
-                  <div key={f.naam} className="grid grid-cols-[1fr_72px_auto] items-center gap-2">
-                    <span>{f.naam}</span>
-                    <input aria-label={`Uren ${f.naam}`} inputMode="decimal" defaultValue={f.uren ? toonDecimaal(f.uren, 3) : ""} placeholder="uren" onBlur={(e) => zetFaseUren(f.naam, e.target.value)} className="crm-veld crm-cijfer !py-1" />
-                    <span className="crm-cijfer text-right">{toonEuro(f.totaal)}</span>
-                  </div>
-                ))}
-                {Math.abs(faseRest) > 2 && (
-                  <div className="grid grid-cols-[1fr_auto] gap-2 text-gedempt">
-                    <span>Nog niet in een fase (arbeid of regels)</span>
-                    <span className="crm-cijfer text-right">{toonEuro(faseRest)}</span>
-                  </div>
-                )}
-              </div>
-            )}
             {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Al betaald"} b={-alBetaald} />}
             {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
           </dl>
