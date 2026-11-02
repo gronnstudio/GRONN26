@@ -48,15 +48,15 @@ export default async function Planning({ searchParams }: { searchParams: Promise
     <>
       <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag." />
       <main className="mx-auto grid max-w-[1440px] @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
-        <div className="grid gap-8">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8">
           <Maandkalender maand={/^\d{4}-\d{2}$/.test(m ?? "") ? m! : nu.slice(0, 7)} nu={nu} klus={klus} eigen={stand.planning} />
           {feed && <AgendaLink url={feed} />}
           <AgendaKnop items={[...klus.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })), ...stand.planning.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum }))]} />
-          <div>
+          <div className="min-w-0">
           {dagen.length === 0 ? (
             <Leeg>Nog niets gepland. Zet rechts een klus, levering of bezoek in de planning.</Leeg>
           ) : (
-            <ol className="m-0 grid list-none gap-6 p-0">
+            <ol className="m-0 grid list-none grid-cols-[minmax(0,1fr)] gap-6 p-0">
               {dagen.map((d) => (
                 <li key={d}>
                   <h2 className={`m-0 mb-2 text-[14px] font-semibold first-letter:uppercase ${d === nu ? "text-accent-tekst" : ""}`}>
@@ -72,7 +72,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
                           {p.href ? (
                             <Link href={p.href} className="crm-link min-w-0 flex-1 truncate">{p.wat}</Link>
                           ) : (
-                            <span className="min-w-0 flex-1">{p.wat}</span>
+                            <span className="min-w-0 flex-1 break-words">{p.wat}</span>
                           )}
                           {p.soort === "Planning" && (
                             <form action={planWeg.bind(null, p.id)}>
@@ -126,7 +126,7 @@ function Maandkalender({ maand, nu, klus, eigen }: { maand: string; nu: string; 
           const hier = klus.filter((p) => p.datum === datum)
           const zelf = eigen.filter((p) => p.datum === datum)
           return (
-            <div key={datum} className={`grid min-h-[96px] content-start gap-1 rounded-[10px] border p-1.5 text-[12px] ${datum === nu ? "border-accent" : "border-lijn"}`}>
+            <div key={datum} className={`grid min-h-[64px] min-w-0 content-start gap-1 rounded-[10px] border p-1 text-[11px] sm:min-h-[96px] sm:p-1.5 sm:text-[12px] ${datum === nu ? "border-accent" : "border-lijn"}`}>
               <span className={datum === nu ? "font-semibold text-accent-tekst" : "text-gedempt"}>{i + 1}</span>
               {hier.map((p, j) => (
                 <Link key={j} href={p.href ?? "#"} title={p.wat} className="flex min-w-0 items-center gap-1 rounded-[6px] px-1 hover:bg-black/5">

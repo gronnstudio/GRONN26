@@ -87,7 +87,7 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
           <input name="naam" required autoFocus={!!nieuw} placeholder="Naam" aria-label="Naam" className={`${veld} w-[200px]`} />
           <input name="telefoon" placeholder="Telefoon" aria-label="Telefoon" className={`${veld} w-[140px]`} />
           <input name="email" type="email" placeholder="E-mail" aria-label="E-mail" className={`${veld} w-[190px]`} />
-          <input name="wat" placeholder="Wat wil de klant?" aria-label="Wat" className={`${veld} w-[260px]`} />
+          <input name="wat" placeholder="Wat wil de klant?" aria-label="Wat" className={`${veld} w-full sm:w-[260px]`} />
           <input name="plaats" placeholder="Plaats" aria-label="Plaats" className={`${veld} w-[120px]`} />
           <select name="bron" aria-label="Bron" defaultValue="" className={veld}>
             <option value="" disabled>Hoe binnen?</option>
@@ -104,9 +104,9 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
             <Link href={basis({ weergave: undefined })} aria-current={!tabel ? "page" : undefined} className={`rounded-full px-4 py-1.5 ${!tabel ? "bg-accent text-op-accent" : "text-gedempt hover:text-inkt"}`}>Pijplijn</Link>
             <Link href={basis({ weergave: "tabel" })} aria-current={tabel ? "page" : undefined} className={`rounded-full px-4 py-1.5 ${tabel ? "bg-accent text-op-accent" : "text-gedempt hover:text-inkt"}`}>Tabel</Link>
           </nav>
-          <form className="flex items-center gap-2" action="/dashboard/klanten">
+          <form className="flex flex-wrap items-center gap-2" action="/dashboard/klanten">
             {tabel && <input type="hidden" name="weergave" value="tabel" />}
-            <input name="q" defaultValue={q} placeholder="Zoek op naam, plaats, tag…" aria-label="Zoeken" className={`${veld} w-[260px]`} />
+            <input name="q" defaultValue={q} placeholder="Zoek op naam, plaats, tag…" aria-label="Zoeken" className={`${veld} w-full sm:w-[260px]`} />
             <select name="soort" defaultValue={soort ?? ""} aria-label="Soort contact" className={veld}>
               <option value="">Alle soorten</option>
               {KLANT_SOORTEN.map((s) => (

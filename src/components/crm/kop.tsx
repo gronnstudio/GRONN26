@@ -35,13 +35,13 @@ export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: R
 /** Tabbladen als gewone links met ?tab=, zodat je een tab kunt delen of bewaren. */
 export function Tabs({ tabs, actief, href, label }: { tabs: { id: string; naam: string; aantal?: number }[]; actief: string; href: (id: string) => string; label: string }) {
   return (
-    <nav aria-label={label} className="flex gap-1 border-b border-lijn px-8 print:hidden">
+    <nav aria-label={label} className="flex gap-1 overflow-x-auto border-b border-lijn px-4 sm:px-8 print:hidden">
       {tabs.map((t) => (
         <Link
           key={t.id}
           href={href(t.id)}
           aria-current={t.id === actief ? "page" : undefined}
-          className={`-mb-px border-b-2 px-3 py-2.5 text-[14px] font-semibold ${t.id === actief ? "border-accent text-inkt" : "border-transparent text-gedempt hover:text-inkt"}`}
+          className={`-mb-px shrink-0 border-b-2 px-3 py-2.5 text-[14px] font-semibold whitespace-nowrap ${t.id === actief ? "border-accent text-inkt" : "border-transparent text-gedempt hover:text-inkt"}`}
         >
           {t.naam}
           {t.aantal ? <span className="crm-cijfer ml-1.5 text-[12px] text-gedempt">{t.aantal}</span> : null}
@@ -71,7 +71,7 @@ export function Cijfer({ waarde, label, href, let: aandacht, uitleg }: { waarde:
 
 /** Een rij cijfers in één paneel, met lijnen ertussen. */
 export function Cijfers({ children }: { children: React.ReactNode }) {
-  return <div className="@container crm-paneel grid auto-cols-fr grid-flow-col divide-x divide-lijn overflow-hidden">{children}</div>
+  return <div className="@container crm-paneel crm-cijfers grid auto-cols-fr grid-flow-col divide-x divide-lijn overflow-hidden">{children}</div>
 }
 
 export function Leeg({ children }: { children: React.ReactNode }) {
@@ -100,7 +100,7 @@ export function FaseBalk({ fasen, nu }: { fasen: readonly string[]; nu: string }
   const stappen = fasen.filter((f) => f !== "Verloren")
   const i = stappen.indexOf(nu)
   return (
-    <ol aria-label="Fase" className="m-0 flex list-none gap-1 p-0 text-[11px] font-semibold">
+    <ol aria-label="Fase" className="m-0 flex list-none flex-wrap gap-1 p-0 text-[11px] font-semibold">
       {stappen.map((f, j) => (
         <li
           key={f}
