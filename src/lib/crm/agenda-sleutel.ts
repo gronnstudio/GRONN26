@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 
 // De geheime sleutel van de agendalink (Google Agenda haalt hem zelf op, zonder inloggen).
 // Afgeleid van AUTH_SECRET, dus geen nieuwe instelling in Vercel. Wie de link heeft, ziet de
-// planning (voornaam + wat er gebeurt), geen adres, telefoon of e-mail.
+// planning (voornaam + wat er gebeurt); e-mail en telefoon worden uit vrije tekst gehaald.
 export function agendaSleutel() {
   const geheim = process.env.AUTH_SECRET ?? ""
   if (geheim.length < 16) return ""
@@ -12,6 +12,6 @@ export function agendaSleutel() {
 
 export function klopt(gegeven: string) {
   const s = agendaSleutel()
-  if (!s || gegeven.length !== s.length) return false
+  if (!s || !/^[0-9a-f]{40}$/.test(gegeven)) return false
   return timingSafeEqual(Buffer.from(gegeven), Buffer.from(s))
 }

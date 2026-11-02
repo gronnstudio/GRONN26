@@ -19,10 +19,18 @@ export function klusdagen(klanten: Klant[]): Klusdag[] {
         const uit: Klusdag[] = []
         for (let x = new Date(`${d.van}T12:00:00Z`); iso(x) <= d.tot; x.setUTCDate(x.getUTCDate() + 1)) {
           if (x.getUTCDay() === 0 || x.getUTCDay() === 6) continue
-          uit.push({ id: `${f.id}-${iso(x)}`, datum: iso(x), wie, wat: `${wie}: ${f.naam || "nog invullen"}`, kleur: KLEUREN[ki % KLEUREN.length], href: `/dashboard/klanten/${k.id}/calculatie/${c.id}` })
+          uit.push({ id: `${c.id}-${f.id}-${iso(x)}`, datum: iso(x), wie, wat: `${wie}: ${f.naam || "nog invullen"}`, kleur: KLEUREN[ki % KLEUREN.length], href: `/dashboard/klanten/${k.id}/calculatie/${c.id}` })
         }
         return uit
       })
     }),
   )
+}
+
+// Voor de agendalink: e-mailadressen en telefoonnummers uit vrije tekst halen, voor het geval
+// ze in "Wat en waar" zijn getypt. De link is geheim, maar hoort geen contactgegevens te dragen.
+export function zonderContact(tekst: string) {
+  return tekst
+    .replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g, "…")
+    .replace(/\+?\d[\d\s-]{7,}\d/g, (m) => (m.replace(/\D/g, "").length >= 9 ? "…" : m))
 }

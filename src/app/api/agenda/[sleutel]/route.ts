@@ -1,6 +1,6 @@
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { leesStand } from "@/lib/beheer/stand"
-import { klusdagen } from "@/lib/crm/agenda"
+import { klusdagen, zonderContact } from "@/lib/crm/agenda"
 import { klopt } from "@/lib/crm/agenda-sleutel"
 import { agendaBestand } from "@/lib/crm/project"
 
@@ -14,8 +14,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ sleutel
   if (!klopt(sleutel.replace(/\.ics$/, ""))) return new Response("Niet gevonden", { status: 404 })
   const [klanten, stand] = await Promise.all([leesKlanten(), leesStand()])
   const items = [
-    ...klusdagen(klanten).map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })),
-    ...stand.planning.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })),
+    ...klusdagen(klanten).map((p) => ({ id: p.id, titel: zonderContact(p.wat), van: p.datum, tot: p.datum })),
+    ...stand.planning.map((p) => ({ id: p.id, titel: zonderContact(p.wat), van: p.datum, tot: p.datum })),
   ]
   const ics = agendaBestand(items).replace("CALSCALE:GREGORIAN", "CALSCALE:GREGORIAN\r\nX-WR-CALNAME:GRØNN planning\r\nX-WR-TIMEZONE:Europe/Amsterdam")
   return new Response(ics, { headers: { "Content-Type": "text/calendar; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } })
