@@ -1,4 +1,4 @@
-import { get, put } from "@vercel/blob"
+import { leesJson, opslagAan, schrijfJson } from "@/lib/crm/opslag"
 
 // Wat het dashboard onthoudt (eigenaar, 10 okt 2026: gepost aanvinken,
 // aanvragen op één plek, planning per week). Eén JSON-bestand in een privé
@@ -57,18 +57,11 @@ const PAD = "dashboard/stand.json"
 const LEEG: Stand = { gepost: {}, aanvragen: [], planning: [], bestellingen: [], bonnen: [] }
 const DERTIG_DAGEN = 30 * 24 * 60 * 60 * 1000
 
-export const opslagAan = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+export { opslagAan }
 
 export async function leesStand(): Promise<Stand> {
-  if (!opslagAan()) return LEEG
-  try {
-    const r = await get(PAD, { access: "private", useCache: false })
-    if (!r?.stream) return LEEG
-    const s = (await new Response(r.stream).json()) as Partial<Stand>
-    return { ...LEEG, ...s }
-  } catch {
-    return LEEG
-  }
+  const s = await leesJson<Partial<Stand>>(PAD, () => LEEG)
+  return { ...LEEG, ...s }
 }
 
 export async function schrijfStand(s: Stand) {
@@ -77,7 +70,7 @@ export async function schrijfStand(s: Stand) {
   s.aanvragen = s.aanvragen.filter((a) => new Date(a.datum).getTime() > grens).slice(0, 200)
   // Bestellingen en bonnen zijn administratie (fiscale bewaarplicht): die blijven staan.
   s.planning = s.planning.sort((a, b) => a.datum.localeCompare(b.datum)).slice(-200)
-  await put(PAD, JSON.stringify(s), { access: "private", allowOverwrite: true, addRandomSuffix: false, contentType: "application/json" })
+  await schrijfJson(PAD, s)
 }
 
 export const nieuweId = () => crypto.randomUUID()

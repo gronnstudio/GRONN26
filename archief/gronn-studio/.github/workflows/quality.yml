@@ -1,0 +1,107 @@
+# The quality gate AGENTS.md §1 already treats as a merge requirement
+# ("a failed or missing quality check is a manual merge prohibition") —
+# now it actually exists. Everything here is a real check: build,
+# types, lint, the WCAG contrast auditor over the real token blocks,
+# and Playwright driving the production build with axe-core.
+name: quality
+
+on:
+  pull_request:
+    # ready_for_review erbij: een draft draait niet (zie `if:` hieronder),
+    # dus de eerste echte run komt op het moment dat hij klaar is.
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  # Manual escape hatch: on 2 Aug 2026 GitHub stopped delivering
+  # pull_request events for an open PR (pushes, a close/reopen — no run
+  # was ever created), which under AGENTS.md §1 blocks merging. This
+  # lets the gate be run by hand against any ref when that happens.
+  workflow_dispatch:
+
+# Zuinig met minuten (23 sep 2026: de 2.000 gratis minuten waren op,
+# acht dagen voor het einde van de maand). Een nieuwe push op een PR
+# stopt de run die er nog voor liep; op main loopt elke run af.
+concurrency:
+  group: quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  quality:
+    # Geen run op een draft. Een overgeslagen job telt als geslaagd, dus
+    # de check ontbreekt niet — hij draait zodra de PR klaar is.
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    # 20 was al krap vóór het menuwiel: de laatste acht groene runs op
+    # main zaten tussen 13m41s en 16m50s, dus de marge was soms nog geen
+    # drie minuten. Het wiel bracht er een spec bij die op vier breedtes
+    # meet, en toen liep de job op 20m16s tegen zijn eigen plafond —
+    # geannuleerd, niet gefaald, met de e2e-stap halverwege.
+    #
+    # 30 geeft die marge terug zonder een kapotte run eindeloos te laten
+    # hangen. Als dit getal nog eens omhoog moet, is de suite zelf aan de
+    # beurt en niet het plafond.
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Twee commits: op een PR is HEAD de merge-commit en HEAD^1 de
+          # basis, op main is HEAD^1 de vorige stand. Genoeg voor de diff.
+          fetch-depth: 2
+      # Alleen documentatie veranderd (Markdown, docs/)? Dan is er niets
+      # te bouwen of te testen, en slaagt de check in een halve minuut in
+      # plaats van vijftien. De check blijft wel bestaan — AGENTS.md telt
+      # een ontbrekende `quality` als een merge-verbod.
+      - name: Wat is er veranderd
+        id: soort
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          code=$(git diff --name-only HEAD^1 HEAD | grep -vE '(\.md$|^docs/)' || true)
+          if [ -n "$code" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; else echo "code=false" >> "$GITHUB_OUTPUT"; echo "Alleen documentatie — bouwen en testen overgeslagen."; fi
+      - uses: actions/setup-node@v4
+        if: steps.soort.outputs.code == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        if: steps.soort.outputs.code == 'true'
+        run: npm ci
+      - name: Typecheck
+        if: steps.soort.outputs.code == 'true'
+        run: npx tsc --noEmit
+      - name: Lint
+        if: steps.soort.outputs.code == 'true'
+        run: npx eslint src scripts tests
+      - name: Contrast (WCAG AA over real token blocks)
+        if: steps.soort.outputs.code == 'true'
+        run: node scripts/check-contrast.mjs
+      - name: Build
+        if: steps.soort.outputs.code == 'true'
+        run: npm run build
+        env:
+          # De maillijst met de checklist vooraf staat in productie achter
+          # een go-live-vlag (src/lib/nieuwsbrief.ts). CI bouwt hem AAN,
+          # zodat nieuwsbrief.spec.ts en de axe-scans de blokken en
+          # /checklist echt zien in plaats van ze over te slaan.
+          NIEUWSBRIEF_ZICHTBAAR: "1"
+      - name: Install Playwright Chromium
+        if: steps.soort.outputs.code == 'true'
+        run: npx playwright install chromium --with-deps
+      - name: E2E + axe (production build)
+        if: steps.soort.outputs.code == 'true'
+        run: npx playwright test
+        env:
+          CI: "true"
+          # next-auth refuses to run in production without a secret, and
+          # `next start` is production — so without this every route under
+          # /dashboard answered 500 and the panel's sign-in gate, which is
+          # what the unauthenticated suite can actually reach, was never
+          # rendered at all. The specs were passing over an error page.
+          #
+          # It authenticates nobody. There is no Google OAuth client in
+          # CI, so no session can be minted with it; all it does is let
+          # next-auth boot far enough to return the gate. The value is
+          # committed on purpose — a real one here would be a secret in a
+          # public workflow file, and it would buy nothing.
+          NEXTAUTH_SECRET: "ci-gate-only-not-a-real-secret"

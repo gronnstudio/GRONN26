@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "./fixtures"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek", "/journaal", "/journaal/vijver-winterklaar-maken", "/journaal/levende-tuin"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek", "/journaal", "/journaal/vijver-winterklaar-maken", "/journaal/levende-tuin", "/journaal/egelvriendelijke-tuin"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
@@ -193,7 +193,8 @@ test("borderpakket: de knop vult het pakket in en de mail noemt het", async ({ p
   await page.click('label:has(input[name="budget"]) >> nth=0')
   await page.fill('textarea[name="bericht"]', "Een strook van zes meter langs het terras.")
   await page.click('button[type="submit"]')
-  await expect(page.getByRole("heading", { name: /Dank je/ })).toBeVisible()
+  await expect(page).toHaveURL(/\/kennismaken\/bedankt$/)
+  await expect(page.getByRole("heading", { name: /Bedankt/ })).toBeVisible()
   expect(body).toContain("Borderpakket: Plukborder")
   expect(body).toContain("Pakket: Plukborder")
 })
@@ -309,29 +310,33 @@ test("layout: Klassiek is de standaard, ook voor wie bij de 50/50 Blueprint kree
       sessionStorage.setItem("gezet", "1")
     }
   })
-  await page.goto("/")
+  await page.goto("/over")
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
   await expect(page.locator("html")).toHaveClass(/\bdonker\b/)
-  await page.getByRole("button", { name: "Bekijk als blueprint" }).first().click()
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.click('#megamenu label:has(input[value="plan"])')
   await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/\bplan\b/)
 })
 
-test("layout: de wissel in de voet zet Blueprint aan en weer uit, en het blijft bewaard", async ({ page }) => {
+test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet Blueprint uit en dat blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
   await expect(page.locator("nav[data-menu]")).toBeVisible()
   await expect(page.locator(".bk")).toBeHidden()
-  await page.getByRole("button", { name: "Bekijk als blueprint" }).click()
+  await expect(page.getByRole("button", { name: "Bekijk als blueprint" })).toHaveCount(0)
+
+  await page.evaluate(() => localStorage.setItem("gronn-weergave", JSON.stringify({ layout: "plan" })))
+  await page.reload()
   await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await expect(page.locator(".bk")).toBeVisible()
   await expect(page.locator("nav[data-menu]")).toBeHidden()
   await expect(page.locator("h1:visible")).toHaveCount(1)
-  await page.reload()
-  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await page.getByRole("button", { name: "Klassieke layout" }).click()
+  await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
+  await page.reload()
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
 })
 

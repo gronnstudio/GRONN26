@@ -9,8 +9,7 @@ import { SOORTEN, leesUren, schrijfUren, type Regel, type Soort } from "@/lib/be
 async function wijzig(f: (r: Regel[]) => Regel[]) {
   if (!(await isEigenaar((await cookies()).get(KOEKJE)?.value))) throw new Error("Niet ingelogd")
   await schrijfUren(f(await leesUren()))
-  revalidatePath("/dashboard/uren")
-  revalidatePath("/dashboard")
+  revalidatePath("/dashboard", "layout")
 }
 
 const tekst = (d: FormData, k: string, n: number) => String(d.get(k) ?? "").trim().slice(0, n)

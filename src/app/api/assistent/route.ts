@@ -1,24 +1,34 @@
 import Anthropic from "@anthropic-ai/sdk"
 import { NextResponse, type NextRequest } from "next/server"
 import { geheugen } from "@/lib/beheer/geheugen"
+import { leesKlanten } from "@/lib/beheer/klanten"
+import { leesStand } from "@/lib/beheer/stand"
+import { crmOverzicht, klantContext } from "@/lib/crm/context"
+import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { KOEKJE, isEigenaar } from "@/lib/eigenaar"
 import { ZONDER_CLAUDE, zelfAntwoord } from "@/lib/beheer/zelf"
 
 // De assistent "Grønn" (spreek uit: greun): Nicks vraag (getypt of ingesproken) naar Claude, met het geheugen van
 // GRØNN als context. Alleen voor de ingelogde eigenaar; de sleutel staat in
 // ANTHROPIC_API_KEY op Vercel. Hij leest en adviseert, hij doet niets zelf.
-const PERSOON = `Je heet Grønn (uitgesproken als "greun"), de assistent en chef-staf van Nick Peters (GRØNN Studio). Je antwoordt in het Nederlands, kort en direct, alsof je het hardop zegt: hooguit vier zinnen, geen opsommingstekens, geen markdown, bedragen voluit leesbaar. Spreek hem aan met Nick.
-Gebruik alleen de gegevens hieronder. Weet je iets niet, zeg dat dan; verzin nooit klanten, bedragen of afspraken. Je voert niets uit: je adviseert, en Nick beslist. Bewaak zijn gouden regel: functioneel en eenvoudig.`
+const PERSOON = `Je heet Grønn (uitgesproken als "greun"), de assistent en chef-staf van Nick Peters (GRØNN Studio). Je antwoordt in het Nederlands, kort en direct, alsof je het hardop zegt: hooguit vier zinnen, geen opsommingstekens, geen markdown, bedragen voluit leesbaar. Praat als een Limburgse vakman tegen een collega: gewone spreektaal, korte zinnen, "je" en "we", geen ambtelijke of computerachtige woorden. Reken mee met alle calculaties, versies en fasen die je hieronder ziet; tel ze zelf op als Nick daarom vraagt. Spreek hem aan met Nick.
+Gebruik alleen de gegevens hieronder; bij verschil tussen het geheugen en het CRM gaat het CRM voor, dat is de actuele stand. Weet je iets niet, zeg dat dan; verzin nooit klanten, bedragen of afspraken. Je voert niets uit: je adviseert, en Nick beslist. Bewaak zijn gouden regel: functioneel en eenvoudig.`
 
 type Beurt = { rol: "nick" | "grønn"; tekst: string }
 
 export async function POST(request: NextRequest) {
   if (!(await isEigenaar(request.cookies.get(KOEKJE)?.value))) return new NextResponse("Niet ingelogd", { status: 401 })
-  const { vraag, eerder = [] } = (await request.json()) as { vraag?: string; eerder?: Beurt[] }
+  const { vraag, eerder = [], klantId } = (await request.json()) as { vraag?: string; eerder?: Beurt[]; klantId?: string }
   if (!vraag?.trim()) return NextResponse.json({ antwoord: "Ik hoorde niets." })
-  const zelf = zelfAntwoord(vraag)
+  const klanten = await leesKlanten()
+  // Op een klantkaart gaat de vraag altijd naar Claude, met die klant erbij.
+  const zelf = klantId ? null : zelfAntwoord(vraag, klanten, (await leesStand()).aanvragen.filter((a) => !a.klaar).length)
   if (zelf) return NextResponse.json({ antwoord: zelf })
   if (!process.env.ANTHROPIC_API_KEY) return NextResponse.json({ antwoord: ZONDER_CLAUDE })
+
+  // Het CRM erbij: alle lopende klanten kort, en de open klant uitgebreid.
+  const open = typeof klantId === "string" ? klanten.find((k) => k.id === klantId) : undefined
+  const crm = `${crmOverzicht(klanten)}${open ? `\n\n${klantContext(open, await leesVragenlijst())}` : ""}`
 
   const client = new Anthropic()
   try {
@@ -28,7 +38,7 @@ export async function POST(request: NextRequest) {
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       output_config: { effort: "low" },
-      system: [{ type: "text", text: `${PERSOON}\n\nVandaag: ${new Date().toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}\n\n${geheugen()}` }],
+      system: [{ type: "text", text: `${PERSOON}\n\nVandaag: ${new Date().toLocaleDateString("nl-NL", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}\n\n${geheugen()}\n\n${crm}` }],
       messages: [
         ...eerder.slice(-8).map((b) => ({ role: b.rol === "nick" ? ("user" as const) : ("assistant" as const), content: b.tekst })),
         { role: "user", content: vraag.slice(0, 2000) },

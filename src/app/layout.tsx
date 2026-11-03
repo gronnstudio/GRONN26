@@ -47,7 +47,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 
 // Klassiek is weer voor iedereen de standaard (eigenaar, 27 okt 2026: "Zet de
 // klassieke site terug vast en laat gebruikers zelf kiezen"); Blueprint alleen
-// als de bezoeker het zelf kiest (Weergave of de wissel in de voet). Wie bij de
+// als de bezoeker het zelf kiest in Weergave. Wie bij de
 // 50/50 van 25 okt een layout toegewezen kreeg (`toegewezen`) en daarna niet
 // zelf koos, gaat één keer terug naar Klassiek.
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de

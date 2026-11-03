@@ -1,9 +1,9 @@
 import "server-only"
-import { PROJECTEN, TODOS } from "@/lib/beheer/data"
+import { TODOS } from "@/lib/beheer/data"
 import { DOCUMENTEN } from "@/lib/data/legal"
 
 // Wat de assistent weet: dezelfde feiten als de GRØNN Vault (gronn-jarvis.zip,
-// 6 okt 2026), plus de live gegevens van het dashboard. Alleen op de server.
+// 6 okt 2026), plus de vaste to-do's. De klanten komen live uit het CRM (src/lib/crm/context.ts). Alleen op de server.
 const VAST = `
 # GRØNN Studio
 Eenmanszaak van Nick Peters, Kelderstraat 32, 6171 GB Stein. KvK 42072154, btw NL005473265B04.
@@ -27,8 +27,7 @@ Voorwaarden en privacy vastgesteld 6 okt 2026, nog niet door een jurist getoetst
 `
 
 export function geheugen() {
-  const projecten = PROJECTEN.map((p) => `- ${p.naam} (${p.wat}${p.plaats ? ", " + p.plaats : ""}): fase ${p.fase}${p.bedrag ? `, € ${p.bedrag.toFixed(2)}` : ""}. Volgende: ${p.volgende}`).join("\n")
   const todos = TODOS.map((t) => `- ${t.wat} — ${t.waarom} Kosten: ${t.kosten}${t.dringend ? " (eerst)" : ""}`).join("\n")
   const docs = DOCUMENTEN.map((d) => `- ${d.doc.title}: ${d.doc.status}, versie ${d.doc.updated}`).join("\n")
-  return `${VAST}\n# Projecten nu\n${projecten}\n\n# Te doen\n${todos}\n\n# Documenten\n${docs}`
+  return `${VAST}\n# Te doen\n${todos}\n\n# Documenten\n${docs}`
 }

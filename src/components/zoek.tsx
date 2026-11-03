@@ -147,6 +147,14 @@ export function Zoek({ index }: { index: Treffer[] }) {
     const t = setTimeout(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)), 0)
     let g = 0
     const toets = (e: KeyboardEvent) => {
+      // Het systeem achter de login heeft zijn eigen zoekvenster en sneltoetsen; alleen Backspace = terug geldt daar ook (Nick, 2 nov 2026).
+      if (location.pathname.startsWith("/dashboard")) {
+        if (e.key === "Backspace" && !e.metaKey && !e.ctrlKey && !e.altKey && !typt(e.target) && !document.querySelector("dialog[open]") && toetsenAan()) {
+          e.preventDefault()
+          history.back()
+        }
+        return
+      }
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault()
         if (doos.current?.open) sluit()

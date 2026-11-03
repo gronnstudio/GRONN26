@@ -41,6 +41,9 @@ const OUD: [string, string][] = [
 const nextConfig: NextConfig = {
   // Foto's als AVIF waar de browser dat kan (kleiner bij dezelfde scherpte), anders WebP.
   images: { formats: ["image/avif", "image/webp"] },
+  // Prijslijsten van leveranciers als CSV naar de catalogus (29 okt 2026):
+  // die van Tuinvariant is 0,8 MB, de standaardgrens is 1 MB. Vercel zelf stopt bij 4,5 MB.
+  experimental: { serverActions: { bodySizeLimit: "4mb" } },
   async headers() {
     return [
       // Basisbeveiliging (21 okt 2026): geen inbedding op andere sites, geen

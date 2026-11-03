@@ -1,0 +1,137 @@
+/* GRØNN Command Center — the OS palette and its few hand-written pieces.
+
+   One dark palette, not the site's two Hours. The OS frames photographs
+   that are already mostly green, so the ground is warm near-black and the
+   green is kept for state: active, selected, healthy, focus. Every pair
+   below was measured (WCAG, on all three grounds):
+
+     text   #efeeea  13.7–16.2 : 1
+     text-2 #aeada6   7.1– 8.3 : 1
+     text-3 #8b8a84   4.6– 5.4 : 1   (smallest text allowed: 11px mono)
+     green  #b8c5a8   8.8–10.4 : 1   (salie, the brand's light green)
+     green2 #8fa889   6.2– 7.3 : 1
+     attn   #db6923   4.6– 5.4 : 1   (aarde-oranje: "needs you", nothing else)
+
+   Never a pure black ground (CLAUDE.md, palette rules): #121211 sits at
+   Material's floor, warmed one step toward the brand's antraciet. */
+
+.os {
+  --os-ground: #121211;
+  --os-surface: #1a1a18;
+  --os-raised: #22221f;
+  --os-text: #efeeea;
+  --os-text-2: #aeada6;
+  --os-text-3: #8b8a84;
+  --os-line: rgb(239 238 234 / 0.1);
+  --os-green: #b8c5a8;
+  --os-green-2: #8fa889;
+  --os-forest: #23483a;
+  --os-attention: #db6923;
+  --focus-ring: #b8c5a8;
+
+  /* The site's own tokens, pointed at the OS palette, so site elements
+     reused inside the OS (logo, water route) draw on OS grounds. */
+  --background: var(--os-ground);
+  --surface: var(--os-surface);
+  --foreground: var(--os-text);
+  --muted: var(--os-text-3);
+
+  background: var(--os-ground);
+  color: var(--os-text);
+  min-height: 100svh;
+  color-scheme: dark;
+}
+
+.os ::selection {
+  background: var(--os-forest);
+  color: var(--os-text);
+}
+
+/* Not on text fields: the palette's input sits in a framed row that
+   already shows where typing goes. */
+.os :focus-visible:not(input) {
+  outline: 2px solid var(--os-green);
+  outline-offset: 2px;
+}
+
+/* Mono telemetry label: the architectural voice of the OS. */
+.os-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--os-text-3);
+}
+
+/* A hairline with survey ticks at both ends. */
+.os-rule {
+  position: relative;
+  height: 1px;
+  background: var(--os-line);
+}
+.os-rule::before,
+.os-rule::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 7px;
+  background: var(--os-text-3);
+}
+.os-rule::before { left: 0; }
+.os-rule::after { right: 0; }
+
+/* ── The Core ─────────────────────────────────────────────────────────── */
+
+.os-core-ring { fill: none; stroke: var(--os-line); stroke-width: 1; }
+.os-core-tick { stroke: var(--os-text-3); stroke-width: 1; }
+.os-core-arc { fill: none; stroke: var(--os-green-2); stroke-width: 2; stroke-linecap: round; }
+.os-core-stale { fill: var(--os-attention); }
+.os-core-arc-strong { fill: none; stroke: var(--os-green); stroke-width: 3; stroke-linecap: round; }
+.os-core-link { stroke: var(--os-green); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0; transition: opacity 240ms ease; }
+.os-core-link[data-on="true"] { opacity: 0.8; }
+.os-core-text { fill: var(--os-text); }
+.os-core-text-2 { fill: var(--os-text-2); }
+.os-core-text-3 { fill: var(--os-text-3); }
+
+.os-node-dot { fill: var(--os-ground); stroke: var(--os-text-2); stroke-width: 1.5; transition: stroke 200ms ease, fill 200ms ease; }
+.os-node[data-health="healthy"] .os-node-dot { stroke: var(--os-green); }
+.os-node[data-health="attention"] .os-node-dot { stroke: var(--os-attention); }
+.os-node[data-health="done"] .os-node-dot { stroke: var(--os-text-3); }
+.os-node[data-active="true"] .os-node-dot { fill: var(--os-forest); stroke: var(--os-green); }
+.os-node-progress { fill: none; stroke: var(--os-green); stroke-width: 2; stroke-linecap: round; }
+
+/* The attention node breathes; that is the only thing on the Core that
+   moves on its own, because it is the only thing that wants you. */
+@keyframes os-breathe {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(1.35); }
+}
+.os-node-halo {
+  fill: none;
+  stroke: var(--os-attention);
+  stroke-width: 1;
+  opacity: 0.25;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="reduced"]) .os-node-halo {
+    animation: os-breathe 3.2s ease-in-out infinite;
+  }
+}
+
+/* Photos in the OS carry the site's photo screen, so a project photo
+   looks the same here as on gronn.studio. */
+.os .photo-glass { pointer-events: none; }
+
+/* The water route reused from the project page. On the site its water
+   runs in aarde-oranje; in the OS orange means "needs you", so the water
+   runs in green here instead. */
+.os-system {
+  --gronn-ember: var(--os-green-2);
+  --ember-text: var(--os-green);
+  /* The pipe bed: a quiet channel the green water runs in. */
+  --line: #3a3a35;
+}

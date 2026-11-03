@@ -35,3 +35,30 @@ export async function haalBetaling(id: string) {
   if (!r.ok) return null
   return (await r.json()) as MollieBetaling
 }
+
+// Voor Dashboard › Geld: de laatste betalingen uit Mollie, om aan een klant of
+// factuur te koppelen (Nick, 31 okt 2026). Alleen lezen; koppelen gebeurt in het CRM.
+export type MollieRegel = { id: string; status: MollieStatus; bedrag: number; omschrijving: string; datum: string; betaald?: string; naam?: string }
+
+export async function lijstBetalingen(aantal = 50): Promise<MollieRegel[] | null> {
+  if (!mollieAan()) return null
+  const r = await fetch(`${API}?limit=${aantal}`, { headers: kop(), cache: "no-store" })
+  if (!r.ok) return null
+  const j = (await r.json()) as { _embedded?: { payments?: { id: string; status: MollieStatus; amount: { value: string }; description: string; createdAt: string; paidAt?: string; details?: { consumerName?: string; cardHolder?: string } }[] } }
+  return (j._embedded?.payments ?? []).map((b) => ({
+    id: b.id,
+    status: b.status,
+    bedrag: Number(b.amount.value),
+    omschrijving: b.description,
+    datum: b.createdAt,
+    betaald: b.paidAt,
+    naam: b.details?.consumerName ?? b.details?.cardHolder,
+  }))
+}
+
+export async function haalRegel(id: string) {
+  const r = await fetch(`${API}/${encodeURIComponent(id)}`, { headers: kop(), cache: "no-store" })
+  if (!r.ok) return null
+  const b = (await r.json()) as { id: string; status: MollieStatus; amount: { value: string }; description: string; createdAt: string; paidAt?: string }
+  return { id: b.id, status: b.status, bedrag: Number(b.amount.value), omschrijving: b.description, datum: b.createdAt, betaald: b.paidAt }
+}

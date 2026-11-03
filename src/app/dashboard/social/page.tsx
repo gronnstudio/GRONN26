@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import Link from "next/link"
+import { Kop } from "@/components/crm/kop"
 import { Bewaar } from "@/components/beheer/bewaar"
 import { Kopieer } from "@/components/beheer/kopieer"
 import { leesStand, opslagAan } from "@/lib/beheer/stand"
@@ -10,27 +10,24 @@ import { POSTS, POSTTIJDEN, TEGELS, VASTGEZET, VOLGORDE, tegelVan, type Post } f
 // koppeling met Instagram zelf: posten via de API vraagt een Meta-zakelijk
 // account en een app-keuring, en Nick wil elke post zelf plaatsen. Hier staan
 // het raster, de beelden en de captions klaar om te downloaden en te kopiëren.
-export const metadata: Metadata = {
-  title: { absolute: "Social · Dashboard · GRØNN Studio" },
-  robots: { index: false, follow: false },
-}
+export const metadata: Metadata = { title: "Social" }
 
-const lbl = "text-[10px] font-semibold uppercase tracking-[.18em]"
+const lbl = "crm-label"
 const beeld = (p: Post, i = 1) => `/social/${p.map}/${i}.jpg`
 
 function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepost?: string }) {
   return (
-    <li id={id} className="scroll-mt-6 rounded-[18px] border border-lijn p-5">
+    <li id={id} className="scroll-mt-6 crm-paneel p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <span className={`${lbl} opacity-70`}>{kop}</span>
+        <span className={`${lbl} text-gedempt`}>{kop}</span>
         {p.map && opslagAan() ? (
           <form action={zetGepost.bind(null, p.map, !gepost)}>
-            <button className={`knop-klein border ${gepost ? "border-oranje text-oranje-tekst" : "border-inkt/30"}`}>
+            <button className={`knop-klein border ${gepost ? "border-accent text-let" : "border-inkt/30"}`}>
               {gepost ? `Gepost ${gepost} ✓` : "Gepost?"}
             </button>
           </form>
         ) : (
-          (gepost ?? p.gepost) && <span className={`${lbl} text-oranje-tekst`}>Gepost {gepost ?? p.gepost}</span>
+          (gepost ?? p.gepost) && <span className={`${lbl} text-let`}>Gepost {gepost ?? p.gepost}</span>
         )}
       </div>
       <h2 className="syne m-0 mt-2 text-[22px] leading-[1.15]">{p.titel}</h2>
@@ -47,17 +44,17 @@ function Kaart({ p, id, kop, gepost }: { p: Post; id: string; kop: string; gepos
               </li>
             ))}
           </ul>
-          <p className="m-0 mt-1 text-[11px] opacity-50">
+          <p className="m-0 mt-1 text-[11px] text-gedempt">
             {p.reel ? "Dit is de cover. " : "Tik op een slide om hem te openen, of op ↓ om hem te bewaren."}
             {p.reel && (
-              <a href={`/social/${p.map}/reel.mp4`} target="_blank" rel="noopener" className="font-semibold text-oranje-tekst opacity-100">
+              <a href={`/social/${p.map}/reel.mp4`} target="_blank" rel="noopener" className="font-semibold text-let opacity-100">
                 Open de reel ↗
               </a>
             )}
           </p>
         </>
       ) : (
-        <p className="m-0 mt-3 text-[13px] opacity-70">Nog niet klaar. {p.nodig}</p>
+        <p className="m-0 mt-3 text-[13px] text-gedempt">Nog niet klaar. {p.nodig}</p>
       )}
       {p.muziek && <p className="m-0 mt-3 text-[13px]">🎵 Muziek: zoek in Instagram op “{p.muziek}”</p>}
       {p.caption && (
@@ -80,15 +77,12 @@ export default async function Social() {
   // Op Instagram staat de nieuwste linksboven.
   const raster = POSTS.map((p, i) => ({ p, n: i + 1 })).reverse()
   return (
-    <div data-links className="min-h-svh bg-grond text-inkt">
-      <header className="flex items-center justify-between gap-4 border-b border-lijn px-5 py-4 md:px-8">
-        <span className={`${lbl} text-oranje-tekst`}>Dashboard · Social</span>
-        <Link href="/dashboard" className="text-[13px] opacity-70 hover:opacity-100">← Dashboard</Link>
-      </header>
-      <main className="mx-auto grid max-w-[1200px] gap-10 px-5 py-8 md:px-8 lg:grid-cols-[420px_minmax(0,1fr)]">
+    <>
+      <Kop pad={[{ naam: "Bedrijf" }, { naam: "Social" }]} titel={"Social"} />
+      <main className="mx-auto grid max-w-[1440px] @min-[1000px]:grid-cols-[400px_minmax(0,1fr)] gap-10 px-8 py-6">
         <section>
-          <h1 className="syne m-0 text-[clamp(36px,4vw,48px)] leading-[1.05]">The KNIGHT move</h1>
-          <p className="m-0 mt-3 text-[14px] leading-[1.55] opacity-75">
+          <h2 className="m-0 text-[15px] font-semibold">The KNIGHT move</h2>
+          <p className="m-0 mt-3 text-[14px] leading-[1.55] text-gedempt">
             Vijf tegels, steeds in deze volgorde. Op drie kolommen staat dezelfde tegel dan een paardensprong verder, nooit
             naast of onder zichzelf. Elke vijfde post is een quote.
           </p>
@@ -121,7 +115,7 @@ export default async function Social() {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={beeld(p)} alt={p.titel} className="size-full object-cover" />
                   ) : (
-                    <span className="flex size-full flex-col justify-end p-2 text-[11px] font-semibold leading-[1.2] text-[#202020]">
+                    <span className="flex size-full flex-col justify-end p-2 text-[11px] font-semibold leading-[1.2] text-op-accent">
                       {p.titel}
                     </span>
                   )}
@@ -132,27 +126,27 @@ export default async function Social() {
               )
             })}
           </div>
-          <p className="m-0 mt-2 text-[11px] opacity-50">Nieuwste linksboven. Tik op een vak voor beelden en caption.</p>
-          <p className={`${lbl} m-0 mt-8 opacity-60`}>Wanneer posten</p>
+          <p className="m-0 mt-2 text-[11px] text-gedempt">Nieuwste linksboven. Tik op een vak voor beelden en caption.</p>
+          <p className={`${lbl} m-0 mt-8 text-gedempt`}>Wanneer posten</p>
           <ul className="m-0 mt-3 grid list-none grid-cols-3 gap-3 p-0">
             {POSTTIJDEN.map((t) => (
-              <li key={t.dag} className="rounded-[18px] border border-lijn p-4">
-                <span className={`${lbl} opacity-60`}>{t.dag}</span>
+              <li key={t.dag} className="crm-paneel p-4">
+                <span className={`${lbl}`}>{t.dag}</span>
                 <b className="syne mt-1 block text-[22px] tabular-nums">{t.tijd}</b>
-                <span className="mt-1 block text-[12px] leading-[1.4] opacity-60">{t.waarom}</span>
+                <span className="mt-1 block text-[12px] leading-[1.4] text-gedempt">{t.waarom}</span>
               </li>
             ))}
           </ul>
-          <p className="m-0 mt-2 text-[11px] opacity-50">Gemiddelden. Kijk in Instagram Insights wanneer jouw volgers online zijn zodra je die data hebt.</p>
+          <p className="m-0 mt-2 text-[11px] text-gedempt">Gemiddelden. Kijk in Instagram Insights wanneer jouw volgers online zijn zodra je die data hebt.</p>
         </section>
         <section>
-          <p className={`${lbl} m-0 opacity-60`}>Vastgezet · zet eerst 03 vast, dan 02, dan 01</p>
+          <p className={`${lbl} m-0`}>Vastgezet · zet eerst 03 vast, dan 02, dan 01</p>
           <ul className="m-0 mt-3 grid list-none gap-3 p-0">
             {VASTGEZET.map((p, i) => (
               <Kaart key={p.titel} p={p} id={`vast-${i + 1}`} kop="📌 Vastgezet" gepost={p.map ? stand.gepost[p.map] : undefined} />
             ))}
           </ul>
-          <p className={`${lbl} m-0 mt-10 opacity-60`}>In volgorde van posten</p>
+          <p className={`${lbl} m-0 mt-10 text-gedempt`}>In volgorde van posten</p>
           <ul className="m-0 mt-3 grid list-none gap-3 p-0">
             {POSTS.map((p, i) => {
               const t = TEGELS[tegelVan(i + 1)]
@@ -161,6 +155,6 @@ export default async function Social() {
           </ul>
         </section>
       </main>
-    </div>
+    </>
   )
 }
