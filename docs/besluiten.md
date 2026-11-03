@@ -18,7 +18,7 @@ Stand: 29 okt 2026.
 | 9 okt 2026 | **Geen previews per branch** op Vercel, alleen productie. Een preview alleen op verzoek. | Kosten (Vercel Pro zo laag mogelijk). |
 | 21 okt 2026 | **CI één keer per commit**, met caches; docs-only draait niet. | Minder Actions-minuten, geen geforceerde herhalingen. |
 | 31 okt 2026 | **Archief van de vorige site in deze repo** onder `archief/gronn-studio/`, buiten de build, openbaar (Nick: "laat maar alles public"). Klantgegevens vervangen door voorbeelden. | Alles op één plek. [ADR 0009](architecture/decisions/0009-archief-van-de-vorige-site.md) |
-| 29 okt 2026 | **Versies en releases**: zie [ADR 0010](architecture/decisions/0010-versies-en-releases.md). | Nick: "there is also no release". |
+| 3 nov 2026 | **Versie = datum van de release** (`vJJJJ.MM.DD`), CHANGELOG.md in de hoofdmap, eerste release `v2026.10.29`. | Nick koos het op een kaart. [ADR 0010](architecture/decisions/0010-versies-en-releases.md) |
 | 3 okt 2026 | Opleveringen als losse bestanden, nooit gezipt. | Nick. |
 | 30 sep 2026 | Geen halfwerkende tussenoplossingen laten zien; alleen het werkende resultaat of één duidelijke blokkade. | "Bespaar me deze tussenoplossingen." |
 
