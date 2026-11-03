@@ -125,7 +125,90 @@ Een egel die je overdag ziet rondlopen, of een heel kleine egel laat in de herfs
 Ik maak tuinen in Stein en omgeving die goed zijn voor mens en dier: met doorgangen in de schutting, een vijver met een flauwe rand, een rommelhoek die er mooi uitziet en planten die insecten aantrekken. Met een vaste prijs vooraf. Stuur een foto van je tuin via WhatsApp naar 06 181 180 14, dan kijk ik mee.
 `
 
+function pad(naam: string, alt: string, bijschrift: string): Foto {
+  return { src: `/blog/${naam}.jpg`, width: 1200, height: 1600, alt, bijschrift }
+}
+
+// Nicks eigen foto's (Kasteelpark Elsloo, namen bevestigd 3 nov 2026),
+// verkleind en zonder metadata.
+const PADDENSTOEL_FOTO: Record<string, Foto> = {
+  "kleine paddenstoelen in de border": pad("kleine-paddenstoelen-in-border", "Twee kleine bruine paddenstoelen tussen kluiten aarde, van onderen gefotografeerd", "Kleine paddenstoelen in kale aarde: de bodem leeft."),
+  "zwavelzwam aan de stamvoet": pad("zwavelzwam-aan-stamvoet", "Een grote oranje-gele zwavelzwam aan de voet van een boom, tussen struiken", "Zwavelzwam aan de voet van een boom in Kasteelpark Elsloo."),
+  "honingzwam op een stronk": pad("honingzwam-op-stronk", "Honderden honingkleurige paddenstoelen in trossen op een omgevallen stronk in het bos", "Honingzwam op een stronk in Kasteelpark Elsloo."),
+  "oesterzwam op een stam": pad("oesterzwam-op-stam", "Een grote lichte oesterzwam aan de stam van een boom, met klimop ernaast", "Oesterzwam op een stam in Kasteelpark Elsloo."),
+}
+
+const PADDENSTOEL_OMSLAG = pad("paddenstoelen-op-mos", "Twee bruine paddenstoelen op een bemoste stam, met herfstblad op de voorgrond", "Paddenstoelen op mos in Kasteelpark Elsloo.")
+
+// [foto: naam] in de tekst wordt een fotoblok.
+function metFotos(tekst: string): Blok[] {
+  return tekst.split(/\n*\[foto: ([^\]]+)\]\n*/).flatMap((deel, i) =>
+    i % 2 ? [{ soort: "foto" as const, foto: PADDENSTOEL_FOTO[deel] }] : deel.trim() ? blokkenUit(deel.trim()) : [],
+  )
+}
+
+const PADDENSTOELEN = `November is de maand van de paddenstoelen. Na een paar natte weken staan ze ineens overal: tussen het mos, in de border, op een oude stronk. Veel mensen schrikken ervan en willen ze zo snel mogelijk weg. Meestal is dat niet nodig. Een paddenstoel is het zichtbare stukje van een schimmel die al jaren onder de grond aan het werk is.
+
+## Wat een paddenstoel eigenlijk is
+
+De paddenstoel zelf is alleen de vrucht. De echte schimmel is een netwerk van dunne draden in de grond, in blad of in hout. Die draden breken dood materiaal af en maken er weer voeding van voor je planten. Veel schimmels werken ook samen met de wortels van bomen en struiken: ze brengen water en voeding aan, en krijgen daar suiker voor terug.
+
+Zie je paddenstoelen in je border of gazon, dan zegt dat vooral: hier leeft de bodem.
+
+[foto: kleine paddenstoelen in de border]
+
+## Laat ze gewoon staan
+
+Paddenstoelen in gras en borders doen je planten geen kwaad. Na een paar dagen tot een week zijn ze vanzelf weer weg. Wegmaaien of uittrekken helpt niet, want de schimmel zit in de grond en komt volgend jaar gewoon terug. Wil je ze toch weg, harken dan alleen de paddenstoelen zelf. Laat de grond met rust.
+
+Een paar dingen om op te letten:
+
+- Eet nooit een paddenstoel uit je tuin. Veel soorten lijken op elkaar en sommige zijn erg giftig.
+- Heb je kleine kinderen of een hond die alles in de bek neemt, haal ze dan weg zodra je ze ziet.
+- Gooi ze bij het gft-afval, niet op de composthoop als je twijfelt wat het is.
+
+## Wanneer een paddenstoel wél iets zegt
+
+Er is één plek waar je beter even goed kijkt: aan of rond de voet van een levende boom. Sommige schimmels leven niet van dood hout, maar van een boom die nog leeft.
+
+[foto: zwavelzwam aan de stamvoet]
+
+Grote oranje of gele plaatzwammen aan een stam, zoals op deze foto, zijn vaak een teken van rot in het hout. Je ziet het van buiten pas laat. Staat zo'n boom dicht bij je huis, een pad of een speelplek, laat dan een boomverzorger kijken of hij nog stevig staat.
+
+[foto: honingzwam op een stronk]
+
+De honingzwam is de bekendste boosdoener. Hij komt in de herfst in grote trossen op stronken en rond de voet van bomen en struiken. Onder de grond verspreidt hij zich met zwarte draden die op schoenveters lijken, en zo kan hij van een oude stronk naar een gezonde haag of boom kruipen. Zie je trossen honingkleurige paddenstoelen, witte schimmel onder de schors of die zwarte veters in de grond, dan is het verstandig om de stronk en de grote wortels weg te halen.
+
+## Dood hout is ook goed
+
+Een oude stronk of een stapel takken in een hoek van de tuin is een feest voor schimmels, kevers en egels. Ligt hij niet tegen een gezonde haag of boom aan, laat hem dan liggen. Het is een van de makkelijkste manieren om je tuin levendiger te maken.
+
+[foto: oesterzwam op een stam]
+
+## Kort samengevat
+
+- Paddenstoelen in gras en border: laten staan, ze zijn een teken van een gezonde bodem.
+- Niet eten, en weghalen als kinderen of huisdieren erbij kunnen.
+- Grote zwammen aan een levende boom: laat een boomverzorger kijken.
+- Trossen paddenstoelen op een stronk naast je haag: stronk en wortels eruit.
+
+Twijfel je over een boom of een stronk in je tuin? Stuur me een foto via WhatsApp, dan kijk ik even mee. Moet er iets gebeuren, dan krijg je vooraf een vaste prijs.`
+
 const RECENT: Stuk[] = [
+  {
+    slug: "paddenstoelen-in-de-tuin",
+    titel: "Paddenstoelen in je tuin: goed teken of reden tot zorg?",
+    beschrijving: "Na een natte herfst schieten overal paddenstoelen op. Meestal betekent dat een gezonde bodem. Soms vertelt een paddenstoel je dat een boom ziek is.",
+    datum: "2026-11-03",
+    rubriek: "Seizoen",
+    leestijd: leestijdVan(PADDENSTOELEN),
+    beeld: PADDENSTOEL_OMSLAG,
+    blokken: metFotos(PADDENSTOELEN),
+    bronnen: [
+      "BNNVARA Vroege Vogels. (z.d.). Tip: paddestoelen in je tuin. https://www.bnnvara.nl/vroegevogels/artikelen/tip-paddestoelen-in-je-tuin",
+      "Royal Horticultural Society. (z.d.). Honey fungus. https://www.rhs.org.uk/disease/honey-fungus",
+    ],
+  },
   {
     slug: "egelvriendelijke-tuin",
     titel: "Een egelvriendelijke tuin: zo help je de egel de winter door",

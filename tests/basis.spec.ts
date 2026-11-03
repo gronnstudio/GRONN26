@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "./fixtures"
 
-const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek", "/journaal", "/journaal/vijver-winterklaar-maken", "/journaal/levende-tuin", "/journaal/egelvriendelijke-tuin"]
+const ROUTES = ["/", "/vijvers", "/tuinen", "/tuinen/borderpakketten", "/tuinen/borderpakketten/bestellen", "/tuinen/materialen", "/werk", "/werk/vijverrenovatie", "/werk/terras-geulle", "/over", "/kennismaken", "/faq", "/privacy", "/techniek", "/journaal", "/journaal/vijver-winterklaar-maken", "/journaal/levende-tuin", "/journaal/egelvriendelijke-tuin", "/journaal/paddenstoelen-in-de-tuin"]
 const BREEDTES = [1440, 834, 390]
 
 // De intro speelt één keer per bezoek; in tests slaan we hem over.
