@@ -1,7 +1,7 @@
 # Wijzigingen
 
 Releases van gronn.studio (site en systeem). Versie = datum van de release
-([ADR 0010](docs/architecture/decisions/0010-versies-en-releases.md), voorgesteld).
+([ADR 0010](docs/architecture/decisions/0010-versies-en-releases.md)).
 Elke PR die iets merkbaars verandert, zet een regel onder "Nog niet uitgebracht".
 De details van het CRM staan in [docs/CHANGELOG.md](docs/CHANGELOG.md).
 

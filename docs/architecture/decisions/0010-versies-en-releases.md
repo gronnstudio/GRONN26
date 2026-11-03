@@ -1,11 +1,11 @@
 # ADR 0010 · Versies en releases
 
-29 okt 2026 · **Voorgesteld** (Nick: "there is also no release"; keuze ligt bij hem)
+29 okt 2026 · **Besloten** (Nick koos "Datum: v2026.10.29", 3 nov 2026)
 
 **Vraag.** De repo had geen tags en geen releases. Wat er wanneer live ging,
 stond alleen in losse PR-titels.
 
-**Voorstel.**
+**Besluit.**
 - Versie = de datum van de release: `vJJJJ.MM.DD` (CalVer), bij twee op één dag
   `vJJJJ.MM.DD.2`. Een website heeft geen afnemers die op een versienummer
   leunen; een datum zegt meteen wanneer iets live ging.
@@ -19,3 +19,5 @@ stond alleen in losse PR-titels.
 
 **Niet gekozen.** SemVer (`v1.0.0`): de vraag "is dit groot of klein" levert
 voor een site niets op. Automatische releases per merge: te veel ruis.
+
+**Hoe.** Claude kan vanuit een sessie geen tags pushen. Claude zet de CHANGELOG klaar en geeft Nick een ingevulde link naar "Draft a new release" (`/releases/new?tag=…&target=<sha>&title=…&body=…`); Nick klikt op Publish.

@@ -15,4 +15,4 @@ Een nieuw ADR krijgt het volgende vrije nummer; een nummer wordt nooit hergebrui
 | [0007](0007-ai-stelt-voor-code-rekent.md) | Claude stelt voor, de code rekent, Nick beslist | Voorgesteld |
 | [0008](0008-gpt-als-reviewer.md) | GPT/Codex reviewt, Claude Code schrijft (was 0005) | Besloten |
 | [0009](0009-archief-van-de-vorige-site.md) | Het archief van de vorige site staat in deze repo | Besloten |
-| [0010](0010-versies-en-releases.md) | Versies en releases | Voorgesteld |
+| [0010](0010-versies-en-releases.md) | Versies en releases | Besloten |
