@@ -302,6 +302,24 @@ async function alsPlan(page: Page) {
   })
 }
 
+test("layout: Klassiek is de standaard, ook voor wie bij de 50/50 Blueprint kreeg", async ({ page }) => {
+  await page.addInitScript(() => {
+    sessionStorage.setItem("gronn-intro", "1")
+    if (!sessionStorage.getItem("gezet")) {
+      localStorage.setItem("gronn-weergave", JSON.stringify({ layout: "plan", toegewezen: 2, kleur: "donker" }))
+      sessionStorage.setItem("gezet", "1")
+    }
+  })
+  await page.goto("/over")
+  await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
+  await expect(page.locator("html")).toHaveClass(/\bdonker\b/)
+  await page.getByRole("button", { name: "Menu" }).click()
+  await page.click('#megamenu label:has(input[value="plan"])')
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await page.reload()
+  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+})
+
 test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet Blueprint uit en dat blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })

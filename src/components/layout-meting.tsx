@@ -3,23 +3,13 @@
 import { track } from "@vercel/analytics"
 import { useEffect } from "react"
 
-// 50/50 tussen Klassiek en Blueprint (eigenaar, 25 okt 2026): het
-// voorverf-script in layout.tsx kiest bij het eerste bezoek één layout en
-// bewaart die. Hier tellen we in Vercel Analytics hoeveel bezoekers welke
-// layout kregen, en per layout de klikken naar Kennismaken, WhatsApp en
-// bellen. Geen cookies; dezelfde gegevens als de gewone paginatelling.
-const KEY = "gronn-weergave"
-
+// Per layout tellen we in Vercel Analytics de klikken naar Kennismaken,
+// WhatsApp en bellen (sinds 27 okt 2026 is Klassiek weer de standaard en kiest
+// de bezoeker Blueprint zelf). Geen cookies; dezelfde gegevens als de gewone
+// paginatelling.
 export function LayoutMeting() {
   useEffect(() => {
     const layout = () => (document.documentElement.classList.contains("plan") ? "blueprint" : "klassiek")
-    try {
-      const s = JSON.parse(localStorage.getItem(KEY) || "{}")
-      if (s.toegewezen === 1) {
-        track("layout-toegewezen", { layout: layout() })
-        localStorage.setItem(KEY, JSON.stringify({ ...s, toegewezen: 2 }))
-      }
-    } catch {}
     const klik = (e: MouseEvent) => {
       const a = (e.target as Element | null)?.closest?.("a")
       const href = a?.getAttribute("href") || ""
