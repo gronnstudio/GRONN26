@@ -522,10 +522,16 @@ test.describe("betaalstand (voorwaarden: 14 dagen, dan een herinnering met 14 da
   })
 })
 
-test("geplande uren: dagen uit de planning van de laatste calculatie × 8", () => {
+test("geplande uren: dagen uit de nieuwste planning per calculatie × 8", () => {
   const k = normaliseer({ id: "k", naam: "Test" })
   expect(geplandeUren(k)).toBe(0)
   const plan = [{ id: "a", naam: "Grond", dagen: 1.5, machines: "", levering: "" }, { id: "b", naam: "Opruimen", dagen: 0.5, machines: "", levering: "" }]
   const met = { ...k, calculaties: [{ id: "c", titel: "C", aangemaakt: "2026-11-01", versies: [{ nr: 1, datum: "2026-11-01", planning: plan }] }] } as unknown as typeof k
   expect(geplandeUren(met)).toBe(16)
+  // Twee klussen tellen samen; van een herziene calculatie telt alleen de nieuwste versie.
+  const twee = { ...k, calculaties: [
+    { id: "c", titel: "C", aangemaakt: "2026-11-01", versies: [{ nr: 1, datum: "2026-11-01", planning: [{ ...plan[0], dagen: 9 }] }, { nr: 2, datum: "2026-11-02", planning: plan }] },
+    { id: "d", titel: "D", aangemaakt: "2026-11-03", versies: [{ nr: 1, datum: "2026-11-03", planning: [plan[0]] }] },
+  ] } as unknown as typeof k
+  expect(geplandeUren(twee)).toBe(28)
 })

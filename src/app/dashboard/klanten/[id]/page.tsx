@@ -113,7 +113,7 @@ async function Overzicht({ k }: { k: Klant }) {
   const urenTotaal = uren.reduce((t, r) => t + r.uren, 0)
   // Nacalculatie in het klein: wat er per gewerkt uur binnenkwam (excl. 21 % btw, schatting).
   const perUur = urenTotaal && g.gefactureerd ? g.gefactureerd / 1.21 / urenTotaal : 0
-  // Gewerkt tegenover gepland (idee uit Plancraft): de planning van de laatste calculatie × 8 uur per dag.
+  // Gewerkt tegenover gepland (idee uit Plancraft): de nieuwste planning per calculatie × 8 uur per dag.
   const gepland = geplandeUren(k)
   const deel = gepland ? Math.round((urenTotaal / gepland) * 100) : 0
   return (

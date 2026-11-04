@@ -348,10 +348,14 @@ export function betaalstand(s: Pick<Stuk, "datum" | "rond" | "herinnerd">, nu: s
 /** Uren per werkdag waarmee de planning (in dagen) naar uren gaat: één man, een volle dag. */
 export const UREN_PER_DAG = 8
 
-/** Geplande uren uit de werkplanning van de laatste calculatie; 0 als er geen planning is. */
+/**
+ * Geplande uren van de klant: per calculatie (één klus) de planning van de nieuwste versie, opgeteld.
+ * De uren uit de registratie hangen aan de klant en niet aan een klus, dus de planning telt ook over
+ * alle klussen; een herziene calculatie telt maar één keer. 0 als er geen planning is.
+ */
 export function geplandeUren(k: Klant): number {
-  const plan = laatsteCalculatie(k)?.v.planning ?? []
-  return plan.reduce((t, f) => t + f.dagen, 0) * UREN_PER_DAG
+  const dagen = k.calculaties.reduce((t, c) => t + (c.versies.at(-1)?.planning ?? []).reduce((s, f) => s + f.dagen, 0), 0)
+  return dagen * UREN_PER_DAG
 }
 
 /** De meest recente calculatieversie van een klant, als die er is. */
