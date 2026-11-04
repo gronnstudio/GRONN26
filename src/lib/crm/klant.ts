@@ -43,6 +43,8 @@ export type Stuk = {
   link?: string
   /** Gekoppelde Mollie-betaling (tr_…), zodat een betaling maar één keer telt. */
   mollie?: string
+  /** Factuur: de dag waarop de kosteloze herinnering (aanmaning) is verstuurd, jjjj-mm-dd. */
+  herinnerd?: string
 }
 
 export type Foto = {
@@ -309,6 +311,47 @@ export function geld(k: Klant) {
   const akkoord = offertes.filter((s) => s.rond).reduce((t, s) => t + s.bedrag, 0)
   const rond = (n: number) => Math.round(n * 100) / 100
   return { akkoord, teFactureren: rond(Math.max(0, akkoord - gefactureerd)), gefactureerd, betaald, open: rond(gefactureerd - betaald), offerte }
+}
+
+/**
+ * Betaaltermijn en herinnering uit de algemene voorwaarden (art. betaling): veertien dagen na
+ * factuurdatum, daarna eerst een kosteloze herinnering met weer veertien dagen. Pas als ook die
+ * termijn voorbij is, mogen rente en incassokosten. Idee uit Plancraft (4 nov 2026): open,
+ * te laat en herinnerd apart laten zien.
+ */
+export const BETAALTERMIJN = 14
+
+const dagErbij = (dag: string, n: number) => {
+  const d = new Date(`${dag.slice(0, 10)}T12:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + n)
+  return d.toISOString().slice(0, 10)
+}
+const dagenTussen = (van: string, tot: string) => Math.round((Date.parse(`${tot.slice(0, 10)}T12:00Z`) - Date.parse(`${van.slice(0, 10)}T12:00Z`)) / 86_400_000)
+
+export type Betaalstand =
+  | { stand: "betaald" }
+  | { stand: "open"; vervalt: string }
+  | { stand: "te laat"; vervalt: string; dagen: number }
+  | { stand: "herinnerd"; herinnerd: string; uiterlijk: string; voorbij: boolean }
+
+/** Waar een factuur staat op dag `nu` (jjjj-mm-dd). Offertes hebben geen betaalstand. */
+export function betaalstand(s: Pick<Stuk, "datum" | "rond" | "herinnerd">, nu: string): Betaalstand {
+  if (s.rond) return { stand: "betaald" }
+  if (s.herinnerd) {
+    const uiterlijk = dagErbij(s.herinnerd, BETAALTERMIJN)
+    return { stand: "herinnerd", herinnerd: s.herinnerd, uiterlijk, voorbij: uiterlijk < nu }
+  }
+  const vervalt = dagErbij(s.datum, BETAALTERMIJN)
+  return vervalt < nu ? { stand: "te laat", vervalt, dagen: dagenTussen(vervalt, nu) } : { stand: "open", vervalt }
+}
+
+/** Uren per werkdag waarmee de planning (in dagen) naar uren gaat: één man, een volle dag. */
+export const UREN_PER_DAG = 8
+
+/** Geplande uren uit de werkplanning van de laatste calculatie; 0 als er geen planning is. */
+export function geplandeUren(k: Klant): number {
+  const plan = laatsteCalculatie(k)?.v.planning ?? []
+  return plan.reduce((t, f) => t + f.dagen, 0) * UREN_PER_DAG
 }
 
 /** De meest recente calculatieversie van een klant, als die er is. */

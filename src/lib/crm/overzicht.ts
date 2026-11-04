@@ -1,4 +1,4 @@
-import { KLANT_FASEN, geld, gewogen, isOpen, laatsteCalculatie, type Klant, type KlantFase } from "./klant"
+import { KLANT_FASEN, betaalstand, geld, gewogen, isOpen, laatsteCalculatie, type Klant, type KlantFase } from "./klant"
 
 // Wat Vandaag, Geld en de pijplijn laten zien, uitgerekend uit de klantkaarten
 // en niet in de pagina zelf (masterprompt CRM: rekenen los van tonen). Elk
@@ -45,7 +45,7 @@ export function pijplijn(klanten: Klant[]) {
 /** Leads (Aanvraag t/m Offerte) gewogen naar de kans die je zelf invult, in centen. */
 export const gewogenPijplijn = (klanten: Klant[]) => klanten.filter((k) => LEADS.includes(k.fase)).reduce((t, k) => t + gewogen(k), 0)
 
-export type Openstaand = { klant: Klant; nummer: string; bedrag: number; datum: string; soort: "Offerte" | "Factuur" }
+export type Openstaand = { klant: Klant; nummer: string; bedrag: number; datum: string; soort: "Offerte" | "Factuur"; herinnerd?: string }
 
 /**
  * Het geld uit de klantkaarten:
@@ -56,16 +56,20 @@ export type Openstaand = { klant: Klant; nummer: string; bedrag: number; datum: 
  */
 export function geldOverzicht(klanten: Klant[], nu: string) {
   const maand = nu.slice(0, 7)
-  const alle = klanten.flatMap((k) => k.stukken.map((s) => ({ klant: k, nummer: s.nummer, bedrag: s.bedrag, datum: s.datum, soort: s.soort, rond: !!s.rond })))
+  const alle = klanten.flatMap((k) => k.stukken.map((s) => ({ klant: k, nummer: s.nummer, bedrag: s.bedrag, datum: s.datum, soort: s.soort, rond: !!s.rond, herinnerd: s.herinnerd })))
   const facturen = alle.filter((s) => s.soort === "Factuur")
   const som = (l: { bedrag: number }[]) => Math.round(l.reduce((t, s) => t + s.bedrag, 0) * 100) / 100
   const teOntvangen: Openstaand[] = facturen.filter((s) => !s.rond).sort((a, b) => a.datum.localeCompare(b.datum))
+  // Over de betaaltermijn heen en nog geen herinnering: daar moet een herinnering heen.
+  const teLaat = teOntvangen.filter((s) => betaalstand(s, nu).stand === "te laat")
   const offertesOpen: Openstaand[] = alle.filter((s) => s.soort === "Offerte" && !s.rond && isOpen(s.klant.fase)).sort((a, b) => a.datum.localeCompare(b.datum))
   return {
     dezeMaand: som(facturen.filter((s) => s.datum.startsWith(maand))),
     betaaldDezeMaand: som(facturen.filter((s) => s.rond && s.datum.startsWith(maand))),
     teOntvangen,
     teOntvangenSom: som(teOntvangen),
+    teLaat,
+    teLaatSom: som(teLaat),
     offertesOpen,
     offertesOpenSom: som(offertesOpen),
   }

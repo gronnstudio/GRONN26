@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Blok, Cijfer, Cijfers, Kop, Leeg } from "@/components/crm/kop"
 import { TE_BETALEN } from "@/lib/beheer/data"
-import { leesKlanten } from "@/lib/beheer/klanten"
+import { betaalstand, leesKlanten } from "@/lib/beheer/klanten"
 import { DOCUMENTEN } from "@/lib/data/legal"
 import { geldOverzicht, jaarOverzicht, vandaagNL, type Openstaand } from "@/lib/crm/overzicht"
 import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
@@ -42,6 +42,7 @@ export default async function Geld() {
       <main className="mx-auto grid max-w-[1440px] gap-8 px-8 py-6">
         <Cijfers>
           <Cijfer label="Te ontvangen" waarde={euro(g.teOntvangenSom)} let={g.teOntvangenSom > 0} uitleg={`${g.teOntvangen.length} facturen`} />
+          <Cijfer label="Te laat" waarde={euro(g.teLaatSom)} let={g.teLaatSom > 0} uitleg={g.teLaat.length ? `${g.teLaat.length} zonder herinnering, na 14 dagen` : "niets over de 14 dagen"} />
           <Cijfer label="Offertes open" waarde={euro(g.offertesOpenSom)} uitleg={`${g.offertesOpen.length} zonder akkoord`} />
           <Cijfer label="Gefactureerd deze maand" waarde={euro(g.dezeMaand)} />
           <Cijfer label="Daarvan afgevinkt" waarde={euro(g.betaaldDezeMaand)} />
@@ -189,6 +190,15 @@ function Jaar({ maanden }: { maanden: ReturnType<typeof jaarOverzicht> }) {
 
 const STATUS: Record<string, string> = { paid: "Betaald", open: "Open", pending: "Bezig", authorized: "Goedgekeurd", canceled: "Geannuleerd", expired: "Verlopen", failed: "Mislukt" }
 
+/** Betaalstand volgens de voorwaarden: 14 dagen termijn, daarna een kosteloze herinnering met weer 14 dagen. */
+function Stand({ s, nu }: { s: Openstaand; nu: string }) {
+  const b = betaalstand({ ...s, rond: false }, nu)
+  if (b.stand === "te laat") return <span className="block font-semibold text-let">{b.dagen} {b.dagen === 1 ? "dag" : "dagen"} te laat</span>
+  if (b.stand === "herinnerd") return <span className={`block ${b.voorbij ? "font-semibold text-let" : ""}`}>herinnerd, uiterlijk {datum(b.uiterlijk)}</span>
+  if (b.stand === "open") return <span className="block">vervalt {datum(b.vervalt)}</span>
+  return null
+}
+
 function Lijst({ rijen, nu, leeg, oud }: { rijen: Openstaand[]; nu: string; leeg: string; oud?: boolean }) {
   if (!rijen.length) return <Leeg>{leeg}</Leeg>
   return (
@@ -205,7 +215,7 @@ function Lijst({ rijen, nu, leeg, oud }: { rijen: Openstaand[]; nu: string; leeg
               <td><Link href={`/dashboard/klanten/${s.klant.id}?tab=stukken`} className="crm-link">{s.klant.naam}</Link></td>
               <td className="crm-cijfer text-[13px] text-gedempt">
                 {datum(s.datum)}
-                {oud && dagen > 14 && <span className="block text-let">{dagen} dagen</span>}
+                {oud ? <Stand s={s} nu={nu} /> : dagen > 14 && <span className="block">{dagen} dagen</span>}
               </td>
               <td className="crm-cijfer text-right">{euro(s.bedrag)}</td>
             </tr>

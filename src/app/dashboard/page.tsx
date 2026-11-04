@@ -81,7 +81,7 @@ export default async function Vandaag({ searchParams }: { searchParams: Promise<
           <Cijfer label="Nieuwe aanvragen" waarde={String(aanvragen.length)} let={aanvragen.length > 0} uitleg="nog niet gebeld" href="/dashboard/aanvragen" />
           <Cijfer label="Offertes open" waarde={euro(geld.offertesOpenSom)} uitleg={`${geld.offertesOpen.length} zonder akkoord`} href="/dashboard/geld#offertes" />
           <Cijfer label="Lopende klussen" waarde={String(lopend.length)} uitleg="akkoord, gepland of bezig" href="/dashboard/klanten" />
-          <Cijfer label="Te ontvangen" waarde={euro(geld.teOntvangenSom)} let={geld.teOntvangenSom > 0} uitleg={`${geld.teOntvangen.length} facturen niet afgevinkt`} href="/dashboard/geld" />
+          <Cijfer label="Te ontvangen" waarde={euro(geld.teOntvangenSom)} let={geld.teOntvangenSom > 0} uitleg={geld.teLaat.length ? `${geld.teLaat.length} te laat, stuur een herinnering` : `${geld.teOntvangen.length} facturen niet afgevinkt`} href="/dashboard/geld" />
           <Cijfer label="Uren deze week" waarde={getal(dezeWeek)} uitleg={`${getal(ditJaar)} van ${DOEL.toLocaleString("nl-NL")} dit jaar`} href="/dashboard/uren" />
         </Cijfers>
 

@@ -133,6 +133,20 @@ export async function stukRond(id: string, stuk: string, rond: boolean) {
   })
 }
 
+/** Kosteloze herinnering voor een factuur verstuurd (vandaag), of weer terug als het per ongeluk was. */
+export async function stukHerinnerd(id: string, stuk: string, aan: boolean) {
+  await pasAan(id, (k) => {
+    const s = k.stukken.find((x) => x.id === stuk)
+    if (!s || s.soort !== "Factuur") return k
+    const stukken = k.stukken.map((x) => {
+      if (x.id !== stuk) return x
+      const { herinnerd: _weg, ...rest } = x
+      return aan ? { ...rest, herinnerd: vandaag() } : rest
+    })
+    return log({ ...k, stukken }, gebeurtenis("Stuk", `Factuur ${s.nummer}: ${aan ? "herinnering verstuurd" : "herinnering teruggedraaid"}`))
+  })
+}
+
 export async function stukWeg(id: string, stuk: string) {
   await pasAan(id, (k) => {
     const s = k.stukken.find((x) => x.id === stuk)

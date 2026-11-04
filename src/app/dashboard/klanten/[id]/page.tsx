@@ -6,13 +6,14 @@ import { calculatieWeg } from "@/app/dashboard/calculatie/acties"
 import { notFound } from "next/navigation"
 import { FaseBalk, Kop, Tabs } from "@/components/crm/kop"
 import { GrønnKnop } from "@/components/crm/gronn-knop"
-import { BRONNEN, KLANT_FASEN, KLANT_SOORTEN, PRIORITEITEN, VERLOREN_REDENEN, VOORKEUREN, geld, hoortBij, leesKlanten, sleutel, type Klant } from "@/lib/beheer/klanten"
+import { BRONNEN, KLANT_FASEN, KLANT_SOORTEN, PRIORITEITEN, VERLOREN_REDENEN, VOORKEUREN, betaalstand, geld, geplandeUren, hoortBij, leesKlanten, sleutel, type Klant, type Stuk } from "@/lib/beheer/klanten"
+import { vandaagNL } from "@/lib/crm/overzicht"
 import { telling, type Vragenlijst } from "@/lib/crm/vragenlijst"
 import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { leesUren } from "@/lib/beheer/uren"
 import { euro } from "@/lib/format"
-import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukRond, stukWeg } from "../acties"
+import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukHerinnerd, stukRond, stukWeg } from "../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { AdresVeld } from "@/components/adres-veld"
 import { KopieerKnop } from "@/components/crm/kopieer-knop"
@@ -112,6 +113,9 @@ async function Overzicht({ k }: { k: Klant }) {
   const urenTotaal = uren.reduce((t, r) => t + r.uren, 0)
   // Nacalculatie in het klein: wat er per gewerkt uur binnenkwam (excl. 21 % btw, schatting).
   const perUur = urenTotaal && g.gefactureerd ? g.gefactureerd / 1.21 / urenTotaal : 0
+  // Gewerkt tegenover gepland (idee uit Plancraft): de planning van de laatste calculatie × 8 uur per dag.
+  const gepland = geplandeUren(k)
+  const deel = gepland ? Math.round((urenTotaal / gepland) * 100) : 0
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_420px] gap-10">
       <form key={sleutel({ ...k, activiteit: 0, stukken: 0, tuinen: 0, calculaties: 0, projecten: 0 })} action={bewaarKlant.bind(null, k.id)} className="flex flex-col gap-6">
@@ -173,7 +177,20 @@ async function Overzicht({ k }: { k: Klant }) {
             <p className={`${lbl} m-0`}>Uren uit je registratie</p>
             <Link href="/dashboard/uren" className="text-[12px] text-accent-tekst">Uren invullen →</Link>
           </div>
-          <p className="crm-cijfer m-0 mt-2 text-[22px]">{urenTotaal.toLocaleString("nl-NL")} uur</p>
+          <p className="crm-cijfer m-0 mt-2 text-[22px]">
+            {urenTotaal.toLocaleString("nl-NL")} uur
+            {gepland > 0 && <span className="text-[14px] text-gedempt"> van {gepland.toLocaleString("nl-NL")} gepland</span>}
+          </p>
+          {gepland > 0 && (
+            <>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-lijn" role="img" aria-label={`${deel} % van de geplande uren gewerkt`}>
+                <div className={`h-full rounded-full ${deel > 100 ? "bg-let" : "bg-accent"}`} style={{ width: `${Math.min(100, deel)}%` }} />
+              </div>
+              <p className={`m-0 mt-1 text-[13px] ${deel > 100 ? "font-semibold text-let" : "text-gedempt"}`}>
+                {deel} % van de planning{deel > 100 ? `, ${(urenTotaal - gepland).toLocaleString("nl-NL")} uur over` : ""}
+              </p>
+            </>
+          )}
           {perUur > 0 && (
             <p className={`m-0 text-[13px] ${perUur < 37 ? "font-semibold text-let" : "text-gedempt"}`}>± {euro(perUur)} per uur gefactureerd (excl. btw, inclusief materiaal)</p>
           )}
@@ -301,6 +318,21 @@ function Projecten({ k }: { k: Klant }) {
   )
 }
 
+/** Open, te laat of herinnerd, volgens de betaaltermijn uit de voorwaarden (14 dagen). */
+function Betaalstand({ s }: { s: Stuk }) {
+  const b = betaalstand(s, vandaagNL())
+  if (b.stand === "open") return <span className="block text-[12px] text-gedempt">Vervalt {datum(b.vervalt)}</span>
+  if (b.stand === "te laat") return <span className="block text-[12px] font-semibold text-let">{b.dagen} {b.dagen === 1 ? "dag" : "dagen"} te laat · stuur een kosteloze herinnering</span>
+  if (b.stand === "herinnerd")
+    return (
+      <span className={`block text-[12px] ${b.voorbij ? "font-semibold text-let" : "text-gedempt"}`}>
+        Herinnerd {datum(b.herinnerd)} · uiterlijk {datum(b.uiterlijk)}
+        {b.voorbij && " · nu mogen rente en incassokosten"}
+      </span>
+    )
+  return null
+}
+
 function Stukken({ k }: { k: Klant }) {
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-10">
@@ -313,6 +345,7 @@ function Stukken({ k }: { k: Klant }) {
                 <span className={`${lbl} mr-2 text-gedempt`}>{s.soort}</span>
                 <span className="[overflow-wrap:anywhere]">{s.nummer}</span>
                 <span className="block text-[12px] text-gedempt">{datum(s.datum)}</span>
+                {s.soort === "Factuur" && !s.rond && <Betaalstand s={s} />}
                 {s.link && (
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
@@ -327,7 +360,14 @@ function Stukken({ k }: { k: Klant }) {
                 )}
               </span>
               <span className="crm-cijfer">{euro(s.bedrag)}</span>
-              <span className="flex gap-1">
+              <span className="flex flex-wrap justify-end gap-1">
+                {s.soort === "Factuur" && !s.rond && (
+                  <form action={stukHerinnerd.bind(null, k.id, s.id, !s.herinnerd)}>
+                    <button className="rounded-full border border-lijn px-3 py-1 text-[12px] font-semibold hover:border-accent">
+                      {s.herinnerd ? "Herinnering terug" : "Herinnering verstuurd"}
+                    </button>
+                  </form>
+                )}
                 <form action={stukRond.bind(null, k.id, s.id, !s.rond)}>
                   <button className={`rounded-full border px-3 py-1 text-[12px] font-semibold ${s.rond ? "border-accent bg-accent text-op-accent" : "border-lijn hover:border-accent"}`}>
                     {s.rond ? (s.soort === "Factuur" ? "Betaald ✓" : "Akkoord ✓") : s.soort === "Factuur" ? "Betaald?" : "Akkoord?"}
