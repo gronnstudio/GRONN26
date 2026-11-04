@@ -9,7 +9,7 @@ import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/be
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
-import { normaliseer, zoekDubbel } from "../src/lib/crm/klant"
+import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
 // De rekenkern van het CRM zonder browser: geld in centen, afronden, btw per
@@ -507,4 +507,31 @@ test("onderhoud: tag geeft elk seizoen een beurt op de eerste maandag, verloren 
     ["2027-06-07", "Zomerbeurt Anna de Vries"],
   ])
   expect(b[0]).toMatchObject({ wie: "Anna", href: "/dashboard/klanten/v" })
+})
+
+test.describe("betaalstand (voorwaarden: 14 dagen, dan een herinnering met 14 dagen)", () => {
+  test("open, te laat, herinnerd en betaald", () => {
+    expect(betaalstand({ datum: "2026-11-01" }, "2026-11-15")).toEqual({ stand: "open", vervalt: "2026-11-15" })
+    expect(betaalstand({ datum: "2026-11-01" }, "2026-11-18")).toEqual({ stand: "te laat", vervalt: "2026-11-15", dagen: 3 })
+    expect(betaalstand({ datum: "2026-10-01", herinnerd: "2026-10-20" }, "2026-11-03")).toEqual({ stand: "herinnerd", herinnerd: "2026-10-20", uiterlijk: "2026-11-03", voorbij: false })
+    expect(betaalstand({ datum: "2026-10-01", herinnerd: "2026-10-20" }, "2026-11-04")).toMatchObject({ stand: "herinnerd", voorbij: true })
+    expect(betaalstand({ datum: "2026-10-01", rond: true, herinnerd: "2026-10-20" }, "2026-12-01")).toEqual({ stand: "betaald" })
+  })
+  test("over de zomertijd heen telt in hele dagen", () => {
+    expect(betaalstand({ datum: "2026-10-20" }, "2026-11-04")).toEqual({ stand: "te laat", vervalt: "2026-11-03", dagen: 1 })
+  })
+})
+
+test("geplande uren: dagen uit de nieuwste planning per calculatie × 8", () => {
+  const k = normaliseer({ id: "k", naam: "Test" })
+  expect(geplandeUren(k)).toBe(0)
+  const plan = [{ id: "a", naam: "Grond", dagen: 1.5, machines: "", levering: "" }, { id: "b", naam: "Opruimen", dagen: 0.5, machines: "", levering: "" }]
+  const met = { ...k, calculaties: [{ id: "c", titel: "C", aangemaakt: "2026-11-01", versies: [{ nr: 1, datum: "2026-11-01", planning: plan }] }] } as unknown as typeof k
+  expect(geplandeUren(met)).toBe(16)
+  // Twee klussen tellen samen; van een herziene calculatie telt alleen de nieuwste versie.
+  const twee = { ...k, calculaties: [
+    { id: "c", titel: "C", aangemaakt: "2026-11-01", versies: [{ nr: 1, datum: "2026-11-01", planning: [{ ...plan[0], dagen: 9 }] }, { nr: 2, datum: "2026-11-02", planning: plan }] },
+    { id: "d", titel: "D", aangemaakt: "2026-11-03", versies: [{ nr: 1, datum: "2026-11-03", planning: [plan[0]] }] },
+  ] } as unknown as typeof k
+  expect(geplandeUren(twee)).toBe(28)
 })

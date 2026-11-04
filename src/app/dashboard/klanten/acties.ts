@@ -10,6 +10,7 @@ import {
   KLANT_SOORTEN,
   PRIORITEITEN,
   VOORKEUREN,
+  betaalstand,
   gebeurtenis,
   leesKlanten,
   normaliseer,
@@ -130,6 +131,22 @@ export async function stukRond(id: string, stuk: string, rond: boolean) {
     // Een goedgekeurde offerte zet de klus op Akkoord, als die nog niet verder was.
     const naar: KlantFase = s.soort === "Offerte" && rond && ["Aanvraag", "Opname", "Offerte"].includes(k.fase) ? "Akkoord" : k.fase
     return log({ ...k, fase: naar, stukken: k.stukken.map((x) => (x.id === stuk ? { ...x, rond } : x)) }, gebeurtenis("Stuk", `${s.soort} ${s.nummer} ${wat}`))
+  })
+}
+
+/** Kosteloze herinnering voor een factuur verstuurd (vandaag), of weer terug als het per ongeluk was. */
+export async function stukHerinnerd(id: string, stuk: string, aan: boolean) {
+  await pasAan(id, (k) => {
+    const s = k.stukken.find((x) => x.id === stuk)
+    if (!s || s.soort !== "Factuur") return k
+    // Een herinnering kan pas na de betaaltermijn; ervoor zou ze de vervaldag ten onrechte opschuiven.
+    if (aan && betaalstand(s, vandaag()).stand !== "te laat") return k
+    const stukken = k.stukken.map((x) => {
+      if (x.id !== stuk) return x
+      const { herinnerd: _weg, ...rest } = x
+      return aan ? { ...rest, herinnerd: vandaag() } : rest
+    })
+    return log({ ...k, stukken }, gebeurtenis("Stuk", `Factuur ${s.nummer}: ${aan ? "herinnering verstuurd" : "herinnering teruggedraaid"}`))
   })
 }
 
