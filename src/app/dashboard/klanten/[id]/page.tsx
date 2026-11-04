@@ -361,7 +361,7 @@ function Stukken({ k }: { k: Klant }) {
               </span>
               <span className="crm-cijfer">{euro(s.bedrag)}</span>
               <span className="flex flex-wrap justify-end gap-1">
-                {s.soort === "Factuur" && !s.rond && (
+                {s.soort === "Factuur" && !s.rond && ["te laat", "herinnerd"].includes(betaalstand(s, vandaagNL()).stand) && (
                   <form action={stukHerinnerd.bind(null, k.id, s.id, !s.herinnerd)}>
                     <button className="rounded-full border border-lijn px-3 py-1 text-[12px] font-semibold hover:border-accent">
                       {s.herinnerd ? "Herinnering terug" : "Herinnering verstuurd"}

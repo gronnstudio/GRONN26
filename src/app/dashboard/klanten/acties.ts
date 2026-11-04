@@ -10,6 +10,7 @@ import {
   KLANT_SOORTEN,
   PRIORITEITEN,
   VOORKEUREN,
+  betaalstand,
   gebeurtenis,
   leesKlanten,
   normaliseer,
@@ -138,6 +139,8 @@ export async function stukHerinnerd(id: string, stuk: string, aan: boolean) {
   await pasAan(id, (k) => {
     const s = k.stukken.find((x) => x.id === stuk)
     if (!s || s.soort !== "Factuur") return k
+    // Een herinnering kan pas na de betaaltermijn; ervoor zou ze de vervaldag ten onrechte opschuiven.
+    if (aan && betaalstand(s, vandaag()).stand !== "te laat") return k
     const stukken = k.stukken.map((x) => {
       if (x.id !== stuk) return x
       const { herinnerd: _weg, ...rest } = x
