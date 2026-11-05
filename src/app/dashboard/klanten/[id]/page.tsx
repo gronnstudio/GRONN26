@@ -21,6 +21,8 @@ import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukHerinn
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { AdresVeld } from "@/components/adres-veld"
 import { KopieerKnop } from "@/components/crm/kopieer-knop"
+import { MailKnop } from "@/components/crm/mail-knop"
+import { mailVoor, mailtoLink, type MailSoort } from "@/lib/crm/mail"
 import { trekOfferteIn } from "../offerte-acties"
 import { maakFactuur } from "../factuur-acties"
 import { haalWerkbonWeg, maakWerkbon } from "../werkbon-acties"
@@ -385,12 +387,14 @@ async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
                 {s.soort === "Factuur" && !s.rond && <Betaalstand s={s} />}
                 {s.factuur && (
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    <Mail k={k} soort={s.herinnerd && !s.rond ? "herinnering" : "factuur"} nummer={s.nummer} pad={`/factuur/${s.factuur}`} bedrag={euro(s.bedrag)} wat={`${s.herinnerd && !s.rond ? "Herinnering" : "Factuur"} ${s.nummer}`} />
                     <KopieerKnop tekst={`/factuur/${s.factuur}`} />
                     <a href={`/factuur/${s.factuur}`} className="crm-knop-stil crm-knop-klein">{s.herinnerd && !s.rond ? "Herinnering bekijken" : "Factuur bekijken"}</a>
                   </span>
                 )}
                 {s.link && (
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    {!s.rond && <Mail k={k} soort="offerte" nummer={s.nummer} pad={`/offerte/${s.link}`} wat={`Offerte ${s.nummer}`} />}
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
                     <a href={`/offerte/${s.link}`} className="crm-knop-stil crm-knop-klein">Bekijk als klant</a>
                     <a href={`/offerte/${s.link}?specificatie=1`} className="crm-knop-stil crm-knop-klein">Specificatie voor factuur</a>
@@ -437,6 +441,7 @@ async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
                 {w.nummer}
                 <span className="block truncate text-[12px] text-gedempt">{datum(w.datum)} · {w.werk}</span>
                 <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  {!w.getekend && <Mail k={k} soort="werkbon" nummer={w.nummer} pad={`/werkbon/${w.token}`} wat={`Werkbon ${w.nummer}`} />}
                   <KopieerKnop tekst={`/werkbon/${w.token}`} />
                   <a href={`/werkbon/${w.token}`} className="crm-knop-stil crm-knop-klein">{w.getekend ? "Bekijken" : "Laten tekenen"}</a>
                 </span>
@@ -551,4 +556,10 @@ function Keuze({ naam, label, waarde, opties }: { naam: string; label: string; w
       </select>
     </label>
   )
+}
+
+/** Mailknop met de mail al ingevuld: aan de klant, met groet en privélink. */
+function Mail({ k, soort, nummer, pad, bedrag, wat }: { k: Klant; soort: MailSoort; nummer: string; pad: string; bedrag?: string; wat: string }) {
+  const m = mailVoor(soort, { naam: k.naam, nummer, pad, bedrag })
+  return <MailKnop href={mailtoLink(k.email, m.onderwerp, m.tekst)} klantId={k.id} wat={wat} />
 }

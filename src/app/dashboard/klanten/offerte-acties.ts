@@ -1,5 +1,6 @@
 "use server"
 
+import { voornaamVan } from "@/lib/crm/mail"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { gebeurtenis, leesKlanten, wijzigKlanten, type Klant } from "@/lib/beheer/klanten"
@@ -21,7 +22,7 @@ export async function maakOfferteVan(klantId: string, calcId: string, nr: number
   if (!k || !c || !v) return
   const deel = typeof fase === "string" && fase && v.fasen?.some((f) => f.naam === fase) ? { ...v, ...faseInvoer(v, fase), beschrijving: faseTekst(v.beschrijving, fase) } : v
   const t = await leesTeksten()
-  const voornaam = (k.naam.split(/\s*[&,]\s*|\s+en\s+/).length > 1 ? k.naam : k.naam.split(" ")[0]) || k.naam
+  const voornaam = voornaamVan(k.naam)
   const o = maakOfferte(k, fase && deel !== v ? { ...c, titel: `${c.titel} · ${fase}` } : c, deel, offerteNummer(klanten), { begin: metNaam(t.begin, voornaam), slot: metNaam(t.slot, voornaam) })
   await bewaarOfferte(o)
   await wijzigKlanten((lijst) =>
