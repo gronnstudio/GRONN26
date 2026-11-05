@@ -8,7 +8,7 @@ import { BTW_TARIEVEN, EENHEDEN, dubbelen, ontdubbeld, SOORTEN, STANDAARD, isSoo
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
-import { perGroep } from "@/components/crm/groepen"
+import { metArbeid, perGroep } from "@/components/crm/groepen"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { planDagen } from "@/lib/crm/project"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
@@ -674,6 +674,9 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         </dl>
         {beschrijving.trim() && <TekstOpmaak tekst={beschrijving.trim()} zonderPrijzen className="mt-6 leading-[1.5]" />}
         {(u.arbeid > 0 || regelsVoorKlant.length > 0) && (() => {
+          // Arbeid zit in de posten, geen eigen regel (Nick, 5 nov 2026: "niet zo obvious zichtbaar").
+          const metA = metArbeid(regelsVoorKlant, u.arbeid, (r) => r.verkoop, (r, verkoop) => ({ ...r, verkoop }))
+          const regels = metA ?? regelsVoorKlant
           // Een hoeveelheid alleen waar die iets zegt (niet "1 st"), en de kolom alleen als de meeste regels er een hebben (Nick, 5 nov 2026: "alleen bij waaltjes? beetje gek").
           const hv = (r: (typeof regelsVoorKlant)[number]) => (r.eenheid !== "post" && !(r.brutoHoeveelheid === 1000 && r.eenheid === "st") ? `${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}` : "")
           const kolom = regelsVoorKlant.filter((r) => hv(r)).length * 2 > regelsVoorKlant.length
@@ -690,7 +693,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 </tr>
               </thead>
               <tbody>
-                {perGroep(regelsVoorKlant).map((g) => (
+                {perGroep(regels).map((g) => (
                   <Fragment key={g.naam || "alle"}>
                     {g.naam && (
                       <tr><th colSpan={kolom ? 3 : 2} scope="colgroup" className="pt-4 pb-1 text-left text-[10pt] font-semibold">{g.naam}</th></tr>
@@ -703,8 +706,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     )}
                   </Fragment>
                 ))}
-                {/* Arbeid onderaan, na wat er komt (Nick, 5 nov 2026: "niet als mokerslag bovenaan"). */}
-                {u.arbeid > 0 && <PostRij t="Aanleg en arbeid" h={kolom ? "" : undefined} b={u.arbeid} />}
+                {!metA && u.arbeid > 0 && <PostRij t="Aanleg" h={kolom ? "" : undefined} b={u.arbeid} />}
               </tbody>
             </table>
           </>
