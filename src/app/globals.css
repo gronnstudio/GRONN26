@@ -466,16 +466,19 @@ html.en .t-en { display: contents; }
    oranje (--let) = er moet iets gebeuren (te laat, open bedrag). Paren
    gemeten: accent-tekst op grond 6,8:1, wit op accent 6,4:1, gedempt 6,1:1,
    let 5,0:1; op donker alle paren boven 7:1. */
+/* 5 nov 2026 (Nick: "ui ux is nog niet heen gekeken", met Plancraft als voorbeeld): een rustige,
+   zakelijke schil. Lichtgrijze grond, witte vlakken, een donkere zijbalk (.crm-zij hieronder) en
+   het oranje alleen voor wat je doet of waar je bent. Gedempt #5C5B56 op wit 6,7:1, op de grond 6,1:1. */
 :root .crm {
-  --grond: #f4f0e6;
-  --vlak: #fbf9f4;
-  --veld: #fffdf8;
-  --zijbalk: #ebe5d8;
-  --inkt: #23221f;
-  --gedempt: #5f5b52;
-  --voorbeeld: #8a8578;
-  --lijn: #e0d9ca;
-  --lijn-sterk: #cbc2b0;
+  --grond: #f3f3f1;
+  --vlak: #ffffff;
+  --veld: #ffffff;
+  --zijbalk: #1c1c1a;
+  --inkt: #1f1f1d;
+  --gedempt: #5c5b56;
+  --voorbeeld: #8b8a84;
+  --lijn: #e5e4df;
+  --lijn-sterk: #cfcec8;
   --accent: #ff5b04;
   --accent-tekst: #a33a00;
   --op-accent: #202020;
@@ -510,6 +513,26 @@ html.en .t-en { display: contents; }
   --oranje-tekst: #ff8a4c;
   color-scheme: dark;
 }
+/* De zijbalk is in beide weergaven donker antraciet (Plancraft, 5 nov 2026). Dezelfde namen, andere
+   waarden: alles erin (knoppen, Nieuw, Zoeken, KleurKeuze) kleurt vanzelf mee. Gedempt #B3B2AB op
+   #1C1C1A 8,6:1, oranje tekst #FF8A4C 7,0:1. */
+:root .crm .crm-zij {
+  --grond: #1c1c1a;
+  --zijbalk: #1c1c1a;
+  --vlak: #2a2a27;
+  --veld: #262623;
+  --inkt: #f4f3ef;
+  --gedempt: #b3b2ab;
+  --voorbeeld: #85847e;
+  --lijn: #34342f;
+  --lijn-sterk: #4a4943;
+  --accent-tekst: #ff8a4c;
+  --accent-zacht: rgb(255 122 46 / 0.16);
+  --let: #ff8a80;
+  --let-zacht: rgb(255 138 128 / 0.14);
+  color: var(--inkt);
+  color-scheme: dark;
+}
 @layer components {
   .crm { font-family: var(--font-montserrat), sans-serif; font-size: 14px; background: var(--grond); color: var(--inkt); }
   .crm ::selection { background: var(--accent-zacht); }
@@ -518,6 +541,8 @@ html.en .t-en { display: contents; }
      (5 nov 2026, professionelere schil: de mono las als code, niet als een boekhouding). */
   .crm-cijfer { font-family: var(--font-montserrat), system-ui, sans-serif; font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "tnum" 1, "lnum" 1; font-weight: 500; letter-spacing: 0; }
   .crm-tabel .crm-cijfer { white-space: nowrap; }
+  /* Koppen in het systeem in Montserrat, niet in Syne: de Syne las als website, niet als werkplek. */
+  .crm .syne { font-family: var(--font-montserrat), sans-serif; font-weight: 650; letter-spacing: -0.015em; }
   .crm-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gedempt); }
   .crm-knop, .crm-knop-groen, .crm-knop-rand, .crm-knop-stil {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -541,7 +566,24 @@ html.en .t-en { display: contents; }
   .crm-veld::placeholder { color: var(--voorbeeld); }
   .crm-veld:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
   select.crm-veld { padding-right: 28px; }
-  .crm-paneel { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 12px; }
+  .crm-paneel { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 12px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.04); }
+  /* Een lijst als in Plancraft: een wit paneel met de tabel erin, kop op de grondkleur, een somregel onderaan. */
+  .crm-lijst { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 12px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.04); }
+  .crm-lijst .crm-tabel th { background: var(--grond); }
+  .crm-lijst .crm-tabel :is(th, td):first-child { padding-left: 16px; }
+  .crm-lijst .crm-tabel :is(th, td):last-child { padding-right: 16px; }
+  .crm-lijst .crm-tabel td { vertical-align: middle; }
+  .crm-lijst .crm-tabel tfoot td { border-bottom: 0; border-top: 1px solid var(--lijn-sterk); font-weight: 600; }
+  /* Status als pil met een stip ervoor, zoals Plancraft het doet: kleur én woord. */
+  .crm-status { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; white-space: nowrap; background: color-mix(in oklab, var(--inkt) 6%, transparent); color: var(--gedempt); }
+  .crm-status::before { content: ""; width: 7px; height: 7px; border-radius: 9999px; background: currentColor; }
+  .crm-status-goed { background: var(--goed-zacht); color: var(--goed); }
+  .crm-status-let { background: var(--let-zacht); color: var(--let); }
+  .crm-status-open { background: var(--accent-zacht); color: var(--accent-tekst); }
+  /* Filterknoppen boven een lijst. */
+  .crm-chip { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 9999px; border: 1px solid var(--lijn-sterk); background: var(--vlak); font-size: 13px; font-weight: 600; color: var(--gedempt); white-space: nowrap; }
+  .crm-chip:hover { color: var(--inkt); border-color: var(--inkt); }
+  .crm-chip[aria-current="true"] { background: var(--inkt); border-color: var(--inkt); color: var(--vlak); }
   .crm-let { background: var(--let-zacht); border: 1px solid color-mix(in oklab, var(--let) 35%, transparent); border-radius: 12px; }
   .crm-badge {
     display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 6px;

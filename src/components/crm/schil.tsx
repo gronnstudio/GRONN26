@@ -100,15 +100,13 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
   const klein = smal && !menu
   return (
     <div className="crm min-h-svh print:block print:min-w-0 print:bg-white lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto]">
-      <div inert={menu} className="sticky top-0 z-30 flex h-[56px] items-center gap-2 border-b border-lijn bg-zijbalk px-3 print:hidden lg:hidden">
+      <div inert={menu} className="crm-zij sticky top-0 z-30 flex h-[56px] items-center gap-2 border-b border-lijn bg-zijbalk px-3 print:hidden lg:hidden">
         <button ref={menuKnop} type="button" onClick={() => setMenu(true)} aria-expanded={menu} aria-controls="crm-menu" className="crm-knop-rand crm-knop-klein">
           <Icoon naam="uitklappen" className="size-[16px]" /> Menu
         </button>
         <Link href="/dashboard" className="flex flex-1 items-center justify-center" aria-label="GRØNN Studio, naar Vandaag">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair.svg" alt="" className="hidden h-[14px] w-auto dark:block" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair-antraciet.svg" alt="" className="h-[14px] w-auto dark:hidden" />
+          <img src="/brand/woordmerk-primair.svg" alt="" className="h-[14px] w-auto" />
         </Link>
         <button type="button" onClick={() => dispatchEvent(new Event(OPEN_ZOEKVENSTER))} className="crm-knop-rand crm-knop-klein">
           <Icoon naam="zoek" className="size-[16px]" /> Zoeken
@@ -121,15 +119,13 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
         {...(menu ? { role: "dialog", "aria-modal": true } : {})}
         // Elke link in het menu sluit het op de telefoon, ook als alleen ?nieuw=1 of #nieuw verandert.
         onClick={(e) => (e.target as Element).closest("a") && setMenu(false)}
-        className={`flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:w-[min(300px,85vw)] max-lg:shadow-[0_0_40px_rgb(0_0_0/.3)] lg:sticky lg:top-0 ${menu ? "" : "max-lg:hidden"} ${klein ? "lg:w-[64px]" : "lg:w-[248px]"}`}
+        className={`crm-zij flex h-svh flex-col border-r border-lijn bg-zijbalk print:hidden max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:w-[min(300px,85vw)] max-lg:shadow-[0_0_40px_rgb(0_0_0/.3)] lg:sticky lg:top-0 ${menu ? "" : "max-lg:hidden"} ${klein ? "lg:w-[64px]" : "lg:w-[248px]"}`}
       >
         <div className={`flex h-[60px] shrink-0 items-center ${klein ? "justify-center" : "justify-between pr-2 pl-4"}`}>
           {!klein && (
             <Link href="/dashboard" className="flex items-center gap-2.5" aria-label="GRØNN Studio, naar Vandaag">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/woordmerk-primair.svg" alt="" className="hidden h-[16px] w-auto dark:block" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/woordmerk-primair-antraciet.svg" alt="" className="h-[16px] w-auto dark:hidden" />
+              <img src="/brand/woordmerk-primair.svg" alt="" className="h-[16px] w-auto" />
             </Link>
           )}
           <button type="button" onClick={() => zetSmal(!smal)} aria-label={klein ? "Zijbalk uitklappen" : "Zijbalk inklappen"} title={klein ? "Uitklappen" : "Inklappen"} className="crm-knop-stil crm-knop-klein size-[32px] !px-0 max-lg:hidden">
@@ -178,7 +174,7 @@ export function Schil({ index, tellers, namen, children }: { index: Treffer[]; t
                         href={o.href}
                         aria-current={hier ? "page" : undefined}
                         title={klein ? o.naam : undefined}
-                        className={`${item} relative ${klein ? "justify-center !px-0" : ""} ${hier ? "bg-vlak text-inkt shadow-[0_1px_0_rgb(0_0_0/.04)] ring-1 ring-lijn" : "text-gedempt hover:bg-vlak/70 hover:text-inkt"}`}
+                        className={`${item} relative ${klein ? "justify-center !px-0" : ""} ${hier ? "bg-vlak text-inkt shadow-[inset_3px_0_0_var(--accent)]" : "text-gedempt hover:bg-vlak/70 hover:text-inkt"}`}
                       >
                         <Icoon naam={o.icoon} className={`size-[18px] ${hier ? "text-accent-tekst" : ""}`} />
                         <span className={klein ? "sr-only" : "flex-1"}>{o.naam}</span>

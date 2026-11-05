@@ -14,6 +14,8 @@ import { btwPerTarief, epcCode, factuurTotaal, termijnRegels, volgendFactuurNumm
 import { MAX_HANDTEKENING, schoneHandtekening, volgendWerkbonNummer } from "../src/lib/crm/werkbon"
 import { metBtw, naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
 import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
+import { documentRijen, filterRijen, naarCsv, somEuro } from "../src/lib/crm/documenten"
+import { planbord } from "../src/lib/crm/planbord"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
 // De rekenkern van het CRM zonder browser: geld in centen, afronden, btw per
@@ -631,3 +633,37 @@ test("mail: voornaam, onderwerp en een volledige link in een mailto", () => {
   expect(mailtoLink("geen adres?subject=x", "a", "b")).toBe("mailto:?subject=a&body=b")
 })
 
+
+test("documenten: offertes en facturen over alle klanten, met status, filter, som en CSV", () => {
+  const k = (id: string, naam: string, stukken: object[]) => normaliseer({ id, naam, stukken } as never)
+  const klanten = [
+    k("a", "Anna", [
+      { id: "1", soort: "Factuur", nummer: "2026-1001-01", bedrag: 100.1, datum: "2026-10-01" },
+      { id: "2", soort: "Factuur", nummer: "2026-1101-01", bedrag: 0.2, datum: "2026-11-01" },
+      { id: "3", soort: "Offerte", nummer: "OF-1", bedrag: 50, datum: "2026-10-02", rond: true },
+    ]),
+    k("c", "-1+Carla", [{ id: "5", soort: "Offerte", nummer: "OF-2", bedrag: 1, datum: "2026-01-01" }]),
+    k("b", "=Bert", [{ id: "4", soort: "Factuur", nummer: "2025-1", bedrag: 10, datum: "2025-05-01", rond: true }]),
+  ]
+  const f = documentRijen(klanten, "Factuur", "2026-11-05")
+  expect(f.map((r) => [r.stuk.nummer, r.status])).toEqual([["2026-1101-01", "Open"], ["2026-1001-01", "Te laat"], ["2025-1", "Betaald"]])
+  expect(f[1].vervalt).toBe("2026-10-15")
+  expect(documentRijen(klanten, "Offerte", "2026-11-05").map((r) => r.status)).toEqual(["Akkoord", "Open"])
+  expect(filterRijen(f, { jaar: "2026" }).length).toBe(2)
+  expect(filterRijen(f, { q: "bert" }).map((r) => r.stuk.nummer)).toEqual(["2025-1"])
+  expect(filterRijen(f, { status: "Te laat" }).length).toBe(1)
+  expect(somEuro(filterRijen(f, { jaar: "2026" }))).toBe(100.3)
+  const csv = naarCsv(f)
+  expect(csv.startsWith("\uFEFF\"Nummer\";")).toBe(true)
+  expect(csv).toContain('"\'=Bert"')
+  expect(csv).toContain('"100,10"')
+  expect(naarCsv(documentRijen(klanten, "Offerte", "2026-11-05"))).toContain(`"'-1+Carla"`)
+})
+
+test("planbord: werkdagen per klus per week, vanaf de week van vandaag", () => {
+  const d = (datum: string, href = "/k/a/calculatie/1") => ({ id: datum, datum, wie: "Anna", wat: "Anna: grondwerk", kleur: "#000", href })
+  const bord = planbord([d("2026-11-04"), d("2026-11-05"), d("2026-11-10"), d("2026-10-01"), d("2026-11-12", "/k/b/calculatie/2")], "2026-11-05", 3)
+  expect(bord.weken.map((w) => w.week)).toEqual([45, 46, 47])
+  expect(bord.rijen.map((r) => r.dagen)).toEqual([[2, 1, 0], [0, 1, 0]])
+  expect(bord.rijen[0].fasen).toEqual(["grondwerk"])
+})
