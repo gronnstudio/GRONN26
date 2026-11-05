@@ -499,6 +499,10 @@ test("werkbon: maken, de klant tekent op de telefoon, daarna staat hij vast", as
   await tel.close()
   await page.reload()
   await expect(page.getByText("Getekend door Test Klant")).toBeVisible()
+  // Weghalen trekt ook de link in.
+  await page.getByRole("button", { name: /^Werkbon .* weghalen$/ }).click()
+  await expect(page.getByRole("link", { name: "Laten tekenen" })).toHaveCount(0)
+  await expect.poll(async () => (await page.request.get(href)).status()).toBe(404)
 })
 
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {

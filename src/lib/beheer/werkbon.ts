@@ -1,5 +1,5 @@
 import "server-only"
-import { leesJson, wijzigJson } from "@/lib/crm/opslag"
+import { leesJson, verwijderBestand, wijzigJson } from "@/lib/crm/opslag"
 import { isToken } from "@/lib/crm/offerte"
 import { kort, type Werkbon, type WerkbonKort } from "@/lib/crm/werkbon"
 
@@ -32,6 +32,9 @@ export async function tekenWerkbon(token: string, getekend: NonNullable<Werkbon[
   return w
 }
 
+/** Uit de lijst én het document weg, zodat de oude link ook niets meer toont (Codex, PR #215). */
 export async function werkbonWeg(token: string) {
+  if (!isToken(token)) return
   await wijzigJson<Doc>(LIJST, leeg, (d) => ({ lijst: (Array.isArray(d.lijst) ? d.lijst : []).filter((x) => x.token !== token) }))
+  await verwijderBestand(pad(token))
 }

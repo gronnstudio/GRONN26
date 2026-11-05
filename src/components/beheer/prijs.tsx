@@ -477,7 +477,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   return (
                 <tbody key={sec.id}>
                   <tr className="border-t-2 border-inkt">
-                    <th colSpan={12} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
+                    <th colSpan={10} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
                     <td className="pt-4 pb-1 pr-2 text-right crm-cijfer font-semibold">{hier.length ? toonEuro(som) : ""}</td>
                     <td className="pt-4 pb-1">
                       <button type="button" onClick={() => setRegels([...regels, naarInvul(nieuweRegel(sec.soort, { hoeveelheid: 1000 }))])} className="text-[12px] text-accent-tekst">+ {sec.enkel}</button>
