@@ -82,21 +82,21 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
           </section>
         )}
 
-        <form id="nieuw" action={nieuweKlant} className="crm-paneel mt-6 flex flex-wrap items-center gap-2 p-3">
-          <span className="crm-label px-2">Nieuwe klant</span>
-          <input name="naam" required autoFocus={!!nieuw} placeholder="Naam" aria-label="Naam" className={`${veld} w-[200px]`} />
-          <input name="telefoon" placeholder="Telefoon" aria-label="Telefoon" className={`${veld} w-[140px]`} />
-          <input name="email" type="email" placeholder="E-mail" aria-label="E-mail" className={`${veld} w-[190px]`} />
-          <input name="wat" placeholder="Wat wil de klant?" aria-label="Wat" className={`${veld} w-full sm:w-[260px]`} />
-          <input name="plaats" placeholder="Plaats" aria-label="Plaats" className={`${veld} w-[120px]`} />
-          <select name="bron" aria-label="Bron" defaultValue="" className={veld}>
+        <form id="nieuw" action={nieuweKlant} className="crm-paneel mt-6 grid grid-cols-2 items-center gap-2 p-3 @min-[1180px]:grid-cols-[auto_1.2fr_1fr_1.2fr_1.6fr_1fr_auto_auto]">
+          <span className="crm-label col-span-2 px-2 @min-[1180px]:col-span-1">Nieuwe klant</span>
+          <input name="naam" required autoFocus={!!nieuw} placeholder="Naam" aria-label="Naam" className={`${veld} w-full min-w-0`} />
+          <input name="telefoon" placeholder="Telefoon" aria-label="Telefoon" className={`${veld} w-full min-w-0`} />
+          <input name="email" type="email" placeholder="E-mail" aria-label="E-mail" className={`${veld} w-full min-w-0`} />
+          <input name="wat" placeholder="Wat wil de klant?" aria-label="Wat" className={`${veld} w-full min-w-0`} />
+          <input name="plaats" placeholder="Plaats" aria-label="Plaats" className={`${veld} w-full min-w-0`} />
+          <select name="bron" aria-label="Bron" defaultValue="" className={`${veld} w-full min-w-0`}>
             <option value="" disabled>Hoe binnen?</option>
             {BRONNEN.map((b) => (
               <option key={b}>{b}</option>
             ))}
           </select>
           <button className="crm-knop">+ Klant</button>
-          {!opslagAan() && <span className="text-[12px] text-let">Opslag staat uit: wijzigingen worden niet bewaard.</span>}
+          {!opslagAan() && <span className="col-span-full text-[12px] text-let">Opslag staat uit: wijzigingen worden niet bewaard.</span>}
         </form>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
@@ -141,7 +141,7 @@ export default async function Klanten({ searchParams }: { searchParams: Promise<
                       <td>{k.soort}</td>
                       <td><span className={faseBadge(k.fase)}>{k.fase}</span></td>
                       <td>{k.plaats}</td>
-                      <td className="text-[13px]">{[k.telefoon, k.email].filter(Boolean).join(" · ") || k.contact}</td>
+                      <td className="text-[13px] whitespace-nowrap">{[k.telefoon, k.email].filter(Boolean).join(" · ") || k.contact}</td>
                       <td>{k.bron}</td>
                       <td className={`crm-cijfer text-[13px] ${k.opvolgen && k.opvolgen <= nu && isOpen(k.fase) ? "font-semibold text-let" : ""}`}>{k.opvolgen ? kortDatum(k.opvolgen) : ""}</td>
                       <td className="crm-cijfer text-right">{g.offerte ? euro(g.offerte) : calc ? toonEuro(calc.v.totaal) : k.waarde ? toonEuro(k.waarde) : ""}</td>

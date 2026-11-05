@@ -170,9 +170,9 @@ export default async function Vandaag({ searchParams }: { searchParams: Promise<
                     <li key={i}>
                       <Link href={a.href} className="grid grid-cols-[84px_minmax(0,1fr)] gap-3 px-4 py-2.5 hover:bg-grond">
                         <span className="crm-cijfer text-[12px] text-gedempt">{kort(a.datum)}</span>
-                        <span className="min-w-0 text-[13px]">
-                          <span className="truncate">{a.wat}</span>
-                          <span className="ml-2 text-[11px] text-gedempt">{a.soort}</span>
+                        <span className="flex min-w-0 items-baseline gap-2 text-[13px]">
+                          <span className="min-w-0 truncate">{a.wat}</span>
+                          <span className="shrink-0 text-[11px] text-gedempt">{a.soort}</span>
                         </span>
                       </Link>
                     </li>
