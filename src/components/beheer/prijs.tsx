@@ -8,6 +8,7 @@ import { BTW_TARIEVEN, EENHEDEN, dubbelen, ontdubbeld, SOORTEN, STANDAARD, isSoo
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
+import { metNieuweNummers } from "@/lib/crm/nummer"
 import { metArbeid, perGroep } from "@/components/crm/groepen"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { planDagen } from "@/lib/crm/project"
@@ -668,9 +669,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         <div className="px-[18mm]">
         {/* Rustiger opbouw (Nick, 5 nov 2026: "erg rommelig"): kop met gegevens, posten als tabel met kolomkoppen, totalen rechts. */}
         <p className="m-0 mt-10 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Prijsoverzicht</p>
-        <h1 className="syne m-0 mt-2 text-[22pt] leading-[1.15]">{titel.replace(/[#*]+\s*/g, "") || "Prijsoverzicht"}</h1>
+        <h1 className="syne m-0 mt-2 text-[22pt] leading-[1.15]">{naamVoorPrint || "Prijsoverzicht"}</h1>
+        {/* Klantnaam, het nummer eronder (Nick, 5 nov 2026); oude nummers in de nieuwe vorm. */}
+        {(() => { const nr = metNieuweNummers(titel).match(/GR-[A-Z]+ \/\/ \d{4}-\d{4}-\d{2,}/)?.[0]; return nr ? <p className="m-0 mt-1 text-[11pt] text-gedempt">{nr}</p> : null })()}
         <dl className="m-0 mt-5 flex gap-12 border-b border-lijn pb-5 text-[10pt]">
-          {naamVoorPrint && <div><dt className="text-[8pt] text-gedempt">Voor</dt><dd className="m-0 font-medium">{naamVoorPrint}</dd></div>}
           <div><dt className="text-[8pt] text-gedempt">Datum</dt><dd className="m-0 font-medium">{new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}</dd></div>
         </dl>
         {beschrijving.trim() && <TekstOpmaak tekst={beschrijving.trim()} zonderPrijzen className="mt-6 leading-[1.5]" />}
