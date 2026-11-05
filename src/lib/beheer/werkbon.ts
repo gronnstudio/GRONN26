@@ -35,6 +35,6 @@ export async function tekenWerkbon(token: string, getekend: NonNullable<Werkbon[
 /** Uit de lijst én het document weg, zodat de oude link ook niets meer toont (Codex, PR #215). */
 export async function werkbonWeg(token: string) {
   if (!isToken(token)) return
-  await wijzigJson<Doc>(LIJST, leeg, (d) => ({ lijst: (Array.isArray(d.lijst) ? d.lijst : []).filter((x) => x.token !== token) }))
   await verwijderBestand(pad(token))
+  await wijzigJson<Doc>(LIJST, leeg, (d) => ({ lijst: (Array.isArray(d.lijst) ? d.lijst : []).filter((x) => x.token !== token) }))
 }

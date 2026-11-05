@@ -52,7 +52,7 @@ export async function leesJson<T>(pad: string, start: () => T): Promise<T> {
   }
 }
 
-async function schrijf(pad: string, data: unknown, etag?: string) {
+async function schrijf(pad: string, data: unknown, etag?: string, alleenNieuw = false) {
   if (LOKAAL()) {
     const { mkdir, writeFile } = await import("node:fs/promises")
     const { dirname } = await import("node:path")
@@ -64,7 +64,8 @@ async function schrijf(pad: string, data: unknown, etag?: string) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) throw new Error("Opslag staat uit: zet BLOB_READ_WRITE_TOKEN.")
   await put(pad, JSON.stringify(data), {
     access: "private",
-    allowOverwrite: true,
+    // Bestond het document nog niet, dan alleen aanmaken: wint een ander proces, dan faalt dit en leest wijzig opnieuw (Codex, PR #215).
+    allowOverwrite: !alleenNieuw,
     addRandomSuffix: false,
     contentType: "application/json",
     ...(etag ? { ifMatch: etag } : {}),
@@ -90,13 +91,14 @@ const rij = new Map<string, Promise<unknown>>()
 
 async function wijzig<T>(pad: string, start: () => T, f: (d: T) => T | void): Promise<T> {
   for (let poging = 0; poging < 2; poging++) {
-    const { data, etag } = await lees(pad, start)
+    const { data, etag, bestaat } = await lees(pad, start)
     const nieuw = (f(data) ?? data) as T
     try {
-      await schrijf(pad, nieuw, etag)
+      await schrijf(pad, nieuw, etag, !bestaat)
       return nieuw
     } catch (fout) {
-      if (fout instanceof BlobPreconditionFailedError && poging === 0) continue
+      // Een eerste schrijf die faalt omdat een ander net aanmaakte: opnieuw lezen. Was het iets anders, dan faalt de tweede poging ook.
+      if ((fout instanceof BlobPreconditionFailedError || !bestaat) && poging === 0) continue
       throw fout
     }
   }
@@ -140,5 +142,6 @@ export async function verwijderBestand(pad: string) {
     return
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) return
-  await del(pad).catch(() => undefined)
+  // Een fout gaat door: een werkbon die niet weg is, moet ook niet als weg gemeld worden (Codex, PR #215).
+  await del(pad)
 }
