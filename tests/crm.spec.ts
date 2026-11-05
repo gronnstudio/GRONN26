@@ -30,6 +30,31 @@ test("zonder inlog: dashboard dicht, API's weigeren", async ({ request }) => {
   expect((await request.post("/api/crm/foto", { multipart: { klant: "a", tuin: "b" } })).status()).toBe(401)
   expect((await request.post("/api/crm/analyse", { data: { klant: "a", tuin: "b", fotos: [] } })).status()).toBe(401)
   expect((await request.get("/dashboard/catalogus/export", { maxRedirects: 0 })).status()).not.toBe(200)
+  expect((await request.post("/api/crm/inkoop", { multipart: { leverancier: "x", datum: "2026-11-05", bedrag: "1" } })).status()).toBe(401)
+  expect((await request.get("/api/crm/inkoop?id=00000000-0000-0000-0000-000000000000")).status()).toBe(401)
+})
+
+test("inkoop: factuur met PDF erbij, staat bij te betalen, afvinken haalt hem weg", async ({ page }) => {
+  await log(page)
+  await page.goto("/dashboard/inkoop")
+  const nummer = `T-${Date.now()}`
+  await page.getByLabel("Leverancier").fill("Bomat testleverancier")
+  await page.getByLabel("Factuurnummer").fill(nummer)
+  await page.getByLabel("Bedrag (€)").fill("121,00")
+  await page.getByLabel(/Factuur \(PDF/).setInputFiles({ name: "factuur.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\n%test\n") })
+  await page.getByRole("button", { name: "Inkoop toevoegen" }).click()
+  const rij = page.getByRole("row").filter({ hasText: nummer })
+  await expect(rij).toBeVisible()
+  await expect(rij).toContainText("€ 100,00") // 121 incl. → 100 excl. btw
+  const href = await rij.getByRole("link", { name: /Factuur bekijken/ }).getAttribute("href")
+  const r = await page.request.get(href!)
+  expect(r.status()).toBe(200)
+  expect(r.headers()["content-type"]).toBe("application/pdf")
+  await rij.getByRole("button", { name: "Betaald", exact: true }).click()
+  await expect(page.getByRole("row").filter({ hasText: nummer })).toHaveCount(0)
+  await page.goto("/dashboard/inkoop?tab=alle")
+  await page.getByRole("row").filter({ hasText: nummer }).getByRole("button", { name: /weghalen/ }).click()
+  await expect(page.getByRole("row").filter({ hasText: nummer })).toHaveCount(0)
 })
 
 test("van aanvraag tot calculatie", async ({ page, request }) => {
@@ -412,6 +437,7 @@ test("systeem: elke pagina één h1, geen fouten, geen overloop, licht en donker
   const paden = [
     "/dashboard",
     "/dashboard/aanvragen",
+    "/dashboard/inkoop",
     "/dashboard/klanten",
     "/dashboard/klanten?weergave=tabel",
     "/dashboard/klanten/clannad-stijn",

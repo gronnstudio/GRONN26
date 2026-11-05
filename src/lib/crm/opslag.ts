@@ -1,5 +1,5 @@
 import "server-only"
-import { BlobNotFoundError, BlobPreconditionFailedError, get, head, put } from "@vercel/blob"
+import { BlobNotFoundError, BlobPreconditionFailedError, del, get, head, put } from "@vercel/blob"
 
 // Eén plek waar het CRM leest en schrijft (ADR 0001, eigenaar 29 okt 2026:
 // "Blob nu, Postgres later"). Elk onderdeel is één JSON-document in de privé
@@ -130,4 +130,15 @@ export async function leesBestand(pad: string): Promise<ReadableStream<Uint8Arra
   if (!process.env.BLOB_READ_WRITE_TOKEN) return null
   const r = await get(pad, { access: "private" }).catch(() => null)
   return r?.stream ?? null
+}
+
+/** Een bijlage weghalen (bijv. bij een verwijderde inkoopfactuur). Bestaat hij niet, dan gebeurt er niets. */
+export async function verwijderBestand(pad: string) {
+  if (LOKAAL()) {
+    const { rm } = await import("node:fs/promises")
+    await rm(await lokaalPad(pad), { force: true })
+    return
+  }
+  if (!process.env.BLOB_READ_WRITE_TOKEN) return
+  await del(pad).catch(() => undefined)
 }

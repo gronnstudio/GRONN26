@@ -12,6 +12,10 @@ import { telling, type Vragenlijst } from "@/lib/crm/vragenlijst"
 import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { leesUren } from "@/lib/beheer/uren"
+import { leesInkoop } from "@/lib/beheer/inkoop"
+import { naInkoop } from "@/lib/crm/inkoop"
+import { InkoopTabel } from "@/components/crm/inkoop-tabel"
+import { InkoopFormulier } from "@/components/crm/inkoop-formulier"
 import { euro } from "@/lib/format"
 import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukHerinnerd, stukRond, stukWeg } from "../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
@@ -109,8 +113,11 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
 
 async function Overzicht({ k }: { k: Klant }) {
   const g = geld(k)
-  const uren = (await leesUren()).filter((r) => hoortBij(k, r.klant))
+  const [alleUren, alleInkoop] = await Promise.all([leesUren(), leesInkoop()])
+  const uren = alleUren.filter((r) => hoortBij(k, r.klant))
   const urenTotaal = uren.reduce((t, r) => t + r.uren, 0)
+  const inkoop = alleInkoop.filter((i) => i.klantId === k.id)
+  const na = naInkoop(g.gefactureerd, inkoop.reduce((t, i) => t + i.bedrag, 0), urenTotaal)
   // Nacalculatie in het klein: wat er per gewerkt uur binnenkwam (excl. 21 % btw, schatting).
   const perUur = urenTotaal && g.gefactureerd ? g.gefactureerd / 1.21 / urenTotaal : 0
   // Gewerkt tegenover gepland (idee uit Plancraft): de nieuwste planning per calculatie × 8 uur per dag.
@@ -191,7 +198,7 @@ async function Overzicht({ k }: { k: Klant }) {
               </p>
             </>
           )}
-          {perUur > 0 && (
+          {perUur > 0 && !inkoop.length && (
             <p className={`m-0 text-[13px] ${perUur < 37 ? "font-semibold text-let" : "text-gedempt"}`}>± {euro(perUur)} per uur gefactureerd (excl. btw, inclusief materiaal)</p>
           )}
           <ul className="m-0 mt-3 grid max-h-[240px] list-none gap-1 overflow-y-auto p-0 text-[13px]">
@@ -203,6 +210,23 @@ async function Overzicht({ k }: { k: Klant }) {
             ))}
             {!uren.length && <li className="text-gedempt">Geen uren gevonden met deze naam in het veld Klant.</li>}
           </ul>
+        </section>
+        <section className="crm-paneel p-5" aria-labelledby="nacalculatie">
+          <div className="flex items-baseline justify-between">
+            <p id="nacalculatie" className={`${lbl} m-0`}>Nacalculatie</p>
+            <Link href="/dashboard/inkoop" className="text-[12px] text-accent-tekst">Alle inkoop →</Link>
+          </div>
+          <dl className="m-0 mt-3 grid gap-1 text-[13px]">
+            <div className="flex justify-between"><dt>Gefactureerd excl. btw</dt><dd className="crm-cijfer m-0">{toonEuro(na.omzet)}</dd></div>
+            <div className="flex justify-between"><dt>Inkoop excl. btw</dt><dd className="crm-cijfer m-0">− {toonEuro(na.inkoop)}</dd></div>
+            <div className="flex justify-between border-t border-lijn pt-1 font-semibold"><dt>Over voor je werk</dt><dd className={`crm-cijfer m-0 ${na.over < 0 ? "text-let" : ""}`}>{toonEuro(na.over)}</dd></div>
+            {na.perUur !== 0 && <div className="flex justify-between"><dt>Per gewerkt uur</dt><dd className={`crm-cijfer m-0 ${na.perUur < 3700 ? "font-semibold text-let" : ""}`}>{toonEuro(na.perUur)}</dd></div>}
+          </dl>
+          {inkoop.length > 0 && <div className="mt-3 overflow-x-auto"><InkoopTabel lijst={inkoop} naam={new Map()} nu={vandaagNL()} zonderKlant /></div>}
+          <details className="mt-3">
+            <summary className="cursor-pointer text-[13px] text-accent-tekst">Inkoopfactuur toevoegen</summary>
+            <div className="mt-3"><InkoopFormulier klanten={[{ id: k.id, naam: k.naam }]} leveranciers={[...new Set(alleInkoop.map((i) => i.leverancier))]} vandaag={vandaagNL()} klantId={k.id} /></div>
+          </details>
         </section>
       </aside>
     </div>

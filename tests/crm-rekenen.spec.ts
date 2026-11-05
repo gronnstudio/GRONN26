@@ -9,6 +9,7 @@ import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/be
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
+import { naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
 import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -534,4 +535,22 @@ test("geplande uren: dagen uit de nieuwste planning per calculatie × 8", () => 
     { id: "d", titel: "D", aangemaakt: "2026-11-03", versies: [{ nr: 1, datum: "2026-11-03", planning: [plan[0]] }] },
   ] } as unknown as typeof k
   expect(geplandeUren(twee)).toBe(28)
+})
+
+test.describe("inkoop", () => {
+  test("schoonmaken: zonder datum, leverancier of geldig bedrag geen regel", () => {
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 10000 })).toMatchObject({ btw: 2100, betaald: false, nummer: "" })
+    expect(schoonInkoop({ datum: "5-11-2026", leverancier: "Bomat", bedrag: 1 })).toBeNull()
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: " ", bedrag: 1 })).toBeNull()
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 1.5 })).toBeNull()
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 1, btw: 1234, bestand: { ext: "exe" } })).not.toHaveProperty("bestand")
+  })
+  test("te betalen: open eerst, oudste vervaldag voorop", () => {
+    const r = (id: string, vervalt: string, betaald = false) => ({ ...schoonInkoop({ datum: "2026-11-01", leverancier: id, bedrag: 1, vervalt, betaald })!, id })
+    expect(teBetalen([r("b", "2026-11-20"), r("a", "2026-11-10"), r("c", "2026-11-01", true)]).map((i) => i.id)).toEqual(["a", "b"])
+  })
+  test("nacalculatie: gefactureerd excl. btw min inkoop, per uur", () => {
+    expect(naInkoop(1210, 40000, 10)).toEqual({ omzet: 100000, inkoop: 40000, over: 60000, perUur: 6000 })
+    expect(naInkoop(0, 5000, 0).perUur).toBe(0)
+  })
 })

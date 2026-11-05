@@ -10,6 +10,9 @@ import { euro } from "@/lib/format"
 import { lijstBetalingen } from "@/lib/mollie"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { koppelMollie } from "./acties"
+import { leesInkoop } from "@/lib/beheer/inkoop"
+import { teBetalen } from "@/lib/crm/inkoop"
+import { InkoopTabel } from "@/components/crm/inkoop-tabel"
 
 // Geld en papieren: wat je nog krijgt en wat er aan offertes openstaat (uit de
 // klantkaarten), wat je zelf nog moet betalen, en de kleine letters. Facturen
@@ -21,7 +24,8 @@ const datum = (d: string) => new Date(`${d.slice(0, 10)}T12:00`).toLocaleDateStr
 const dagenGeleden = (d: string, nu: string) => Math.round((Date.parse(`${nu}T12:00Z`) - Date.parse(`${d.slice(0, 10)}T12:00Z`)) / 86_400_000)
 
 export default async function Geld() {
-  const [klanten, uren, mollie] = await Promise.all([leesKlanten(), leesUren(), lijstBetalingen()])
+  const [klanten, uren, mollie, inkoop] = await Promise.all([leesKlanten(), leesUren(), lijstBetalingen(), leesInkoop()])
+  const open = teBetalen(inkoop)
   const nu = vandaagNL()
   const g = geldOverzicht(klanten, nu)
   const jaar = nu.slice(0, 4)
@@ -105,7 +109,10 @@ export default async function Geld() {
           )}
         </Blok>
 
-        <Blok titel="Zelf te betalen" rechts={<span className="text-gedempt">stand 7 okt 2026, uit de mail · src/lib/beheer/data.ts</span>}>
+        <Blok titel="Zelf te betalen" rechts={<Link href="/dashboard/inkoop" className="text-accent-tekst">Inkoop toevoegen →</Link>}>
+          {open.length ? <InkoopTabel lijst={open} naam={new Map(klanten.map((k) => [k.id, k.naam]))} nu={vandaagNL()} /> : <p className="m-0 text-[13px] text-gedempt">Geen open inkoopfacturen. Zet ze onder Inkoop, met de PDF erbij.</p>}
+          <details className="mt-3">
+            <summary className="cursor-pointer text-[13px] text-gedempt">Oude lijst uit de mail (stand 7 okt 2026)</summary>
           <table className="crm-tabel">
             <thead>
               <tr><th>Van</th><th>Waarvoor</th><th>Stand</th><th>Vervaldag</th><th className="text-right">Bedrag</th></tr>
@@ -122,6 +129,7 @@ export default async function Geld() {
               ))}
             </tbody>
           </table>
+          </details>
         </Blok>
 
         <Blok titel="Kleine letters" rechts={<a href="/documenten/GRONN-bijlagen-particulier.zip" download className="text-accent-tekst">Bijlagen voor een particuliere offerte (zip) ↓</a>}>
