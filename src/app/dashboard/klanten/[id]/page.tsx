@@ -12,12 +12,20 @@ import { telling, type Vragenlijst } from "@/lib/crm/vragenlijst"
 import { leesVragenlijst } from "@/lib/beheer/vragenlijst"
 import { toonDecimaal, toonEuro } from "@/lib/crm/geld"
 import { leesUren } from "@/lib/beheer/uren"
+import { leesInkoop } from "@/lib/beheer/inkoop"
+import { naInkoop } from "@/lib/crm/inkoop"
+import { InkoopTabel } from "@/components/crm/inkoop-tabel"
+import { InkoopFormulier } from "@/components/crm/inkoop-formulier"
 import { euro } from "@/lib/format"
 import { bewaarKlant, klantWeg, nieuweNotitie, nieuweTuin, nieuwStuk, stukHerinnerd, stukRond, stukWeg } from "../acties"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { AdresVeld } from "@/components/adres-veld"
 import { KopieerKnop } from "@/components/crm/kopieer-knop"
 import { trekOfferteIn } from "../offerte-acties"
+import { maakFactuur } from "../factuur-acties"
+import { haalWerkbonWeg, maakWerkbon } from "../werkbon-acties"
+import { leesWerkbonnen } from "@/lib/beheer/werkbon"
+import { volgendFactuurNummer } from "@/lib/crm/factuur-reken"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
 // module 02: Overzicht | Tuinen | Calculaties | Stukken | Activiteit). Gewone
@@ -100,7 +108,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
         {actief === "overzicht" && <Overzicht k={k} />}
         {actief === "tuinen" && <Tuinen k={k} lijst={lijst} />}
         {actief === "calculaties" && <Calculaties k={k} />}
-        {actief === "stukken" && <Stukken k={k} />}
+        {actief === "stukken" && <Stukken k={k} nummer={volgendFactuurNummer(klanten, vandaagNL())} />}
         {actief === "activiteit" && <Tijdlijn k={k} />}
       </main>
     </>
@@ -109,8 +117,11 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
 
 async function Overzicht({ k }: { k: Klant }) {
   const g = geld(k)
-  const uren = (await leesUren()).filter((r) => hoortBij(k, r.klant))
+  const [alleUren, alleInkoop] = await Promise.all([leesUren(), leesInkoop()])
+  const uren = alleUren.filter((r) => hoortBij(k, r.klant))
   const urenTotaal = uren.reduce((t, r) => t + r.uren, 0)
+  const inkoop = alleInkoop.filter((i) => i.klantId === k.id)
+  const na = naInkoop(g.gefactureerd, inkoop.reduce((t, i) => t + i.bedrag, 0), urenTotaal)
   // Nacalculatie in het klein: wat er per gewerkt uur binnenkwam (excl. 21 % btw, schatting).
   const perUur = urenTotaal && g.gefactureerd ? g.gefactureerd / 1.21 / urenTotaal : 0
   // Gewerkt tegenover gepland (idee uit Plancraft): de nieuwste planning per calculatie × 8 uur per dag.
@@ -156,7 +167,11 @@ async function Overzicht({ k }: { k: Klant }) {
         </label>
         <div className="flex items-center justify-between">
           <BewaarKnop>Bewaren</BewaarKnop>
-          <button formAction={klantWeg.bind(null, k.id)} className="crm-knop-stil hover:!text-let">Klant verwijderen</button>
+          {k.stukken.some((s) => s.factuur) ? (
+            <span className="text-[12px] text-gedempt">Heeft facturen, blijft bewaard</span>
+          ) : (
+            <button formAction={klantWeg.bind(null, k.id)} className="crm-knop-stil hover:!text-let">Klant verwijderen</button>
+          )}
         </div>
       </form>
 
@@ -191,7 +206,7 @@ async function Overzicht({ k }: { k: Klant }) {
               </p>
             </>
           )}
-          {perUur > 0 && (
+          {perUur > 0 && !inkoop.length && (
             <p className={`m-0 text-[13px] ${perUur < 37 ? "font-semibold text-let" : "text-gedempt"}`}>± {euro(perUur)} per uur gefactureerd (excl. btw, inclusief materiaal)</p>
           )}
           <ul className="m-0 mt-3 grid max-h-[240px] list-none gap-1 overflow-y-auto p-0 text-[13px]">
@@ -203,6 +218,23 @@ async function Overzicht({ k }: { k: Klant }) {
             ))}
             {!uren.length && <li className="text-gedempt">Geen uren gevonden met deze naam in het veld Klant.</li>}
           </ul>
+        </section>
+        <section className="crm-paneel p-5" aria-labelledby="nacalculatie">
+          <div className="flex items-baseline justify-between">
+            <p id="nacalculatie" className={`${lbl} m-0`}>Nacalculatie</p>
+            <Link href="/dashboard/inkoop" className="text-[12px] text-accent-tekst">Alle inkoop →</Link>
+          </div>
+          <dl className="m-0 mt-3 grid gap-1 text-[13px]">
+            <div className="flex justify-between"><dt>Gefactureerd excl. btw <span className="text-gedempt">(geschat op 21 %)</span></dt><dd className="crm-cijfer m-0">{toonEuro(na.omzet)}</dd></div>
+            <div className="flex justify-between"><dt>Inkoop excl. btw</dt><dd className="crm-cijfer m-0">− {toonEuro(na.inkoop)}</dd></div>
+            <div className="flex justify-between border-t border-lijn pt-1 font-semibold"><dt>Over voor je werk</dt><dd className={`crm-cijfer m-0 ${na.over < 0 ? "text-let" : ""}`}>{toonEuro(na.over)}</dd></div>
+            {na.perUur !== 0 && <div className="flex justify-between"><dt>Per gewerkt uur</dt><dd className={`crm-cijfer m-0 ${na.perUur < 3700 ? "font-semibold text-let" : ""}`}>{toonEuro(na.perUur)}</dd></div>}
+          </dl>
+          {inkoop.length > 0 && <div className="mt-3 overflow-x-auto"><InkoopTabel lijst={inkoop} naam={new Map()} nu={vandaagNL()} zonderKlant /></div>}
+          <details className="mt-3">
+            <summary className="cursor-pointer text-[13px] text-accent-tekst">Inkoopfactuur toevoegen</summary>
+            <div className="mt-3"><InkoopFormulier klanten={[{ id: k.id, naam: k.naam }]} leveranciers={[...new Set(alleInkoop.map((i) => i.leverancier))]} vandaag={vandaagNL()} klantId={k.id} /></div>
+          </details>
         </section>
       </aside>
     </div>
@@ -333,7 +365,12 @@ function Betaalstand({ s }: { s: Stuk }) {
   return null
 }
 
-function Stukken({ k }: { k: Klant }) {
+async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
+  const [alleBonnen, alleUren] = await Promise.all([leesWerkbonnen(), leesUren()])
+  const bonnen = alleBonnen.filter((w) => w.klantId === k.id)
+  const vandaag = vandaagNL()
+  const urenVandaag = alleUren.filter((r) => r.datum === vandaag && hoortBij(k, r.klant)).reduce((t, r) => t + r.uren, 0)
+  const offertes = k.stukken.filter((s) => s.soort === "Offerte" && s.link && s.rond)
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-10">
       <section>
@@ -346,6 +383,12 @@ function Stukken({ k }: { k: Klant }) {
                 <span className="[overflow-wrap:anywhere]">{s.nummer}</span>
                 <span className="block text-[12px] text-gedempt">{datum(s.datum)}</span>
                 {s.soort === "Factuur" && !s.rond && <Betaalstand s={s} />}
+                {s.factuur && (
+                  <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    <KopieerKnop tekst={`/factuur/${s.factuur}`} />
+                    <a href={`/factuur/${s.factuur}`} className="crm-knop-stil crm-knop-klein">{s.herinnerd && !s.rond ? "Herinnering bekijken" : "Factuur bekijken"}</a>
+                  </span>
+                )}
                 {s.link && (
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
@@ -373,18 +416,87 @@ function Stukken({ k }: { k: Klant }) {
                     {s.rond ? (s.soort === "Factuur" ? "Betaald ✓" : "Akkoord ✓") : s.soort === "Factuur" ? "Betaald?" : "Akkoord?"}
                   </button>
                 </form>
-                <form action={stukWeg.bind(null, k.id, s.id)}>
-                  <button aria-label={`${s.soort} ${s.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
-                </form>
+                {!s.factuur && (
+                  <form action={stukWeg.bind(null, k.id, s.id)}>
+                    <button aria-label={`${s.soort} ${s.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
+                  </form>
+                )}
               </span>
             </li>
           ))}
           {!k.stukken.length && <li className="text-[13px] text-gedempt">Nog niets.</li>}
         </ul>
-        <p className="m-0 mt-4 text-[12px] text-gedempt">De facturen zelf maak en boek je in DigiBoox; hier houd je bij wat er openstaat.</p>
+        <p className="m-0 mt-4 text-[12px] text-gedempt">Maak de factuur hiernaast; de klant krijgt een link met betaalknop en QR-code. Boeken blijft in DigiBoox.</p>
+
+        <p className={`${lbl} m-0 mt-10`}>Werkbonnen</p>
+        <ul className="m-0 mt-3 grid list-none gap-2 p-0 text-[14px]">
+          {bonnen.map((w) => (
+            <li key={w.token} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-lijn pb-2">
+              <span className="min-w-0">
+                <span className={`${lbl} mr-2 text-gedempt`}>Werkbon</span>
+                {w.nummer}
+                <span className="block truncate text-[12px] text-gedempt">{datum(w.datum)} · {w.werk}</span>
+                <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  <KopieerKnop tekst={`/werkbon/${w.token}`} />
+                  <a href={`/werkbon/${w.token}`} className="crm-knop-stil crm-knop-klein">{w.getekend ? "Bekijken" : "Laten tekenen"}</a>
+                </span>
+              </span>
+              <span className="flex items-center gap-1">
+                {w.getekend ? <span className="crm-badge crm-badge-goed">Getekend door {w.getekend.naam}</span> : <span className="crm-badge">Niet getekend</span>}
+                <form action={haalWerkbonWeg.bind(null, w.token)}>
+                  <button aria-label={`Werkbon ${w.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
+                </form>
+              </span>
+            </li>
+          ))}
+          {!bonnen.length && <li className="text-[13px] text-gedempt">Nog geen werkbonnen. Maak er een op de dag zelf en laat de klant tekenen op je telefoon.</li>}
+        </ul>
       </section>
-      <form action={nieuwStuk.bind(null, k.id)} className="grid grid-cols-[110px_minmax(0,1fr)] gap-2 self-start crm-paneel p-5">
-        <p className={`${lbl} col-span-2 m-0 text-gedempt`}>Toevoegen</p>
+      <div className="flex flex-col gap-6 self-start">
+      <form action={maakFactuur.bind(null, k.id)} className="crm-paneel grid gap-3 p-5">
+        <p className={`${lbl} m-0`}>Factuur maken</p>
+        <label className="grid gap-1 text-[13px]">
+          Waar komt hij uit?
+          <select name="bron" className={veld} defaultValue={offertes.at(-1)?.link ?? ""}>
+            {offertes.map((o) => <option key={o.id} value={o.link}>Termijn van offerte {o.nummer} ({euro(o.bedrag)})</option>)}
+            <option value="">Vrije factuur, één regel</option>
+          </select>
+        </label>
+        <div className="grid grid-cols-[minmax(0,1fr)_96px] gap-2">
+          <label className="grid gap-1 text-[13px]">Naam van de termijn<input name="label" placeholder="Termijn 1 van 3" className={veld} /></label>
+          <label className="grid gap-1 text-[13px]">Deel (%)<input name="procent" inputMode="decimal" defaultValue="100" className={veld} /></label>
+        </div>
+        <details className="text-[13px]">
+          <summary className="cursor-pointer text-accent-tekst">Bij een vrije factuur</summary>
+          <div className="mt-2 grid gap-2">
+            <label className="grid gap-1">Omschrijving<input name="omschrijving" placeholder="Snoeiwerk 4 november" className={veld} /></label>
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] gap-2">
+              <label className="grid gap-1">Bedrag (€)<input name="bedrag" inputMode="decimal" className={veld} /></label>
+              <label className="grid gap-1">Bedrag is<select name="metbtw" defaultValue="1" className={veld}><option value="1">incl. btw</option><option value="0">excl. btw</option></select></label>
+              <label className="grid gap-1">Btw<select name="btw" defaultValue="21" className={veld}><option value="21">21 %</option><option value="9">9 %</option><option value="0">0 %</option></select></label>
+            </div>
+          </div>
+        </details>
+        <label className="grid gap-1 text-[13px]">Titel op de factuur<input name="titel" placeholder="Leeg = titel van de offerte" className={veld} /></label>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="grid gap-1 text-[13px]">Factuurnummer<input name="nummer" required defaultValue={nummer} className={veld} /></label>
+          <label className="grid gap-1 text-[13px]">Datum<input name="datum" type="date" required defaultValue={vandaagNL()} className={veld} /></label>
+        </div>
+        <BewaarKnop>Factuur maken</BewaarKnop>
+      </form>
+      <form action={maakWerkbon.bind(null, k.id)} className="crm-paneel grid gap-3 p-5">
+        <p className={`${lbl} m-0`}>Werkbon maken</p>
+        <label className="grid gap-1 text-[13px]">Wat is er gedaan?<textarea name="werk" required rows={3} className={`${veld} resize-y`} placeholder="Keermuur gestort, 6 m drainage gelegd" /></label>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="grid gap-1 text-[13px]">Datum<input name="datum" type="date" required defaultValue={vandaag} className={veld} /></label>
+          <label className="grid gap-1 text-[13px]">Uren<input name="uren" inputMode="decimal" required defaultValue={urenVandaag ? String(urenVandaag).replace(".", ",") : ""} className={veld} /></label>
+        </div>
+        <label className="grid gap-1 text-[13px]">Materiaal<textarea name="materiaal" rows={2} className={`${veld} resize-y`} placeholder="2 BB teelaarde, 40 betonblokken" /></label>
+        <label className="grid gap-1 text-[13px]">Opmerking (bijv. meerwerk)<input name="opmerking" className={veld} /></label>
+        <BewaarKnop>Werkbon maken</BewaarKnop>
+      </form>
+      <form action={nieuwStuk.bind(null, k.id)} className="grid grid-cols-[110px_minmax(0,1fr)] gap-2 crm-paneel p-5">
+        <p className={`${lbl} col-span-2 m-0 text-gedempt`}>Al gemaakt in DigiBoox? Toevoegen</p>
         <select name="soort" aria-label="Soort" className={`${veld}`}>
           <option>Factuur</option>
           <option>Offerte</option>
@@ -394,6 +506,7 @@ function Stukken({ k }: { k: Klant }) {
         <input name="datum" type="date" required defaultValue={new Date().toISOString().slice(0, 10)} aria-label="Datum" className={veld} />
         <button className="col-span-2 crm-knop-rand">+ Toevoegen</button>
       </form>
+      </div>
     </div>
   )
 }

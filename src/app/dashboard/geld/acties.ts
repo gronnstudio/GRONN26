@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { eisEigenaar } from "@/lib/crm/toegang"
 import { gebeurtenis, wijzigKlanten, type Stuk } from "@/lib/beheer/klanten"
 import { haalRegel } from "@/lib/mollie"
+import { bewaarTeksten } from "@/lib/beheer/teksten"
 
 // Koppel een betaalde Mollie-betaling aan een klant: aan een open factuur (die
 // wordt betaald), of als nieuw ontvangen bedrag (bijv. een aanbetaling).
@@ -28,4 +29,11 @@ export async function koppelMollie(betaling: string, d: FormData) {
     })
   })
   revalidatePath("/dashboard", "layout")
+}
+
+/** Vaste begin- en slottekst voor nieuwe offertes. */
+export async function bewaarVasteTeksten(d: FormData) {
+  await eisEigenaar()
+  await bewaarTeksten({ begin: String(d.get("begin") ?? ""), slot: String(d.get("slot") ?? "") })
+  revalidatePath("/dashboard/geld")
 }

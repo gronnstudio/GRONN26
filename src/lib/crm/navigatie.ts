@@ -29,6 +29,7 @@ export const GROEPEN: { naam: string; onderdelen: Onderdeel[] }[] = [
     naam: "Bedrijf",
     onderdelen: [
       { href: "/dashboard/geld", naam: "Geld en papieren", icoon: "geld" },
+      { href: "/dashboard/inkoop", naam: "Inkoop", icoon: "inkoop" },
       { href: "/dashboard/uren", naam: "Uren", icoon: "uren" },
       { href: "/dashboard/social", naam: "Social", icoon: "social" },
       { href: "/dashboard/links", naam: "Links", icoon: "links" },
@@ -50,5 +51,6 @@ export const NIEUW: { naam: string; href: string; uitleg: string }[] = [
   { naam: "Calculatie", href: "/dashboard/prijs", uitleg: "Rekenblad, bewaren bij een klant" },
   { naam: "Afspraak", href: "/dashboard/planning?nieuw=1", uitleg: "In de planning" },
   { naam: "Uren", href: "/dashboard/uren", uitleg: "Een werkdag invullen" },
+  { naam: "Inkoopfactuur", href: "/dashboard/inkoop", uitleg: "Factuur van een leverancier" },
   { naam: "Catalogusitem", href: "/dashboard/catalogus#nieuw", uitleg: "Inkoopprijs onthouden" },
 ]

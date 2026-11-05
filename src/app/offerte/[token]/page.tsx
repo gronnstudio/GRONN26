@@ -61,6 +61,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
         </dl>
       </header>
 
+      {!spec && o.begin && <p className="m-0 mt-6 max-w-[72ch] whitespace-pre-line text-[16px] leading-[1.6]">{o.begin}</p>}
       {o.beschrijving && <TekstOpmaak tekst={o.beschrijving} className="mt-6 max-w-[72ch] text-[16px] leading-[1.6]" />}
 
       {o.planning && o.planning.length > 0 && (
@@ -94,6 +95,8 @@ export default async function OffertePagina({ params, searchParams }: { params: 
       </table>
 
       {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel} />}
+
+      {!spec && o.slot && <p className="m-0 mt-10 max-w-[72ch] whitespace-pre-line text-[16px] leading-[1.6]">{o.slot}</p>}
 
       <PdfKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${o.nummer} GRØNN Studio`} />
 

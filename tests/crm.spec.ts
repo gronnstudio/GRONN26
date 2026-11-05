@@ -30,6 +30,33 @@ test("zonder inlog: dashboard dicht, API's weigeren", async ({ request }) => {
   expect((await request.post("/api/crm/foto", { multipart: { klant: "a", tuin: "b" } })).status()).toBe(401)
   expect((await request.post("/api/crm/analyse", { data: { klant: "a", tuin: "b", fotos: [] } })).status()).toBe(401)
   expect((await request.get("/dashboard/catalogus/export", { maxRedirects: 0 })).status()).not.toBe(200)
+  expect((await request.post("/api/crm/inkoop", { multipart: { leverancier: "x", datum: "2026-11-05", bedrag: "1" } })).status()).toBe(401)
+  expect((await request.get("/api/crm/inkoop?id=00000000-0000-0000-0000-000000000000")).status()).toBe(401)
+})
+
+test("inkoop: factuur met PDF erbij, staat bij te betalen, afvinken haalt hem weg", async ({ page }) => {
+  await log(page)
+  // Een ingevuld maar onleesbaar btw-bedrag valt niet stil terug op het tarief.
+  expect((await page.request.post("/api/crm/inkoop", { multipart: { leverancier: "x", datum: "2026-11-05", bedrag: "121", metbtw: "1", btwbedrag: "21,0x" } })).status()).toBe(400)
+  await page.goto("/dashboard/inkoop")
+  const nummer = `T-${Date.now()}`
+  await page.getByLabel("Leverancier").fill("Bomat testleverancier")
+  await page.getByLabel("Factuurnummer").fill(nummer)
+  await page.getByLabel("Bedrag (€)", { exact: true }).fill("121,00")
+  await page.getByLabel(/Factuur \(PDF/).setInputFiles({ name: "factuur.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\n%test\n") })
+  await page.getByRole("button", { name: "Inkoop toevoegen" }).click()
+  const rij = page.getByRole("row").filter({ hasText: nummer })
+  await expect(rij).toBeVisible()
+  await expect(rij).toContainText("€ 100,00") // 121 incl. → 100 excl. btw
+  const href = await rij.getByRole("link", { name: /Factuur bekijken/ }).getAttribute("href")
+  const r = await page.request.get(href!)
+  expect(r.status()).toBe(200)
+  expect(r.headers()["content-type"]).toBe("application/pdf")
+  await rij.getByRole("button", { name: "Betaald", exact: true }).click()
+  await expect(page.getByRole("row").filter({ hasText: nummer })).toHaveCount(0)
+  await page.goto("/dashboard/inkoop?tab=alle")
+  await page.getByRole("row").filter({ hasText: nummer }).getByRole("button", { name: /weghalen/ }).click()
+  await expect(page.getByRole("row").filter({ hasText: nummer })).toHaveCount(0)
 })
 
 test("van aanvraag tot calculatie", async ({ page, request }) => {
@@ -393,6 +420,91 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   await expect(page.getByText("Minigraver")).toHaveCount(0)
 })
 
+test("factuur: vrije factuur maken, de klant ziet hem zonder inlog, betaald staat erop", async ({ page, browser }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  const naam = `Factuurtest ${Date.now()}`
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill(naam)
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await expect(page.getByRole("heading", { level: 1, name: naam })).toBeVisible()
+  await page.goto(`${page.url().split("?")[0]}?tab=stukken`)
+  await page.getByLabel("Waar komt hij uit?").selectOption("")
+  await page.getByText("Bij een vrije factuur").click()
+  await page.getByLabel("Omschrijving").fill("Snoeiwerk")
+  await page.getByLabel("Bedrag (€)").fill("121")
+  const nummer = `GR-F // T${Date.now()}`
+  await page.getByLabel("Factuurnummer").fill(nummer)
+  await page.getByRole("button", { name: "Factuur maken" }).click()
+  const link = page.getByRole("link", { name: "Factuur bekijken" })
+  await expect(link).toBeVisible()
+  const href = (await link.getAttribute("href"))!
+  // De klant opent de link zonder inlog.
+  const klant = await browser.newPage()
+  await klant.goto(href)
+  await expect(klant.getByRole("heading", { level: 1 })).toBeVisible()
+  await expect(klant.getByText(nummer).first()).toBeVisible()
+  await expect(klant.getByRole("row", { name: /Btw 21 % over € 100,00/ })).toContainText("€ 21,00")
+  await expect(klant.getByRole("row", { name: /Te betalen/ })).toContainText("€ 121,00")
+  // Terug van Mollie maar nog niet afgevinkt: geen tweede betaalknop, wel een bevestiging.
+  await klant.goto(`${href}?betaald=1`)
+  await expect(klant.getByRole("status")).toContainText("Je betaling is onderweg")
+  // Een gemaakte factuur kan niet weg; alleen op betaald zetten.
+  await expect(page.getByRole("button", { name: new RegExp(`Factuur ${nummer.replace(/[/]/g, "\\/")} weghalen`) })).toHaveCount(0)
+  await page.getByRole("button", { name: "Betaald?" }).click()
+  await expect(page.getByRole("button", { name: "Betaald ✓" })).toBeVisible()
+  await klant.reload()
+  await expect(klant.getByText("Betaald, dank je wel")).toBeVisible()
+  await klant.close()
+  expect((await page.request.get("/factuur/onzin")).status()).toBe(404)
+  // Een klant met een uitgegeven factuur kan ook niet meer weg.
+  await page.goto(page.url().split("?")[0])
+  await expect(page.getByText("Heeft facturen, blijft bewaard")).toBeVisible()
+  await expect(page.getByRole("button", { name: "Klant verwijderen" })).toHaveCount(0)
+})
+
+test("werkbon: maken, de klant tekent op de telefoon, daarna staat hij vast", async ({ page, browser }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  const naam = `Werkbontest ${Date.now()}`
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill(naam)
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await expect(page.getByRole("heading", { level: 1, name: naam })).toBeVisible()
+  await page.goto(`${page.url().split("?")[0]}?tab=stukken`)
+  await page.getByLabel("Wat is er gedaan?").fill("Keermuur gestort")
+  await page.getByLabel("Uren", { exact: true }).fill("6,5")
+  await page.getByRole("button", { name: "Werkbon maken" }).click()
+  const link = page.getByRole("link", { name: "Laten tekenen" })
+  await expect(link).toBeVisible()
+  const href = (await link.getAttribute("href"))!
+  const tel = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true })
+  await tel.goto(href)
+  await expect(tel.getByText("Keermuur gestort")).toBeVisible()
+  await expect(tel.getByText("6,5 uur")).toBeVisible()
+  await tel.getByLabel("Je naam").fill("Test Klant")
+  const vlak = tel.getByLabel("Tekenvlak voor je handtekening")
+  await expect(tel.getByRole("button", { name: "Tekenen" })).toBeDisabled()
+  await vlak.evaluate((e) => e.scrollIntoView({ block: "center" }))
+  const b = (await vlak.boundingBox())!
+  await tel.mouse.move(b.x + 20, b.y + 100)
+  await tel.mouse.down()
+  for (let i = 1; i <= 10; i++) await tel.mouse.move(b.x + 20 + i * 25, b.y + 100 + (i % 2 ? -30 : 30))
+  await tel.mouse.up()
+  await tel.getByLabel(/Ik heb gezien/).check()
+  await tel.getByRole("button", { name: "Tekenen" }).click()
+  await expect(tel.getByText("Voor gezien getekend")).toBeVisible()
+  await expect(tel.getByRole("img", { name: "Handtekening van Test Klant" })).toBeVisible()
+  await expect(tel.getByRole("button", { name: "Tekenen" })).toHaveCount(0)
+  await tel.close()
+  await page.reload()
+  await expect(page.getByText("Getekend door Test Klant")).toBeVisible()
+  // Weghalen trekt ook de link in.
+  await page.getByRole("button", { name: /^Werkbon .* weghalen$/ }).click()
+  await expect(page.getByRole("link", { name: "Laten tekenen" })).toHaveCount(0)
+  await expect.poll(async () => (await page.request.get(href)).status()).toBe(404)
+})
+
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
   await log(page)
   await page.setViewportSize({ width: 1440, height: 1000 })
@@ -412,6 +524,7 @@ test("systeem: elke pagina één h1, geen fouten, geen overloop, licht en donker
   const paden = [
     "/dashboard",
     "/dashboard/aanvragen",
+    "/dashboard/inkoop",
     "/dashboard/klanten",
     "/dashboard/klanten?weergave=tabel",
     "/dashboard/klanten/clannad-stijn",

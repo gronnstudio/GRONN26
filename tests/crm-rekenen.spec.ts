@@ -9,6 +9,9 @@ import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/be
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
+import { btwPerTarief, epcCode, factuurTotaal, termijnRegels, volgendFactuurNummer } from "../src/lib/crm/factuur-reken"
+import { MAX_HANDTEKENING, schoneHandtekening, volgendWerkbonNummer } from "../src/lib/crm/werkbon"
+import { metBtw, naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
 import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -534,4 +537,80 @@ test("geplande uren: dagen uit de nieuwste planning per calculatie × 8", () => 
     { id: "d", titel: "D", aangemaakt: "2026-11-03", versies: [{ nr: 1, datum: "2026-11-03", planning: [plan[0]] }] },
   ] } as unknown as typeof k
   expect(geplandeUren(twee)).toBe(28)
+})
+
+test.describe("inkoop", () => {
+  test("schoonmaken: zonder datum, leverancier of geldig bedrag geen regel", () => {
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 10000 })).toMatchObject({ btw: 2100, betaald: false, nummer: "" })
+    expect(schoonInkoop({ datum: "5-11-2026", leverancier: "Bomat", bedrag: 1 })).toBeNull()
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: " ", bedrag: 1 })).toBeNull()
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 1.5 })).toBeNull()
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 1, btw: 1234, bestand: { ext: "exe" } })).not.toHaveProperty("bestand")
+  })
+  test("gemengde btw: het btw-bedrag van de factuur gaat voor het tarief", () => {
+    const i = schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 10000, btw: 2100, btwBedrag: 1500 })!
+    expect(metBtw(i)).toBe(11500)
+    expect(metBtw(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 10000, btw: 2100 })!)).toBe(12100)
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 100, btwBedrag: 500 })).not.toHaveProperty("btwBedrag")
+  })
+  test("te betalen: open eerst, oudste vervaldag voorop", () => {
+    const r = (id: string, vervalt: string, betaald = false) => ({ ...schoonInkoop({ datum: "2026-11-01", leverancier: id, bedrag: 1, vervalt, betaald })!, id })
+    expect(teBetalen([r("b", "2026-11-20"), r("a", "2026-11-10"), r("c", "2026-11-01", true)]).map((i) => i.id)).toEqual(["a", "b"])
+  })
+  test("nacalculatie: gefactureerd excl. btw min inkoop, per uur", () => {
+    expect(naInkoop(1210, 40000, 10)).toEqual({ omzet: 100000, inkoop: 40000, over: 60000, perUur: 6000 })
+    expect(naInkoop(0, 5000, 0).perUur).toBe(0)
+  })
+})
+
+test.describe("factuur", () => {
+  test("btw per tarief over de som, totaal klopt", () => {
+    const r = [{ omschrijving: "a", bedrag: 10000, btw: 2100 }, { omschrijving: "b", bedrag: 5000, btw: 900 }, { omschrijving: "c", bedrag: 333, btw: 2100 }]
+    expect(btwPerTarief(r)).toEqual([{ tarief: 2100, grondslag: 10333, btw: 2170 }, { tarief: 900, grondslag: 5000, btw: 450 }])
+    expect(factuurTotaal(r).totaal).toBe(10333 + 2170 + 5000 + 450)
+  })
+  test("termijn: per tarief het deel van de offerte", () => {
+    const o = { nummer: "GR-O // 1", btw: [{ tarief: 2100, grondslag: 100000, btw: 21000 }, { tarief: 900, grondslag: 20000, btw: 1800 }] }
+    const r = termijnRegels(o, 4000, "Termijn 1 van 3")
+    expect(r!.map((x) => [x.bedrag, x.btw])).toEqual([[40000, 2100], [8000, 900]])
+    expect(r![0].omschrijving).toContain("Termijn 1 van 3 · 40 % van offerte GR-O // 1")
+  })
+  test("termijnen: samen niet boven 100 %, de laatste krijgt de rest", () => {
+    const o = { nummer: "GR-O // 2", btw: [{ tarief: 2100, grondslag: 10001, btw: 2100 }] }
+    const een = termijnRegels(o, 5000, "1")!
+    expect(een[0].bedrag).toBe(5001)
+    const twee = termijnRegels(o, 5000, "2", [{ deel: 5000, regels: een }])!
+    expect(twee[0].bedrag).toBe(5000)
+    expect(termijnRegels(o, 6000, "2", [{ deel: 5000, regels: een }])).toBeNull()
+    expect(termijnRegels(o, 10000, "nog eens", [{ deel: 10000, regels: [{ omschrijving: "", bedrag: 10001, btw: 2100 }] }])).toBeNull()
+  })
+  test("nummer: Nicks vorm, volgnummer per dag", () => {
+    const k = [{ stukken: [{ id: "1", soort: "Factuur" as const, nummer: "GR-F // 2026-1105-0002", bedrag: 1, datum: "2026-11-05" }, { id: "2", soort: "Offerte" as const, nummer: "GR-F // 2026-1105-0009", bedrag: 1, datum: "2026-11-05" }] }]
+    expect(volgendFactuurNummer(k, "2026-11-05")).toBe("GR-F // 2026-1105-0003")
+    expect(volgendFactuurNummer(k, "2026-11-06")).toBe("GR-F // 2026-1106-0001")
+  })
+  test("SEPA-betaalcode volgens EPC069-12", () => {
+    expect(epcCode({ naam: "GRØNN Studio", iban: "nl91 abna 0417 1643 00", bedrag: 12100, omschrijving: "Factuur 1" }).split("\n")).toEqual(["BCD", "002", "1", "SCT", "", "GRØNN Studio", "NL91ABNA0417164300", "EUR121.00", "", "", "Factuur 1"])
+  })
+})
+
+test.describe("werkbon", () => {
+  test("nummer per dag, handtekening alleen als echte PNG", () => {
+    expect(volgendWerkbonNummer([{ nummer: "GR-W // 2026-1105-01" }], "2026-11-05")).toBe("GR-W // 2026-1105-02")
+    expect(volgendWerkbonNummer([], "2026-11-06")).toBe("GR-W // 2026-1106-01")
+    const png = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(200)]).toString("base64")
+    expect(schoneHandtekening(`data:image/png;base64,${png}`)).toBe(`data:image/png;base64,${png}`)
+    expect(schoneHandtekening(`data:image/svg+xml;base64,${png}`)).toBeNull()
+    expect(schoneHandtekening(`data:image/png;base64,${Buffer.from("<svg onload=alert(1)>".repeat(10)).toString("base64")}`)).toBeNull()
+    expect(schoneHandtekening(`data:image/png;base64,${"A".repeat(MAX_HANDTEKENING)}`)).toBeNull()
+  })
+})
+
+test("korting per regel: over de verkoop van die regel, btw over wat overblijft", () => {
+  const r = nieuweRegel("materiaal", { inkoop: 10000, opslag: 0, hoeveelheid: 2000, korting: 1000, btw: 2100 })
+  const u = reken({ uren: 0, uurtarief: 0, regels: [r], onvoorzien: 0, korting: 0 })
+  expect(u.regels[0].verkoop).toBe(18000)
+  expect(u.btw).toEqual([{ tarief: 2100, grondslag: 18000, btw: 3780 }])
+  expect(schoonRegel({ ...r, korting: 20000 }).korting).toBe(10000)
+  expect(schoonRegel({ ...r, korting: 0 }).korting).toBeUndefined()
 })

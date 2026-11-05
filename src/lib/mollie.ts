@@ -62,3 +62,17 @@ export async function haalRegel(id: string) {
   const b = (await r.json()) as { id: string; status: MollieStatus; amount: { value: string }; description: string; createdAt: string; paidAt?: string }
   return { id: b.id, status: b.status, bedrag: Number(b.amount.value), omschrijving: b.description, datum: b.createdAt, betaald: b.paidAt }
 }
+
+// Een betaallink voor een factuur (5 nov 2026). Anders dan een betaling
+// verloopt een link niet na een kwartier: de klant kan hem dagen later openen.
+// Wat er via de link binnenkomt staat in de lijst op Geld, om te koppelen.
+export async function maakBetaallink(b: { bedrag: number; omschrijving: string; terug: string }) {
+  const r = await fetch("https://api.mollie.com/v2/payment-links", {
+    method: "POST",
+    headers: kop(),
+    body: JSON.stringify({ amount: { currency: "EUR", value: b.bedrag.toFixed(2) }, description: b.omschrijving.slice(0, 255), redirectUrl: b.terug }),
+  })
+  if (!r.ok) throw new Error(`Mollie ${r.status}: ${await r.text()}`)
+  const j = (await r.json()) as { _links?: { paymentLink?: { href?: string } } }
+  return j._links?.paymentLink?.href ?? null
+}
