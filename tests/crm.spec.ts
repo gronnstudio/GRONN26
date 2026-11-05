@@ -40,7 +40,7 @@ test("inkoop: factuur met PDF erbij, staat bij te betalen, afvinken haalt hem we
   const nummer = `T-${Date.now()}`
   await page.getByLabel("Leverancier").fill("Bomat testleverancier")
   await page.getByLabel("Factuurnummer").fill(nummer)
-  await page.getByLabel("Bedrag (€)").fill("121,00")
+  await page.getByLabel("Bedrag (€)", { exact: true }).fill("121,00")
   await page.getByLabel(/Factuur \(PDF/).setInputFiles({ name: "factuur.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\n%test\n") })
   await page.getByRole("button", { name: "Inkoop toevoegen" }).click()
   const rij = page.getByRole("row").filter({ hasText: nummer })
