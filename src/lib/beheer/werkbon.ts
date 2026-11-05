@@ -1,7 +1,7 @@
 import "server-only"
 import { leesJson, verwijderBestand, wijzigJson } from "@/lib/crm/opslag"
 import { isToken } from "@/lib/crm/offerte"
-import { kort, type Werkbon, type WerkbonKort } from "@/lib/crm/werkbon"
+import { kort, volgendWerkbonNummer, type Werkbon, type WerkbonKort } from "@/lib/crm/werkbon"
 
 // Elke werkbon is een eigen document onder een onraadbare sleutel (zoals de
 // offerte), met een korte lijst ernaast voor de klantkaart.
@@ -17,10 +17,16 @@ export async function leesWerkbonnen(): Promise<WerkbonKort[]> {
   return Array.isArray(d.lijst) ? d.lijst : []
 }
 
-/** Bewaar het document en zet de korte versie in de lijst (nieuw of bijgewerkt). */
-export async function bewaarWerkbon(w: Werkbon) {
+/** Een nieuwe werkbon: het nummer wordt in dezelfde schrijf van de lijst gekozen, dus twee tegelijk krijgen nooit hetzelfde (Codex, PR #215). */
+export async function nieuweWerkbon(zonder: Omit<Werkbon, "nummer">): Promise<Werkbon> {
+  let w: Werkbon = { ...zonder, nummer: "" }
+  await wijzigJson<Doc>(LIJST, leeg, (d) => {
+    const lijst = Array.isArray(d.lijst) ? d.lijst : []
+    w = { ...zonder, nummer: volgendWerkbonNummer(lijst, zonder.datum) }
+    return { lijst: [kort(w), ...lijst].sort((a, b) => b.datum.localeCompare(a.datum)) }
+  })
   await wijzigJson<Werkbon | null>(pad(w.token), () => null, () => w)
-  await wijzigJson<Doc>(LIJST, leeg, (d) => ({ lijst: [kort(w), ...(Array.isArray(d.lijst) ? d.lijst : []).filter((x) => x.token !== w.token)].sort((a, b) => b.datum.localeCompare(a.datum)) }))
+  return w
 }
 
 /** Teken alleen als er nog niet getekend is; geeft de getekende werkbon terug, of null. */
