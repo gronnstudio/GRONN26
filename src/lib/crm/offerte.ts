@@ -65,7 +65,10 @@ export function offerteNummer(klanten: Klant[], datum = vandaag()) {
     .flatMap((k) => k.stukken)
     .filter((s) => s.soort === "Offerte" && s.nummer.startsWith(voor))
     .reduce((m, s) => Math.max(m, Number(s.nummer.slice(voor.length)) || 0), 0)
-  return `${voor}${String(hoogste + 1).padStart(2, "0")}`
+  // Oude vorm van dezelfde dag (GR-O // JJJJMMDDNNNN) telt mee, zodat de reeks doorloopt (Codex, PR #224).
+  const dag = datum.replaceAll("-", "")
+  const oud = klanten.flatMap((k) => k.stukken).filter((s) => s.soort === "Offerte" && /^GR-O \/\/ \d{12}$/.test(s.nummer) && s.nummer.slice(8, 16) === dag).reduce((m, s) => Math.max(m, Number(s.nummer.slice(16))), 0)
+  return `${voor}${String(Math.max(hoogste, oud) + 1).padStart(2, "0")}`
 }
 
 /** Korting per regel staat erbij in de omschrijving; het bedrag is al na korting. */
