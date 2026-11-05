@@ -642,12 +642,13 @@ test("documenten: offertes en facturen over alle klanten, met status, filter, so
       { id: "2", soort: "Factuur", nummer: "2026-1101-01", bedrag: 0.2, datum: "2026-11-01" },
       { id: "3", soort: "Offerte", nummer: "OF-1", bedrag: 50, datum: "2026-10-02", rond: true },
     ]),
+    k("c", "-1+Carla", [{ id: "5", soort: "Offerte", nummer: "OF-2", bedrag: 1, datum: "2026-01-01" }]),
     k("b", "=Bert", [{ id: "4", soort: "Factuur", nummer: "2025-1", bedrag: 10, datum: "2025-05-01", rond: true }]),
   ]
   const f = documentRijen(klanten, "Factuur", "2026-11-05")
   expect(f.map((r) => [r.stuk.nummer, r.status])).toEqual([["2026-1101-01", "Open"], ["2026-1001-01", "Te laat"], ["2025-1", "Betaald"]])
   expect(f[1].vervalt).toBe("2026-10-15")
-  expect(documentRijen(klanten, "Offerte", "2026-11-05").map((r) => r.status)).toEqual(["Akkoord"])
+  expect(documentRijen(klanten, "Offerte", "2026-11-05").map((r) => r.status)).toEqual(["Akkoord", "Open"])
   expect(filterRijen(f, { jaar: "2026" }).length).toBe(2)
   expect(filterRijen(f, { q: "bert" }).map((r) => r.stuk.nummer)).toEqual(["2025-1"])
   expect(filterRijen(f, { status: "Te laat" }).length).toBe(1)
@@ -656,6 +657,7 @@ test("documenten: offertes en facturen over alle klanten, met status, filter, so
   expect(csv.startsWith("\uFEFF\"Nummer\";")).toBe(true)
   expect(csv).toContain('"\'=Bert"')
   expect(csv).toContain('"100,10"')
+  expect(naarCsv(documentRijen(klanten, "Offerte", "2026-11-05"))).toContain(`"'-1+Carla"`)
 })
 
 test("planbord: werkdagen per klus per week, vanaf de week van vandaag", () => {

@@ -64,18 +64,16 @@ export function filterRijen(rijen: DocRij[], { q, status, jaar }: Filter): DocRi
 /** Bedragen staan in euro's met centen; optellen in centen, zodat er geen 0,1 + 0,2 ontstaat. */
 export const somEuro = (rijen: DocRij[]) => rijen.reduce((t, r) => t + Math.round(r.stuk.bedrag * 100), 0) / 100
 
-// Een cel die met = + @ of een min zonder cijfer begint, zou Excel als formule lezen: een apostrof ervoor.
-const cel = (v: string | number) => {
-  const t = String(v)
-  return `"${(/^[=+@\t\r]|^-(?!\d)/.test(t) ? `'${t}` : t).replace(/"/g, '""')}"`
-}
-const bedragNL = (n: number) => n.toFixed(2).replace(".", ",")
+// Tekstcellen die met = + - @ of een tab beginnen, zou Excel als formule lezen: een apostrof ervoor.
+// Ook een min met een cijfer erna, want een klantnaam komt van buiten. Bedragen gaan apart (bedragCel).
+const cel = (v: string) => `"${(/^[=+\-@\t\r]/.test(v) ? `'${v}` : v).replace(/"/g, '""')}"`
+const bedragCel = (n: number) => `"${n.toFixed(2).replace(".", ",")}"`
 
 /** CSV met puntkomma's en een BOM, zodat Excel NL hem goed opent. */
 export function naarCsv(rijen: DocRij[]): string {
   const kop = ["Nummer", "Soort", "Klant", "Datum", "Vervalt", "Status", "Bedrag incl. btw"]
-  const regels = rijen.map((r) => [r.stuk.nummer, r.stuk.soort, r.klant.naam, r.stuk.datum.slice(0, 10), r.vervalt ?? "", r.status, bedragNL(r.stuk.bedrag)])
-  return "﻿" + [kop, ...regels].map((r) => r.map(cel).join(";")).join("\r\n")
+  const regels = rijen.map((r) => [...[r.stuk.nummer, r.stuk.soort, r.klant.naam, r.stuk.datum.slice(0, 10), r.vervalt ?? "", r.status].map(cel), bedragCel(r.stuk.bedrag)])
+  return "﻿" + [kop.map(cel), ...regels].map((r) => r.join(";")).join("\r\n")
 }
 
 /** De klasse van de statuspil: groen = rond, rood = te laat, oranje = er moet iets gebeuren. */
