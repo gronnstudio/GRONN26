@@ -24,6 +24,7 @@ import { KopieerKnop } from "@/components/crm/kopieer-knop"
 import { MailKnop } from "@/components/crm/mail-knop"
 import { mailVoor, mailtoLink, type MailSoort } from "@/lib/crm/mail"
 import { trekOfferteIn } from "../offerte-acties"
+import { OfferteWeg } from "@/components/crm/offerte-weg"
 import { maakFactuur } from "../factuur-acties"
 import { haalWerkbonWeg, maakWerkbon } from "../werkbon-acties"
 import { leesWerkbonnen } from "@/lib/beheer/werkbon"
@@ -481,10 +482,14 @@ async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
                     {s.rond ? (s.soort === "Factuur" ? "Betaald ✓" : "Akkoord ✓") : s.soort === "Factuur" ? "Betaald?" : "Akkoord?"}
                   </button>
                 </form>
-                {!s.factuur && (
-                  <form action={stukWeg.bind(null, k.id, s.id)}>
-                    <button aria-label={`${s.soort} ${s.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
-                  </form>
+                {s.soort === "Offerte" ? (
+                  !k.stukken.some((y) => s.link && y.termijn?.offerte === s.link) && <OfferteWeg klantId={k.id} stuk={s} />
+                ) : (
+                  !s.factuur && (
+                    <form action={stukWeg.bind(null, k.id, s.id)}>
+                      <button aria-label={`${s.soort} ${s.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
+                    </form>
+                  )
                 )}
               </span>
             </li>

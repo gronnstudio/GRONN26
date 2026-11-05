@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Kop, Cijfer, Cijfers, Leeg } from "@/components/crm/kop"
 import { MailKnop } from "@/components/crm/mail-knop"
+import { OfferteWeg } from "@/components/crm/offerte-weg"
 import { stukRond } from "@/app/dashboard/klanten/acties"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { vandaagNL } from "@/lib/crm/overzicht"
@@ -141,6 +142,7 @@ function Regel({ r, soort }: { r: DocRij; soort: "Offerte" | "Factuur" }) {
               <span className="sr-only"> · {s.nummer}</span>
             </button>
           </form>
+          {soort === "Offerte" && !r.vastAanFactuur && <OfferteWeg klantId={r.klant.id} stuk={s} />}
         </div>
       </td>
     </tr>

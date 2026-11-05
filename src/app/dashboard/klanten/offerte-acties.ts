@@ -4,7 +4,7 @@ import { voornaamVan } from "@/lib/crm/mail"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { gebeurtenis, leesKlanten, wijzigKlanten, type Klant } from "@/lib/beheer/klanten"
-import { bewaarOfferte, maakOfferte, offerteNummer, wijzigOfferte } from "@/lib/crm/offerte"
+import { bewaarOfferte, maakOfferte, offerteDocumentWeg, offerteNummer, wijzigOfferte } from "@/lib/crm/offerte"
 import { eisEigenaar } from "@/lib/crm/toegang"
 import { leesTeksten, metNaam } from "@/lib/beheer/teksten"
 import { faseInvoer, faseTekst } from "@/lib/crm/werkomschrijving"
@@ -42,5 +42,27 @@ export async function trekOfferteIn(klantId: string, token: string) {
   const o = await wijzigOfferte(token, (x) => (x.status === "open" ? { ...x, status: "ingetrokken" } : x))
   if (!o || o.klantId !== klantId) return
   await wijzigKlanten((lijst) => lijst.map((x) => (x.id === klantId ? log(x, `Offerte ${o.nummer} ingetrokken`) : x)))
+  revalidatePath("/dashboard", "layout")
+}
+
+/**
+ * Een offerte helemaal weggooien (Nick, 5 nov 2026: "ik kan geen offertes weggooien"), alleen na
+ * het woord "verwijderen". Van de klantkaart en het document achter de link: die geeft daarna een
+ * 404. Een offerte waar al een termijnfactuur op staat blijft, want die factuur rekent ermee.
+ */
+export async function verwijderOfferte(klantId: string, stukId: string, d: FormData) {
+  await eisEigenaar()
+  if (String(d.get("bevestig") ?? "").trim().toLowerCase() !== "verwijderen") return
+  let token: string | undefined
+  await wijzigKlanten((lijst) =>
+    lijst.map((x) => {
+      if (x.id !== klantId) return x
+      const s = x.stukken.find((y) => y.id === stukId && y.soort === "Offerte")
+      if (!s || (s.link && x.stukken.some((y) => y.termijn?.offerte === s.link))) return x
+      token = s.link
+      return log({ ...x, stukken: x.stukken.filter((y) => y.id !== stukId) }, `Offerte ${s.nummer} verwijderd`)
+    }),
+  )
+  if (token) await offerteDocumentWeg(token)
   revalidatePath("/dashboard", "layout")
 }
