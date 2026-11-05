@@ -68,6 +68,8 @@ export async function maakFactuur(klantId: string, d: FormData) {
     if (!x) return lijst
     if (lijst.some((y) => y.stukken.some((s) => s.soort === "Factuur" && s.nummer.trim().toLowerCase() === nummer.toLowerCase()))) return lijst
     if (stuk.termijn) {
+      // De offerte kan intussen weggegooid zijn (PR #220): dan geen termijnfactuur meer.
+      if (!x.stukken.some((s) => s.soort === "Offerte" && s.link === stuk.termijn!.offerte)) return lijst
       const al = x.stukken.reduce((t, s) => t + (s.termijn?.offerte === stuk.termijn!.offerte ? s.termijn.deel : 0), 0)
       if (al + stuk.termijn.deel > 10000) return lijst
     }
