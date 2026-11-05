@@ -9,6 +9,7 @@ import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/be
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
+import { btwPerTarief, epcCode, factuurTotaal, termijnRegels, volgendFactuurNummer } from "../src/lib/crm/factuur-reken"
 import { naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
 import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
@@ -552,5 +553,27 @@ test.describe("inkoop", () => {
   test("nacalculatie: gefactureerd excl. btw min inkoop, per uur", () => {
     expect(naInkoop(1210, 40000, 10)).toEqual({ omzet: 100000, inkoop: 40000, over: 60000, perUur: 6000 })
     expect(naInkoop(0, 5000, 0).perUur).toBe(0)
+  })
+})
+
+test.describe("factuur", () => {
+  test("btw per tarief over de som, totaal klopt", () => {
+    const r = [{ omschrijving: "a", bedrag: 10000, btw: 2100 }, { omschrijving: "b", bedrag: 5000, btw: 900 }, { omschrijving: "c", bedrag: 333, btw: 2100 }]
+    expect(btwPerTarief(r)).toEqual([{ tarief: 2100, grondslag: 10333, btw: 2170 }, { tarief: 900, grondslag: 5000, btw: 450 }])
+    expect(factuurTotaal(r).totaal).toBe(10333 + 2170 + 5000 + 450)
+  })
+  test("termijn: per tarief het deel van de offerte", () => {
+    const o = { nummer: "GR-O // 1", btw: [{ tarief: 2100, grondslag: 100000, btw: 21000 }, { tarief: 900, grondslag: 20000, btw: 1800 }] }
+    const r = termijnRegels(o, 4000, "Termijn 1 van 3")
+    expect(r.map((x) => [x.bedrag, x.btw])).toEqual([[40000, 2100], [8000, 900]])
+    expect(r[0].omschrijving).toContain("Termijn 1 van 3 · 40 % van offerte GR-O // 1")
+  })
+  test("nummer: Nicks vorm, volgnummer per dag", () => {
+    const k = [{ stukken: [{ id: "1", soort: "Factuur" as const, nummer: "GR-F // 2026-1105-0002", bedrag: 1, datum: "2026-11-05" }, { id: "2", soort: "Offerte" as const, nummer: "GR-F // 2026-1105-0009", bedrag: 1, datum: "2026-11-05" }] }]
+    expect(volgendFactuurNummer(k, "2026-11-05")).toBe("GR-F // 2026-1105-0003")
+    expect(volgendFactuurNummer(k, "2026-11-06")).toBe("GR-F // 2026-1106-0001")
+  })
+  test("SEPA-betaalcode volgens EPC069-12", () => {
+    expect(epcCode({ naam: "GRØNN Studio", iban: "nl91 abna 0417 1643 00", bedrag: 12100, omschrijving: "Factuur 1" }).split("\n")).toEqual(["BCD", "002", "1", "SCT", "", "GRØNN Studio", "NL91ABNA0417164300", "EUR121.00", "", "", "Factuur 1"])
   })
 })

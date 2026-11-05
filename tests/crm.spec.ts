@@ -418,6 +418,40 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   await expect(page.getByText("Minigraver")).toHaveCount(0)
 })
 
+test("factuur: vrije factuur maken, de klant ziet hem zonder inlog, betaald staat erop", async ({ page, browser }) => {
+  await log(page)
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  const naam = `Factuurtest ${Date.now()}`
+  await page.goto("/dashboard/klanten")
+  await page.getByLabel("Naam", { exact: true }).fill(naam)
+  await page.getByRole("button", { name: "+ Klant" }).click()
+  await expect(page.getByRole("heading", { level: 1, name: naam })).toBeVisible()
+  await page.goto(`${page.url().split("?")[0]}?tab=stukken`)
+  await page.getByLabel("Waar komt hij uit?").selectOption("")
+  await page.getByText("Bij een vrije factuur").click()
+  await page.getByLabel("Omschrijving").fill("Snoeiwerk")
+  await page.getByLabel("Bedrag (€)").fill("121")
+  const nummer = `GR-F // T${Date.now()}`
+  await page.getByLabel("Factuurnummer").fill(nummer)
+  await page.getByRole("button", { name: "Factuur maken" }).click()
+  const link = page.getByRole("link", { name: "Factuur bekijken" })
+  await expect(link).toBeVisible()
+  const href = (await link.getAttribute("href"))!
+  // De klant opent de link zonder inlog.
+  const klant = await browser.newPage()
+  await klant.goto(href)
+  await expect(klant.getByRole("heading", { level: 1 })).toBeVisible()
+  await expect(klant.getByText(nummer).first()).toBeVisible()
+  await expect(klant.getByRole("row", { name: /Btw 21 % over € 100,00/ })).toContainText("€ 21,00")
+  await expect(klant.getByRole("row", { name: /Te betalen/ })).toContainText("€ 121,00")
+  await page.getByRole("button", { name: "Betaald?" }).click()
+  await expect(page.getByRole("button", { name: "Betaald ✓" })).toBeVisible()
+  await klant.reload()
+  await expect(klant.getByText("Betaald, dank je wel")).toBeVisible()
+  await klant.close()
+  expect((await page.request.get("/factuur/onzin")).status()).toBe(404)
+})
+
 test("klant met dezelfde naam maakt geen tweede kaart", async ({ page }) => {
   await log(page)
   await page.setViewportSize({ width: 1440, height: 1000 })

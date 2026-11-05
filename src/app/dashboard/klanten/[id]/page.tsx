@@ -22,6 +22,8 @@ import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { AdresVeld } from "@/components/adres-veld"
 import { KopieerKnop } from "@/components/crm/kopieer-knop"
 import { trekOfferteIn } from "../offerte-acties"
+import { maakFactuur } from "../factuur-acties"
+import { volgendFactuurNummer } from "@/lib/crm/factuur-reken"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
 // module 02: Overzicht | Tuinen | Calculaties | Stukken | Activiteit). Gewone
@@ -104,7 +106,7 @@ export default async function Klantkaart({ params, searchParams }: { params: Pro
         {actief === "overzicht" && <Overzicht k={k} />}
         {actief === "tuinen" && <Tuinen k={k} lijst={lijst} />}
         {actief === "calculaties" && <Calculaties k={k} />}
-        {actief === "stukken" && <Stukken k={k} />}
+        {actief === "stukken" && <Stukken k={k} nummer={volgendFactuurNummer(klanten, vandaagNL())} />}
         {actief === "activiteit" && <Tijdlijn k={k} />}
       </main>
     </>
@@ -357,7 +359,8 @@ function Betaalstand({ s }: { s: Stuk }) {
   return null
 }
 
-function Stukken({ k }: { k: Klant }) {
+function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
+  const offertes = k.stukken.filter((s) => s.soort === "Offerte" && s.link && s.rond)
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-10">
       <section>
@@ -370,6 +373,12 @@ function Stukken({ k }: { k: Klant }) {
                 <span className="[overflow-wrap:anywhere]">{s.nummer}</span>
                 <span className="block text-[12px] text-gedempt">{datum(s.datum)}</span>
                 {s.soort === "Factuur" && !s.rond && <Betaalstand s={s} />}
+                {s.factuur && (
+                  <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    <KopieerKnop tekst={`/factuur/${s.factuur}`} />
+                    <a href={`/factuur/${s.factuur}`} className="crm-knop-stil crm-knop-klein">{s.herinnerd && !s.rond ? "Herinnering bekijken" : "Factuur bekijken"}</a>
+                  </span>
+                )}
                 {s.link && (
                   <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <KopieerKnop tekst={`/offerte/${s.link}`} />
@@ -405,10 +414,42 @@ function Stukken({ k }: { k: Klant }) {
           ))}
           {!k.stukken.length && <li className="text-[13px] text-gedempt">Nog niets.</li>}
         </ul>
-        <p className="m-0 mt-4 text-[12px] text-gedempt">De facturen zelf maak en boek je in DigiBoox; hier houd je bij wat er openstaat.</p>
+        <p className="m-0 mt-4 text-[12px] text-gedempt">Maak de factuur hiernaast; de klant krijgt een link met betaalknop en QR-code. Boeken blijft in DigiBoox.</p>
       </section>
-      <form action={nieuwStuk.bind(null, k.id)} className="grid grid-cols-[110px_minmax(0,1fr)] gap-2 self-start crm-paneel p-5">
-        <p className={`${lbl} col-span-2 m-0 text-gedempt`}>Toevoegen</p>
+      <div className="flex flex-col gap-6 self-start">
+      <form action={maakFactuur.bind(null, k.id)} className="crm-paneel grid gap-3 p-5">
+        <p className={`${lbl} m-0`}>Factuur maken</p>
+        <label className="grid gap-1 text-[13px]">
+          Waar komt hij uit?
+          <select name="bron" className={veld} defaultValue={offertes.at(-1)?.link ?? ""}>
+            {offertes.map((o) => <option key={o.id} value={o.link}>Termijn van offerte {o.nummer} ({euro(o.bedrag)})</option>)}
+            <option value="">Vrije factuur, één regel</option>
+          </select>
+        </label>
+        <div className="grid grid-cols-[minmax(0,1fr)_96px] gap-2">
+          <label className="grid gap-1 text-[13px]">Naam van de termijn<input name="label" placeholder="Termijn 1 van 3" className={veld} /></label>
+          <label className="grid gap-1 text-[13px]">Deel (%)<input name="procent" inputMode="decimal" defaultValue="100" className={veld} /></label>
+        </div>
+        <details className="text-[13px]">
+          <summary className="cursor-pointer text-accent-tekst">Bij een vrije factuur</summary>
+          <div className="mt-2 grid gap-2">
+            <label className="grid gap-1">Omschrijving<input name="omschrijving" placeholder="Snoeiwerk 4 november" className={veld} /></label>
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)] gap-2">
+              <label className="grid gap-1">Bedrag (€)<input name="bedrag" inputMode="decimal" className={veld} /></label>
+              <label className="grid gap-1">Bedrag is<select name="metbtw" defaultValue="1" className={veld}><option value="1">incl. btw</option><option value="0">excl. btw</option></select></label>
+              <label className="grid gap-1">Btw<select name="btw" defaultValue="21" className={veld}><option value="21">21 %</option><option value="9">9 %</option><option value="0">0 %</option></select></label>
+            </div>
+          </div>
+        </details>
+        <label className="grid gap-1 text-[13px]">Titel op de factuur<input name="titel" placeholder="Leeg = titel van de offerte" className={veld} /></label>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="grid gap-1 text-[13px]">Factuurnummer<input name="nummer" required defaultValue={nummer} className={veld} /></label>
+          <label className="grid gap-1 text-[13px]">Datum<input name="datum" type="date" required defaultValue={vandaagNL()} className={veld} /></label>
+        </div>
+        <BewaarKnop>Factuur maken</BewaarKnop>
+      </form>
+      <form action={nieuwStuk.bind(null, k.id)} className="grid grid-cols-[110px_minmax(0,1fr)] gap-2 crm-paneel p-5">
+        <p className={`${lbl} col-span-2 m-0 text-gedempt`}>Al gemaakt in DigiBoox? Toevoegen</p>
         <select name="soort" aria-label="Soort" className={`${veld}`}>
           <option>Factuur</option>
           <option>Offerte</option>
@@ -418,6 +459,7 @@ function Stukken({ k }: { k: Klant }) {
         <input name="datum" type="date" required defaultValue={new Date().toISOString().slice(0, 10)} aria-label="Datum" className={veld} />
         <button className="col-span-2 crm-knop-rand">+ Toevoegen</button>
       </form>
+      </div>
     </div>
   )
 }
