@@ -45,6 +45,8 @@ export type Stuk = {
   mollie?: string
   /** Factuur uit het dashboard: de sleutel van /factuur/[token]. */
   factuur?: string
+  /** Termijnfactuur: welke offerte (token) en welk deel (Bp), zodat de som bij het wegschrijven nog eens telt. */
+  termijn?: { offerte: string; deel: number }
   /** Factuur: de dag waarop de kosteloze herinnering (aanmaning) is verstuurd, jjjj-mm-dd. */
   herinnerd?: string
 }

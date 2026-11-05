@@ -457,6 +457,10 @@ test("factuur: vrije factuur maken, de klant ziet hem zonder inlog, betaald staa
   await expect(klant.getByText("Betaald, dank je wel")).toBeVisible()
   await klant.close()
   expect((await page.request.get("/factuur/onzin")).status()).toBe(404)
+  // Een klant met een uitgegeven factuur kan ook niet meer weg.
+  await page.goto(page.url().split("?")[0])
+  await expect(page.getByText("Heeft facturen, blijft bewaard")).toBeVisible()
+  await expect(page.getByRole("button", { name: "Klant verwijderen" })).toHaveCount(0)
 })
 
 test("werkbon: maken, de klant tekent op de telefoon, daarna staat hij vast", async ({ page, browser }) => {

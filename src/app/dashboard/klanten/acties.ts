@@ -160,7 +160,8 @@ export async function stukWeg(id: string, stuk: string) {
 }
 
 export async function klantWeg(id: string) {
-  await wijzig((k) => k.filter((x) => x.id !== id))
+  // Een klant met een uitgegeven factuur blijft: anders wordt die factuurlink een 404 en verdwijnt het openstaande bedrag (Codex, PR #215).
+  await wijzig((k) => k.filter((x) => x.id !== id || x.stukken.some((s) => s.factuur)))
   redirect("/dashboard/klanten")
 }
 

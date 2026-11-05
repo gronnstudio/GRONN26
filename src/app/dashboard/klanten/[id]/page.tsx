@@ -167,7 +167,11 @@ async function Overzicht({ k }: { k: Klant }) {
         </label>
         <div className="flex items-center justify-between">
           <BewaarKnop>Bewaren</BewaarKnop>
-          <button formAction={klantWeg.bind(null, k.id)} className="crm-knop-stil hover:!text-let">Klant verwijderen</button>
+          {k.stukken.some((s) => s.factuur) ? (
+            <span className="text-[12px] text-gedempt">Heeft facturen, blijft bewaard</span>
+          ) : (
+            <button formAction={klantWeg.bind(null, k.id)} className="crm-knop-stil hover:!text-let">Klant verwijderen</button>
+          )}
         </div>
       </form>
 

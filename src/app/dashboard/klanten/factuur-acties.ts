@@ -58,6 +58,24 @@ export async function maakFactuur(klantId: string, d: FormData) {
   if (som.totaal <= 0) return
 
   const token = nieuwToken()
+  const stuk = { id: crypto.randomUUID(), soort: "Factuur" as const, nummer, bedrag: som.totaal / 100, datum, factuur: token, ...(offerte && termijn ? { termijn: { offerte: offerte.token, deel: termijn } } : {}) }
+  // Eerst het nummer en de termijn vastleggen, en daarbij alles nog eens tellen: twee
+  // gelijktijdige aanvragen lezen dezelfde stand, maar schrijven na elkaar (Codex, PR #215).
+  let gelukt = false
+  await wijzigKlanten((lijst) => {
+    gelukt = false
+    const x = lijst.find((y) => y.id === k.id)
+    if (!x) return lijst
+    if (lijst.some((y) => y.stukken.some((s) => s.soort === "Factuur" && s.nummer.trim().toLowerCase() === nummer.toLowerCase()))) return lijst
+    if (stuk.termijn) {
+      const al = x.stukken.reduce((t, s) => t + (s.termijn?.offerte === stuk.termijn!.offerte ? s.termijn.deel : 0), 0)
+      if (al + stuk.termijn.deel > 10000) return lijst
+    }
+    gelukt = true
+    return lijst.map((y) => (y.id === k.id ? log({ ...y, stukken: [...y.stukken, stuk].sort((a, b) => a.datum.localeCompare(b.datum)) }, `${offerte ? "Termijnfactuur" : "Factuur"} ${nummer} gemaakt`) : y))
+  })
+  if (!gelukt) return
+
   const basis = "https://gronn.studio"
   let betaallink: string | undefined
   if (mollieAan()) {
@@ -80,13 +98,6 @@ export async function maakFactuur(klantId: string, d: FormData) {
     ...(betaallink ? { betaallink } : {}),
   }
   await bewaarFactuur(f)
-  await wijzigKlanten((lijst) =>
-    lijst.map((x) =>
-      x.id === k.id
-        ? log({ ...x, stukken: [...x.stukken, { id: crypto.randomUUID(), soort: "Factuur" as const, nummer, bedrag: som.totaal / 100, datum, factuur: token }].sort((a, b) => a.datum.localeCompare(b.datum)) }, `${f.soort} ${nummer} gemaakt`)
-        : x,
-    ),
-  )
   revalidatePath("/dashboard", "layout")
   redirect(`/dashboard/klanten/${k.id}?tab=stukken`)
 }
