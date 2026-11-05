@@ -73,8 +73,10 @@ export default async function OffertePagina({ params, searchParams }: { params: 
       <Posten titel="Wat er gebeurt" posten={o.posten} />
       <table data-blok className="mt-4 ml-auto w-full max-w-[400px] border-collapse text-[15px]">
         <tbody>
+          {/* De korting zichtbaar, ook die op losse regels (Nick, 5 nov 2026). */}
+          {(o.regelKorting ?? 0) > 0 && <Rij naam="Prijs zonder korting" bedrag={o.posten.reduce((t, p) => t + p.bedrag, 0) + (o.regelKorting ?? 0)} />}
           {o.onvoorzien > 0 && <Rij naam="Onvoorzien" bedrag={o.onvoorzien} />}
-          {o.korting > 0 && <Rij naam="Korting" bedrag={-o.korting} />}
+          {o.korting + (o.regelKorting ?? 0) > 0 && <Rij naam="Korting" bedrag={-(o.korting + (o.regelKorting ?? 0))} />}
           <Rij naam="Totaal excl. btw" bedrag={o.verkoop} sterk />
           {o.btw.map((b) => (
             <Rij key={b.tarief} naam={`Btw ${b.tarief / 100} % over ${toonEuro(b.grondslag)}`} bedrag={b.btw} />

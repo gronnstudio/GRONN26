@@ -82,6 +82,8 @@ export type RegelUitkomst = Regel & {
   brutoHoeveelheid: Milli
   kostprijs: Centen
   verkoop: Centen
+  /** Wat de korting op deze regel scheelt */
+  kortingBedrag: Centen
   winst: Centen
 }
 
@@ -113,7 +115,7 @@ export function rekenRegel(r: Regel): RegelUitkomst {
   const kostprijs = maal(r.inkoop, brutoHoeveelheid)
   const vol = maal(plusProcent(r.inkoop, r.opslag), brutoHoeveelheid)
   const verkoop = vol - procent(vol, r.korting ?? 0)
-  return { ...r, brutoHoeveelheid, kostprijs, verkoop, winst: verkoop - kostprijs }
+  return { ...r, brutoHoeveelheid, kostprijs, verkoop, kortingBedrag: vol - verkoop, winst: verkoop - kostprijs }
 }
 
 export function reken(invoer: Invoer, arbeidBtw: Bp = STANDAARD.arbeidBtw): Uitkomst {
