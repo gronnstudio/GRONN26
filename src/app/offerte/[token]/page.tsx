@@ -85,7 +85,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
         </tbody>
       </table>
 
-      {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel} />}
+      {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel.map(({ groep: _, ...p }) => p)} />}
 
       {!spec && o.slot && <p className="m-0 mt-10 max-w-[72ch] whitespace-pre-line text-[16px] leading-[1.6]">{o.slot}</p>}
 

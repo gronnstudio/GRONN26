@@ -289,10 +289,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     const n = metActueleBedragen(beschrijving, { verkoop: u.verkoop, btw: u.btwTotaal, totaal: u.totaal, fasen: faseExcl })
     if (n !== beschrijving) setBeschrijving(n)
   }
-  const zetFaseUren = (naam: string, tekst: string) => {
-    const uren = Math.max(0, leesMilli(tekst) ?? 0)
-    setFasen(fasen.some((f) => f.naam === naam) ? fasen.map((f) => (f.naam === naam ? { ...f, uren } : f)) : [...fasen, { naam, uren }])
-  }
+
   const goed = urenMilli > 0 && u.perUur >= STANDAARD.minimumPerUur
   const te = tekort(u, urenMilli)
 
@@ -601,23 +598,6 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         <aside className="flex flex-col gap-4 self-start crm-paneel p-5 xl:sticky xl:top-6">
           <p className={`${lbl} m-0`}>Voor de klant</p>
           <dl className="m-0 grid gap-2 text-[14px]">
-            {faseSom.length > 0 && (
-              <div className="grid gap-1 border-b border-lijn pb-2 text-[13px]">
-                <p className="m-0 text-[12px] text-gedempt">Per fase, incl. btw. Samen is dit het totaal.</p>
-                {faseSom.map((f) => (
-                  <div key={f.naam} className="grid grid-cols-[1fr_72px_auto] items-center gap-2">
-                    <span>{f.naam}</span>
-                    <input aria-label={`Uren ${f.naam}`} inputMode="decimal" defaultValue={f.uren ? toonDecimaal(f.uren, 3) : ""} placeholder="uren" onBlur={(e) => zetFaseUren(f.naam, e.target.value)} className="crm-veld crm-cijfer !py-1" />
-                    <span className="crm-cijfer text-right">{toonEuro(f.totaal)}</span>
-                  </div>
-                ))}
-                <div className="grid grid-cols-[1fr_auto] gap-2 border-t border-lijn pt-1 font-semibold">
-                  <span>Totaal fasen</span>
-                  <span className="crm-cijfer text-right">{toonEuro(faseSom.reduce((t, f) => t + f.totaal, 0))}</span>
-                </div>
-                {Math.abs(faseRest) > 2 && <p className="m-0 text-[12px] text-gedempt">Arbeid zonder uren per fase ({toonEuro(faseRest)}) is naar verhouding over de fasen verdeeld.</p>}
-              </div>
-            )}
             <Rij t="Arbeid" b={u.arbeid} />
             <Rij t="Materiaal en overig" b={u.materiaal} />
             {/* Per fase, excl. btw (Nick, 2 nov 2026): telt precies op tot Materiaal en overig. */}
