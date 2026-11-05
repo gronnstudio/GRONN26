@@ -24,7 +24,7 @@ export type Regel = { id: string; datum: string; soort: Soort; klant: string; wa
 // git. Website, social en vijver zijn Nicks eigen totalen (400, 50, 120), over de
 // weken verdeeld; overig is een voorzichtige schatting. Bron en uitleg:
 // /mnt/project-files/administratie/urenregistratie-2026.xlsx en de PDF ernaast.
-export const RECONSTRUCTIE_TOT = "2026-10-15"
+export const RECONSTRUCTIE_TOT = "2026-10-21"
 export const RECONSTRUCTIE = [
   { week: 23, maandag: "2026-06-01", website: 0, social: 0, vijver: 0, overig: 12, wat: "Start onderneming: KvK-inschrijving en uittreksel, KvK-startersprogramma, oriëntatie op samenwerkingen (mails GRNFIX en BioKultura)" },
   { week: 24, maandag: "2026-06-08", website: 0, social: 0, vijver: 0, overig: 10, wat: "Belafspraak BioKultura, gesprek GRNFIX, oriëntatie op vakkennis en gereedschap (Plantenkennis)" },
@@ -45,7 +45,8 @@ export const RECONSTRUCTIE = [
   { week: 39, maandag: "2026-09-21", website: 28, social: 4, vijver: 16, overig: 8, wat: "Vijver fase 5: leidingen, afvoer, teelaarde (laatste factuur), materiaal Hornbach, nieuwsbrief/checklist, socials plannen, website" },
   { week: 40, maandag: "2026-09-28", website: 20, social: 14, vijver: 0, overig: 32, wat: "Merkregistratie (Brndpwr), bestelling Wildkamp, KvK-wijziging, tuin Stephanie: 1 dag graven met minigraver (factuur GR-F 0930-0011), KLIC-aanmelding, eHerkenning, website, SEO, socials, Drive ordenen. Uitzoeken (10 uur): plugins en koppelingen, 30-dagenplan en Google Bedrijfsprofiel opgezet, systeem voor papieren administratie, positionering, DMARC, NotebookLM, permacultuur en voedselbos, Vercel-kosten" },
   { week: 41, maandag: "2026-10-05", website: 4, social: 20, vijver: 0, overig: 35, wat: "Qredits ondernemingsplan en financieel plan, algemene voorwaarden, offertes en facturen, elektra-klus (2 uur gefactureerd), tuin Stephanie: 2 dagen harken en egaliseren, graszoden deel 1 leggen (factuur €800 voor 100 m²), bouwbord (Blueprint), website GRONN26, Instagram-posts. Uitzoeken (3 uur): concurrent Chris Janssen, webshop Dutch Paving Tools, gereedschap voor aanleg, leerpad tuinontwerp" },
-  { week: 42, maandag: "2026-10-12", website: 21, social: 10, vijver: 0, overig: 10, wat: "Tindemans graszoden, Hornbach ProfiService, merkregistratie, logo, urenadministratie (t/m do 15 okt). Uitzoeken (2 uur): visitekaartje in Wallet, regelingen en kosten voor starters" },
+  { week: 42, maandag: "2026-10-12", website: 21, social: 10, vijver: 0, overig: 12, wat: "Tindemans graszoden, Hornbach ProfiService, merkregistratie, logo, urenadministratie (t/m do 15 okt). Uitzoeken (2 uur): visitekaartje in Wallet, regelingen en kosten voor starters. Uit Bijhouden: Temple Gardens als voorbeeld (vr 16 okt, 1 uur), bedrijfskleding Tappewear (za 17 okt, 1 uur)" },
+  { week: 43, maandag: "2026-10-19", website: 0, social: 0, vijver: 40, overig: 10.5, wat: "Uit Bijhouden (opgave Nick): vijver ma t/m wo 40 uur, uitzoekwerk voor Diliana (HairDiel) 8 uur, leveranciers voor materialen 1,5 uur, samenwerkingen voorstellen 1 uur" },
 ]
 export const weekTotaal = (r: (typeof RECONSTRUCTIE)[number]) => r.website + r.social + r.vijver + r.overig
 
