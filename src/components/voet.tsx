@@ -103,7 +103,7 @@ export function Voet() {
           </div>
         </div>
 
-        {/* het reuzenwoordmerk, met rechts in de lege ruimte KVK en BTW om te kopiëren (eigenaar, 5 okt 2026) */}
+        {/* het reuzenwoordmerk, met rechts in de lege ruimte KVK, BTW en naam om te kopiëren (eigenaar, 5 okt 2026) */}
         <div className="mt-[clamp(56px,8vw,120px)] flex flex-wrap items-end justify-between gap-x-10 gap-y-6 border-t border-lijn pt-[clamp(28px,4vw,48px)]">
           <Logo className="h-auto w-full max-w-[1100px] lg:w-[68%]" />
           {/* geen "Bekijk als blueprint" meer hier (eigenaar, 2 nov 2026); Blueprint kies je in Weergave */}
@@ -127,6 +127,8 @@ export function Voet() {
             </a>
             <Kopieer label="KVK" waarde={BUSINESS.kvk} />
             <Kopieer label="BTW" waarde={BUSINESS.btw} />
+            {/* de handelsnaam zoals bij de KVK, ook om te kopiëren (eigenaar, 5 nov 2026) */}
+            <Kopieer label="Naam" waarde={BUSINESS.name} />
           </div>
         </div>
       </div>
