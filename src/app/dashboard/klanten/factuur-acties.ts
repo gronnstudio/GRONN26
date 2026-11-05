@@ -97,7 +97,13 @@ export async function maakFactuur(klantId: string, d: FormData) {
     totaal: som.totaal,
     ...(betaallink ? { betaallink } : {}),
   }
-  await bewaarFactuur(f)
+  try {
+    await bewaarFactuur(f)
+  } catch (fout) {
+    // Zonder document geen verwijzing: de kaart terug zoals hij was, zodat nummer en termijn weer vrij zijn (Codex, PR #215).
+    await wijzigKlanten((lijst) => lijst.map((y) => (y.id === k.id ? { ...y, stukken: y.stukken.filter((s) => s.factuur !== token) } : y)))
+    throw fout
+  }
   revalidatePath("/dashboard", "layout")
   redirect(`/dashboard/klanten/${k.id}?tab=stukken`)
 }
