@@ -100,7 +100,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const [titel, setTitel] = useState(begin?.titel ?? "")
   const [tuinId, setTuinId] = useState(begin?.tuinId ?? "")
   const [calcId, setCalcId] = useState(begin?.calculatieId)
-  const [versie, setVersie] = useState(begin?.nr ?? 0)
+  const [, setVersie] = useState(begin?.nr ?? 0)
   const [uren, setUren] = useState(begin ? toonDecimaal(begin.uren, 3) : "")
   const [tarief, setTarief] = useState(toonDecimaal(begin?.uurtarief ?? STANDAARD.uurtarief, 2))
   const [korting, setKorting] = useState(toonDecimaal(begin?.korting ?? 0, 2))
@@ -295,14 +295,14 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const goed = urenMilli > 0 && u.perUur >= STANDAARD.minimumPerUur
   const te = tekort(u, urenMilli)
 
-  const bewaar = () =>
+  const bewaar = (soort: "concept" | "definitief") =>
     start(async () => {
       setMelding("")
-      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, planStart: planStart || undefined, fasen, betaald: alBetaald, betaaldTekst: betaaldTekst.trim() || undefined, ...invoer })
+      const uit = await bewaarCalculatie({ klantId, calculatieId: calcId, titel, tuinId: tuinId || undefined, beschrijving, planning: plan, planStart: planStart || undefined, fasen, betaald: alBetaald, betaaldTekst: betaaldTekst.trim() || undefined, soort, ...invoer })
       if ("fout" in uit) return setMelding(uit.fout)
       setCalcId(uit.id)
       setVersie(uit.nr)
-      setMelding(`Versie ${uit.nr} bewaard.`)
+      setMelding(soort === "definitief" ? "Bewaard als definitief." : "Bewaard als concept.")
       // Op de klantpagina: naar het vaste adres van deze calculatie.
       // Ook na een meetstaat-import naar het vaste adres: verversen mag de import niet herhalen.
       if (begin && (!calcId || window.location.search.includes("meetstaat="))) router.replace(`/dashboard/klanten/${klantId}/calculatie/${uit.id}`)
@@ -660,9 +660,15 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           </div>
           <p className="m-0 text-[12px] leading-[1.5] text-gedempt">Overhouden = verkoop excl. btw min inkoop, vóór vaste lasten en inkomstenbelasting. Zet de uren niet op de offerte, alleen de prijs per post.</p>
           {/* Altijd zichtbaar: zonder klant zegt de knop wat er nog nodig is, in plaats van te verdwijnen. */}
-          <button type="button" onClick={bewaar} disabled={bewaart || !klantId} className="crm-knop disabled:opacity-50">
-            {!klantId ? "Kies een klant om te bewaren" : bewaart ? "Bewaren…" : versie ? `Bewaar als versie ${versie + 1}` : "Bewaar bij klant"}
-          </button>
+          {/* Twee concepten en één definitief, geen versienummers (Nick, 5 nov 2026). */}
+          {!klantId ? (
+            <button type="button" disabled className="crm-knop disabled:opacity-50">Kies een klant om te bewaren</button>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <button type="button" onClick={() => bewaar("concept")} disabled={bewaart} className="crm-knop-rand disabled:opacity-50">{bewaart ? "Bewaren…" : "Bewaar als concept"}</button>
+              <button type="button" onClick={() => bewaar("definitief")} disabled={bewaart} className="crm-knop disabled:opacity-50">{bewaart ? "Bewaren…" : "Bewaar als definitief"}</button>
+            </div>
+          )}
           {melding && <p role="status" className="m-0 -mt-2 text-[13px]">{melding}</p>}
           <PdfKnoppen naam={`Calculatie ${titel || "GRØNN Studio"}`} doel=".calculatie-druk" uit={!u.verkoop} className="grid grid-cols-2 gap-2" crm />
           <p className="m-0 -mt-2 text-[12px] leading-[1.5] text-gedempt">De klant ziet alleen de prijzen, niet je inkoop, opslag of uren.</p>

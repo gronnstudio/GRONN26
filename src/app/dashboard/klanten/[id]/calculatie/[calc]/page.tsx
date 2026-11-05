@@ -2,6 +2,7 @@ import { werkplan } from "@/lib/crm/planning"
 import { faseTotalen } from "@/lib/crm/werkomschrijving"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { labelVan, zichtbareVersies } from "@/lib/crm/versies"
 import { notFound } from "next/navigation"
 import { Kop } from "@/components/crm/kop"
 import { PrijsRekenaar, type Begin } from "@/components/beheer/prijs"
@@ -74,33 +75,24 @@ export default async function CalculatiePagina({ params, searchParams }: { param
   return (
     <>
       <Kop pad={[{ naam: "Klanten", href: "/dashboard/klanten" }, { naam: k.naam, href: `/dashboard/klanten/${k.id}?tab=calculaties` }, { naam: c?.titel ?? "Nieuwe calculatie" }]} titel={c ? c.titel : "Nieuwe calculatie"}>
+        {/* Drie vakken in plaats van versienummers (Nick, 5 nov 2026). */}
         {c && c.versies.length > 0 && (
-          <details className="relative text-[13px]">
-            <summary className="crm-knop-rand cursor-pointer list-none">
-              Versie {versie?.nr} van {c.versies.length} ▾
-              {versie && faseTotalen(versie).length > 0 && (
-                <span className="ml-2 text-gedempt">{faseTotalen(versie).map((f) => `${f.naam.split(" — ")[0]} ${toonEuro(f.totaal)}`).join(" · ")}</span>
-              )}
-            </summary>
-            <ul aria-label="Versies" className="absolute left-0 z-20 m-0 mt-1 grid max-h-[360px] min-w-[260px] list-none overflow-auto rounded-[12px] border border-lijn bg-vlak p-1 shadow-lg">
-              {[...c.versies].reverse().map((x) => (
-                <li key={x.nr}>
-                  <Link
-                    href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.nr}`}
-                    aria-current={x.nr === versie?.nr ? "page" : undefined}
-                    className={`flex justify-between gap-4 rounded-[8px] px-3 py-2 hover:bg-accent/10 ${x.nr === versie?.nr ? "font-semibold" : ""}`}
-                  >
-                    <span>v{x.nr} · {tijd(x.datum)}</span>
-                    <span className="crm-cijfer">{toonEuro(x.totaal)}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </details>
+          <nav aria-label="Concept of definitief" className="flex flex-wrap gap-1.5 text-[13px]">
+            {zichtbareVersies(c.versies).map((x) => (
+              <Link
+                key={x.label}
+                href={`/dashboard/klanten/${k.id}/calculatie/${c.id}?v=${x.versie.nr}`}
+                aria-current={x.versie.nr === versie?.nr ? "true" : undefined}
+                className="crm-chip"
+              >
+                {x.label} <span className="crm-cijfer text-gedempt">{toonEuro(x.versie.totaal)} · {tijd(x.versie.datum)}</span>
+              </Link>
+            ))}
+          </nav>
         )}
         {c && versie && (
           <form action={maakOfferteVan.bind(null, k.id, c.id, versie.nr, "")}>
-            <BewaarKnop>Offerte met link maken (v{versie.nr})</BewaarKnop>
+            <BewaarKnop>Offerte met link maken ({labelVan(c.versies, versie.nr).toLowerCase()})</BewaarKnop>
           </form>
         )}
         {c && versie && versie.fasen && versie.fasen.length > 1 &&
@@ -111,9 +103,9 @@ export default async function CalculatiePagina({ params, searchParams }: { param
           ))}
       </Kop>
       <main className="mx-auto max-w-[2200px] px-8 py-6 print:max-w-none print:p-0">
-        {versie && versie.nr !== laatste && (
+        {c && versie && versie.nr !== laatste && (
           <p role="status" data-stil className="crm-let m-0 px-4 py-2 text-[13px] print:hidden">
-            Je kijkt naar versie {versie.nr} van {tijd(versie.datum)}. Bewaren maakt er versie {laatste + 1} van; deze blijft staan.
+            Je kijkt naar {labelVan(c.versies, versie.nr).toLowerCase()} van {tijd(versie.datum)}. Bewaren maakt een nieuw concept of definitief; deze blijft staan.
           </p>
         )}
         <div className="mt-4 print:mt-0">

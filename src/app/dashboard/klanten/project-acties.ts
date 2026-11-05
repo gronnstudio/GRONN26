@@ -33,7 +33,7 @@ export async function startProject(klantId: string, calcId: string, nr: number) 
         return x
       }
       pid = nieuw.id
-      return log({ ...x, fase: ["Akkoord", "Gepland", "Offerte", "Opgeleverd"].includes(x.fase) ? "Uitvoering" : x.fase, projecten: [...x.projecten, nieuw] }, `Project "${c.titel}" gestart uit versie ${v.nr}`)
+      return log({ ...x, fase: ["Akkoord", "Gepland", "Offerte", "Opgeleverd"].includes(x.fase) ? "Uitvoering" : x.fase, projecten: [...x.projecten, nieuw] }, `Project "${c.titel}" gestart uit de calculatie`)
     }),
   )
   revalidatePath("/dashboard", "layout")

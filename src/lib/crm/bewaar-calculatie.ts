@@ -27,6 +27,8 @@ export type Concept = {
   planning?: PlanFase[]
   planStart?: string
   fasen?: FaseUren[]
+  /** Bewaren als concept of als definitief; zonder keuze een concept. */
+  soort?: "concept" | "definitief"
 }
 
 const schoonFasen = (f: unknown): FaseUren[] =>
@@ -58,6 +60,7 @@ export async function bewaarVersie(c: Concept): Promise<{ id: string; nr: number
       nr = (oud?.versies.at(-1)?.nr ?? 0) + 1
       const versie: Versie = {
         nr,
+        soort: c.soort === "definitief" ? "definitief" : "concept",
         datum: new Date().toISOString(),
         beschrijving: String(c.beschrijving ?? "").slice(0, 12000),
         ...invoer,
@@ -79,7 +82,7 @@ export async function bewaarVersie(c: Concept): Promise<{ id: string; nr: number
       return {
         ...k,
         calculaties: oud ? k.calculaties.map((x) => (x.id === id ? calc : x)) : [...k.calculaties, calc],
-        activiteit: [gebeurtenis("Calculatie", `${calc.titel}, versie ${nr} bewaard`), ...k.activiteit].slice(0, 500),
+        activiteit: [gebeurtenis("Calculatie", `${calc.titel}, bewaard als ${versie.soort}`), ...k.activiteit].slice(0, 500),
       }
     }),
   )
