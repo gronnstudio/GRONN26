@@ -36,6 +36,8 @@ test("zonder inlog: dashboard dicht, API's weigeren", async ({ request }) => {
 
 test("inkoop: factuur met PDF erbij, staat bij te betalen, afvinken haalt hem weg", async ({ page }) => {
   await log(page)
+  // Een ingevuld maar onleesbaar btw-bedrag valt niet stil terug op het tarief.
+  expect((await page.request.post("/api/crm/inkoop", { multipart: { leverancier: "x", datum: "2026-11-05", bedrag: "121", metbtw: "1", btwbedrag: "21,0x" } })).status()).toBe(400)
   await page.goto("/dashboard/inkoop")
   const nummer = `T-${Date.now()}`
   await page.getByLabel("Leverancier").fill("Bomat testleverancier")
