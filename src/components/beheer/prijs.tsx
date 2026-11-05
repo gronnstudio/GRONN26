@@ -654,6 +654,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
               <Rij t="Btw-rekening, af te dragen" b={w.btwAfdragen} />
               <Rij t={`Belasting op je winst (${STANDAARD.reserveBelasting / 100} %)`} b={w.reserve} />
               <Rij t="Vrij voor jou" b={w.vrij} vet />
+              <Rij t="Je opslag op materiaal, excl. btw" b={u.materiaal - u.kostprijs} />
             </dl>
             <p className="m-0 mt-2 text-[12px] leading-[1.5] text-gedempt">De btw op je inkoop trek je af in je aangifte, daarom staat alleen het verschil op de btw-rekening.</p>
           </div>

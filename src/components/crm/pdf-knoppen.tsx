@@ -28,6 +28,14 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
     // html2canvas meet verkeerd in een gescrolde pagina: even naar boven, daarna terug.
     const scroll = window.scrollY
     window.scrollTo(0, 0)
+    // Waar een pagina niet mag knippen (Nick, 5 nov 2026: "regels lopen half door van pagina naar
+    // pagina"): elke regel, alinea, kop en tabelrij, in CSS-pixels vanaf de bovenkant van het blad.
+    const rb = bron.getBoundingClientRect()
+    // onclone haalt de bovenruimte van de offerte weg: de blokken schuiven even hoog mee.
+    const weg = bron.matches(".offerte-druk") ? parseFloat(getComputedStyle(bron).paddingTop) || 0 : 0
+    const blokken = [...bron.querySelectorAll<HTMLElement>("tr, li, dl > div, p, h1, h2, h3, img, [data-blok]")]
+      .filter((el) => !el.closest("[data-geen-pdf]"))
+      .map((el) => { const r = el.getBoundingClientRect(); return [r.top - rb.top - weg, r.bottom - rb.top - weg] as const })
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas-pro"), import("jspdf")])
       const doek = await html2canvas(bron, { scale: 2, backgroundColor: "#ffffff", ignoreElements: (el) => el.hasAttribute("data-geen-pdf"),
@@ -39,17 +47,28 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
         },
       })
       const doc = new jsPDF({ unit: "mm", format: "a4" })
-      const breed = 210
-      const hoog = 297
-      // Het blad als één lange afbeelding, in A4-stukken over de pagina's verdeeld.
-      const perPagina = Math.floor((doek.width * hoog) / breed)
-      for (let y = 0, p = 0; y < doek.height; y += perPagina, p++) {
+      // A4 in CSS-pixels van dit blad, met 12 mm wit boven (vanaf pagina 2) en onder.
+      const s = doek.width / rb.width
+      const pagina = (rb.width * 297) / 210
+      const marge = (rb.width * 12) / 210
+      const totaal = doek.height / s
+      for (let y = 0, p = 0; y < totaal - 1; p++) {
+        const boven = p ? marge : 0
+        let eind = y + pagina - marge - boven
+        // Knipt de grens door een regel heen, dan begint die regel op de volgende pagina.
+        if (eind < totaal) for (const [t, b] of blokken) if (t > y && t < eind && b > eind && b - t < pagina / 2) eind = t
+        eind = Math.min(eind, totaal)
         const stuk = document.createElement("canvas")
         stuk.width = doek.width
-        stuk.height = Math.min(perPagina, doek.height - y)
-        stuk.getContext("2d")!.drawImage(doek, 0, -y)
+        stuk.height = Math.round(pagina * s)
+        const c = stuk.getContext("2d")!
+        c.fillStyle = "#ffffff"
+        c.fillRect(0, 0, stuk.width, stuk.height)
+        const h = Math.round((eind - y) * s)
+        c.drawImage(doek, 0, Math.round(y * s), doek.width, h, 0, Math.round(boven * s), doek.width, h)
         if (p) doc.addPage()
-        doc.addImage(stuk.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, breed, (stuk.height * breed) / doek.width)
+        doc.addImage(stuk.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 297)
+        y = eind
       }
       doc.save(`${naam.replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, " ").trim()}.pdf`)
     } finally {

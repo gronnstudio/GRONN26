@@ -375,13 +375,21 @@ html.en .t-en { display: contents; }
 /* Offertemaker (/offertes): een oranje stip voor elk kopje, en bij printen alleen het blad. */
 .kop-stip::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ff5b04; margin: 0 10px 2px 0; }
 @media print {
-  @page { size: A4; margin: 0; }
+  /* Wit boven en onder op elke pagina; de eerste begint met de zwarte kop tegen de rand. */
+  @page { size: A4; margin: 12mm 0; }
+  @page :first { margin-top: 0; }
   body:has(.offertes) { background: #fff !important; }
   .offertes { display: block !important; padding: 0 !important; background: #fff !important; min-height: 0 !important; }
   .offertes [data-geen-print] { display: none !important; }
   .offerte-blad { max-width: none !important; border-radius: 0 !important; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 @media print { .drukwerk { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+/* Offerte, factuur en calculatie op A4 (Nick, 5 nov 2026): geen regel half op twee pagina's. */
+@media print {
+  :is(.offerte-druk, .calculatie-druk) :is(tr, li, dl > div, p, h1, h2, h3, img, [data-blok]) { break-inside: avoid; }
+  :is(.offerte-druk, .calculatie-druk) :is(h1, h2, h3) { break-after: avoid; }
+  :is(.offerte-druk, .calculatie-druk) thead { display: table-header-group; }
+}
 
 
 /* View Transition (11 okt 2026): een projectfoto groeit van Werk naar de
