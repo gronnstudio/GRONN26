@@ -198,6 +198,8 @@ body {
   font-family: var(--font-sans);
   padding-bottom: 110px;
 }
+/* Het dashboard heeft geen dock onderaan: geen ruimte ervoor, anders steekt de site-achtergrond onder de zijbalk uit (Nick, 5 nov 2026). */
+body:has(.crm) { padding-bottom: 0; }
 
 /* Kopieerslot (eigenaar, 21 okt 2026: "afbeeldingen, tekst en elementen kunnen
    worden gekopieerd, beveilig dat"). Tekst niet selecteren, foto's niet slepen
