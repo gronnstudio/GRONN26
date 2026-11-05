@@ -53,16 +53,20 @@ export async function trekOfferteIn(klantId: string, token: string) {
 export async function verwijderOfferte(klantId: string, stukId: string, d: FormData) {
   await eisEigenaar()
   if (String(d.get("bevestig") ?? "").trim().toLowerCase() !== "verwijderen") return
-  let token: string | undefined
+  // Eerst het document achter de link, dan de regel: mislukt het weghalen, dan staat de regel er
+  // nog en kun je het opnieuw proberen (Codex, PR #220). Andersom zou de link blijven werken.
+  const k = (await leesKlanten()).find((x) => x.id === klantId)
+  const s = k?.stukken.find((y) => y.id === stukId && y.soort === "Offerte")
+  if (!k || !s || (s.link && k.stukken.some((y) => y.termijn?.offerte === s.link))) return
+  if (s.link) await offerteDocumentWeg(s.link)
   await wijzigKlanten((lijst) =>
     lijst.map((x) => {
       if (x.id !== klantId) return x
-      const s = x.stukken.find((y) => y.id === stukId && y.soort === "Offerte")
-      if (!s || (s.link && x.stukken.some((y) => y.termijn?.offerte === s.link))) return x
-      token = s.link
-      return log({ ...x, stukken: x.stukken.filter((y) => y.id !== stukId) }, `Offerte ${s.nummer} verwijderd`)
+      const nu = x.stukken.find((y) => y.id === stukId)
+      // Intussen een termijnfactuur erop gezet? Dan blijft de regel staan.
+      if (!nu || (nu.link && x.stukken.some((y) => y.termijn?.offerte === nu.link))) return x
+      return log({ ...x, stukken: x.stukken.filter((y) => y.id !== stukId) }, `Offerte ${nu.nummer} verwijderd`)
     }),
   )
-  if (token) await offerteDocumentWeg(token)
   revalidatePath("/dashboard", "layout")
 }
