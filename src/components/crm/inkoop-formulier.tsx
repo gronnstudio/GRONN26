@@ -67,6 +67,10 @@ export function InkoopFormulier({ klanten, leveranciers, vandaag, klantId }: { k
         </select>
       </label>
       <label className="col-span-2">
+        <span className={lbl}>Btw-bedrag (€), alleen bij 9 % én 21 % op één factuur</span>
+        <input name="btwbedrag" inputMode="decimal" className={veld} placeholder="Leeg = uitgerekend met het tarief" />
+      </label>
+      <label className="col-span-2">
         <span className={lbl}>Voor klant</span>
         <select name="klantId" defaultValue={klantId ?? ""} className={veld}>
           <option value="">Algemene kosten (geen klant)</option>

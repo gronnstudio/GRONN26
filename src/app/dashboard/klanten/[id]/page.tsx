@@ -219,7 +219,7 @@ async function Overzicht({ k }: { k: Klant }) {
             <Link href="/dashboard/inkoop" className="text-[12px] text-accent-tekst">Alle inkoop →</Link>
           </div>
           <dl className="m-0 mt-3 grid gap-1 text-[13px]">
-            <div className="flex justify-between"><dt>Gefactureerd excl. btw</dt><dd className="crm-cijfer m-0">{toonEuro(na.omzet)}</dd></div>
+            <div className="flex justify-between"><dt>Gefactureerd excl. btw <span className="text-gedempt">(geschat op 21 %)</span></dt><dd className="crm-cijfer m-0">{toonEuro(na.omzet)}</dd></div>
             <div className="flex justify-between"><dt>Inkoop excl. btw</dt><dd className="crm-cijfer m-0">− {toonEuro(na.inkoop)}</dd></div>
             <div className="flex justify-between border-t border-lijn pt-1 font-semibold"><dt>Over voor je werk</dt><dd className={`crm-cijfer m-0 ${na.over < 0 ? "text-let" : ""}`}>{toonEuro(na.over)}</dd></div>
             {na.perUur !== 0 && <div className="flex justify-between"><dt>Per gewerkt uur</dt><dd className={`crm-cijfer m-0 ${na.perUur < 3700 ? "font-semibold text-let" : ""}`}>{toonEuro(na.perUur)}</dd></div>}

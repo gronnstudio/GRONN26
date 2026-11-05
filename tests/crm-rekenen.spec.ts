@@ -10,7 +10,7 @@ import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { btwPerTarief, epcCode, factuurTotaal, termijnRegels, volgendFactuurNummer } from "../src/lib/crm/factuur-reken"
-import { naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
+import { metBtw, naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
 import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
 
@@ -545,6 +545,12 @@ test.describe("inkoop", () => {
     expect(schoonInkoop({ datum: "2026-11-05", leverancier: " ", bedrag: 1 })).toBeNull()
     expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 1.5 })).toBeNull()
     expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 1, btw: 1234, bestand: { ext: "exe" } })).not.toHaveProperty("bestand")
+  })
+  test("gemengde btw: het btw-bedrag van de factuur gaat voor het tarief", () => {
+    const i = schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 10000, btw: 2100, btwBedrag: 1500 })!
+    expect(metBtw(i)).toBe(11500)
+    expect(metBtw(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 10000, btw: 2100 })!)).toBe(12100)
+    expect(schoonInkoop({ datum: "2026-11-05", leverancier: "Bomat", bedrag: 100, btwBedrag: 500 })).not.toHaveProperty("btwBedrag")
   })
   test("te betalen: open eerst, oudste vervaldag voorop", () => {
     const r = (id: string, vervalt: string, betaald = false) => ({ ...schoonInkoop({ datum: "2026-11-01", leverancier: id, bedrag: 1, vervalt, betaald })!, id })

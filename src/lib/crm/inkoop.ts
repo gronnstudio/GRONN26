@@ -16,6 +16,8 @@ export type Inkoop = {
   /** Bedrag excl. btw, in centen */
   bedrag: Centen
   btw: Bp
+  /** Btw-bedrag zoals op de factuur, in centen: bij gemengde tarieven (9 % en 21 %) gaat dit voor `btw`. */
+  btwBedrag?: Centen
   /** Klant (Klant.id) waar dit voor was; leeg = algemene kosten */
   klantId?: string
   betaald: boolean
@@ -28,7 +30,7 @@ export type Inkoop = {
 export const BESTAND_TYPES = { "application/pdf": "pdf", "image/jpeg": "jpg", "image/png": "png" } as const
 export const MAX_BESTAND = 4_000_000
 
-export const metBtw = (i: Pick<Inkoop, "bedrag" | "btw">): Centen => plusProcent(i.bedrag, i.btw)
+export const metBtw = (i: Pick<Inkoop, "bedrag" | "btw" | "btwBedrag">): Centen => (i.btwBedrag !== undefined ? i.bedrag + i.btwBedrag : plusProcent(i.bedrag, i.btw))
 
 const datumOk = (d: unknown): d is string => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d)
 const t = (v: unknown, n: number) => (typeof v === "string" ? v.trim().slice(0, n) : "")
@@ -39,6 +41,7 @@ export function schoonInkoop(r: Record<string, unknown>): Inkoop | null {
   const leverancier = t(r.leverancier, 80)
   if (!datumOk(r.datum) || bedrag === null || !leverancier) return null
   const btw = BTW_TARIEVEN.includes(r.btw as Bp) ? (r.btw as Bp) : 2100
+  const btwBedrag = typeof r.btwBedrag === "number" && Number.isSafeInteger(r.btwBedrag) && r.btwBedrag >= 0 && r.btwBedrag <= Math.abs(bedrag) ? r.btwBedrag : undefined
   const b = r.bestand as { ext?: unknown; naam?: unknown } | undefined
   const ext = b && ["pdf", "jpg", "png"].includes(b.ext as string) ? (b.ext as "pdf" | "jpg" | "png") : null
   const klantId = t(r.klantId, 64)
@@ -50,6 +53,7 @@ export function schoonInkoop(r: Record<string, unknown>): Inkoop | null {
     omschrijving: t(r.omschrijving, 200),
     bedrag,
     btw,
+    ...(btwBedrag !== undefined ? { btwBedrag } : {}),
     ...(klantId ? { klantId } : {}),
     betaald: r.betaald === true,
     ...(datumOk(r.vervalt) ? { vervalt: r.vervalt } : {}),
@@ -67,7 +71,8 @@ export const inkoopVan = (lijst: Inkoop[], klantId: string): Centen => lijst.fil
 /**
  * Nacalculatie van een klant (Plancraft: "Nacalculatie"): gefactureerd excl. 21 % btw min de
  * inkoop excl. btw is wat er voor je werk overbleef, en dat gedeeld door de uren. Gefactureerd
- * komt binnen in euro's incl. btw (oude vorm), inkoop in centen excl. btw.
+ * komt binnen in euro's incl. btw (oude vorm), inkoop in centen excl. btw. De omzet is een schatting
+ * op 21 %: een stuk bewaart alleen het bedrag incl. btw. De klantkaart zegt dat erbij.
  */
 export function naInkoop(gefactureerdInclEuro: number, inkoop: Centen, uren: number) {
   const omzet = Math.round((gefactureerdInclEuro * 100) / 1.21)

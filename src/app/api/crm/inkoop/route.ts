@@ -24,7 +24,10 @@ export async function POST(request: NextRequest) {
   const bedragInvoer = leesCenten(v("bedrag"))
   const btw = leesBp(v("btw")) ?? 2100
   // Het bedrag komt incl. of excl. btw binnen; bewaard wordt excl. btw (zoals de calculatie).
-  const bedrag = bedragInvoer === null ? null : v("metbtw") === "1" ? Math.round((bedragInvoer * 10000) / (10000 + btw)) : bedragInvoer
+  // Gemengde tarieven: het btw-bedrag van de factuur gaat voor het gekozen tarief (Codex, PR #215).
+  const btwBedrag = v("btwbedrag").trim() ? leesCenten(v("btwbedrag")) : null
+  const bedrag = bedragInvoer === null ? null : v("metbtw") !== "1" ? bedragInvoer : btwBedrag !== null ? bedragInvoer - btwBedrag : Math.round((bedragInvoer * 10000) / (10000 + btw))
+  if (btwBedrag !== null && (bedragInvoer === null || btwBedrag < 0 || btwBedrag * 2 > Math.abs(bedragInvoer))) return NextResponse.json({ fout: "Dat btw-bedrag past niet bij het bedrag." }, { status: 400 })
   const klantId = v("klantId")
   if (klantId && !(await leesKlanten()).some((k) => k.id === klantId)) return NextResponse.json({ fout: "Onbekende klant" }, { status: 400 })
 
@@ -44,6 +47,7 @@ export async function POST(request: NextRequest) {
     omschrijving: v("omschrijving"),
     bedrag,
     btw,
+    ...(btwBedrag !== null ? { btwBedrag } : {}),
     klantId,
     betaald: v("betaald") === "1",
     vervalt: v("vervalt"),
