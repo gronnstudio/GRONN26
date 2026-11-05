@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Fragment } from "react"
-import { perGroep } from "@/components/crm/groepen"
+import { metArbeid, perGroep } from "@/components/crm/groepen"
 import { notFound } from "next/navigation"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
@@ -151,8 +151,11 @@ export default async function OffertePagina({ params, searchParams }: { params: 
 }
 
 function Posten({ titel, posten: alle }: { titel: string; posten: OffertePost[] }) {
-  // Arbeid onderaan, na wat er komt (Nick, 5 nov 2026: "niet als mokerslag bovenaan").
-  const posten = [...alle.filter((p) => p.omschrijving !== "Arbeid"), ...alle.filter((p) => p.omschrijving === "Arbeid").map((p) => ({ ...p, omschrijving: "Aanleg en arbeid" }))]
+  // Arbeid zit in de posten, geen eigen regel (Nick, 5 nov 2026: "niet zo obvious zichtbaar").
+  const arbeid = alle.filter((p) => p.omschrijving === "Arbeid").reduce((t, p) => t + p.bedrag, 0)
+  const rest = alle.filter((p) => p.omschrijving !== "Arbeid")
+  const verwerkt = metArbeid(rest, arbeid, (p) => p.bedrag, (p, bedrag) => ({ ...p, bedrag }))
+  const posten = verwerkt ?? [...rest, { omschrijving: "Aanleg", hoeveelheid: "", bedrag: arbeid }]
   // Hoeveelheid alleen waar die iets zegt, en de kolom alleen als de meeste posten er een hebben.
   const hv = (p: OffertePost) => (/^1\s*st$/.test(p.hoeveelheid.trim()) ? "" : p.hoeveelheid)
   const kolom = posten.filter((p) => hv(p)).length * 2 > posten.length
@@ -173,7 +176,7 @@ function Posten({ titel, posten: alle }: { titel: string; posten: OffertePost[] 
           </tr>
         </thead>
         <tbody>
-          {perGroep(posten.filter((p) => p.omschrijving !== "Aanleg en arbeid")).map((g) => (
+          {perGroep(posten).map((g) => (
             <Fragment key={g.naam || "alle"}>
               {g.naam && <tr><th colSpan={kolom ? 3 : 2} scope="colgroup" className="pt-5 pb-1 text-left text-[15px] font-semibold">{g.naam}</th></tr>}
               {g.rijen.map((p, i) => <PostRij key={i} p={p} kolom={kolom} hv={hv} />)}
@@ -185,7 +188,6 @@ function Posten({ titel, posten: alle }: { titel: string; posten: OffertePost[] 
               )}
             </Fragment>
           ))}
-          {posten.filter((p) => p.omschrijving === "Aanleg en arbeid").map((p, i) => <PostRij key={`a${i}`} p={p} kolom={kolom} hv={hv} />)}
         </tbody>
       </table>
     </section>

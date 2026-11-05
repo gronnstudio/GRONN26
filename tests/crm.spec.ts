@@ -222,7 +222,9 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   const kp = await klant.newPage()
   await kp.goto(href)
   await expect(kp.getByRole("heading", { level: 1 })).toContainText("Oprit")
-  await expect(kp.getByText("€ 1.722,70")).toBeVisible()
+  // arbeid zit in de post (Nick, 5 nov 2026): € 1.722,70 + 44 uur arbeid
+  await expect(kp.getByText("€ 3.922,70").first()).toBeVisible()
+  await expect(kp.locator("article")).not.toContainText("Arbeid")
   await expect(kp.getByText("Totaal incl. btw")).toBeVisible()
   // inkoop (€ 25,00 per m²), opslag en uren staan er niet op
   await expect(kp.locator("article")).not.toContainText("€ 25,00")
