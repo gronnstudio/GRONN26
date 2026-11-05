@@ -3,11 +3,12 @@
 import { Komeet } from "@/components/komeet"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useMemo, useState, useTransition } from "react"
+import { Fragment, useEffect, useMemo, useState, useTransition } from "react"
 import { BTW_TARIEVEN, EENHEDEN, dubbelen, ontdubbeld, SOORTEN, STANDAARD, isSoort, nieuweRegel, reken, tekort, wegzetten, type Regel, type Soort } from "@/lib/crm/calculatie"
 import { alsRegel, type Item } from "@/lib/crm/catalogus"
 import { leesBp, leesCenten, leesMilli, plusProcent, toonDecimaal, toonEuro, zonderProcent, type Milli } from "@/lib/crm/geld"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
+import { perGroep } from "@/components/crm/groepen"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { planDagen } from "@/lib/crm/project"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
@@ -709,8 +710,18 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 </tr>
               </thead>
               <tbody>
-                {regelsVoorKlant.map((r) => (
-                  <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h={kolom ? hv(r) : undefined} b={r.verkoop} />
+                {perGroep(regelsVoorKlant).map((g) => (
+                  <Fragment key={g.naam || "alle"}>
+                    {g.naam && (
+                      <tr><th colSpan={kolom ? 3 : 2} scope="colgroup" className="pt-4 pb-1 text-left text-[10pt] font-semibold">{g.naam}</th></tr>
+                    )}
+                    {g.rijen.map((r) => (
+                      <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h={kolom ? hv(r) : undefined} b={r.verkoop} />
+                    ))}
+                    {g.naam && (
+                      <tr><td colSpan={kolom ? 2 : 1} className="py-1.5 text-right text-gedempt">Subtotaal {g.naam.toLowerCase()}</td><td className="py-1.5 text-right whitespace-nowrap crm-cijfer font-semibold">{toonEuro(g.rijen.reduce((t, r) => t + r.verkoop, 0))}</td></tr>
+                    )}
+                  </Fragment>
                 ))}
                 {/* Arbeid onderaan, na wat er komt (Nick, 5 nov 2026: "niet als mokerslag bovenaan"). */}
                 {u.arbeid > 0 && <PostRij t="Aanleg en arbeid" h={kolom ? "" : undefined} b={u.arbeid} />}

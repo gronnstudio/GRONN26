@@ -12,7 +12,7 @@ import { leesJson, verwijderBestand, wijzigJson } from "./opslag"
 // winst gaan er nooit in. Elke offerte is een eigen document onder een
 // onraadbare sleutel, zodat de link niets anders kan lezen dan die ene offerte.
 
-export type OffertePost = { omschrijving: string; hoeveelheid: string; bedrag: Centen }
+export type OffertePost = { omschrijving: string; hoeveelheid: string; bedrag: Centen; /** Fase of werkpakket, voor de indeling op de offerte. */ groep?: string }
 
 export type Offerte = {
   token: string
@@ -96,7 +96,7 @@ export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string, 
     ...(v.planning?.length ? { planning: v.planning.map((f) => ({ naam: f.naam, dagen: f.dagen })) } : {}),
     posten: [
       ...(u.arbeid ? [{ omschrijving: "Arbeid", hoeveelheid: "", bedrag: u.arbeid }] : []),
-      ...u.regels.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
+      ...u.regels.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop, ...(r.groep?.trim() ? { groep: r.groep.trim().slice(0, 60) } : {}) })),
     ],
     optioneel: u.optioneel.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
     onvoorzien: u.onvoorzien,
