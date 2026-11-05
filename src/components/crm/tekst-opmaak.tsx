@@ -7,7 +7,19 @@ const vet = (t: string): ReactNode[] => t.split(/(\*\*[^*]+\*\*)/g).map((s, i) =
 const cellen = (r: string) => r.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim())
 const scheiding = (r: string) => /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(r)
 
-export function TekstOpmaak({ tekst, className = "" }: { tekst: string; className?: string }) {
+/**
+ * De tekst zonder tabellen, lijnen en kopjes die daarna leeg zijn (Nick, 5 nov 2026: "als ik calc
+ * aanpas moet beschrijving mee veranderen"). Prijzen en posten op de offerte komen altijd uit de
+ * calculatie; een tabel in de omschrijving is een momentopname en loopt achter.
+ */
+export function zonderTabellen(tekst: string) {
+  const regels = tekst.split(/\r\n|\r|\n|\u2028|\u2029/).filter((r) => !r.trim().startsWith("|") && !/^\s*-{3,}\s*$/.test(r))
+  const leeg = (j: number) => { for (let k = j + 1; k < regels.length; k++) { if (!regels[k].trim()) continue; return /^\s*#{1,3}\s/.test(regels[k]) && regels[k].match(/#+/)![0].length <= regels[j].match(/#+/)![0].length } return true }
+  return regels.filter((r, j) => !/^\s*#{1,3}\s/.test(r) || !leeg(j)).join("\n").replace(/\n{3,}/g, "\n\n").trim()
+}
+
+export function TekstOpmaak({ tekst: ruw, className = "", zonderPrijzen = false }: { tekst: string; className?: string; zonderPrijzen?: boolean }) {
+  const tekst = zonderPrijzen ? zonderTabellen(ruw) : ruw
   // Elke soort regeleinde (Windows, Mac, Unicode) en voorloopspaties tellen niet.
   const regels = tekst.split(/\r\n|\r|\n|\u2028|\u2029/).map((r) => r.replace(/^[\s\u00a0]+/, ""))
   const uit: ReactNode[] = []

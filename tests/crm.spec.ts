@@ -424,7 +424,7 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   const href = (await page.getByRole("link", { name: "Bekijk als klant" }).getAttribute("href"))!
   await page.goto(href)
   await expect(page.getByRole("heading", { name: "Planning" })).toBeVisible()
-  await expect(page.getByText("Afgraven en grond afvoeren · 1,5 werkdagen")).toBeVisible()
+  await expect(page.getByRole("row", { name: "Afgraven en grond afvoeren 1,5 werkdagen" })).toBeVisible()
   await expect(page.getByText("Minigraver")).toHaveCount(0)
 })
 

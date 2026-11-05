@@ -33,53 +33,42 @@ export default async function OffertePagina({ params, searchParams }: { params: 
         <p className="m-0 mt-5 text-[11px] font-semibold tracking-[.18em] text-[#ff5b04] uppercase">Vijvers en natuurlijke tuinen · Stein en omgeving</p>
       </div>
       <div className="print:px-[48px]">
-      <header className="mt-8 flex flex-wrap items-start justify-between gap-6 border-b border-lijn pb-6">
-        <div>
-          <p className="lbl m-0 text-gedempt">{spec ? `Specificatie bij factuur · offerte ${o.nummer}` : `Offerte · ${o.nummer}`}</p>
-          <h1 className="syne m-0 mt-2 text-[clamp(30px,4.4vw,48px)] leading-[1.05] tracking-[-.03em]">{o.titel}</h1>
-          <p className="m-0 mt-3 text-[16px] text-gedempt">
-            Voor {o.klant}
-            {o.adres ? ` · ${o.adres}` : ""}
-          </p>
-        </div>
-        <dl className="m-0 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-[14px]">
-          <dt className="text-gedempt">Datum</dt>
-          <dd className="m-0">{datum(o.datum)}</dd>
-          {spec ? (
-            o.akkoord && (
-              <>
-                <dt className="text-gedempt">Akkoord</dt>
-                <dd className="m-0">{datum(o.akkoord.op)} · {o.akkoord.naam}</dd>
-              </>
-            )
-          ) : (
-            <>
-              <dt className="text-gedempt">Geldig tot</dt>
-              <dd className="m-0">{datum(o.geldigTot)}</dd>
-            </>
-          )}
+      <header className="mt-8 border-b border-lijn pb-6">
+        <p className="lbl m-0 text-gedempt">{spec ? "Specificatie bij factuur" : "Offerte"}</p>
+        <h1 className="syne m-0 mt-2 text-[clamp(28px,4vw,40px)] leading-[1.1] tracking-[-.02em]">{o.titel}</h1>
+        {/* De gegevens in één nette rij vakjes (Nick, 5 nov 2026: "erg rommelig"). */}
+        <dl className="m-0 mt-6 grid grid-cols-2 gap-x-6 gap-y-3 text-[14px] sm:grid-cols-4 print:grid-cols-4">
+          <Gegeven t="Voor" w={o.klant} />
+          <Gegeven t="Nummer" w={o.nummer} />
+          <Gegeven t="Datum" w={datum(o.datum)} />
+          {spec ? o.akkoord && <Gegeven t="Akkoord" w={`${datum(o.akkoord.op)} · ${o.akkoord.naam}`} /> : <Gegeven t="Geldig tot" w={datum(o.geldigTot)} />}
+          {o.adres && <Gegeven t="Adres" w={o.adres} breed />}
         </dl>
       </header>
 
       {!spec && o.begin && <p className="m-0 mt-6 max-w-[72ch] whitespace-pre-line text-[16px] leading-[1.6]">{o.begin}</p>}
-      {o.beschrijving && <TekstOpmaak tekst={o.beschrijving} className="mt-6 max-w-[72ch] text-[16px] leading-[1.6]" />}
+      {o.beschrijving && <TekstOpmaak tekst={o.beschrijving} zonderPrijzen className="mt-6 max-w-[72ch] text-[16px] leading-[1.6]" />}
 
       {o.planning && o.planning.length > 0 && (
-        <section className="mt-8">
+        <section className="mt-10">
           <h2 className="lbl m-0 text-gedempt">Planning</h2>
-          <ol className="m-0 mt-2 grid gap-1 pl-5 text-[15px]">
-            {o.planning.map((f, i) => (
-              <li key={i}>
-                {f.naam} · {f.dagen.toLocaleString("nl-NL")} {f.dagen === 1 ? "werkdag" : "werkdagen"}
-              </li>
-            ))}
-          </ol>
+          <table className="mt-3 w-full border-collapse text-[15px]">
+            <tbody>
+              {o.planning.map((f, i) => (
+                <tr key={i} className="border-b border-lijn">
+                  <td className="w-[36px] py-2.5 text-gedempt tabular-nums">{i + 1}</td>
+                  <td className="py-2.5 pr-4">{f.naam}</td>
+                  <td className="py-2.5 text-right whitespace-nowrap tabular-nums">{f.dagen.toLocaleString("nl-NL")} {f.dagen === 1 ? "werkdag" : "werkdagen"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <p className="m-0 mt-2 text-[13px] text-gedempt">Samen {o.planning.reduce((t, f) => t + f.dagen, 0).toLocaleString("nl-NL")} werkdagen. De startdatum spreken we samen af; het weer kan de planning verschuiven.</p>
         </section>
       )}
 
       <Posten titel="Wat er gebeurt" posten={o.posten} />
-      <table className="mt-2 w-full border-collapse text-[15px]">
+      <table data-blok className="mt-4 ml-auto w-full max-w-[400px] border-collapse text-[15px]">
         <tbody>
           {o.onvoorzien > 0 && <Rij naam="Onvoorzien" bedrag={o.onvoorzien} />}
           {o.korting > 0 && <Rij naam="Korting" bedrag={-o.korting} />}
@@ -163,21 +152,39 @@ function Posten({ titel, posten }: { titel: string; posten: OffertePost[] }) {
   return (
     <section className="mt-10">
       <h2 className="lbl m-0 text-gedempt">{titel}</h2>
-      <table className="mt-3 w-full border-collapse text-[15px]">
-        <thead className="sr-only">
-          <tr><th>Omschrijving</th><th>Hoeveelheid</th><th>Bedrag excl. btw</th></tr>
+      <table className="mt-3 w-full table-fixed border-collapse text-[15px]">
+        <colgroup>
+          <col />
+          <col className="w-[110px]" />
+          <col className="w-[130px]" />
+        </colgroup>
+        <thead>
+          <tr className="border-b-2 border-inkt text-[12px] text-gedempt">
+            <th scope="col" className="pb-2 text-left font-semibold">Omschrijving</th>
+            <th scope="col" className="pb-2 text-right font-semibold">Hoeveelheid</th>
+            <th scope="col" className="pb-2 text-right font-semibold">Excl. btw</th>
+          </tr>
         </thead>
         <tbody>
           {posten.map((p, i) => (
-            <tr key={i} className="border-b border-lijn">
+            <tr key={i} className="border-b border-lijn align-top">
               <td className="py-2.5 pr-4">{p.omschrijving}</td>
-              <td className="py-2.5 pr-4 whitespace-nowrap text-gedempt tabular-nums">{p.hoeveelheid}</td>
+              <td className="py-2.5 pr-4 text-right whitespace-nowrap text-gedempt tabular-nums">{p.hoeveelheid || "—"}</td>
               <td className="py-2.5 text-right whitespace-nowrap tabular-nums">{toonEuro(p.bedrag)}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </section>
+  )
+}
+
+function Gegeven({ t, w, breed }: { t: string; w: string; breed?: boolean }) {
+  return (
+    <div className={breed ? "col-span-2" : ""}>
+      <dt className="text-[12px] text-gedempt">{t}</dt>
+      <dd className="m-0 mt-0.5 font-medium">{w}</dd>
+    </div>
   )
 }
 
