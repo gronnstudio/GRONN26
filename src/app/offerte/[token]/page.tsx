@@ -148,20 +148,25 @@ export default async function OffertePagina({ params, searchParams }: { params: 
   )
 }
 
-function Posten({ titel, posten }: { titel: string; posten: OffertePost[] }) {
+function Posten({ titel, posten: alle }: { titel: string; posten: OffertePost[] }) {
+  // Arbeid onderaan, na wat er komt (Nick, 5 nov 2026: "niet als mokerslag bovenaan").
+  const posten = [...alle.filter((p) => p.omschrijving !== "Arbeid"), ...alle.filter((p) => p.omschrijving === "Arbeid").map((p) => ({ ...p, omschrijving: "Aanleg en arbeid" }))]
+  // Hoeveelheid alleen waar die iets zegt, en de kolom alleen als de meeste posten er een hebben.
+  const hv = (p: OffertePost) => (/^1\s*st$/.test(p.hoeveelheid.trim()) ? "" : p.hoeveelheid)
+  const kolom = posten.filter((p) => hv(p)).length * 2 > posten.length
   return (
     <section className="mt-10">
       <h2 className="lbl m-0 text-gedempt">{titel}</h2>
       <table className="mt-3 w-full table-fixed border-collapse text-[15px]">
         <colgroup>
           <col />
-          <col className="w-[110px]" />
+          {kolom && <col className="w-[110px]" />}
           <col className="w-[130px]" />
         </colgroup>
         <thead>
           <tr className="border-b-2 border-inkt text-[12px] text-gedempt">
             <th scope="col" className="pb-2 text-left font-semibold">Omschrijving</th>
-            <th scope="col" className="pb-2 text-right font-semibold">Hoeveelheid</th>
+            {kolom && <th scope="col" className="pb-2 text-right font-semibold">Hoeveelheid</th>}
             <th scope="col" className="pb-2 text-right font-semibold">Excl. btw</th>
           </tr>
         </thead>
@@ -169,7 +174,7 @@ function Posten({ titel, posten }: { titel: string; posten: OffertePost[] }) {
           {posten.map((p, i) => (
             <tr key={i} className="border-b border-lijn align-top">
               <td className="py-2.5 pr-4">{p.omschrijving}</td>
-              <td className="py-2.5 pr-4 text-right whitespace-nowrap text-gedempt tabular-nums">{p.hoeveelheid || "—"}</td>
+              {kolom && <td className="py-2.5 pr-4 text-right whitespace-nowrap text-gedempt tabular-nums">{hv(p)}</td>}
               <td className="py-2.5 text-right whitespace-nowrap tabular-nums">{toonEuro(p.bedrag)}</td>
             </tr>
           ))}
