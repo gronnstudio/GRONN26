@@ -63,7 +63,12 @@ export function OfferteMaker() {
     const t = setTimeout(() => {
       try {
         const bewaard = localStorage.getItem(KEY);
-        if (bewaard) setO({ ...nieuw(), ...JSON.parse(bewaard) });
+        if (bewaard) {
+          // Oude concepten hadden vier cijfers achter de datum (…-0001); nu twee (Nick, 5 nov 2026).
+          const b = JSON.parse(bewaard);
+          if (typeof b.nummer === "string") b.nummer = b.nummer.replace(/-(\d{4})$/, (_: string, n: string) => `-${String(Number(n)).padStart(2, "0")}`);
+          setO({ ...nieuw(), ...b });
+        }
         setBieb(JSON.parse(localStorage.getItem(BIEB) || "[]"));
       } catch {}
       setGeladen(true);
