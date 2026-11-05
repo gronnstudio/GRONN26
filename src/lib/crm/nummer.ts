@@ -6,3 +6,6 @@ export function toonNummer(n: string): string {
   if (oud) return `${oud[1]}${oud[2]}-${oud[3]}-${String(Number(oud[4])).padStart(2, "0")}`
   return n.replace(/^(GR-[A-Z]+ \/\/ \d{4}-\d{4}-)(\d{3,})$/, (_, v: string, nr: string) => `${v}${String(Number(nr)).padStart(2, "0")}`)
 }
+
+/** Alle nummers in een stuk tekst (bijvoorbeeld een titel) in de nieuwe vorm. */
+export const metNieuweNummers = (t: string) => t.replace(/GR-[A-Z]+ \/\/ (?:\d{12}|\d{4}-\d{4}-\d{3,})/g, toonNummer)
