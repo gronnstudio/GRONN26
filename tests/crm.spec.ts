@@ -221,7 +221,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   const klant = await page.context().browser()!.newContext({ baseURL: "http://localhost:3210" })
   const kp = await klant.newPage()
   await kp.goto(href)
-  await expect(kp.getByRole("heading", { level: 1 })).toContainText("Oprit")
+  await expect(kp.getByRole("heading", { level: 1 })).toContainText(naam)
   // arbeid zit in de post (Nick, 5 nov 2026): € 1.722,70 + 44 uur arbeid
   await expect(kp.getByText("€ 3.922,70").first()).toBeVisible()
   await expect(kp.locator("article")).not.toContainText("Arbeid")

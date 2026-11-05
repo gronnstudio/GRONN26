@@ -30,7 +30,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
   return (
     <article className="offerte-druk mx-auto max-w-[860px] px-6 pt-[clamp(32px,6vw,72px)] pb-24 print:max-w-none print:p-0">
       {/* De kop van het briefpapier (Brand Guide 2026): antraciet vlak, primair woordmerk, oranje regel. */}
-      <div className="-mx-6 rounded-b-[24px] bg-[#202020] px-6 pt-8 pb-7 sm:px-10 print:mx-0 print:px-[48px] print:pt-[40px]">
+      <div className="-mx-6 rounded-b-[24px] bg-[#2a2019] px-6 pt-8 pb-7 sm:px-10 print:mx-0 print:px-[48px] print:pt-[40px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="h-[36px] w-auto" />
         <p className="m-0 mt-5 text-[11px] font-semibold tracking-[.18em] text-[#ff5b04] uppercase">Vijvers en natuurlijke tuinen · Stein en omgeving</p>
@@ -38,11 +38,11 @@ export default async function OffertePagina({ params, searchParams }: { params: 
       <div className="print:px-[48px]">
       <header className="mt-8 border-b border-lijn pb-6">
         <p className="lbl m-0 text-gedempt">{spec ? "Specificatie bij factuur" : "Offerte"}</p>
-        <h1 className="syne m-0 mt-2 text-[clamp(28px,4vw,40px)] leading-[1.1] tracking-[-.02em]">{o.titel}</h1>
+        <h1 className="syne m-0 mt-2 text-[clamp(28px,4vw,40px)] leading-[1.1] tracking-[-.02em]">{o.klant}</h1>
+        {/* Klantnaam met het nummer eronder, verder niks (Nick, 5 nov 2026). */}
+        <p className="m-0 mt-1 text-[16px] text-gedempt tabular-nums">{toonNummer(o.nummer)}</p>
         {/* De gegevens in één nette rij vakjes (Nick, 5 nov 2026: "erg rommelig"). */}
         <dl className="m-0 mt-6 grid grid-cols-2 gap-x-6 gap-y-3 text-[14px] sm:grid-cols-4 print:grid-cols-4">
-          <Gegeven t="Voor" w={o.klant} />
-          <Gegeven t="Nummer" w={toonNummer(o.nummer)} />
           <Gegeven t="Datum" w={datum(o.datum)} />
           {spec ? o.akkoord && <Gegeven t="Akkoord" w={`${datum(o.akkoord.op)} · ${o.akkoord.naam}`} /> : <Gegeven t="Geldig tot" w={datum(o.geldigTot)} />}
           {o.adres && <Gegeven t="Adres" w={o.adres} breed />}
