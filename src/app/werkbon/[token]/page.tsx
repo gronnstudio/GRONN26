@@ -1,3 +1,4 @@
+import { toonNummer } from "@/lib/crm/nummer"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HandtekeningVeld } from "@/components/crm/handtekening-veld"
@@ -26,7 +27,7 @@ export default async function WerkbonPagina({ params }: { params: Promise<{ toke
       </div>
       <div className="print:px-[48px]">
         <header className="mt-8 border-b border-lijn pb-6">
-          <p className="lbl m-0 text-gedempt">Werkbon · {w.nummer}</p>
+          <p className="lbl m-0 text-gedempt">Werkbon · {toonNummer(w.nummer)}</p>
           <h1 className="syne m-0 mt-2 text-[clamp(30px,4.4vw,48px)] leading-[1.05] tracking-[-.03em]">{datum(w.datum)}</h1>
           <p className="m-0 mt-3 text-[16px] text-gedempt">
             Bij {w.klant}
@@ -81,7 +82,7 @@ export default async function WerkbonPagina({ params }: { params: Promise<{ toke
           </form>
         )}
 
-        <PdfKnoppen naam={`Werkbon ${w.nummer} GRØNN Studio`} />
+        <PdfKnoppen naam={`Werkbon ${toonNummer(w.nummer)} GRØNN Studio`} />
 
         <footer className="mt-12 border-t border-lijn pt-5 text-[13px] leading-[1.6] text-gedempt">
           {BUSINESS.name} · {BUSINESS.address.street}, {BUSINESS.address.postalCode} {BUSINESS.address.city} · KvK {BUSINESS.kvk} · {BUSINESS.phone} · {BUSINESS.email}

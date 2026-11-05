@@ -1,3 +1,4 @@
+import { toonNummer } from "@/lib/crm/nummer"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Blok, Cijfer, Cijfers, Kop, Leeg } from "@/components/crm/kop"
@@ -121,7 +122,7 @@ export default async function Geld() {
             <tbody>
               {TE_BETALEN.map((f) => (
                 <tr key={f.nummer}>
-                  <td className="font-semibold">{f.nummer}</td>
+                  <td className="font-semibold">{toonNummer(f.nummer)}</td>
                   <td>{f.aan}</td>
                   <td className="text-[13px] text-let">{f.stand}</td>
                   <td className="crm-cijfer text-[13px] text-gedempt">{datum(f.vervalt)}</td>
@@ -228,7 +229,7 @@ function Lijst({ rijen, nu, leeg, oud }: { rijen: Openstaand[]; nu: string; leeg
           const dagen = dagenGeleden(s.datum, nu)
           return (
             <tr key={`${s.klant.id}-${s.nummer}`}>
-              <td className="crm-cijfer text-[13px]">{s.nummer}</td>
+              <td className="crm-cijfer text-[13px]">{toonNummer(s.nummer)}</td>
               <td><Link href={`/dashboard/klanten/${s.klant.id}?tab=stukken`} className="crm-link">{s.klant.naam}</Link></td>
               <td className="crm-cijfer text-[13px] text-gedempt">
                 {datum(s.datum)}
