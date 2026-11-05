@@ -542,6 +542,10 @@ test("systeem: elke pagina één h1, geen fouten, geen overloop, licht en donker
     "/dashboard/catalogus",
     "/dashboard/leveranciers",
     "/dashboard/geld",
+    "/dashboard/offertes",
+    "/dashboard/facturen",
+    "/dashboard/facturen?status=Betaald&q=x",
+    "/dashboard/planning?weergave=bord",
     "/dashboard/uren",
     "/dashboard/social",
     "/dashboard/links",
@@ -648,4 +652,21 @@ test("telefoon: menu bovenaan, pagina's vallen niet van het scherm", async ({ br
   await expect(page.locator(".crm [inert]")).toHaveCount(0)
   await expect(page.getByRole("dialog")).toHaveCount(0)
   await ctx.close()
+})
+
+test("offertes en facturen: eigen lijsten met statusfilter en CSV, alleen voor de eigenaar", async ({ page, request }) => {
+  expect((await request.get("/dashboard/facturen/export", { maxRedirects: 0 })).status()).toBe(307)
+  await log(page)
+  await page.goto("/dashboard/facturen")
+  await expect(page.getByRole("heading", { level: 1, name: "Facturen" })).toBeVisible()
+  const status = page.getByRole("navigation", { name: "Status" })
+  await status.getByRole("link", { name: /^Betaald/ }).click()
+  await expect(page).toHaveURL(/status=Betaald/)
+  await expect(status.locator('[aria-current="true"]')).toContainText("Betaald")
+  const csv = await page.request.get("/dashboard/facturen/export?status=Betaald")
+  expect(csv.status()).toBe(200)
+  expect(csv.headers()["content-type"]).toContain("text/csv")
+  expect(await csv.text()).toContain('"Nummer";"Soort";"Klant"')
+  await page.goto("/dashboard/offertes")
+  await expect(page.getByRole("heading", { level: 1, name: "Offertes" })).toBeVisible()
 })

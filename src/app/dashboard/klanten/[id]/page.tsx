@@ -28,6 +28,7 @@ import { maakFactuur } from "../factuur-acties"
 import { haalWerkbonWeg, maakWerkbon } from "../werkbon-acties"
 import { leesWerkbonnen } from "@/lib/beheer/werkbon"
 import { volgendFactuurNummer } from "@/lib/crm/factuur-reken"
+import { klusdagen } from "@/lib/crm/agenda"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
 // module 02: Overzicht | Tuinen | Calculaties | Stukken | Activiteit). Gewone
@@ -129,7 +130,10 @@ async function Overzicht({ k }: { k: Klant }) {
   // Gewerkt tegenover gepland (idee uit Plancraft): de nieuwste planning per calculatie × 8 uur per dag.
   const gepland = geplandeUren(k)
   const deel = gepland ? Math.round((urenTotaal / gepland) * 100) : 0
+  const dagen = klusdagen([k]).map((d) => d.datum).sort()
   return (
+    <>
+    <Infokaarten k={k} uren={urenTotaal} gepland={gepland} deel={deel} dagen={dagen} />
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_420px] gap-10">
       <form key={sleutel({ ...k, activiteit: 0, stukken: 0, tuinen: 0, calculaties: 0, projecten: 0 })} action={bewaarKlant.bind(null, k.id)} className="flex flex-col gap-6">
         <fieldset className="m-0 grid grid-cols-3 gap-4 border-0 p-0">
@@ -239,6 +243,63 @@ async function Overzicht({ k }: { k: Klant }) {
           </details>
         </section>
       </aside>
+    </div>
+    </>
+  )
+}
+
+/**
+ * De kop van de klantkaart als projectpagina (Plancraft, 5 nov 2026): vier kaarten met wat je
+ * het vaakst zoekt. Uren gewerkt tegenover gepland als ring, de klant, wanneer en waar.
+ */
+function Infokaarten({ k, uren, gepland, deel, dagen }: { k: Klant; uren: number; gepland: number; deel: number; dagen: string[] }) {
+  const over = deel > 100
+  const r = 26
+  const omtrek = 2 * Math.PI * r
+  const waar = [k.adres, k.plaats].filter(Boolean).join(", ")
+  const kaart = "crm-paneel min-w-0 p-4"
+  return (
+    <div className="mb-8 grid gap-4 sm:grid-cols-2 @min-[1060px]:grid-cols-4">
+      <section aria-label="Gewerkte uren" className={`${kaart} flex items-center gap-4`}>
+        <svg viewBox="0 0 64 64" className="size-[64px] shrink-0 -rotate-90" aria-hidden>
+          <circle cx="32" cy="32" r={r} fill="none" stroke="var(--lijn)" strokeWidth="7" />
+          {gepland > 0 && <circle cx="32" cy="32" r={r} fill="none" stroke={over ? "var(--let)" : "var(--accent)"} strokeWidth="7" strokeLinecap="round" strokeDasharray={`${(Math.min(100, deel) / 100) * omtrek} ${omtrek}`} />}
+        </svg>
+        <div className="min-w-0">
+          <p className={`${lbl} m-0`}>Gewerkte uren</p>
+          <p className="crm-cijfer m-0 mt-1 text-[20px]">{uren.toLocaleString("nl-NL")} u</p>
+          <p className={`m-0 text-[12px] ${over ? "font-semibold text-let" : "text-gedempt"}`}>{gepland ? `${deel} % van ${gepland.toLocaleString("nl-NL")} u gepland` : "Nog geen planning in een calculatie"}</p>
+        </div>
+      </section>
+      <section aria-label="Klant" className={kaart}>
+        <p className={`${lbl} m-0`}>Klant</p>
+        <p className="m-0 mt-1 truncate font-semibold">{k.naam}{k.bedrijf ? <span className="font-normal text-gedempt"> · {k.bedrijf}</span> : null}</p>
+        {k.telefoon ? <a href={`tel:${k.telefoon.replace(/\s/g, "")}`} className="block truncate text-[13px] hover:text-accent-tekst">{k.telefoon}</a> : <span className="block text-[13px] text-gedempt">Geen telefoon</span>}
+        {k.email ? <a href={`mailto:${k.email}`} className="block truncate text-[13px] hover:text-accent-tekst">{k.email}</a> : <span className="block text-[13px] text-gedempt">Geen e-mail</span>}
+      </section>
+      <section aria-label="Tijdsbestek" className={kaart}>
+        <p className={`${lbl} m-0`}>Tijdsbestek</p>
+        {dagen.length ? (
+          <>
+            <p className="crm-cijfer m-0 mt-1 font-semibold">{datum(dagen[0])} – {datum(dagen.at(-1)!)}</p>
+            <p className="m-0 text-[12px] text-gedempt">{dagen.length} {dagen.length === 1 ? "werkdag" : "werkdagen"} gepland</p>
+          </>
+        ) : (
+          <p className="m-0 mt-1 text-[13px] text-gedempt">Nog niet ingepland. Zet een startdatum in de planning van de calculatie.</p>
+        )}
+        {k.opvolgen && <p className="m-0 mt-1 text-[12px]">Opvolgen {datum(k.opvolgen)}</p>}
+      </section>
+      <section aria-label="Locatie" className={kaart}>
+        <p className={`${lbl} m-0`}>Locatie</p>
+        {waar ? (
+          <>
+            <p className="m-0 mt-1 text-[13px] [overflow-wrap:anywhere]">{waar}</p>
+            <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(waar)}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-[13px] font-semibold text-accent-tekst">Route ↗</a>
+          </>
+        ) : (
+          <p className="m-0 mt-1 text-[13px] text-gedempt">Nog geen adres. Vul het hieronder in.</p>
+        )}
+      </section>
     </div>
   )
 }

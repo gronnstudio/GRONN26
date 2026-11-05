@@ -7,7 +7,7 @@ export type Stap = { naam: string; href?: string }
 
 export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: React.ReactNode; sub?: React.ReactNode; children?: React.ReactNode }) {
   return (
-    <header className="border-b border-lijn px-4 pt-5 pb-5 sm:px-8 print:hidden">
+    <header className="border-b border-lijn bg-vlak px-4 pt-4 pb-5 sm:px-8 print:hidden">
       <div className="flex items-center justify-between gap-4">
       <nav aria-label="Kruimelpad" className="min-h-[18px] min-w-0 text-[12px] text-gedempt">
         {/* Op één regel; een lange klantnaam wordt afgekort (met de hele naam als tooltip). */}
@@ -24,7 +24,7 @@ export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: R
       </div>
       <div className="mt-2 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
         <div className="min-w-0">
-          <h1 className="syne m-0 text-[30px] leading-[1.1] tracking-[-0.01em]">{titel}</h1>
+          <h1 className="m-0 text-[24px] leading-[1.2] font-semibold tracking-[-0.015em]">{titel}</h1>
           {sub && <div className="m-0 mt-1.5 max-w-[80ch] text-[14px] text-gedempt">{sub}</div>}
         </div>
         {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
@@ -36,7 +36,7 @@ export function Kop({ pad = [], titel, sub, children }: { pad?: Stap[]; titel: R
 /** Tabbladen als gewone links met ?tab=, zodat je een tab kunt delen of bewaren. */
 export function Tabs({ tabs, actief, href, label }: { tabs: { id: string; naam: string; aantal?: number }[]; actief: string; href: (id: string) => string; label: string }) {
   return (
-    <nav aria-label={label} className="flex gap-1 overflow-x-auto border-b border-lijn px-4 sm:px-8 print:hidden">
+    <nav aria-label={label} className="flex gap-1 overflow-x-auto border-b border-lijn bg-vlak px-4 sm:px-8 print:hidden">
       {tabs.map((t) => (
         <Link
           key={t.id}

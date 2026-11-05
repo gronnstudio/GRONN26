@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Kop, Leeg } from "@/components/crm/kop"
+import { Kop, Leeg, Tabs } from "@/components/crm/kop"
+import { Planbord } from "@/components/crm/planbord"
 import { isOpen, leesKlanten } from "@/lib/beheer/klanten"
 import { leesStand } from "@/lib/beheer/stand"
 import { plusDagen, vandaagNL } from "@/lib/crm/overzicht"
@@ -26,8 +27,9 @@ const dagNaam = (d: string) => new Date(`${d}T12:00`).toLocaleDateString("nl-NL"
 
 const iso = (d: Date) => d.toISOString().slice(0, 10)
 
-export default async function Planning({ searchParams }: { searchParams: Promise<{ nieuw?: string; maand?: string }> }) {
-  const { nieuw, maand: m } = await searchParams
+export default async function Planning({ searchParams }: { searchParams: Promise<{ nieuw?: string; maand?: string; weergave?: string }> }) {
+  const { nieuw, maand: m, weergave } = await searchParams
+  const bord = weergave === "bord"
   const h = await headers()
   const sleutel = agendaSleutel()
   const feed = sleutel ? `https://${h.get("host")}/api/agenda/${sleutel}.ics` : ""
@@ -50,9 +52,11 @@ export default async function Planning({ searchParams }: { searchParams: Promise
   return (
     <>
       <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag. Klanten met de tag onderhoud komen elk seizoen terug." />
+      <Tabs label="Planning bekijken als" tabs={[{ id: "kalender", naam: "Kalender" }, { id: "bord", naam: "Planbord per week" }]} actief={bord ? "bord" : "kalender"} href={(t) => (t === "bord" ? "/dashboard/planning?weergave=bord" : "/dashboard/planning")} />
       <main className="mx-auto grid max-w-[1440px] @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
         <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8">
-          <Maandkalender maand={maand} nu={nu} klus={klus} eigen={stand.planning} weer={weer} beurten={onderhoudsbeurten(klanten, `${maand}-01`, `${maand}-31`)} />
+          {bord && <Planbord klus={klus} nu={nu} />}
+          {!bord && <Maandkalender maand={maand} nu={nu} klus={klus} eigen={stand.planning} weer={weer} beurten={onderhoudsbeurten(klanten, `${maand}-01`, `${maand}-31`)} />}
           {feed && <AgendaLink url={feed} />}
           <AgendaKnop items={[...klus.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum })), ...stand.planning.map((p) => ({ id: p.id, titel: p.wat, van: p.datum, tot: p.datum }))]} />
           <div className="min-w-0">

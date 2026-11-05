@@ -17,6 +17,15 @@ export const GROEPEN: { naam: string; onderdelen: Onderdeel[] }[] = [
     ],
   },
   {
+    // Plancraft (5 nov 2026): offertes en facturen als eigen lijsten, over alle klanten heen.
+    naam: "Verkoop",
+    onderdelen: [
+      { href: "/dashboard/offertes", naam: "Offertes", icoon: "offerte" },
+      { href: "/dashboard/facturen", naam: "Facturen", icoon: "factuur" },
+      { href: "/dashboard/inkoop", naam: "Inkoopfacturen", icoon: "inkoop" },
+    ],
+  },
+  {
     naam: "Rekenen",
     onderdelen: [
       { href: "/dashboard/calculaties", naam: "Calculaties", icoon: "calculaties" },
@@ -29,7 +38,6 @@ export const GROEPEN: { naam: string; onderdelen: Onderdeel[] }[] = [
     naam: "Bedrijf",
     onderdelen: [
       { href: "/dashboard/geld", naam: "Geld en papieren", icoon: "geld" },
-      { href: "/dashboard/inkoop", naam: "Inkoop", icoon: "inkoop" },
       { href: "/dashboard/uren", naam: "Uren", icoon: "uren" },
       { href: "/dashboard/social", naam: "Social", icoon: "social" },
       { href: "/dashboard/links", naam: "Links", icoon: "links" },
