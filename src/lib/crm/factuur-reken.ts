@@ -47,7 +47,7 @@ export function termijnRegels(offerte: { nummer: string; btw: BtwRegel[] }, deel
 }
 
 /**
- * GR-F // 2026-1105-01: de vorm die Nick al gebruikt (datum plus volgnummer
+ * GR-F // 2026-1105-0001: de vorm die Nick al gebruikt (datum plus volgnummer
  * van die dag), zodat de reeks aansluit. Eén hoger dan het hoogste van die dag.
  */
 export function volgendFactuurNummer(klanten: Pick<Klant, "stukken">[], datum: string) {
@@ -56,7 +56,7 @@ export function volgendFactuurNummer(klanten: Pick<Klant, "stukken">[], datum: s
     .flatMap((k) => k.stukken)
     .filter((s) => s.soort === "Factuur" && s.nummer.startsWith(voor))
     .reduce((m, s) => Math.max(m, Number(s.nummer.slice(voor.length)) || 0), 0)
-  return `${voor}${String(hoogste + 1).padStart(2, "0")}` // twee cijfers (Nick, 5 nov 2026)
+  return `${voor}${String(hoogste + 1).padStart(4, "0")}`
 }
 
 /**

@@ -589,8 +589,8 @@ test.describe("factuur", () => {
   })
   test("nummer: Nicks vorm, volgnummer per dag", () => {
     const k = [{ stukken: [{ id: "1", soort: "Factuur" as const, nummer: "GR-F // 2026-1105-0002", bedrag: 1, datum: "2026-11-05" }, { id: "2", soort: "Offerte" as const, nummer: "GR-F // 2026-1105-0009", bedrag: 1, datum: "2026-11-05" }] }]
-    expect(volgendFactuurNummer(k, "2026-11-05")).toBe("GR-F // 2026-1105-03")
-    expect(volgendFactuurNummer(k, "2026-11-06")).toBe("GR-F // 2026-1106-01")
+    expect(volgendFactuurNummer(k, "2026-11-05")).toBe("GR-F // 2026-1105-0003")
+    expect(volgendFactuurNummer(k, "2026-11-06")).toBe("GR-F // 2026-1106-0001")
   })
   test("SEPA-betaalcode volgens EPC069-12", () => {
     expect(epcCode({ naam: "GRØNN Studio", iban: "nl91 abna 0417 1643 00", bedrag: 12100, omschrijving: "Factuur 1" }).split("\n")).toEqual(["BCD", "002", "1", "SCT", "", "GRØNN Studio", "NL91ABNA0417164300", "EUR121.00", "", "", "Factuur 1"])
