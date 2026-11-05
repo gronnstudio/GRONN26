@@ -375,7 +375,7 @@ function Calculaties({ k }: { k: Klant }) {
               <tr key={c.id}>
                 <td className="pr-4"><Link href={`/dashboard/klanten/${k.id}/calculatie/${c.id}`} className="font-semibold hover:text-accent-tekst">{c.titel}</Link></td>
                 <td className="pr-4">{k.tuinen.find((t) => t.id === c.tuinId)?.naam ?? ""}</td>
-                <td>{c.versies.length ? (c.versies.some((x) => x.soort === "definitief") ? "Definitief" : "Concept") : ""}</td>
+                <td>{v ? (v.soort === "definitief" ? "Definitief" : "Concept") : ""}</td>
                 <td className="pr-4">{v ? tijd(v.datum) : ""}</td>
                 <td className="text-right crm-cijfer">{v ? toonEuro(v.winst) : ""}</td>
                 <td className="text-right crm-cijfer">{v ? toonEuro(v.totaal) : ""}</td>
