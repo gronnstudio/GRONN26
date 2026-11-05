@@ -572,8 +572,17 @@ test.describe("factuur", () => {
   test("termijn: per tarief het deel van de offerte", () => {
     const o = { nummer: "GR-O // 1", btw: [{ tarief: 2100, grondslag: 100000, btw: 21000 }, { tarief: 900, grondslag: 20000, btw: 1800 }] }
     const r = termijnRegels(o, 4000, "Termijn 1 van 3")
-    expect(r.map((x) => [x.bedrag, x.btw])).toEqual([[40000, 2100], [8000, 900]])
-    expect(r[0].omschrijving).toContain("Termijn 1 van 3 · 40 % van offerte GR-O // 1")
+    expect(r!.map((x) => [x.bedrag, x.btw])).toEqual([[40000, 2100], [8000, 900]])
+    expect(r![0].omschrijving).toContain("Termijn 1 van 3 · 40 % van offerte GR-O // 1")
+  })
+  test("termijnen: samen niet boven 100 %, de laatste krijgt de rest", () => {
+    const o = { nummer: "GR-O // 2", btw: [{ tarief: 2100, grondslag: 10001, btw: 2100 }] }
+    const een = termijnRegels(o, 5000, "1")!
+    expect(een[0].bedrag).toBe(5001)
+    const twee = termijnRegels(o, 5000, "2", [{ deel: 5000, regels: een }])!
+    expect(twee[0].bedrag).toBe(5000)
+    expect(termijnRegels(o, 6000, "2", [{ deel: 5000, regels: een }])).toBeNull()
+    expect(termijnRegels(o, 10000, "nog eens", [{ deel: 10000, regels: [{ omschrijving: "", bedrag: 10001, btw: 2100 }] }])).toBeNull()
   })
   test("nummer: Nicks vorm, volgnummer per dag", () => {
     const k = [{ stukken: [{ id: "1", soort: "Factuur" as const, nummer: "GR-F // 2026-1105-0002", bedrag: 1, datum: "2026-11-05" }, { id: "2", soort: "Offerte" as const, nummer: "GR-F // 2026-1105-0009", bedrag: 1, datum: "2026-11-05" }] }]

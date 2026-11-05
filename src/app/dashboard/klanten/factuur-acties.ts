@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { gebeurtenis, leesKlanten, wijzigKlanten, type Klant } from "@/lib/beheer/klanten"
 import { BTW_TARIEVEN } from "@/lib/crm/calculatie"
-import { bewaarFactuur, nieuwToken, type Factuur } from "@/lib/crm/factuur"
+import { bewaarFactuur, leesFactuur, nieuwToken, type Factuur } from "@/lib/crm/factuur"
 import { factuurTotaal, termijnRegels, type FactuurRegel } from "@/lib/crm/factuur-reken"
 import { leesBp, leesCenten, zonderProcent, type Bp } from "@/lib/crm/geld"
 import { leesOfferte } from "@/lib/crm/offerte"
@@ -32,12 +32,18 @@ export async function maakFactuur(klantId: string, d: FormData) {
   const bron = tekst(d, "bron", 40)
   let regels: FactuurRegel[] = []
   let offerte: Factuur["offerte"]
+  let termijn: Bp | undefined
   let titel = tekst(d, "titel", 120)
   if (bron) {
     const o = await leesOfferte(bron)
     const deel = leesBp(tekst(d, "procent", 8))
     if (!o || o.klantId !== k.id || !deel || deel <= 0 || deel > 10000) return
-    regels = termijnRegels(o, deel, tekst(d, "label", 60))
+    // Eerdere termijnen van deze offerte: samen niet boven 100 %.
+    const eerder = (await Promise.all(k.stukken.filter((s) => s.factuur).map((s) => leesFactuur(s.factuur!)))).filter((f): f is Factuur => !!f && f.offerte?.token === o.token && !!f.deel)
+    const r = termijnRegels(o, deel, tekst(d, "label", 60), eerder.map((f) => ({ deel: f.deel!, regels: f.regels })))
+    if (!r) return
+    regels = r
+    termijn = deel
     offerte = { nummer: o.nummer, token: o.token }
     titel ||= o.titel
   } else {
@@ -67,7 +73,7 @@ export async function maakFactuur(klantId: string, d: FormData) {
     klant: k.bedrijf || k.naam,
     adres: [k.adres, k.plaats].filter(Boolean).join(", "),
     titel: titel || "Werkzaamheden",
-    ...(offerte ? { offerte } : {}),
+    ...(offerte ? { offerte, deel: termijn } : {}),
     regels,
     btw: som.btw,
     totaal: som.totaal,

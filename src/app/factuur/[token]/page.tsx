@@ -19,8 +19,10 @@ export const dynamic = "force-dynamic"
 
 const datum = (d: string) => new Date(`${d.slice(0, 10)}T12:00`).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })
 
-export default async function FactuurPagina({ params }: { params: Promise<{ token: string }> }) {
+export default async function FactuurPagina({ params, searchParams }: { params: Promise<{ token: string }>; searchParams: Promise<{ betaald?: string }> }) {
   const { token } = await params
+  // Terug van Mollie: de betaling is onderweg, maar nog niet afgevinkt (Codex, PR #215).
+  const terugVanMollie = (await searchParams).betaald === "1"
   const f = await leesFactuur(token)
   if (!f) notFound()
   // De stand (betaald, herinnerd) leeft op de klantkaart; het document zelf verandert niet.
@@ -122,6 +124,10 @@ export default async function FactuurPagina({ params }: { params: Promise<{ toke
 
         {stand.stand === "betaald" ? (
           <p className="mt-10 inline-block rounded-full border-2 border-[#2e7d4f] px-5 py-2 text-[16px] font-semibold text-[#2e7d4f]">Betaald, dank je wel</p>
+        ) : terugVanMollie ? (
+          <p role="status" className="mt-10 max-w-[60ch] rounded-[16px] border border-lijn p-6 text-[16px] leading-[1.6]">
+            Dank je wel. Je betaling is onderweg; zodra hij binnen is, staat hier Betaald. Je hoeft niets meer te doen.
+          </p>
         ) : (
           <section aria-labelledby="betalen" className="mt-10 grid gap-6 rounded-[16px] border border-lijn p-6 sm:grid-cols-[minmax(0,1fr)_auto] print:grid-cols-[minmax(0,1fr)_auto]">
             <div>

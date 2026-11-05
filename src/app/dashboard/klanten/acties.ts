@@ -153,6 +153,8 @@ export async function stukHerinnerd(id: string, stuk: string, aan: boolean) {
 export async function stukWeg(id: string, stuk: string) {
   await pasAan(id, (k) => {
     const s = k.stukken.find((x) => x.id === stuk)
+    // Een factuur uit het dashboard is uitgegeven: hij blijft staan, anders wordt de link van de klant een 404 (Codex, PR #215).
+    if (s?.factuur) return k
     return s ? log({ ...k, stukken: k.stukken.filter((x) => x.id !== stuk) }, gebeurtenis("Stuk", `${s.soort} ${s.nummer} weggehaald`)) : k
   })
 }

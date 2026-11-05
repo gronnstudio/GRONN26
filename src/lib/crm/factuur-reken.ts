@@ -27,15 +27,23 @@ export function factuurTotaal(regels: FactuurRegel[]) {
 
 /**
  * Een termijn van een offerte (Plancraft: "Abschlagsrechnung"): per btw-tarief
- * het percentage van de grondslag, één regel per tarief. Zo klopt de btw van
- * alle termijnen samen met die van de offerte.
+ * het percentage van de grondslag, één regel per tarief. Eerdere termijnen van
+ * dezelfde offerte tellen mee: samen nooit boven 100 %, en de termijn die op
+ * 100 % uitkomt krijgt precies de rest, zodat afronden geen cent te veel geeft
+ * (Codex, PR #215). Te veel: null.
  */
-export function termijnRegels(offerte: { nummer: string; btw: BtwRegel[] }, deelBp: Bp, label: string): FactuurRegel[] {
+export function termijnRegels(offerte: { nummer: string; btw: BtwRegel[] }, deelBp: Bp, label: string, eerder: { deel: Bp; regels: FactuurRegel[] }[] = []): FactuurRegel[] | null {
+  const alBp = eerder.reduce((t, e) => t + e.deel, 0)
+  if (deelBp <= 0 || alBp + deelBp > 10000) return null
+  const laatste = alBp + deelBp === 10000
   const tekst = `${label || "Termijn"} · ${(deelBp / 100).toLocaleString("nl-NL")} % van offerte ${offerte.nummer}`
   const meer = offerte.btw.filter((b) => b.grondslag).length > 1
   return offerte.btw
     .filter((b) => b.grondslag)
-    .map((b) => ({ omschrijving: meer ? `${tekst} (${b.tarief / 100} % btw)` : tekst, bedrag: procent(b.grondslag, deelBp), btw: b.tarief }))
+    .map((b) => {
+      const al = eerder.flatMap((e) => e.regels).filter((r) => r.btw === b.tarief).reduce((t, r) => t + r.bedrag, 0)
+      return { omschrijving: meer ? `${tekst} (${b.tarief / 100} % btw)` : tekst, bedrag: laatste ? b.grondslag - al : procent(b.grondslag, deelBp), btw: b.tarief }
+    })
 }
 
 /**

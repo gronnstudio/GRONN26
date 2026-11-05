@@ -412,9 +412,11 @@ async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
                     {s.rond ? (s.soort === "Factuur" ? "Betaald ✓" : "Akkoord ✓") : s.soort === "Factuur" ? "Betaald?" : "Akkoord?"}
                   </button>
                 </form>
-                <form action={stukWeg.bind(null, k.id, s.id)}>
-                  <button aria-label={`${s.soort} ${s.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
-                </form>
+                {!s.factuur && (
+                  <form action={stukWeg.bind(null, k.id, s.id)}>
+                    <button aria-label={`${s.soort} ${s.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
+                  </form>
+                )}
               </span>
             </li>
           ))}

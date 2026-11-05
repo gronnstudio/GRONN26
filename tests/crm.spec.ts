@@ -446,6 +446,11 @@ test("factuur: vrije factuur maken, de klant ziet hem zonder inlog, betaald staa
   await expect(klant.getByText(nummer).first()).toBeVisible()
   await expect(klant.getByRole("row", { name: /Btw 21 % over € 100,00/ })).toContainText("€ 21,00")
   await expect(klant.getByRole("row", { name: /Te betalen/ })).toContainText("€ 121,00")
+  // Terug van Mollie maar nog niet afgevinkt: geen tweede betaalknop, wel een bevestiging.
+  await klant.goto(`${href}?betaald=1`)
+  await expect(klant.getByRole("status")).toContainText("Je betaling is onderweg")
+  // Een gemaakte factuur kan niet weg; alleen op betaald zetten.
+  await expect(page.getByRole("button", { name: new RegExp(`Factuur ${nummer.replace(/[/]/g, "\\/")} weghalen`) })).toHaveCount(0)
   await page.getByRole("button", { name: "Betaald?" }).click()
   await expect(page.getByRole("button", { name: "Betaald ✓" })).toBeVisible()
   await klant.reload()

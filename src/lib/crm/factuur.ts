@@ -1,7 +1,7 @@
 import "server-only"
 import type { BtwRegel } from "./calculatie"
 import type { FactuurRegel } from "./factuur-reken"
-import type { Centen } from "./geld"
+import type { Bp, Centen } from "./geld"
 import { leesJson, wijzigJson } from "./opslag"
 import { isToken, nieuwToken } from "./offerte"
 
@@ -21,6 +21,8 @@ export type Factuur = {
   titel: string
   /** Bij een termijn: de offerte waar hij uit komt. */
   offerte?: { nummer: string; token: string }
+  /** Bij een termijn: het deel van de offerte in basispunten (4000 = 40 %). */
+  deel?: Bp
   regels: FactuurRegel[]
   btw: BtwRegel[]
   totaal: Centen
