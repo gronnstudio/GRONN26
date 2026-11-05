@@ -9,6 +9,7 @@ import { opdracht, schoonBevindingen, zonderContact } from "../src/lib/crm/ai/be
 import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
+import { mailVoor, mailtoLink, voornaamVan } from "../src/lib/crm/mail"
 import { btwPerTarief, epcCode, factuurTotaal, termijnRegels, volgendFactuurNummer } from "../src/lib/crm/factuur-reken"
 import { MAX_HANDTEKENING, schoneHandtekening, volgendWerkbonNummer } from "../src/lib/crm/werkbon"
 import { metBtw, naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
@@ -614,3 +615,19 @@ test("korting per regel: over de verkoop van die regel, btw over wat overblijft"
   expect(schoonRegel({ ...r, korting: 20000 }).korting).toBe(10000)
   expect(schoonRegel({ ...r, korting: 0 }).korting).toBeUndefined()
 })
+
+test("mail: voornaam, onderwerp en een volledige link in een mailto", () => {
+  expect(voornaamVan("Anna de Vries")).toBe("Anna")
+  expect(voornaamVan("Clannad & Stijn")).toBe("Clannad & Stijn")
+  const m = mailVoor("factuur", { naam: "Anna de Vries", nummer: "GR-F // 2026-1105-0001", pad: "/factuur/abc", bedrag: "€ 121,00" })
+  expect(m.onderwerp).toBe("Factuur GR-F // 2026-1105-0001 van GRØNN Studio")
+  expect(m.tekst).toMatch(/^Hoi Anna,/)
+  expect(m.tekst).toContain("https://gronn.studio/factuur/abc")
+  expect(m.tekst).toContain("€ 121,00")
+  const href = mailtoLink("anna@voorbeeld.nl", m.onderwerp, m.tekst)
+  expect(href.startsWith("mailto:anna@voorbeeld.nl?subject=")).toBe(true)
+  expect(decodeURIComponent(href.split("body=")[1])).toBe(m.tekst)
+  // Geen geldig adres: de mail opent toch, zonder ontvanger, en niets uit het veld komt in de link.
+  expect(mailtoLink("geen adres?subject=x", "a", "b")).toBe("mailto:?subject=a&body=b")
+})
+

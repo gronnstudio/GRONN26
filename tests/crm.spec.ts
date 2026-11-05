@@ -439,6 +439,10 @@ test("factuur: vrije factuur maken, de klant ziet hem zonder inlog, betaald staa
   const link = page.getByRole("link", { name: "Factuur bekijken" })
   await expect(link).toBeVisible()
   const href = (await link.getAttribute("href"))!
+  // Mailen opent het mailprogramma met onderwerp en de volledige link.
+  const mail = await page.getByRole("link", { name: "Mailen" }).first().getAttribute("href")
+  expect(decodeURIComponent(mail!)).toContain(`Factuur ${nummer} van GRØNN Studio`)
+  expect(decodeURIComponent(mail!)).toContain(`https://gronn.studio${href}`)
   // De klant opent de link zonder inlog.
   const klant = await browser.newPage()
   await klant.goto(href)
