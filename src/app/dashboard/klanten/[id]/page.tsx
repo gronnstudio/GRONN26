@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { faseBadge } from "@/lib/crm/klant"
 import Link from "next/link"
+import { labelVan } from "@/lib/crm/versies"
 import { VerwijderKnop } from "@/components/crm/verwijder-knop"
 import { calculatieWeg } from "@/app/dashboard/calculatie/acties"
 import { notFound } from "next/navigation"
@@ -375,7 +376,7 @@ function Calculaties({ k }: { k: Klant }) {
               <tr key={c.id}>
                 <td className="pr-4"><Link href={`/dashboard/klanten/${k.id}/calculatie/${c.id}`} className="font-semibold hover:text-accent-tekst">{c.titel}</Link></td>
                 <td className="pr-4">{k.tuinen.find((t) => t.id === c.tuinId)?.naam ?? ""}</td>
-                <td>{v ? (v.soort === "definitief" ? "Definitief" : "Concept") : ""}</td>
+                <td>{v ? (labelVan(c.versies, v.nr) === "Definitief" ? "Definitief" : "Concept") : ""}</td>
                 <td className="pr-4">{v ? tijd(v.datum) : ""}</td>
                 <td className="text-right crm-cijfer">{v ? toonEuro(v.winst) : ""}</td>
                 <td className="text-right crm-cijfer">{v ? toonEuro(v.totaal) : ""}</td>
