@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { gebeurtenis, leesKlanten, wijzigKlanten, type Klant } from "@/lib/beheer/klanten"
 import { bewaarOfferte, maakOfferte, offerteNummer, wijzigOfferte } from "@/lib/crm/offerte"
 import { eisEigenaar } from "@/lib/crm/toegang"
+import { leesTeksten, metNaam } from "@/lib/beheer/teksten"
 import { faseInvoer, faseTekst } from "@/lib/crm/werkomschrijving"
 
 const log = (k: Klant, tekst: string): Klant => ({ ...k, activiteit: [gebeurtenis("Stuk", tekst), ...k.activiteit].slice(0, 500) })
@@ -19,7 +20,9 @@ export async function maakOfferteVan(klantId: string, calcId: string, nr: number
   const v = c?.versies.find((x) => x.nr === nr)
   if (!k || !c || !v) return
   const deel = typeof fase === "string" && fase && v.fasen?.some((f) => f.naam === fase) ? { ...v, ...faseInvoer(v, fase), beschrijving: faseTekst(v.beschrijving, fase) } : v
-  const o = maakOfferte(k, fase && deel !== v ? { ...c, titel: `${c.titel} · ${fase}` } : c, deel, offerteNummer(klanten))
+  const t = await leesTeksten()
+  const voornaam = (k.naam.split(/\s*[&,]\s*|\s+en\s+/).length > 1 ? k.naam : k.naam.split(" ")[0]) || k.naam
+  const o = maakOfferte(k, fase && deel !== v ? { ...c, titel: `${c.titel} · ${fase}` } : c, deel, offerteNummer(klanten), { begin: metNaam(t.begin, voornaam), slot: metNaam(t.slot, voornaam) })
   await bewaarOfferte(o)
   await wijzigKlanten((lijst) =>
     lijst.map((x) =>

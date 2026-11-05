@@ -596,3 +596,12 @@ test.describe("werkbon", () => {
     expect(schoneHandtekening(`data:image/png;base64,${"A".repeat(MAX_HANDTEKENING)}`)).toBeNull()
   })
 })
+
+test("korting per regel: over de verkoop van die regel, btw over wat overblijft", () => {
+  const r = nieuweRegel("materiaal", { inkoop: 10000, opslag: 0, hoeveelheid: 2000, korting: 1000, btw: 2100 })
+  const u = reken({ uren: 0, uurtarief: 0, regels: [r], onvoorzien: 0, korting: 0 })
+  expect(u.regels[0].verkoop).toBe(18000)
+  expect(u.btw).toEqual([{ tarief: 2100, grondslag: 18000, btw: 3780 }])
+  expect(schoonRegel({ ...r, korting: 20000 }).korting).toBe(10000)
+  expect(schoonRegel({ ...r, korting: 0 }).korting).toBeUndefined()
+})

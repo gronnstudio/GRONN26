@@ -54,6 +54,8 @@ export type Regel = {
   btw: Bp
   /** Afval of snijverlies: de inkoop- én verkoophoeveelheid gaat met dit percentage omhoog. */
   afval: Bp
+  /** Korting op deze regel (Plancraft: "Rabatt pro Position"), over de verkoop van de regel. */
+  korting?: Bp
   /** Groep op de offerte (fase of werkpakket). */
   groep?: string
   /** Optioneel werk: los geprijsd, niet in het totaal. */
@@ -109,7 +111,8 @@ export type Uitkomst = {
 export function rekenRegel(r: Regel): RegelUitkomst {
   const brutoHoeveelheid = plusProcent(r.hoeveelheid, r.afval)
   const kostprijs = maal(r.inkoop, brutoHoeveelheid)
-  const verkoop = maal(plusProcent(r.inkoop, r.opslag), brutoHoeveelheid)
+  const vol = maal(plusProcent(r.inkoop, r.opslag), brutoHoeveelheid)
+  const verkoop = vol - procent(vol, r.korting ?? 0)
   return { ...r, brutoHoeveelheid, kostprijs, verkoop, winst: verkoop - kostprijs }
 }
 
@@ -222,6 +225,7 @@ export function schoonRegel(r: Partial<Regel> & Record<string, unknown>): Regel 
     opslag: geheel(r.opslag, SOORTEN[soort].opslag, 0, 100000),
     btw: BTW_TARIEVEN.includes(r.btw as number) ? (r.btw as number) : SOORTEN[soort].btw,
     afval: geheel(r.afval, 0, 0, 10000),
+    korting: geheel(r.korting, 0, 0, 10000) || undefined,
     groep: r.groep ? String(r.groep).slice(0, 60) : undefined,
     optioneel: r.optioneel === true || undefined,
     catalogusId: typeof r.catalogusId === "string" ? r.catalogusId.slice(0, 64) : undefined,

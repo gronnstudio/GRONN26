@@ -26,7 +26,7 @@ import { faseInvoer, metActueleBedragen, opmaakTekst, werkomschrijving, zonderTe
 type Schatting = { uren: number; posten: { wat: string; toelichting?: string; uren: number; fase?: string }[]; regels?: { wat: string; soort: string; inkoop: number; fase?: string; post?: string }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
-type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; schatting?: boolean; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
+type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; korting: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; schatting?: boolean; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
 
 // "Met btw" (eigenaar, 29 okt 2026: "ik wil met btw"): inkoop en verkoop
 // tonen en invoeren incl. btw. Opgeslagen en gerekend wordt altijd excl.
@@ -60,6 +60,7 @@ const naarInvul = (r: Regel): Invul => ({
   opslag: toonDecimaal(r.opslag, 2),
   btw: r.btw,
   afval: toonDecimaal(r.afval, 2),
+  korting: r.korting ? toonDecimaal(r.korting, 2) : "",
   optioneel: !!r.optioneel,
   groep: r.groep ?? "",
   catalogusId: r.catalogusId,
@@ -76,6 +77,7 @@ const naarRegel = (r: Invul): Regel => ({
   opslag: Math.max(0, leesBp(r.opslag) ?? 0),
   btw: r.btw,
   afval: Math.max(0, leesBp(r.afval) ?? 0),
+  korting: Math.min(10000, Math.max(0, leesBp(r.korting) ?? 0)) || undefined,
   groep: r.groep.trim() || undefined,
   optioneel: r.optioneel || undefined,
   catalogusId: r.catalogusId,
@@ -459,6 +461,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                     <th className="py-1 pr-1.5 font-semibold">Inkoop / eenh.{metBtw ? " incl." : ""}</th>
                     <th className="py-1 pr-1.5 font-semibold">Opslag %</th>
                     <th className="py-1 pr-1.5 font-semibold">Afval %</th>
+                    <th className="py-1 pr-1.5 font-semibold">Korting %</th>
                     <th className="py-1 pr-1.5 font-semibold">Btw</th>
                     <th className="py-1 pr-2 text-right font-semibold">Verkoop{metBtw ? " incl." : ""}</th>
                     <th className="py-1 font-semibold"><span className="sr-only">Acties</span></th>
@@ -474,7 +477,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                   return (
                 <tbody key={sec.id}>
                   <tr className="border-t-2 border-inkt">
-                    <th colSpan={9} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
+                    <th colSpan={12} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">{sec.naam}</th>
                     <td className="pt-4 pb-1 pr-2 text-right crm-cijfer font-semibold">{hier.length ? toonEuro(som) : ""}</td>
                     <td className="pt-4 pb-1">
                       <button type="button" onClick={() => setRegels([...regels, naarInvul(nieuweRegel(sec.soort, { hoeveelheid: 1000 }))])} className="text-[12px] text-accent-tekst">+ {sec.enkel}</button>
@@ -544,6 +547,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                         </td>
                         <td className="py-1.5 pr-1.5"><input aria-label="Opslag procent" inputMode="decimal" value={r.opslag} onChange={(e) => zet(i, { opslag: e.target.value })} className={`${klein} w-[48px]`} /></td>
                         <td className="py-1.5 pr-1.5"><input aria-label="Afval procent" inputMode="decimal" value={r.afval} onChange={(e) => zet(i, { afval: e.target.value })} className={`${klein} w-[44px]`} /></td>
+                        <td className="py-1.5 pr-1.5"><input aria-label="Korting procent" inputMode="decimal" value={r.korting} onChange={(e) => zet(i, { korting: e.target.value })} placeholder="0" className={`${klein} w-[44px]`} /></td>
                         <td className="py-1.5 pr-1.5">
                           <select aria-label="Btw" value={r.btw} onChange={(e) => { const btw = Number(e.target.value); zet(i, metBtw && r.inkoopIncl ? { btw, inkoop: exclUit(r.inkoopIncl, btw) } : { btw }) }} className={`${klein} bg-grond`}>
                             {BTW_TARIEVEN.map((b) => (

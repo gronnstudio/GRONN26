@@ -9,7 +9,8 @@ import { RECONSTRUCTIE, leesUren, weekTotaal } from "@/lib/beheer/uren"
 import { euro } from "@/lib/format"
 import { lijstBetalingen } from "@/lib/mollie"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
-import { koppelMollie } from "./acties"
+import { bewaarVasteTeksten, koppelMollie } from "./acties"
+import { leesTeksten } from "@/lib/beheer/teksten"
 import { leesInkoop } from "@/lib/beheer/inkoop"
 import { teBetalen } from "@/lib/crm/inkoop"
 import { InkoopTabel } from "@/components/crm/inkoop-tabel"
@@ -24,7 +25,7 @@ const datum = (d: string) => new Date(`${d.slice(0, 10)}T12:00`).toLocaleDateStr
 const dagenGeleden = (d: string, nu: string) => Math.round((Date.parse(`${nu}T12:00Z`) - Date.parse(`${d.slice(0, 10)}T12:00Z`)) / 86_400_000)
 
 export default async function Geld() {
-  const [klanten, uren, mollie, inkoop] = await Promise.all([leesKlanten(), leesUren(), lijstBetalingen(), leesInkoop()])
+  const [klanten, uren, mollie, inkoop, teksten] = await Promise.all([leesKlanten(), leesUren(), lijstBetalingen(), leesInkoop(), leesTeksten()])
   const open = teBetalen(inkoop)
   const nu = vandaagNL()
   const g = geldOverzicht(klanten, nu)
@@ -130,6 +131,14 @@ export default async function Geld() {
             </tbody>
           </table>
           </details>
+        </Blok>
+
+        <Blok titel="Vaste teksten op offertes" rechts={<span className="text-gedempt">{"{naam}"} wordt de naam van de klant</span>}>
+          <form action={bewaarVasteTeksten} className="grid gap-4 @min-[900px]:grid-cols-2">
+            <label className="grid gap-1 text-[13px]">Boven de offerte<textarea name="begin" rows={5} defaultValue={teksten.begin} className="crm-veld resize-y leading-[1.5]" /></label>
+            <label className="grid gap-1 text-[13px]">Onder de offerte<textarea name="slot" rows={5} defaultValue={teksten.slot} className="crm-veld resize-y leading-[1.5]" /></label>
+            <div><BewaarKnop>Teksten bewaren</BewaarKnop></div>
+          </form>
         </Blok>
 
         <Blok titel="Kleine letters" rechts={<a href="/documenten/GRONN-bijlagen-particulier.zip" download className="text-accent-tekst">Bijlagen voor een particuliere offerte (zip) ↓</a>}>

@@ -26,6 +26,9 @@ export type Offerte = {
   adres: string
   titel: string
   beschrijving: string
+  /** Vaste begin- en slottekst, bewaard bij het maken (Dashboard › Geld › Vaste teksten). */
+  begin?: string
+  slot?: string
   posten: OffertePost[]
   /** Werkvolgorde voor de klant: alleen fase en dagen, geen machines of leveringen. */
   planning?: { naam: string; dagen: number }[]
@@ -62,9 +65,11 @@ export function offerteNummer(klanten: Klant[], datum = vandaag()) {
   return `GR-O // ${dag}${String(vandaagAl + 1).padStart(4, "0")}`
 }
 
+/** Korting per regel staat erbij in de omschrijving; het bedrag is al na korting. */
+const metKorting = (r: { omschrijving: string; korting?: Bp }) => `${r.omschrijving || "Post"}${r.korting ? ` (incl. ${toonDecimaal(r.korting, 2)} % korting)` : ""}`
 const hoeveel = (milli: number, eenheid: string) => `${toonDecimaal(milli, 3)} ${eenheid}`.trim()
 
-export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string): Offerte {
+export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string, teksten?: { begin: string; slot: string }): Offerte {
   const u = reken({ uren: v.uren, uurtarief: v.uurtarief, regels: v.regels, onvoorzien: v.onvoorzien, korting: v.korting })
   const tuin = k.tuinen.find((t) => t.id === c.tuinId)
   const datum = vandaag()
@@ -80,12 +85,14 @@ export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string):
     adres: tuin?.adres || k.adres || k.plaats,
     titel: c.titel,
     beschrijving: v.beschrijving,
+    ...(teksten?.begin.trim() ? { begin: teksten.begin.trim() } : {}),
+    ...(teksten?.slot.trim() ? { slot: teksten.slot.trim() } : {}),
     ...(v.planning?.length ? { planning: v.planning.map((f) => ({ naam: f.naam, dagen: f.dagen })) } : {}),
     posten: [
       ...(u.arbeid ? [{ omschrijving: "Arbeid", hoeveelheid: "", bedrag: u.arbeid }] : []),
-      ...u.regels.map((r) => ({ omschrijving: r.omschrijving || "Post", hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
+      ...u.regels.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
     ],
-    optioneel: u.optioneel.map((r) => ({ omschrijving: r.omschrijving || "Post", hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
+    optioneel: u.optioneel.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
     onvoorzien: u.onvoorzien,
     korting: u.korting,
     verkoop: u.verkoop,
