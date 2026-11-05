@@ -729,7 +729,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
             </dl>
           </>
         )}
-        <p className="m-0 mt-10 text-[9pt] leading-[1.5] text-gedempt">Dit is een prijsindicatie, geen offerte. GRØNN Studio · Stein · hello@gronn.studio · gronn.studio</p>
+        <p className="m-0 mt-10 text-[9pt] leading-[1.5] text-gedempt">Dit is een prijsindicatie, geen factuur. GRØNN Studio · Stein · hello@gronn.studio · gronn.studio</p>
         </div>
       </article>
     </>
