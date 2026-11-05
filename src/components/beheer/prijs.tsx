@@ -671,7 +671,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         <p className="m-0 mt-10 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Prijsoverzicht</p>
         <h1 className="syne m-0 mt-2 text-[22pt] leading-[1.15]">{naamVoorPrint || "Prijsoverzicht"}</h1>
         {/* Klantnaam, het nummer eronder (Nick, 5 nov 2026); oude nummers in de nieuwe vorm. */}
-        {(() => { const nr = metNieuweNummers(titel).match(/GR-[A-Z]+ \/\/ \d{4}-\d{4}-\d{2,}/)?.[0]; return nr ? <p className="m-0 mt-1 text-[11pt] text-gedempt">{nr}</p> : null })()}
+        {(() => { const vandaag = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" }); const nr = metNieuweNummers(titel).match(/GR-[A-Z]+ \/\/ \d{4}-\d{4}-\d{2,}/)?.[0]?.replace(/\d{4}-\d{4}(?=-\d+$)/, `${vandaag.slice(0, 4)}-${vandaag.slice(5, 7)}${vandaag.slice(8, 10)}`); return nr ? <p className="m-0 mt-1 text-[11pt] text-gedempt">{nr}</p> : null })()}
         <dl className="m-0 mt-5 flex gap-12 border-b border-lijn pb-5 text-[10pt]">
           <div><dt className="text-[8pt] text-gedempt">Datum</dt><dd className="m-0 font-medium">{new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}</dd></div>
         </dl>
