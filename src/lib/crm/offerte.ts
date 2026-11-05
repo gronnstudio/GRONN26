@@ -35,6 +35,8 @@ export type Offerte = {
   optioneel: OffertePost[]
   onvoorzien: Centen
   korting: Centen
+  /** Korting op losse regels, al verrekend in de posten; op de offerte opgeteld bij de korting (Nick, 5 nov 2026). */
+  regelKorting?: Centen
   verkoop: Centen
   btw: { tarief: Bp; grondslag: Centen; btw: Centen }[]
   totaal: Centen
@@ -101,6 +103,7 @@ export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string, 
     optioneel: u.optioneel.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop, ...(r.groep?.trim() ? { groep: r.groep.trim().slice(0, 60) } : {}) })),
     onvoorzien: u.onvoorzien,
     korting: u.korting,
+    ...(u.regels.some((r) => r.kortingBedrag > 0) ? { regelKorting: u.regels.reduce((t, r) => t + r.kortingBedrag, 0) } : {}),
     verkoop: u.verkoop,
     btw: u.btw,
     totaal: u.totaal,

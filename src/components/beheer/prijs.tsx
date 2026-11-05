@@ -249,6 +249,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
     regels: regels.map(naarRegel),
   }
   const u = reken(invoer)
+  const regelKorting = u.regels.reduce((t, r) => t + r.kortingBedrag, 0)
   const vroegste = (sec: (typeof SECTIES)[number]) => Math.min(99, ...regels.filter((r) => sec.bij(r.soort)).map((r) => Number(faseNr(r.groep)) || 99)) * 10 + SECTIES.indexOf(sec)
   const w = wegzetten(u)
   const alBetaald = Math.max(0, leesCenten(betaald) ?? 0)
@@ -713,8 +714,10 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           )
         })()}
         <dl data-blok className="m-0 mt-4 ml-auto grid w-[90mm] gap-1.5">
+          {/* De korting zichtbaar, ook die op losse regels (Nick, 5 nov 2026). */}
+          {regelKorting > 0 && <Rij t="Prijs zonder korting" b={u.regels.reduce((t, r) => t + r.verkoop, 0) + u.arbeid + regelKorting} />}
           {u.onvoorzien > 0 && <Rij t="Onvoorzien" b={u.onvoorzien} />}
-          {u.korting > 0 && <Rij t="Korting" b={-u.korting} />}
+          {u.korting + regelKorting > 0 && <Rij t="Korting" b={-(u.korting + regelKorting)} />}
           <Rij t="Totaal excl. btw" b={u.verkoop} vet />
           {u.btw.map((b) => (
             <Rij key={b.tarief} t={`Btw ${b.tarief / 100} %`} b={b.btw} />
