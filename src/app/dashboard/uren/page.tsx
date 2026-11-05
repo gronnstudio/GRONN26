@@ -76,7 +76,7 @@ export default async function Uren() {
               <label className="grid gap-1 text-[12px]">Klant of project<input name="klant" placeholder="Bijv. Clannad & Stijn" className={veld} /></label>
               <label className="grid gap-1 text-[12px]">Wat<input name="wat" placeholder="Bijv. graszoden leggen deel 2" className={veld} /></label>
               <button className="knop-klein justify-self-start border border-inkt/30">Opslaan</button>
-              <p className="m-0 text-[11px] text-gedempt">Per kwartier. Uren tot en met 15 okt staan al in de reconstructie; een regel daarvoor telt erbovenop.</p>
+              <p className="m-0 text-[11px] text-gedempt">Per kwartier. Uren tot en met {dag(RECONSTRUCTIE_TOT)} staan al in de reconstructie; een regel daarvoor telt erbovenop.</p>
             </form>
           ) : (
             <p className="m-0 mt-8 crm-paneel p-5 text-[14px] text-gedempt">Opslag staat uit (geen BLOB_READ_WRITE_TOKEN), dus invullen kan hier nog niet.</p>
