@@ -35,7 +35,8 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
     const weg = bron.matches(".offerte-druk") ? parseFloat(getComputedStyle(bron).paddingTop) || 0 : 0
     const blokken = [...bron.querySelectorAll<HTMLElement>("tr, li, dl > div, p, h1, h2, h3, img, [data-blok]")]
       .filter((el) => !el.closest("[data-geen-pdf]"))
-      .map((el) => { const r = el.getBoundingClientRect(); return [r.top - rb.top - weg, r.bottom - rb.top - weg] as const })
+      // Een kop blijft bij wat eronder staat: hij telt als blok tot 80 px onder zich.
+      .map((el) => { const r = el.getBoundingClientRect(); return [r.top - rb.top - weg, r.bottom - rb.top - weg + (/^H[1-3]$/.test(el.tagName) ? 80 : 0)] as const })
     try {
       const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import("html2canvas-pro"), import("jspdf")])
       const doek = await html2canvas(bron, { scale: 2, backgroundColor: "#ffffff", ignoreElements: (el) => el.hasAttribute("data-geen-pdf"),
@@ -51,7 +52,8 @@ export function PdfKnoppen({ naam, doel = ".offerte-druk", uit = false, classNam
       const s = doek.width / rb.width
       const pagina = (rb.width * 297) / 210
       const marge = (rb.width * 12) / 210
-      const totaal = doek.height / s
+      // Witruimte onderaan het blad geeft geen lege laatste pagina.
+      const totaal = Math.min(doek.height / s, Math.max(0, ...blokken.map(([, b]) => b)) + 24)
       for (let y = 0, p = 0; y < totaal - 1; p++) {
         const boven = p ? marge : 0
         let eind = y + pagina - marge - boven

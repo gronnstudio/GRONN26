@@ -678,18 +678,36 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           <p className="m-0 mt-5 text-[8pt] font-semibold tracking-[.18em] text-[#ff5b04] uppercase">Vijvers en natuurlijke tuinen · Stein en omgeving</p>
         </div>
         <div className="px-[18mm]">
-        <h1 className="syne m-0 mt-10 text-[24pt] leading-[1.1]">{titel.replace(/[#*]+\s*/g, "") || "Prijsoverzicht"}</h1>
-        <p className="m-0 mt-2">
-          {naamVoorPrint && <>Voor {naamVoorPrint} · </>}
-          {new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}
-        </p>
-        {beschrijving.trim() && <TekstOpmaak tekst={beschrijving.trim()} className="mt-6 leading-[1.5]" />}
-        <dl className="m-0 mt-8 grid gap-2">
-          {/* Staat de prijsopbouw al in de werkomschrijving, dan alleen de totalen. */}
-          {!werkOpbouw && u.arbeid > 0 && <Rij t="Werkzaamheden" b={u.arbeid} />}
-          {!werkOpbouw && regelsVoorKlant.map((r) => (
-            <Rij key={r.id} t={`${r.omschrijving || SOORTEN[r.soort].naam}${r.eenheid !== "post" ? ` · ${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}` : ""}`} b={r.verkoop} />
-          ))}
+        {/* Rustiger opbouw (Nick, 5 nov 2026: "erg rommelig"): kop met gegevens, posten als tabel met kolomkoppen, totalen rechts. */}
+        <p className="m-0 mt-10 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Prijsoverzicht</p>
+        <h1 className="syne m-0 mt-2 text-[22pt] leading-[1.15]">{titel.replace(/[#*]+\s*/g, "") || "Prijsoverzicht"}</h1>
+        <dl className="m-0 mt-5 flex gap-12 border-b border-lijn pb-5 text-[10pt]">
+          {naamVoorPrint && <div><dt className="text-[8pt] text-gedempt">Voor</dt><dd className="m-0 font-medium">{naamVoorPrint}</dd></div>}
+          <div><dt className="text-[8pt] text-gedempt">Datum</dt><dd className="m-0 font-medium">{new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}</dd></div>
+        </dl>
+        {beschrijving.trim() && <TekstOpmaak tekst={beschrijving.trim()} zonderPrijzen className="mt-6 leading-[1.5]" />}
+        {(u.arbeid > 0 || regelsVoorKlant.length > 0) && (
+          <>
+            <h2 className="m-0 mt-8 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Wat er gebeurt</h2>
+            <table className="mt-2 w-full table-fixed border-collapse">
+              <colgroup><col /><col className="w-[30mm]" /><col className="w-[32mm]" /></colgroup>
+              <thead>
+                <tr className="border-b-2 border-[#202020] text-[8pt] text-gedempt">
+                  <th scope="col" className="pb-1.5 text-left font-semibold">Omschrijving</th>
+                  <th scope="col" className="pb-1.5 text-right font-semibold">Hoeveelheid</th>
+                  <th scope="col" className="pb-1.5 text-right font-semibold">Excl. btw</th>
+                </tr>
+              </thead>
+              <tbody>
+                {u.arbeid > 0 && <PostRij t="Werkzaamheden" h="" b={u.arbeid} />}
+                {regelsVoorKlant.map((r) => (
+                  <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h={r.eenheid !== "post" ? `${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}` : ""} b={r.verkoop} />
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+        <dl data-blok className="m-0 mt-4 ml-auto grid w-[90mm] gap-1.5">
           {u.onvoorzien > 0 && <Rij t="Onvoorzien" b={u.onvoorzien} />}
           {u.korting > 0 && <Rij t="Korting" b={-u.korting} />}
           <Rij t="Totaal excl. btw" b={u.verkoop} vet />
@@ -700,19 +718,21 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Al betaald"} b={-alBetaald} />}
           {alBetaald > 0 && <Rij t="Nog te betalen" b={u.totaal - alBetaald} vet />}
         </dl>
-        {/* Betaling (Nick, 2 nov 2026): geen termijnen meer. Aanbetaling, dan een factuur voor materiaal en overig incl. btw, de rest contant bij levering. */}
-        <p className="m-0 mt-8 font-semibold">Betaling</p>
-        <dl className="m-0 mt-2 grid gap-2">
-          {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Aanbetaling, al voldaan"} b={alBetaald} />}
-          {materiaalIncl > 0 && <Rij t="Factuur materiaal en overig, incl. btw" b={materiaalIncl} />}
-          <Rij t="Rest, contant bij levering" b={Math.max(0, u.totaal - alBetaald - materiaalIncl)} vet />
-        </dl>
+        {/* Betaling (Nick, 2 nov 2026): aanbetaling, factuur materiaal, rest bij oplevering. 5 nov: ook de rest per factuur, niet contant. */}
+        <div data-blok className="mt-8">
+          <h2 className="m-0 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Betaling</h2>
+          <dl className="m-0 mt-2 grid gap-1.5 border-t-2 border-[#202020] pt-2">
+            {alBetaald > 0 && <Rij t={betaaldTekst.trim() || "Aanbetaling, al voldaan"} b={alBetaald} />}
+            {materiaalIncl > 0 && <Rij t="Factuur materiaal en overig, incl. btw" b={materiaalIncl} />}
+            <Rij t="Rest, factuur bij oplevering" b={Math.max(0, u.totaal - alBetaald - materiaalIncl)} vet />
+          </dl>
+        </div>
         {plan.some((f) => f.naam.trim()) && (
           <>
-            <p className="m-0 mt-8 font-semibold">Planning</p>
-            <ol className="m-0 mt-2 grid list-none gap-1 p-0">
+            <h2 className="m-0 mt-8 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Planning</h2>
+            <ol className="m-0 mt-2 grid list-none gap-0 border-t-2 border-[#202020] p-0">
               {plan.map((f, i) => f.naam.trim() && (
-                <li key={f.id} className="flex justify-between gap-6 border-b border-lijn py-1">
+                <li key={f.id} className="flex justify-between gap-6 border-b border-lijn py-1.5">
                   <span>{f.naam}{f.machines ? ` · ${f.machines}` : ""}</span>
                   <span className="shrink-0">{printDagen[i] ? printDag(printDagen[i].van, printDagen[i].tot) : `${f.dagen.toLocaleString("nl-NL")} dag${f.dagen === 1 ? "" : "en"}`}</span>
                 </li>
@@ -722,18 +742,29 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
         )}
         {u.optioneel.length > 0 && (
           <>
-            <p className="m-0 mt-8 font-semibold">Optioneel, niet in het totaal</p>
-            <dl className="m-0 mt-2 grid gap-2">
-              {u.optioneel.map((r) => (
-                <Rij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} b={r.verkoop} />
-              ))}
-            </dl>
+            <h2 className="m-0 mt-8 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Optioneel, niet in het totaal</h2>
+            <table className="mt-2 w-full table-fixed border-collapse border-t-2 border-[#202020]">
+              <colgroup><col /><col className="w-[30mm]" /><col className="w-[32mm]" /></colgroup>
+              <tbody>
+                {u.optioneel.map((r) => <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h="" b={r.verkoop} />)}
+              </tbody>
+            </table>
           </>
         )}
         <p className="m-0 mt-10 text-[9pt] leading-[1.5] text-gedempt">Dit is een prijsindicatie, geen factuur. GRØNN Studio · Stein · hello@gronn.studio · gronn.studio</p>
         </div>
       </article>
     </>
+  )
+}
+
+function PostRij({ t, h, b }: { t: string; h: string; b: number }) {
+  return (
+    <tr className="border-b border-lijn align-top">
+      <td className="py-1.5 pr-3">{t}</td>
+      <td className="py-1.5 pr-3 text-right whitespace-nowrap text-gedempt crm-cijfer">{h}</td>
+      <td className="py-1.5 text-right whitespace-nowrap crm-cijfer">{toonEuro(b)}</td>
+    </tr>
   )
 }
 
