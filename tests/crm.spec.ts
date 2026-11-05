@@ -193,12 +193,12 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   // 59,92 × € 28,75 = € 1.722,70 verkoop; arbeid 40 × € 50 = € 2.000
   await expect(regel.getByText("€ 1.722,70")).toBeVisible()
   await expect(page.locator("aside").getByText("€ 3.722,70", { exact: true })).toBeVisible()
-  await page.getByRole("button", { name: "Bewaar bij klant" }).click()
+  await page.getByRole("button", { name: "Bewaar als concept" }).click()
   await expect(page).toHaveURL(/\/calculatie\/[0-9a-f-]{36}$/)
-  await expect(page.getByText("Versie 1 van 1")).toBeVisible()
+  await expect(page.getByRole("navigation", { name: "Concept of definitief" }).getByRole("link", { name: /^Definitief/ })).toBeVisible()
   await page.getByPlaceholder("bijv. 24").fill("44")
-  await page.getByRole("button", { name: "Bewaar als versie 2" }).click()
-  await expect(page.getByRole("status")).toHaveText("Versie 2 bewaard.")
+  await page.getByRole("button", { name: "Bewaar als definitief" }).click()
+  await expect(page.getByRole("status")).toHaveText("Bewaard als definitief.")
 
   // 6. ★ zet de prijs in de catalogus.
   await page.locator("tbody").first().locator("tr").last().getByRole("button", { name: "Prijs onthouden in de catalogus" }).click()
@@ -214,7 +214,7 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await rij.getByRole("link", { name: naam }).click()
   await page.getByRole("link", { name: /^Calculaties/ }).click()
   await page.getByRole("link", { name: /Oprit/ }).first().click()
-  await page.getByRole("button", { name: "Offerte met link maken (v2)" }).click()
+  await page.getByRole("button", { name: "Offerte met link maken (definitief)" }).click()
   await expect(page).toHaveURL(/tab=stukken/)
   const href = (await page.getByRole("link", { name: "Bekijk als klant" }).getAttribute("href"))!
   expect(href).toMatch(/^\/offerte\/[A-Za-z0-9_-]{32}$/)
@@ -420,7 +420,7 @@ test("meetstaat: zonematen worden regels in de calculatie", async ({ page }) => 
   await page.reload()
   await expect(page.locator('input[value="Afgraven en grond afvoeren"]')).toBeVisible()
   const calcUrl = page.url()
-  await page.getByRole("button", { name: "Offerte met link maken (v1)" }).click()
+  await page.getByRole("button", { name: "Offerte met link maken (definitief)" }).click()
   const href = (await page.getByRole("link", { name: "Bekijk als klant" }).getAttribute("href"))!
   await page.goto(href)
   await expect(page.getByRole("heading", { name: "Planning" })).toBeVisible()

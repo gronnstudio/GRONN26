@@ -12,7 +12,7 @@ import { leesJson, verwijderBestand, wijzigJson } from "./opslag"
 // winst gaan er nooit in. Elke offerte is een eigen document onder een
 // onraadbare sleutel, zodat de link niets anders kan lezen dan die ene offerte.
 
-export type OffertePost = { omschrijving: string; hoeveelheid: string; bedrag: Centen }
+export type OffertePost = { omschrijving: string; hoeveelheid: string; bedrag: Centen; /** Fase of werkpakket, voor de indeling op de offerte. */ groep?: string }
 
 export type Offerte = {
   token: string
@@ -58,11 +58,17 @@ const plusDagen = (d: string, n: number) => {
   return t.toISOString().slice(0, 10)
 }
 
-/** GR-O // 20261029 0001: per dag doorgeteld over de offertes van deze klant en de rest. */
+/** GR-O // 2026-1105-01: datum plus volgnummer van die dag, twee cijfers (Nick, 5 nov 2026), zoals factuur en werkbon. */
 export function offerteNummer(klanten: Klant[], datum = vandaag()) {
+  const voor = `GR-O // ${datum.slice(0, 4)}-${datum.slice(5, 7)}${datum.slice(8, 10)}-`
+  const hoogste = klanten
+    .flatMap((k) => k.stukken)
+    .filter((s) => s.soort === "Offerte" && s.nummer.startsWith(voor))
+    .reduce((m, s) => Math.max(m, Number(s.nummer.slice(voor.length)) || 0), 0)
+  // Oude vorm van dezelfde dag (GR-O // JJJJMMDDNNNN) telt mee, zodat de reeks doorloopt (Codex, PR #224).
   const dag = datum.replaceAll("-", "")
-  const vandaagAl = klanten.flatMap((k) => k.stukken).filter((s) => s.soort === "Offerte" && s.nummer.replace(/\D/g, "").startsWith(dag)).length
-  return `GR-O // ${dag}${String(vandaagAl + 1).padStart(4, "0")}`
+  const oud = klanten.flatMap((k) => k.stukken).filter((s) => s.soort === "Offerte" && /^GR-O \/\/ \d{12}$/.test(s.nummer) && s.nummer.slice(8, 16) === dag).reduce((m, s) => Math.max(m, Number(s.nummer.slice(16))), 0)
+  return `${voor}${String(Math.max(hoogste, oud) + 1).padStart(2, "0")}`
 }
 
 /** Korting per regel staat erbij in de omschrijving; het bedrag is al na korting. */
@@ -90,9 +96,9 @@ export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string, 
     ...(v.planning?.length ? { planning: v.planning.map((f) => ({ naam: f.naam, dagen: f.dagen })) } : {}),
     posten: [
       ...(u.arbeid ? [{ omschrijving: "Arbeid", hoeveelheid: "", bedrag: u.arbeid }] : []),
-      ...u.regels.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
+      ...u.regels.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop, ...(r.groep?.trim() ? { groep: r.groep.trim().slice(0, 60) } : {}) })),
     ],
-    optioneel: u.optioneel.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop })),
+    optioneel: u.optioneel.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop, ...(r.groep?.trim() ? { groep: r.groep.trim().slice(0, 60) } : {}) })),
     onvoorzien: u.onvoorzien,
     korting: u.korting,
     verkoop: u.verkoop,

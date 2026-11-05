@@ -110,6 +110,8 @@ export type Tuin = {
 
 export type Versie = {
   nr: number
+  /** Concept of definitief (Nick, 5 nov 2026); ontbreekt bij oudere versies. */
+  soort?: "concept" | "definitief"
   datum: string
   beschrijving: string
   uren: Milli

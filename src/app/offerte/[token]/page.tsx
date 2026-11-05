@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Fragment } from "react"
+import { perGroep } from "@/components/crm/groepen"
 import { notFound } from "next/navigation"
 import { BewaarKnop } from "@/components/crm/bewaar-knop"
 import { TekstOpmaak } from "@/components/crm/tekst-opmaak"
@@ -171,16 +173,32 @@ function Posten({ titel, posten: alle }: { titel: string; posten: OffertePost[] 
           </tr>
         </thead>
         <tbody>
-          {posten.map((p, i) => (
-            <tr key={i} className="border-b border-lijn align-top">
-              <td className="py-2.5 pr-4">{p.omschrijving}</td>
-              {kolom && <td className="py-2.5 pr-4 text-right whitespace-nowrap text-gedempt tabular-nums">{hv(p)}</td>}
-              <td className="py-2.5 text-right whitespace-nowrap tabular-nums">{toonEuro(p.bedrag)}</td>
-            </tr>
+          {perGroep(posten.filter((p) => p.omschrijving !== "Aanleg en arbeid")).map((g) => (
+            <Fragment key={g.naam || "alle"}>
+              {g.naam && <tr><th colSpan={kolom ? 3 : 2} scope="colgroup" className="pt-5 pb-1 text-left text-[15px] font-semibold">{g.naam}</th></tr>}
+              {g.rijen.map((p, i) => <PostRij key={i} p={p} kolom={kolom} hv={hv} />)}
+              {g.naam && (
+                <tr>
+                  <td colSpan={kolom ? 2 : 1} className="py-2 text-right text-[14px] text-gedempt">Subtotaal {g.naam.toLowerCase()}</td>
+                  <td className="py-2 text-right whitespace-nowrap font-semibold tabular-nums">{toonEuro(g.rijen.reduce((t, r) => t + r.bedrag, 0))}</td>
+                </tr>
+              )}
+            </Fragment>
           ))}
+          {posten.filter((p) => p.omschrijving === "Aanleg en arbeid").map((p, i) => <PostRij key={`a${i}`} p={p} kolom={kolom} hv={hv} />)}
         </tbody>
       </table>
     </section>
+  )
+}
+
+function PostRij({ p, kolom, hv }: { p: OffertePost; kolom: boolean; hv: (p: OffertePost) => string }) {
+  return (
+    <tr className="border-b border-lijn align-top">
+      <td className="py-2.5 pr-4">{p.omschrijving}</td>
+      {kolom && <td className="py-2.5 pr-4 text-right whitespace-nowrap text-gedempt tabular-nums">{hv(p)}</td>}
+      <td className="py-2.5 text-right whitespace-nowrap tabular-nums">{toonEuro(p.bedrag)}</td>
+    </tr>
   )
 }
 
