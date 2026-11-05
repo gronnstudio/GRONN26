@@ -1,3 +1,4 @@
+import { toonNummer } from "@/lib/crm/nummer"
 import Link from "next/link"
 import { Kop, Cijfer, Cijfers, Leeg } from "@/components/crm/kop"
 import { MailKnop } from "@/components/crm/mail-knop"
@@ -127,7 +128,7 @@ function Regel({ r, soort }: { r: DocRij; soort: "Offerte" | "Factuur" }) {
   const m = r.pad ? mailVoor(soort === "Offerte" ? "offerte" : herinnering && s.herinnerd ? "herinnering" : "factuur", { naam: r.klant.naam, nummer: s.nummer, pad: r.pad, bedrag: euro(s.bedrag) }) : undefined
   return (
     <tr>
-      <td className="font-semibold whitespace-nowrap">{r.pad ? <a href={r.pad} className="crm-link">{s.nummer}</a> : s.nummer}</td>
+      <td className="font-semibold whitespace-nowrap">{r.pad ? <a href={r.pad} className="crm-link">{toonNummer(s.nummer)}</a> : s.nummer}</td>
       <td><Link href={kaart} className="hover:text-accent-tekst">{r.klant.naam}</Link></td>
       <td className="crm-cijfer whitespace-nowrap text-gedempt">{datum(s.datum)}</td>
       {soort === "Factuur" && <td className={`crm-cijfer whitespace-nowrap ${r.status === "Te laat" ? "font-semibold text-let" : "text-gedempt"}`}>{r.vervalt ? datum(r.vervalt) : "—"}</td>}

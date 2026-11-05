@@ -1,3 +1,4 @@
+import { toonNummer } from "@/lib/crm/nummer"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Fragment } from "react"
@@ -41,7 +42,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
         {/* De gegevens in één nette rij vakjes (Nick, 5 nov 2026: "erg rommelig"). */}
         <dl className="m-0 mt-6 grid grid-cols-2 gap-x-6 gap-y-3 text-[14px] sm:grid-cols-4 print:grid-cols-4">
           <Gegeven t="Voor" w={o.klant} />
-          <Gegeven t="Nummer" w={o.nummer} />
+          <Gegeven t="Nummer" w={toonNummer(o.nummer)} />
           <Gegeven t="Datum" w={datum(o.datum)} />
           {spec ? o.akkoord && <Gegeven t="Akkoord" w={`${datum(o.akkoord.op)} · ${o.akkoord.naam}`} /> : <Gegeven t="Geldig tot" w={datum(o.geldigTot)} />}
           {o.adres && <Gegeven t="Adres" w={o.adres} breed />}
@@ -89,7 +90,7 @@ export default async function OffertePagina({ params, searchParams }: { params: 
 
       {!spec && o.slot && <p className="m-0 mt-10 max-w-[72ch] whitespace-pre-line text-[16px] leading-[1.6]">{o.slot}</p>}
 
-      <PdfKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${o.nummer} GRØNN Studio`} />
+      <PdfKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${toonNummer(o.nummer)} GRØNN Studio`} />
 
       {!spec && (
       <section data-geen-pdf aria-labelledby="akkoord-kop" className="mt-12 rounded-[16px] border border-lijn bg-vlak p-6 print:hidden">

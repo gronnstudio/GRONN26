@@ -1,3 +1,4 @@
+import { toonNummer } from "@/lib/crm/nummer"
 import type { Metadata } from "next"
 import { faseBadge } from "@/lib/crm/klant"
 import Link from "next/link"
@@ -445,7 +446,7 @@ async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
             <li key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3 border-b border-lijn pb-2">
               <span className="min-w-0">
                 <span className={`${lbl} mr-2 text-gedempt`}>{s.soort}</span>
-                <span className="[overflow-wrap:anywhere]">{s.nummer}</span>
+                <span className="[overflow-wrap:anywhere]">{toonNummer(s.nummer)}</span>
                 <span className="block text-[12px] text-gedempt">{datum(s.datum)}</span>
                 {s.soort === "Factuur" && !s.rond && <Betaalstand s={s} />}
                 {s.factuur && (

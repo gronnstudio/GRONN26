@@ -1,3 +1,4 @@
+import { toonNummer } from "@/lib/crm/nummer"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
@@ -46,7 +47,7 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
       <div className="print:px-[48px]">
         <header className="mt-8 flex flex-wrap items-start justify-between gap-6 border-b border-lijn pb-6">
           <div>
-            <p className="lbl m-0 text-gedempt">{kop} · {f.nummer}</p>
+            <p className="lbl m-0 text-gedempt">{kop} · {toonNummer(f.nummer)}</p>
             <h1 className="syne m-0 mt-2 text-[clamp(30px,4.4vw,48px)] leading-[1.05] tracking-[-.03em]">{f.titel}</h1>
             <p className="m-0 mt-3 text-[16px] text-gedempt">
               Aan {f.klant}
@@ -55,7 +56,7 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
           </div>
           <dl className="m-0 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-[14px]">
             <dt className="text-gedempt">Factuurnummer</dt>
-            <dd className="m-0">{f.nummer}</dd>
+            <dd className="m-0">{toonNummer(f.nummer)}</dd>
             <dt className="text-gedempt">Factuurdatum</dt>
             <dd className="m-0">{datum(f.datum)}</dd>
             {herinnering && stand.stand === "herinnerd" && (
@@ -73,7 +74,7 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
             {f.offerte && (
               <>
                 <dt className="text-gedempt">Offerte</dt>
-                <dd className="m-0">{f.offerte.nummer}</dd>
+                <dd className="m-0">{toonNummer(f.offerte.nummer)}</dd>
               </>
             )}
           </dl>
@@ -133,7 +134,7 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
             <div>
               <h2 id="betalen" className="syne m-0 text-[24px]">Betalen</h2>
               <p className="m-0 mt-2 text-[15px] leading-[1.6]">
-                Graag {toonEuro(f.totaal)} vóór {datum(uiterlijk)}, onder vermelding van {f.nummer}.
+                Graag {toonEuro(f.totaal)} vóór {datum(uiterlijk)}, onder vermelding van {toonNummer(f.nummer)}.
               </p>
               {f.betaallink && (
                 <p className="m-0 mt-4">
@@ -149,9 +150,9 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
             {(f.betaallink || iban) && (
               <figure className="m-0 grid justify-items-center gap-2">
                 {f.betaallink ? (
-                  <Qr tekst={f.betaallink} label={`QR-code: betaal factuur ${f.nummer} online`} />
+                  <Qr tekst={f.betaallink} label={`QR-code: betaal factuur ${toonNummer(f.nummer)} online`} />
                 ) : (
-                  <Qr tekst={epcCode({ naam: BUSINESS.name, iban: iban!, bedrag: f.totaal, omschrijving: `Factuur ${f.nummer}` })} label={`QR-code: betaal factuur ${f.nummer} met je bankapp`} />
+                  <Qr tekst={epcCode({ naam: BUSINESS.name, iban: iban!, bedrag: f.totaal, omschrijving: `Factuur ${toonNummer(f.nummer)}` })} label={`QR-code: betaal factuur ${toonNummer(f.nummer)} met je bankapp`} />
                 )}
                 <figcaption className="text-[12px] text-gedempt">Scan met je {f.betaallink ? "camera" : "bankapp"}</figcaption>
               </figure>
@@ -159,7 +160,7 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
           </section>
         )}
 
-        <PdfKnoppen naam={`${kop} ${f.nummer} GRØNN Studio`} />
+        <PdfKnoppen naam={`${kop} ${toonNummer(f.nummer)} GRØNN Studio`} />
 
         <footer className="mt-12 grid gap-x-8 gap-y-3 border-t border-lijn pt-5 text-[13px] leading-[1.6] sm:grid-cols-3 print:grid-cols-3">
           <p className="m-0">
