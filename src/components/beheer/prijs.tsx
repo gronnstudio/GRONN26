@@ -686,27 +686,33 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           <div><dt className="text-[8pt] text-gedempt">Datum</dt><dd className="m-0 font-medium">{new Date().toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}</dd></div>
         </dl>
         {beschrijving.trim() && <TekstOpmaak tekst={beschrijving.trim()} zonderPrijzen className="mt-6 leading-[1.5]" />}
-        {(u.arbeid > 0 || regelsVoorKlant.length > 0) && (
+        {(u.arbeid > 0 || regelsVoorKlant.length > 0) && (() => {
+          // Een hoeveelheid alleen waar die iets zegt (niet "1 st"), en de kolom alleen als de meeste regels er een hebben (Nick, 5 nov 2026: "alleen bij waaltjes? beetje gek").
+          const hv = (r: (typeof regelsVoorKlant)[number]) => (r.eenheid !== "post" && !(r.brutoHoeveelheid === 1000 && r.eenheid === "st") ? `${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}` : "")
+          const kolom = regelsVoorKlant.filter((r) => hv(r)).length * 2 > regelsVoorKlant.length
+          return (
           <>
             <h2 className="m-0 mt-8 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Wat er gebeurt</h2>
             <table className="mt-2 w-full table-fixed border-collapse">
-              <colgroup><col /><col className="w-[30mm]" /><col className="w-[32mm]" /></colgroup>
+              <colgroup><col />{kolom && <col className="w-[30mm]" />}<col className="w-[32mm]" /></colgroup>
               <thead>
                 <tr className="border-b-2 border-[#202020] text-[8pt] text-gedempt">
                   <th scope="col" className="pb-1.5 text-left font-semibold">Omschrijving</th>
-                  <th scope="col" className="pb-1.5 text-right font-semibold">Hoeveelheid</th>
+                  {kolom && <th scope="col" className="pb-1.5 text-right font-semibold">Hoeveelheid</th>}
                   <th scope="col" className="pb-1.5 text-right font-semibold">Excl. btw</th>
                 </tr>
               </thead>
               <tbody>
-                {u.arbeid > 0 && <PostRij t="Werkzaamheden" h="" b={u.arbeid} />}
                 {regelsVoorKlant.map((r) => (
-                  <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h={r.eenheid !== "post" ? `${toonDecimaal(r.brutoHoeveelheid, 3)} ${r.eenheid}` : ""} b={r.verkoop} />
+                  <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h={kolom ? hv(r) : undefined} b={r.verkoop} />
                 ))}
+                {/* Arbeid onderaan, na wat er komt (Nick, 5 nov 2026: "niet als mokerslag bovenaan"). */}
+                {u.arbeid > 0 && <PostRij t="Aanleg en arbeid" h={kolom ? "" : undefined} b={u.arbeid} />}
               </tbody>
             </table>
           </>
-        )}
+          )
+        })()}
         <dl data-blok className="m-0 mt-4 ml-auto grid w-[90mm] gap-1.5">
           {u.onvoorzien > 0 && <Rij t="Onvoorzien" b={u.onvoorzien} />}
           {u.korting > 0 && <Rij t="Korting" b={-u.korting} />}
@@ -744,9 +750,9 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
           <>
             <h2 className="m-0 mt-8 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Optioneel, niet in het totaal</h2>
             <table className="mt-2 w-full table-fixed border-collapse border-t-2 border-[#202020]">
-              <colgroup><col /><col className="w-[30mm]" /><col className="w-[32mm]" /></colgroup>
+              <colgroup><col /><col className="w-[32mm]" /></colgroup>
               <tbody>
-                {u.optioneel.map((r) => <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} h="" b={r.verkoop} />)}
+                {u.optioneel.map((r) => <PostRij key={r.id} t={r.omschrijving || SOORTEN[r.soort].naam} b={r.verkoop} />)}
               </tbody>
             </table>
           </>
@@ -758,11 +764,11 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   )
 }
 
-function PostRij({ t, h, b }: { t: string; h: string; b: number }) {
+function PostRij({ t, h, b }: { t: string; h?: string; b: number }) {
   return (
     <tr className="border-b border-lijn align-top">
       <td className="py-1.5 pr-3">{t}</td>
-      <td className="py-1.5 pr-3 text-right whitespace-nowrap text-gedempt crm-cijfer">{h}</td>
+      {h !== undefined && <td className="py-1.5 pr-3 text-right whitespace-nowrap text-gedempt crm-cijfer">{h}</td>}
       <td className="py-1.5 text-right whitespace-nowrap crm-cijfer">{toonEuro(b)}</td>
     </tr>
   )
