@@ -58,11 +58,14 @@ const plusDagen = (d: string, n: number) => {
   return t.toISOString().slice(0, 10)
 }
 
-/** GR-O // 20261029 0001: per dag doorgeteld over de offertes van deze klant en de rest. */
+/** GR-O // 2026-1105-01: datum plus volgnummer van die dag, twee cijfers (Nick, 5 nov 2026), zoals factuur en werkbon. */
 export function offerteNummer(klanten: Klant[], datum = vandaag()) {
-  const dag = datum.replaceAll("-", "")
-  const vandaagAl = klanten.flatMap((k) => k.stukken).filter((s) => s.soort === "Offerte" && s.nummer.replace(/\D/g, "").startsWith(dag)).length
-  return `GR-O // ${dag}${String(vandaagAl + 1).padStart(4, "0")}`
+  const voor = `GR-O // ${datum.slice(0, 4)}-${datum.slice(5, 7)}${datum.slice(8, 10)}-`
+  const hoogste = klanten
+    .flatMap((k) => k.stukken)
+    .filter((s) => s.soort === "Offerte" && s.nummer.startsWith(voor))
+    .reduce((m, s) => Math.max(m, Number(s.nummer.slice(voor.length)) || 0), 0)
+  return `${voor}${String(hoogste + 1).padStart(2, "0")}`
 }
 
 /** Korting per regel staat erbij in de omschrijving; het bedrag is al na korting. */
