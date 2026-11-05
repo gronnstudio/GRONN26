@@ -236,6 +236,14 @@ test("van aanvraag tot calculatie", async ({ page, request }) => {
   await expect(page.getByRole("button", { name: "Akkoord ✓" })).toBeVisible()
   // een verzonnen sleutel geeft niets
   expect((await request.get("/offerte/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")).status()).toBe(404)
+  // weggooien met de prullenbak: pas na het woord "verwijderen", daarna is ook de link weg
+  await page.getByRole("button", { name: /^Verwijderen · offerte/ }).click()
+  const weg = page.getByRole("button", { name: "Weg" })
+  await expect(weg).toBeDisabled()
+  await page.getByLabel(/Typ verwijderen/).fill("verwijderen")
+  await weg.click()
+  await expect(page.getByRole("link", { name: "Bekijk als klant" })).toHaveCount(0)
+  expect((await request.get(href)).status()).toBe(404)
 })
 
 test("vragenlijst: een nieuwe vraag verschijnt in de intake, vervallen haalt hem weg", async ({ page }) => {

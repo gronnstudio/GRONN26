@@ -3,7 +3,7 @@ import { reken } from "./calculatie"
 import type { Bp, Centen } from "./geld"
 import { toonDecimaal } from "./geld"
 import type { Calculatie, Klant, Versie } from "./klant"
-import { leesJson, wijzigJson } from "./opslag"
+import { leesJson, verwijderBestand, wijzigJson } from "./opslag"
 
 // Een offerte met een privélink (eigenaar, 29 okt 2026: "een privélink per
 // offerte, waarmee de klant de offerte bekijkt en op Akkoord drukt, zonder in
@@ -113,5 +113,8 @@ export async function wijzigOfferte(token: string, f: (o: Offerte) => Offerte) {
   if (!isToken(token)) return null
   return wijzigJson<Offerte | null>(pad(token), () => null, (o) => (o ? f(o) : o))
 }
+
+/** Het document achter de privélink weg: de link geeft daarna een 404. */
+export const offerteDocumentWeg = (token: string) => (isToken(token) ? verwijderBestand(pad(token)) : Promise.resolve())
 
 export const verlopen = (o: Offerte) => o.geldigTot < vandaag()

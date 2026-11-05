@@ -21,6 +21,8 @@ export type DocRij = {
   vervalt?: string
   /** De privélink voor de klant, als die er is. */
   pad?: string
+  /** Offerte waar al een termijnfactuur op staat: die blijft. */
+  vastAanFactuur?: boolean
 }
 
 export function statusVan(s: Stuk, nu: string): DocStatus {
@@ -42,6 +44,7 @@ export function documentRijen(klanten: Klant[], soort: Stuk["soort"], nu: string
             status: statusVan(s, nu),
             vervalt: b?.stand === "open" || b?.stand === "te laat" ? b.vervalt : b?.stand === "herinnerd" ? b.uiterlijk : undefined,
             pad: s.factuur ? `/factuur/${s.factuur}` : s.link ? `/offerte/${s.link}` : undefined,
+            vastAanFactuur: s.soort === "Offerte" && !!s.link && k.stukken.some((y) => y.termijn?.offerte === s.link),
           }
         }),
     )

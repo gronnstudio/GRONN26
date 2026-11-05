@@ -4,7 +4,7 @@ import { useState } from "react"
 
 // Weghalen dat niet terug kan: eerst de knop, dan "verwijderen" typen. De
 // actie controleert het woord zelf ook, de knop alleen is geen bevestiging.
-export function VerwijderKnop({ actie, wat, label = "Verwijderen", knop = "text-[12px] text-gedempt underline hover:text-let" }: { actie: (d: FormData) => void | Promise<void>; wat: string; label?: string; knop?: string }) {
+export function VerwijderKnop({ actie, wat, label = "Verwijderen", knop = "text-[12px] text-gedempt underline hover:text-let" }: { actie: (d: FormData) => void | Promise<void>; wat: string; label?: React.ReactNode; knop?: string }) {
   const [open, setOpen] = useState(false)
   const [tekst, setTekst] = useState("")
   if (!open)
