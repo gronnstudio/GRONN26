@@ -23,6 +23,8 @@ import { AdresVeld } from "@/components/adres-veld"
 import { KopieerKnop } from "@/components/crm/kopieer-knop"
 import { trekOfferteIn } from "../offerte-acties"
 import { maakFactuur } from "../factuur-acties"
+import { haalWerkbonWeg, maakWerkbon } from "../werkbon-acties"
+import { leesWerkbonnen } from "@/lib/beheer/werkbon"
 import { volgendFactuurNummer } from "@/lib/crm/factuur-reken"
 
 // De klantkaart: één werkplek per klant, met tabbladen (masterprompt CRM,
@@ -359,7 +361,11 @@ function Betaalstand({ s }: { s: Stuk }) {
   return null
 }
 
-function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
+async function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
+  const [alleBonnen, alleUren] = await Promise.all([leesWerkbonnen(), leesUren()])
+  const bonnen = alleBonnen.filter((w) => w.klantId === k.id)
+  const vandaag = vandaagNL()
+  const urenVandaag = alleUren.filter((r) => r.datum === vandaag && hoortBij(k, r.klant)).reduce((t, r) => t + r.uren, 0)
   const offertes = k.stukken.filter((s) => s.soort === "Offerte" && s.link && s.rond)
   return (
     <div className="grid @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-10">
@@ -415,6 +421,30 @@ function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
           {!k.stukken.length && <li className="text-[13px] text-gedempt">Nog niets.</li>}
         </ul>
         <p className="m-0 mt-4 text-[12px] text-gedempt">Maak de factuur hiernaast; de klant krijgt een link met betaalknop en QR-code. Boeken blijft in DigiBoox.</p>
+
+        <p className={`${lbl} m-0 mt-10`}>Werkbonnen</p>
+        <ul className="m-0 mt-3 grid list-none gap-2 p-0 text-[14px]">
+          {bonnen.map((w) => (
+            <li key={w.token} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-lijn pb-2">
+              <span className="min-w-0">
+                <span className={`${lbl} mr-2 text-gedempt`}>Werkbon</span>
+                {w.nummer}
+                <span className="block truncate text-[12px] text-gedempt">{datum(w.datum)} · {w.werk}</span>
+                <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  <KopieerKnop tekst={`/werkbon/${w.token}`} />
+                  <a href={`/werkbon/${w.token}`} className="crm-knop-stil crm-knop-klein">{w.getekend ? "Bekijken" : "Laten tekenen"}</a>
+                </span>
+              </span>
+              <span className="flex items-center gap-1">
+                {w.getekend ? <span className="crm-badge crm-badge-goed">Getekend door {w.getekend.naam}</span> : <span className="crm-badge">Niet getekend</span>}
+                <form action={haalWerkbonWeg.bind(null, w.token)}>
+                  <button aria-label={`Werkbon ${w.nummer} weghalen`} className="px-2 opacity-40 hover:opacity-100">×</button>
+                </form>
+              </span>
+            </li>
+          ))}
+          {!bonnen.length && <li className="text-[13px] text-gedempt">Nog geen werkbonnen. Maak er een op de dag zelf en laat de klant tekenen op je telefoon.</li>}
+        </ul>
       </section>
       <div className="flex flex-col gap-6 self-start">
       <form action={maakFactuur.bind(null, k.id)} className="crm-paneel grid gap-3 p-5">
@@ -447,6 +477,17 @@ function Stukken({ k, nummer }: { k: Klant; nummer: string }) {
           <label className="grid gap-1 text-[13px]">Datum<input name="datum" type="date" required defaultValue={vandaagNL()} className={veld} /></label>
         </div>
         <BewaarKnop>Factuur maken</BewaarKnop>
+      </form>
+      <form action={maakWerkbon.bind(null, k.id)} className="crm-paneel grid gap-3 p-5">
+        <p className={`${lbl} m-0`}>Werkbon maken</p>
+        <label className="grid gap-1 text-[13px]">Wat is er gedaan?<textarea name="werk" required rows={3} className={`${veld} resize-y`} placeholder="Keermuur gestort, 6 m drainage gelegd" /></label>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="grid gap-1 text-[13px]">Datum<input name="datum" type="date" required defaultValue={vandaag} className={veld} /></label>
+          <label className="grid gap-1 text-[13px]">Uren<input name="uren" inputMode="decimal" required defaultValue={urenVandaag ? String(urenVandaag).replace(".", ",") : ""} className={veld} /></label>
+        </div>
+        <label className="grid gap-1 text-[13px]">Materiaal<textarea name="materiaal" rows={2} className={`${veld} resize-y`} placeholder="2 BB teelaarde, 40 betonblokken" /></label>
+        <label className="grid gap-1 text-[13px]">Opmerking (bijv. meerwerk)<input name="opmerking" className={veld} /></label>
+        <BewaarKnop>Werkbon maken</BewaarKnop>
       </form>
       <form action={nieuwStuk.bind(null, k.id)} className="grid grid-cols-[110px_minmax(0,1fr)] gap-2 crm-paneel p-5">
         <p className={`${lbl} col-span-2 m-0 text-gedempt`}>Al gemaakt in DigiBoox? Toevoegen</p>

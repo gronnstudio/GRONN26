@@ -10,6 +10,7 @@ import { meetstaat, naarRegel as naarMeetRegel } from "../src/lib/crm/meetstaat"
 import { nacalculatie, nieuwProject, normaliseerProject, splitsProject } from "../src/lib/crm/project"
 import { metWerkvolgorde, schoonPlan, startDagen, totaalDagen, werkplan } from "../src/lib/crm/planning"
 import { btwPerTarief, epcCode, factuurTotaal, termijnRegels, volgendFactuurNummer } from "../src/lib/crm/factuur-reken"
+import { MAX_HANDTEKENING, schoneHandtekening, volgendWerkbonNummer } from "../src/lib/crm/werkbon"
 import { metBtw, naInkoop, schoonInkoop, teBetalen } from "../src/lib/crm/inkoop"
 import { betaalstand, geplandeUren, normaliseer, zoekDubbel } from "../src/lib/crm/klant"
 import { STANDAARD, alleVragen, openPunten, oppervlakUit, schoonAntwoord, schoonLijst, telling, vragenVoor, zoneOppervlak } from "../src/lib/crm/vragenlijst"
@@ -581,5 +582,17 @@ test.describe("factuur", () => {
   })
   test("SEPA-betaalcode volgens EPC069-12", () => {
     expect(epcCode({ naam: "GRØNN Studio", iban: "nl91 abna 0417 1643 00", bedrag: 12100, omschrijving: "Factuur 1" }).split("\n")).toEqual(["BCD", "002", "1", "SCT", "", "GRØNN Studio", "NL91ABNA0417164300", "EUR121.00", "", "", "Factuur 1"])
+  })
+})
+
+test.describe("werkbon", () => {
+  test("nummer per dag, handtekening alleen als echte PNG", () => {
+    expect(volgendWerkbonNummer([{ nummer: "GR-W // 2026-1105-01" }], "2026-11-05")).toBe("GR-W // 2026-1105-02")
+    expect(volgendWerkbonNummer([], "2026-11-06")).toBe("GR-W // 2026-1106-01")
+    const png = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(200)]).toString("base64")
+    expect(schoneHandtekening(`data:image/png;base64,${png}`)).toBe(`data:image/png;base64,${png}`)
+    expect(schoneHandtekening(`data:image/svg+xml;base64,${png}`)).toBeNull()
+    expect(schoneHandtekening(`data:image/png;base64,${Buffer.from("<svg onload=alert(1)>".repeat(10)).toString("base64")}`)).toBeNull()
+    expect(schoneHandtekening(`data:image/png;base64,${"A".repeat(MAX_HANDTEKENING)}`)).toBeNull()
   })
 })
