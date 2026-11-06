@@ -33,6 +33,8 @@ export type Offerte = {
   /** Werkvolgorde voor de klant: alleen fase en dagen, geen machines of leveringen. */
   planning?: { naam: string; dagen: number }[]
   optioneel: OffertePost[]
+  /** Door de klant zelf uit te voeren: alleen omschrijving en hoeveelheid, geen bedrag. */
+  doorKlant?: { omschrijving: string; hoeveelheid: string }[]
   onvoorzien: Centen
   korting: Centen
   /** Korting op losse regels, al verrekend in de posten; op de offerte opgeteld bij de korting (Nick, 5 nov 2026). */
@@ -101,6 +103,7 @@ export function maakOfferte(k: Klant, c: Calculatie, v: Versie, nummer: string, 
       ...u.regels.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop, ...(r.groep?.trim() ? { groep: r.groep.trim().slice(0, 60) } : {}) })),
     ],
     optioneel: u.optioneel.map((r) => ({ omschrijving: metKorting(r), hoeveelheid: hoeveel(r.brutoHoeveelheid, r.eenheid), bedrag: r.verkoop, ...(r.groep?.trim() ? { groep: r.groep.trim().slice(0, 60) } : {}) })),
+    ...(u.doorKlant.length ? { doorKlant: u.doorKlant.map((r) => ({ omschrijving: r.omschrijving || "Werk", hoeveelheid: r.hoeveelheid ? hoeveel(r.hoeveelheid, r.eenheid) : "" })) } : {}),
     onvoorzien: u.onvoorzien,
     korting: u.korting,
     ...(u.regels.some((r) => r.kortingBedrag > 0) ? { regelKorting: u.regels.reduce((t, r) => t + r.kortingBedrag, 0) } : {}),

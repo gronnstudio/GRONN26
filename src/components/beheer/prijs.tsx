@@ -28,7 +28,7 @@ import { faseInvoer, metActueleBedragen, opmaakTekst, werkomschrijving, zonderTe
 type Schatting = { uren: number; posten: { wat: string; toelichting?: string; uren: number; fase?: string }[]; regels?: { wat: string; soort: string; inkoop: number; fase?: string; post?: string }[]; aannames: string }
 
 /** Een regel zoals hij in de invulvelden staat: tekst, nog niet ontleed. */
-type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; korting: string; optioneel: boolean; groep: string; catalogusId?: string; meetstaat?: string; schatting?: boolean; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
+type Invul = { id: string; soort: Soort; omschrijving: string; hoeveelheid: string; eenheid: string; inkoop: string; opslag: string; btw: number; afval: string; korting: string; optioneel: boolean; doorKlant: boolean; groep: string; catalogusId?: string; meetstaat?: string; schatting?: boolean; /** Wat Nick typte terwijl "met btw" aan stond */ inkoopIncl?: string }
 
 // "Met btw" (eigenaar, 29 okt 2026: "ik wil met btw"): inkoop en verkoop
 // tonen en invoeren incl. btw. Opgeslagen en gerekend wordt altijd excl.
@@ -64,6 +64,7 @@ const naarInvul = (r: Regel): Invul => ({
   afval: toonDecimaal(r.afval, 2),
   korting: r.korting ? toonDecimaal(r.korting, 2) : "",
   optioneel: !!r.optioneel,
+  doorKlant: !!r.doorKlant,
   groep: r.groep ?? "",
   catalogusId: r.catalogusId,
   meetstaat: r.meetstaat,
@@ -82,6 +83,7 @@ const naarRegel = (r: Invul): Regel => ({
   korting: Math.min(10000, Math.max(0, leesBp(r.korting) ?? 0)) || undefined,
   groep: r.groep.trim() || undefined,
   optioneel: r.optioneel || undefined,
+  doorKlant: r.doorKlant || undefined,
   catalogusId: r.catalogusId,
   meetstaat: r.meetstaat,
   schatting: r.schatting,
@@ -92,6 +94,8 @@ const SECTIES: { id: string; naam: string; enkel: string; soort: Soort; bij: (s:
   { id: "planten", naam: "Planten", enkel: "Plant", soort: "planten", bij: (s) => s === "planten" },
   { id: "machines", naam: "Machines", enkel: "Machine", soort: "machine", bij: (s) => s === "machine" },
 ]
+// Wat de klant zelf doet staat in een eigen deel, los van de soort (Nick, 6 nov 2026).
+const sectieVan = (r: Invul) => (r.doorKlant ? "klant" : (SECTIES.find((s) => s.bij(r.soort))?.id ?? "materialen"))
 // Het nummer van een fase: "Fase 2 — Maart 2027" is 2.
 const faseNr = (naam = "") => naam.match(/\d+/)?.[0] ?? ""
 const leeg = () => naarInvul(nieuweRegel("materiaal", { hoeveelheid: 1000 }))
@@ -224,9 +228,16 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   // Een regel die Nick met de hand aanpast is geen schatting meer: opnieuw schatten laat hem staan.
   const zet = (i: number, r: Partial<Invul>) =>
     setRegels(regels.map((x, j) => (j === i ? { ...x, ...r, schatting: undefined, ...(!("inkoopIncl" in r) && ("inkoop" in r || "btw" in r) ? { inkoopIncl: undefined } : {}) } : x)))
+  // Omhoog en omlaag binnen hetzelfde deel: de buurregel is de vorige of volgende regel van dat deel,
+  // ook als er in de lijst regels van een ander deel tussen staan.
+  const buur = (i: number, d: -1 | 1) => {
+    let j = i + d
+    while (j >= 0 && j < regels.length && sectieVan(regels[j]) !== sectieVan(regels[i])) j += d
+    return j >= 0 && j < regels.length ? j : -1
+  }
   const schuif = (i: number, d: -1 | 1) => {
-    const j = i + d
-    if (j < 0 || j >= regels.length) return
+    const j = buur(i, d)
+    if (j < 0) return
     const nieuw = [...regels]
     ;[nieuw[i], nieuw[j]] = [nieuw[j], nieuw[i]]
     setRegels(nieuw)
@@ -241,6 +252,34 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   const ontdubbel = () => setRegels(ontdubbeld(regels))
   const voegToe = (r: Regel) => setRegels((oud) => [...oud.filter((x) => x.omschrijving.trim() || x.inkoop.trim()), naarInvul(r)])
 
+  // Fase 1 tot 6 (Nick, 30 okt 2026): een nummer kiezen; een fase uit de schatting houdt zijn volle naam.
+  const faseKeuze = (r: Invul, i: number) => (
+    <select
+      aria-label="Fase"
+      value={faseNr(r.groep)}
+      onChange={(e) => {
+        const n = e.target.value
+        const naam = n ? (fasen.find((f) => faseNr(f.naam) === n)?.naam ?? `Fase ${n}`) : ""
+        zet(i, { groep: naam })
+        if (naam && !fasen.some((f) => f.naam === naam)) setFasen([...fasen, { naam, uren: 0 }].sort((x, y) => faseNr(x.naam).localeCompare(faseNr(y.naam))))
+      }}
+      className={`${klein} w-[52px] bg-grond`}
+    >
+      <option value="">–</option>
+      {["1", "2", "3", "4", "5", "6"].map((n) => (
+        <option key={n} value={n}>{n}</option>
+      ))}
+    </select>
+  )
+  const knoppen = (i: number) => (
+    <>
+      <button type="button" aria-label="Regel omhoog" disabled={buur(i, -1) < 0} onClick={() => schuif(i, -1)} className="size-[22px] opacity-60 hover:opacity-100 disabled:opacity-20">↑</button>
+      <button type="button" aria-label="Regel omlaag" disabled={buur(i, 1) < 0} onClick={() => schuif(i, 1)} className="size-[22px] opacity-60 hover:opacity-100 disabled:opacity-20">↓</button>
+      <button type="button" aria-label="Regel weghalen" onClick={() => setRegels(regels.length > 1 ? regels.filter((_, j) => j !== i) : [leeg()])} className="size-[22px] opacity-60 hover:opacity-100">×</button>
+    </>
+  )
+  const klantRegels = regels.map((r, i) => [r, i] as const).filter(([r]) => r.doorKlant)
+
   const urenMilli = Math.max(0, leesMilli(uren) ?? 0)
   const invoer = {
     uren: urenMilli,
@@ -251,7 +290,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
   }
   const u = reken(invoer)
   const regelKorting = u.regels.reduce((t, r) => t + r.kortingBedrag, 0)
-  const vroegste = (sec: (typeof SECTIES)[number]) => Math.min(99, ...regels.filter((r) => sec.bij(r.soort)).map((r) => Number(faseNr(r.groep)) || 99)) * 10 + SECTIES.indexOf(sec)
+  const vroegste = (sec: (typeof SECTIES)[number]) => Math.min(99, ...regels.filter((r) => !r.doorKlant && sec.bij(r.soort)).map((r) => Number(faseNr(r.groep)) || 99)) * 10 + SECTIES.indexOf(sec)
   const w = wegzetten(u)
   const alBetaald = Math.max(0, leesCenten(betaald) ?? 0)
   const faseNamen = [...new Set(u.regels.map((r) => r.groep ?? ""))].sort((a, b) => (a ? b ? a.localeCompare(b) : -1 : 1))
@@ -469,7 +508,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 </thead>
                 {/* Secties op volgorde van hun vroegste fase (Nick, 2 nov 2026): machines in fase 1 staan dan bovenaan. */}
                 {[...SECTIES].sort((a, b) => vroegste(a) - vroegste(b)).map((sec) => {
-                  const hier = regels.map((r, i) => [r, i] as const).filter(([r]) => sec.bij(r.soort))
+                  const hier = regels.map((r, i) => [r, i] as const).filter(([r]) => !r.doorKlant && sec.bij(r.soort))
                   const som = hier.reduce((t, [r]) => {
                     const x = [...u.regels].find((y) => y.id === r.id)
                     return t + (x ? (metBtw ? plusProcent(x.verkoop, r.btw) : x.verkoop) : 0)
@@ -489,28 +528,15 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                       <tr key={r.id} className="border-t border-lijn align-top">
                         <td className="py-1.5 pr-1.5">
                           <input aria-label="Omschrijving" list="catalogus-namen" value={r.omschrijving} onChange={(e) => zetOmschrijving(i, e.target.value)} placeholder="bijv. klinkers" className={`${klein} w-full`} />
-                          <label className="mt-1 flex items-center gap-1.5 text-[12px] text-gedempt">
-                            <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
-                          </label>
+                          <span className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-gedempt">
+                            <label className="flex items-center gap-1.5">
+                              <input type="checkbox" checked={r.optioneel} onChange={(e) => zet(i, { optioneel: e.target.checked })} /> optioneel
+                            </label>
+                            <button type="button" onClick={() => zet(i, { doorKlant: true, optioneel: false })} className="text-accent-tekst">→ door klant</button>
+                          </span>
                         </td>
                         <td className="py-1.5 pr-1.5">
-                          {/* Fase 1 tot 6 (Nick, 30 okt 2026): een nummer kiezen; een fase uit de schatting houdt zijn volle naam. */}
-                          <select
-                            aria-label="Fase"
-                            value={faseNr(r.groep)}
-                            onChange={(e) => {
-                              const n = e.target.value
-                              const naam = n ? (fasen.find((f) => faseNr(f.naam) === n)?.naam ?? `Fase ${n}`) : ""
-                              zet(i, { groep: naam })
-                              if (naam && !fasen.some((f) => f.naam === naam)) setFasen([...fasen, { naam, uren: 0 }].sort((x, y) => faseNr(x.naam).localeCompare(faseNr(y.naam))))
-                            }}
-                            className={`${klein} w-[52px] bg-grond`}
-                          >
-                            <option value="">–</option>
-                            {["1", "2", "3", "4", "5", "6"].map((n) => (
-                              <option key={n} value={n}>{n}</option>
-                            ))}
-                          </select>
+                          {faseKeuze(r, i)}
                         </td>
                         <td className="py-1.5 pr-1.5">
                           <select aria-label="Soort" value={r.soort} onChange={(e) => { const s = e.target.value as Soort; zet(i, { soort: s, opslag: toonDecimaal(SOORTEN[s].opslag, 2), btw: SOORTEN[s].btw }) }} className={`${klein} w-[104px] bg-grond`}>
@@ -561,9 +587,7 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                         </td>
                         <td className="py-1.5 whitespace-nowrap">
                           <button type="button" aria-label="Prijs onthouden in de catalogus" title="Onthoud in catalogus" onClick={() => onthoud(i)} disabled={!r.omschrijving.trim()} className={`size-[22px] hover:opacity-100 disabled:opacity-20 ${r.catalogusId ? "text-let opacity-100" : "text-gedempt"}`}>★</button>
-                          <button type="button" aria-label="Regel omhoog" disabled={i === 0} onClick={() => schuif(i, -1)} className="size-[22px] opacity-60 hover:opacity-100 disabled:opacity-20">↑</button>
-                          <button type="button" aria-label="Regel omlaag" disabled={i === regels.length - 1} onClick={() => schuif(i, 1)} className="size-[22px] opacity-60 hover:opacity-100 disabled:opacity-20">↓</button>
-                          <button type="button" aria-label="Regel weghalen" onClick={() => setRegels(regels.length > 1 ? regels.filter((_, j) => j !== i) : [leeg()])} className="size-[22px] opacity-60 hover:opacity-100">×</button>
+                          {knoppen(i)}
                         </td>
                       </tr>
                     )
@@ -571,6 +595,32 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 </tbody>
                   )
                 })}
+                {/* Door klant uit te voeren (Nick, 6 nov 2026): staat op de offerte, zonder prijs en niet in het totaal. */}
+                <tbody>
+                  <tr className="border-t-2 border-inkt">
+                    <th colSpan={10} scope="rowgroup" className="pt-4 pb-1 text-left text-[14px] font-semibold">
+                      Door klant uit te voeren <span className="font-normal text-gedempt">· op de offerte, niet in de prijs</span>
+                    </th>
+                    <td />
+                    <td className="pt-4 pb-1">
+                      <button type="button" onClick={() => setRegels([...regels, { ...naarInvul(nieuweRegel("overig", { hoeveelheid: 1000 })), doorKlant: true }])} className="text-[12px] text-accent-tekst">+ Taak</button>
+                    </td>
+                  </tr>
+                  {klantRegels.map(([r, i]) => (
+                    <tr key={r.id} className="border-t border-lijn align-top">
+                      <td className="py-1.5 pr-1.5">
+                        <input aria-label="Omschrijving" value={r.omschrijving} onChange={(e) => zet(i, { omschrijving: e.target.value })} placeholder="bijv. oude tegels eruit halen" className={`${klein} w-full`} />
+                        <button type="button" onClick={() => zet(i, { doorKlant: false })} className="mt-1 text-[12px] text-accent-tekst">← terug in de prijs</button>
+                      </td>
+                      <td className="py-1.5 pr-1.5">{faseKeuze(r, i)}</td>
+                      <td />
+                      <td className="py-1.5 pr-1.5"><input aria-label="Aantal" inputMode="decimal" value={r.hoeveelheid} onChange={(e) => zet(i, { hoeveelheid: e.target.value })} className={`${klein} w-[56px]`} /></td>
+                      <td className="py-1.5 pr-1.5"><input aria-label="Eenheid" list="eenheden" value={r.eenheid} onChange={(e) => zet(i, { eenheid: e.target.value.slice(0, 12) })} className={`${klein} w-[48px]`} /></td>
+                      <td colSpan={6} className="py-1.5 pr-2 text-right text-[12px] text-gedempt">door de klant</td>
+                      <td className="py-1.5 whitespace-nowrap">{knoppen(i)}</td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
               <datalist id="eenheden">
                 {EENHEDEN.map((e) => (
@@ -748,6 +798,14 @@ export function PrijsRekenaar({ klanten = [], catalogus = [], begin }: { klanten
                 </li>
               ))}
             </ol>
+          </>
+        )}
+        {u.doorKlant.length > 0 && (
+          <>
+            <h2 className="m-0 mt-8 text-[8pt] font-semibold tracking-[.14em] text-gedempt uppercase">Door de klant zelf uit te voeren, niet in de prijs</h2>
+            <ul className="m-0 mt-2 list-none border-t-2 border-[#202020] p-0">
+              {u.doorKlant.map((r) => <li key={r.id} className="border-b border-lijn py-1.5">{r.omschrijving || "Werk"}{r.hoeveelheid !== 1000 || r.eenheid !== "st" ? ` · ${toonDecimaal(r.hoeveelheid, 3)} ${r.eenheid}` : ""}</li>)}
+            </ul>
           </>
         )}
         {u.optioneel.length > 0 && (

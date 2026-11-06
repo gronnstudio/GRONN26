@@ -90,6 +90,21 @@ export default async function OffertePagina({ params, searchParams }: { params: 
 
       {o.optioneel.length > 0 && <Posten titel="Optioneel, niet in het totaal" posten={o.optioneel.map(({ groep: _, ...p }) => p)} />}
 
+      {/* Wat de klant zelf doet (Nick, 6 nov 2026): op de offerte, zonder bedrag en niet in het totaal. */}
+      {o.doorKlant?.length ? (
+        <section data-blok className="mt-10">
+          <h2 className="lbl m-0 text-gedempt">Door jou zelf uit te voeren, niet in de prijs</h2>
+          <ul className="m-0 mt-3 list-none border-t-2 border-inkt p-0 text-[15px]">
+            {o.doorKlant.map((p, i) => (
+              <li key={i} className="flex justify-between gap-4 border-b border-lijn py-2.5">
+                <span>{p.omschrijving}</span>
+                {p.hoeveelheid && !/^1\s*st$/.test(p.hoeveelheid) && <span className="shrink-0 tabular-nums text-gedempt">{p.hoeveelheid}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       {!spec && o.slot && <p className="m-0 mt-10 max-w-[72ch] whitespace-pre-line text-[16px] leading-[1.6]">{o.slot}</p>}
 
       <PdfKnoppen naam={`${spec ? "Specificatie" : "Offerte"} ${toonNummer(o.nummer)} GRØNN Studio`} />

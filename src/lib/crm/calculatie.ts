@@ -60,6 +60,8 @@ export type Regel = {
   groep?: string
   /** Optioneel werk: los geprijsd, niet in het totaal. */
   optioneel?: boolean
+  /** Door de klant zelf uit te voeren (Nick, 6 nov 2026): staat op de offerte, zonder prijs en niet in het totaal. */
+  doorKlant?: boolean
   /** Uit de catalogus; de prijs is bij het invoegen gekopieerd, dus een oude calculatie verandert niet mee. */
   catalogusId?: string
   /** Uit de meetstaat van deze zone (Zone.id): "Zet in calculatie" vervangt zulke regels. */
@@ -92,6 +94,8 @@ export type BtwRegel = { tarief: Bp; grondslag: Centen; btw: Centen }
 export type Uitkomst = {
   regels: RegelUitkomst[]
   optioneel: RegelUitkomst[]
+  /** Wat de klant zelf doet: geen deel van de prijs. */
+  doorKlant: RegelUitkomst[]
   arbeid: Centen
   materiaal: Centen
   onvoorzien: Centen
@@ -120,8 +124,9 @@ export function rekenRegel(r: Regel): RegelUitkomst {
 
 export function reken(invoer: Invoer, arbeidBtw: Bp = STANDAARD.arbeidBtw): Uitkomst {
   const alle = invoer.regels.map(rekenRegel)
-  const regels = alle.filter((r) => !r.optioneel)
-  const optioneel = alle.filter((r) => r.optioneel)
+  const regels = alle.filter((r) => !r.optioneel && !r.doorKlant)
+  const optioneel = alle.filter((r) => r.optioneel && !r.doorKlant)
+  const doorKlant = alle.filter((r) => r.doorKlant)
   const arbeid = maal(invoer.uurtarief, invoer.uren)
   const materiaal = regels.reduce((t, r) => t + r.verkoop, 0)
   const kostprijs = regels.reduce((t, r) => t + r.kostprijs, 0)
@@ -158,6 +163,7 @@ export function reken(invoer: Invoer, arbeidBtw: Bp = STANDAARD.arbeidBtw): Uitk
   return {
     regels,
     optioneel,
+    doorKlant,
     arbeid,
     materiaal,
     onvoorzien,
@@ -230,6 +236,7 @@ export function schoonRegel(r: Partial<Regel> & Record<string, unknown>): Regel 
     korting: geheel(r.korting, 0, 0, 10000) || undefined,
     groep: r.groep ? String(r.groep).slice(0, 60) : undefined,
     optioneel: r.optioneel === true || undefined,
+    doorKlant: r.doorKlant === true || undefined,
     catalogusId: typeof r.catalogusId === "string" ? r.catalogusId.slice(0, 64) : undefined,
     meetstaat: typeof r.meetstaat === "string" && r.meetstaat ? r.meetstaat.slice(0, 64) : undefined,
     schatting: r.schatting === true || undefined,
