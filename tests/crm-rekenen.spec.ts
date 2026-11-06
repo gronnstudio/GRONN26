@@ -116,6 +116,18 @@ test.describe("calculatie", () => {
     expect(met.optioneel).toHaveLength(1)
   })
 
+  test("door klant: op de lijst, niet in de prijs, ook niet als optie; blijft bewaard", () => {
+    const zelf = { ...planten, id: "k", doorKlant: true, optioneel: true }
+    const met = reken({ uren: 0, uurtarief: 5000, regels: [klinkers, zelf], onvoorzien: 0, korting: 0 })
+    const zonder = reken({ uren: 0, uurtarief: 5000, regels: [klinkers], onvoorzien: 0, korting: 0 })
+    expect(met.totaal).toBe(zonder.totaal)
+    expect(met.kostprijs).toBe(zonder.kostprijs)
+    expect(met.optioneel).toHaveLength(0)
+    expect(met.doorKlant.map((r) => r.id)).toEqual(["k"])
+    expect(schoonRegel({ ...zelf }).doorKlant).toBe(true)
+    expect(schoonRegel({ ...klinkers, doorKlant: "ja" } as never).doorKlant).toBeUndefined()
+  })
+
   test("na betaling wegzetten en tekort", () => {
     const u = reken({ uren: 8000, uurtarief: 5000, regels: [klinkers], onvoorzien: 0, korting: 0 })
     const w = wegzetten(u)

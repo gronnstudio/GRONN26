@@ -680,3 +680,24 @@ test("offertes en facturen: eigen lijsten met statusfilter en CSV, alleen voor d
   await page.goto("/dashboard/offertes")
   await expect(page.getByRole("heading", { level: 1, name: "Offertes" })).toBeVisible()
 })
+
+test("rekenblad: regel naar door klant en terug, verschuiven binnen een deel", async ({ page }) => {
+  await log(page)
+  await page.goto("/dashboard/prijs")
+  const oms = page.locator("input[aria-label=\"Omschrijving\"]") // met catalogus is het een combobox
+  const waarden = async () => oms.evaluateAll((l) => l.map((x) => (x as HTMLInputElement).value))
+  await oms.first().fill("Tegels eruit halen")
+  await page.getByRole("button", { name: "+ Materiaal" }).click()
+  await oms.nth(1).fill("Zand")
+  await page.getByRole("button", { name: "→ door klant" }).first().click()
+  await expect(page.getByRole("button", { name: "← terug in de prijs" })).toHaveCount(1)
+  expect(await waarden()).toEqual(["Zand", "Tegels eruit halen"])
+  // Omhoog springt naar de vorige regel van hetzelfde deel, ook als er een klantregel tussen zit.
+  await page.getByRole("button", { name: "+ Materiaal" }).click()
+  await oms.nth(1).fill("Grind")
+  await page.getByRole("button", { name: "Regel omhoog" }).nth(1).click()
+  expect(await waarden()).toEqual(["Grind", "Zand", "Tegels eruit halen"])
+  await expect(page.getByRole("button", { name: "Regel omlaag" }).nth(1)).toBeDisabled()
+  await page.getByRole("button", { name: "← terug in de prijs" }).click()
+  expect(await waarden()).toEqual(["Tegels eruit halen", "Grind", "Zand"])
+})
