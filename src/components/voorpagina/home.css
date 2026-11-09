@@ -1,0 +1,94 @@
+/* De voorpagina (9 nov 2026). Raster, ruimte en type komen uit globals.css
+   (raster, --r-*, t-*); hier alleen de compositie per sectie. */
+
+/* ── Opening ─────────────────────────────────────────────────────────── */
+.opening { padding-top: 20px; position: relative; z-index: 1; }
+.opening-balk { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; }
+.opening-logo { display: inline-flex; align-items: center; min-height: var(--raak); }
+.opening-logo img { height: 18px; width: auto; }
+.opening-label { margin-top: clamp(48px, 9vh, 96px); color: var(--gedempt); }
+.opening-kop { margin: 18px 0 0; max-width: 12ch; }
+.opening-onder { margin-top: var(--r-m); row-gap: var(--r-m); align-items: end; }
+.opening-tekst { grid-column: 1 / -1; display: grid; gap: 28px; margin-top: var(--r-m); }
+@media (min-width: 1280px) { .opening-tekst { margin-top: 0; } }
+.opening-tekst .t-lead { max-width: 26ch; color: var(--inkt); }
+.opening-acties { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
+/* het beeld loopt tot aan de schermrand en steekt in de crème sectie eronder */
+.opening-beeld { grid-column: 1 / -1; display: flex; flex-direction: column-reverse; margin-inline: calc(-1 * var(--goot)); margin-bottom: calc(-1 * var(--r-l)); }
+.opening-beeld figcaption { padding: 0 var(--goot) 10px; }
+@media (min-width: 768px) {
+  .opening-beeld { grid-column: 7 / -1; margin-inline: 0 calc(-1 * var(--rand)); }
+  .opening-beeld figcaption { padding: 0 var(--rand) 10px 0; }
+}
+@media (min-width: 1024px) {
+  .opening-beeld { grid-column: 6 / -1; }
+}
+/* Vanaf 1280px staan zin en knop naast de laatste kopregels, zodat de knop
+   boven de vouw staat; het beeld begint daaronder over de volle rechterkant. */
+@media (min-width: 1280px) {
+  .opening-kop-raster { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--kolomgoot); }
+  .opening-kop-raster > h1 { grid-column: 1 / -1; grid-row: 1; }
+  .opening-kop-raster > .opening-tekst { grid-column: 9 / -1; grid-row: 1; align-self: end; padding-bottom: 6px; }
+  .opening-tekst .t-lead { font-size: 21px; line-height: 1.4; max-width: 30ch; }
+  .opening-onder { margin-top: 48px; }
+  .opening-beeld { grid-column: 4 / -1; }
+}
+
+/* ── 01 Studio ───────────────────────────────────────────────────────── */
+.studio { padding-top: calc(var(--r-l) * 2); }
+.studio-raster { row-gap: var(--r-m); align-items: start; }
+.studio-tekst { grid-column: 1 / -1; display: grid; gap: 28px; justify-items: start; }
+.studio-tekst h2 { max-width: 16ch; }
+.studio-lead { margin: 0; max-width: 30ch; }
+.studio-beeld { grid-column: 2 / -1; }
+.studio-punten { list-style: none; margin: var(--r-l) 0 0; padding: 0; display: grid; gap: 32px; }
+.studio-punten li { display: grid; gap: 10px; padding-top: 18px; border-top: 1px solid var(--lijn); }
+.studio-punten li p { max-width: 34ch; }
+@media (min-width: 768px) {
+  .studio-tekst { grid-column: 1 / span 8; }
+  .studio-beeld { grid-column: 9 / -1; margin-top: clamp(80px, 12vw, 200px); }
+  .studio-punten { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--kolomgoot); }
+}
+
+/* ── 03 Werk ─────────────────────────────────────────────────────────── */
+.werk-kopblok { grid-column: 1 / -1; }
+.werk-kop { margin: 14px 0 0; max-width: 18ch; }
+.werk-reeks { row-gap: var(--r-m); align-items: start; }
+.werk-ervoor { grid-column: 1 / span 2; }
+.werk-tijdens { grid-column: 3 / span 2; margin-top: 72px; }
+.werk-nu { grid-column: 1 / -1; }
+.werk-spec { grid-column: 1 / -1; }
+/* desktop: links het staande ervoor-beeld over twee rijen, rechts kop en nu;
+   daaronder tijdens (verschoven) en de maten */
+@media (min-width: 768px) {
+  .werk-kopblok { grid-column: 6 / -1; grid-row: 1; }
+  .werk-ervoor { grid-column: 1 / span 4; grid-row: 1 / span 2; }
+  .werk-nu { grid-column: 6 / -1; grid-row: 2; }
+  .werk-tijdens { grid-column: 2 / span 3; grid-row: 3; margin-top: var(--r-m); }
+  .werk-spec { grid-column: 7 / -1; grid-row: 3; align-self: end; }
+}
+.werk-volgend {
+  display: grid; grid-template-columns: 96px minmax(0, 1fr); grid-template-rows: auto auto; gap: 6px 20px; align-items: center;
+  margin-top: var(--r-l); padding-block: 24px; border-block: 1px solid var(--lijn); color: inherit; text-decoration: none;
+}
+.werk-volgend-beeld { grid-row: 1 / span 2; aspect-ratio: 1; }
+.werk-volgend .t-h3 { transition: translate .5s cubic-bezier(.22,1,.36,1); }
+.werk-volgend-pijl { display: none; }
+.werk-volgend:hover .t-h3, .werk-volgend:focus-visible .t-h3 { translate: 8px 0; }
+.werk-volgend:focus-visible { outline: 2px solid var(--inkt); outline-offset: 4px; }
+@media (min-width: 768px) {
+  .werk-volgend { grid-template-columns: 160px minmax(0, 1fr) 40px; column-gap: 32px; }
+  .werk-volgend-pijl { display: block; grid-column: 3; grid-row: 1 / span 2; font-size: 28px; color: var(--gedempt); }
+  .werk-volgend:hover .werk-volgend-pijl { color: var(--oranje); }
+}
+
+/* ── 04 Werkwijze en slot ────────────────────────────────────────────── */
+.begin-kop { margin: 0 0 var(--r-m); }
+.slot { padding-bottom: var(--r-m); }
+.slot-binnen { display: grid; gap: var(--r-m); padding-top: var(--r-m); border-top: 1px solid var(--inkt); }
+.slot-binnen h2 { max-width: 12ch; }
+.slot-onder { display: grid; gap: 28px; }
+.slot-acties { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
+@media (min-width: 1024px) {
+  .slot-onder { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+}

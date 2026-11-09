@@ -14,7 +14,7 @@ lopen via Mollie, en de enige opslag is Vercel Blob (privé).
 
 | Pad | Wat | Bron |
 | --- | --- | --- |
-| `/` | voorpagina: opening (waterval, kop, één zin, één knop), wie Nick is, wat ik doe (Vijvers, Tuinen, Borderpakketten), uitgelicht werk, vragen | `src/components/voorpagina/` |
+| `/` | voorpagina (9 nov 2026): opening, 01 Studio, 02 Wat ik maak (index), 03 Werk, 04 Werkwijze, slot. Zie [../website/BLUEPRINT.md](../website/BLUEPRINT.md) | `src/components/voorpagina/` |
 | `/vijvers`, `/tuinen` | de twee diensten, even zwaar (positionering 3 okt 2026) | `src/lib/data/services.ts`, `pricing.ts` |
 | `/tuinen/borderpakketten` | 8 pakketten + op maat, bestellen en betalen via Mollie | `borderpakketten.ts`, `src/lib/mollie.ts` |
 | `/tuinen/cadeaubon`, `/shop` | cadeaubon met eigen bedrag, de winkel | `cadeaubon.ts` |
@@ -54,25 +54,27 @@ component.
 
 | Token | Licht | Donker | Gebruik |
 | --- | --- | --- | --- |
-| `--grond` | #f6f2e9 warm zand | #221c17 warm aardebruin | achtergrond |
-| `--inkt` | #2b2a24 | #f0e9dc | tekst |
-| `--oranje` | #ff5b04 | #ff5b04 | het ene accent (uit het logo, 18 okt 2026) |
+| `--grond` | #efeeea crème | #1a1a18 antraciet | achtergrond |
+| `--inkt` | #202020 | #efeeea | tekst |
+| `--oranje` | #ff5b04 | #ff5b04 | het ene accent |
 | `--oranje-tekst` | #b84000 | #ff5b04 | oranje als tekst op licht |
-| `--bos` | #2a2019 | | de voet, warm aardebruin |
+| `--bos` | #141413 | | de voet, diep antraciet |
 
+Sinds 9 nov 2026 crème en antraciet (Master Brief); zand en bruin van 11 okt zijn weg.
+Typografie, ruimte en beweging: [../website/ART-DIRECTION.md](../website/ART-DIRECTION.md).
 Geen groen of salie als vlak (Nick, 10–11 okt 2026). Maten staan ook als
 variabelen: `--knop` 48, `--knop-klein` 36, `--knop-groot` 64, `--raak` 44
-(minimale tikhoogte), `--foto-hoek` 16, `--breedte` 1440 met `--goot`.
+(minimale tikhoogte), `--foto-hoek` 4, `--breedte` 1440 met `--goot`.
 Letters: Syne (koppen), Montserrat (tekst), IBM Plex in Blueprint.
 
 ## Navigatie
 
-Eén glazen pil onderaan, op elk scherm (18 okt 2026): Home (kiemplantje),
+Eén dichte antraciet pil onderaan (glas tot 9 nov 2026), op elk scherm (18 okt 2026): Home (kiemplantje),
 Werk (schop), Studio (poppetje, ook actief op `/techniek`), Shop (shoptas) en
 een menuknop met vier stippen. Tijdens het lezen verschijnt Omhoog (oranje)
 als laatste in de pil. Het menu bevat alleen wat niet al in dock of voet staat:
 Kennismaken (telefoon en tablet) en Weergave. Op desktop staat bovenaan een
-brede balk die bij scrollen een pil wordt. Een komeet loopt om de pil.
+brede balk die bij scrollen een pil wordt. Een komeet loopt één keer om de pil bij binnenkomst; iconen bewegen alleen bij aanwijzen.
 Zoeken: ⌘K / Ctrl K, `/`, en `g` + letter (`src/components/zoek.tsx`,
 `src/lib/zoek-index.ts`).
 

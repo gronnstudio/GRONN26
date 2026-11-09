@@ -1,5 +1,25 @@
 # Componenten
 
+## Publieke site: het ontwerpsysteem (9 nov 2026)
+
+`src/components/ontwerp/` (opmaak in `ontwerp.css`, richting in [../website/ART-DIRECTION.md](../website/ART-DIRECTION.md)):
+
+| Component / klasse | Doet | Gebruik |
+| --- | --- | --- |
+| `Markering` | `01 — Naam` op een haarlijn | begin van elke sectie |
+| `Maatlijn` | `\|—— maat ——\|` | alleen met een echte maat uit de data |
+| `Figuur` | foto + mono bijschrift en code | elk beeld van werk; `vorm` zet de verhouding |
+| `Regels` | kopregels die één voor één binnenkomen | alleen de h1 van een opening |
+| `LijnLink` | tekstlink met aangroeiende lijn en pijl | secundaire acties |
+| `.index` | grote woorden met meewisselend beeld | keuzelijsten (diensten) |
+| `.spec` | maten als op een tekening | projectdata |
+| `.stappen` | stappen op één lijn | werkwijze |
+| `.vlak-diep` + `.donker` | antraciet sectie | wisselen met crème |
+| `.opkomst` | blok komt op bij scrollen | koppen en beelden, niet op alles |
+| `t-display` … `t-body`, `meta`, `bijschrift`, `raster` | type en raster (globals.css) | nooit een eigen maat |
+
+## Systeem
+
 Het systeem (`src/components/crm/`):
 
 | Component | Doet |
