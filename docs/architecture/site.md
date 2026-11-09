@@ -14,7 +14,7 @@ lopen via Mollie, en de enige opslag is Vercel Blob (privé).
 
 | Pad | Wat | Bron |
 | --- | --- | --- |
-| `/` | voorpagina: opening (waterval, kop, één zin, één knop), wie Nick is, wat ik doe (Vijvers, Tuinen, Borderpakketten), uitgelicht werk, vragen | `src/components/voorpagina/` |
+| `/` | voorpagina (Klassiek = Veldboek, 9 nov 2026): opening, index, Observatie 001, dossiers, werkwijze, slot; zie [website/BLUEPRINT.md](../website/BLUEPRINT.md) | `src/components/veldboek/` |
 | `/vijvers`, `/tuinen` | de twee diensten, even zwaar (positionering 3 okt 2026) | `src/lib/data/services.ts`, `pricing.ts` |
 | `/tuinen/borderpakketten` | 8 pakketten + op maat, bestellen en betalen via Mollie | `borderpakketten.ts`, `src/lib/mollie.ts` |
 | `/tuinen/cadeaubon`, `/shop` | cadeaubon met eigen bedrag, de winkel | `cadeaubon.ts` |

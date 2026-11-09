@@ -19,18 +19,23 @@
      zand voor vlakken en kaarten. Geen bosgroen of salie (eigenaar, 11 okt
      2026: "ik hou niet van dat bosgroen, salie"): de diepe kleur is aarde,
      de bijkleuren zijn klei en donker zand. */
-  --grond: #f6f2e9;
-  --inkt: #2b2a24;
-  --gedempt: #615a4c;
-  --lijn: #ddd2c0;
-  --vlak: #efe8dc;
-  --veld: #e9e0d0;
+  /* Veldboek (9 nov 2026, Website Master Brief): papier en plaat. Licht is
+     warm crème, donker is antraciet; groen komt alleen uit foto's, oranje
+     blijft het ene accent. Zie docs/website/ART-DIRECTION.md. */
+  --grond: #f4efe6;
+  --inkt: #1f1e1b;
+  --gedempt: #5b554a;
+  --lijn: #d9d1c3;
+  --vlak: #ebe4d7;
+  --veld: #e6dece;
+  --plaat: #1b1b19;
+  --op-plaat: #eee9df;
   --voorbeeld: #8a8272;
   --oranje: #ff5b04;
   /* kleine oranje tekst op Licht: #FF5B04 haalde 2,8:1 op het zand, #B84000
      5,0:1 (eigenaar, 22 okt 2026). Vlakken en knoppen blijven #FF5B04. */
   --oranje-tekst: #b84000;
-  --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
+  --bos: #1b1b19; /* de voet: antraciet (Veldboek, 9 nov 2026; was warm aardebruin) */
   --mos: #6f6553;
   --salie: #cbbfa8;
   --goot: clamp(20px, 4vw, 56px);
@@ -58,18 +63,19 @@
      variabelen"). Gelijk aan de kaarten. Snijdt een kader de foto bij
      (parallax, schaal bij hover), dan draagt dat kader deze hoek. Nooit een
      eigen maat; tests/basis.spec.ts (fotohoek) bewaakt het. */
-  --foto-hoek: 16px;
+  --foto-hoek: 2px; /* Veldboek: rechte, architectonische hoeken (was 16px) */
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
   /* Warm aardebruin (eigenaar koos "Brown", 11 okt 2026): bruin in plaats
      van grijs, hoogte als lichter bruin (veld, dan vlak), roomwitte tekst. */
-  --grond: #221c17;
-  --inkt: #f0e9dc;
-  --gedempt: #c8bca8;
-  --lijn: #4a3f33;
-  --vlak: #372e25;
-  --veld: #2e261f;
+  --grond: #181816;
+  --inkt: #eee9df;
+  --gedempt: #b3ada1;
+  --lijn: #383732;
+  --vlak: #23231f;
+  --veld: #1f1f1c;
+  --plaat: #0f0f0e;
   --mos: #b7a98f;
   --voorbeeld: #9a8e7a;
   /* Het oranje blijft op donker even vol als op licht (eigenaar, 11 okt
@@ -82,8 +88,8 @@ html.donker, .donker {
    tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #3a2e25;
-  --gedempt: var(--salie);
+  --vlak: #262624;
+  --gedempt: #b3ada1;
   --lijn: rgba(239, 238, 234, 0.2);
 }
 html.contrast { --gedempt: var(--inkt); --lijn: currentColor; }
@@ -102,6 +108,9 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
   --color-oranje: var(--oranje);
   --color-oranje-tekst: var(--oranje-tekst);
   --color-bos: var(--bos);
+  --color-plaat: var(--plaat);
+  --color-op-plaat: var(--op-plaat);
+  --font-annotatie: var(--font-geist-mono), ui-monospace, monospace;
   --color-mos: var(--mos);
   --color-salie: var(--salie);
   --color-antraciet: #202020;
