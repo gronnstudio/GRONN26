@@ -1,11 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { Verder } from "@/components/wereld/verder"
-import { Atelier } from "@/components/voorpagina/atelier"
-import { Uitgelicht } from "@/components/voorpagina/uitgelicht"
-import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
-import "@/components/voorpagina/voorpagina.css"
+import { Aanvraag } from "@/components/voorpagina/aanvraag"
+import "@/components/voorpagina/aanvraag.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
 import "@/components/blad/plan.css"
@@ -17,8 +14,9 @@ import { studioSchema } from "@/lib/schema"
 // Twee voorpagina's, één per layout (Weergave → Layout, 25 okt 2026); de
 // andere staat uit via html.plan in globals.css.
 //
-// Klassiek, versimpeld (24 okt 2026): opening, wie ik ben, wat ik doe, één
-// echt project en Kennismaken.
+// Klassiek als aanvraagpagina (11 nov 2026, "ik wil in maart een volle
+// agenda"): opening met de knop, vier ingangen per probleem met prijs, echt
+// werk met de review, drie stappen naar maart, Nick, korte vragen en het slot.
 //
 // Tuinplan, blad B-01, de plattegrond (24 okt 2026): bovenaan de kop van de
 // tekening, dan de tuin van boven met legenda, de toelichting in genummerde
@@ -50,18 +48,7 @@ export default function Voorpagina() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema()).replace(/</g, "\\u003c") }} />
 
       <div className="alleen-klassiek">
-        <div className="vp-wortel">
-          <Atelier />
-          <WatIkDoe />
-          <Uitgelicht />
-        </div>
-        <Verder
-          voor={{ nl: "Zullen we", en: "Shall we" }}
-          nadruk={{ nl: "kennismaken", en: "meet" }}
-          na="?"
-          href="/kennismaken"
-          label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
-        />
+        <Aanvraag />
       </div>
 
       <div className="alleen-plan">
