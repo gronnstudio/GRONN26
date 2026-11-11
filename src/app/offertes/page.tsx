@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { OfferteMaker } from "@/components/offertes/maker"
+import { postadres } from "@/lib/postadres"
 
 // gronn.studio/offertes: offertes opstellen in de huisstijl en als PDF printen
 // (eigenaar, 6 okt 2026). Alleen voor de eigenaar, achter Google-login (zie
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default function Offertes() {
   return (
     <div data-links>
-      <OfferteMaker />
+      <OfferteMaker adres={postadres().filter(Boolean).join(", ")} />
     </div>
   )
 }

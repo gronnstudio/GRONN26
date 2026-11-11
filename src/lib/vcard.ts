@@ -25,7 +25,7 @@ export function bouwVcard(): string {
   const a = b.address
   if (a) {
     regels.push(
-      `ADR;TYPE=WORK:;;${esc(a.street)};${esc(a.city)};${esc(a.province)};${esc(a.postalCode)};${esc(a.country)}`
+      `ADR;TYPE=WORK:;;;${esc(a.city)};${esc(a.province)};;${esc(a.country)}`
     )
   }
   regels.push("END:VCARD")

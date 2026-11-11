@@ -53,6 +53,7 @@ Stand: 29 okt 2026.
 | Datum | Besluit | Waarom |
 | --- | --- | --- |
 | 9 okt 2026 | **gronn.studio draait op deze repo** (Vercel-project `gronn26`). De vorige site (`gronn-studio`) serveert alleen nog links.gronn.studio. | Nieuwe opbouw. |
+| 11 nov 2026 | **Geen straat, huisnummer of postcode op de site of in deze repo.** Overal "Stein en omgeving"; postadres alleen op factuur, offerte en werkbon, uit de Vercel-variabele `FACTUUR_ADRES`. `tests/geen-adres.spec.ts` bewaakt het. | Veiligheid (Nick: "haal openlijke adresgegevens van de website, ivm stalking"). |
 | 11 okt 2026 | **Palet aards, zonder groen:** licht = warm zand met donkere aarde, donker = warm aardebruin; oranje op volle sterkte. Geen bosgroen of salie. | Nick houdt van de Grova-look; "hou niet van dat bosgroen, salie". |
 | 18 okt 2026 | **Eén oranje: #FF5B04** overal, uit het logo. Oranje als tekst op licht: #B84000 (22 okt). | Herkenning; contrast. |
 | 18 okt 2026 | **Navigatie:** één glazen pil onderaan (Home, Werk, Studio, Shop, menu), Omhoog als laatste tijdens het lezen; op desktop ook een brede balk bovenaan. Shop = shoptas (22 okt). Mand, tuinbroek en kruiwagen zijn geprobeerd en afgewezen. | Zie [architecture/site.md](architecture/site.md#navigatie). |

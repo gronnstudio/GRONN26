@@ -58,9 +58,7 @@ export function JuridischDocument({ doc, titel }: { doc: LegalDocument; titel: T
             <p className="m-0">
               {BUSINESS.name}
               <br />
-              {a.street}
-              <br />
-              {a.postalCode} {a.city}
+              {a.area}
             </p>
             <p className="m-0">
               <a href={BUSINESS.emailHref}>{BUSINESS.email}</a>

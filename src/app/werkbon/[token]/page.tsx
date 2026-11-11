@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HandtekeningVeld } from "@/components/crm/handtekening-veld"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
+import { postadres } from "@/lib/postadres"
 import { BUSINESS } from "@/lib/business"
 import { leesWerkbon } from "@/lib/beheer/werkbon"
 import { teken } from "./acties"
@@ -85,7 +86,7 @@ export default async function WerkbonPagina({ params }: { params: Promise<{ toke
         <PdfKnoppen naam={`Werkbon ${toonNummer(w.nummer)} GRØNN Studio`} />
 
         <footer className="mt-12 border-t border-lijn pt-5 text-[13px] leading-[1.6] text-gedempt">
-          {BUSINESS.name} · {BUSINESS.address.street}, {BUSINESS.address.postalCode} {BUSINESS.address.city} · KvK {BUSINESS.kvk} · {BUSINESS.phone} · {BUSINESS.email}
+          {BUSINESS.name} · {postadres().filter(Boolean).join(", ")} · KvK {BUSINESS.kvk} · {BUSINESS.phone} · {BUSINESS.email}
         </footer>
       </div>
     </article>

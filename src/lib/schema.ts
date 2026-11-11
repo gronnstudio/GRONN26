@@ -24,8 +24,6 @@ export function studioSchema() {
     telephone: BUSINESS.phone,
     address: {
       "@type": "PostalAddress",
-      streetAddress: BUSINESS.address.street,
-      postalCode: BUSINESS.address.postalCode,
       addressLocality: BUSINESS.address.city,
       addressRegion: BUSINESS.address.province,
       addressCountry: "NL",

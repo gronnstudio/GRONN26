@@ -112,7 +112,7 @@ Drie vragen in één ronde:
 ### Twee correcties die tijdens de review binnenkwamen
 
 - **De postcode sprak zichzelf tegen.** Het veld zei "vier cijfers is
-  genoeg" en toonde `6171 GB` als voorbeeld — cijfers *en* letters.
+  genoeg" en toonde `6171 AB` als voorbeeld — cijfers *en* letters.
   `checkPostcode()` leest alleen `/^(\d{4})/`, dus de instructie klopte
   en het voorbeeld was fout. Nick: *"slordig!"* Terecht.
 - **De ronde hoeken werden een stap ruimer**, gezet in het

@@ -6,7 +6,7 @@ import { DOCUMENTEN } from "@/lib/data/legal"
 // 6 okt 2026), plus de vaste to-do's. De klanten komen live uit het CRM (src/lib/crm/context.ts). Alleen op de server.
 const VAST = `
 # GRØNN Studio
-Eenmanszaak van Nick Peters, Kelderstraat 32, 6171 GB Stein. KvK 42072154, btw NL005473265B04.
+Eenmanszaak van Nick Peters, Stein. KvK 42072154, btw NL005473265B04.
 Vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.
 Facturen en boekhouding in DigiBoox. Geen bedrijfsaansprakelijkheidsverzekering (alleen een fietsverzekering).
 

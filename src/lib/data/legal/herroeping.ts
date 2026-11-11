@@ -29,7 +29,7 @@ import type { LegalDocument } from "./types"
 // elkaar gaan lopen.
 
 /** Waar de klant zijn herroeping heen stuurt — vooraf ingevuld. */
-const AAN = `${BUSINESS.name}, ${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city} · ${BUSINESS.email}`
+const AAN = `${BUSINESS.name}, ${BUSINESS.address.city} · ${BUSINESS.email}`
 
 /** Een schrijfregel. Opmaak, geen tekst. */
 const REGEL = " ".repeat(2) + "_".repeat(46)
@@ -62,7 +62,7 @@ export const HERROEPING: LegalDocument = {
   title: "Modelformulier voor ontbinding / herroeping",
   kind: "formulier",
   audience: "consument",
-  updated: "2026-10-06",
+  updated: "2026-11-11",
   status: "vastgesteld",
   intro:
     "Wilt u de overeenkomst binnen de bedenktijd ontbinden, dan kunt u dit formulier gebruiken. Het hoeft niet — een duidelijke mededeling per e-mail of brief volstaat ook. Wij bevestigen de ontvangst.",
@@ -75,7 +75,7 @@ export const HERROEPING: LegalDocument = {
       heading: "Wat u verder moet weten",
       body: [
         "U heeft veertien dagen bedenktijd, gerekend vanaf de dag nadat de overeenkomst is gesloten. Binnen die termijn kunt u ontbinden zonder opgave van redenen.",
-        `Stuur het formulier of uw mededeling naar ${BUSINESS.email}, of per post naar ${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city}.`,
+        `Stuur het formulier of uw mededeling naar ${BUSINESS.email}. Wilt u het per post sturen, mail dan eerst; u krijgt het postadres per omgaande.`,
         "U bent op tijd wanneer u uw mededeling verstuurt vóórdat de bedenktijd is verstreken.",
         "Heeft u ons uitdrukkelijk gevraagd al binnen de bedenktijd te beginnen en ontbindt u daarna alsnog, dan bent u een evenredig deel verschuldigd van wat op dat moment al is geleverd, afgezet tegen de volledige opdracht. Is het werk op uw verzoek binnen de bedenktijd volledig uitgevoerd, dan vervalt het herroepingsrecht.",
         "Wij betalen binnen veertien dagen na uw mededeling terug wat u heeft betaald, verminderd met dat evenredige deel.",

@@ -7,8 +7,8 @@ export const BUSINESS = {
   owner: { given: "Nick", family: "Peters" },
   tagline: "Designing Living Ecosystems",
   address: {
-    street: "Kelderstraat 32",
-    postalCode: "6171 GB",
+    street: "",
+    postalCode: "",
     city: "Stein",
     province: "Limburg",
     country: "Nederland",

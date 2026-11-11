@@ -206,7 +206,7 @@ test.describe("the footer says who we are without reciting it", () => {
     // Art. 3:15d BW asks for "easily, directly and permanently
     // accessible", which a linked page satisfies; it does not ask for
     // the details to be repeated at the foot of every page.
-    for (const gone of ["Kelderstraat", "+316", "hello@gronn.studio"]) {
+    for (const gone of ["Kelderstr", "+316", "hello@gronn.studio"]) {
       expect(text, `${gone} should have moved to the colophon`).not.toContain(
         gone
       )

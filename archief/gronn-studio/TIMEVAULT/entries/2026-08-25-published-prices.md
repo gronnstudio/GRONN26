@@ -30,7 +30,7 @@ that answers honestly when the answer is no.
 
 ## A small thing that mattered
 
-The postcode field's placeholder showed `6171 GB` while the message said
+The postcode field's placeholder showed `6171 AB` while the message said
 four digits was enough. The owner: *"vier cijfers is genoeg staat er,
 maar het voorbeeld toont ook letters, slordig!"*
 

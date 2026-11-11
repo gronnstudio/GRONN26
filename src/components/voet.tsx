@@ -32,9 +32,7 @@ export function Voet() {
             <p className="mt-4 mb-0 leading-[1.75]">
               {BUSINESS.name}
               <br />
-              {a.street}
-              <br />
-              {a.postalCode} {a.city}
+              {a.area}
             </p>
           </div>
           <div className="min-w-0">

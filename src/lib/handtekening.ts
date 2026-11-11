@@ -78,7 +78,7 @@ export const HANDTEKENING_HTML = `<table cellpadding="0" cellspacing="0" border=
 </td>
 </tr>
 <tr>
-<td colspan="2" style="${TEKST} padding:8px 0 0 0; font-size:11px; line-height:17px; color:${GRIJS};">${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city} · KVK ${BUSINESS.kvk}</td>
+<td colspan="2" style="${TEKST} padding:8px 0 0 0; font-size:11px; line-height:17px; color:${GRIJS};">${BUSINESS.address.area} · KVK ${BUSINESS.kvk}</td>
 </tr>
 </table>`
 
