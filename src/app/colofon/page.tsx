@@ -18,7 +18,7 @@ const PARTICULIER: L = { nl: "Particuliere opdrachtgevers", en: "Private clients
 const a = BUSINESS.address
 const GEGEVENS: [L, React.ReactNode][] = [
   [{ nl: "Handelsnaam", en: "Trade name" }, BUSINESS.name],
-  [{ nl: "Vestigingsadres", en: "Business address" }, <>{a.street}<br />{a.postalCode} {a.city}</>],
+  [{ nl: "Vestigingsplaats", en: "Place of business" }, <>{a.city}, {a.province}<br /><T t={{ nl: "Postadres op aanvraag via e-mail", en: "Postal address on request by e-mail" }} /></>],
   [{ nl: "Land", en: "Country" }, a.country],
   [{ nl: "KvK-nummer", en: "Chamber of Commerce (KvK) number" }, BUSINESS.kvk],
   [{ nl: "Btw-identificatienummer", en: "VAT identification number" }, BUSINESS.btw],

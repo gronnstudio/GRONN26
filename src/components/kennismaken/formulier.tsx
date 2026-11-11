@@ -428,7 +428,7 @@ export function KennismakenFormulier() {
         <a href="/contact.vcf" download="gronn-studio.vcf" className="w-lijnlink self-start text-[15px]"><T t={{ nl: "Visitekaartje bewaren", en: "Save business card" }} /></a>
         <a href={BUSINESS.whatsapp} className="w-lijnlink self-start text-[18px]">WhatsApp</a>
         <p className="lbl mt-4 mb-0 text-gedempt">
-          {BUSINESS.address.street} · {BUSINESS.address.postalCode} {BUSINESS.address.city}
+          {BUSINESS.address.area}
           <br />
           KVK {BUSINESS.kvk}
         </p>

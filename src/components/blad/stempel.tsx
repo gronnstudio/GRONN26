@@ -31,9 +31,7 @@ export function Stempel() {
         <div className="st-vak">
           <p className="st-lbl">Studio</p>
           <p className="m-0">
-            {a.street}
-            <br />
-            {a.postalCode} {a.city}
+            {a.area}
           </p>
         </div>
         <div className="st-vak">

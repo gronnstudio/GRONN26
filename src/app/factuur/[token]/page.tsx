@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { PdfKnoppen } from "@/components/crm/pdf-knoppen"
 import { Qr } from "@/components/crm/qr"
+import { postadres } from "@/lib/postadres"
 import { BUSINESS } from "@/lib/business"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { betaalstand } from "@/lib/crm/klant"
@@ -166,9 +167,9 @@ export default async function FactuurPagina({ params, searchParams }: { params: 
           <p className="m-0">
             <strong>{BUSINESS.name}</strong>
             <br />
-            {BUSINESS.address.street}
+            {postadres()[0]}
             <br />
-            {BUSINESS.address.postalCode} {BUSINESS.address.city}
+            {postadres()[1]}
           </p>
           <p className="m-0">
             <span className="font-semibold text-accent-tekst">Telefoon</span> <a href={BUSINESS.phoneHref}>{BUSINESS.phone}</a>

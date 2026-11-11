@@ -1,15 +1,20 @@
-// Single source of truth for legal/business identity (Dutch website
-// requirements: name, physical address, KVK, contact). Referenced by the
-// footer, menu, contact page and legal pages.
+// Single source of truth for legal/business identity (name, place, KVK,
+// contact). Referenced by the footer, menu, contact page and legal pages.
+//
+// GEEN straat, huisnummer of postcode in deze repo (eigenaar, 11 nov 2026:
+// "haal openlijke adresgegevens van de website, ivm stalking"). De repo is
+// openbaar en dit bestand gaat naar elke browser. Alleen documenten die het
+// wettelijk nodig hebben (factuur, offerte, werkbon) tonen het postadres, uit
+// de omgevingsvariabele FACTUUR_ADRES via src/lib/postadres.ts.
 export const BUSINESS = {
   name: "GRØNN Studio",
   /** De eigenaar, voor het visitekaartje en de vCard (eigenaar, 25 sep 2026). */
   owner: { given: "Nick", family: "Peters" },
   tagline: "Designing Living Ecosystems",
   address: {
-    street: "Kelderstraat 32",
-    postalCode: "6171 GB",
     city: "Stein",
+    /** Wat de site toont waar vroeger het adres stond. */
+    area: "Stein en omgeving",
     province: "Limburg",
     country: "Nederland",
   },

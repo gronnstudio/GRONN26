@@ -37,7 +37,7 @@ const inAny = (n: number, ranges: readonly Range[]) =>
   ranges.some(([from, to]) => n >= from && n <= to)
 
 /**
- * Accepts anything a person actually types: "6171 GB", "6171gb", "6171".
+ * Accepts anything a person actually types: "6171 AB", "6171ab", "6171".
  * Only the numeric part decides — letters are noise for this question.
  */
 export function checkPostcode(input: string): AreaResult {

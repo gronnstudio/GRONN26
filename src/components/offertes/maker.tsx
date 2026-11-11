@@ -52,7 +52,7 @@ const datumNL = (d: string) =>
   d ? new Date(d).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" }) : "";
 const rond = (n: number) => Math.round(n * 100) / 100;
 
-export function OfferteMaker() {
+export function OfferteMaker({ adres }: { adres: string }) {
   const [o, setO] = useState<Offerte>(nieuw);
   const [geladen, setGeladen] = useState(false);
   const [intern, setIntern] = useState(false);
@@ -430,7 +430,7 @@ export function OfferteMaker() {
           )}
           {o.slot && <p className="m-0 mt-8 whitespace-pre-line">{o.slot}</p>}
           <p className="m-0 mt-10 border-t border-[#d9d7d0] pt-4 text-[10px] text-[#5c5b57]">
-            {BUSINESS.name} · {BUSINESS.address.street}, {BUSINESS.address.postalCode} {BUSINESS.address.city} ·{" "}
+            {BUSINESS.name} · {adres} ·{" "}
             {BUSINESS.phone} · {BUSINESS.email} · KvK {BUSINESS.kvk} · Btw {BUSINESS.btw}
           </p>
         </div>

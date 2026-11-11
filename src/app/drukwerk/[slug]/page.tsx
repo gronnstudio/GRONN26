@@ -44,7 +44,7 @@ export default async function Drukwerk({ params }: { params: Promise<{ slug: str
           </section>
         ))}
         <p className="m-0 mt-10 border-t border-[#d9d7d0] pt-4 text-[10px] text-[#5c5b57]">
-          {BUSINESS.name} · {BUSINESS.address.street}, {BUSINESS.address.postalCode} {BUSINESS.address.city} · KvK{" "}
+          {BUSINESS.name} · {BUSINESS.address.city} · KvK{" "}
           {BUSINESS.kvk} · Btw {BUSINESS.btw} · {BUSINESS.email}
         </p>
       </main>

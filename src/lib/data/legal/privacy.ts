@@ -38,7 +38,7 @@ export const PRIVACY: LegalDocument = {
   title: "Privacyverklaring",
   kind: "privacy",
   audience: "iedereen",
-  updated: "2026-10-29",
+  updated: "2026-11-11",
   status: "vastgesteld",
   intro:
     "Korte versie: wij gebruiken wat je ons stuurt om je te antwoorden en je project uit te voeren, wij volgen je niet over het web, en wij verkopen niets door. De lange versie staat hieronder, per soort gegeven.",
@@ -46,7 +46,7 @@ export const PRIVACY: LegalDocument = {
     {
       heading: "Wie verantwoordelijk is",
       body: [
-        `${BUSINESS.name}, ${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city}, KvK ${BUSINESS.kvk}, is verwerkingsverantwoordelijke voor de gegevens die op deze website en in onze dienstverlening worden verwerkt.`,
+        `${BUSINESS.name}, ${BUSINESS.address.city}, KvK ${BUSINESS.kvk}, is verwerkingsverantwoordelijke voor de gegevens die op deze website en in onze dienstverlening worden verwerkt.`,
         `Vragen over privacy, of een verzoek om inzage of verwijdering: ${BUSINESS.email}. Wij reageren binnen een maand.`,
         "Wij hebben geen functionaris voor gegevensbescherming. Dat hoeft ook niet: die verplichting geldt voor overheidsinstanties en voor organisaties die op grote schaal bijzondere gegevens verwerken of mensen stelselmatig volgen, en dat doen wij geen van beide.",
       ],

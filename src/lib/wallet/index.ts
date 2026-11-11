@@ -16,7 +16,6 @@ const QR = `${SITE}/links`
 const NAAM = `${BUSINESS.owner.given} ${BUSINESS.owner.family}`
 const WAT = "Vijvers en natuurlijke tuinen"
 const WAAR = "Stein en omgeving"
-const a = BUSINESS.address
 
 export const APPLE_PAD = "/wallet/visitekaartje.pkpass"
 
@@ -60,7 +59,6 @@ export async function bouwApplePas(): Promise<Buffer> {
         veld("b-mail", "E-mail", BUSINESS.email),
         veld("b-site", "Website", SITE),
         veld("b-insta", "Instagram", BUSINESS.instagram),
-        veld("b-adres", "Adres", `${a.street}, ${a.postalCode} ${a.city}`),
         veld("b-kvk", "KVK", BUSINESS.kvk),
       ],
     },

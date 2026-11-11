@@ -53,7 +53,7 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
   title: "Algemene voorwaarden voor particuliere opdrachtgevers",
   kind: "voorwaarden",
   audience: "consument",
-  updated: "2026-11-06",
+  updated: "2026-11-11",
   status: "vastgesteld",
   intro:
     `Deze voorwaarden gelden voor alle offertes, opdrachten en overeenkomsten tussen ${BUSINESS.name} en particuliere opdrachtgevers. Ze zijn geschreven om leesbaar te zijn. Waar de wet de klant meer rechten geeft dan hieronder staat, geldt de wet — een voorwaarde kan een wettelijk consumentenrecht niet wegnemen.`,
@@ -61,7 +61,7 @@ export const VOORWAARDEN_CONSUMENT: LegalDocument = {
     {
       heading: "Wie wij zijn en waarop deze voorwaarden van toepassing zijn",
       body: [
-        `${BUSINESS.name}, gevestigd aan ${BUSINESS.address.street}, ${BUSINESS.address.postalCode} ${BUSINESS.address.city}, ingeschreven bij de Kamer van Koophandel onder nummer ${BUSINESS.kvk}, btw-identificatienummer ${BUSINESS.btw}. Rechtsvorm: ${BUSINESS.legalForm}. Bereikbaar via ${BUSINESS.email} en ${BUSINESS.phone}.`,
+        `${BUSINESS.name}, gevestigd in ${BUSINESS.address.city}, ingeschreven bij de Kamer van Koophandel onder nummer ${BUSINESS.kvk}, btw-identificatienummer ${BUSINESS.btw}. Rechtsvorm: ${BUSINESS.legalForm}. Bereikbaar via ${BUSINESS.email} en ${BUSINESS.phone}.`,
         "Deze voorwaarden gelden voor tuinadvies, tuinontwerp, beplantingsplannen, tuinaanleg, renovatie en onderhoud, en voor alles wat daarmee samenhangt.",
         "Ze zijn geschreven voor particuliere opdrachtgevers. Geeft iemand de opdracht in de uitoefening van een beroep of bedrijf, dan gelden ze ook, behalve het artikel over bedenktijd.",
         "De opdrachtgever krijgt deze voorwaarden vóór of bij de offerte, en ze staan op gronn.studio/voorwaarden. Wie een offerte aanvaardt, aanvaardt daarmee ook deze voorwaarden.",
