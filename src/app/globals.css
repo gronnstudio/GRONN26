@@ -19,20 +19,26 @@
      zand voor vlakken en kaarten. Geen bosgroen of salie (eigenaar, 11 okt
      2026: "ik hou niet van dat bosgroen, salie"): de diepe kleur is aarde,
      de bijkleuren zijn klei en donker zand. */
-  --grond: #f6f2e9;
-  --inkt: #2b2a24;
-  --gedempt: #615a4c;
-  --lijn: #ddd2c0;
-  --vlak: #efe8dc;
-  --veld: #e9e0d0;
-  --voorbeeld: #8a8272;
-  --oranje: #ff5b04;
-  /* kleine oranje tekst op Licht: #FF5B04 haalde 2,8:1 op het zand, #B84000
-     5,0:1 (eigenaar, 22 okt 2026). Vlakken en knoppen blijven #FF5B04. */
-  --oranje-tekst: #b84000;
-  --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
-  --mos: #6f6553;
-  --salie: #cbbfa8;
+  /* Handoff "Website 2027", Nature (eigenaar koos "Handoff precies volgen",
+     12 nov 2026): linnen grond, inkt tekst, porselein kaarten, bosgroen voor
+     navigatie, CTA en donkere vlakken, salie en klei als zachte accenten.
+     --oranje heet nog zo, maar is hier klei (#C9A98A): een vlak dat antraciet
+     tekst draagt (7,3:1). Kleine accenttekst is bosgroen. */
+  --grond: #f3f0e7;
+  --inkt: #252a26;
+  --gedempt: #565e57;
+  --lijn: #dcd7c9;
+  --vlak: #fcfbf7;
+  --veld: #fcfbf7;
+  --voorbeeld: #7a8279;
+  --oranje: #c9a98a;
+  --oranje-tekst: #253b30;
+  --bos: #253b30;
+  --mos: #5d6b56;
+  --salie: #8c9d83;
+  --klei: #c9a98a;
+  --porselein: #fcfbf7;
+  --linnen: #f3f0e7;
   --goot: clamp(20px, 4vw, 56px);
   /* Eén paginabreedte voor alles (uitlijning, 9 okt 2026): tekst, voet en
      menu-hoeken staan op dezelfde lijn. --breedte is de kolom inclusief de
@@ -58,7 +64,7 @@
      variabelen"). Gelijk aan de kaarten. Snijdt een kader de foto bij
      (parallax, schaal bij hover), dan draagt dat kader deze hoek. Nooit een
      eigen maat; tests/basis.spec.ts (fotohoek) bewaakt het. */
-  --foto-hoek: 16px;
+  --foto-hoek: 18px; /* handoff 2027: radius 12/18/24, foto en kaart 18 */
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
@@ -82,8 +88,8 @@ html.donker, .donker {
    tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #3a2e25;
-  --gedempt: var(--salie);
+  --vlak: #2f4a3d;
+  --gedempt: #b8c5ad;
   --lijn: rgba(239, 238, 234, 0.2);
 }
 html.contrast { --gedempt: var(--inkt); --lijn: currentColor; }
