@@ -5,6 +5,8 @@ import { Verder } from "@/components/wereld/verder"
 import { Atelier } from "@/components/voorpagina/atelier"
 import { Uitgelicht } from "@/components/voorpagina/uitgelicht"
 import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
+import { HandoffVoorpagina } from "@/components/handoff/voorpagina"
+import { DevAlleen } from "@/components/dev-menu"
 import "@/components/voorpagina/voorpagina.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
@@ -49,7 +51,12 @@ export default function Voorpagina() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema()).replace(/</g, "\\u003c") }} />
 
-      <div className="alleen-klassiek">
+      {/* De voorpagina uit de handoff "Website 2027", alleen via het ontwikkelaarsmenu (12 nov 2026). */}
+      <div className="alleen-klassiek dev-alleen-voorpagina">
+        <DevAlleen klasse="dev-voorpagina"><HandoffVoorpagina /></DevAlleen>
+      </div>
+
+      <div className="alleen-klassiek dev-zonder-voorpagina">
         <div className="vp-wortel">
           <Atelier />
           <WatIkDoe />

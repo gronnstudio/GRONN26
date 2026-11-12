@@ -1,0 +1,57 @@
+/* Ontwikkelaarsmenu: een smal lipje rechts midden, klapt uit bij hover of
+   een tik. Vaste kleuren: het moet leesbaar blijven, welk thema ook aanstaat. */
+.dev-menu {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  transform: translate(calc(100% - 36px), -50%);
+  transition: transform 300ms cubic-bezier(.22, 1, .36, 1);
+  font-family: var(--font-montserrat), sans-serif;
+  color: #f3f0e7;
+}
+.dev-menu[data-open], .dev-menu:focus-within { transform: translate(0, -50%); }
+.dev-menu-tab {
+  width: 36px;
+  min-height: 96px;
+  border: 0;
+  border-radius: 12px 0 0 12px;
+  background: #202020;
+  color: #f3f0e7;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  cursor: pointer;
+}
+.dev-menu-paneel {
+  display: grid;
+  gap: 14px;
+  width: 248px;
+  padding: 18px;
+  background: #202020;
+  box-shadow: -8px 0 32px rgb(0 0 0 / .25);
+}
+.dev-menu-kop { margin: 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #b8b4a8; }
+.dev-menu-rij { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0; padding: 0; border: 0; }
+.dev-menu-rij legend { margin-bottom: 6px; font-weight: 600; font-size: 13px; }
+.dev-menu-rij label { position: relative; }
+.dev-menu-rij input { position: absolute; opacity: 0; }
+.dev-menu-rij span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  border: 1px solid #4a4a46;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.dev-menu-rij input:checked + span { border-color: #f3f0e7; background: #f3f0e7; color: #202020; font-weight: 600; }
+.dev-menu-rij input:focus-visible + span, .dev-menu-tab:focus-visible, .dev-menu-link:focus-visible { outline: 2px solid #ff5b04; outline-offset: 2px; }
+.dev-menu-link { display: flex; align-items: center; min-height: 44px; font-weight: 600; font-size: 14px; color: #f3f0e7; }
+@media (prefers-reduced-motion: reduce) { .dev-menu { transition: none; } }
