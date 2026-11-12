@@ -96,7 +96,7 @@ test("aanvraag: zes stappen tot de bevestiging, met referentie", async ({ page }
   await expect(page.getByText("Stap 5 van 6")).toBeVisible()
   await verder.click()
   await page.getByRole("textbox", { name: "Naam" }).fill("Test Persoon")
-  await page.getByRole("textbox", { name: "E-mail" }).fill("test@voorbeeld.nl")
+  await page.getByRole("textbox", { name: "E-mail" }).fill("test@example.nl")
   await page.getByRole("button", { name: /Verstuur aanvraag/ }).click()
   await expect(page.locator(".hw-samenvatting")).toContainText("privacyverklaring")
   await page.getByLabel(/Ik ga akkoord/).check()

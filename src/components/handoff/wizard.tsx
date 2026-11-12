@@ -96,7 +96,7 @@ function controleer(stap: number, s: Stand): Fouten {
   if (stap === 3 && !s.planning) f.planning = "Kies wanneer je wilt beginnen."
   if (stap === 5) {
     if (!s.naam.trim()) f.naam = "Vul je naam in."
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) f.email = "Vul een geldig e-mailadres in, zoals naam@voorbeeld.nl."
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) f.email = "Vul een geldig e-mailadres in."
     if ((s.kanaal === "telefoon" || s.kanaal === "whatsapp") && s.telefoon.replace(/\D/g, "").length < 9) f.telefoon = "Vul je telefoonnummer in, zodat we je zo kunnen bereiken."
     if (!s.akkoord) f.akkoord = "Geef akkoord op de privacyverklaring om te versturen."
   }
