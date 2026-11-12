@@ -246,9 +246,9 @@ html:has(.ho-menu[open]) { overflow: hidden; }
 .ho-vraag-teken { flex: none; font-weight: 400; font-size: 24px; color: var(--bos); }
 .ho-vraag-antwoord p { margin: 0 0 24px; max-width: 62ch; color: var(--gedempt); }
 
-.ho-eind { padding-block: clamp(80px, 12vw, 176px); background: var(--klei); color: #202020; text-align: center; }
+.ho-eind { padding-block: clamp(80px, 12vw, 176px); background: var(--porselein); border-top: 1px solid var(--lijn); color: var(--inkt); text-align: center; }
 .ho-eind .ho-kolom { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.ho-eind .ho-lbl { color: #202020; }
+.ho-eind .ho-lbl { color: var(--gedempt); }
 .ho-eind-kop {
   margin: 0;
   font-family: var(--font-syne);
