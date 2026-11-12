@@ -95,6 +95,14 @@ const VRAAG_EN_ANTWOORD: { v: Tekst; a: Tekst }[] = [
     a: { nl: "In Stein en omgeving, tot ongeveer 30 km: ook Maastricht, Sittard-Geleen, Heerlen en Kerkrade.", en: "In Stein and around, up to about 30 km: Maastricht, Sittard-Geleen, Heerlen and Kerkrade too." },
   },
   {
+    v: { nl: "Kun je een bestaande tuin ook deels vernieuwen?", en: "Can you renew part of an existing garden?" },
+    a: { nl: "Ja. Ik kijk wat kan blijven en waar één gerichte ingreep het meeste verschil maakt.", en: "Yes. I look at what can stay and where one targeted change makes the biggest difference." },
+  },
+  {
+    v: { nl: "Wanneer kun je beginnen?", en: "When can you start?" },
+    a: { nl: "Wie deze winter een vaste prijs afspreekt, plan ik in voor maart of april. Geef in je bericht door wanneer het jou uitkomt.", en: "If we agree a fixed price this winter, I schedule you for March or April. Tell me in your message when suits you." },
+  },
+  {
     v: { nl: "En als het tegenvalt tijdens het werk?", en: "And if something turns up during the work?" },
     a: { nl: "Een vaste prijs is een vaste prijs. Zie ik vooraf iets wat ik niet kan inschatten, dan zeg ik dat vóór je tekent, niet erna.", en: "A fixed price is a fixed price. If I see something up front I can’t estimate, I say so before you sign, not after." },
   },

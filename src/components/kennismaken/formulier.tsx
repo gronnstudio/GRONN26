@@ -44,9 +44,18 @@ const PAKKETTEN: { id: string; label: L }[] = [
   { id: "op-maat", label: { nl: "Op maat", en: "Made to measure" } },
 ]
 
+// Wanneer iemand wil beginnen (11 nov 2026, doel: een volle agenda in maart).
+// Optioneel; zo zie ik meteen wie voor het voorjaar plant.
+const PLANNING: { id: string; label: L }[] = [
+  { id: "voorjaar", label: { nl: "In het voorjaar (maart–april)", en: "In spring (March–April)" } },
+  { id: "zsm", label: { nl: "Zo snel mogelijk", en: "As soon as possible" } },
+  { id: "later", label: { nl: "Later in het jaar", en: "Later in the year" } },
+  { id: "weet-niet", label: { nl: "Weet ik nog niet", en: "Not sure yet" } },
+]
+
 type Status = "invullen" | "bezig" | "verzonden" | "terugval"
 // soort en budget in beide talen: de samenvatting volgt de taal, de mail naar mij blijft Nederlands.
-type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: L; pakket: L; budget: L; bericht: string }
+type Velden = { naam: string; email: string; telefoon: string; plaats: string; soort: L; pakket: L; budget: L; planning: L; bericht: string }
 
 /* ---------- velden: label erboven, een licht vlak met rand om te typen ---------- */
 // Eigenaar, 9 okt 2026: alleen een lijn met het label ver links was niet
@@ -190,6 +199,7 @@ function Samenvatting({ v }: { v: Velden }) {
     [{ nl: "Vraag", en: "Question" }, v.soort],
     [{ nl: "Pakket", en: "Package" }, v.pakket],
     [{ nl: "Budget", en: "Budget" }, v.budget],
+    [{ nl: "Wanneer", en: "When" }, v.planning],
     [{ nl: "Naam", en: "Name" }, v.naam],
     [{ nl: "E-mail", en: "E-mail" }, v.email],
     [{ nl: "Telefoon", en: "Phone" }, v.telefoon],
@@ -222,6 +232,7 @@ export function KennismakenFormulier() {
   const [pakket, setPakket] = useState("")
   const [budget, setBudget] = useState("")
   const [budgetFout, setBudgetFout] = useState(false)
+  const [planning, setPlanning] = useState("")
   const [foto, setFoto] = useState<FotoUitkomst | null>(null)
   const [verstuurd, setVerstuurd] = useState<{ velden: Velden; onderwerp: string; mailto: string } | null>(null)
   const taal = useTaal()
@@ -269,12 +280,14 @@ export function KennismakenFormulier() {
       soort: SOORTEN.find((s) => s.id === data.get("soort"))?.label ?? SOORTEN[5].label,
       pakket: (data.get("soort") === "border" && PAKKETTEN.find((k) => k.id === data.get("pakket"))?.label) || { nl: "", en: "" },
       budget: CONTACT_BUDGETTEN.find((b) => b.id === data.get("budget"))?.label ?? { nl: "", en: "" },
+      planning: PLANNING.find((k) => k.id === data.get("planning"))?.label ?? { nl: "", en: "" },
       bericht: String(data.get("bericht") ?? "").trim(),
     }
     const tekst = [
       `Vraag: ${velden.soort.nl}`,
       velden.pakket.nl ? `Pakket: ${velden.pakket.nl}` : null,
       `Budget: ${velden.budget.nl}`,
+      velden.planning.nl ? `Wanneer: ${velden.planning.nl}` : null,
       `Naam: ${velden.naam}`,
       `E-mail: ${velden.email}`,
       velden.telefoon ? `Telefoon: ${velden.telefoon}` : null,
@@ -399,6 +412,7 @@ export function KennismakenFormulier() {
           verplicht
           fout={budgetFout ? kies({ nl: "Kies je budget.", en: "Choose your budget." }, taal) : undefined}
         />
+        <Keuzes legenda={{ nl: "Wanneer wil je beginnen? · optioneel", en: "When would you like to start? · optional" }} naam="planning" keuzes={PLANNING} gekozen={planning} onKies={setPlanning} />
         <Veld label={{ nl: "Vertel kort over je tuin of vijver", en: "Tell me briefly about your garden or pond" }} {...veld("bericht")} verplicht regels={5} />
         <Vijverfoto onUitkomst={setFoto} />
         {/* Het verborgen honeypotveld: mensen zien het niet, bots vullen het in. */}
