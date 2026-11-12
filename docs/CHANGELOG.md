@@ -1,5 +1,14 @@
 # Wijzigingen
 
+## 9 nov 2026 · Premium redesign, fase 1: ontwerpsysteem en voorpagina
+
+- Master Brief van de eigenaar: [website/BLUEPRINT.md](website/BLUEPRINT.md) en [website/ART-DIRECTION.md](website/ART-DIRECTION.md).
+- Kleur: crème #EFEEEA en antraciet #202020/#1A1A18 in plaats van zand en bruin; oranje blijft het ene accent. Foto-hoek 4px.
+- Type: schaal `t-display` … `t-body`, `meta` en `bijschrift`; Geist Mono terug voor annotaties.
+- Menu: geen glas maar dicht antraciet; komeet één ronde, iconen bewegen alleen bij aanwijzen.
+- Voorpagina opnieuw: opening, Studio, index Wat ik maak, Werk met maten, Werkwijze, slot. Bouwstenen in `src/components/ontwerp/`.
+- Dashboard, API en privélinks niet aangeraakt.
+
 ## 29 okt 2026 · Intake-engine (fase 2)
 
 - Eén vragenlijst (`src/lib/crm/vragenlijst.ts`) vervangt `intake.ts` en `checklist.ts`: 11 categorieën, 153 vragen, met de ids van de oude vragen en vinkjes. Een vinkje van de oude checklist wordt bij het lezen "Ja".

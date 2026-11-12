@@ -19,20 +19,23 @@
      zand voor vlakken en kaarten. Geen bosgroen of salie (eigenaar, 11 okt
      2026: "ik hou niet van dat bosgroen, salie"): de diepe kleur is aarde,
      de bijkleuren zijn klei en donker zand. */
-  --grond: #f6f2e9;
-  --inkt: #2b2a24;
-  --gedempt: #615a4c;
-  --lijn: #ddd2c0;
-  --vlak: #efe8dc;
-  --veld: #e9e0d0;
-  --voorbeeld: #8a8272;
+  /* Crème en antraciet (eigenaar, 9 nov 2026, Master Brief: "the contrast
+     between cream and anthracite should establish a recognizable visual
+     identity"). Verving het zand en het bruin van 11 okt. Oranje blijft het
+     ene accent; groen komt uit de foto's, niet uit de interface. Gemeten:
+     inkt 14,0:1, gedempt 5,9:1, oranje-tekst 4,8:1 op de grond. */
+  --grond: #efeeea;
+  --inkt: #202020;
+  --gedempt: #5c5a54;
+  --lijn: #d3d0c7;
+  --vlak: #e6e4de;
+  --veld: #e2dfd7;
+  --voorbeeld: #85827a;
   --oranje: #ff5b04;
-  /* kleine oranje tekst op Licht: #FF5B04 haalde 2,8:1 op het zand, #B84000
-     5,0:1 (eigenaar, 22 okt 2026). Vlakken en knoppen blijven #FF5B04. */
   --oranje-tekst: #b84000;
-  --bos: #2a2019; /* warm aardebruin; #2b2a24 oogde naast het bruin van Donker als donkergroen (eigenaar, 18 okt 2026) */
-  --mos: #6f6553;
-  --salie: #cbbfa8;
+  --bos: #141413; /* de voet: diep antraciet (heette bosgroen, daarna aardebruin) */
+  --mos: #6a675f;
+  --salie: #c9c6bd;
   --goot: clamp(20px, 4vw, 56px);
   /* Eén paginabreedte voor alles (uitlijning, 9 okt 2026): tekst, voet en
      menu-hoeken staan op dezelfde lijn. --breedte is de kolom inclusief de
@@ -58,20 +61,20 @@
      variabelen"). Gelijk aan de kaarten. Snijdt een kader de foto bij
      (parallax, schaal bij hover), dan draagt dat kader deze hoek. Nooit een
      eigen maat; tests/basis.spec.ts (fotohoek) bewaakt het. */
-  --foto-hoek: 16px;
+  --foto-hoek: 4px; /* 9 nov 2026: strak, architectonisch (brief: "avoid excessive rounded corners"); was 16 */
 }
 /* .donker werkt ook op een los vlak (de opening, de kop): dezelfde tokens. */
 html.donker, .donker {
-  /* Warm aardebruin (eigenaar koos "Brown", 11 okt 2026): bruin in plaats
-     van grijs, hoogte als lichter bruin (veld, dan vlak), roomwitte tekst. */
-  --grond: #221c17;
-  --inkt: #f0e9dc;
-  --gedempt: #c8bca8;
-  --lijn: #4a3f33;
-  --vlak: #372e25;
-  --veld: #2e261f;
-  --mos: #b7a98f;
-  --voorbeeld: #9a8e7a;
+  /* Antraciet (9 nov 2026): bijna zwart, nooit puur zwart; hoogte als
+     licht (vlak lichter dan grond). Gebroken wit 15,0:1, gedempt 7,1:1. */
+  --grond: #1a1a18;
+  --inkt: #efeeea;
+  --gedempt: #a8a59c;
+  --lijn: #353430;
+  --vlak: #262623;
+  --veld: #2c2b28;
+  --mos: #a8a59c;
+  --voorbeeld: #8f8c84;
   /* Het oranje blijft op donker even vol als op licht (eigenaar, 11 okt
      2026: "oranje heb je vervaagt, dat wil ik niet"). */
   --oranje: #ff5b04;
@@ -82,7 +85,7 @@ html.donker, .donker {
    tokens op aarde, samen met .donker. Gedempt is donker zand. */
 .bos-vlak {
   --grond: var(--bos);
-  --vlak: #3a2e25;
+  --vlak: #222220;
   --gedempt: var(--salie);
   --lijn: rgba(239, 238, 234, 0.2);
 }
@@ -255,6 +258,41 @@ body:not(:has([data-links])) :is(img, video, svg) { -webkit-user-drag: none; }
 }
 @utility sectie { padding-top: clamp(96px, 12vw, 180px); }
 
+/* ── Typografie en ruimte (9 nov 2026, docs/website/ART-DIRECTION.md) ──────
+   Eén schaal voor de publieke site. Syne Bold toont, Montserrat vertelt,
+   Geist Mono annoteert (maten, codes, data). Maten vloeien met clamp() van
+   390px naar 1440px; min en max in px. Gebruik de utilities, nooit een eigen
+   maat in een component. */
+:root {
+  --t-display: clamp(46px, 11vw, 132px);   /* de opening, één keer per pagina */
+  --t-h1: clamp(40px, 6.6vw, 104px);       /* paginatitel */
+  --t-h2: clamp(32px, 4.6vw, 72px);        /* sectiekop */
+  --t-h3: clamp(24px, 2.4vw, 36px);        /* onderdeel */
+  --t-index: clamp(40px, 7.2vw, 112px);    /* de woorden in een indexlijst */
+  --t-lead: clamp(19px, 2.3vw, 34px);      /* de grote leesalinea */
+  --t-body: clamp(16px, 1.15vw, 17.5px);
+  --t-klein: 14px;
+  --t-meta: clamp(11px, .8vw, 12px);
+  /* ruimte: drie stappen, verder niets */
+  --r-s: clamp(16px, 2vw, 24px);
+  --r-m: clamp(40px, 5vw, 72px);
+  --r-l: clamp(88px, 11vw, 176px);
+  --kolomgoot: clamp(16px, 2vw, 32px);
+}
+@utility t-display { font-family: var(--font-syne); font-weight: 700; font-size: var(--t-display); line-height: .9; letter-spacing: -.045em; }
+@utility t-h1 { font-family: var(--font-syne); font-weight: 700; font-size: var(--t-h1); line-height: .95; letter-spacing: -.035em; }
+@utility t-h2 { font-family: var(--font-syne); font-weight: 700; font-size: var(--t-h2); line-height: 1; letter-spacing: -.03em; text-wrap: balance; }
+@utility t-h3 { font-family: var(--font-syne); font-weight: 700; font-size: var(--t-h3); line-height: 1.1; letter-spacing: -.02em; }
+@utility t-index { font-family: var(--font-syne); font-weight: 700; font-size: var(--t-index); line-height: .92; letter-spacing: -.04em; }
+@utility t-lead { font-family: var(--font-sans); font-weight: 400; font-size: var(--t-lead); line-height: 1.28; letter-spacing: -.015em; text-wrap: pretty; }
+@utility t-body { font-family: var(--font-sans); font-weight: 400; font-size: var(--t-body); line-height: 1.65; text-wrap: pretty; }
+/* annotatie: codes, maten, plaatsen, data. Altijd Geist Mono, altijd klein. */
+@utility meta { font-family: var(--font-geist-mono), ui-monospace, monospace; font-weight: 500; font-size: var(--t-meta); line-height: 1.45; letter-spacing: .04em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+/* bijschrift bij een foto: mono, gewone letters */
+@utility bijschrift { font-family: var(--font-geist-mono), ui-monospace, monospace; font-weight: 400; font-size: 12px; line-height: 1.5; letter-spacing: 0; color: var(--gedempt); }
+/* het raster: 4 kolommen op de telefoon, 12 vanaf 768px */
+@utility raster { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--kolomgoot); @media (min-width: 768px) { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
@@ -274,11 +312,12 @@ h1[tabindex="-1"]:focus-visible {
 .komeet { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .komeet svg { display: block; overflow: visible; }
 /* de komeet volgt de ronding van de pil: de helft van zijn hoogte (24 klein, 32 groot; menu.tsx zet --komeet-r) */
-.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet var(--komeet-duur, 6s) linear infinite; }
+.komeet rect { rx: var(--komeet-r, 24px); ry: var(--komeet-r, 24px); transition: rx .5s cubic-bezier(.22,1,.36,1), ry .5s cubic-bezier(.22,1,.36,1); fill: none; stroke: #ff5b04; stroke-width: 1.5; animation: komeet var(--komeet-duur, 2.4s) cubic-bezier(.45,0,.2,1) 1 both; }
 /* de desktoppil is ruim twee keer zo lang als die op de telefoon; met dezelfde
    6 s leek de komeet daar te jagen (eigenaar, 18 okt 2026), dus even snel per pixel */
-@media (min-width: 1024px) { .komeet { --komeet-duur: 15s; } }
-@keyframes komeet { to { stroke-dashoffset: -1; } }
+@media (min-width: 1024px) { .komeet { --komeet-duur: 4.5s; } }
+/* Eén ronde bij binnenkomst, daarna stil (9 nov 2026, brief: "avoid constant movement"). */
+@keyframes komeet { 0% { stroke-dashoffset: 0; opacity: 0; } 8% { opacity: 1; } 85% { opacity: 1; } 100% { stroke-dashoffset: -1; opacity: 0; } }
 
 /* Voortgangsring binnen in de pijl, in de kleur van de pijl zelf: loopt vol met het scrollen van de pagina. */
 .ring-voortgang { position: absolute; inset: 4px; width: calc(100% - 8px); height: calc(100% - 8px); transform: rotate(-90deg); pointer-events: none; overflow: visible; }
@@ -292,23 +331,16 @@ h1[tabindex="-1"]:focus-visible {
    lichtrand bovenin en een schaduwrand onderin, zodat het geslepen lijkt.
    Op elke grond even donker, dus witte iconen blijven leesbaar. */
 @utility glas {
-  background: rgb(22 22 21 / .42);
-  -webkit-backdrop-filter: blur(8px) saturate(1.6) brightness(.85);
-  backdrop-filter: blur(8px) saturate(1.6) brightness(.85);
-  box-shadow:
-    inset 0 1px .5px 0 rgb(255 255 255 / .22),
-    inset 0 -1px .5px 0 rgb(0 0 0 / .2),
-    0 10px 40px -12px rgb(0 0 0 / .45);
+  /* Geen glas meer (9 nov 2026, brief: "no glassmorphism"): dicht antraciet
+     met een haarlijn, op elke grond even leesbaar. Naam blijft voor de tests. */
+  background: #1a1a18;
+  box-shadow: inset 0 0 0 1px rgb(239 238 234 / .1), 0 12px 32px -16px rgb(0 0 0 / .5);
 }
 /* Het megamenu (18 okt 2026): hetzelfde glas, maar dichter en zachter, zodat
    de lijst over elke foto leesbaar blijft. */
 @utility glas-diep {
-  background: rgb(22 22 21 / .8);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(.8);
-  backdrop-filter: blur(24px) saturate(1.6) brightness(.8);
-  box-shadow:
-    inset 0 1px .5px 0 rgb(255 255 255 / .18),
-    0 24px 80px -24px rgb(0 0 0 / .6);
+  background: #1a1a18;
+  box-shadow: inset 0 0 0 1px rgb(239 238 234 / .1), 0 24px 80px -24px rgb(0 0 0 / .6);
 }
 /* Dezelfde glasranden op de oranje knop Omhoog; het oranje blijft vol (eigenaar,
    18 okt 2026: "hetzelfde glass effect toe, maar behoud de kleur"). */
@@ -335,21 +367,19 @@ h1[tabindex="-1"]:focus-visible {
    elk icoon één korte beweging, de vijf na elkaar van links naar rechts
    (eigenaar, 10 okt 2026: "de iconen een kleine animatie meegeven", "niet bij
    aanraken, standaard"). Stil bij minder beweging. */
-.menu-icoon svg { transform-box: fill-box; transform-origin: 50% 100%; animation: 8s cubic-bezier(.22,1,.36,1) infinite var(--beweging); }
+/* Sinds 9 nov 2026 alleen bij aanwijzen of focus, niet meer elke acht seconden (brief: "avoid constant movement"). */
+.menu-icoon svg { transform-box: fill-box; transform-origin: 50% 100%; }
+.menu-icoon:is(:hover, :focus-visible) svg { animation: .8s cubic-bezier(.22,1,.36,1) var(--beweging); }
 .menu-icoon[data-beweging=golf] { --beweging: icoon-golf; }
 .menu-icoon[data-beweging=groei] { --beweging: icoon-groei; }
 .menu-icoon[data-beweging=spit] { --beweging: icoon-spit; }
 .menu-icoon[data-beweging=knik] { --beweging: icoon-knik; }
 .menu-icoon[data-beweging=plop] { --beweging: icoon-plop; }
-.menu-icoon[data-beweging=groei] svg { animation-delay: .6s; }
-.menu-icoon[data-beweging=spit] svg { animation-delay: 1.2s; }
-.menu-icoon[data-beweging=knik] svg { animation-delay: 1.8s; }
-.menu-icoon[data-beweging=plop] svg { animation-delay: 2.4s; }
-@keyframes icoon-golf { 3% { translate: -2px 0; } 6% { translate: 2px 0; } 9%, 100% { translate: 0 0; } }
-@keyframes icoon-groei { 0% { scale: 1 1; } 3% { scale: 1 .6; } 7% { scale: 1 1.12; } 10%, 100% { scale: 1 1; } }
-@keyframes icoon-spit { 4% { rotate: -14deg; translate: 0 2px; } 7% { rotate: 6deg; translate: 0 0; } 10%, 100% { rotate: 0deg; } }
-@keyframes icoon-knik { 3% { translate: 0 2px; } 6%, 100% { translate: 0 0; } }
-@keyframes icoon-plop { 0% { scale: 1; } 3% { scale: .7; } 6% { scale: 1.15; } 9%, 100% { scale: 1; } }
+@keyframes icoon-golf { 25% { translate: -2px 0; } 55% { translate: 2px 0; } 85%, 100% { translate: 0 0; } }
+@keyframes icoon-groei { 0% { scale: 1 1; } 25% { scale: 1 .6; } 60% { scale: 1 1.12; } 90%, 100% { scale: 1 1; } }
+@keyframes icoon-spit { 30% { rotate: -14deg; translate: 0 2px; } 60% { rotate: 6deg; translate: 0 0; } 90%, 100% { rotate: 0deg; } }
+@keyframes icoon-knik { 25% { translate: 0 2px; } 55%, 100% { translate: 0 0; } }
+@keyframes icoon-plop { 0% { scale: 1; } 25% { scale: .7; } 55% { scale: 1.15; } 85%, 100% { scale: 1; } }
 @media (prefers-reduced-motion: reduce) { .komeet rect, .menu-icoon svg { animation: none !important; } }
 html.stil .komeet rect, html.stil .menu-icoon svg { animation: none !important; }
 
