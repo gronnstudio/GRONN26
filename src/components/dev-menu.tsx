@@ -36,7 +36,8 @@ export function DevMenu() {
     fetch("/api/eigenaar", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : { eigenaar: false }))
       .then((d: { eigenaar?: boolean }) => {
-        if (!d.eigenaar) return
+        // Niet (meer) ingelogd: dan altijd de gewone site, ook als deze browser nog keuzes bewaart.
+        if (!d.eigenaar) return Object.values(KLASSEN).forEach((k) => document.documentElement.classList.remove(k))
         setStand(lees())
         setEigenaar(true)
       })

@@ -4,8 +4,9 @@ import { KOEKJE, maakKoekje } from "../src/lib/eigenaar"
 process.env.AUTH_SECRET = "alleen-voor-tests"
 
 // Op gronn.studio staat de handoff achter het ontwikkelaarsmenu (12 nov 2026).
-async function dev(page: Page, v: { kop?: boolean; kleur?: boolean; voorpagina?: boolean }) {
+async function dev(page: Page, v: { kop?: boolean; kleur?: boolean; voorpagina?: boolean }, eigenaar = true) {
   await page.addInitScript((w) => localStorage.setItem("gronn-dev", JSON.stringify(w)), v)
+  if (eigenaar) await page.context().addCookies([{ name: KOEKJE, value: await maakKoekje("hello@gronn.studio"), url: "http://localhost:3210" }])
 }
 
 test("ontwikkelaarsmenu: bezoekers zien het niet, de eigenaar wel; Kop Handoff wisselt de kop", async ({ page }) => {
@@ -29,6 +30,13 @@ test("ontwikkelaarsmenu: bezoekers zien het niet, de eigenaar wel; Kop Handoff w
 
 // De handoff "Website 2027" (12 nov 2026): de kop met menu, en de
 // projectaanvraag in zes stappen, zowel de foutroute als de gelukte route.
+
+test("ontwikkelaarsmenu: uitgelogd met bewaarde keuzes ziet toch de gewone site", async ({ page }) => {
+  await dev(page, { kop: true, kleur: true, voorpagina: true }, false)
+  await page.goto("/")
+  await expect(page.locator("html")).not.toHaveClass(/dev-(kop|nature|voorpagina)/)
+  await expect(page.locator("nav[data-menu]")).toBeVisible()
+})
 
 test("kop @1440: vier links en Start een project; Projecten gaat naar /werk", async ({ page }) => {
   await dev(page, { kop: true })
