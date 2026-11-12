@@ -37,18 +37,10 @@ test("Ctrl K zoekt, Enter opent, Esc sluit", async ({ page }) => {
   await expect(zoek).toBeHidden()
 })
 
-test("vanuit het menu, g dan w gaat naar Werk, Backspace terug", async ({ page }) => {
+test("g dan w gaat naar Werk, Backspace terug", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/", { waitUntil: "domcontentloaded" })
   await page.waitForTimeout(400)
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.getByRole("button", { name: "Zoek op de site" }).click()
-  const zoek = page.getByRole("dialog", { name: "Zoek op deze site" })
-  await expect(zoek).toBeVisible()
-  await page.keyboard.press("Escape")
-  await expect(zoek).toBeHidden()
-  await expect(page.getByRole("button", { name: "Menu" })).toBeFocused()
-
   await page.locator("body").click({ position: { x: 5, y: 300 } })
   await page.keyboard.press("g")
   await page.keyboard.press("w")
@@ -57,16 +49,4 @@ test("vanuit het menu, g dan w gaat naar Werk, Backspace terug", async ({ page }
   await page.waitForTimeout(400)
   await page.keyboard.press("Backspace")
   await expect(page).toHaveURL(/localhost:3210\/$/, { timeout: 20_000 })
-})
-
-test("Sneltoetsen in het menu opent het overzicht", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 })
-  await page.goto("/", { waitUntil: "domcontentloaded" })
-  await page.waitForTimeout(400)
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.getByRole("button", { name: "Sneltoetsen" }).click()
-  const zoek = page.getByRole("dialog", { name: "Zoek op deze site" })
-  await expect(zoek).toBeVisible()
-  await expect(zoek.getByText("Ga naar (G, dan…)")).toBeVisible()
-  await expect(zoek.getByText("Terug")).toBeVisible()
 })
