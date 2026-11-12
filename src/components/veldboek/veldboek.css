@@ -1,0 +1,366 @@
+/* Veldboek: de voorpagina (9 nov 2026). Maten en keuzes staan in
+   docs/website/ART-DIRECTION.md; kleuren alleen als tokens. */
+
+.vb {
+  --vb-sectie: clamp(96px, 13vw, 208px);
+  --vb-blok: clamp(40px, 6vw, 96px);
+  --vb-ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --vb-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* ── Typografie ─────────────────────────────────────────────────────────── */
+
+.vb-mono,
+.vb-regel,
+.vb-bijschrift,
+.vb-feiten dt,
+.vb-haak-label {
+  font-family: var(--vb-mono);
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vb-display {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 0.6rem + 8.2vw, 9.25rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  margin: 0;
+  text-wrap: balance;
+}
+.vb-h2 {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1rem + 4.4vw, 5.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  margin: 0;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.vb-h3 {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 0.5rem 0 0.5rem;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+.vb-lead {
+  font-size: clamp(1.125rem, 1rem + 0.55vw, 1.5rem);
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  max-width: 34ch;
+}
+.vb-body { font-size: 1rem; line-height: 1.65; max-width: 46ch; color: var(--gedempt); }
+.vb-klein { font-size: 0.875rem; line-height: 1.5; color: var(--gedempt); }
+
+.vb-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--raak);
+  font-weight: 600;
+  font-size: var(--knop-tekst);
+  letter-spacing: var(--knop-letter);
+  text-transform: uppercase;
+  background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.85em) / 100% 1px no-repeat;
+  transition: background-size 250ms var(--vb-ease);
+}
+.vb-link:hover, .vb-link:focus-visible { background-size: 30% 1px; }
+
+.vb-knop-lijn {
+  border: 1px solid currentColor;
+  background: transparent;
+  color: var(--inkt);
+}
+.vb-knop-lijn:hover { background: var(--inkt); color: var(--grond); }
+
+.vb-acties { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.vb-bijschrift {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25em;
+  margin: 12px 0 0;
+  color: var(--gedempt);
+}
+.vb-vul { position: absolute !important; inset: 0; }
+
+/* ── 00 Opening ─────────────────────────────────────────────────────────── */
+
+.vb-opening {
+  padding: clamp(28px, 5vw, 56px) var(--rand) 0;
+}
+.vb-regel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 2em;
+  margin: 0 0 clamp(40px, 8vw, 120px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--lijn);
+  color: var(--gedempt);
+}
+.vb-regel-plek { margin-left: auto; }
+@media (max-width: 639px) { .vb-regel > span:nth-child(2) { display: none; } }
+
+.vb-kopregel { display: block; overflow: clip; padding-bottom: 0.06em; margin-bottom: -0.06em; }
+.vb-kopregel > span { display: inline-block; }
+.vb-kopregel:nth-child(3) { color: var(--gedempt); }
+@media (min-width: 1024px) {
+  /* de kop loopt als een trap de pagina af, elke regel heel */
+  /* zo groot als past: de langste regel plus inspringen is ±11,4em */
+  .vb-display { text-wrap: nowrap; font-size: min(9.25rem, calc((min(100vw, 1440px) - 2 * clamp(20px, 4vw, 56px)) / 11.6)); }
+  .vb-kopregel:nth-child(2) { padding-left: 0.5em; }
+  .vb-kopregel:nth-child(3) { padding-left: 1em; }
+}
+
+.vb-opening-onder {
+  display: grid;
+  gap: var(--vb-blok);
+  margin-top: clamp(40px, 7vw, 112px);
+}
+.vb-beeldvak {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--foto-hoek);
+}
+.vb-opening-tekst { display: grid; gap: 32px; align-content: start; }
+.vb-feiten { display: grid; margin: 8px 0 0; border-top: 1px solid var(--lijn); }
+.vb-feiten > div {
+  display: grid;
+  grid-template-columns: 9em 1fr;
+  gap: 1em;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--lijn);
+}
+.vb-feiten dt { color: var(--gedempt); align-self: center; }
+.vb-feiten dd { margin: 0; font-weight: 500; }
+
+@media (min-width: 768px) {
+  .vb-opening-onder { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--goot); align-items: end; }
+  .vb-opening-tekst { grid-column: 1 / span 6; grid-row: 1; padding-bottom: 40px; }
+  .vb-opening-beeld { grid-column: 8 / -1; grid-row: 1; }
+}
+@media (min-width: 1024px) {
+  .vb-opening-tekst { grid-column: 1 / span 5; }
+  .vb-opening-beeld { grid-column: 8 / span 4; }
+}
+
+/* ── Hoekhaken ──────────────────────────────────────────────────────────── */
+
+.vb-haken { position: absolute; inset: 0; pointer-events: none; }
+.vb-haak {
+  --l: 14px;
+  --d: 2px;
+  position: absolute;
+  color: #fff;
+  background:
+    linear-gradient(currentColor, currentColor) top left / var(--l) var(--d),
+    linear-gradient(currentColor, currentColor) top left / var(--d) var(--l),
+    linear-gradient(currentColor, currentColor) top right / var(--l) var(--d),
+    linear-gradient(currentColor, currentColor) top right / var(--d) var(--l),
+    linear-gradient(currentColor, currentColor) bottom left / var(--l) var(--d),
+    linear-gradient(currentColor, currentColor) bottom left / var(--d) var(--l),
+    linear-gradient(currentColor, currentColor) bottom right / var(--l) var(--d),
+    linear-gradient(currentColor, currentColor) bottom right / var(--d) var(--l);
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 1px rgb(0 0 0 / 0.55));
+}
+.vb-haak-kern { color: var(--oranje); }
+.vb-haak-label {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  padding: 3px 6px;
+  color: #fff;
+  background: rgb(20 20 18 / 0.82);
+  filter: none;
+}
+.vb-haak-kern .vb-haak-label { background: var(--oranje); color: #1b1b19; }
+.vb-haak-onder .vb-haak-label { bottom: auto; top: calc(100% + 6px); left: auto; right: 0; }
+
+/* ── 01 Index ───────────────────────────────────────────────────────────── */
+
+.vb-sectie { padding: var(--vb-sectie) var(--rand) 0; }
+.vb-sectiekop { display: grid; gap: 20px; margin-bottom: var(--vb-blok); }
+.vb-sectiekop .vb-mono { color: var(--oranje-tekst); }
+
+.vb-index { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--inkt); }
+.vb-index > li { border-bottom: 1px solid var(--lijn); }
+.vb-indexregel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3em 1fr auto;
+  grid-template-areas: "nr naam pijl" ". zin zin" ". delen delen";
+  gap: 10px 0;
+  padding: 28px 0 32px;
+  min-height: var(--raak);
+}
+.vb-index-nr { grid-area: nr; padding-top: 0.9em; color: var(--gedempt); }
+.vb-index-naam {
+  grid-area: naam;
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1rem + 4.6vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  hyphens: manual;
+  transition: transform 350ms var(--vb-ease);
+}
+.vb-index-zin { grid-area: zin; max-width: 40ch; line-height: 1.5; }
+.vb-index-delen { grid-area: delen; color: var(--gedempt); }
+.vb-index-pijl {
+  grid-area: pijl;
+  align-self: center;
+  font-size: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  transition: transform 350ms var(--vb-ease), color 350ms;
+}
+.vb-index-beeld { display: none; }
+
+@media (min-width: 1024px) {
+  .vb-indexregel {
+    grid-template-columns: 5em minmax(0, 5fr) minmax(0, 4fr) 3em;
+    grid-template-areas: "nr naam zin pijl" "nr naam delen pijl";
+    column-gap: var(--goot);
+    align-items: center;
+    padding: 36px 0;
+  }
+  .vb-index-nr { align-self: start; padding-top: 1.4em; }
+  .vb-index-zin { align-self: end; }
+  .vb-index-delen { align-self: start; }
+  .vb-index-pijl { justify-self: end; }
+  /* bij aanwijzen schuift een beeld mee, tussen naam en zin */
+  .vb-index-beeld {
+    display: block;
+    position: absolute;
+    right: calc(3em + var(--goot));
+    top: 50%;
+    width: 168px;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--foto-hoek);
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(24px, -50%) rotate(2deg);
+    transition: opacity 350ms var(--vb-ease), transform 450ms var(--vb-ease);
+  }
+  .vb-indexregel:is(:hover, :focus-visible) .vb-index-beeld { opacity: 1; transform: translate(0, -50%) rotate(0deg); }
+  .vb-indexregel:is(:hover, :focus-visible) .vb-index-zin,
+  .vb-indexregel:is(:hover, :focus-visible) .vb-index-delen { opacity: 0; }
+  .vb-index-zin, .vb-index-delen { transition: opacity 250ms; }
+}
+.vb-indexregel:is(:hover, :focus-visible) .vb-index-naam { transform: translateX(0.12em); }
+.vb-indexregel:is(:hover, :focus-visible) .vb-index-pijl { transform: translateX(6px); color: var(--oranje-tekst); }
+
+/* ── Plaat (antraciete secties) ─────────────────────────────────────────── */
+
+.vb-plaat {
+  margin-top: var(--vb-sectie);
+  background: var(--plaat);
+  color: var(--op-plaat);
+  --grond: var(--plaat);
+  --inkt: var(--op-plaat);
+}
+.vb-plaat-binnen { padding: var(--vb-sectie) var(--rand); }
+.vb-plaat .vb-mono { color: var(--oranje); }
+
+.vb-obs { display: grid; gap: var(--vb-blok); }
+.vb-obs-tekst { display: grid; gap: 24px; align-content: start; }
+.vb-obs .o-vak { border-radius: var(--foto-hoek); }
+@media (min-width: 1024px) {
+  .vb-obs { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--goot); }
+  .vb-obs-tekst { grid-column: 1 / span 4; position: sticky; top: 96px; align-self: start; }
+  .vb-obs-beeld { grid-column: 6 / -1; }
+}
+
+/* ── 03 Dossiers ────────────────────────────────────────────────────────── */
+
+.vb-dossiers { list-style: none; margin: 0 0 var(--vb-blok); padding: 0; display: grid; gap: var(--vb-blok); }
+.vb-dossier-link { display: block; }
+.vb-dossier-beeld { position: relative; aspect-ratio: 4 / 3; border-radius: var(--foto-hoek); overflow: hidden; }
+.vb-dossier-beeld > * { transition: transform 900ms var(--vb-ease); }
+.vb-dossier-link:is(:hover, :focus-visible) .vb-dossier-beeld > * { transform: scale(1.03); }
+.vb-dossier-link:is(:hover, :focus-visible) .vb-h3 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.vb-dossier:nth-child(2) .vb-dossier-beeld { aspect-ratio: 4 / 5; }
+@media (min-width: 768px) {
+  .vb-dossiers { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--goot); }
+  .vb-dossier:nth-child(1) { grid-column: 1 / span 7; }
+  .vb-dossier:nth-child(2) { grid-column: 9 / -1; margin-top: clamp(80px, 16vw, 280px); }
+  .vb-dossier:nth-child(n + 3) { grid-column: span 6; }
+}
+
+/* ── 04 Werkwijze ───────────────────────────────────────────────────────── */
+
+.vb-werkwijze { display: grid; gap: var(--vb-blok); }
+.vb-uitspraken { list-style: none; margin: 0 0 32px; padding: 0; counter-reset: none; }
+.vb-uitspraken li {
+  display: grid;
+  grid-template-columns: 3em 1fr;
+  padding: 22px 0;
+  border-top: 1px solid var(--lijn);
+  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.4;
+}
+.vb-uitspraken li:last-child { border-bottom: 1px solid var(--lijn); }
+.vb-uitspraken .vb-mono { padding-top: 0.45em; color: var(--oranje-tekst); }
+.vb-uitspraken p { max-width: 38ch; }
+.vb-portret-beeld { position: relative; aspect-ratio: 4 / 5; border-radius: var(--foto-hoek); overflow: hidden; }
+@media (min-width: 1024px) {
+  .vb-werkwijze { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--goot); align-items: end; }
+  .vb-wijze-tekst { grid-column: 1 / span 7; }
+  .vb-portret { grid-column: 9 / -1; }
+}
+
+/* ── 05 Slot ────────────────────────────────────────────────────────────── */
+
+/* het slot loopt door in de voet: de marge boven de voet valt weg */
+.vb-slot { margin-bottom: calc(-1 * clamp(80px, 14vw, 220px)); }
+.vb-slot .vb-plaat-binnen {
+  display: grid;
+  gap: 32px;
+  padding-bottom: calc(clamp(80px, 14vw, 220px) + clamp(56px, 7vw, 112px));
+}
+.vb-slot-kop {
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+  font-size: clamp(3rem, 1rem + 7.4vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  margin: 0;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+.vb-slot-zin { color: var(--gedempt); }
+
+/* ── Beweging ───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .vb-kopregel > span {
+    animation: vb-op 900ms var(--vb-ease) both;
+    animation-delay: calc(120ms + var(--i) * 90ms);
+  }
+  html:not(.stil) .vb-in { animation: vb-vaag 700ms var(--vb-ease) both; }
+  html:not(.stil) .vb-haak {
+    animation: vb-haak 500ms var(--vb-ease) both;
+    animation-delay: calc(700ms + var(--i) * 180ms);
+  }
+  @supports (animation-timeline: view()) {
+    html:not(.stil) .vb-zie {
+      animation: vb-binnen linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+@keyframes vb-op { from { transform: translateY(105%); } }
+@keyframes vb-vaag { from { opacity: 0; } }
+@keyframes vb-haak { from { opacity: 0; transform: scale(1.35); } }
+@keyframes vb-binnen { from { opacity: 0; transform: translateY(24px); } }

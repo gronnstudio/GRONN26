@@ -1,11 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { Verder } from "@/components/wereld/verder"
-import { Atelier } from "@/components/voorpagina/atelier"
-import { Uitgelicht } from "@/components/voorpagina/uitgelicht"
-import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
-import "@/components/voorpagina/voorpagina.css"
+import { Dossiers, Index, Observatie, Opening, Slot, Werkwijze, WERKWIJZE } from "@/components/veldboek/veldboek"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
 import "@/components/blad/plan.css"
@@ -17,8 +13,8 @@ import { studioSchema } from "@/lib/schema"
 // Twee voorpagina's, één per layout (Weergave → Layout, 25 okt 2026); de
 // andere staat uit via html.plan in globals.css.
 //
-// Klassiek, versimpeld (24 okt 2026): opening, wie ik ben, wat ik doe, één
-// echt project en Kennismaken.
+// Klassiek is sinds 9 nov 2026 het Veldboek (docs/website/BLUEPRINT.md):
+// opening, index, observatie, dossiers, werkwijze, slot.
 //
 // Tuinplan, blad B-01, de plattegrond (24 okt 2026): bovenaan de kop van de
 // tekening, dan de tuin van boven met legenda, de toelichting in genummerde
@@ -30,12 +26,7 @@ export const metadata: Metadata = {
     "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
 }
 
-const OPMERKINGEN: Tekst[] = [
-  { nl: "Ik ontwerp, leg aan en onderhoud zelf. Eén persoon van het eerste gesprek tot de laatste plant.", en: "I design, build and maintain myself. One person from the first conversation to the last plant." },
-  { nl: "Een vaste prijs vooraf, waar het kan. Wat niet blind te prijzen is, bekijk ik eerst ter plaatse.", en: "A fixed price up front, wherever possible. What can’t be priced blind, I look at on site first." },
-  { nl: "Ik begin bij water, bodem en licht van jouw plek, en kies daarna pas de planten.", en: "I start with the water, soil and light of your place, and only then choose the plants." },
-  { nl: "Werkgebied: Stein en omgeving, tot ongeveer 30 km (Maastricht, Heerlen, Kerkrade).", en: "Area: Stein and surroundings, up to about 30 km (Maastricht, Heerlen, Kerkrade)." },
-]
+const OPMERKINGEN: Tekst[] = WERKWIJZE
 
 const Sectiekop = ({ code, t }: { code: string; t: Tekst }) => (
   <div className="b-sectiekop">
@@ -49,19 +40,13 @@ export default function Voorpagina() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema()).replace(/</g, "\\u003c") }} />
 
-      <div className="alleen-klassiek">
-        <div className="vp-wortel">
-          <Atelier />
-          <WatIkDoe />
-          <Uitgelicht />
-        </div>
-        <Verder
-          voor={{ nl: "Zullen we", en: "Shall we" }}
-          nadruk={{ nl: "kennismaken", en: "meet" }}
-          na="?"
-          href="/kennismaken"
-          label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
-        />
+      <div className="alleen-klassiek vb">
+        <Opening />
+        <Index />
+        <Observatie />
+        <Dossiers />
+        <Werkwijze />
+        <Slot />
       </div>
 
       <div className="alleen-plan">

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed, Montserrat, Syne } from "next/font/google"
+import { Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed, Montserrat, Syne } from "next/font/google"
 import { Menu } from "@/components/menu"
 import { Voet } from "@/components/voet"
 import { Kop } from "@/components/blad/kop"
@@ -16,6 +16,8 @@ import { BUSINESS } from "@/lib/business"
 import "./globals.css"
 
 const syne = Syne({ subsets: ["latin"], weight: ["700"], variable: "--font-syne" })
+// Geist Mono: annotaties, codes en maten (Veldboek, 9 nov 2026; Website Master Brief).
+const geist = Geist_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-geist-mono" })
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-montserrat" })
 // Layout Tuinplan (Weergave → Layout): IBM Plex, de letter van tekeningen en
 // maten. globals.css zet onder html.plan --font-syne op de smalle Condensed
@@ -56,7 +58,7 @@ const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="nl" className={`${syne.variable} ${montserrat.variable} ${smal.variable} ${plex.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="nl" className={`${syne.variable} ${montserrat.variable} ${geist.variable} ${smal.variable} ${plex.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
       </head>
