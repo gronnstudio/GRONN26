@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Foto } from "@/components/foto"
 import { euro } from "@/components/diensten/prijs"
 import { Pijl } from "@/components/pijl"
-import { F01, F02_2, F08_1, F09_2, F10, T02 } from "@/components/voorpagina/beelden"
+import { F01, F02_2, F04_2, F08_1, F09_2, F10, F11, T01, T02 } from "@/components/voorpagina/beelden"
 import { pricingFor } from "@/lib/data/pricing"
 import { KLANT_CITAAT, VIJVER } from "@/lib/data/vijverrenovatie"
 import { TelLink, VoorNu } from "@/components/handoff/klant"
@@ -34,6 +34,16 @@ const RUBRIEKEN = [
   { nr: "03", naam: "Tuinen", zin: `Kleine tuin of terras vanaf ${euro(prijs("implementation"))}, vaste prijs vooraf.`, href: "/tuinen", foto: T02 },
   { nr: "04", naam: "Studio", zin: "Eén hovenier, één aanspreekpunt, van eerste gesprek tot oplevering.", href: "/over", foto: F09_2 },
   { nr: "05", naam: "Journaal", zin: "Korte stukken over water, planten en wat er deze maand speelt.", href: "/journaal", foto: F01 },
+]
+
+// De draaiende band: alleen eigen werk, met de naam van het project eronder.
+const BAND = [
+  { foto: F10, naam: "Vijverrenovatie" },
+  { foto: T01, naam: "Terras Geulle" },
+  { foto: F08_1, naam: "Vijverrenovatie" },
+  { foto: F11, naam: "Vijverrenovatie" },
+  { foto: T02, naam: "Terras Geulle" },
+  { foto: F04_2, naam: "Vijverrenovatie" },
 ]
 
 // "In het kort": alleen wat in de projectdata staat (VIJVER.omschrijving en .status).
@@ -84,6 +94,22 @@ export function MagazineVoorpagina() {
         <h2 id="mg-uitspraak" className="mg-uitspraak">
           Een tuin is geen product maar een plek. Ik ontwerp hem, reken hem door en leg hem zelf aan, <em>en je weet vooraf wat het kost.</em>
         </h2>
+      </section>
+
+      {/* ── De draaiende band ────────────────────────────────────── */}
+      <section className="mg-band" aria-label="Beelden van het werk">
+        <div className="mg-band-baan">
+          {[0, 1].map((ronde) => (
+            <div key={ronde} className="mg-band-reeks" aria-hidden={ronde === 1 || undefined}>
+              {BAND.map((b, i) => (
+                <figure key={i} className="mg-band-kaart">
+                  <Foto foto={ronde === 1 ? { ...b.foto, alt: "" } : b.foto} sizes="(min-width: 900px) 26vw, 62vw" className="mg-band-foto" />
+                  <figcaption className="ho-lbl">{b.naam}</figcaption>
+                </figure>
+              ))}
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ── De inhoud ────────────────────────────────────────────── */}

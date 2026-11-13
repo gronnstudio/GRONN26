@@ -35,6 +35,35 @@
   @media (hover: hover) { html:not(.stil) .mg-coverregel:hover { border-top-color: #ff5b04; transform: translateY(-4px); } }
 }
 
+/* het doek gaat op en de coverfoto zoomt uit (eigenaar, 13 nov 2026: "animaties met uitzoomen") */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .mg-cover-foto img { animation: mg-uitzoom 1800ms var(--ho-ease) both; }
+  html:not(.stil) .mg-cover::before { content: ""; position: absolute; inset: 0; z-index: 2; background: #140f0b; transform-origin: top; pointer-events: none; animation: mg-doek 1100ms var(--ho-ease) 150ms both; }
+  html:not(.stil) .mg-cover-inhoud > * { animation: mg-op 900ms var(--ho-ease) 700ms both; }
+  html:not(.stil) .mg-cover-inhoud > :nth-child(2) { animation-delay: 850ms; }
+  html:not(.stil) .mg-cover-inhoud > :nth-child(3) { animation-delay: 1000ms; }
+}
+@keyframes mg-uitzoom { from { scale: 1.25; } to { scale: 1; } }
+@keyframes mg-doek { from { scale: 1 1; } to { scale: 1 0; } }
+@keyframes mg-op { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+
+/* ── de draaiende band: loopt vanzelf, staat stil onder de muis of bij focus ── */
+.mg-band { overflow: hidden; padding-block: clamp(8px, 2vw, 24px) clamp(40px, 6vw, 88px); }
+.mg-band-baan { display: flex; width: max-content; }
+.mg-band-reeks { display: flex; gap: clamp(12px, 1.6vw, 24px); padding-right: clamp(12px, 1.6vw, 24px); }
+.mg-band-kaart { margin: 0; flex: none; width: clamp(220px, 26vw, 400px); display: grid; gap: 10px; }
+.mg-band-kaart:nth-child(even) { margin-top: clamp(20px, 4vw, 64px); }
+.mg-band-foto { aspect-ratio: 4 / 5; }
+html.stil .mg-band { overflow-x: auto; }
+@media (prefers-reduced-motion: reduce) { .mg-band { overflow-x: auto; } }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .mg-band-baan { animation: mg-draai 60s linear infinite; }
+  html:not(.stil) .mg-band:hover .mg-band-baan { animation-play-state: paused; }
+  html:not(.stil) .mg-band-foto img { scale: 1.1; transition: scale 750ms var(--ho-ease); }
+  html:not(.stil) .mg-band-kaart:hover .mg-band-foto img { scale: 1; }
+}
+@keyframes mg-draai { to { translate: -50% 0; } }
+
 /* ── de uitspraak (Kolenda: één zin over de volle breedte) ────────── */
 .mg-uitspraak { margin: 18px 0 0; max-width: 24ch; font-family: var(--font-syne); font-weight: 700; font-size: clamp(28px, 4.6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; text-wrap: balance; }
 .mg-uitspraak em { font-style: normal; color: var(--oranje-tekst); }
