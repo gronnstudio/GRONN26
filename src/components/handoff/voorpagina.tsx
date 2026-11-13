@@ -168,7 +168,7 @@ export function HandoffVoorpagina() {
           <ul className="ho-diensten">
             {SPECIALISMEN.map((s) => (
               <li key={s.id} id={s.id} className="ho-dienst">
-                <Link href={s.link.href} className="ho-dienst-beeld" tabIndex={-1} aria-hidden>
+                <Link transitionTypes={["schuif"]} href={s.link.href} className="ho-dienst-beeld" tabIndex={-1} aria-hidden>
                   <Foto foto={s.foto} sizes="(min-width: 1024px) 50vw, 94vw" className="ho-dienst-foto" />
                 </Link>
                 <div className="ho-dienst-tekst">
@@ -177,7 +177,7 @@ export function HandoffVoorpagina() {
                   <p className="ho-sterk">{s.sub}</p>
                   <p>{s.tekst}</p>
                   <p className="ho-prijs">{s.prijs}</p>
-                  <Link href={s.link.href} className="ho-pijl">
+                  <Link transitionTypes={["schuif"]} href={s.link.href} className="ho-pijl">
                     {s.link.label} <span aria-hidden>↗</span>
                   </Link>
                 </div>
@@ -219,7 +219,7 @@ export function HandoffVoorpagina() {
               </li>
             ))}
           </ul>
-          <Link href="/werk" className="ho-knop ho-knop-lijn">
+          <Link transitionTypes={["schuif"]} href="/werk" className="ho-knop ho-knop-lijn">
             Bekijk projecten <span aria-hidden>↗</span>
           </Link>
         </div>
@@ -258,7 +258,7 @@ export function HandoffVoorpagina() {
               standaardoplossingen. Wel één aanspreekpunt van eerste gesprek tot oplevering, aandacht voor details en technische kennis van water.
             </p>
             <p>Omdat goed buitenwerk begint bij begrijpen wat een plek nodig heeft.</p>
-            <Link href="/over" className="ho-pijl">
+            <Link transitionTypes={["schuif"]} href="/over" className="ho-pijl">
               Meer over mij <span aria-hidden>↗</span>
             </Link>
           </div>

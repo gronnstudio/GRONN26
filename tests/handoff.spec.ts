@@ -97,3 +97,21 @@ test("voor/nu: de schuif werkt met het toetsenbord en verschuift de grens", asyn
   const pos = await page.locator(".ho-vergelijk").evaluate((e) => getComputedStyle(e).getPropertyValue("--pos").trim())
   expect(pos).toBe("40%")
 })
+
+test("Ontdek tuinrenovatie: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __vt: string[] }
+    w.__vt = []
+    const orig = document.startViewTransition?.bind(document)
+    if (!orig) return
+    document.startViewTransition = ((arg: unknown) => {
+      const types = (arg as { types?: string[] })?.types ?? []
+      w.__vt.push(...types)
+      return orig(arg as Parameters<typeof orig>[0])
+    }) as typeof document.startViewTransition
+  })
+  await page.goto("/")
+  await page.getByRole("link", { name: /Ontdek tuinrenovatie/ }).click()
+  await expect(page).toHaveURL(/\/tuinen$/)
+  expect(await page.evaluate(() => (window as unknown as { __vt: string[] }).__vt)).toContain("schuif")
+})
