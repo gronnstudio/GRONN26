@@ -122,7 +122,8 @@ for (const b of [390, 1440]) {
 test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1920, height: 900 })
-  for (const route of ["/", "/vijvers", "/over"]) {
+  // De voorpagina volgt sinds 13 nov 2026 het raster van de handoff (1440).
+  for (const route of ["/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
     const [h1, voet, kennis] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
