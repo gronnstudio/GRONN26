@@ -4,14 +4,22 @@ import { expect, test } from "./fixtures"
 // projectaanvraag in vier stappen (13 nov 2026), zowel de foutroute als de
 // gelukte route. Op de telefoon staat het dock in plaats van de kop.
 
-test("kop @1440: vier links en Start een project; Projecten gaat naar /werk", async ({ page }) => {
+test("desktop @1440: het dock staat bovenaan, Werk gaat naar /werk", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
-  for (const naam of ["Specialismen", "Projecten", "Werkwijze", "Studio"]) await expect(nav.getByRole("link", { name: naam })).toBeVisible()
-  await nav.getByRole("link", { name: "Projecten" }).click()
+  const nav = page.locator("nav[data-menu]")
+  await expect(nav).toBeVisible()
+  const box = await nav.boundingBox()
+  expect(box!.y).toBeLessThan(100)
+  await expect(page.locator(".ho-kop")).toHaveCount(0)
+  await nav.getByRole("link", { name: "Werk" }).click()
   await expect(page).toHaveURL(/\/werk$/)
-  await expect(nav.getByRole("link", { name: "Projecten" })).toHaveAttribute("aria-current", "page")
+})
+
+test("donker thema werkt op de handoff-voorpagina", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("gronn-weergave", JSON.stringify({ kleur: "donker" })))
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
 test("telefoon @390: het dock onderaan, geen handoff-kop", async ({ page }) => {

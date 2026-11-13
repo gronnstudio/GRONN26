@@ -105,7 +105,7 @@ export function LayoutWissel({ className }: { className?: string }) {
 // Sinds 18 okt 2026 geen eigen knop en paneel meer: de instellingen staan in
 // het hamburgermenu (eigenaar: "hierin breng je alles onder wat in menu niet
 // staat zoals weergave").
-export function Instellingen() {
+export function Instellingen({ layout = true }: { layout?: boolean } = {}) {
   const [stand, setStand] = useState<Stand>(STANDAARD);
   const id = useId();
 
@@ -185,6 +185,7 @@ export function Instellingen() {
           <T t={{ nl: "Auto: overdag licht, 's avonds donker (19:00 tot 07:00).", en: "Auto: light by day, dark in the evening (19:00 to 07:00)." }} />
         </p>
       </fieldset>
+      {layout ? (
       <fieldset className="m-0 mb-4 border-0 p-0">
         <legend className="lbl mb-2.5 p-0 opacity-70">Layout</legend>
         <div className="grid grid-cols-2 rounded-full border border-lijn p-[3px]">
@@ -206,6 +207,7 @@ export function Instellingen() {
           ))}
         </div>
       </fieldset>
+      ) : null}
       <div className="lg:col-span-3 lg:grid lg:grid-cols-2 lg:gap-x-8">
       {SCHAKELAARS.map(([k, t]) => (
         <label

@@ -306,7 +306,7 @@ html:has(.ho-menu[open]) { overflow: hidden; }
 .ho-voet-onder a { color: inherit; }
 
 /* de aanvraag heeft zijn eigen kop, zonder menu en voet (handoff 23) */
-body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-tot-desktop) { display: none; }
+body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock) { display: none; }
 
 /* ── projectaanvraag ──────────────────────────────────────────────── */
 .hw { min-height: 100svh; padding: 0 var(--ho-goot) 64px; background: var(--linnen); color: var(--inkt); }
@@ -418,10 +418,7 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-tot-desktop) { display: none; }
   .ho-voorna { grid-template-columns: 3fr 2fr; align-items: end; gap: 48px; }
 }
 .hw-legenda { margin: 8px 0 4px; padding: 0; font-weight: 600; color: var(--inkt); }
-/* Navigatie: handoff-kop vanaf 1024px, het dock eronder. */
-.ho-vanaf-desktop, .ho-tot-desktop { display: contents; }
-@media (max-width: 1023.98px) { .ho-vanaf-desktop { display: none !important; } }
-@media (min-width: 1024px) { .ho-tot-desktop { display: none !important; } }
+.ho-dock { display: contents; }
 
 /* Beweging van de live site (13 nov 2026): kop per woord omhoog, parallax
    op hero en studio via [data-v] uit globals.css, voor/nu-schuif. Bij minder
@@ -456,3 +453,20 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-tot-desktop) { display: none; }
 ::view-transition-old(.schuif-uit) { animation: ho-schuif-weg 650ms cubic-bezier(0.65, 0, 0.35, 1) both; }
 @keyframes ho-schuif-in { from { translate: 100% 0; } }
 @keyframes ho-schuif-weg { to { translate: -20% 0; opacity: 0.5; } }
+
+/* Donker (Weergave in het dock, of Auto na 19:00): de warme aardetinten van
+   de live site (globals.css, html.donker) met de handoff-namen erop. --bos is
+   hier de kleur van koppen en lijnknoppen, dus licht; de voet krijgt het
+   donkere aardevlak van de live site. */
+html.donker:root {
+  --bos: #f0e9dc;
+  --porselein: #2e261f;
+  --linnen: #221c17;
+  --klei: #c9a98a;
+}
+html.donker .ho-voet { background: #2a2019; color: #f0e9dc; }
+html.donker .ho-voet .ho-lbl, html.donker .ho-voet-onder { color: #c8bca8; }
+html.donker .ho-knop-lijn:hover { background: #f0e9dc; color: #221c17; }
+html.donker :is(.hw-keuze:has(input:checked), .hw-chip input:checked + span) { background: #372e25; }
+html.donker .hw-samenvatting { background: #3a1e17; border-color: #ff8a6b; }
+html.donker :is(.hw-samenvatting p, .hw-samenvatting a, .hw-fout) { color: #ffb7a3; }

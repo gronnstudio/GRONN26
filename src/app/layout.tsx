@@ -3,7 +3,6 @@ import { Analytics } from "@vercel/analytics/next"
 import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed, Montserrat, Syne } from "next/font/google"
-import { HandoffKop } from "@/components/handoff/kop"
 import { Menu } from "@/components/menu"
 import { HandoffVoet } from "@/components/handoff/voet"
 import "@/components/handoff/handoff.css"
@@ -56,7 +55,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 // zelf koos, gaat één keer terug naar Klassiek.
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
-const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=location.pathname.indexOf('/dashboard')===0&&(k==='donker'||(k==='auto'&&(h>=19||h<7))),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.remove('plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
+const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.remove('plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}}catch(e){}`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -66,9 +65,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div className="alleen-plan contents"><Kop /></div>
-        {/* Handoff-kop vanaf 1024px, het dock eronder (eigenaar, 13 nov 2026). */}
-        <div className="alleen-klassiek ho-vanaf-desktop"><HandoffKop /></div>
-        <div className="alleen-klassiek ho-tot-desktop"><Menu weergave={false} /></div>
+        {/* Het dock van de live site, met licht en donker; op desktop bovenaan
+            (eigenaar, 13 nov 2026: "neem themas en dock mee over"). */}
+        <div className="alleen-klassiek ho-dock"><Menu layout={false} /></div>
         <main id="inhoud">{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
         <div className="alleen-klassiek contents">
