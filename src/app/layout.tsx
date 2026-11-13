@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed, Montserrat, Syne } from "next/font/google"
+import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
 import { Menu } from "@/components/menu"
 import { HandoffVoet } from "@/components/handoff/voet"
 import "@/components/handoff/handoff.css"
@@ -15,17 +15,6 @@ import "@/components/wereld/wereld.css"
 import { Stempel } from "@/components/blad/stempel"
 import { BUSINESS } from "@/lib/business"
 import "./globals.css"
-
-const syne = Syne({ subsets: ["latin"], weight: ["700"], variable: "--font-syne" })
-// Geist Mono 600 voor de labels uit de handoff "Website 2027".
-const geistMono = Geist_Mono({ subsets: ["latin"], weight: ["600"], variable: "--font-geist-mono" })
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-montserrat" })
-// Layout Tuinplan (Weergave → Layout): IBM Plex, de letter van tekeningen en
-// maten. globals.css zet onder html.plan --font-syne op de smalle Condensed
-// en --font-montserrat op de gewone Sans, zodat elke pagina meedoet.
-const smal = IBM_Plex_Sans_Condensed({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-plex-smal", preload: false })
-const plex = IBM_Plex_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-plex", preload: false })
-const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-plex-mono", preload: false })
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gronn.studio"),

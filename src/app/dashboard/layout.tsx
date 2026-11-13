@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist_Mono, Montserrat, Syne } from "next/font/google"
+import { geistMono as mono, montserrat, syne } from "@/fonts"
 import { Schil } from "@/components/crm/schil"
 import type { Treffer } from "@/components/crm/zoekvenster"
 import { leesCatalogus } from "@/lib/beheer/catalogus"
@@ -15,9 +15,6 @@ import { leesStand } from "@/lib/beheer/stand"
 // De letters staan hier nog een keer op de schil: Layout Tuinplan (html.plan)
 // zet op de site andere letters, het systeem houdt Syne en Montserrat. Geist
 // Mono is voor bedragen, maten en tijden (masterprompt CRM).
-const syne = Syne({ subsets: ["latin"], weight: ["700"], variable: "--font-syne" })
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-montserrat" })
-const mono = Geist_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-geist-mono" })
 
 export const metadata: Metadata = {
   title: { absolute: "GRØNN Studio · Systeem", template: "%s · GRØNN Studio" },
