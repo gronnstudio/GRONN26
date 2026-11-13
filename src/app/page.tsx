@@ -1,12 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { Verder } from "@/components/wereld/verder"
-import { Atelier } from "@/components/voorpagina/atelier"
-import { Uitgelicht } from "@/components/voorpagina/uitgelicht"
-import { WatIkDoe } from "@/components/voorpagina/wat-ik-doe"
 import { HandoffVoorpagina } from "@/components/handoff/voorpagina"
-import { DevAlleen } from "@/components/dev-menu"
 import "@/components/voorpagina/voorpagina.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
@@ -51,24 +46,11 @@ export default function Voorpagina() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema()).replace(/</g, "\\u003c") }} />
 
-      {/* De voorpagina uit de handoff "Website 2027", alleen via het ontwikkelaarsmenu (12 nov 2026). */}
-      <div className="alleen-klassiek dev-alleen-voorpagina">
-        <DevAlleen klasse="dev-voorpagina"><HandoffVoorpagina /></DevAlleen>
-      </div>
-
-      <div className="alleen-klassiek dev-zonder-voorpagina">
-        <div className="vp-wortel">
-          <Atelier />
-          <WatIkDoe />
-          <Uitgelicht />
-        </div>
-        <Verder
-          voor={{ nl: "Zullen we", en: "Shall we" }}
-          nadruk={{ nl: "kennismaken", en: "meet" }}
-          na="?"
-          href="/kennismaken"
-          label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
-        />
+      {/* De voorpagina uit de handoff "Website 2027" is de voorpagina
+          (eigenaar, 13 nov 2026: "zet alles tot aan de footer over op de live
+          website"). De voet en het dock blijven die van de live site. */}
+      <div className="alleen-klassiek">
+        <HandoffVoorpagina />
       </div>
 
       <div className="alleen-plan">

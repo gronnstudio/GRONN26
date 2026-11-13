@@ -17,6 +17,7 @@ const ROUTES = [
   "/werk/terras-geulle",
   "/over",
   "/kennismaken",
+  "/start-een-project",
   "/faq",
   "/privacy",
   "/voorwaarden",

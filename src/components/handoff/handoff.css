@@ -63,8 +63,10 @@
   cursor: pointer;
   transition: background-color 180ms var(--ho-ease), transform 180ms var(--ho-ease), color 180ms var(--ho-ease);
 }
-.ho-knop-bos { background: var(--bos); color: var(--porselein); border: 0; }
-.ho-knop-bos:hover { background: #1b2c23; }
+/* De actieknop is oranje met antraciet tekst (5,24:1), zoals de merkgids
+   (eigenaar koos "Oranje, zoals de merkgids", 13 nov 2026). Eén per scherm. */
+.ho-knop-oranje { background: #ff5b04; color: #202020; border: 0; }
+.ho-knop-oranje:hover { background: #202020; color: #ff5b04; }
 .ho-knop-porselein { background: var(--porselein); color: var(--bos); }
 .ho-knop-lijn { border: 1px solid var(--bos); color: var(--bos); background: transparent; }
 .ho-knop-lijn:hover { background: var(--bos); color: var(--porselein); }
@@ -308,7 +310,7 @@ html:has(.ho-menu[open]) { overflow: hidden; }
 .ho-voet-onder a { color: inherit; }
 
 /* de aanvraag heeft zijn eigen kop, zonder menu en voet (handoff 23) */
-body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .dev-zonder-kop) { display: none !important; }
+body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock, .dev-zonder-kop) { display: none !important; }
 
 /* ── projectaanvraag ──────────────────────────────────────────────── */
 .hw { min-height: 100svh; padding: 0 var(--ho-goot) 64px; background: var(--linnen); color: var(--inkt); }
@@ -403,6 +405,75 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .dev-zonder-kop) { display: none !im
 .hw-referentie .ho-lbl { display: block; margin-bottom: 4px; }
 
 /* andere pagina's: wat ruimte onder de vaste kop op de telefoon */
+@media (max-width: 1023px) { main#inhoud:not(:has(.ho, .hw)) { padding-top: 24px; } }
+
+/* Verbeterronde 13 nov 2026: voorjaarshaak, twee knoppen, prijsregel, voor/nu met review. */
+.ho-haak { font-weight: 600; color: var(--inkt) !important; }
+.ho-knoppen { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.ho-eind .ho-knoppen { justify-content: center; }
+.ho-prijs { font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: 13px; letter-spacing: 0.02em; color: var(--bos) !important; }
+.ho-voorna { margin: 0 0 48px; display: grid; gap: 24px; }
+.ho-voorna-paar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ho-voorna-paar .ho-lbl { margin-top: 8px; }
+.ho-voorna-foto { aspect-ratio: 4 / 3; border-radius: var(--foto-hoek); overflow: hidden; }
+.ho-citaat { margin: 0; max-width: 60ch; }
+.ho-citaat p { font-size: clamp(20px, 2.2vw, 28px); line-height: 1.35; margin: 0 0 12px; color: var(--inkt); }
+@media (min-width: 1024px) {
+  .ho-voorna { grid-template-columns: 3fr 2fr; align-items: end; gap: 48px; }
+}
+.hw-legenda { margin: 8px 0 4px; padding: 0; font-weight: 600; color: var(--inkt); }
+.ho-dock { display: contents; }
+
+/* Beweging van de live site (13 nov 2026): kop per woord omhoog, parallax
+   op hero en studio via [data-v] uit globals.css, voor/nu-schuif. Bij minder
+   beweging staat alles meteen stil. */
+.ho-woord { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.ho-woord > span { display: inline-block; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .ho-woord > span { animation: ho-woord-op 900ms var(--ho-ease) both; animation-delay: calc(var(--i) * 90ms + 100ms); }
+}
+@keyframes ho-woord-op { from { transform: translateY(105%); } }
+
+.ho-held-raam, .ho-studio-raam { overflow: hidden; border-radius: var(--foto-hoek); }
+.ho-held-raam [data-v] > *, .ho-studio-raam [data-v] > * { scale: 1.14; border-radius: 0; }
+.ho-studio-raam, .ho-studio-raam [data-v] { height: 100%; }
+
+.ho-vergelijk { position: relative; aspect-ratio: 4 / 3; border-radius: var(--foto-hoek); overflow: hidden; touch-action: pan-y; }
+.ho-vergelijk-foto { position: absolute !important; inset: 0; border-radius: 0 !important; }
+.ho-vergelijk-voor { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ho-vergelijk-lbl { position: absolute; top: 12px; padding: 4px 10px; border-radius: 999px; background: rgb(32 32 32 / .72); color: #efeeea; pointer-events: none; }
+.ho-vergelijk-lbl[data-kant="voor"] { left: 12px; }
+.ho-vergelijk-lbl[data-kant="nu"] { right: 12px; }
+.ho-vergelijk-greep { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; translate: -1px 0; background: #efeeea; pointer-events: none; }
+.ho-vergelijk-greep span { position: absolute; top: 50%; left: 50%; translate: -50% -50%; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: #efeeea; color: #202020; font-weight: 700; font-size: 18px; box-shadow: 0 2px 12px rgb(0 0 0 / .25); }
+.ho-vergelijk-schuif { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.ho-vergelijk:has(.ho-vergelijk-schuif:focus-visible) .ho-vergelijk-greep span { outline: 3px solid var(--bos); outline-offset: 3px; }
+
+/* Pagina schuift van rechts over de voorpagina heen (src/app/template.tsx).
+   Kop en dock staan buiten de overgang en blijven stil. Bij minder beweging
+   zet globals.css alle view-transitions uit. */
+::view-transition-group(.schuif-in) { z-index: 2; }
+::view-transition-new(.schuif-in) { animation: ho-schuif-in 650ms cubic-bezier(0.65, 0, 0.35, 1) both; box-shadow: -24px 0 48px rgb(0 0 0 / .12); }
+::view-transition-old(.schuif-uit) { animation: ho-schuif-weg 650ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+@keyframes ho-schuif-in { from { translate: 100% 0; } }
+@keyframes ho-schuif-weg { to { translate: -20% 0; opacity: 0.5; } }
+
+/* Donker (Weergave in het dock, of Auto na 19:00): de warme aardetinten van
+   de live site (globals.css, html.donker) met de handoff-namen erop. --bos is
+   hier de kleur van koppen en lijnknoppen, dus licht; de voet krijgt het
+   donkere aardevlak van de live site. */
+html.donker:root {
+  --bos: #f0e9dc;
+  --porselein: #2e261f;
+  --linnen: #221c17;
+  --klei: #c9a98a;
+}
+html.donker .ho-voet { background: #2a2019; color: #f0e9dc; }
+html.donker .ho-voet .ho-lbl, html.donker .ho-voet-onder { color: #c8bca8; }
+html.donker .ho-knop-lijn:hover { background: #f0e9dc; color: #221c17; }
+html.donker :is(.hw-keuze:has(input:checked), .hw-chip input:checked + span) { background: #372e25; }
+html.donker .hw-samenvatting { background: #3a1e17; border-color: #ff8a6b; }
+html.donker :is(.hw-samenvatting p, .hw-samenvatting a, .hw-fout) { color: #ffb7a3; }
+
+/* andere pagina's: wat ruimte onder de vaste kop op de telefoon (ontwikkelaarsmenu) */
 @media (max-width: 1023px) { html.dev-kop main#inhoud:not(:has(.ho, .hw)) { padding-top: 24px; } }
-/* met het dock blijft de sticky knop weg: die zou het dock bedekken */
-html:not(.dev-kop) .ho-plak { display: none; }
