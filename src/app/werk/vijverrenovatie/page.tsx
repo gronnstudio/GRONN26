@@ -8,6 +8,7 @@ import { Verder } from "@/components/wereld/verder"
 import { Fotostapel } from "@/components/werk/fotostapel"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
+import { Pijl } from "@/components/pijl"
 import {
   CIJFERS,
   CIJFERS_NOOT,
@@ -133,7 +134,7 @@ export default function Vijverrenovatie() {
                 <dt className="lbl text-gedempt"><T t={k} /></dt>
                 <dd className="m-0 max-w-[62ch] text-[17px] leading-[1.6]">
                   <T t={v} />{" "}
-                  <a href={`#${anker}`} className="lnk whitespace-nowrap"><T t={nlEn("Lees meer", "Read more")} /> ↓</a>
+                  <a href={`#${anker}`} className="lnk whitespace-nowrap"><T t={nlEn("Lees meer", "Read more")} /> <Pijl richting="s" /></a>
                 </dd>
               </div>
             ))}

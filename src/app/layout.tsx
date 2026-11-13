@@ -5,11 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
 import { Menu } from "@/components/menu"
 import { Voet } from "@/components/voet"
-import { DevMenu } from "@/components/dev-menu"
-import { HandoffKop } from "@/components/handoff/kop"
-import { HandoffVoet } from "@/components/handoff/voet"
 import "@/components/handoff/handoff.css"
-import "@/components/dev-menu.css"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
 import { Zoek } from "@/components/zoek"
@@ -48,7 +44,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 // zelf koos, gaat één keer terug naar Klassiek.
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
-const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}var v=JSON.parse(localStorage.getItem('gronn-dev')||'{}');c.toggle('dev-kop',!!v.kop);c.toggle('dev-nature',!!v.kleur);c.toggle('dev-voorpagina',!!v.voorpagina)}catch(e){}`
+const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}localStorage.removeItem('gronn-dev')}catch(e){}`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -58,15 +54,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div className="alleen-plan contents"><Kop /></div>
-        <div className="alleen-klassiek dev-alleen-kop contents"><HandoffKop /></div>
         <main id="inhoud">{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
-        <div className="alleen-klassiek dev-zonder-kop contents">
+        <div className="alleen-klassiek ho-dock contents">
           <Voet />
           <Menu />
         </div>
-        <div className="alleen-klassiek dev-alleen-kop contents"><HandoffVoet /></div>
-        <DevMenu />
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}

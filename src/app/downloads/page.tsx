@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Opening } from "@/components/wereld/opening"
 import { T } from "@/components/taal"
 import type { L } from "@/lib/i18n"
+import { Pijl } from "@/components/pijl"
 
 // /downloads (eigenaar, 5 okt 2026: "een pagina waar ik dit soort dingen
 // makkelijk kan downloaden voor als ik het nog eens nodig heb"). Merkbestanden
@@ -105,7 +106,7 @@ export default function Downloads() {
                   <T t={s.uitleg} />
                 </span>
                 <span className="mt-auto knop-klein self-start bg-oranje text-antraciet">
-                  <T t={s.label} /> <span aria-hidden="true">{intern ? "→" : "↓"}</span>
+                  <T t={s.label} /> <Pijl richting={intern ? "e" : "s"} />
                 </span>
               </>
             )

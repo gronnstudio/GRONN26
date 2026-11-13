@@ -5,6 +5,7 @@ import { track } from "@vercel/analytics"
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { Logo } from "@/components/logo"
 import { BUSINESS } from "@/lib/business"
+import { Pijl } from "@/components/pijl"
 
 // "Start een project": de aanvraag uit de handoff "Website 2027" (pagina 12
 // en 23; eigenaar koos "Handoff precies volgen", 12 nov 2026), op 13 nov
@@ -125,7 +126,7 @@ function Keuzes({ naam, lijst, waarde, onKies, fout, legenda, zichtbaar }: { naa
         <label key={k.id} className="hw-keuze">
           <input type="radio" name={naam} value={k.id} checked={waarde === k.id} onChange={() => onKies(k.id)} id={i === 0 ? `veld-${naam}` : undefined} />
           <span>{k.label}</span>
-          <span aria-hidden className="hw-keuze-pijl">↗</span>
+          <Pijl className="hw-keuze-pijl" />
         </label>
       ))}
       {fout ? <p id={`fout-${naam}`} className="hw-fout">{fout}</p> : null}
@@ -346,7 +347,7 @@ export function ProjectWizard() {
             </>
           )}
           <p>
-            <Link href="/" className="ho-pijl">Terug naar de voorpagina <span aria-hidden>↗</span></Link>
+            <Link href="/" className="ho-pijl">Terug naar de voorpagina <Pijl /></Link>
           </p>
         </div>
       </div>

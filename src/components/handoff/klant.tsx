@@ -5,6 +5,7 @@ import { track } from "@vercel/analytics"
 import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react"
 import { Foto } from "@/components/foto"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
+import { Pijl } from "@/components/pijl"
 
 // De drie stukjes van de handoff-voorpagina die JavaScript nodig hebben.
 
@@ -84,7 +85,7 @@ export function PlakCta() {
   return (
     <div className="ho-plak" data-toon={toon || undefined} aria-hidden={!toon}>
       <Link href="/start-een-project" className="ho-knop ho-knop-oranje" tabIndex={toon ? undefined : -1}>
-        Start een project <span aria-hidden>↗</span>
+        Start een project <Pijl />
       </Link>
     </div>
   )

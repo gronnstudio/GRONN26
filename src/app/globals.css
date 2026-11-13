@@ -86,28 +86,6 @@ html.donker, .donker {
   --gedempt: var(--salie);
   --lijn: rgba(239, 238, 234, 0.2);
 }
-/* Ontwikkelaarsmenu (12 nov 2026, dev-menu.tsx): de handoff "Website 2027"
-   naast de gewone site. Alleen de eigenaar kan deze klassen zetten; zonder
-   klasse is alles zoals altijd. */
-html:not(.dev-kop) .dev-alleen-kop, html.dev-kop .dev-zonder-kop,
-html:not(.dev-voorpagina) .dev-alleen-voorpagina, html.dev-voorpagina .dev-zonder-voorpagina { display: none !important; }
-/* Nature uit de handoff: linnen, porselein, inkt, bosgroen, salie; --oranje
-   wordt klei (draagt antraciet, 7,4:1), kleine accenttekst bosgroen. */
-html.dev-nature:not(.donker) {
-  --grond: #f3f0e7;
-  --inkt: #252a26;
-  --gedempt: #565e57;
-  --lijn: #dcd7c9;
-  --vlak: #fcfbf7;
-  --veld: #fcfbf7;
-  --voorbeeld: #7a8279;
-  --oranje: #c9a98a;
-  --oranje-tekst: #253b30;
-  --bos: #253b30;
-  --mos: #5d6b56;
-  --salie: #8c9d83;
-}
-html.dev-nature:not(.donker) .bos-vlak { --vlak: #2f4a3d; --gedempt: #b8c5ad; }
 html.contrast { --gedempt: var(--inkt); --lijn: currentColor; }
 html.groot { font-size: 115%; }
 html.onderstreep main a { text-decoration: underline; text-underline-offset: 3px; }

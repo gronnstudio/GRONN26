@@ -310,7 +310,7 @@ html:has(.ho-menu[open]) { overflow: hidden; }
 .ho-voet-onder a { color: inherit; }
 
 /* de aanvraag heeft zijn eigen kop, zonder menu en voet (handoff 23) */
-body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock, .dev-zonder-kop) { display: none !important; }
+body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock) { display: none !important; }
 
 /* ── projectaanvraag ──────────────────────────────────────────────── */
 .hw { min-height: 100svh; padding: 0 var(--ho-goot) 64px; background: var(--linnen); color: var(--inkt); }
@@ -476,5 +476,3 @@ html.donker :is(.hw-keuze:has(input:checked), .hw-chip input:checked + span) { b
 html.donker .hw-samenvatting { background: #3a1e17; border-color: #ff8a6b; }
 html.donker :is(.hw-samenvatting p, .hw-samenvatting a, .hw-fout) { color: #ffb7a3; }
 
-/* andere pagina's: wat ruimte onder de vaste kop op de telefoon (ontwikkelaarsmenu) */
-@media (max-width: 1023px) { html.dev-kop main#inhoud:not(:has(.ho, .hw)) { padding-top: 24px; } }

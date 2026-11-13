@@ -4,6 +4,7 @@ import { SectieBody, Alinea } from "@/components/juridisch/alinea"
 import { BUSINESS } from "@/lib/business"
 import { Beide, T, type Tekst } from "@/components/taal"
 import type { LegalDocument } from "@/lib/data/legal/types"
+import { Pijl } from "@/components/pijl"
 
 function datum(iso: string, locale: "nl-NL" | "en-GB" = "nl-NL") {
   return new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(
@@ -75,7 +76,7 @@ export function JuridischDocument({ doc, titel }: { doc: LegalDocument; titel: T
 
           <nav aria-label="Verder" className="mt-10 flex flex-wrap gap-x-7 gap-y-4">
             <a className="lnk" href="#inhoud">
-              <T t={{ nl: "Naar de inhoud ↑", en: "Back to contents ↑" }} />
+              <T t={{ nl: "Naar de inhoud", en: "Back to contents" }} /> <Pijl richting="n" />
             </a>
           </nav>
         </article>
