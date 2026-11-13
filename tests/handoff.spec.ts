@@ -123,3 +123,11 @@ test("Ontdek tuinrenovatie: de pagina schuift binnen met een view transition van
   await expect(page).toHaveURL(/\/tuinen$/)
   expect(await page.evaluate(() => (window as unknown as { __vt: string[] }).__vt)).toContain("schuif")
 })
+
+test("donker: de voet onder de voorpagina blijft donker", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("gronn-weergave", JSON.stringify({ kleur: "donker" })))
+  await page.goto("/")
+  const achtergrond = await page.locator("footer").last().evaluate((e) => getComputedStyle(e).backgroundColor)
+  const [r, g, b] = achtergrond.match(/\d+/g)!.map(Number)
+  expect(r + g + b).toBeLessThan(200)
+})

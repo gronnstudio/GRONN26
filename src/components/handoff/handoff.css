@@ -462,7 +462,8 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock, .dev-zonder-kop) { display
    de live site (globals.css, html.donker) met de handoff-namen erop. --bos is
    hier de kleur van koppen en lijnknoppen, dus licht; de voet krijgt het
    donkere aardevlak van de live site. */
-html.donker:root {
+/* alleen op de handoff-vlakken: --bos is elders op de site de donkere voet en de bos-vlakken */
+html.donker :is(.ho, .hw, .ho-wizard) {
   --bos: #f0e9dc;
   --porselein: #2e261f;
   --linnen: #221c17;
