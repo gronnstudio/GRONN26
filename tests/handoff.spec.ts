@@ -85,3 +85,14 @@ test("aanvraag: vier stappen tot de bevestiging, met referentie", async ({ page 
   expect(body).toContain("Budget: € 5.000 – 10.000")
   expect(body).toContain("Planning: Binnen 3 maanden")
 })
+
+test("voor/nu: de schuif werkt met het toetsenbord en verschuift de grens", async ({ page }) => {
+  await page.goto("/")
+  const schuif = page.getByRole("slider", { name: "Schuif tussen voor en nu" })
+  await schuif.focus()
+  await expect(schuif).toHaveValue("50")
+  for (let i = 0; i < 10; i++) await page.keyboard.press("ArrowLeft")
+  await expect(schuif).toHaveValue("40")
+  const pos = await page.locator(".ho-vergelijk").evaluate((e) => getComputedStyle(e).getPropertyValue("--pos").trim())
+  expect(pos).toBe("40%")
+})

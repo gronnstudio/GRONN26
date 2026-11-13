@@ -59,8 +59,10 @@
   cursor: pointer;
   transition: background-color 180ms var(--ho-ease), transform 180ms var(--ho-ease), color 180ms var(--ho-ease);
 }
-.ho-knop-bos { background: var(--bos); color: var(--porselein); border: 0; }
-.ho-knop-bos:hover { background: #1b2c23; }
+/* De actieknop is oranje met antraciet tekst (5,24:1), zoals de merkgids
+   (eigenaar koos "Oranje, zoals de merkgids", 13 nov 2026). Eén per scherm. */
+.ho-knop-oranje { background: #ff5b04; color: #202020; border: 0; }
+.ho-knop-oranje:hover { background: #202020; color: #ff5b04; }
 .ho-knop-porselein { background: var(--porselein); color: var(--bos); }
 .ho-knop-lijn { border: 1px solid var(--bos); color: var(--bos); background: transparent; }
 .ho-knop-lijn:hover { background: var(--bos); color: var(--porselein); }
@@ -420,3 +422,28 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-tot-desktop) { display: none; }
 .ho-vanaf-desktop, .ho-tot-desktop { display: contents; }
 @media (max-width: 1023.98px) { .ho-vanaf-desktop { display: none !important; } }
 @media (min-width: 1024px) { .ho-tot-desktop { display: none !important; } }
+
+/* Beweging van de live site (13 nov 2026): kop per woord omhoog, parallax
+   op hero en studio via [data-v] uit globals.css, voor/nu-schuif. Bij minder
+   beweging staat alles meteen stil. */
+.ho-woord { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.ho-woord > span { display: inline-block; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .ho-woord > span { animation: ho-woord-op 900ms var(--ho-ease) both; animation-delay: calc(var(--i) * 90ms + 100ms); }
+}
+@keyframes ho-woord-op { from { transform: translateY(105%); } }
+
+.ho-held-raam, .ho-studio-raam { overflow: hidden; border-radius: var(--foto-hoek); }
+.ho-held-raam [data-v] > *, .ho-studio-raam [data-v] > * { scale: 1.14; border-radius: 0; }
+.ho-studio-raam, .ho-studio-raam [data-v] { height: 100%; }
+
+.ho-vergelijk { position: relative; aspect-ratio: 4 / 3; border-radius: var(--foto-hoek); overflow: hidden; touch-action: pan-y; }
+.ho-vergelijk-foto { position: absolute !important; inset: 0; border-radius: 0 !important; }
+.ho-vergelijk-voor { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ho-vergelijk-lbl { position: absolute; top: 12px; padding: 4px 10px; border-radius: 999px; background: rgb(32 32 32 / .72); color: #efeeea; pointer-events: none; }
+.ho-vergelijk-lbl[data-kant="voor"] { left: 12px; }
+.ho-vergelijk-lbl[data-kant="nu"] { right: 12px; }
+.ho-vergelijk-greep { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; translate: -1px 0; background: #efeeea; pointer-events: none; }
+.ho-vergelijk-greep span { position: absolute; top: 50%; left: 50%; translate: -50% -50%; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: #efeeea; color: #202020; font-weight: 700; font-size: 18px; box-shadow: 0 2px 12px rgb(0 0 0 / .25); }
+.ho-vergelijk-schuif { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.ho-vergelijk:has(.ho-vergelijk-schuif:focus-visible) .ho-vergelijk-greep span { outline: 3px solid var(--bos); outline-offset: 3px; }

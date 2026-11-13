@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ViewTransition, type CSSProperties } from "react"
 import { Foto } from "@/components/foto"
 import { euro } from "@/components/diensten/prijs"
 import { F01, F02_2, F07_2, F08_1, F09_2, F10, T02 } from "@/components/voorpagina/beelden"
@@ -6,7 +7,7 @@ import { WERK } from "@/components/werk/projecten"
 import { BUSINESS } from "@/lib/business"
 import { pricingFor } from "@/lib/data/pricing"
 import { KLANT_CITAAT } from "@/lib/data/vijverrenovatie"
-import { Onthul, Vraag } from "./klant"
+import { Onthul, TelLink, Vraag, VoorNu } from "./klant"
 
 // De voorpagina volgens de handoff "GRØNN Studio Website 2027" (eigenaar koos
 // "Handoff precies volgen", 12 nov 2026). Volgorde en tekst uit de handoff,
@@ -95,7 +96,12 @@ export function HandoffVoorpagina() {
           <div>
             <p className="ho-lbl">Voorjaar 2027 · Stein en omgeving</p>
             <h1 id="ho-titel" className="ho-titel">
-              Buitenruimte die <em>natuurlijk</em> aanvoelt.
+              {/* per woord omhoog bij het laden; zie .ho-woord in handoff.css */}
+              {["Buitenruimte", "die", "natuurlijk", "aanvoelt."].map((w, i) => (
+                <span key={w} className="ho-woord" style={{ "--i": i } as CSSProperties}>
+                  <span>{w === "natuurlijk" ? <em>{w}</em> : w}</span>{" "}
+                </span>
+              ))}
             </h1>
           </div>
           <div className="ho-held-zij">
@@ -104,12 +110,12 @@ export function HandoffVoorpagina() {
             </p>
             <p className="ho-haak">Plan nu, dan begin ik in maart.</p>
             <div className="ho-knoppen">
-              <Link href="/start-een-project" className="ho-knop ho-knop-bos">
+              <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="hero" className="ho-knop ho-knop-oranje">
                 Start een project <span aria-hidden>↗</span>
-              </Link>
-              <a href={WHATSAPP_FOTO} className="ho-knop ho-knop-lijn" target="_blank" rel="noopener">
+              </TelLink>
+              <TelLink href={WHATSAPP_FOTO} gebeurtenis="cta_whatsapp_foto" plek="hero" className="ho-knop ho-knop-lijn">
                 Stuur een foto <span aria-hidden>↗</span>
-              </a>
+              </TelLink>
             </div>
             <a href="#projecten" className="ho-pijl">
               Bekijk mijn werk <span aria-hidden>↓</span>
@@ -117,7 +123,11 @@ export function HandoffVoorpagina() {
           </div>
         </div>
         <div className="ho-kolom">
-          <Foto foto={F10} priority sizes="(min-width: 1440px) 1344px, 94vw" className="ho-held-beeld" />
+          <div className="ho-held-raam">
+            <div data-v="1">
+              <Foto foto={F10} priority sizes="(min-width: 1440px) 1344px, 94vw" className="ho-held-beeld" />
+            </div>
+          </div>
           <div className="ho-held-onder ho-lbl">
             <span>01 / Natuurlijk vernieuwen</span>
             <span>Stein · Limburg</span>
@@ -188,16 +198,7 @@ export function HandoffVoorpagina() {
             </p>
           </div>
           <figure className="ho-voorna">
-            <div className="ho-voorna-paar">
-              <div>
-                <Foto foto={F02_2} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-voorna-foto" />
-                <p className="ho-lbl">Voor</p>
-              </div>
-              <div>
-                <Foto foto={F01} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-voorna-foto" />
-                <p className="ho-lbl">Nu</p>
-              </div>
-            </div>
+            <VoorNu voor={F02_2} nu={F01} sizes="(min-width: 1024px) 60vw, 94vw" />
             <blockquote className="ho-citaat">
               <p>“{KLANT_CITAAT.tekst.nl}”</p>
               <footer className="ho-lbl">{KLANT_CITAAT.bron}</footer>
@@ -207,7 +208,9 @@ export function HandoffVoorpagina() {
             {[groot, klein].map((p) => (
               <li key={p.href}>
                 <Link href={p.href} className="ho-werk-kaart">
-                  <Foto foto={p.foto} sizes="(min-width: 1024px) 60vw, 94vw" className="ho-werk-foto" />
+                  <ViewTransition name={p.morph} share="morph" default="none">
+                    <Foto foto={p.foto} sizes="(min-width: 1024px) 60vw, 94vw" className="ho-werk-foto" />
+                  </ViewTransition>
                   <p className="ho-lbl">{p.type.nl}{p.plaats !== "—" ? ` · ${p.plaats}` : ""} · {p.jaar}</p>
                   <h3 className="ho-h3">{p.titel.nl}</h3>
                 </Link>
@@ -240,7 +243,11 @@ export function HandoffVoorpagina() {
       {/* 06 · Studio */}
       <Onthul className="ho-blok" aria-labelledby="ho-studio">
         <div className="ho-kolom ho-studio">
-          <Foto foto={F09_2} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-studio-foto" />
+          <div className="ho-studio-raam">
+            <div data-v="0.6">
+              <Foto foto={F09_2} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-studio-foto" />
+            </div>
+          </div>
           <div className="ho-studio-tekst">
             <p className="ho-lbl">Over GRØNN Studio</p>
             <h2 id="ho-studio" className="ho-h2">Klein in schaal. Groot in aandacht.</h2>
@@ -280,12 +287,12 @@ export function HandoffVoorpagina() {
           <h2 id="ho-eind-kop" className="ho-eind-kop">Er begint iets moois buiten.</h2>
           <p>Een tuin die niet meer bij je past? Een vijver die aandacht nodig heeft? Vertel me over je plannen. Plan je nu, dan begin ik in maart.</p>
           <div className="ho-knoppen">
-            <Link href="/start-een-project" className="ho-knop ho-knop-bos">
+            <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="eind" className="ho-knop ho-knop-oranje">
               Start jouw project <span aria-hidden>↗</span>
-            </Link>
-            <a href={WHATSAPP_FOTO} className="ho-knop ho-knop-lijn" target="_blank" rel="noopener">
+            </TelLink>
+            <TelLink href={WHATSAPP_FOTO} gebeurtenis="cta_whatsapp_foto" plek="eind" className="ho-knop ho-knop-lijn">
               Stuur een foto <span aria-hidden>↗</span>
-            </a>
+            </TelLink>
           </div>
         </div>
       </section>

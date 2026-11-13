@@ -1,7 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useId, useRef, useState, type ReactNode } from "react"
+import { track } from "@vercel/analytics"
+import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react"
+import { Foto } from "@/components/foto"
+import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
 // De drie stukjes van de handoff-voorpagina die JavaScript nodig hebben.
 
@@ -80,9 +83,55 @@ export function PlakCta() {
   }, [])
   return (
     <div className="ho-plak" data-toon={toon || undefined} aria-hidden={!toon}>
-      <Link href="/start-een-project" className="ho-knop ho-knop-bos" tabIndex={toon ? undefined : -1}>
+      <Link href="/start-een-project" className="ho-knop ho-knop-oranje" tabIndex={toon ? undefined : -1}>
         Start een project <span aria-hidden>↗</span>
       </Link>
+    </div>
+  )
+}
+
+/** Een knop of link die meetelt in Vercel Analytics, zodat je de funnel ziet:
+ *  hoeveel bezoekers tikken op "Start een project" of "Stuur een foto". */
+export function TelLink({ href, gebeurtenis, plek, className, children }: { href: string; gebeurtenis: string; plek: string; className?: string; children: ReactNode }) {
+  const tel = () => track(gebeurtenis, { plek })
+  if (href.startsWith("http")) {
+    return (
+      <a href={href} className={className} target="_blank" rel="noopener" onClick={tel}>
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href} className={className} onClick={tel}>
+      {children}
+    </Link>
+  )
+}
+
+/** Voor en nu als één beeld met een schuif (13 nov 2026). Een echte
+ *  range-input, dus ook met pijltjestoetsen en een schermlezer te bedienen;
+ *  zonder JavaScript staat de schuif in het midden. */
+export function VoorNu({ voor, nu, sizes }: { voor: FotoData; nu: FotoData; sizes: string }) {
+  const [pos, setPos] = useState(50)
+  return (
+    <div className="ho-vergelijk" style={{ "--pos": `${pos}%` } as CSSProperties}>
+      <Foto foto={nu} sizes={sizes} className="ho-vergelijk-foto" />
+      <div className="ho-vergelijk-voor" aria-hidden>
+        <Foto foto={voor} sizes={sizes} className="ho-vergelijk-foto" />
+      </div>
+      <span className="ho-vergelijk-lbl ho-lbl" data-kant="voor" aria-hidden>Voor</span>
+      <span className="ho-vergelijk-lbl ho-lbl" data-kant="nu" aria-hidden>Nu</span>
+      <span className="ho-vergelijk-greep" aria-hidden><span>‹ ›</span></span>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={pos}
+        onChange={(e) => setPos(Number(e.target.value))}
+        aria-label="Schuif tussen voor en nu"
+        aria-valuetext={`${pos}% voor, ${100 - pos}% nu`}
+        className="ho-vergelijk-schuif"
+      />
     </div>
   )
 }

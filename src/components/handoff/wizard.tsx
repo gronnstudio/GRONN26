@@ -342,7 +342,7 @@ export function ProjectWizard() {
           ) : (
             <>
               <p className="hw-uitleg">Je e-mailprogramma is geopend met dezelfde tekst. Verstuur hem daar, of mail naar {BUSINESS.email}.</p>
-              <a href={mailto} className="ho-knop ho-knop-bos">Open de e-mail opnieuw</a>
+              <a href={mailto} className="ho-knop ho-knop-oranje">Open de e-mail opnieuw</a>
             </>
           )}
           <p>
@@ -487,7 +487,7 @@ export function ProjectWizard() {
               <span aria-hidden>←</span> Terug
             </button>
           ) : <span />}
-          <button type="submit" className="ho-knop ho-knop-bos" disabled={status === "bezig" || (stap === 1 && fotosBezig)}>
+          <button type="submit" className="ho-knop ho-knop-oranje" disabled={status === "bezig" || (stap === 1 && fotosBezig)}>
             {stap < LAATSTE ? <>Volgende stap <span aria-hidden>→</span></> : status === "bezig" ? "Versturen…" : <>Verstuur aanvraag <span aria-hidden>→</span></>}
           </button>
         </div>

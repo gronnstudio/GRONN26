@@ -43,7 +43,7 @@ export function HandoffKop() {
             </Link>
           ))}
         </nav>
-        <Link href="/start-een-project" className="ho-knop ho-knop-bos ho-kop-cta">
+        <Link href="/start-een-project" className="ho-knop ho-knop-lijn ho-kop-cta">
           Start een project <span aria-hidden>↗</span>
         </Link>
       </div>
