@@ -1,9 +1,8 @@
 import Link from "next/link"
-import { Fragment, ViewTransition, type CSSProperties } from "react"
+import { Fragment, type CSSProperties } from "react"
 import { Foto } from "@/components/foto"
 import { euro } from "@/components/diensten/prijs"
 import { F01, F02_2, F07_2, F08_1, F09_2, F10, T02 } from "@/components/voorpagina/beelden"
-import { WERK } from "@/components/werk/projecten"
 import { BUSINESS } from "@/lib/business"
 import { pricingFor } from "@/lib/data/pricing"
 import { KLANT_CITAAT } from "@/lib/data/vijverrenovatie"
@@ -87,7 +86,6 @@ const VRAGEN = [
 ]
 
 export function HandoffVoorpagina() {
-  const [groot, klein] = WERK
   return (
     <div className="ho">
       {/* 01 · Hero */}
@@ -199,6 +197,8 @@ export function HandoffVoorpagina() {
               Alleen eigen werk, met eigen foto&apos;s. Zo zag de vijverrenovatie in Stein eruit, en nu, en dit zegt de opdrachtgever erover.
             </p>
           </div>
+          {/* Geen projectkaarten meer: de specialismen erboven linken al naar
+              de vijver en het terras (Nick, 13 nov 2026: "weinig meerwaarde"). */}
           <figure className="ho-voorna">
             <VoorNu voor={F02_2} nu={F01} sizes="(min-width: 1024px) 60vw, 94vw" />
             <blockquote className="ho-citaat">
@@ -206,19 +206,6 @@ export function HandoffVoorpagina() {
               <footer className="ho-lbl">{KLANT_CITAAT.bron}</footer>
             </blockquote>
           </figure>
-          <ul className="ho-werk">
-            {[groot, klein].map((p) => (
-              <li key={p.href}>
-                <Link href={p.href} className="ho-werk-kaart">
-                  <ViewTransition name={p.morph} share="morph" default="none">
-                    <Foto foto={p.foto} sizes="(min-width: 1024px) 60vw, 94vw" className="ho-werk-foto" />
-                  </ViewTransition>
-                  <p className="ho-lbl">{p.type.nl}{p.plaats !== "—" ? ` · ${p.plaats}` : ""} · {p.jaar}</p>
-                  <h3 className="ho-h3">{p.titel.nl}</h3>
-                </Link>
-              </li>
-            ))}
-          </ul>
           <Link transitionTypes={["schuif"]} href="/werk" className="ho-knop ho-knop-lijn">
             Bekijk projecten <span aria-hidden>↗</span>
           </Link>

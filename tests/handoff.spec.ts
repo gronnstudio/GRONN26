@@ -4,13 +4,13 @@ import { expect, test } from "./fixtures"
 // projectaanvraag in vier stappen (13 nov 2026), zowel de foutroute als de
 // gelukte route. Op de telefoon staat het dock in plaats van de kop.
 
-test("desktop @1440: het dock staat bovenaan, Werk gaat naar /werk", async ({ page }) => {
+test("desktop @1440: het dock staat onderaan, Werk gaat naar /werk", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
   const nav = page.locator("nav[data-menu]")
   await expect(nav).toBeVisible()
   const box = await nav.boundingBox()
-  expect(box!.y).toBeLessThan(100)
+  expect(box!.y + box!.height).toBeGreaterThan(800)
   await expect(page.locator(".ho-kop")).toHaveCount(0)
   await nav.getByRole("link", { name: "Werk" }).click()
   await expect(page).toHaveURL(/\/werk$/)
