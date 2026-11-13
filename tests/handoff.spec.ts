@@ -131,3 +131,13 @@ test("donker: de voet onder de voorpagina blijft donker", async ({ page }) => {
   const [r, g, b] = achtergrond.match(/\d+/g)!.map(Number)
   expect(r + g + b).toBeLessThan(200)
 })
+
+test("voorpagina: de voet sluit direct aan op de eind-CTA, geen lege balk", async ({ page }) => {
+  await page.goto("/")
+  const gat = await page.evaluate(() => {
+    const eind = document.querySelector("#ho-eind")!.getBoundingClientRect().bottom
+    const voet = document.querySelector("footer.bos-vlak")!.getBoundingClientRect().top
+    return Math.round(voet - eind)
+  })
+  expect(gat).toBe(0)
+})
