@@ -233,9 +233,16 @@ export function HandoffVoorpagina() {
       {/* 06 · Studio */}
       <Onthul className="ho-blok" aria-labelledby="ho-studio">
         <div className="ho-kolom ho-studio">
-          <div className="ho-studio-raam">
-            <div data-v="0.6">
-              <Foto foto={F09_2} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-studio-foto" />
+          {/* twee foto's over elkaar: Nick aan het werk, en het resultaat dat sneller
+              meeschuift (eigenaar, 13 nov 2026, naar dejongensvanoranje.nl) */}
+          <div className="ho-studio-beeld">
+            <div className="ho-studio-raam">
+              <div data-v="0.6">
+                <Foto foto={F09_2} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-studio-foto" />
+              </div>
+            </div>
+            <div className="ho-studio-klein" data-v="3">
+              <Foto foto={F10} sizes="(min-width: 1024px) 20vw, 46vw" className="ho-studio-klein-foto" />
             </div>
           </div>
           <div className="ho-studio-tekst">
