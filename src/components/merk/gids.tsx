@@ -33,7 +33,7 @@ function Kop({ id, label, aantal }: { id: string; label: L; aantal?: L }) {
 }
 
 const SCHAAL: { naam: L; vol: string; midden?: string; licht: string }[] = [
-  { naam: { nl: "Oranje", en: "Orange" }, vol: "#FF5B04", midden: "#C49073", licht: "#E6D9D0" },
+  { naam: { nl: "Oranje", en: "Orange" }, vol: "#B84000", midden: "#D18E69", licht: "#E8D9CE" },
   { naam: { nl: "Bosgroen", en: "Forest green" }, vol: "#23483A", midden: "#7F9389", licht: "#D7DAD5" },
   { naam: { nl: "Mosgroen", en: "Moss green" }, vol: "#607A59", midden: "#A0AE9A", licht: "#DEE0D9" },
   { naam: { nl: "Antraciet", en: "Anthracite" }, vol: "#202020", midden: "#7D7D7B", licht: "#D6D5D2" },
@@ -52,7 +52,7 @@ const LETTERS: { naam: string | L; maat: string; regel: string; voorbeeld: L; sy
 
 const PAREN: { voor: string; achter: string; wat: L }[] = [
   { voor: "#202020", achter: "#FF5B04", wat: { nl: "Antraciet op aarde-oranje (knop)", en: "Anthracite on earth orange (button)" } },
-  { voor: "#FF5B04", achter: "#EFEEEA", wat: { nl: "Donker oranje op gebroken wit (link)", en: "Dark orange on off-white (link)" } },
+  { voor: "#B84000", achter: "#EFEEEA", wat: { nl: "Donker oranje op gebroken wit (link)", en: "Dark orange on off-white (link)" } },
   { voor: "#EFEEEA", achter: "#23483A", wat: { nl: "Gebroken wit op bosgroen", en: "Off-white on forest green" } },
   { voor: "#EFEEEA", achter: "#202020", wat: { nl: "Gebroken wit op antraciet", en: "Off-white on anthracite" } },
   { voor: "#FF5B04", achter: "#202020", wat: { nl: "Aarde-oranje op antraciet", en: "Earth orange on anthracite" } },
@@ -96,8 +96,8 @@ export function MerkGids() {
         <p className="mt-6 max-w-[66ch] text-[16px] leading-[1.6] text-gedempt">
           <T
             t={{
-              nl: "Vol, midden en licht, en geen andere mengsels. Midden is 55 % en licht 12 % van de kleur in gebroken wit, zodat tinten van verschillende tegels altijd bij elkaar horen. In de schaal is oranje vol het donkere oranje #FF5B04; het felle aarde-oranje blijft voor knoppen en acties. Eén schaduw: mosgroen met 15 % antraciet (#566C50), alleen waar gebroken wit erop moet staan.",
-              en: "Full, mid and light, and no other mixes. Mid is 55 % and light 12 % of the colour in off-white, so tints on different tiles always belong together. In the scale, full orange is the dark orange #FF5B04; the bright earth orange stays for buttons and actions. One shade: moss green with 15 % anthracite (#566C50), only where off-white has to sit on it.",
+              nl: "Vol, midden en licht, en geen andere mengsels. Midden is 55 % en licht 12 % van de kleur in gebroken wit, zodat tinten van verschillende tegels altijd bij elkaar horen. In de schaal is oranje vol het donkere oranje #B84000; het felle aarde-oranje blijft voor knoppen en acties. Eén schaduw: mosgroen met 15 % antraciet (#566C50), alleen waar gebroken wit erop moet staan.",
+              en: "Full, mid and light, and no other mixes. Mid is 55 % and light 12 % of the colour in off-white, so tints on different tiles always belong together. In the scale, full orange is the dark orange #B84000; the bright earth orange stays for buttons and actions. One shade: moss green with 15 % anthracite (#566C50), only where off-white has to sit on it.",
             }}
           />
         </p>
