@@ -3,15 +3,20 @@
    de tokens (--grond, --inkt, --gedempt, --lijn, --oranje); donkere vlakken op
    donkere aarde. Beweging alleen in CSS, stil bij minder beweging. */
 
-/* Het palet (eigenaar, 13 nov 2026, coolors "f8f9fa … 212529": "geen standaard
-   wit, geen standaard zwart"): negen grijzen, oranje als enige actiekleur. Het
-   overschrijft de zand- en aardetinten voor de hele site. */
+/* Het palet (eigenaar, 13 nov 2026): "wit op zwart en andersom, met accenten
+   van oranje", geen tussengrijzen. Wit is #F8F9FA, zwart #212529 (geen puur wit
+   of zwart). Gedempte tekst en lijnen zijn de inkt met minder dekking. Blokken
+   met .ar-inv draaien de kleuren om. */
 html:root {
-  --g50: #f8f9fa; --g100: #e9ecef; --g200: #dee2e6; --g300: #ced4da; --g400: #adb5bd; --g500: #6c757d; --g600: #495057; --g700: #343a40; --g800: #212529;
-  --grond: var(--g50); --vlak: var(--g100); --lijn: var(--g200); --gedempt: var(--g600); --inkt: var(--g800);
+  --g50: #f8f9fa; --g800: #212529;
+  --grond: var(--g50); --inkt: var(--g800);
+  --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); --vlak: color-mix(in srgb, var(--inkt) 6%, var(--grond));
   --ar-ease: cubic-bezier(.15, .2, .1, 1); --ar-kop: 76px; --ar-goot: clamp(20px, 4vw, 64px); --ar-aarde: var(--g800); --ar-zand: var(--g50); --ar-op-oranje: var(--g800);
 }
-html.donker:root { --grond: var(--g800); --vlak: var(--g700); --lijn: var(--g600); --gedempt: var(--g400); --inkt: var(--g50); --oranje-tekst: var(--oranje); --ar-aarde: var(--g700); }
+html.donker:root { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); }
+.ar-inv { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 18%, var(--grond)); background: var(--grond); color: var(--inkt); }
+html.donker .ar-inv { --grond: var(--g50); --inkt: var(--g800); --oranje-tekst: #b84000; }
+.ar :is(section, div) { --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); }
 body { background-color: var(--grond); }
 
 .ar-raster { width: 100%; max-width: 1520px; margin-inline: auto; padding-left: max(var(--ar-goot), env(safe-area-inset-left, 0px)); padding-right: max(var(--ar-goot), env(safe-area-inset-right, 0px)); }
@@ -27,8 +32,8 @@ body { background-color: var(--grond); }
 .ar-knop-oranje:hover { background: var(--g800); color: var(--ar-zand); }
 .ar-knop-lijn { border: 1px solid var(--inkt); color: var(--inkt); }
 .ar-knop-lijn:hover { background: var(--inkt); color: var(--grond); }
-.ar-knop-lijn-licht { border: 1px solid rgb(246 242 233 / .5); color: var(--ar-zand); }
-.ar-knop-lijn-licht:hover { background: var(--ar-zand); color: var(--ar-aarde); }
+.ar-knop-lijn-licht { border: 1px solid currentColor; color: inherit; }
+.ar-knop-lijn-licht:hover { background: var(--g50); color: var(--g800); }
 .ar-knop:focus-visible, .ar a:focus-visible, .ar-menuknop:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 .ar-lijnlink { justify-self: start; color: var(--inkt); text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 3px; transition: background-size 400ms var(--ar-ease); }
 .ar-lijnlink:hover, a:hover > .ar-lijnlink { background-size: 30% 1px; }
@@ -95,11 +100,12 @@ html.ar-open .ar-sluit { opacity: 1; scale: 1; pointer-events: auto; transition-
 html.ar-open .ar-scherm { display: block; }
 
 /* ── de opening ─────────────────────────────────────────────────── */
-.ar-opening { display: grid; gap: clamp(28px, 4vw, 64px); padding-block: clamp(28px, 5vw, 72px) clamp(56px, 8vw, 120px); }
+.ar-opening { background: var(--grond); color: var(--inkt); display: grid; gap: clamp(28px, 4vw, 64px); padding-block: clamp(28px, 5vw, 72px) clamp(56px, 8vw, 120px); }
 .ar-opening-tekst { display: flex; flex-direction: column; justify-content: space-between; gap: clamp(20px, 3vw, 36px); }
-.ar-titel { margin: 0; font-family: var(--font-syne); font-weight: 700; font-size: clamp(48px, 9.2vw, 164px); line-height: .92; letter-spacing: -.05em; }
+.ar-titel { margin: 0; font-family: var(--font-syne); font-weight: 700; font-size: clamp(52px, 8.6vw, 156px); line-height: .9; letter-spacing: -.055em; }
 .ar-regel { display: block; overflow: hidden; padding-bottom: .06em; }
 .ar-regel > span { display: block; }
+.ar-titel b { color: var(--oranje); font-weight: inherit; }
 .ar-opening-zin { max-width: 40ch; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; }
 .ar-opening-beeld { position: relative; aspect-ratio: 4 / 5; max-height: calc(100svh - var(--ar-kop) - 64px); width: 100%; overflow: hidden; }
 .ar-dia { position: absolute; inset: 0; }
@@ -113,11 +119,10 @@ html.ar-open .ar-scherm { display: block; }
 }
 
 /* ── uitspraak en band op donkere aarde ─────────────────────────── */
-.ar-donker { background: var(--ar-aarde); color: var(--ar-zand); padding-block: clamp(64px, 9vw, 150px) clamp(56px, 7vw, 120px); overflow: hidden; }
-.ar-donker .ar-lbl { color: rgb(246 242 233 / .65); }
+.ar-uitspraak-sectie { background: var(--grond); color: var(--inkt); padding-block: clamp(64px, 9vw, 150px) clamp(56px, 7vw, 120px); overflow: hidden; }
 .ar-uitspraak-blok { display: grid; gap: 22px; }
 .ar-uitspraak { margin: 0; max-width: 22ch; font-family: var(--font-syne); font-weight: 700; font-size: clamp(30px, 4.8vw, 84px); line-height: 1.04; letter-spacing: -.035em; text-wrap: balance; }
-.ar-uitspraak em { font-style: normal; color: var(--oranje); }
+.ar-uitspraak em { font-style: normal; color: var(--oranje-tekst); }
 .ar-band { margin-top: clamp(56px, 8vw, 120px); }
 .ar-band-baan { display: flex; width: max-content; }
 .ar-band-reeks { display: flex; align-items: flex-start; gap: clamp(14px, 2vw, 28px); padding-right: clamp(14px, 2vw, 28px); }
@@ -125,8 +130,7 @@ html.ar-open .ar-scherm { display: block; }
 .ar-band-foto:nth-child(even) { margin-top: clamp(32px, 5vw, 80px); }
 
 /* ── blokken ────────────────────────────────────────────────────── */
-.ar-blok { display: grid; gap: clamp(24px, 4vw, 56px); padding-block: clamp(64px, 9vw, 140px); border-top: 1px solid var(--lijn); }
-.ar-blok:first-of-type { border-top: 0; }
+.ar-blok { display: grid; gap: clamp(24px, 4vw, 56px); padding-block: clamp(72px, 10vw, 160px); background: var(--grond); color: var(--inkt); }
 .ar-blokkop { display: grid; gap: 12px; align-content: start; }
 @media (min-width: 1024px) {
   .ar-blok:not(.ar-maker) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
@@ -139,7 +143,7 @@ html.ar-open .ar-scherm { display: block; }
 .ar-index-kop { padding-bottom: 12px; border-bottom: 1px solid var(--inkt); }
 .ar-index-kop span:nth-child(n+3):not(:last-child) { display: none; }
 .ar-index-rij { position: relative; padding-block: clamp(18px, 2.4vw, 30px); border-bottom: 1px solid var(--lijn); color: inherit; text-decoration: none; }
-.ar-index-naam { font-family: var(--font-syne); font-weight: 700; font-size: clamp(26px, 3.4vw, 52px); line-height: 1.02; letter-spacing: -.035em; transition: color 300ms, translate 500ms var(--ar-ease); }
+.ar-index-naam { font-family: var(--font-syne); font-weight: 700; font-size: clamp(26px, 3vw, 46px); line-height: 1.02; letter-spacing: -.035em; transition: color 300ms, translate 500ms var(--ar-ease); }
 .ar-index-cel { color: var(--gedempt); font-size: 15px; }
 .ar-index-rij > .ar-index-cel { display: none; }
 .ar-index-rij > .ar-index-cel:last-of-type { display: block; grid-column: 3; grid-row: 1; text-align: right; }
@@ -147,7 +151,7 @@ html.ar-open .ar-scherm { display: block; }
 .ar-index-foto { aspect-ratio: 4 / 3; }
 .ar-index-rij:focus-visible { outline: 2px solid var(--inkt); outline-offset: 4px; }
 @media (min-width: 900px) {
-  .ar-index-kop, .ar-index-rij { grid-template-columns: 76px minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1.4fr) 56px; }
+  .ar-index-kop, .ar-index-rij { grid-template-columns: 76px minmax(0, 4fr) minmax(0, 1.6fr) minmax(0, 1.2fr) 56px; }
   .ar-index-kop span { display: block !important; }
   .ar-index-rij > .ar-index-cel { display: block; }
   .ar-index-rij > .ar-index-cel:last-of-type { grid-column: auto; grid-row: auto; }
@@ -191,9 +195,13 @@ html.ar-open .ar-scherm { display: block; }
 @media (min-width: 1024px) { .ar-maker { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(48px, 7vw, 120px); } }
 
 /* het slot */
-.ar-slot { background: var(--ar-aarde); color: var(--ar-zand); }
+.ar-slot { background: var(--oranje); color: var(--g800); }
+.ar-slot .ar-knop-oranje { background: var(--g800); color: var(--g50); }
+.ar-slot .ar-knop-oranje:hover { background: var(--g50); color: var(--g800); }
+.ar-slot .ar-knop-lijn-licht { border-color: var(--g800); color: var(--g800); }
+.ar-slot .ar-knop-lijn-licht:hover { background: var(--g800); color: var(--g50); }
 .ar-slot .ar-raster { display: grid; gap: 24px; padding-block: clamp(72px, 11vw, 180px); }
-.ar-slot .ar-lbl { color: var(--oranje); }
+.ar-slot .ar-lbl { color: var(--g800); }
 .ar-slot-kop { margin: 0; font-family: var(--font-syne); font-weight: 700; font-size: clamp(44px, 8vw, 140px); line-height: .95; letter-spacing: -.05em; text-wrap: balance; }
 
 /* ── de voet ────────────────────────────────────────────────────── */

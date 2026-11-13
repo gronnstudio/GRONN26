@@ -37,13 +37,13 @@ export function ArVoorpagina() {
   return (
     <div className="ar">
       {/* ── Opening ─────────────────────────────────────────────── */}
-      <section className="ar-raster ar-opening" aria-labelledby="ar-titel">
+      <section className="ar-inv ar-opening-vlak"><div className="ar-raster ar-opening" aria-labelledby="ar-titel">
         <div className="ar-opening-tekst">
           <p className="ar-lbl ar-in" style={{ "--d": 0 } as React.CSSProperties}>GRØNN Studio · sinds 2026</p>
           <h1 id="ar-titel" className="ar-titel">
             <span className="ar-regel"><span style={{ "--d": 1 } as React.CSSProperties}>Vijvers en</span></span>
             <span className="ar-regel"><span style={{ "--d": 2 } as React.CSSProperties}>natuurlijke</span></span>
-            <span className="ar-regel"><span style={{ "--d": 3 } as React.CSSProperties}>tuinen.</span></span>
+            <span className="ar-regel"><span style={{ "--d": 3 } as React.CSSProperties}>tuinen<b>.</b></span></span>
           </h1>
           <p className="ar-opening-zin ar-in" style={{ "--d": 4 } as React.CSSProperties}>
             Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.
@@ -61,10 +61,10 @@ export function ArVoorpagina() {
           ))}
           <p className="ar-lbl ar-opening-onderschrift">Vijverrenovatie en terras Geulle, 2026</p>
         </div>
-      </section>
+      </div></section>
 
       {/* ── Uitspraak en de draaiende band ──────────────────────── */}
-      <section className="ar-donker" aria-labelledby="ar-uitspraak">
+      <section className="ar-uitspraak-sectie" aria-labelledby="ar-uitspraak">
         <div className="ar-raster ar-uitspraak-blok">
           <p className="ar-lbl">Van de maker</p>
           <h2 id="ar-uitspraak" className="ar-uitspraak">
@@ -85,7 +85,7 @@ export function ArVoorpagina() {
       </section>
 
       {/* ── Werk als index ──────────────────────────────────────── */}
-      <section className="ar-raster ar-blok" aria-labelledby="ar-werk">
+      <section className="ar-inv" aria-labelledby="ar-werk"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
           <p className="ar-lbl">01</p>
           <h2 id="ar-werk" className="ar-h2">Werk</h2>
@@ -108,7 +108,7 @@ export function ArVoorpagina() {
             </Link>
           ))}
         </div>
-      </section>
+      </div></section>
 
       {/* ── Diensten ───────────────────────────────────────────── */}
       <section className="ar-raster ar-blok" aria-labelledby="ar-diensten">
@@ -139,7 +139,7 @@ export function ArVoorpagina() {
       </section>
 
       {/* ── Werkwijze ──────────────────────────────────────────── */}
-      <section className="ar-raster ar-blok" aria-labelledby="ar-werkwijze">
+      <section className="ar-inv" aria-labelledby="ar-werkwijze"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
           <p className="ar-lbl">03</p>
           <h2 id="ar-werkwijze" className="ar-h2">Werkwijze</h2>
@@ -153,7 +153,7 @@ export function ArVoorpagina() {
             </li>
           ))}
         </ol>
-      </section>
+      </div></section>
 
       {/* ── De maker ───────────────────────────────────────────── */}
       <section className="ar-raster ar-blok ar-maker" aria-labelledby="ar-maker">
