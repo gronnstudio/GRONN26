@@ -478,3 +478,7 @@ html.donker :is(.hw-samenvatting p, .hw-samenvatting a, .hw-fout) { color: #ffb7
 
 /* andere pagina's: wat ruimte onder de vaste kop op de telefoon (ontwikkelaarsmenu) */
 @media (max-width: 1023px) { html.dev-kop main#inhoud:not(:has(.ho, .hw)) { padding-top: 24px; } }
+
+/* De eind-CTA heeft een eigen vlak: daaronder sluit de voet direct aan, zonder
+   de lege marge die de voet op andere pagina's boven zich houdt (13 nov 2026). */
+body:has(main .ho) footer.bos-vlak { margin-top: 0; }
