@@ -9,6 +9,7 @@ import { MerkGids } from "@/components/merk/gids"
 import { Kopieer } from "@/components/kopieer"
 import { MerkElementen } from "@/components/merk/elementen"
 import { Verder } from "@/components/wereld/verder"
+import { Pijl } from "@/components/pijl"
 
 export const metadata: Metadata = {
   title: "Merk",
@@ -94,7 +95,7 @@ export default function Merk() {
               ["#elementen", { nl: "Elementen", en: "Elements" }],
               ["#beweging", { nl: "Beweging", en: "Motion" }],
               ["#h-regels", { nl: "Regels", en: "Rules" }],
-              ["/downloads", { nl: "Downloads ↓", en: "Downloads ↓" }],
+              ["/downloads", { nl: "Downloads", en: "Downloads" }],
             ] as [string, L][]
           ).map(([href, naam], i) => (
             <a key={href} href={href} className="knop-klein border border-lijn transition-colors hover:border-inkt hover:bg-inkt hover:text-grond" data-zie style={{ "--i": i % 6 } as CSSProperties}>
@@ -197,7 +198,7 @@ export default function Merk() {
             ].map(([naam, url]) => (
               <a key={naam} href={url} target="_blank" rel="noopener noreferrer" className="knop border border-lijn hover:border-inkt">
                 <T t={{ nl: `Download ${naam}`, en: `Download ${naam}` }} />
-                <span aria-hidden="true">↓</span>
+                <Pijl richting="s" />
               </a>
             ))}
           </div>

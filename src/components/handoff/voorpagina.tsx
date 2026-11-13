@@ -7,6 +7,7 @@ import { BUSINESS } from "@/lib/business"
 import { pricingFor } from "@/lib/data/pricing"
 import { KLANT_CITAAT } from "@/lib/data/vijverrenovatie"
 import { Onthul, TelLink, Vraag, VoorNu } from "./klant"
+import { Pijl } from "@/components/pijl"
 
 // De voorpagina volgens de handoff "GRØNN Studio Website 2027" (eigenaar koos
 // "Handoff precies volgen", 12 nov 2026). Volgorde en tekst uit de handoff,
@@ -111,14 +112,14 @@ export function HandoffVoorpagina() {
             <p className="ho-haak">Plan nu, dan begin ik in maart.</p>
             <div className="ho-knoppen">
               <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="hero" className="ho-knop ho-knop-oranje">
-                Start een project <span aria-hidden>↗</span>
+                Start een project <Pijl />
               </TelLink>
               <TelLink href={WHATSAPP_FOTO} gebeurtenis="cta_whatsapp_foto" plek="hero" className="ho-knop ho-knop-lijn">
-                Stuur een foto <span aria-hidden>↗</span>
+                Stuur een foto <Pijl />
               </TelLink>
             </div>
             <a href="#projecten" className="ho-pijl">
-              Bekijk mijn werk <span aria-hidden>↓</span>
+              Bekijk mijn werk <Pijl richting="s" />
             </a>
           </div>
         </div>
@@ -176,7 +177,7 @@ export function HandoffVoorpagina() {
                   <p>{s.tekst}</p>
                   <p className="ho-prijs">{s.prijs}</p>
                   <Link transitionTypes={["schuif"]} href={s.link.href} className="ho-pijl">
-                    {s.link.label} <span aria-hidden>↗</span>
+                    {s.link.label} <Pijl />
                   </Link>
                 </div>
               </li>
@@ -207,7 +208,7 @@ export function HandoffVoorpagina() {
             </blockquote>
           </figure>
           <Link transitionTypes={["schuif"]} href="/werk" className="ho-knop ho-knop-lijn">
-            Bekijk projecten <span aria-hidden>↗</span>
+            Bekijk projecten <Pijl />
           </Link>
         </div>
       </Onthul>
@@ -246,7 +247,7 @@ export function HandoffVoorpagina() {
             </p>
             <p>Omdat goed buitenwerk begint bij begrijpen wat een plek nodig heeft.</p>
             <Link transitionTypes={["schuif"]} href="/over" className="ho-pijl">
-              Meer over mij <span aria-hidden>↗</span>
+              Meer over mij <Pijl />
             </Link>
           </div>
         </div>
@@ -277,10 +278,10 @@ export function HandoffVoorpagina() {
           <p>Een tuin die niet meer bij je past? Een vijver die aandacht nodig heeft? Vertel me over je plannen. Plan je nu, dan begin ik in maart.</p>
           <div className="ho-knoppen">
             <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="eind" className="ho-knop ho-knop-oranje">
-              Start jouw project <span aria-hidden>↗</span>
+              Start jouw project <Pijl />
             </TelLink>
             <TelLink href={WHATSAPP_FOTO} gebeurtenis="cta_whatsapp_foto" plek="eind" className="ho-knop ho-knop-lijn">
-              Stuur een foto <span aria-hidden>↗</span>
+              Stuur een foto <Pijl />
             </TelLink>
           </div>
         </div>

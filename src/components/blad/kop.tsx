@@ -8,6 +8,7 @@ import { OPEN_ZOEK } from "@/components/zoek"
 import { T } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import { BLADEN, bladVan } from "./bladen"
+import { Pijl } from "@/components/pijl"
 
 // De kop van het tuinplan: links het woordmerk, in het midden het blad waar
 // je bent (zoals de hoek van een tekening), rechts Index. Index opent een
@@ -102,12 +103,12 @@ export function Kop() {
       </p>
       {gelezen && (
         <button type="button" className="bk-omhoog" onClick={omhoog}>
-          <span aria-hidden>↑</span>
+          <Pijl richting="n" />
           <span className="bk-omhoog-tekst"><T t={{ nl: "Terug naar boven", en: "Back to top" }} /></span>
         </button>
       )}
       <button type="button" className="bk-dock-knop" aria-haspopup="dialog" onClick={() => venster.current?.showModal()}>
-        Index <span aria-hidden>{BLADEN.length.toString().padStart(2, "0")} ↑</span>
+        Index <span aria-hidden>{BLADEN.length.toString().padStart(2, "0")}</span> <Pijl richting="n" />
       </button>
     </div>
     </>

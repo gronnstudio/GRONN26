@@ -132,6 +132,13 @@ test("donker: de voet onder de voorpagina blijft donker", async ({ page }) => {
   expect(r + g + b).toBeLessThan(200)
 })
 
+test("pijlen zijn getekend (svg), geen ↗-teken dat op iPhone een emoji wordt", async ({ page }) => {
+  await page.goto("/")
+  const tekst = await page.locator("main").innerText()
+  expect(tekst).not.toMatch(/[↗↓↑]/)
+  await expect(page.getByRole("link", { name: "Start een project" }).first().locator("svg")).toHaveCount(1)
+})
+
 test("voorpagina: de voet sluit direct aan op de eind-CTA, geen lege balk", async ({ page }) => {
   await page.goto("/")
   const gat = await page.evaluate(() => {
