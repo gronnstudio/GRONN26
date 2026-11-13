@@ -188,3 +188,22 @@
   html.w-fx:not(.stil) .aan .merk-icoon path, html.w-fx:not(.stil) .merk-icoon.aan path { transform: none; }
 }
 @keyframes merk-stip { 0%, 100% { transform: translateX(0); opacity: 1; } 50% { transform: translateX(-28px); opacity: .5; } }
+
+/* ── Projectfoto's zoomen rustig uit ────────────────────────────────────
+   In rust iets ingezoomd (110 %), bij hover of focus op de link in 0,75 s
+   naar 100 %; de titel krijgt dan zijn streep. Op de telefoon (geen hover)
+   gebeurt het uitzoomen één keer terwijl de foto in beeld schuift.
+   (eigenaar, 13 nov 2026, naar dejongensvanoranje.nl) */
+a:is(:hover, :focus-visible) .w-lijnlink { background-size: 100% 1px; }
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) {
+    html:not(.stil) a [data-v] > * { transform: scale(1.1); transition: transform .75s cubic-bezier(.2, .75, .5, 1); }
+    html:not(.stil) a:is(:hover, :focus-visible) [data-v] > * { transform: scale(1); }
+  }
+  @media (hover: none) {
+    @supports (animation-timeline: view()) {
+      html:not(.stil) a [data-v] > * { animation: w-uitzoom linear both; animation-timeline: view(); animation-range: entry 10% cover 45%; }
+    }
+  }
+}
+@keyframes w-uitzoom { from { transform: scale(1.1); } to { transform: scale(1); } }
