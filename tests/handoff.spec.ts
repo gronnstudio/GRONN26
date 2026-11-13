@@ -138,3 +138,13 @@ test("pijlen zijn getekend (svg), geen ↗-teken dat op iPhone een emoji wordt",
   expect(tekst).not.toMatch(/[↗↓↑]/)
   await expect(page.getByRole("link", { name: "Start een project" }).first().locator("svg")).toHaveCount(1)
 })
+
+test("voorpagina: de voet sluit direct aan op de eind-CTA, geen lege balk", async ({ page }) => {
+  await page.goto("/")
+  const gat = await page.evaluate(() => {
+    const eind = document.querySelector("#ho-eind")!.getBoundingClientRect().bottom
+    const voet = document.querySelector("footer.bos-vlak")!.getBoundingClientRect().top
+    return Math.round(voet - eind)
+  })
+  expect(gat).toBe(0)
+})

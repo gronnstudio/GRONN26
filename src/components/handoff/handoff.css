@@ -476,3 +476,6 @@ html.donker :is(.hw-keuze:has(input:checked), .hw-chip input:checked + span) { b
 html.donker .hw-samenvatting { background: #3a1e17; border-color: #ff8a6b; }
 html.donker :is(.hw-samenvatting p, .hw-samenvatting a, .hw-fout) { color: #ffb7a3; }
 
+/* De eind-CTA heeft een eigen vlak: daaronder sluit de voet direct aan, zonder
+   de lege marge die de voet op andere pagina's boven zich houdt (13 nov 2026). */
+body:has(main .ho) footer.bos-vlak { margin-top: 0; }
