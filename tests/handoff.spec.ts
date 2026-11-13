@@ -30,6 +30,7 @@ test("voorpagina: prijzen, foto via WhatsApp, voor/nu met review", async ({ page
   await expect(foto).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/)
   await expect(page.getByText("Plan nu, dan begin ik in maart.")).toBeVisible()
   await expect(page.locator(".ho-citaat")).toContainText("Veronique")
+  expect(await page.locator("#ho-titel").innerText()).toMatch(/^Buitenruimte die natuurlijk aanvoelt\.$/)
 })
 
 test("FAQ: knop met aria-expanded, antwoord blijft in de DOM", async ({ page }) => {

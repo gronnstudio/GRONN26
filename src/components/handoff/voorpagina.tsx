@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ViewTransition, type CSSProperties } from "react"
+import { Fragment, ViewTransition, type CSSProperties } from "react"
 import { Foto } from "@/components/foto"
 import { euro } from "@/components/diensten/prijs"
 import { F01, F02_2, F07_2, F08_1, F09_2, F10, T02 } from "@/components/voorpagina/beelden"
@@ -98,9 +98,11 @@ export function HandoffVoorpagina() {
             <h1 id="ho-titel" className="ho-titel">
               {/* per woord omhoog bij het laden; zie .ho-woord in handoff.css */}
               {["Buitenruimte", "die", "natuurlijk", "aanvoelt."].map((w, i) => (
-                <span key={w} className="ho-woord" style={{ "--i": i } as CSSProperties}>
-                  <span>{w === "natuurlijk" ? <em>{w}</em> : w}</span>{" "}
-                </span>
+                <Fragment key={w}>
+                  <span className="ho-woord" style={{ "--i": i } as CSSProperties}>
+                    <span>{w === "natuurlijk" ? <em>{w}</em> : w}</span>
+                  </span>{" "}
+                </Fragment>
               ))}
             </h1>
           </div>
