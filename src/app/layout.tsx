@@ -4,6 +4,7 @@ import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Geist_Mono, IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Condensed, Montserrat, Syne } from "next/font/google"
 import { HandoffKop } from "@/components/handoff/kop"
+import { Menu } from "@/components/menu"
 import { HandoffVoet } from "@/components/handoff/voet"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
@@ -65,7 +66,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div className="alleen-plan contents"><Kop /></div>
-        <div className="alleen-klassiek contents"><HandoffKop /></div>
+        {/* Handoff-kop vanaf 1024px, het dock eronder (eigenaar, 13 nov 2026). */}
+        <div className="alleen-klassiek ho-vanaf-desktop"><HandoffKop /></div>
+        <div className="alleen-klassiek ho-tot-desktop"><Menu weergave={false} /></div>
         <main id="inhoud">{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
         <div className="alleen-klassiek contents">

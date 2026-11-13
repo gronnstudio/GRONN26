@@ -1,14 +1,23 @@
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { F01, F07_2, F08_1, F09_2, T02 } from "@/components/voorpagina/beelden"
+import { euro } from "@/components/diensten/prijs"
+import { F01, F02_2, F07_2, F08_1, F09_2, F10, T02 } from "@/components/voorpagina/beelden"
 import { WERK } from "@/components/werk/projecten"
-import { Onthul, PlakCta, Vraag } from "./klant"
+import { BUSINESS } from "@/lib/business"
+import { pricingFor } from "@/lib/data/pricing"
+import { KLANT_CITAAT } from "@/lib/data/vijverrenovatie"
+import { Onthul, Vraag } from "./klant"
 
 // De voorpagina volgens de handoff "GRØNN Studio Website 2027" (eigenaar koos
 // "Handoff precies volgen", 12 nov 2026). Volgorde en tekst uit de handoff,
 // pagina 09 en 10: hero, filosofie, drie specialismen, projecten, werkwijze,
 // studio, FAQ, eind-CTA. De handoff zegt zelf dat conceptbeelden voor
 // livegang eigen foto's worden; hier staan dus alleen eigen foto's.
+
+const prijs = (slug: string) => pricingFor(slug)?.tiers[0]?.amount ?? 0
+
+// "Stuur een foto" gaat via WhatsApp met een ingevulde eerste zin.
+export const WHATSAPP_FOTO = `${BUSINESS.whatsapp}?text=${encodeURIComponent("Hoi Nick, hier een foto van mijn tuin/vijver. Kun je even meekijken?")}`
 
 const SPECIALISMEN = [
   {
@@ -17,7 +26,8 @@ const SPECIALISMEN = [
     kop: "Tuinrenovatie",
     sub: "Een nieuwe toekomst voor je tuin.",
     tekst:
-      "Een bestaande tuin verdient soms een frisse blik. We brengen structuur, sfeer en natuurlijke materialen samen tot een buitenruimte die aansluit bij jouw leven. Van gerichte vernieuwing tot een complete transformatie.",
+      "Een bestaande tuin verdient soms een frisse blik. Ik breng structuur, sfeer en natuurlijke materialen samen tot een buitenruimte die aansluit bij jouw leven. Van gerichte vernieuwing tot een complete transformatie.",
+    prijs: `Kleine tuin of terras vanaf ${euro(prijs("implementation"))}, vaste prijs vooraf`,
     link: { href: "/tuinen", label: "Ontdek tuinrenovatie" },
     foto: T02,
   },
@@ -27,7 +37,8 @@ const SPECIALISMEN = [
     kop: "Vijvers & watersystemen",
     sub: "Breng het water weer in balans.",
     tekst:
-      "Een mooie vijver begint onder het wateroppervlak. We combineren kennis van filtering, circulatie en waterkwaliteit met een natuurlijke vormgeving. Voor vijvers die mooi ogen en technisch goed functioneren.",
+      "Een mooie vijver begint onder het wateroppervlak. Ik combineer kennis van filtering, circulatie en waterkwaliteit met een natuurlijke vormgeving. Voor vijvers die mooi ogen en technisch goed functioneren.",
+    prijs: `Vijveronderhoud vanaf ${euro(prijs("maintenance-subscription"))} per maand`,
     link: { href: "/vijvers", label: "Ontdek vijverrenovatie" },
     foto: F08_1,
   },
@@ -37,39 +48,40 @@ const SPECIALISMEN = [
     kop: "Ontwerp & specialistisch advies",
     sub: "Een goed resultaat begint met inzicht.",
     tekst:
-      "Soms is niet meteen een renovatie nodig, maar eerst een helder plan. We helpen met tuinconcepten, beplantingsadvies, vijverinspecties en technische verbeteringen. Praktisch, doordacht en afgestemd op jouw situatie.",
+      "Soms is niet meteen een renovatie nodig, maar eerst een helder plan. Ik help met tuinconcepten, beplantingsadvies, vijverinspecties en technische verbeteringen. Praktisch, doordacht en afgestemd op jouw situatie.",
+    prijs: `Vijverdoorlichting ${euro(prijs("pond-survey"))}, verrekend bij een opdracht`,
     link: { href: "/start-een-project?type=advies", label: "Vraag ontwerp of advies aan" },
     foto: F07_2,
   },
 ]
 
 const STAPPEN = [
-  { kop: "Vertel ons over je plannen", tekst: "Deel wat je wilt veranderen, locatie, budget en bij voorkeur foto's." },
-  { kop: "We onderzoeken de mogelijkheden", tekst: "We bespreken je wensen en bepalen of inspectie, advies, ontwerp of renovatie past." },
-  { kop: "Je ontvangt een duidelijk voorstel", tekst: "Je krijgt inzicht in werkzaamheden, materiaalkeuzes, investering en planning." },
-  { kop: "We brengen het plan tot leven", tekst: "GRØNN Studio voert de kern uit en schakelt waar nodig passende vakpartners in." },
+  { kop: "Vertel me over je plannen", tekst: "Wat je wilt veranderen, waar, je budget en het liefst een paar foto's." },
+  { kop: "Ik kom kijken", tekst: "We bespreken je wensen op de plek zelf en ik zeg eerlijk of inspectie, advies, ontwerp of renovatie past." },
+  { kop: "Je krijgt een vaste prijs", tekst: "Een helder voorstel met werkzaamheden, materialen, planning en één prijs vooraf. Geen verrassingen achteraf." },
+  { kop: "Ik voer het zelf uit", tekst: "Ik doe het werk zelf en schakel alleen waar nodig een vakpartner in die ik ken." },
 ]
 
 const VRAGEN = [
   {
-    v: "In welk gebied werkt GRØNN Studio?",
-    a: "Primair in Limburg en omgeving. Deel je postcode in de aanvraag; dan beoordelen we snel of je project binnen het werkgebied valt.",
+    v: "In welk gebied werk je?",
+    a: "In Stein en omgeving, tot zo'n 30 kilometer: van Maastricht en Sittard-Geleen tot Heerlen en Kerkrade. Zet je postcode in de aanvraag, dan zeg ik meteen of het past.",
   },
   {
-    v: "Kunnen jullie een bestaande tuin deels vernieuwen?",
-    a: "Ja. We bekijken welke onderdelen behouden kunnen blijven en waar een gerichte ingreep het meeste verschil maakt.",
+    v: "Kun je een bestaande tuin deels vernieuwen?",
+    a: "Ja. Ik kijk wat kan blijven en waar een gerichte ingreep het meeste verschil maakt.",
   },
   {
-    v: "Helpen jullie ook alleen met vijverproblemen?",
-    a: "Ja. Een inspectie of technisch advies kan de juiste eerste stap zijn bij waterkwaliteit, circulatie of filtering.",
+    v: "Help je ook alleen met een vijverprobleem?",
+    a: "Ja. Bij groen water, een lekkende vijver of een filter dat niet werkt is een vijverdoorlichting vaak de beste eerste stap. Stuur gerust eerst een foto via WhatsApp.",
   },
   {
     v: "Wat kost een traject?",
-    a: "Dat hangt af van schaal, bestaande situatie, materiaal en techniek. De intake vraagt om een bandbreedte, waarna we een passende vervolgstap voorstellen.",
+    a: "Dat hangt af van de schaal, de bestaande situatie en de materialen. Je krijgt altijd een vaste prijs vooraf, dus je weet waar je aan toe bent voordat ik begin.",
   },
   {
-    v: "Hoe snel kunnen jullie starten?",
-    a: "Beschikbaarheid wisselt per seizoen en project. Geef je gewenste planning door; na beoordeling ontvang je een realistische indicatie.",
+    v: "Wanneer kun je beginnen?",
+    a: "Het voorjaar loopt het snelst vol. Wie nu plant, kan in maart beginnen. Geef je gewenste planning door, dan krijg je een eerlijke datum.",
   },
 ]
 
@@ -81,29 +93,34 @@ export function HandoffVoorpagina() {
       <section className="ho-held" id="ho-held" aria-labelledby="ho-titel">
         <div className="ho-kolom ho-held-raster">
           <div>
-            <p className="ho-lbl">Tuinrenovatie · Vijvers · Ontwerp &amp; advies</p>
+            <p className="ho-lbl">Voorjaar 2027 · Stein en omgeving</p>
             <h1 id="ho-titel" className="ho-titel">
               Buitenruimte die <em>natuurlijk</em> aanvoelt.
             </h1>
           </div>
           <div className="ho-held-zij">
             <p>
-              Een tuin om in thuis te komen. Een vijver die weer tot leven komt. Met aandacht voor vorm, natuur en techniek vernieuwt GRØNN
-              Studio buitenruimtes in Limburg en omgeving.
+              Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.
             </p>
-            <Link href="/start-een-project" className="ho-knop ho-knop-bos">
-              Start een project <span aria-hidden>↗</span>
-            </Link>
+            <p className="ho-haak">Plan nu, dan begin ik in maart.</p>
+            <div className="ho-knoppen">
+              <Link href="/start-een-project" className="ho-knop ho-knop-bos">
+                Start een project <span aria-hidden>↗</span>
+              </Link>
+              <a href={WHATSAPP_FOTO} className="ho-knop ho-knop-lijn" target="_blank" rel="noopener">
+                Stuur een foto <span aria-hidden>↗</span>
+              </a>
+            </div>
             <a href="#projecten" className="ho-pijl">
-              Ontdek ons werk <span aria-hidden>↓</span>
+              Bekijk mijn werk <span aria-hidden>↓</span>
             </a>
           </div>
         </div>
         <div className="ho-kolom">
-          <Foto foto={F01} priority sizes="(min-width: 1440px) 1344px, 94vw" className="ho-held-beeld" />
+          <Foto foto={F10} priority sizes="(min-width: 1440px) 1344px, 94vw" className="ho-held-beeld" />
           <div className="ho-held-onder ho-lbl">
             <span>01 / Natuurlijk vernieuwen</span>
-            <span>Limburg · Nederland</span>
+            <span>Stein · Limburg</span>
           </div>
         </div>
       </section>
@@ -117,8 +134,8 @@ export function HandoffVoorpagina() {
             <div className="ho-tekst">
               <p>Een plek waar je tot rust komt. Waar materialen mooi verouderen, beplanting zich ontwikkelt en water beweging brengt.</p>
               <p>
-                Bij GRØNN Studio kijken we verder dan alleen de aanleg. We onderzoeken wat een bestaande tuin of vijver nodig heeft en brengen
-                esthetiek, functionaliteit en techniek samen.
+                Ik kijk verder dan alleen de aanleg. Eerst onderzoek ik wat een bestaande tuin of vijver nodig heeft, daarna breng ik vorm, natuur
+                en techniek samen.
               </p>
               <p className="ho-sterk">Met aandacht ontworpen. Met vakmanschap uitgevoerd.</p>
             </div>
@@ -147,6 +164,7 @@ export function HandoffVoorpagina() {
                   <h3 className="ho-h3">{s.kop}</h3>
                   <p className="ho-sterk">{s.sub}</p>
                   <p>{s.tekst}</p>
+                  <p className="ho-prijs">{s.prijs}</p>
                   <Link href={s.link.href} className="ho-pijl">
                     {s.link.label} <span aria-hidden>↗</span>
                   </Link>
@@ -166,9 +184,25 @@ export function HandoffVoorpagina() {
               <h2 id="ho-projecten" className="ho-h2">Elke plek heeft een eigen verhaal.</h2>
             </div>
             <p className="ho-sectiekop-zij">
-              Van de eerste uitdaging tot het laatste detail. Ontdek hoe bestaande tuinen en vijvers veranderen met een doordachte aanpak.
+              Alleen eigen werk, met eigen foto&apos;s. Zo zag de vijverrenovatie in Stein eruit, en nu, en dit zegt de opdrachtgever erover.
             </p>
           </div>
+          <figure className="ho-voorna">
+            <div className="ho-voorna-paar">
+              <div>
+                <Foto foto={F02_2} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-voorna-foto" />
+                <p className="ho-lbl">Voor</p>
+              </div>
+              <div>
+                <Foto foto={F01} sizes="(min-width: 1024px) 45vw, 94vw" className="ho-voorna-foto" />
+                <p className="ho-lbl">Nu</p>
+              </div>
+            </div>
+            <blockquote className="ho-citaat">
+              <p>“{KLANT_CITAAT.tekst.nl}”</p>
+              <footer className="ho-lbl">{KLANT_CITAAT.bron}</footer>
+            </blockquote>
+          </figure>
           <ul className="ho-werk">
             {[groot, klein].map((p) => (
               <li key={p.href}>
@@ -211,13 +245,12 @@ export function HandoffVoorpagina() {
             <p className="ho-lbl">Over GRØNN Studio</p>
             <h2 id="ho-studio" className="ho-h2">Klein in schaal. Groot in aandacht.</h2>
             <p>
-              GRØNN Studio is een zelfstandige studio voor tuin- en vijverrenovatie, met een persoonlijke en betrokken werkwijze. Geen onnodig
-              ingewikkeld proces of standaardoplossingen. Wel direct contact, aandacht voor details en een sterke combinatie van uitvoering en
-              technische kennis.
+              Ik ben Nick, en GRØNN Studio is mijn eenmanszaak voor tuinen en vijvers in Stein en omgeving. Geen ingewikkeld proces en geen
+              standaardoplossingen. Wel één aanspreekpunt van eerste gesprek tot oplevering, aandacht voor details en technische kennis van water.
             </p>
             <p>Omdat goed buitenwerk begint bij begrijpen wat een plek nodig heeft.</p>
             <Link href="/over" className="ho-pijl">
-              Meer over de studio <span aria-hidden>↗</span>
+              Meer over mij <span aria-hidden>↗</span>
             </Link>
           </div>
         </div>
@@ -245,14 +278,18 @@ export function HandoffVoorpagina() {
         <div className="ho-kolom">
           <p className="ho-lbl">Start een project</p>
           <h2 id="ho-eind-kop" className="ho-eind-kop">Er begint iets moois buiten.</h2>
-          <p>Een tuin die niet meer bij je past? Een vijver die aandacht nodig heeft? Vertel ons over je plannen.</p>
-          <Link href="/start-een-project" className="ho-knop ho-knop-bos">
-            Start jouw project <span aria-hidden>↗</span>
-          </Link>
+          <p>Een tuin die niet meer bij je past? Een vijver die aandacht nodig heeft? Vertel me over je plannen. Plan je nu, dan begin ik in maart.</p>
+          <div className="ho-knoppen">
+            <Link href="/start-een-project" className="ho-knop ho-knop-bos">
+              Start jouw project <span aria-hidden>↗</span>
+            </Link>
+            <a href={WHATSAPP_FOTO} className="ho-knop ho-knop-lijn" target="_blank" rel="noopener">
+              Stuur een foto <span aria-hidden>↗</span>
+            </a>
+          </div>
         </div>
       </section>
 
-      <PlakCta />
     </div>
   )
 }

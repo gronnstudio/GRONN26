@@ -36,7 +36,8 @@ const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10
 
 const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
 
-export function Menu() {
+/** `weergave={false}`: zonder het blok Weergave (de handoff-preview kent maar één kleur en één layout). */
+export function Menu({ weergave = true }: { weergave?: boolean } = {}) {
   const pad = usePathname()
   const taal = useTaal()
   const [open, setOpen] = useState(false)
@@ -151,10 +152,12 @@ export function Menu() {
             <T t={{ nl: "Kennismaken", en: "Get in touch" }} />
           </Link>
           <Link href="/journaal" className={`${linkKlasse} syne text-[28px] leading-[1.2] tracking-[-.02em] lg:hidden`}>Journaal</Link>
-          <div>
-            <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
-            <Instellingen />
-          </div>
+          {weergave ? (
+            <div>
+              <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
+              <Instellingen />
+            </div>
+          ) : null}
         </div>
       </div>
 

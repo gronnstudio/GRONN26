@@ -2,13 +2,12 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Logo } from "@/components/logo"
 
 // De kop uit de handoff "Website 2027" (12 nov 2026): logo, vier links en
-// één knop. Transparant bovenaan, na 48px linnen met een dunne lijn. Op de
-// telefoon een schermvullend menu; <dialog> geeft de focusval en Escape, de
-// CSS zet het scrollen van de pagina eronder stil.
+// één knop. Transparant bovenaan, na 48px linnen met een dunne lijn. Alleen
+// vanaf 1024px; daaronder staat het dock (eigenaar, 13 nov 2026).
 
 export const LINKS = [
   { href: "/#specialismen", label: "Specialismen" },
@@ -20,7 +19,6 @@ export const LINKS = [
 export function HandoffKop() {
   const pad = usePathname()
   const [gevuld, setGevuld] = useState(false)
-  const menu = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
     const kijk = () => setGevuld(window.scrollY > 48)
@@ -28,11 +26,6 @@ export function HandoffKop() {
     window.addEventListener("scroll", kijk, { passive: true })
     return () => window.removeEventListener("scroll", kijk)
   }, [])
-
-  // Een nieuwe pagina sluit het menu.
-  useEffect(() => {
-    menu.current?.close()
-  }, [pad])
 
   const actief = (href: string) => !href.includes("#") && pad.startsWith(href)
 
@@ -53,31 +46,7 @@ export function HandoffKop() {
         <Link href="/start-een-project" className="ho-knop ho-knop-bos ho-kop-cta">
           Start een project <span aria-hidden>↗</span>
         </Link>
-        <button type="button" className="ho-kop-menuknop" onClick={() => menu.current?.showModal()}>
-          Menu
-        </button>
       </div>
-
-      <dialog ref={menu} className="ho-menu" aria-label="Menu">
-        <div className="ho-menu-kop">
-          <Logo className="h-[22px] w-auto" />
-          <button type="button" className="ho-kop-menuknop" onClick={() => menu.current?.close()}>
-            Sluiten
-          </button>
-        </div>
-        <nav aria-label="Menu" className="ho-menu-nav">
-          <Link href="/" onClick={() => menu.current?.close()}>Home</Link>
-          {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} onClick={() => menu.current?.close()}>
-              {l.label}
-            </Link>
-          ))}
-          <Link href="/kennismaken" onClick={() => menu.current?.close()}>Contact</Link>
-        </nav>
-        <Link href="/start-een-project" className="ho-knop ho-knop-bos ho-menu-cta" onClick={() => menu.current?.close()}>
-          Start een project <span aria-hidden>↗</span>
-        </Link>
-      </dialog>
     </header>
   )
 }

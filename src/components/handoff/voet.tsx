@@ -35,7 +35,7 @@ export function HandoffVoet() {
         </nav>
       </div>
       <div className="ho-kolom ho-voet-onder">
-        <p>© {BUSINESS.name} {new Date().getFullYear()} · Limburg, Nederland</p>
+        <p>© {BUSINESS.name} {new Date().getFullYear()} · Stein en omgeving</p>
         <p>
           KVK {BUSINESS.kvk} · <Link href="/voorwaarden">Voorwaarden</Link> · <a href={BUSINESS.emailHref}>{BUSINESS.email}</a>
         </p>

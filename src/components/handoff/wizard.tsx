@@ -6,9 +6,10 @@ import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } fr
 import { Logo } from "@/components/logo"
 import { BUSINESS } from "@/lib/business"
 
-// "Start een project": de aanvraag in zes stappen uit de handoff "Website
-// 2027" (pagina 12 en 23; eigenaar koos "Handoff precies volgen", 12 nov
-// 2026). Eén vraag per scherm, "Stap x van 6", terug en volgende, voortgang
+// "Start een project": de aanvraag uit de handoff "Website 2027" (pagina 12
+// en 23; eigenaar koos "Handoff precies volgen", 12 nov 2026), op 13 nov
+// teruggebracht van zes naar vier stappen: wat, hoe het er nu uitziet (met
+// foto's), budget en planning samen, contact. "Stap x van 4", terug en volgende, voortgang
 // in sessionStorage (zonder foto's), fouten bij het veld én in een
 // samenvatting. Versturen gaat zoals op Kennismaken: rechtstreeks uit de
 // browser naar FormSubmit (die blokkeert serveradressen), met een kopie naar
@@ -44,6 +45,7 @@ const BUDGETTEN: Keuze[] = [
 ]
 const PLANNINGEN: Keuze[] = [
   { id: "zsm", label: "Zo snel mogelijk" },
+  { id: "voorjaar", label: "Voorjaar 2027, vanaf maart" },
   { id: "3mnd", label: "Binnen 3 maanden" },
   { id: "6mnd", label: "Binnen 6 maanden" },
   { id: "later", label: "Later" },
@@ -75,29 +77,30 @@ type Foto = { sleutel: string; voorbeeld: string; id: string | null; stand: "bez
 type Fouten = Partial<Record<keyof Stand, string>>
 
 const STAPPEN = [
-  { lbl: "Jouw project", kop: "Wat wil je realiseren?", uitleg: "Kies wat het beste past. Twijfel je? Dan denken we met je mee." },
-  { lbl: "Bestaande situatie", kop: "Hoe ziet het er nu uit?", uitleg: "Een korte toelichting en je postcode zijn genoeg. Een volledig adres is nu nog niet nodig." },
-  { lbl: "Budget", kop: "Aan welk budget denk je?", uitleg: "Een bandbreedte helpt ons de juiste vervolgstap voor te stellen. Het is geen toezegging." },
-  { lbl: "Planning", kop: "Wanneer wil je beginnen?", uitleg: "Beschikbaarheid wisselt per seizoen. Met je planning geven we een realistische indicatie." },
-  { lbl: "Foto's", kop: "Laat zien waar het om gaat.", uitleg: "Optioneel, maar het helpt veel: een overzicht, de probleemzone en eventuele techniek." },
-  { lbl: "Contact", kop: "Hoe bereiken we je?", uitleg: "We gebruiken je gegevens alleen om op deze aanvraag te reageren." },
+  { lbl: "Jouw project", kop: "Wat wil je laten doen?", uitleg: "Kies wat het beste past. Twijfel je? Dan denk ik met je mee." },
+  { lbl: "Bestaande situatie", kop: "Hoe ziet het er nu uit?", uitleg: "Een korte toelichting en je postcode zijn genoeg. Foto's helpen veel, maar zijn niet verplicht." },
+  { lbl: "Budget en planning", kop: "Wat heb je in gedachten?", uitleg: "Een bandbreedte en een moment helpen mij de juiste vervolgstap voor te stellen. Het is geen toezegging." },
+  { lbl: "Contact", kop: "Hoe bereik ik je?", uitleg: "Ik gebruik je gegevens alleen om op deze aanvraag te reageren." },
 ]
+const LAATSTE = STAPPEN.length - 1
 
 const label = (lijst: Keuze[], id: string) => lijst.find((k) => k.id === id)?.label ?? ""
 
 function controleer(stap: number, s: Stand): Fouten {
   const f: Fouten = {}
-  if (stap === 0 && !s.type) f.type = "Kies wat je wilt realiseren."
+  if (stap === 0 && !s.type) f.type = "Kies wat je wilt laten doen."
   if (stap === 1) {
     if (s.situatie.trim().length < 10) f.situatie = "Vertel in een paar woorden hoe het er nu uitziet."
     if (!/^\d{4}\s?[a-zA-Z]{2}$/.test(s.postcode.trim())) f.postcode = "Vul een postcode in zoals 6171 AB."
   }
-  if (stap === 2 && !s.budget) f.budget = "Kies een budget, of Nog onzeker."
-  if (stap === 3 && !s.planning) f.planning = "Kies wanneer je wilt beginnen."
-  if (stap === 5) {
+  if (stap === 2) {
+    if (!s.budget) f.budget = "Kies een budget, of Nog onzeker."
+    if (!s.planning) f.planning = "Kies wanneer je wilt beginnen."
+  }
+  if (stap === 3) {
     if (!s.naam.trim()) f.naam = "Vul je naam in."
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) f.email = "Vul een geldig e-mailadres in, zoals naam@voorbeeld.nl."
-    if ((s.kanaal === "telefoon" || s.kanaal === "whatsapp") && s.telefoon.replace(/\D/g, "").length < 9) f.telefoon = "Vul je telefoonnummer in, zodat we je zo kunnen bereiken."
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) f.email = "Vul een geldig e-mailadres in, zoals in je mailprogramma."
+    if ((s.kanaal === "telefoon" || s.kanaal === "whatsapp") && s.telefoon.replace(/\D/g, "").length < 9) f.telefoon = "Vul je telefoonnummer in, zodat ik je zo kan bereiken."
     if (!s.akkoord) f.akkoord = "Geef akkoord op de privacyverklaring om te versturen."
   }
   return f
@@ -114,10 +117,10 @@ async function verklein(bestand: File): Promise<Blob> {
   return new Promise((klaar, mis) => doek.toBlob((b) => (b ? klaar(b) : mis(new Error("leeg"))), "image/jpeg", 0.85))
 }
 
-function Keuzes({ naam, lijst, waarde, onKies, fout, legenda }: { naam: keyof Stand; lijst: Keuze[]; waarde: string; onKies: (id: string) => void; fout?: string; legenda: string }) {
+function Keuzes({ naam, lijst, waarde, onKies, fout, legenda, zichtbaar }: { naam: keyof Stand; lijst: Keuze[]; waarde: string; onKies: (id: string) => void; fout?: string; legenda: string; zichtbaar?: boolean }) {
   return (
     <fieldset className="hw-keuzes" aria-describedby={fout ? `fout-${naam}` : undefined} aria-invalid={fout ? true : undefined}>
-      <legend className="sr-only">{legenda}</legend>
+      <legend className={zichtbaar ? "hw-legenda" : "sr-only"}>{legenda}</legend>
       {lijst.map((k, i) => (
         <label key={k.id} className="hw-keuze">
           <input type="radio" name={naam} value={k.id} checked={waarde === k.id} onChange={() => onKies(k.id)} id={i === 0 ? `veld-${naam}` : undefined} />
@@ -163,7 +166,7 @@ export function ProjectWizard() {
       const bewaard = JSON.parse(sessionStorage.getItem(OPSLAG) || "null") as { stap?: number; s?: Partial<Stand> } | null
       // eslint-disable-next-line react-hooks/set-state-in-effect -- eenmalig na hydratie
       if (bewaard?.s) setS({ ...LEEG, ...bewaard.s })
-      if (typeof bewaard?.stap === "number") setStap(Math.min(Math.max(bewaard.stap, 0), 5))
+      if (typeof bewaard?.stap === "number") setStap(Math.min(Math.max(bewaard.stap, 0), LAATSTE))
     } catch {}
     const type = new URLSearchParams(window.location.search).get("type")
     if (type && TYPES.some((t) => t.id === type)) setS((o) => ({ ...o, type }))
@@ -202,7 +205,7 @@ export function ProjectWizard() {
       return
     }
     track("complete_step", { step: stap + 1 })
-    if (stap < 5) naar(stap + 1)
+    if (stap < LAATSTE) naar(stap + 1)
     else void verstuur()
   }
 
@@ -287,7 +290,7 @@ export function ProjectWizard() {
           _template: "box",
           _captcha: "false",
           // De bevestiging aan de aanvrager, met samenvatting en referentie (handoff 12).
-          _autoresponse: `Bedankt voor je aanvraag bij ${BUSINESS.name}. We bekijken hem persoonlijk en reageren binnen twee werkdagen.\n\nReferentie: ${ref}\nProjecttype: ${label(TYPES, s.type)}\nBudget: ${label(BUDGETTEN, s.budget)}\nPlanning: ${label(PLANNINGEN, s.planning)}`,
+          _autoresponse: `Bedankt voor je aanvraag bij ${BUSINESS.name}. Ik bekijk hem zelf en reageer binnen twee werkdagen.\n\nReferentie: ${ref}\nProjecttype: ${label(TYPES, s.type)}\nBudget: ${label(BUDGETTEN, s.budget)}\nPlanning: ${label(PLANNINGEN, s.planning)}`,
           name: s.naam.trim(),
           email: s.email.trim(),
           message: tekst,
@@ -313,7 +316,7 @@ export function ProjectWizard() {
       <Link href="/" aria-label="GRØNN Studio, naar de voorpagina">
         <Logo className="h-[22px] w-auto" />
       </Link>
-      {status === "invullen" || status === "bezig" ? <p className="hw-stapnr" aria-live="polite">Stap {stap + 1} van 6</p> : null}
+      {status === "invullen" || status === "bezig" ? <p className="hw-stapnr" aria-live="polite">Stap {stap + 1} van {STAPPEN.length}</p> : null}
     </div>
   )
 
@@ -324,13 +327,13 @@ export function ProjectWizard() {
         <div className="hw-inhoud">
           <p className="ho-lbl">Bevestiging</p>
           <h1 ref={kopRef} tabIndex={-1} className="hw-titel">
-            {status === "klaar" ? "Bedankt. We bekijken je aanvraag persoonlijk." : "Verzenden lukte niet. Er staat een e-mail voor je klaar."}
+            {status === "klaar" ? "Bedankt. Ik bekijk je aanvraag zelf." : "Verzenden lukte niet. Er staat een e-mail voor je klaar."}
           </h1>
           {status === "klaar" ? (
             <>
               <p className="hw-uitleg">
-                Je ontvangt een e-mail met een samenvatting en je referentienummer. Binnen twee werkdagen hoor je van ons: een korte intake, een
-                voorstel voor advies of inspectie, een renovatieverkenning, of eerlijk bericht als je project niet bij ons past.
+                Je ontvangt een e-mail met een samenvatting en je referentienummer. Binnen twee werkdagen hoor je van mij: een afspraak om te komen
+                kijken, een voorstel voor advies of inspectie, of eerlijk bericht als je project niet bij mij past.
               </p>
               <p className="hw-referentie">
                 <span className="ho-lbl">Referentie</span> {referentie}
@@ -357,8 +360,8 @@ export function ProjectWizard() {
   return (
     <div className="hw ho-wizard">
       {kop}
-      <div className="hw-balk" role="progressbar" aria-label="Voortgang" aria-valuemin={1} aria-valuemax={6} aria-valuenow={stap + 1}>
-        <span style={{ width: `${((stap + 1) / 6) * 100}%` }} />
+      <div className="hw-balk" role="progressbar" aria-label="Voortgang" aria-valuemin={1} aria-valuemax={STAPPEN.length} aria-valuenow={stap + 1}>
+        <span style={{ width: `${((stap + 1) / STAPPEN.length) * 100}%` }} />
       </div>
       <form className="hw-inhoud" onSubmit={volgende} noValidate>
         <p className="ho-lbl">{st.lbl}</p>
@@ -397,14 +400,7 @@ export function ProjectWizard() {
                 </select>
               </Veld>
             ) : null}
-          </div>
-        ) : null}
-
-        {stap === 2 ? <Keuzes naam="budget" legenda={st.kop} lijst={BUDGETTEN} waarde={s.budget} onKies={(id) => zet("budget", id)} fout={fouten.budget} /> : null}
-        {stap === 3 ? <Keuzes naam="planning" legenda={st.kop} lijst={PLANNINGEN} waarde={s.planning} onKies={(id) => zet("planning", id)} fout={fouten.planning} /> : null}
-
-        {stap === 4 ? (
-          <div className="hw-velden">
+            <p className="hw-legenda">Foto&apos;s <span className="hw-optioneel">· optioneel</span></p>
             <div
               className="hw-drop"
               onDragOver={(e) => e.preventDefault()}
@@ -440,7 +436,14 @@ export function ProjectWizard() {
           </div>
         ) : null}
 
-        {stap === 5 ? (
+        {stap === 2 ? (
+          <div className="hw-velden">
+            <Keuzes naam="budget" legenda="Aan welk budget denk je?" zichtbaar lijst={BUDGETTEN} waarde={s.budget} onKies={(id) => zet("budget", id)} fout={fouten.budget} />
+            <Keuzes naam="planning" legenda="Wanneer wil je beginnen?" zichtbaar lijst={PLANNINGEN} waarde={s.planning} onKies={(id) => zet("planning", id)} fout={fouten.planning} />
+          </div>
+        ) : null}
+
+        {stap === 3 ? (
           <div className="hw-velden">
             <Veld naam="naam" label="Naam" fout={fouten.naam}>
               <input id="veld-naam" value={s.naam} onChange={(e) => zet("naam", e.target.value)} autoComplete="name" aria-invalid={fouten.naam ? true : undefined} aria-describedby={fouten.naam ? "fout-naam" : undefined} />
@@ -484,8 +487,8 @@ export function ProjectWizard() {
               <span aria-hidden>←</span> Terug
             </button>
           ) : <span />}
-          <button type="submit" className="ho-knop ho-knop-bos" disabled={status === "bezig" || (stap === 4 && fotosBezig)}>
-            {stap < 5 ? <>Volgende stap <span aria-hidden>→</span></> : status === "bezig" ? "Versturen…" : <>Verstuur aanvraag <span aria-hidden>→</span></>}
+          <button type="submit" className="ho-knop ho-knop-bos" disabled={status === "bezig" || (stap === 1 && fotosBezig)}>
+            {stap < LAATSTE ? <>Volgende stap <span aria-hidden>→</span></> : status === "bezig" ? "Versturen…" : <>Verstuur aanvraag <span aria-hidden>→</span></>}
           </button>
         </div>
       </form>
