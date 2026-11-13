@@ -1,0 +1,106 @@
+/* De voorpagina als tijdschrift (13 nov 2026). Alles onder .mg; kleuren uit
+   de tokens (--grond, --inkt, --gedempt, --lijn, --oranje), beweging alleen
+   in CSS en stil bij minder beweging. Maten in px en clamp, geen rem. */
+
+.mg { --mg-goot: var(--ho-goot, clamp(20px, 4vw, 56px)); }
+.mg-kolom { width: calc(100% - 2 * var(--mg-goot)); max-width: calc(1440px - 2 * var(--mg-goot)); margin-inline: auto; }
+.mg-blok { padding-block: clamp(64px, 9vw, 150px); }
+.mg-kopregel { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--lijn); margin-bottom: clamp(24px, 4vw, 56px); }
+.mg-kopregel > * { margin: 0; }
+.mg-h2 { margin: 0; font-family: var(--font-syne); font-weight: 700; font-size: clamp(30px, 4vw, 60px); line-height: 1.04; letter-spacing: -0.03em; }
+
+/* ── de cover ─────────────────────────────────────────────────────── */
+.mg-cover { position: relative; min-height: 100svh; display: flex; overflow: hidden; background: #140f0b; color: #f6f2e9; }
+.mg-cover-beeld { position: absolute; inset: -6% 0; }
+.mg-cover-foto { position: absolute !important; inset: 0; border-radius: 0 !important; }
+.mg-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(20 15 11 / .55) 0%, rgb(20 15 11 / .15) 32%, rgb(20 15 11 / .82) 100%); pointer-events: none; }
+.mg-cover-inhoud { position: relative; z-index: 1; display: flex; flex-direction: column; width: calc(100% - 2 * var(--mg-goot)); max-width: calc(1440px - 2 * var(--mg-goot)); margin-inline: auto; padding-block: clamp(20px, 3vw, 36px) clamp(110px, 12vw, 140px); }
+.mg-cover .ho-lbl { color: inherit; }
+.mg-regel { display: flex; justify-content: space-between; gap: 16px; margin: 0; padding-bottom: 12px; border-bottom: 1px solid rgb(246 242 233 / .35); color: #f6f2e9; }
+.mg-titel { margin: auto 0 clamp(28px, 4vw, 56px); max-width: 16ch; font-family: var(--font-syne); font-weight: 700; font-size: clamp(38px, 7.2vw, 118px); line-height: .98; letter-spacing: -0.04em; text-wrap: balance; }
+.mg-titel-klein { display: block; margin-bottom: clamp(12px, 1.6vw, 22px); font-family: var(--font-geist-mono), monospace; font-weight: 500; font-size: clamp(12px, 1vw, 14px); line-height: 1.4; letter-spacing: .14em; text-transform: uppercase; color: #ff5b04; }
+.mg-coverregels { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; border-top: 1px solid rgb(246 242 233 / .35); }
+.mg-coverregel { display: grid; grid-template-columns: 34px 1fr; gap: 2px 8px; padding: 14px 0; border-bottom: 1px solid rgb(246 242 233 / .22); color: inherit; text-decoration: none; }
+.mg-coverregel-kop { font-family: var(--font-syne); font-weight: 700; font-size: clamp(18px, 1.5vw, 23px); line-height: 1.15; letter-spacing: -0.02em; }
+.mg-coverregel-sub { grid-column: 2; opacity: .8; }
+.mg-coverregel[data-actie] .mg-coverregel-kop { color: #ff5b04; }
+.mg-coverregel:focus-visible { outline: 2px solid #f6f2e9; outline-offset: 4px; }
+@media (min-width: 900px) {
+  .mg-coverregels { grid-template-columns: repeat(4, 1fr); column-gap: clamp(16px, 2vw, 32px); border-top: 0; }
+  .mg-coverregel { grid-template-columns: 1fr; gap: 10px; padding: 16px 0 0; border-bottom: 0; border-top: 1px solid rgb(246 242 233 / .45); height: 100%; align-content: start; }
+  .mg-coverregel-sub { grid-column: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mg-coverregel { transition: border-color 300ms var(--ho-ease), transform 300ms var(--ho-ease); }
+  @media (hover: hover) { html:not(.stil) .mg-coverregel:hover { border-top-color: #ff5b04; transform: translateY(-4px); } }
+}
+
+/* ── de uitspraak (Kolenda: één zin over de volle breedte) ────────── */
+.mg-uitspraak { margin: 18px 0 0; max-width: 24ch; font-family: var(--font-syne); font-weight: 700; font-size: clamp(28px, 4.6vw, 72px); line-height: 1.06; letter-spacing: -0.035em; text-wrap: balance; }
+.mg-uitspraak em { font-style: normal; color: var(--oranje-tekst); }
+
+/* ── de inhoud: genummerde rubrieken ──────────────────────────────── */
+.mg-inhoud { list-style: none; margin: 0; padding: 0; }
+.mg-rubriek { position: relative; display: grid; grid-template-columns: 34px 1fr 20px; align-items: baseline; gap: 4px 8px; padding: clamp(18px, 2.4vw, 34px) 0; border-bottom: 1px solid var(--lijn); color: inherit; text-decoration: none; }
+.mg-rubriek-naam { font-family: var(--font-syne); font-weight: 700; font-size: clamp(34px, 6vw, 96px); line-height: 1; letter-spacing: -0.04em; }
+.mg-rubriek-zin { grid-column: 2; color: var(--gedempt); max-width: 46ch; }
+.mg-rubriek-pijl { grid-column: 3; grid-row: 1; align-self: center; font-size: clamp(18px, 2vw, 28px); }
+.mg-rubriek-beeld { display: none; }
+.mg-rubriek:focus-visible { outline: 2px solid var(--inkt); outline-offset: 4px; }
+@media (min-width: 900px) {
+  .mg-rubriek { grid-template-columns: 64px minmax(0, 5fr) minmax(0, 4fr) 32px; align-items: center; }
+  .mg-rubriek-zin { grid-column: 3; }
+  .mg-rubriek-pijl { grid-column: 4; }
+  /* het beeld van de rubriek komt op bij hover, los over de regel (Studio Verde) */
+  .mg-rubriek-beeld { display: block; position: absolute; z-index: 2; left: 36%; top: 50%; width: 220px; translate: 0 -50%; opacity: 0; pointer-events: none; rotate: 2deg; }
+  .mg-rubriek-foto { aspect-ratio: 4 / 3; box-shadow: 0 24px 48px -16px rgb(20 15 11 / .5); }
+  @media (hover: hover) {
+    .mg-rubriek:hover .mg-rubriek-beeld { opacity: 1; }
+    .mg-rubriek:hover .mg-rubriek-naam { color: var(--oranje-tekst); }
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .mg-rubriek-naam { transition: color 300ms var(--ho-ease), translate 500ms var(--ho-ease); }
+  html:not(.stil) .mg-rubriek-beeld { transition: opacity 300ms var(--ho-ease), scale 500ms var(--ho-ease); scale: .92; }
+  html:not(.stil) .mg-rubriek-pijl { transition: translate 300ms var(--ho-ease); }
+  @media (hover: hover) {
+    html:not(.stil) .mg-rubriek:hover .mg-rubriek-naam { translate: 14px 0; }
+    html:not(.stil) .mg-rubriek:hover .mg-rubriek-beeld { scale: 1; }
+    html:not(.stil) .mg-rubriek:hover .mg-rubriek-pijl { translate: 4px -4px; }
+  }
+}
+
+/* ── de reportage: tekst, "in het kort" en losse beelden ──────────── */
+.mg-reportage { display: grid; gap: clamp(40px, 6vw, 96px); }
+.mg-reportage-tekst { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+.mg-reportage-tekst > p { margin: 0; max-width: 52ch; color: var(--gedempt); }
+.mg-kort { margin: 8px 0; width: 100%; max-width: 520px; display: grid; }
+.mg-kort > div { display: grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--lijn); }
+.mg-kort > div:last-child { border-bottom: 1px solid var(--lijn); }
+.mg-kort dt, .mg-kort dd { margin: 0; }
+.mg-beelden { position: relative; padding-bottom: 18%; }
+.mg-beeld-groot { width: 82%; }
+.mg-beeld-klein { position: absolute; right: 0; bottom: 0; width: 44%; }
+.mg-beeld-klein > * { box-shadow: 0 24px 48px -12px rgb(20 15 11 / .45); }
+.mg-foto-liggend { aspect-ratio: 4 / 3; }
+.mg-foto-staand { aspect-ratio: 3 / 4; }
+@media (min-width: 1024px) {
+  .mg-reportage { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+}
+.mg-voornu { margin: clamp(56px, 8vw, 120px) 0 0; display: grid; gap: clamp(24px, 4vw, 56px); }
+.mg-citaat { margin: 0; }
+.mg-citaat p { margin: 0 0 16px; font-family: var(--font-syne); font-weight: 700; font-size: clamp(22px, 2.4vw, 36px); line-height: 1.18; letter-spacing: -0.025em; }
+@media (min-width: 1024px) {
+  .mg-voornu { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; }
+}
+
+/* ── de studio ────────────────────────────────────────────────────── */
+.mg-studio { display: grid; gap: clamp(32px, 5vw, 80px); align-items: center; }
+.mg-studio-beeld { width: min(70%, 420px); }
+.mg-studio-tekst { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.mg-studio-tekst p { margin: 0; max-width: 52ch; }
+.mg-studio-tekst p:not(.ho-lbl) { color: var(--gedempt); }
+@media (min-width: 1024px) {
+  .mg-studio { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); }
+  .mg-studio-beeld { width: 100%; max-width: 440px; justify-self: end; }
+}
