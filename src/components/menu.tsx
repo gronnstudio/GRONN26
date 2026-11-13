@@ -83,6 +83,10 @@ export function Menu() {
     }
     document.addEventListener("keydown", toets)
     document.addEventListener("click", klik)
+    // de pagina wijkt terug achter het menu, vanuit het midden van het scherm
+    // (globals.css, "Menu open"); de voet krijgt hetzelfde middelpunt
+    for (const el of document.querySelectorAll<HTMLElement>("#inhoud, footer.bos-vlak"))
+      el.style.transformOrigin = `50% ${innerHeight / 2 - el.getBoundingClientRect().top}px`
     // op de telefoon vult het menu het scherm: de pagina eronder staat stil
     const oud = document.documentElement.style.overflow
     if (!matchMedia("(min-width: 1024px)").matches) document.documentElement.style.overflow = "hidden"

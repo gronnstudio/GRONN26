@@ -148,3 +148,11 @@ test("voorpagina: de voet sluit direct aan op de eind-CTA, geen lege balk", asyn
   })
   expect(gat).toBe(0)
 })
+
+test("menu open: de pagina wijkt terug, en staat stil bij minder beweging", async ({ page }) => {
+  await page.goto("/")
+  await page.getByRole("button", { name: /menu/i }).last().click()
+  await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toContain("0.92")
+  await page.emulateMedia({ reducedMotion: "reduce" })
+  await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toBe("none")
+})

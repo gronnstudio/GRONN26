@@ -643,3 +643,15 @@ html.en .t-en { display: contents; }
   .crm :has(> table) { overflow-x: auto; position: relative; }
   @media print { .crm :has(> table) { overflow: visible; } }
 }
+
+/* ── Menu open: de pagina wijkt terug ───────────────────────────────────
+   De pagina krimpt rustig naar 92 % op donkere aarde, het menu komt ervoor
+   (eigenaar, 13 nov 2026, naar dejongensvanoranje.nl). Het middelpunt zet
+   menu.tsx bij het openen. Bij minder beweging en in Plan blijft alles staan. */
+#inhoud { background: var(--grond); }
+body { transition: background-color .8s cubic-bezier(.15, .2, .1, 1); }
+html:not(.plan):has(nav[data-menu][data-open]) body { background-color: #140f0b; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) :is(#inhoud, footer.bos-vlak) { transition: transform .8s cubic-bezier(.15, .2, .1, 1); }
+  html:not(.stil):not(.plan):has(nav[data-menu][data-open]) :is(#inhoud, footer.bos-vlak) { transform: scale(.92); }
+}
