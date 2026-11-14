@@ -19,13 +19,14 @@ const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = 
   { href: "/", naam: "Home", beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", naam: "Projecten", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/vijvers", naam: "Vijvers", beweging: "golf", icoon: "M2.5 8.5c2 0 2-1.5 4.25-1.5S9 8.5 11 8.5s2-1.5 4.25-1.5 2.25 1.5 4.25 1.5M2.5 14c2 0 2-1.5 4.25-1.5S9 14 11 14s2-1.5 4.25-1.5S17.5 14 19.5 14" },
-  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5v-6M7.5 13.5a3.5 3.5 0 0 1-.6-6.95 4.1 4.1 0 0 1 8.2 0 3.5 3.5 0 0 1-.6 6.95z" },
+  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 20V11.5M11 11.5c-3.3 0-5.4-2.4-5.4-6.3l2.7 1.7L11 2.8l2.7 4.1 2.7-1.7c0 3.9-2.1 6.3-5.4 6.3zM11 17.5c-.9-2.3-3-3.4-5.8-3.4.4 2.3 2.4 3.8 5.8 3.8M11 17.5c.9-2.3 3-3.4 5.8-3.4-.4 2.3-2.4 3.8-5.8 3.8" },
 ]
+// iconen in dezelfde lijnstijl als het dock in plaats van nummers (eigenaar, 14 nov 2026)
 const MEER = [
-  { href: "/over", naam: "Studio" },
-  { href: "/journaal", naam: "Journaal" },
-  { href: "/shop", naam: "Shop" },
-  { href: "/faq", naam: "Vragen" },
+  { href: "/over", naam: "Studio", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
+  { href: "/journaal", naam: "Journaal", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12" },
+  { href: "/shop", naam: "Shop", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
+  { href: "/faq", naam: "Vragen", icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M11 15.6v.1" },
 ]
 
 const isHier = (pad: string, href: string) => (href === "/" ? pad === "/" : pad === href || pad.startsWith(href + "/"))
@@ -85,7 +86,7 @@ export function ArKop() {
                   {MEER.map((p) => (
                     <li key={p.href}>
                       <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-link" aria-current={isHier(pad, p.href) ? "page" : undefined}>
-                        <span className="ar-lbl ar-dock-nr" aria-hidden />
+                        <svg className="ar-dock-ico" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
                         <span className="ar-dock-naam">{p.naam}</span>
                       </Link>
                     </li>
@@ -98,11 +99,11 @@ export function ArKop() {
                 )}
                 {/* snel contact, rond en groen zoals WhatsApp zelf (eigenaar, 14 nov 2026) */}
                 <a href={BUSINESS.whatsapp} className="ar-rondknop ar-rond-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "dock" })}>
-                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.1A8.8 8.8 0 1 0 12 3.2Z" /><path d="M9.1 8.2c-.5.3-.8.9-.7 1.5.4 2.6 2.4 4.6 5 5 .6.1 1.2-.2 1.5-.7l.5-.9-2-1-.9.9a5.6 5.6 0 0 1-2.4-2.4l.9-.9-1-2-.9.5Z" fill="currentColor" stroke="none" /></svg>
+                  <svg viewBox="0 0 22 22" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 2.5a8.5 8.5 0 0 0-7.4 12.7L2.5 19.5l4.4-1.1A8.5 8.5 0 1 0 11 2.5z" /><path d="M8.3 7.4c-.5.4-.7 1-.5 1.6.6 2.2 2.1 3.8 4.3 4.4.6.2 1.2 0 1.6-.5l.4-.6-1.6-.9-.7.7a4.6 4.6 0 0 1-2.1-2.1l.7-.7-.9-1.6z" /></svg>
                 </a>
                 <button type="button" className="ar-rondknop" aria-pressed={tab === "weergave"} aria-label="Weergave" title="Weergave" onClick={() => setTab(tab === "weergave" ? "inhoud" : "weergave")}>
                   {/* een palet */}
-                  <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                     <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4c1 0 1.6-.7 1.6-1.5 0-.5-.2-.8-.5-1.1-.3-.3-.5-.7-.5-1.1 0-.9.7-1.5 1.6-1.5h1.8a3.7 3.7 0 0 0 3.7-3.7C17.7 5.6 14.3 2.8 10 2.8Z" strokeLinejoin="round" />
                     <circle cx="6.3" cy="9.3" r="1" fill="currentColor" stroke="none" />
                     <circle cx="8.6" cy="6.2" r="1" fill="currentColor" stroke="none" />

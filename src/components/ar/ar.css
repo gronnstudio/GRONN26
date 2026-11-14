@@ -59,19 +59,20 @@ html.donker .ar-logo-donker { display: block; }
 .ar-dock-vel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 600ms var(--ar-ease); }
 .ar-dock[data-open] .ar-dock-vel { grid-template-rows: 1fr; }
 .ar-dock-vel-binnen { min-height: 0; overflow: hidden; }
-.ar-dock-vel-inhoud { max-height: calc(100svh - 120px - env(safe-area-inset-bottom, 0px)); overflow-y: auto; overscroll-behavior: contain; padding: 22px 22px 6px; display: grid; gap: 18px; opacity: 0; transition: opacity 300ms; }
+.ar-dock-vel-inhoud { max-height: calc(100svh - 120px - env(safe-area-inset-bottom, 0px)); overflow-y: auto; overscroll-behavior: contain; padding: 20px 20px 6px; display: grid; gap: 18px; opacity: 0; transition: opacity 300ms; }
 .ar-dock[data-open] .ar-dock-vel-inhoud { opacity: 1; transition-delay: 200ms; }
 .ar-dock-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--zand-20); }
 .ar-dock-top img { height: 16px; width: auto; }
 .ar-dock .ar-lbl { color: var(--zand-60); }
 .ar-dock-lijst { list-style: none; margin: 0; padding: 0; counter-reset: nr; }
 .ar-dock-lijst li { counter-increment: nr; }
-.ar-dock-link { display: grid; grid-template-columns: 32px 1fr; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--zand-20); color: inherit; text-decoration: none; }
-.ar-dock-nr::before { content: counter(nr, decimal-leading-zero); }
+.ar-dock-link { display: grid; grid-template-columns: 40px 1fr; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--zand-20); color: inherit; text-decoration: none; }
+.ar-dock-ico { width: 26px; height: 26px; color: var(--zand-60); transition: color 300ms; }
+.ar-dock-link:hover .ar-dock-ico, .ar-dock-link[aria-current="page"] .ar-dock-ico { color: var(--zand); }
 .ar-dock-naam { font-family: var(--font-syne); font-weight: 700; font-size: 28px; line-height: 1.05; letter-spacing: -.03em; transition: translate 500ms var(--ar-ease); }
 .ar-dock-link:hover .ar-dock-naam, .ar-dock-link[aria-current="page"] .ar-dock-naam { translate: 8px 0; }
-.ar-dock-voet { display: flex; align-items: center; gap: 10px; }
-.ar-dock-voet .ar-knop { margin-right: auto; }
+.ar-dock-voet { display: flex; align-items: center; gap: 8px; }
+.ar-dock-voet .ar-knop { margin-right: auto; white-space: nowrap; padding-inline: 20px; }
 .ar-dock-voet[data-tab="weergave"] { justify-content: flex-end; }
 .ar-dock-rij { position: relative; z-index: 2; list-style: none; margin: 0; padding: 8px; display: flex; justify-content: space-between; }
 .ar-dock-vak { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--zand); cursor: pointer; transition: background-color 500ms, color 500ms, width 500ms var(--ar-ease); }
