@@ -105,7 +105,7 @@ html.ar-open .ar-scherm { display: block; }
 .ar-titel { margin: 0; font-family: var(--font-syne); font-weight: 700; font-size: clamp(52px, 8.6vw, 156px); line-height: .9; letter-spacing: -.055em; }
 .ar-regel { display: block; overflow: hidden; padding-bottom: .06em; }
 .ar-regel > span { display: block; }
-.ar-titel b { color: var(--oranje); font-weight: inherit; }
+.ar-titel b, .ar-punt { color: var(--oranje); font-weight: inherit; }
 .ar-opening-zin { max-width: 40ch; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; }
 .ar-opening-beeld { position: relative; aspect-ratio: 4 / 5; max-height: calc(100svh - var(--ar-kop) - 64px); width: 100%; overflow: hidden; }
 .ar-dia { position: absolute; inset: 0; }

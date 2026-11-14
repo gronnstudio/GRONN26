@@ -127,7 +127,7 @@ export function ArVoorpagina() {
       <section className="ar-inv" aria-labelledby="ar-werk"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
           <p className="ar-lbl">01</p>
-          <h2 id="ar-werk" className="ar-h2">Projecten</h2>
+          <h2 id="ar-werk" className="ar-h2">Projecten<b className="ar-punt">.</b></h2>
           <Link href="/werk" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Alle projecten</Link>
         </div>
         <div className="ar-werk-inhoud">
@@ -176,7 +176,7 @@ export function ArVoorpagina() {
       <section className="ar-raster ar-blok" aria-labelledby="ar-diensten">
         <div className="ar-blokkop">
           <p className="ar-lbl">02</p>
-          <h2 id="ar-diensten" className="ar-h2">Diensten</h2>
+          <h2 id="ar-diensten" className="ar-h2">Diensten<b className="ar-punt">.</b></h2>
         </div>
         <div className="ar-diensten">
           <Link href="/vijvers" className="ar-dienst" transitionTypes={["schuif"]}>
@@ -204,7 +204,7 @@ export function ArVoorpagina() {
       <section className="ar-inv" aria-labelledby="ar-werkwijze"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
           <p className="ar-lbl">03</p>
-          <h2 id="ar-werkwijze" className="ar-h2">Werkwijze</h2>
+          <h2 id="ar-werkwijze" className="ar-h2">Werkwijze<b className="ar-punt">.</b></h2>
         </div>
         <div className="ar-stappen-kolom">
         <p className="ar-maat ar-lbl" aria-hidden><span>Eerste gesprek</span><span>Oplevering</span></p>
@@ -227,7 +227,7 @@ export function ArVoorpagina() {
         </div>
         <div className="ar-maker-tekst">
           <p className="ar-lbl">04 · Studio</p>
-          <h2 id="ar-maker" className="ar-h2">Eén maker, van eerste schets tot laatste plant.</h2>
+          <h2 id="ar-maker" className="ar-h2">Eén maker, van eerste schets tot laatste plant<b className="ar-punt">.</b></h2>
           <p>Ik ben Nick. GRØNN Studio is mijn eenmanszaak voor vijvers en tuinen in Stein en omgeving. Je hebt één aanspreekpunt, en wie de prijs maakt, legt de tuin ook aan.</p>
           <Link href="/over" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Over mij</Link>
         </div>
