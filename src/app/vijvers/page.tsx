@@ -34,6 +34,16 @@ const F01 = FOTOS.F01 as FotoData
 const F05 = FOTOS.F05 as FotoData
 const F10 = FOTOS.F10 as FotoData
 
+// Sfeer bij "helder water" (Nick, 14 nov 2026). Geen tekst óp de beelden (Nick: "Laat sfeerbeeld weg").
+const sfeer = (src: string, width: number, height: number, alt: string, en: string): FotoData => ({ src: `/sfeer/${src}.jpg`, width, height, alt, en: { alt: en } })
+const SFEER = {
+  waterval: sfeer("waterval-vijver", 1600, 1065, "Waterval die tussen grote keien in een vijver valt", "Waterfall dropping between boulders into a pond"),
+  beek: sfeer("beekloop-stenen", 1063, 1600, "Beekloop over stenen met waterlelies", "Stream over stones with waterlilies"),
+  koi: sfeer("vijver-koi", 1600, 1066, "Koi in helder vijverwater, van bovenaf", "Koi in clear pond water, from above"),
+  blad: sfeer("vijver-blad", 1066, 1600, "Helder water met planten en gras langs de rand", "Clear water with plants and grass along the edge"),
+  bloemen: sfeer("waterval-bloemen", 1600, 1067, "Kleine waterval tussen bloemen en varens", "Small waterfall between flowers and ferns"),
+}
+
 export default function VijversPagina() {
   return (
     <>
@@ -63,7 +73,29 @@ export default function VijversPagina() {
       </div>
 
       <div className="wrap">
-        <section aria-labelledby="vijver-werk">
+        <section aria-labelledby="vijver-helder">
+          <div className="ar-sectiekop">
+            <h2 id="vijver-helder" className="ar-h2 max-w-[18ch]">
+              <T t={{ nl: "Helder water, zonder filter schoonmaken", en: "Clear water, no filter cleaning" }} />
+            </h2>
+          </div>
+          <Oplichten
+            tekst={{
+              nl: "Natuurlijke waterval, beekloop en biofiltersysteem. Planten en pomp doen het zware werk.",
+              en: "A natural waterfall, stream and biofilter system. Plants and pump do the heavy lifting.",
+            }}
+            className="m-0 mt-[clamp(20px,2.5vw,36px)]"
+          />
+          <div data-zie className="mt-[clamp(32px,4vw,56px)] grid grid-cols-2 gap-[8px] md:grid-cols-12 md:gap-[16px]">
+            <Foto foto={SFEER.waterval} sizes="(min-width: 768px) 66vw, 100vw" className="col-span-2 aspect-[3/2] md:col-span-8" />
+            <Foto foto={SFEER.beek} sizes="(min-width: 768px) 33vw, 50vw" className="aspect-[2/3] md:col-span-4 md:aspect-auto" />
+            <Foto foto={SFEER.blad} sizes="(min-width: 768px) 33vw, 50vw" className="aspect-[2/3] md:col-span-4 md:aspect-[4/5]" />
+            <Foto foto={SFEER.koi} sizes="(min-width: 768px) 33vw, 50vw" className="col-span-2 aspect-[3/2] md:col-span-4 md:aspect-[4/5]" />
+            <Foto foto={SFEER.bloemen} sizes="(min-width: 768px) 33vw, 100vw" className="col-span-2 aspect-[3/2] md:col-span-4 md:aspect-[4/5]" />
+          </div>
+        </section>
+
+        <section aria-labelledby="vijver-werk" className="mt-[clamp(96px,12vw,180px)]">
           <WerkKop id="vijver-werk">
             <T t={{ nl: "Vijverwerk", en: "Pond work" }} />
           </WerkKop>
