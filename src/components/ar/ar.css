@@ -333,3 +333,5 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 .ar-klein .ar-paneel-naam { font-size: clamp(20px, 2.2vw, 28px); }
 
 /* geen oranje tekst, alleen de punt (eigenaar, 14 nov 2026) */
+/* klein menu op de telefoon nog verder omlaag: tot op de rand, Kennismaken naast de ronde knop (eigenaar, 14 nov 2026) */
+@media (max-width: 759px) { .ar-paneel.ar-klein { gap: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); } }
