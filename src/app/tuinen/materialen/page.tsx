@@ -4,7 +4,6 @@ import { KopRegel } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
-import { Verder } from "@/components/wereld/verder"
 import { MATERIAALGROEPEN } from "@/lib/data/materialen"
 
 export const metadata: Metadata = {
@@ -59,10 +58,6 @@ export default function MaterialenPagina() {
         </section>
       </div>
 
-      <Verder voor={{ nl: "Meer over", en: "More about" }}
-        nadruk={{ nl: "natuurlijke tuinen", en: "natural gardens" }}
-        href="/tuinen"
-        label={{ nl: "Naar Tuinen", en: "To Gardens" }} />
     </>
   )
 }

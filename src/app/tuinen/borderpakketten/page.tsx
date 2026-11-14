@@ -4,7 +4,6 @@ import { Foto } from "@/components/foto"
 import { Stapel } from "@/components/stapel"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
-import { Verder } from "@/components/wereld/verder"
 import { BODEMPAKKETTEN, BORDER_MATEN, BORDER_PRIJS, BORDERPAKKETTEN, type BorderPakket } from "@/lib/data/borderpakketten"
 import { priceLabel } from "@/lib/format"
 import { opslagAan } from "@/lib/beheer/stand"
@@ -43,7 +42,6 @@ function Kaart({ p, nr }: { p: BorderPakket; nr: number }) {
       <article aria-labelledby={id} className="bp-kaart relative overflow-hidden rounded-[16px] border border-lijn bg-vlak">
         <a href={`#open-${p.slug}`} className="flex flex-col no-underline text-inherit focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-inkt lg:h-[min(640px,calc(100svh-160px))]">
           <span className="flex items-baseline gap-4 p-5 sm:p-8">
-            <span className="lbl text-oranje-tekst">{String(nr).padStart(2, "0")}</span>
             <span id={id} className="syne text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></span>
           </span>
           <Foto
@@ -252,13 +250,6 @@ export default function BorderpakkettenPagina() {
         </section>
       </div>
 
-      <Verder
-        voor={{ nl: "Liever", en: "Rather" }}
-        nadruk={{ nl: "een hele tuin", en: "a whole garden" }}
-        na="?"
-        href="/tuinen"
-        label={{ nl: "Naar Tuinen", en: "To Gardens" }}
-      />
     </>
   )
 }

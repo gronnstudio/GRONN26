@@ -105,7 +105,10 @@ export function LayoutWissel({ className }: { className?: string }) {
 // Sinds 18 okt 2026 geen eigen knop en paneel meer: de instellingen staan in
 // het hamburgermenu (eigenaar: "hierin breng je alles onder wat in menu niet
 // staat zoals weergave").
-export function Instellingen() {
+// smal: één kolom, zoals in het menupaneel rechts (13 nov 2026); anders vanaf lg in drie kolommen
+// zonderLayout: geen keuze Klassiek/Blueprint (het menu van de nieuwe site, eigenaar 14 nov 2026)
+export function Instellingen({ smal = false, zonderLayout = false }: { smal?: boolean; zonderLayout?: boolean }) {
+  const breed = (k: string) => (smal ? "" : k)
   const [stand, setStand] = useState<Stand>(STANDAARD);
   const id = useId();
 
@@ -133,7 +136,7 @@ export function Instellingen() {
   };
 
   return (
-    <div className="text-sm lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-10">
+    <div className={`text-sm ${breed("lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-10")}`}>
       <fieldset className="m-0 mb-4 border-0 p-0">
         <legend className="lbl mb-2.5 p-0 opacity-70">
           <T t={{ nl: "Taal", en: "Language" }} />
@@ -185,6 +188,7 @@ export function Instellingen() {
           <T t={{ nl: "Auto: overdag licht, 's avonds donker (19:00 tot 07:00).", en: "Auto: light by day, dark in the evening (19:00 to 07:00)." }} />
         </p>
       </fieldset>
+      {!zonderLayout && (
       <fieldset className="m-0 mb-4 border-0 p-0">
         <legend className="lbl mb-2.5 p-0 opacity-70">Layout</legend>
         <div className="grid grid-cols-2 rounded-full border border-lijn p-[3px]">
@@ -206,7 +210,8 @@ export function Instellingen() {
           ))}
         </div>
       </fieldset>
-      <div className="lg:col-span-3 lg:grid lg:grid-cols-2 lg:gap-x-8">
+      )}
+      <div className={breed("lg:col-span-3 lg:grid lg:grid-cols-2 lg:gap-x-8")}>
       {SCHAKELAARS.map(([k, t]) => (
         <label
           key={k}
@@ -227,7 +232,7 @@ export function Instellingen() {
         onClick={() => {
           zet(STANDAARD);
         }}
-        className="lbl mt-3 w-fit cursor-pointer self-start border-0 border-b border-current bg-transparent p-0 text-inherit lg:col-start-2 lg:mt-4"
+        className={`lbl mt-3 w-fit cursor-pointer self-start border-0 border-b border-current bg-transparent p-0 text-inherit ${breed("lg:col-start-2 lg:mt-4")}`}
       >
         <T t={{ nl: "Standaard herstellen", en: "Restore defaults" }} />
       </button>

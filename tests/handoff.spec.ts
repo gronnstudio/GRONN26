@@ -29,26 +29,17 @@ test("telefoon @390: het dock onderaan, geen handoff-kop", async ({ page }) => {
   await expect(page.locator(".ho-kop")).toBeHidden()
 })
 
-test("voorpagina: prijzen, foto via WhatsApp, voor/nu met review", async ({ page }) => {
+test("voorpagina als tijdschrift: prijzen, foto via WhatsApp, voor/nu met review, draaiende band", async ({ page }) => {
   await page.goto("/")
-  await expect(page.getByText("vanaf € 3.000", { exact: false }).first()).toBeVisible()
-  await expect(page.getByText("€ 45 per maand", { exact: false })).toBeVisible()
-  await expect(page.getByText("Vijverdoorlichting € 195", { exact: false })).toBeVisible()
+  await expect(page.locator("#mg-titel")).toContainText("Vijvers en natuurlijke tuinen, met een vaste prijs vooraf.")
+  await expect(page.locator(".mg-inhoud")).toContainText("€ 45 per maand")
+  await expect(page.locator(".mg-inhoud")).toContainText("Doorlichting € 195")
   const foto = page.getByRole("link", { name: /Stuur een foto/ }).first()
   await expect(foto).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/)
-  await expect(page.getByText("Plan nu, dan begin ik in maart.")).toBeVisible()
-  await expect(page.locator(".ho-citaat")).toContainText("Veronique")
-  expect(await page.locator("#ho-titel").innerText()).toMatch(/^Buitenruimte die natuurlijk aanvoelt\.$/)
-})
-
-test("FAQ: knop met aria-expanded, antwoord blijft in de DOM", async ({ page }) => {
-  await page.goto("/")
-  const knop = page.getByRole("button", { name: "Wat kost een traject?" })
-  await expect(knop).toHaveAttribute("aria-expanded", "false")
-  await expect(page.getByText("Je krijgt altijd een vaste prijs vooraf")).toBeAttached()
-  await knop.click()
-  await expect(knop).toHaveAttribute("aria-expanded", "true")
-  await expect(page.getByText("Je krijgt altijd een vaste prijs vooraf")).toBeVisible()
+  await expect(page.locator(".mg-citaat")).toContainText("Veronique")
+  // de band draait vanzelf; de tweede ronde is alleen voor het oog
+  await expect(page.locator(".mg-band-reeks")).toHaveCount(2)
+  await expect(page.locator(".mg-band-reeks").nth(1)).toHaveAttribute("aria-hidden", "true")
 })
 
 test("aanvraag: verder zonder keuze geeft een fout en blijft op stap 1", async ({ page }) => {
@@ -106,7 +97,7 @@ test("voor/nu: de schuif werkt met het toetsenbord en verschuift de grens", asyn
   expect(pos).toBe("40%")
 })
 
-test("Ontdek tuinrenovatie: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
+test("Rubriek Tuinen: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
   await page.addInitScript(() => {
     const w = window as unknown as { __vt: string[] }
     w.__vt = []
@@ -119,7 +110,7 @@ test("Ontdek tuinrenovatie: de pagina schuift binnen met een view transition van
     }) as typeof document.startViewTransition
   })
   await page.goto("/")
-  await page.getByRole("link", { name: /Ontdek tuinrenovatie/ }).click()
+  await page.locator(".mg-rubriek", { hasText: "Tuinen" }).click()
   await expect(page).toHaveURL(/\/tuinen$/)
   expect(await page.evaluate(() => (window as unknown as { __vt: string[] }).__vt)).toContain("schuif")
 })
@@ -152,7 +143,7 @@ test("voorpagina: de voet sluit direct aan op de eind-CTA, geen lege balk", asyn
 test("menu open: de pagina wijkt terug, en staat stil bij minder beweging", async ({ page }) => {
   await page.goto("/")
   await page.getByRole("button", { name: /menu/i }).last().click()
-  await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toContain("0.92")
+  await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toContain("0.9")
   await page.emulateMedia({ reducedMotion: "reduce" })
   await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toBe("none")
 })

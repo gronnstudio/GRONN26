@@ -4,7 +4,6 @@ import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Cijfer, Citaat, Clip, Doorkijk, Fiche, FotoReeks, Kopregel, Lees, Slot, Volgende } from "@/components/werk/delen"
-import { Verder } from "@/components/wereld/verder"
 import { Fotostapel } from "@/components/werk/fotostapel"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
@@ -49,7 +48,6 @@ export const metadata: Metadata = {
   },
 }
 
-const nr = (i: number) => String(i + 1).padStart(2, "0")
 
 // De titel uit de data, in regels voor de reuzenkop; de zachte koppeltekens
 // laten de twee lange woorden op de telefoon netjes afbreken.
@@ -164,10 +162,9 @@ export default function Vijverrenovatie() {
           <Kopregel id="inhoud-kop" links={<T t={nlEn("Het hele verhaal", "The whole story")} />}
             rechts={<T t={nlEn(`${HOOFDSTUKKEN.length} hoofdstukken`, `${HOOFDSTUKKEN.length} chapters`)} />} />
           <ol className="m-0 list-none columns-1 gap-x-8 p-0 md:columns-2">
-            {HOOFDSTUKKEN.map((h, i) => (
+            {HOOFDSTUKKEN.map((h) => (
               <li key={h.id} className="break-inside-avoid border-t border-lijn">
                 <a href={`#${h.id}`} className="flex min-h-11 items-baseline gap-4 py-3 no-underline">
-                  <span className="lbl tabular-nums text-gedempt">{nr(i)}</span>
                   <span className="w-lijnlink text-[17px] font-medium"><T t={h.kort} /></span>
                 </a>
               </li>
@@ -175,18 +172,15 @@ export default function Vijverrenovatie() {
           </ol>
         </nav>
 
-        {HOOFDSTUKKEN.map((h, i) => {
+        {HOOFDSTUKKEN.map((h) => {
           const fotos = h.foto ? fotosVoor(h.foto) : []
           return (
             <div key={h.id}>
               <section id={h.id} aria-labelledby={`${h.id}-kop`} className="w-sectie scroll-mt-6">
                 <div className="w-kopregel">
                   <p className="lbl m-0">
-                    {nr(i)} · <T t={h.kort} />
+                    <T t={h.kort} />
                   </p>
-                  <span className="lbl tabular-nums text-gedempt">
-                    {nr(i)} / {nr(HOOFDSTUKKEN.length - 1)}
-                  </span>
                 </div>
                 <h2 id={`${h.id}-kop`} className="w-titel syne max-w-[22ch] [overflow-wrap:anywhere]" data-zie>
                   <T t={h.kop} />
@@ -293,13 +287,6 @@ export default function Vijverrenovatie() {
         <Slot kop={SLOT.kop} alineas={[...SLOT.alineas, SLOT.oproep]} knop={nlEn(VIJVER.contactknop, EN.contactknop)} />
         <Volgende hier="/werk/vijverrenovatie" />
       </div>
-      <Verder
-        voor={nlEn("Zoiets voor", "Something like this for")}
-        nadruk={nlEn("jouw tuin", "your garden")}
-        na="?"
-        href="/kennismaken"
-        label={nlEn("Naar Kennismaken", "To Get in touch")}
-      />
     </article>
   )
 }

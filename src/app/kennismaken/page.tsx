@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { KennismakenFormulier } from "@/components/kennismaken/formulier"
 import { Opening } from "@/components/wereld/opening"
+import Link from "next/link"
 import { T } from "@/components/taal"
 import { KENNISMAKING_VRIJBLIJVEND } from "@/lib/data/teksten"
 
@@ -23,6 +24,13 @@ export default function Kennismaken() {
         />
       </div>
       <div className="wrap">
+        {/* wie al weet wat hij wil, gaat meteen door naar de aanvraag (eigenaar, 14 nov 2026) */}
+        <p className="mb-[clamp(32px,4vw,56px)] max-w-[46ch] text-gedempt">
+          <T t={{ nl: "Weet je al wat je wilt laten maken?", en: "Already know what you want built?" }} />{" "}
+          <Link href="/start-een-project" transitionTypes={["schuif"]} className="text-inkt underline decoration-1 underline-offset-4">
+            <T t={{ nl: "Start meteen een project", en: "Start a project right away" }} />
+          </Link>
+        </p>
         <KennismakenFormulier />
       </div>
     </>

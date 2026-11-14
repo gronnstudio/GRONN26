@@ -49,9 +49,9 @@ export function WerkOverzicht() {
 
   return (
     <div className="pt-[clamp(56px,7vw,112px)]">
-      <div className="w-kopregel">
-        <h2 className="lbl m-0"><T t={{ nl: "Alle projecten", en: "All projects" }} /></h2>
-        <div className="lbl -my-3 flex gap-6" role="group" aria-label={en ? "How to show the work" : "Weergave van het werk"}>
+      <div className="ar-sectiekop">
+        <h2 className="ar-h2"><T t={{ nl: "Alle projecten", en: "All projects" }} /><b className="ar-punt" aria-hidden>.</b></h2>
+        <div className="ar-lbl -my-3 flex gap-6" role="group" aria-label={en ? "How to show the work" : "Weergave van het werk"}>
           {(["lijst", "raster"] as const).map((w) => (
             <button
               key={w}
@@ -80,7 +80,6 @@ export function WerkOverzicht() {
                 <span className="flex flex-col gap-4 md:col-span-7">
                   <span className="lbl flex gap-4 tabular-nums text-gedempt">
                     <span>{p.jaar}</span>
-                    <span>{p.code}</span>
                   </span>
                   <span className="syne text-[clamp(32px,4.4vw,64px)] leading-[1.02] tracking-[-.035em] [overflow-wrap:anywhere]">
                     <span className="w-lijnlink"><T t={p.titel} /></span>
@@ -128,9 +127,6 @@ export function WerkOverzicht() {
               v={i % 2 === 0 ? 0.6 : 1.4}
               eigen={false}
             />
-            <span className="lbl tabular-nums">
-              {String(i + 1).padStart(2, "0")} — {p.code}
-            </span>
             <span className="syne text-[clamp(28px,3vw,44px)] leading-[1.05] tracking-[-.03em]">
               <span className="w-lijnlink"><T t={p.naam} /></span>
             </span>

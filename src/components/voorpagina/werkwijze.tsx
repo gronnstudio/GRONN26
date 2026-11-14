@@ -13,7 +13,6 @@ export function Werkwijze() {
         <ol className="vp-zes">
           {WERKWIJZE.map((s, n) => (
             <li key={n}>
-              <span className="lbl">{String(n + 1).padStart(2, "0")}</span>
               <h3 className="syne"><T t={s.titel} /></h3>
               <p><T t={s.tekst} /></p>
             </li>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { HandoffVoorpagina } from "@/components/handoff/voorpagina"
+import { ArVoorpagina } from "@/components/ar/voorpagina"
 import "@/components/voorpagina/voorpagina.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
@@ -50,7 +50,7 @@ export default function Voorpagina() {
           (eigenaar, 13 nov 2026: "zet alles tot aan de footer over op de live
           website"). De voet en het dock blijven die van de live site. */}
       <div className="alleen-klassiek">
-        <HandoffVoorpagina />
+        <ArVoorpagina />
       </div>
 
       <div className="alleen-plan">

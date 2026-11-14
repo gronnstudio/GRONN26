@@ -3,8 +3,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
-import { Menu } from "@/components/menu"
-import { Voet } from "@/components/voet"
+import { ArKop } from "@/components/ar/kop"
+import { ArVoet } from "@/components/ar/voet"
+import { ArSlot } from "@/components/ar/slot"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
@@ -56,9 +57,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="alleen-plan contents"><Kop /></div>
         <main id="inhoud">{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
-        <div className="alleen-klassiek ho-dock contents">
-          <Voet />
-          <Menu />
+        <div className="alleen-klassiek contents">
+          <ArSlot />
+          <ArVoet />
+          <ArKop />
         </div>
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).

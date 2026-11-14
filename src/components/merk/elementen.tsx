@@ -82,8 +82,7 @@ export function MerkElementen() {
         />
         <ol className="m-0 mt-[clamp(40px,5vw,72px)] list-none border-t border-lijn p-0">
           {STEM.map(([kop, regel, voorbeeld], i) => (
-            <li key={i} className="grid gap-3 border-b border-lijn py-6 md:grid-cols-[60px_3fr_4fr_5fr] md:gap-8" data-zie>
-              <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")}</span>
+            <li key={i} className="grid gap-3 border-b border-lijn py-6 md:grid-cols-[3fr_4fr_5fr] md:gap-8" data-zie>
               <h3 className="syne m-0 text-[clamp(20px,2vw,26px)] tracking-[-.02em]">
                 <T t={kop} />
               </h3>

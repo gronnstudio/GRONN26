@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import type { ReactNode } from "react"
 import { usePathname } from "next/navigation"
 import { T, kies, type Tekst } from "@/components/taal"
 
@@ -19,7 +20,7 @@ const PAGINAS: Record<string, { naam: Tekst; ouder?: string }> = {
   "/tuinen/borderpakketten/bedankt": { naam: { nl: "Bedankt", en: "Thank you" }, ouder: "/tuinen/borderpakketten" },
   "/tuinen/cadeaubon": { naam: { nl: "Cadeaubon", en: "Gift card" }, ouder: "/shop" },
   "/tuinen/cadeaubon/bon": { naam: { nl: "Je bon", en: "Your card" }, ouder: "/tuinen/cadeaubon" },
-  "/werk": { naam: { nl: "Werk", en: "Work" } },
+  "/werk": { naam: { nl: "Projecten", en: "Projects" } },
   "/werk/vijverrenovatie": { naam: { nl: "Vijverrenovatie", en: "Pond renovation" }, ouder: "/werk" },
   "/werk/terras-geulle": { naam: { nl: "Terras in Geulle", en: "Terrace in Geulle" }, ouder: "/werk" },
   "/over": { naam: "Studio" },
@@ -46,10 +47,12 @@ function spoor(pad: string) {
   return stappen.length ? [{ pad: "/", naam: "Home" as Tekst }, ...stappen] : []
 }
 
-export function Kruimelpad() {
+// Eén kruimelpad in de letters van het label (eigenaar, 14 nov 2026: "1 breadcrumb, de onderste letters zijn mooist");
+// anders = wat er staat op een pagina zonder pad.
+export function Kruimelpad({ anders = null }: { anders?: ReactNode } = {}) {
   const pad = usePathname().replace(/\/$/, "") || "/"
   const stappen = spoor(pad)
-  if (!stappen.length) return null
+  if (!stappen.length) return anders
   // Voor zoekmachines (BreadcrumbList), in het Nederlands zoals de site zelf.
   const schema = {
     "@context": "https://schema.org",
@@ -62,7 +65,7 @@ export function Kruimelpad() {
     })),
   }
   return (
-    <nav className="kruimelpad" aria-label="Kruimelpad">
+    <nav className="kruimelpad lbl" aria-label="Kruimelpad">
       <ol>
         {stappen.map((s, i) => (
           <li key={s.pad}>

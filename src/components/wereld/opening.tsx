@@ -26,15 +26,17 @@ export function Opening({
   children?: ReactNode
 }) {
   const regels = (t: string) =>
-    t.split("\n").map((r, n) => (
+    t.split("\n").map((r, n, alle) => (
       <span key={n} className="w-r">
         {r}
+        {/* de oranje punt van de voorpagina, achter de laatste regel (eigenaar, 14 nov 2026) */}
+        {n === alle.length - 1 ? <b className="ar-punt w-punt" aria-hidden>.</b> : null}
       </span>
     ))
   return (
     <section className="w-opening" aria-labelledby="pagina-titel" data-opening>
-      <Kruimelpad />
-      <p className="lbl w-label"><T t={label} /></p>
+      {/* één regel boven de kop: het kruimelpad, of het label waar geen pad is */}
+      <Kruimelpad anders={<p className="lbl w-label"><T t={label} /></p>} />
       <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={typeof titel === "string" ? titel.replace(/\n/g, " ") : undefined}>
         {typeof titel === "string" ? regels(titel) : <Beide nl={regels(titel.nl)} en={regels(titel.en)} />}
       </h1>

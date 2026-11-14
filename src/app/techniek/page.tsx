@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Opening } from "@/components/wereld/opening"
-import { Verder } from "@/components/wereld/verder"
 import { T } from "@/components/taal"
 import { AANTAL } from "@/lib/data/techniek"
 import { Stapel } from "@/components/techniek/stapel"
@@ -61,7 +60,6 @@ export default function Techniek() {
         </section>
       </div>
 
-      <Verder voor={{ nl: "En hoe het", en: "And how it" }} nadruk={{ nl: "eruitziet", en: "looks" }} na="?" href="/merk" label={{ nl: "Naar het merk", en: "To the brand" }} />
     </>
   )
 }

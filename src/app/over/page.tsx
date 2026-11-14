@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Foto } from "@/components/foto"
-import { Verder } from "@/components/wereld/verder"
 import { PORTRET } from "@/components/over/portret"
 import { Werkwijze } from "@/components/voorpagina/werkwijze"
 import "@/components/voorpagina/voorpagina.css"
@@ -99,13 +98,6 @@ export default function Over() {
         <Werkwijze />
       </div>
 
-      <Verder
-        voor={{ nl: "Zullen we", en: "Shall we" }}
-        nadruk={{ nl: "kennismaken", en: "meet" }}
-        na="?"
-        href="/kennismaken"
-        label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
-      />
     </>
   )
 }

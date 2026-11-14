@@ -4,7 +4,6 @@ import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Citaat, Fiche, Figuur, Kopregel, Lees, Paar, Slot, Volgende } from "@/components/werk/delen"
-import { Verder } from "@/components/wereld/verder"
 import "@/components/werk/werk.css"
 import { TERRAS, TERRAS_CITAAT, TERRAS_FOTOS, TERRAS_SLOT, TERRAS_STAPPEN } from "@/lib/data/terras-geulle"
 
@@ -83,9 +82,8 @@ export default function TerrasGeulle() {
                 key={s.nl}
                 data-zie
                 style={{ "--i": i % 2 } as CSSProperties}
-                className="grid grid-cols-[40px_minmax(0,1fr)] items-baseline gap-x-3 border-t border-lijn py-[18px] last:border-b md:grid-cols-[60px_minmax(0,1fr)] md:gap-x-8 md:py-[26px]"
+                className="block border-t border-lijn py-[18px] last:border-b md:py-[26px]"
               >
-                <span className="lbl tabular-nums text-gedempt">{String(i + 1).padStart(2, "0")}</span>
                 <span className="syne text-[clamp(20px,2.3vw,32px)] leading-[1.2] tracking-[-.02em]"><T t={s} /></span>
               </li>
             ))}
@@ -108,13 +106,6 @@ export default function TerrasGeulle() {
         <Slot kop={TERRAS_SLOT.kop} alineas={TERRAS_SLOT.alineas} knop={nlEn(TERRAS.contactknop, EN.contactknop)} />
         <Volgende hier="/werk/terras-geulle" />
       </div>
-      <Verder
-        voor={nlEn("Zoiets voor", "Something like this for")}
-        nadruk={nlEn("jouw tuin", "your garden")}
-        na="?"
-        href="/kennismaken"
-        label={nlEn("Naar Kennismaken", "To Get in touch")}
-      />
     </article>
   )
 }

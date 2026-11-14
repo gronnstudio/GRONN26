@@ -25,7 +25,7 @@ import { useTaal } from "./taal-klant"
 // "Blogs in eigen menu, dat past op desktop. Op mobiel waarschijnlijk niet").
 const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string; groot?: true }[] = [
   { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
-  { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
+  { href: "/werk", label: { nl: "Projecten", en: "Projects" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/shop", label: "Shop", bij: ["/shop", "/tuinen/borderpakketten", "/tuinen/cadeaubon"], beweging: "groei", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
   { href: "/journaal", label: "Journaal", bij: ["/journaal"], beweging: "knik", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12", groot: true },
@@ -36,7 +36,9 @@ const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10
 
 const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
 
-export function Menu() {
+// paneel: de vier stippen openen het uitschuifmenu van de nieuwe kop (ArKop) in plaats van het megamenu (eigenaar, 14 nov 2026)
+export const OPEN_PANEEL = "gronn-open-paneel"
+export function Menu({ paneel = false }: { paneel?: boolean }) {
   const pad = usePathname()
   const taal = useTaal()
   const [open, setOpen] = useState(false)
@@ -101,16 +103,17 @@ export function Menu() {
 
   return (
     <>
-      {/* het megamenu: één glazen vlak dat de pil omsluit en er op de telefoon
-          uit omhoog groeit (clip-path van de pil naar het hele vlak) */}
+      {/* het megamenu: een paneel dat van rechts binnenschuift terwijl de pagina
+          naar links wijkt (eigenaar, 13 nov 2026, naar dejongensvanoranje.nl);
+          op desktop de rechterhelft, op de telefoon bijna het hele scherm */}
       <div
         ref={vlak}
         id="megamenu"
         inert={!open}
-        className={`donker fixed z-[100] overflow-y-auto overscroll-contain rounded-[32px] glas-diep text-gebroken-wit transition-[clip-path,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none
-          inset-x-[var(--goot)] bottom-5 max-h-[calc(100dvh-36px)] px-6 pt-8 pb-[96px]
-          lg:left-1/2 lg:right-auto lg:max-h-[calc(100dvh-40px)] lg:w-[min(1120px,calc(100vw-2*var(--goot)))] lg:-translate-x-1/2 lg:px-10 lg:pt-10 lg:pb-[100px] ${
-          open ? "opacity-100 [clip-path:inset(0_0_0_0_round_32px)]" : "pointer-events-none opacity-0 [clip-path:inset(calc(100%-64px)_0_0_0_round_32px)]"
+        className={`donker fixed inset-y-0 right-0 z-[100] w-[88vw] overflow-y-auto overscroll-contain bg-[#140f0b] px-6 pt-10 pb-[110px] text-gebroken-wit motion-reduce:transition-none lg:w-1/2 lg:px-16 lg:pt-16 lg:pb-[120px] ${
+          open
+            ? "translate-x-0 opacity-100 [transition:transform_800ms_cubic-bezier(.15,.2,.1,1),opacity_0s]"
+            : "pointer-events-none translate-x-full opacity-0 [transition:transform_800ms_cubic-bezier(.15,.2,.1,1),opacity_0s_800ms]"
         }`}
       >
         <div className="grid gap-y-8">
@@ -157,7 +160,7 @@ export function Menu() {
           <Link href="/journaal" className={`${linkKlasse} syne text-[28px] leading-[1.2] tracking-[-.02em] lg:hidden`}>Journaal</Link>
           <div>
             <p className="lbl m-0 mb-4 text-gebroken-wit/60"><T t={{ nl: "Weergave", en: "Display" }} /></p>
-            <Instellingen />
+            <Instellingen smal />
           </div>
         </div>
       </div>
@@ -166,7 +169,7 @@ export function Menu() {
         {/* onder 1024px altijd groot, 64 hoog met rondjes van 48 en iconen van 32
             (eigenaar, 18 okt 2026: "zonder dock te verkleinen"); vanaf 1024px
             ook 64 hoog met 48 en 22, met het woordmerk ("maak dock op desktop ook iets groter", 18 okt 2026) */}
-        <ul className="relative z-10 m-0 flex list-none items-center justify-between rounded-full glas p-[8px] [--komeet-r:32px] transition-[background-color,box-shadow] duration-500 motion-reduce:transition-none group-data-[open]:bg-transparent group-data-[open]:shadow-none max-lg:p-[8px] max-lg:[--komeet-r:32px] lg:pointer-events-auto lg:w-[1000px] lg:justify-start lg:gap-1 lg:transition-[width,background-color,box-shadow] lg:group-data-[bovenaan]:w-[calc(100vw-2*var(--rand))]">
+        <ul className="relative z-10 m-0 flex list-none items-center justify-between rounded-full glas p-[8px] [--komeet-r:32px] transition-[background-color,box-shadow] duration-500 motion-reduce:transition-none max-lg:p-[8px] max-lg:[--komeet-r:32px] lg:pointer-events-auto lg:w-[1000px] lg:justify-start lg:gap-1 lg:transition-[width,background-color,box-shadow] lg:group-data-[bovenaan]:w-[calc(100vw-2*var(--rand))]">
           <Komeet as="li" />
           <li className="hidden lg:mr-auto lg:flex">
             {/* het woordmerk, altijd het primaire logo, zonder vlak (eigenaar, 5 okt 2026); op de telefoon staat hij linksboven (kop.tsx) */}
@@ -209,11 +212,11 @@ export function Menu() {
               ref={knop}
               type="button"
               aria-expanded={open}
-              aria-controls="megamenu"
+              aria-controls={paneel ? "ar-paneel" : "megamenu"}
               aria-label="Menu"
               title="Menu"
               className={`grid size-[var(--knop)] cursor-pointer place-items-center rounded-full border-0 bg-transparent transition-[background-color,width,height] duration-500 motion-reduce:transition-none max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[18px] lg:text-[15px] lg:font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}
-              onClick={() => setOpen(!open)}
+              onClick={() => (paneel ? dispatchEvent(new Event(OPEN_PANEEL)) : setOpen(!open))}
             >
               {/* vier stippen als vier perkjes (eigenaar, 18 okt 2026: "for hamburger
                   something else"); open worden ze een kruis */}

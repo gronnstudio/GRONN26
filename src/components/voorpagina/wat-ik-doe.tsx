@@ -59,7 +59,6 @@ const KAARTEN: Kaart[] = [
   },
 ]
 
-const nr = (n: number) => String(n + 1).padStart(2, "0")
 
 export function WatIkDoe() {
   return (
@@ -69,10 +68,9 @@ export function WatIkDoe() {
           <T t={{ nl: "Wat ik doe", en: "What I do" }} />
         </h2>
         <ul className="vp-kaarten">
-          {KAARTEN.map((k, n) => (
+          {KAARTEN.map((k) => (
             <li key={k.href} className="vp-kaart">
               <div className="vp-kaart-tekst">
-                <p className="lbl vp-kaart-nr">{nr(n)}</p>
                 <h3 className="vp-kaart-naam"><T t={k.naam} /></h3>
                 <p className="vp-kaart-zin"><T t={k.zin} /></p>
                 <ul className="vp-kaart-delen">

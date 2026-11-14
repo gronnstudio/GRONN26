@@ -57,7 +57,6 @@ export function Filter() {
             <span className="fl-stip" aria-hidden="true">
               {toestand(i) === "ok" ? "✓" : toestand(i) === "fout" ? "×" : ""}
             </span>
-            <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")}</span>
             <span className="syne fl-naam">{s.naam}</span>
             <span className="fl-wat">
               {toestand(i) === "fout" && s.fout ? <T t={s.fout} /> : toestand(i) === "ok" ? <T t={s.wat} /> : null}

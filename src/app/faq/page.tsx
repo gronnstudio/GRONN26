@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { faqSchema, faqVragen } from "@/components/faq/vragen"
 import { VraagRegel } from "@/components/faq/vraag-regel"
-import { Verder } from "@/components/wereld/verder"
 import { Opening } from "@/components/wereld/opening"
 import { T } from "@/components/taal"
 
@@ -47,13 +46,6 @@ export default function FaqPagina() {
         <p className="lbl mt-4 max-w-[60ch] text-gedempt"><T t={{ nl: "Alle prijzen inclusief btw", en: "All prices include VAT" }} /></p>
       </div>
 
-      <Verder
-        voor={{ nl: "Staat je vraag", en: "Is your question" }}
-        nadruk={{ nl: "er niet bij", en: "not here" }}
-        na="?"
-        href="/kennismaken"
-        label={{ nl: "Naar Kennismaken", en: "To Get in touch" }}
-      />
     </>
   )
 }

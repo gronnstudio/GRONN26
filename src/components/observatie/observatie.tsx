@@ -141,7 +141,7 @@ export function ObservatieFoto({ obs, sizes = "(min-width: 1100px) 900px, 100vw"
                 aria-hidden="true"
               >
                 <span className="o-wat">
-                  <span className="o-nr">{String(i + 1).padStart(2, "0")}</span><span className="o-woord"> <T t={p.wat} /></span>
+                  <span className="o-woord"><T t={p.wat} /></span>
                 </span>
                 <span className="o-waarom"><T t={p.waarom} /></span>
               </span>
@@ -154,7 +154,6 @@ export function ObservatieFoto({ obs, sizes = "(min-width: 1100px) 900px, 100vw"
         <ol className="m-0 grid list-none gap-0 border-t border-lijn p-0 sm:grid-cols-2 sm:gap-x-8">
           {obs.punten.map((p, i) => (
             <li key={i} className="flex gap-3 border-b border-lijn py-3">
-              <span className={`lbl tabular-nums ${p.kern ? "text-oranje-tekst" : "text-gedempt"}`}>{String(i + 1).padStart(2, "0")}</span>
               <span>
                 <span className="lbl block"><T t={p.wat} /></span>
                 <span className="text-[15px] text-gedempt"><T t={p.waarom} /></span>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
-import { Verder } from "@/components/wereld/verder"
 import { WERK } from "@/components/werk/projecten"
 import { WerkOverzicht } from "@/components/werk/werk-overzicht"
 
@@ -36,13 +35,6 @@ export default function WerkPagina() {
       <div className="wrap">
         <WerkOverzicht />
       </div>
-      <Verder
-        voor={{ nl: "Wie is", en: "Who is" }}
-        nadruk={{ nl: "de persoon", en: "the person" }}
-        na={{ nl: "erachter?", en: "behind it?" }}
-        href="/over"
-        label={{ nl: "Naar Over", en: "To About" }}
-      />
     </>
   )
 }

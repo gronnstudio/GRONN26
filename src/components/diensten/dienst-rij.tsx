@@ -3,9 +3,9 @@ import { T, type Tekst } from "@/components/taal"
 import type { L } from "@/lib/i18n"
 import { kortePrijs, prijsblok } from "./prijs"
 
-// Rij-raster uit WF-019/WF-031: nr · dienst · wat · prijs · +/−.
+// Rij-raster uit WF-019/WF-031: dienst · wat · prijs · +/− (zonder nummer, eigenaar 14 nov 2026).
 const RIJ =
-  "grid grid-cols-[32px_minmax(0,1fr)_14px] gap-x-[12px] gap-y-[6px] md:grid-cols-[60px_minmax(0,4fr)_minmax(0,5fr)_minmax(0,2fr)_20px] md:gap-x-[32px] md:gap-y-0"
+  "grid grid-cols-[minmax(0,1fr)_14px] gap-x-[12px] gap-y-[6px] md:grid-cols-[minmax(0,4fr)_minmax(0,5fr)_minmax(0,2fr)_20px] md:gap-x-[32px] md:gap-y-0"
 
 // Lange samenstellingen breken anders niet af (Chrome kent geen Nederlandse
 // afbreekregels): een zacht afbreekstreepje op de naad.
@@ -16,7 +16,6 @@ const afbreekbaar = (t: string) => t.split(" ").map((w) => NAAD[w] ?? w).join(" 
 export function DienstKolommen() {
   return (
     <div aria-hidden="true" className={`${RIJ} lbl hidden py-[10px] text-gedempt md:grid`}>
-      <span>Nr</span>
       <span>
         <T t={{ nl: "Dienst", en: "Service" }} />
       </span>
@@ -51,26 +50,25 @@ function Lijst({ kop, items, gedempt = false }: { kop: Tekst; items: L[]; gedemp
  * prijs; open wat erbij hoort, wat niet, en alle prijzen. Native
  * <details>, dus geen JavaScript en vanzelf bedienbaar met het toetsenbord.
  */
-export function DienstRij({ nr, dienst }: { nr: string; dienst: Service }) {
+export function DienstRij({ dienst }: { dienst: Service }) {
   const prijs = prijsblok(dienst)
   return (
     <details id={dienst.slug} className="group scroll-mt-[96px] border-t border-lijn last:border-b">
       <summary
         className={`${RIJ} cursor-pointer list-none items-baseline py-[20px] md:py-[26px] [&::-webkit-details-marker]:hidden`}
       >
-        <span className="lbl">{nr}</span>
-        <span className="syne col-start-2 row-start-1 min-w-0 text-[clamp(22px,2.3vw,32px)] leading-[1.1] tracking-[-.02em] [overflow-wrap:anywhere]">
+        <span className="syne col-start-1 row-start-1 min-w-0 text-[clamp(22px,2.3vw,32px)] leading-[1.1] tracking-[-.02em] [overflow-wrap:anywhere]">
           <T t={{ nl: afbreekbaar(dienst.title.nl), en: dienst.title.en }} />
         </span>
-        <span className="col-start-2 row-start-2 leading-[1.6] text-gedempt md:col-start-3 md:row-start-1"><T t={dienst.summary} /></span>
-        <span className="lbl col-start-2 row-start-3 tabular-nums md:col-start-4 md:row-start-1 md:text-right"><T t={kortePrijs(dienst)} /></span>
-        <span aria-hidden="true" className="col-start-3 row-start-1 text-right text-gedempt md:col-start-5">
+        <span className="col-start-1 row-start-2 leading-[1.6] text-gedempt md:col-start-2 md:row-start-1"><T t={dienst.summary} /></span>
+        <span className="lbl col-start-1 row-start-3 tabular-nums md:col-start-3 md:row-start-1 md:text-right"><T t={kortePrijs(dienst)} /></span>
+        <span aria-hidden="true" className="col-start-2 row-start-1 text-right text-gedempt md:col-start-4">
           <span className="group-open:hidden">+</span>
           <span className="hidden group-open:inline">−</span>
         </span>
       </summary>
-      <div className="pb-[28px] pl-[44px] md:grid md:grid-cols-[60px_minmax(0,1fr)] md:gap-x-[32px] md:pb-[36px] md:pl-0">
-        <div className="grid gap-[32px] md:col-start-2 md:grid-cols-2 lg:grid-cols-3">
+      <div className="pb-[28px] md:pb-[36px]">
+        <div className="grid gap-[32px] md:grid-cols-2 lg:grid-cols-3">
           <Lijst kop={{ nl: "Wat erbij hoort", en: "What it includes" }} items={dienst.includes} />
           {dienst.excludes?.length ? <Lijst kop={{ nl: "Wat niet", en: "What it doesn’t" }} items={dienst.excludes} gedempt /> : null}
           <div className="min-w-0">

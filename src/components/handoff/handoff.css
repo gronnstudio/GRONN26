@@ -437,6 +437,14 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock) { display: none !important
 .ho-held-raam, .ho-studio-raam { overflow: hidden; border-radius: var(--foto-hoek); }
 .ho-held-raam [data-v] > *, .ho-studio-raam [data-v] > * { scale: 1.14; border-radius: 0; }
 .ho-studio-raam, .ho-studio-raam [data-v] { height: 100%; }
+.ho-studio-beeld { position: relative; }
+.ho-studio-klein { position: absolute; z-index: 1; right: 16px; bottom: -14%; width: 46%; }
+.ho-studio-klein-foto { aspect-ratio: 4 / 3; box-shadow: 0 24px 48px -12px rgb(20 15 11 / .45); }
+.ho-studio:has(.ho-studio-klein) .ho-studio-tekst { padding-top: calc(19% + clamp(24px, 5vw, 64px)); }
+@media (min-width: 1024px) {
+  .ho-studio-klein { right: -18%; bottom: 10%; width: 52%; }
+  .ho-studio:has(.ho-studio-klein) .ho-studio-tekst { padding-top: clamp(32px, 6vw, 96px); padding-left: calc(clamp(32px, 6vw, 96px) + 12%); }
+}
 
 .ho-vergelijk { position: relative; aspect-ratio: 4 / 3; border-radius: var(--foto-hoek); overflow: hidden; touch-action: pan-y; }
 .ho-vergelijk-foto { position: absolute !important; inset: 0; border-radius: 0 !important; }

@@ -1,15 +1,16 @@
 import Link from "next/link"
 import { T, type Tekst } from "@/components/taal"
+import { Pijl } from "@/components/pijl"
 
-/** Kop boven een werkblok, als de sectiekoppen van de voorpagina: "Vijverwerk" links, "Alle werk →" rechts. */
+/** Kop boven een werkblok, als de sectiekoppen van de voorpagina: "Vijverwerk" links, "Alle werk" met pijl rechts. */
 export function WerkKop({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <div className="w-kopregel">
-      <h2 id={id} className="lbl m-0">
-        {children}
+    <div className="ar-sectiekop">
+      <h2 id={id} className="ar-h2">
+        {children}<b className="ar-punt" aria-hidden>.</b>
       </h2>
-      <Link href="/werk" className="lbl w-lijnlink">
-        <T t={{ nl: "Alle werk →", en: "All work →" }} />
+      <Link href="/werk" className="ar-lbl w-lijnlink">
+        <T t={{ nl: "Alle werk", en: "All work" }} /> <Pijl richting="e" />
       </Link>
     </div>
   )
@@ -34,11 +35,11 @@ export function WerkBlok({ href, children }: { href: string; children: React.Rea
 /** Sectiekop als op de voorpagina: lijn, label links, aantal rechts. */
 export function KopRegel({ id, label, aantal }: { id: string; label: Tekst; aantal: Tekst }) {
   return (
-    <div className="w-kopregel">
-      <h2 id={id} className="lbl m-0">
-        <T t={label} />
+    <div className="ar-sectiekop">
+      <h2 id={id} className="ar-h2">
+        <T t={label} /><b className="ar-punt" aria-hidden>.</b>
       </h2>
-      <span className="lbl text-gedempt tabular-nums">
+      <span className="ar-lbl tabular-nums">
         <T t={aantal} />
       </span>
     </div>

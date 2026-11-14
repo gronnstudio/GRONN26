@@ -37,7 +37,6 @@ export function Stapel() {
             className="st-plaat"
             style={{ "--i": i } as CSSProperties}
           >
-            <span className="lbl tabular-nums">{String(i + 1).padStart(2, "0")}</span>
             <span className="syne st-plaat-naam"><T t={l.naam} /></span>
             <span className="lbl tabular-nums st-plaat-aantal">{l.delen.length}</span>
           </button>
@@ -46,7 +45,7 @@ export function Stapel() {
 
       <div className="st-uitleg" aria-live="polite" key={laag.id}>
         <p className="lbl m-0 text-gedempt">
-          {String(index + 1).padStart(2, "0")} · {laag.delen.length} <T t={{ nl: "onderdelen", en: "parts" }} />
+          {laag.delen.length} <T t={{ nl: "onderdelen", en: "parts" }} />
         </p>
         <p className="st-zin m-0"><T t={laag.zin} /></p>
         <ul className="st-delen m-0 list-none p-0">
