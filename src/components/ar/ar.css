@@ -344,3 +344,13 @@ html.dock .ar-kop { display: none; }
 html.dock #inhoud { padding-top: 0; }
 html.dock .ar-paneel, html.dock .ar-paneel.ar-klein { padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }
 @media (min-width: 760px) { html.dock .ar-paneel-naam { font-size: clamp(28px, 3vw, 44px); } }
+/* Weergave compacter (eigenaar, 14 nov 2026) */
+.ar-weergave { padding-top: 14px; }
+.ar-weergave fieldset { margin-bottom: 12px !important; }
+.ar-weergave legend { margin-bottom: 6px !important; }
+.ar-weergave fieldset label { padding-block: 6px !important; }
+.ar-weergave fieldset p { margin-top: 4px !important; font-size: 11px; }
+.ar-weergave label[class*="justify-between"] { padding-block: 7px !important; }
+.ar-weergave button { margin-top: 8px !important; }
+.ar-paneel-voet[data-tab="weergave"] { justify-content: flex-end; }
+.ar-paneel-acties[hidden] { display: none; }

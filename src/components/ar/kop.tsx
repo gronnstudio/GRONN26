@@ -95,7 +95,7 @@ export function ArKop() {
         <div>
         <p className="ar-lbl ar-paneel-lbl">{tab === "weergave" ? "Weergave" : "Inhoud"}</p>
         {tab === "weergave" ? (
-          <div className="ar-weergave"><Instellingen smal /></div>
+          <div className="ar-weergave"><Instellingen smal zonderLayout /></div>
         ) : (
         <nav aria-label="Hoofdmenu">
           <ol className="ar-paneel-lijst">
@@ -112,8 +112,9 @@ export function ArKop() {
         )}
         </div>
         {/* links de twee tekstknoppen, rechts twee kleine ronde: klein/groot menu en Weergave (eigenaar, 14 nov 2026) */}
-        <div className="ar-paneel-voet">
-          <div className="ar-paneel-acties">
+        <div className="ar-paneel-voet" data-tab={tab}>
+          {/* in Weergave alleen de ronde knoppen (eigenaar, 14 nov 2026) */}
+          <div className="ar-paneel-acties" hidden={tab === "weergave"}>
             <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
             <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>
           </div>
