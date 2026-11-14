@@ -7,7 +7,8 @@ import { ViewTransition, type ReactNode } from "react"
 export default function Template({ children }: { children: ReactNode }) {
   return (
     <ViewTransition enter={{ schuif: "schuif-in", default: "none" }} exit={{ schuif: "schuif-uit", default: "none" }} default="none">
-      <div>{children}</div>
+      {/* een eigen ondergrond, zodat de oude pagina niet door de nieuwe heen schijnt tijdens het schuiven */}
+      <div className="vt-pagina">{children}</div>
     </ViewTransition>
   )
 }

@@ -366,7 +366,7 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
 /* het dock blijft stil en bovenop terwijl de nieuwe pagina binnenschuift
    (eigenaar, 14 nov 2026: "Menu bugged bij animatie van inschuiven") */
 .ar-dock { view-transition-name: ar-dock; }
-::view-transition-group(ar-dock) { z-index: 3; animation: none; }
+::view-transition-group(ar-dock) { z-index: 3; animation: none; border-radius: 32px; overflow: clip; } /* de vastgelegde dock houdt zijn ronde hoeken (anders een grijs vierkant om het glas) */
 ::view-transition-old(ar-dock) { display: none; }
 ::view-transition-new(ar-dock) { animation: none; }
 

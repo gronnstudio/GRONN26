@@ -460,11 +460,16 @@ body:has(.ho-wizard) :is(.ho-kop, .ho-voet, .ho-dock) { display: none !important
 /* Pagina schuift van rechts over de voorpagina heen (src/app/template.tsx).
    Kop en dock staan buiten de overgang en blijven stil. Bij minder beweging
    zet globals.css alle view-transitions uit. */
+/* Soepeler (eigenaar, 14 nov 2026): de nieuwe pagina is dicht (eigen ondergrond),
+   de oude wijkt iets en wordt donkerder in plaats van doorzichtig, en de rest van
+   de pagina (voet, slot) springt mee zonder overvloei. */
+.vt-pagina { background: var(--grond); }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 ::view-transition-group(.schuif-in) { z-index: 2; }
-::view-transition-new(.schuif-in) { animation: ho-schuif-in 650ms cubic-bezier(0.65, 0, 0.35, 1) both; box-shadow: -24px 0 48px rgb(0 0 0 / .12); }
-::view-transition-old(.schuif-uit) { animation: ho-schuif-weg 650ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+::view-transition-new(.schuif-in) { animation: ho-schuif-in 560ms cubic-bezier(0.22, 1, 0.36, 1) both; box-shadow: -24px 0 48px rgb(0 0 0 / .14); will-change: translate; }
+::view-transition-old(.schuif-uit) { animation: ho-schuif-weg 560ms cubic-bezier(0.22, 1, 0.36, 1) both; will-change: translate; }
 @keyframes ho-schuif-in { from { translate: 100% 0; } }
-@keyframes ho-schuif-weg { to { translate: -20% 0; opacity: 0.5; } }
+@keyframes ho-schuif-weg { to { translate: -24% 0; filter: brightness(.82); } }
 
 /* Donker (Weergave in het dock, of Auto na 19:00): de warme aardetinten van
    de live site (globals.css, html.donker) met de handoff-namen erop. --bos is
