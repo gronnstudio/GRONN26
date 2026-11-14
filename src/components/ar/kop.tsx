@@ -19,7 +19,7 @@ const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = 
   { href: "/", naam: "Home", beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", naam: "Projecten", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/vijvers", naam: "Vijvers", beweging: "golf", icoon: "M2.5 8.5c2 0 2-1.5 4.25-1.5S9 8.5 11 8.5s2-1.5 4.25-1.5 2.25 1.5 4.25 1.5M2.5 14c2 0 2-1.5 4.25-1.5S9 14 11 14s2-1.5 4.25-1.5S17.5 14 19.5 14" },
-  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 20V11.5M11 11.5c-3.3 0-5.4-2.4-5.4-6.3l2.7 1.7L11 2.8l2.7 4.1 2.7-1.7c0 3.9-2.1 6.3-5.4 6.3zM11 17.5c-.9-2.3-3-3.4-5.8-3.4.4 2.3 2.4 3.8 5.8 3.8M11 17.5c.9-2.3 3-3.4 5.8-3.4-.4 2.3-2.4 3.8-5.8 3.8" },
+  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5V12M6.5 3.5V7.5a4.5 4.5 0 0 0 9 0V3.5L13 5.5 11 3 9 5.5z" },
 ]
 // iconen in dezelfde lijnstijl als het dock in plaats van nummers (eigenaar, 14 nov 2026)
 const MEER = [
