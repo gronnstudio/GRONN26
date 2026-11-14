@@ -24,6 +24,8 @@ export function ArKop() {
   const pad = usePathname()
   const [open, setOpen] = useState(false)
   const [gezakt, setGezakt] = useState(false)
+  // een kleiner menu: kleinere namen, alles onderin binnen bereik van de duim (eigenaar, 14 nov 2026)
+  const [klein, setKlein] = useState(false)
   const knop = useRef<HTMLButtonElement>(null)
 
   const [vorig, setVorig] = useState(pad)
@@ -79,7 +81,7 @@ export function ArKop() {
         </div>
       </header>
 
-      <div id="ar-paneel" className="ar-paneel" inert={!open} aria-label="Menu">
+      <div id="ar-paneel" className={klein ? "ar-paneel ar-klein" : "ar-paneel"} inert={!open} aria-label="Menu">
         <nav aria-label="Hoofdmenu">
           <p className="ar-lbl ar-paneel-lbl">Inhoud</p>
           <ol className="ar-paneel-lijst">
@@ -96,6 +98,12 @@ export function ArKop() {
         <div className="ar-paneel-voet">
           <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
           <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>
+          <button type="button" className="ar-knop ar-knop-lijn-licht ar-kleinknop" aria-pressed={klein} onClick={() => setKlein(!klein)}>
+            <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              {klein ? <path d="M4 5h12M4 10h12M4 15h12" /> : <path d="M6 7h8M6 10h8M6 13h8" />}
+            </svg>
+            <span>{klein ? "Groot menu" : "Klein menu"}</span>
+          </button>
         </div>
       </div>
       {/* de pagina zelf sluit het menu, met een ronde sluitknop op de rand */}

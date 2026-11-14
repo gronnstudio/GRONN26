@@ -323,3 +323,9 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
   .ar-paneel { gap: 24px; padding-top: calc(24px + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px) + 20px); }
   .ar-opening { min-height: auto; }
 }
+
+/* ── klein menu: kleinere namen, alles onderin (eigenaar, 14 nov 2026) ── */
+.ar-kleinknop { gap: 8px; cursor: pointer; background: transparent; }
+.ar-paneel.ar-klein { justify-content: flex-end; }
+.ar-klein .ar-paneel-link { padding: 8px 0; }
+.ar-klein .ar-paneel-naam { font-size: clamp(20px, 2.2vw, 28px); }
