@@ -135,7 +135,9 @@ html.stil :is(.ar-dock, .ar-dock-vel, .ar-dock-vel-inhoud, .ar-scherm) { transit
 .ar-dia { position: absolute; inset: 0; }
 /* één kleine hoek voor elke foto, wrapper en beeld gelijk, zodat er nergens een hoekje doorschemert (eigenaar, 14 nov 2026) */
 html:root { --foto-hoek: 4px; }
-.ar :is(.ar-dia-foto, .ar-band-foto, .ar-index-foto, .ar-maker-foto, .ar-spread-foto, .ar-dienst-foto) { background: transparent; }
+.ar :is(.ar-dia-foto, .ar-band-foto, .ar-index-foto, .ar-maker-foto, .ar-spread-foto) { background: transparent; }
+/* het dienstbeeld houdt een grijs vlak zolang de foto laadt, zodat er nooit een leeg gat staat (eigenaar, 14 nov 2026) */
+.ar .ar-dienst-foto { background: var(--veld); }
 .ar-dia-foto { position: absolute !important; inset: 0; }
 .ar-dia:not(:first-child) { opacity: 0; }
 .ar-opening-onderschrift { position: absolute; left: 14px; bottom: 12px; z-index: 2; color: var(--ar-zand); text-shadow: 0 1px 8px rgb(0 0 0 / .5); }
@@ -230,8 +232,8 @@ html:root { --foto-hoek: 4px; }
 .ar-slot { background: var(--oranje); color: var(--g800); }
 .ar-slot .ar-knop-oranje { background: var(--g800); color: var(--g50); }
 .ar-slot .ar-knop-oranje:hover { background: var(--g50); color: var(--g800); }
-.ar-slot .ar-knop-lijn-licht { border-color: var(--g800); color: var(--g800); }
-.ar-slot .ar-knop-lijn-licht:hover { background: var(--g800); color: var(--g50); }
+.ar-slot .ar-knop-lijn-licht { border-color: var(--g50); background: var(--g50); color: var(--g800); }
+.ar-slot .ar-knop-lijn-licht:hover { border-color: var(--g800); background: var(--g800); color: var(--g50); }
 .ar-slot .ar-raster { display: grid; gap: 24px; padding-block: clamp(72px, 11vw, 180px); }
 .ar-slot .ar-lbl { color: var(--g800); }
 .ar-slot-kop { margin: 0; font-family: var(--font-syne); font-weight: 700; font-size: clamp(44px, 8vw, 140px); line-height: .95; letter-spacing: -.05em; text-wrap: balance; }
@@ -248,11 +250,12 @@ html:root { --foto-hoek: 4px; }
 .ar-voet-kolom ul { list-style: none; margin: 10px 0 0; padding: 0; }
 .ar-voet-onder { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 24px; padding-block: 24px; border-top: 1px solid var(--lijn); }
 .ar-voet-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
-.ar-voet-kopie { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 8px; font-size: 14px; }
+.ar-voet-kopie { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 8px; font-size: 13px; }
 /* twee kolommen knoppen, even breed (eigenaar, 14 nov 2026) */
 .ar-voet-kopie > * { width: 100%; justify-content: flex-start; white-space: nowrap; }
 .ar-voet-kopie > button > :last-child { margin-left: auto; }
-@media (max-width: 479px) { .ar-voet-kopie { grid-template-columns: repeat(2, minmax(0, 1fr)); font-size: 11px; gap: 6px; } .ar-voet-kopie > * { padding-inline: 10px; gap: 5px; } }
+/* kleine letters met lucht eromheen, zodat niets in de knop geklemd zit (eigenaar, 14 nov 2026) */
+@media (max-width: 479px) { .ar-voet-kopie { grid-template-columns: repeat(2, minmax(0, 1fr)); font-size: clamp(9px, 2.4vw, 11px); gap: 6px; } .ar-voet-kopie > * { padding-inline: 12px; gap: 4px; } .ar-voet-kopie svg { width: 12px; height: 12px; } }
 @media (max-width: 359px) { .ar-voet-kopie { grid-template-columns: minmax(0, 1fr); } }
 .ar-voet-rechts { display: grid; gap: 6px; justify-items: start; }
 .ar-voet-login { display: inline-flex; align-items: center; gap: 8px; height: var(--knop-klein); padding-inline: var(--knop-binnen-klein); border: 1px dashed var(--lijn); border-radius: 999px; color: var(--gedempt); text-decoration: none; transition: border-color 300ms, color 300ms; }

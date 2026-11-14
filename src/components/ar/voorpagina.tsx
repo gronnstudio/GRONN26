@@ -182,7 +182,7 @@ export function ArVoorpagina() {
         </div>
         <div className="ar-diensten">
           <Link href="/vijvers" className="ar-dienst" transitionTypes={["schuif"]}>
-            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...F04_2, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" /></span>
+            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...F04_2, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" eager /></span>
             <h3 className="ar-h3">Vijvers</h3>
             <p>Een heldere vijver met een filter dat werkt. Aanleg, renovatie en vast onderhoud.</p>
             <dl className="ar-prijzen">
@@ -191,7 +191,7 @@ export function ArVoorpagina() {
             <span className="ar-lbl ar-lijnlink">Naar vijvers</span>
           </Link>
           <Link href="/tuinen" className="ar-dienst" transitionTypes={["schuif"]}>
-            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...TERRAS_FOTOS.hoofd, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" /></span>
+            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...TERRAS_FOTOS.hoofd, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" eager /></span>
             <h3 className="ar-h3">Tuinen</h3>
             <p>Een natuurlijke tuin die bij je huis en je bodem past. Ontwerp, aanleg en beplanting.</p>
             <dl className="ar-prijzen">

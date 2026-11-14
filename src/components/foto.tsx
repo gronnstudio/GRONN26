@@ -14,17 +14,20 @@ export function Foto({
   sizes = "100vw",
   className = "",
   priority = false,
+  eager = false,
 }: {
   foto: FotoData
   sizes?: string
   className?: string
   priority?: boolean
+  /** meteen laden, zonder preload: voor beelden die anders op iOS te laat binnenkomen */
+  eager?: boolean
 }) {
   const taal = useTaal()
   const alt = taal === "en" && foto.en ? foto.en.alt : foto.alt
   return (
     <div className={`relative overflow-hidden rounded-[var(--foto-hoek)] bg-vlak ${className}`}>
-      <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover [filter:saturate(.88)_contrast(1.04)_brightness(.98)]" />
+      <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} loading={priority ? undefined : eager ? "eager" : undefined} className="object-cover [filter:saturate(.88)_contrast(1.04)_brightness(.98)]" />
       {foto.label ? (
         <span className="lbl absolute top-3 left-3 rounded-full bg-antraciet/85 px-2.5 py-1 text-gebroken-wit"><T t={foto.en?.label ? { nl: foto.label, en: foto.en.label } : foto.label} /></span>
       ) : null}
