@@ -33,8 +33,8 @@ export function Opening({
     ))
   return (
     <section className="w-opening" aria-labelledby="pagina-titel" data-opening>
-      <Kruimelpad />
-      <p className="lbl w-label"><T t={label} /></p>
+      {/* één regel boven de kop: het kruimelpad, of het label waar geen pad is */}
+      <Kruimelpad anders={<p className="lbl w-label"><T t={label} /></p>} />
       <h1 id="pagina-titel" className="w-reus" tabIndex={-1} aria-label={typeof titel === "string" ? titel.replace(/\n/g, " ") : undefined}>
         {typeof titel === "string" ? regels(titel) : <Beide nl={regels(titel.nl)} en={regels(titel.en)} />}
       </h1>
