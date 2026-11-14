@@ -177,7 +177,7 @@ export function ArVoorpagina() {
       </div></section>
 
       {/* ── Diensten ───────────────────────────────────────────── */}
-      <section className="ar-raster ar-blok" aria-labelledby="ar-diensten">
+      <section className="ar-raster ar-blok ar-blok-vol" aria-labelledby="ar-diensten">
         <div className="ar-blokkop">
           <h2 id="ar-diensten" className="ar-h2">Diensten<b className="ar-punt">.</b></h2>
         </div>
@@ -204,7 +204,7 @@ export function ArVoorpagina() {
       </section>
 
       {/* ── Werkwijze ──────────────────────────────────────────── */}
-      <section className="ar-inv" aria-labelledby="ar-werkwijze"><div className="ar-raster ar-blok">
+      <section className="ar-inv" aria-labelledby="ar-werkwijze"><div className="ar-raster ar-blok ar-blok-vol">
         <div className="ar-blokkop">
           <h2 id="ar-werkwijze" className="ar-h2">Werkwijze<b className="ar-punt">.</b></h2>
         </div>
