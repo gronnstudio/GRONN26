@@ -38,9 +38,14 @@ export async function GET(req: NextRequest) {
   if ((await rol()) !== "eigenaar") return new NextResponse("Niet ingelogd", { status: 401 })
   const pad = req.nextUrl.searchParams.get("pad") ?? ""
   if (!pad.startsWith(MEDIA_MAP) || pad.includes("..")) return new NextResponse("Ongeldig pad", { status: 400 })
-  const r = await get(pad, { access: "private" }).catch(() => null)
+  // video's: byte ranges doorgeven, zodat voorbeeld en zoeken niet steeds het hele bestand halen
+  const range = req.headers.get("range")
+  const r = await get(pad, { access: "private", ...(range ? { headers: { range } } : {}) }).catch(() => null)
   if (!r?.stream) return new NextResponse("Niet gevonden", { status: 404 })
-  return new NextResponse(r.stream, {
-    headers: { "Content-Type": r.blob.contentType ?? "application/octet-stream", "Cache-Control": "private, max-age=3600" },
-  })
+  const kop = new Headers({ "Content-Type": r.blob.contentType ?? "application/octet-stream", "Cache-Control": "private, max-age=3600", "Accept-Ranges": "bytes" })
+  for (const k of ["content-length", "content-range"]) {
+    const v = r.headers.get(k)
+    if (v) kop.set(k, v)
+  }
+  return new NextResponse(r.stream, { status: r.headers.get("content-range") ? 206 : 200, headers: kop })
 }

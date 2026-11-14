@@ -15,7 +15,14 @@ const mb = (b: number) => (b > 1e9 ? `${(b / 1e9).toFixed(2)} GB` : `${(b / 1e6)
 export default async function MediaPagina() {
   await eisEigenaar()
   const aan = !!process.env.BLOB_READ_WRITE_TOKEN
-  const blobs = aan ? (await list({ prefix: "media/", limit: 1000 })).blobs.sort((a, b) => +b.uploadedAt - +a.uploadedAt) : []
+  // alle pagina's ophalen: list geeft er hooguit 1000 per keer
+  const blobs: Awaited<ReturnType<typeof list>>["blobs"] = []
+  for (let cursor: string | undefined, eerst = true; aan && (eerst || cursor); eerst = false) {
+    const r = await list({ prefix: "media/", limit: 1000, cursor })
+    blobs.push(...r.blobs)
+    cursor = r.hasMore ? r.cursor : undefined
+  }
+  blobs.sort((a, b) => +b.uploadedAt - +a.uploadedAt)
   const totaal = blobs.reduce((s, b) => s + b.size, 0)
   return (
     <div className="mx-auto max-w-[1100px] p-5">
