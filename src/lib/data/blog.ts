@@ -1,4 +1,5 @@
 import type { Foto } from "./vijverrenovatie"
+import { SFEER } from "./sfeer"
 import { ARCHIEF } from "./journaal-archief"
 import { blokkenUit, leestijdVan } from "./journaal-tekst"
 
@@ -331,4 +332,21 @@ export function seizoen(d: string) {
   const m = t.getMonth()
   const naam = m < 2 || m === 11 ? "Winter" : m < 5 ? "Lente" : m < 8 ? "Zomer" : "Herfst"
   return `${naam} ${t.getFullYear()}`
+}
+
+// Een stuk zonder eigen foto krijgt in de lijst een beeld bij zijn thema
+// (eigenaar, 14 nov 2026: "fotos ontbreken"). Alleen in de lijst; het stuk
+// zelf en het delen blijven bij de eigen foto.
+const bp = (naam: string, alt: string): Foto => ({ src: `/borderpakketten/${naam}.jpg`, width: 1600, height: 1200, alt })
+const sf = (naam: string, alt: string): Foto => ({ src: `/sfeer/${naam}.jpg`, width: 1600, height: 1200, alt })
+const POOL: Record<Thema, Foto[]> = {
+  Vijver: [SFEER.waterval, SFEER.koi, SFEER.beek, SFEER.bloemen, SFEER.blad, bp("vijverrand", "Een vijverrand vol planten")],
+  Tuin: [bp("vlinderborder", "Een bloeiende border met zonnehoed en siergras"), bp("inheemse", "Een border met inheemse planten"), bp("droge-border", "Een droge border met grassen"), bp("eetbare-border", "Een eetbare border"), bp("schaduwborder", "Een schaduwborder met varens"), bp("witte-border", "Een border met witte bloemen")],
+  Seizoen: [sf("weide-tegenlicht", "Een wilde weide in laag tegenlicht"), sf("grashalm", "Een grashalm van dichtbij"), bp("plukborder", "Een plukborder in bloei")],
+}
+export function beeldVan(s: Stuk): Foto {
+  if (s.beeld) return s.beeld
+  const zonder = STUKKEN.filter((x) => x.rubriek === s.rubriek && !x.beeld)
+  const pool = POOL[s.rubriek]
+  return pool[zonder.indexOf(s) % pool.length]
 }

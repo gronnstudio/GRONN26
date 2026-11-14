@@ -30,7 +30,7 @@ export default function MaterialenPagina() {
           <section key={g.id} aria-labelledby={`materiaal-${g.id}`} className={i === 0 ? "pt-[48px]" : "w-sectie"}>
             <KopRegel id={`materiaal-${g.id}`} label={g.kop} aantal={{ nl: `${g.materialen.length} soorten`, en: `${g.materialen.length} kinds` }} />
             <Foto
-              foto={{ src: `/materialen/${g.id}.jpg`, width: 1600, height: 900, alt: g.alt.nl, label: "Sfeerbeeld", en: { alt: g.alt.en, label: "Mood image" } }}
+              foto={{ src: `/materialen/${g.id}.jpg`, width: 1600, height: 900, alt: g.alt.nl, en: { alt: g.alt.en } }}
               sizes="(min-width: 1280px) 1200px, 100vw"
               className="mt-[24px] mb-[8px] aspect-[16/9] md:aspect-[21/9]"
             />

@@ -76,7 +76,7 @@ export function Fotostapel() {
             <span className="lbl text-oranje-tekst">
               <T t={fase} />
             </span>
-            <p className="syne m-0 text-[clamp(24px,3vw,40px)] leading-[1.1] tracking-[-.02em]"><T t={zin} /></p>
+            <p className="syne m-0 text-[clamp(20px,1.8vw,26px)] leading-[1.2] tracking-[-.02em]"><T t={zin} /></p>
           </li>
         ))}
       </ol>
