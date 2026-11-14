@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 import { track } from "@vercel/analytics"
 import { BUSINESS } from "@/lib/business"
+import { Instellingen } from "@/components/weergave"
 
 // De kop van de nieuwe site (eigenaar, 13 nov 2026: "Architectuur stijl!",
 // "bouw helemaal vanuit nul"). Logo links, Kennismaken en Menu rechts. Menu
@@ -26,6 +27,8 @@ export function ArKop() {
   const [gezakt, setGezakt] = useState(false)
   // een kleiner menu: kleinere namen, alles onderin binnen bereik van de duim (eigenaar, 14 nov 2026)
   const [klein, setKlein] = useState(false)
+  // het tweede tabblad van het menu: Weergave (eigenaar, 14 nov 2026)
+  const [tab, setTab] = useState<"inhoud" | "weergave">("inhoud")
   const knop = useRef<HTMLButtonElement>(null)
 
   const [vorig, setVorig] = useState(pad)
@@ -33,6 +36,13 @@ export function ArKop() {
     setVorig(pad)
     setOpen(false)
   }
+
+  // kiest de bezoeker in Weergave de dock, dan gaat dit menu dicht (en de pagina weer op volle maat)
+  useEffect(() => {
+    const kijk = () => document.documentElement.classList.contains("dock") && setOpen(false)
+    addEventListener("gronn-weergave-gewijzigd", kijk)
+    return () => removeEventListener("gronn-weergave-gewijzigd", kijk)
+  }, [])
 
   useEffect(() => {
     const meet = () => setGezakt(scrollY > 8)
@@ -82,8 +92,18 @@ export function ArKop() {
       </header>
 
       <div id="ar-paneel" className={klein ? "ar-paneel ar-klein" : "ar-paneel"} inert={!open} aria-label="Menu">
+        <div>
+        <div className="ar-paneel-tabs">
+          {(["inhoud", "weergave"] as const).map((t) => (
+            <button key={t} type="button" className="ar-lbl ar-paneel-tab" aria-pressed={tab === t} onClick={() => setTab(t)}>
+              {t === "inhoud" ? "Inhoud" : "Weergave"}
+            </button>
+          ))}
+        </div>
+        {tab === "weergave" ? (
+          <div className="ar-weergave"><Instellingen smal /></div>
+        ) : (
         <nav aria-label="Hoofdmenu">
-          <p className="ar-lbl ar-paneel-lbl">Inhoud</p>
           <ol className="ar-paneel-lijst">
             {PAGINAS.map((p, i) => (
               <li key={p.href} style={{ "--i": i } as React.CSSProperties}>
@@ -95,6 +115,8 @@ export function ArKop() {
             ))}
           </ol>
         </nav>
+        )}
+        </div>
         <div className="ar-paneel-voet">
           <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
           <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>

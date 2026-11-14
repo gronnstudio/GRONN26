@@ -336,3 +336,9 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 /* geen oranje tekst, alleen de punt (eigenaar, 14 nov 2026) */
 /* klein menu op de telefoon nog verder omlaag: tot op de rand, Kennismaken naast de ronde knop (eigenaar, 14 nov 2026) */
 @media (max-width: 759px) { .ar-paneel.ar-klein { gap: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); } }
+/* Inhoud en Weergave als twee tabbladen bovenin het menu (eigenaar, 14 nov 2026) */
+.ar-paneel-tabs { display: flex; gap: 24px; padding-bottom: 14px; border-bottom: 1px solid rgb(246 242 233 / .2); }
+.ar-paneel-tab { padding: 0; border: 0; border-bottom: 1px solid transparent; background: none; color: rgb(246 242 233 / .6); cursor: pointer; }
+.ar-paneel-tab[aria-pressed="true"] { color: var(--ar-zand); border-bottom-color: currentColor; }
+.ar-paneel-tab:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
+.ar-weergave { --inkt: var(--ar-zand); --grond: var(--g800); --lijn: rgb(246 242 233 / .2); color: var(--ar-zand); padding-top: 20px; }

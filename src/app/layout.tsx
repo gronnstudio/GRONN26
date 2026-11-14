@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
 import { ArKop } from "@/components/ar/kop"
 import { ArVoet } from "@/components/ar/voet"
+import { Menu } from "@/components/menu"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
@@ -44,7 +45,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1 }
 // zelf koos, gaat één keer terug naar Klassiek.
 // Voor de eerste verf: kies licht of donker uit de bewaarde weergave (of de
 // instelling van het toestel), zodat er geen flits is.
-const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}localStorage.removeItem('gronn-dev')}catch(e){}`
+const VOORVERF = `try{var s=JSON.parse(localStorage.getItem('gronn-weergave')||'{}'),k=s.kleur||'auto',h=new Date().getHours(),d=k==='donker'||(k==='auto'&&(h>=19||h<7)),c=document.documentElement.classList;c.toggle('donker',d);if(s.toegewezen){delete s.layout;delete s.toegewezen;localStorage.setItem('gronn-weergave',JSON.stringify(s))}c.toggle('plan',s.layout==='plan');c.toggle('stil',!!s.beweging);c.toggle('groot',!!s.groot);c.toggle('contrast',!!s.contrast);c.toggle('onderstreep',!!s.onderstreep);c.toggle('dock',!!s.dock);if(s.taal==='en'){c.add('en');document.documentElement.lang='en'}localStorage.removeItem('gronn-dev')}catch(e){}`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -58,7 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="alleen-plan contents"><Stempel /></div>
         <div className="alleen-klassiek contents">
           <ArVoet />
-          <ArKop />
+          {/* de oude dock komt terug als de bezoeker dat kiest in Weergave (eigenaar, 14 nov 2026) */}
+          <div className="geen-dock contents"><ArKop /></div>
+          <div className="alleen-dock contents"><Menu /></div>
         </div>
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).

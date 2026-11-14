@@ -6,9 +6,9 @@ import { Kopieer } from "@/components/kopieer"
 // De voet van de nieuwe site: contact, pagina's en de bedrijfsgegevens. Geen
 // adres (eigenaar, 11 nov 2026), wel KVK en BTW.
 const KOLOMMEN: [string, [string, string][]][] = [
-  ["Diensten", [["/vijvers", "Vijvers"], ["/tuinen", "Tuinen"], ["/tuinen/borderpakketten", "Borderpakketten"], ["/shop", "Shop"]]],
-  ["Studio", [["/werk", "Projecten"], ["/over", "Over mij"], ["/journaal", "Journaal"], ["/faq", "Vragen"]]],
-  ["Juridisch", [["/voorwaarden", "Voorwaarden"], ["/privacy", "Privacy"], ["/herroeping", "Herroeping"], ["/colofon", "Colofon"]]],
+  ["Diensten", [["/vijvers", "Vijvers"], ["/tuinen", "Tuinen"], ["/tuinen/borderpakketten", "Borderpakketten"], ["/tuinen/materialen", "Materialen"], ["/shop", "Shop"]]],
+  ["Studio", [["/werk", "Projecten"], ["/over", "Over mij"], ["/journaal", "Journaal"], ["/kennismaken", "Kennismaken"], ["/faq", "Vragen"]]],
+  ["Juridisch", [["/voorwaarden", "Voorwaarden"], ["/privacy", "Privacy"], ["/herroeping", "Herroeping"], ["/colofon", "Colofon"], ["/merk", "Merk"], ["/techniek", "Techniek"]]],
 ]
 
 export function ArVoet() {

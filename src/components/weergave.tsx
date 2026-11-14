@@ -17,6 +17,8 @@ type Stand = {
   onderstreep: boolean;
   /** Lettertoetsen als sneltoets (zoek.tsx); WCAG 2.1.4 wil ze uit kunnen zetten. */
   toetsen: boolean;
+  /** De oude dock onderin in plaats van de kop met Menu (eigenaar, 14 nov 2026). */
+  dock: boolean;
 };
 const KEY = "gronn-weergave";
 const STANDAARD: Stand = {
@@ -28,6 +30,7 @@ const STANDAARD: Stand = {
   contrast: false,
   onderstreep: false,
   toetsen: true,
+  dock: false,
 };
 const KLEUREN: Record<Stand["kleur"], Tekst> = {
   auto: "Auto",
@@ -44,6 +47,7 @@ const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal" | "layout">, Tekst][] = [
   ["contrast", { nl: "Meer contrast", en: "More contrast" }],
   ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
   ["toetsen", { nl: "Sneltoetsen", en: "Keyboard shortcuts" }],
+  ["dock", { nl: "Dock onderin", en: "Dock at the bottom" }],
 ];
 
 // Auto volgt de klok van de bezoeker: 's avonds donker, overdag licht
@@ -73,6 +77,7 @@ function pasToe(s: Stand) {
   c.toggle("groot", s.groot);
   c.toggle("contrast", s.contrast);
   c.toggle("onderstreep", s.onderstreep);
+  c.toggle("dock", s.dock);
   c.toggle("en", s.taal === "en");
   document.documentElement.lang = s.taal;
   try {
