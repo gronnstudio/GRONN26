@@ -39,6 +39,7 @@ export const GROEPEN: { naam: string; onderdelen: Onderdeel[] }[] = [
     onderdelen: [
       { href: "/dashboard/geld", naam: "Geld en papieren", icoon: "geld" },
       { href: "/dashboard/uren", naam: "Uren", icoon: "uren" },
+      { href: "/dashboard/media", naam: "Media", icoon: "media" },
       { href: "/dashboard/social", naam: "Social", icoon: "social" },
       { href: "/dashboard/links", naam: "Links", icoon: "links" },
     ],
