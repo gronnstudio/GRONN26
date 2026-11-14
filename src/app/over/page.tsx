@@ -45,12 +45,13 @@ export default function Over() {
       <Opening label={{ nl: "Hovenier en ecologisch ontwerper", en: "Gardener and ecological designer" }} titel={{ nl: "Over mij", en: "About me" }}>
         {/* Het portret staat rechtop; daarom een eigen kader (3:2, op de
             telefoon 4:5) met het gezicht in beeld, in plaats van 16:9. */}
-        <figure className="w-groei m-0">
+        {/* op desktop klein en rechtop (eigenaar, 14 nov 2026: "die foto is te groooooooot!") */}
+        <figure className="w-groei m-0 md:max-w-[380px]">
           <Foto
             foto={PORTRET}
             priority
-            sizes="100vw"
-            className="aspect-[4/5] md:aspect-[3/2] [&_img]:object-[50%_30%]"
+            sizes="(min-width: 768px) 380px, 100vw"
+            className="aspect-[4/5] [&_img]:object-[50%_30%]"
           />
           <figcaption className="lbl mt-4 text-gedempt">Nick Peters · GRØNN Studio</figcaption>
         </figure>

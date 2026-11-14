@@ -9,6 +9,10 @@ import { useTaal } from "@/components/taal-klant"
 // aspect-ratio of hoogte). Een label (bijv. AI-visualisatie) staat altijd óp
 // het beeld, zodat een visualisatie nooit doorgaat voor een foto.
 // Een clientcomponent alleen voor de alt-tekst in de gekozen taal.
+// Eigen foto's krijgen dezelfde volle kleur als de beelden van Pexels (eigenaar,
+// 14 nov 2026: "lijn ze allemaal zo uit dat ze op pexels lijken"); die laatste blijven zoals ze zijn.
+const STOCK = /^\/(sfeer|borderpakketten|materialen)\//
+
 export function Foto({
   foto,
   sizes = "100vw",
@@ -27,7 +31,7 @@ export function Foto({
   const alt = taal === "en" && foto.en ? foto.en.alt : foto.alt
   return (
     <div className={`relative overflow-hidden rounded-[var(--foto-hoek)] bg-vlak ${className}`}>
-      <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} loading={priority ? undefined : eager ? "eager" : undefined} className="object-cover [filter:saturate(.88)_contrast(1.04)_brightness(.98)]" />
+      <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} loading={priority ? undefined : eager ? "eager" : undefined} className={`object-cover ${STOCK.test(foto.src) ? "" : "[filter:saturate(1.22)_contrast(1.08)_brightness(1.03)]"}`} />
       {foto.label ? (
         <span className="lbl absolute top-3 left-3 rounded-full bg-antraciet/85 px-2.5 py-1 text-gebroken-wit"><T t={foto.en?.label ? { nl: foto.label, en: foto.en.label } : foto.label} /></span>
       ) : null}
