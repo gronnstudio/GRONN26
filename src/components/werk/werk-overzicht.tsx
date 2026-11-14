@@ -80,7 +80,6 @@ export function WerkOverzicht() {
                 <span className="flex flex-col gap-4 md:col-span-7">
                   <span className="lbl flex gap-4 tabular-nums text-gedempt">
                     <span>{p.jaar}</span>
-                    <span>{p.code}</span>
                   </span>
                   <span className="syne text-[clamp(32px,4.4vw,64px)] leading-[1.02] tracking-[-.035em] [overflow-wrap:anywhere]">
                     <span className="w-lijnlink"><T t={p.titel} /></span>

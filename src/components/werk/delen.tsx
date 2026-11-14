@@ -271,7 +271,6 @@ export function Volgende({ hier }: { hier: string }) {
     <section aria-label={taal === "en" ? "Next project" : "Volgend project"} className="w-sectie">
       <div className="w-kopregel">
         <p className="lbl m-0"><T t={{ nl: "Volgend project", en: "Next project" }} /></p>
-        <span className="lbl tabular-nums text-gedempt">{p.code}</span>
       </div>
       <Link href={p.href} className="group grid grid-cols-1 items-end gap-x-8 gap-y-6 no-underline md:grid-cols-12" data-zie>
         <span className="syne min-w-0 text-[clamp(36px,5vw,72px)] leading-[1] tracking-[-.035em] [overflow-wrap:anywhere] md:col-span-7">
