@@ -90,7 +90,7 @@ export function ArKop() {
               )}
               <div className="ar-dock-voet" data-tab={tab}>
                 {tab === "inhoud" && (
-                  <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]} onClick={() => track("cta_project", { plek: "dock" })}>Start een project</Link>
+                  <Link href="/kennismaken" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]} onClick={() => track("cta_kennismaken", { plek: "dock" })}>Kennismaken</Link>
                 )}
                 {/* snel contact, rond en groen zoals WhatsApp zelf (eigenaar, 14 nov 2026) */}
                 <a href={BUSINESS.whatsapp} className="ar-rondknop ar-rond-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "dock" })}>
@@ -116,6 +116,8 @@ export function ArKop() {
             <li key={d.href}>
               <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d.icoon} /></svg>
+                {/* alleen het actieve vak draagt zijn naam, heel klein in de kiezel (eigenaar, 14 nov 2026) */}
+                {isHier(pad, d.href) && <span className="ar-dock-label" aria-hidden>{d.naam}</span>}
               </Link>
             </li>
           ))}
