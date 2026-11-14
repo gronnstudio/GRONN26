@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Foto } from "@/components/foto"
 import { WERK } from "@/components/werk/projecten"
 import { F04_2, F08_1, F08_2, F10, F11 } from "@/components/voorpagina/beelden"
+import { VIJVER } from "@/lib/data/vijverrenovatie"
 import { fotosVoor } from "@/lib/data/vijverrenovatie"
 import { TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { pricingFor } from "@/lib/data/pricing"
@@ -24,7 +25,21 @@ const vanaf = (slug: string) => {
 
 // de opening: drie rustige, strakke beelden die om de beurt uitzoomen
 const OPENING = [F10, TERRAS_FOTOS.reeks[0], fotosVoor("F09")[0]]
-const BAND = [F04_2, F10, TERRAS_FOTOS.hoofd, F08_1, TERRAS_FOTOS.reeks[1], F11]
+// de band: projectkaarten met naam en soort eronder (dejongensvanoranje.nl)
+const VIJ = { titel: "Vijverrenovatie", soort: "Ontwerp & aanleg", href: "/werk/vijverrenovatie" }
+const TER = { titel: "Terras Geulle", soort: "Aanleg", href: "/werk/terras-geulle" }
+const BAND = [
+  { foto: F04_2, ...VIJ }, { foto: TERRAS_FOTOS.hoofd, ...TER }, { foto: F11, ...VIJ },
+  { foto: TERRAS_FOTOS.reeks[1], ...TER }, { foto: F08_1, ...VIJ }, { foto: TERRAS_FOTOS.reeks[0], ...TER },
+]
+// "in het kort" bij het uitgelichte project (studioverde.be), met maatlijnen (Blueprint)
+const KORT = [
+  ["Opdracht", VIJVER.categorie],
+  ["Water", "Twee vijvers, circa 5.000 liter"],
+  ["Onderdelen", "Waterval en beekloop in één systeem"],
+  ["Werk", "Circa 120 uur"],
+  ["Status", VIJVER.status],
+]
 const WHATSAPP = `${BUSINESS.whatsapp}?text=${encodeURIComponent("Hoi Nick, hier een foto van mijn tuin/vijver. Kun je even meekijken?")}`
 
 const STAPPEN = [
@@ -75,8 +90,12 @@ export function ArVoorpagina() {
           <div className="ar-band-baan">
             {[0, 1].map((ronde) => (
               <div key={ronde} className="ar-band-reeks" aria-hidden={ronde === 1 || undefined}>
-                {BAND.map((f) => (
-                  <Foto key={f.src} foto={ronde === 1 ? { ...f, alt: "" } : f} sizes="(min-width: 900px) 24vw, 60vw" className="ar-band-foto" />
+                {BAND.map((b) => (
+                  <Link key={b.foto.src} href={b.href} className="ar-band-kaart" tabIndex={ronde === 1 ? -1 : undefined} transitionTypes={["schuif"]}>
+                    <Foto foto={ronde === 1 ? { ...b.foto, alt: "" } : b.foto} sizes="(min-width: 900px) 24vw, 60vw" className="ar-band-foto" />
+                    <span className="ar-band-titel">{b.titel}</span>
+                    <span className="ar-band-soort">{b.soort}</span>
+                  </Link>
                 ))}
               </div>
             ))}
@@ -91,6 +110,28 @@ export function ArVoorpagina() {
           <h2 id="ar-werk" className="ar-h2">Werk</h2>
           <Link href="/werk" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Alle projecten</Link>
         </div>
+        <div className="ar-werk-inhoud">
+        <article className="ar-spread" aria-labelledby="ar-spread-titel">
+          <div className="ar-spread-groot" data-v="0.6">
+            <Foto foto={F10} sizes="(min-width: 1024px) 40vw, 90vw" className="ar-spread-foto" />
+          </div>
+          <div className="ar-spread-klein ar-spread-klein-a" data-v="1.5">
+            <Foto foto={F08_1} sizes="(min-width: 1024px) 16vw, 44vw" className="ar-spread-foto" />
+          </div>
+          <div className="ar-spread-klein ar-spread-klein-b" data-v="3">
+            <Foto foto={F11} sizes="(min-width: 1024px) 14vw, 40vw" className="ar-spread-foto" />
+          </div>
+          <div className="ar-spread-tekst">
+            <p className="ar-lbl">GR/001 · Uitgelicht</p>
+            <h3 id="ar-spread-titel" className="ar-h3">{VIJVER.titel}</h3>
+            <dl className="ar-kort">
+              {KORT.map(([k, v]) => (
+                <div key={k}><dt className="ar-lbl">{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+            <Link href="/werk/vijverrenovatie" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Lees het project</Link>
+          </div>
+        </article>
         <div className="ar-index" role="list">
           <div className="ar-index-kop ar-lbl" aria-hidden>
             <span>Nr.</span><span>Project</span><span>Soort</span><span>Plaats</span><span>Jaar</span>
@@ -108,6 +149,7 @@ export function ArVoorpagina() {
             </Link>
           ))}
         </div>
+        </div>
       </div></section>
 
       {/* ── Diensten ───────────────────────────────────────────── */}
@@ -118,6 +160,7 @@ export function ArVoorpagina() {
         </div>
         <div className="ar-diensten">
           <Link href="/vijvers" className="ar-dienst" transitionTypes={["schuif"]}>
+            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...F04_2, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" /></span>
             <h3 className="ar-h3">Vijvers</h3>
             <p>Een heldere vijver met een filter dat werkt. Aanleg, renovatie en vast onderhoud.</p>
             <dl className="ar-prijzen">
@@ -127,6 +170,7 @@ export function ArVoorpagina() {
             <span className="ar-lbl ar-lijnlink">Naar vijvers</span>
           </Link>
           <Link href="/tuinen" className="ar-dienst" transitionTypes={["schuif"]}>
+            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...TERRAS_FOTOS.hoofd, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" /></span>
             <h3 className="ar-h3">Tuinen</h3>
             <p>Een natuurlijke tuin die bij je huis en je bodem past. Ontwerp, aanleg en beplanting.</p>
             <dl className="ar-prijzen">
@@ -144,6 +188,8 @@ export function ArVoorpagina() {
           <p className="ar-lbl">03</p>
           <h2 id="ar-werkwijze" className="ar-h2">Werkwijze</h2>
         </div>
+        <div className="ar-stappen-kolom">
+        <p className="ar-maat ar-lbl" aria-hidden><span>Eerste gesprek</span><span>Oplevering</span></p>
         <ol className="ar-stappen">
           {STAPPEN.map(([kop, zin], i) => (
             <li key={kop} className="ar-op">
@@ -153,6 +199,7 @@ export function ArVoorpagina() {
             </li>
           ))}
         </ol>
+        </div>
       </div></section>
 
       {/* ── De maker ───────────────────────────────────────────── */}

@@ -126,8 +126,14 @@ html.ar-open .ar-scherm { display: block; }
 .ar-band { margin-top: clamp(56px, 8vw, 120px); }
 .ar-band-baan { display: flex; width: max-content; }
 .ar-band-reeks { display: flex; align-items: flex-start; gap: clamp(14px, 2vw, 28px); padding-right: clamp(14px, 2vw, 28px); }
-.ar-band-foto { flex: none; width: clamp(220px, 24vw, 380px); aspect-ratio: 4 / 5; }
-.ar-band-foto:nth-child(even) { margin-top: clamp(32px, 5vw, 80px); }
+.ar-band-foto { aspect-ratio: 4 / 5; }
+.ar-band-kaart { flex: none; display: grid; gap: 4px; width: clamp(220px, 24vw, 380px); color: inherit; text-decoration: none; }
+.ar-band-kaart:nth-child(even) { margin-top: clamp(32px, 5vw, 80px); }
+.ar-band-foto { width: 100%; margin-bottom: 14px; }
+.ar-band-titel { font-family: var(--font-syne); font-weight: 700; font-size: 19px; letter-spacing: -.02em; }
+.ar-band-kaart:hover .ar-band-titel { text-decoration: underline; text-underline-offset: 4px; }
+.ar-band-soort { font-size: 14px; color: var(--gedempt); }
+.ar-band-kaart:focus-visible { outline: 2px solid var(--inkt); outline-offset: 4px; }
 
 /* ── blokken ────────────────────────────────────────────────────── */
 .ar-blok { display: grid; gap: clamp(24px, 4vw, 56px); padding-block: clamp(72px, 10vw, 160px); background: var(--grond); color: var(--inkt); }
@@ -230,7 +236,7 @@ html.ar-open .ar-scherm { display: block; }
   html:not(.stil) .ar-band-baan { animation: ar-draai 70s linear infinite; }
   html:not(.stil) .ar-band:hover .ar-band-baan { animation-play-state: paused; }
   html:not(.stil) .ar-band-foto img { scale: 1.12; transition: scale 900ms var(--ar-ease); }
-  html:not(.stil) .ar-band-foto:hover img { scale: 1; }
+  html:not(.stil) .ar-band-kaart:hover .ar-band-foto img { scale: 1; }
 }
 @keyframes ar-regel { from { translate: 0 105%; } to { translate: 0 0; } }
 @keyframes ar-op { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
@@ -254,3 +260,48 @@ html.ar-open .ar-scherm { display: block; }
 html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
 @media (prefers-reduced-motion: reduce) { .ar-band { overflow-x: auto; } .ar-paneel, #inhoud, .ar-voet, .ar-kop { transition: none; } }
 html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
+
+/* ── combinatie (13 nov 2026: "kies elementen die elkaar versterken") ── */
+/* het uitgelichte project als losse compositie (studioverde.be) */
+.ar-werk-inhoud { display: grid; gap: clamp(56px, 8vw, 120px); }
+.ar-spread { position: relative; display: grid; gap: 24px; }
+.ar-spread-foto { border-radius: 2px !important; }
+.ar-spread-groot .ar-spread-foto { aspect-ratio: 4 / 3; }
+.ar-spread-klein .ar-spread-foto { aspect-ratio: 3 / 4; }
+.ar-spread-klein { display: none; }
+.ar-spread-tekst { display: grid; gap: 16px; justify-items: start; }
+.ar-kort { margin: 0; width: 100%; display: grid; }
+.ar-kort > div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--lijn); }
+.ar-kort > div:last-child { border-bottom: 1px solid var(--lijn); }
+.ar-kort dd { margin: 0; }
+@media (min-width: 900px) {
+  .ar-spread { grid-template-columns: repeat(12, 1fr); grid-template-rows: auto auto; align-items: start; gap: 24px; }
+  .ar-spread-groot { grid-column: 1 / 8; grid-row: 1 / 3; }
+  .ar-spread-klein { display: block; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .55); }
+  .ar-spread-klein-a { grid-column: 7 / 10; grid-row: 1; margin-top: 45%; z-index: 2; }
+  .ar-spread-klein-b { grid-column: 10 / 13; grid-row: 1; margin-top: -8%; }
+  .ar-spread-tekst { grid-column: 9 / 13; grid-row: 2; }
+}
+/* diensten met een beeld dat rustig uitzoomt (dejongensvanoranje.nl) */
+.ar-dienst-beeld { display: block; overflow: hidden; border-radius: 2px; }
+.ar-dienst-foto { aspect-ratio: 16 / 10; border-radius: 2px !important; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.stil) .ar-dienst-foto img { scale: 1.12; transition: scale 900ms var(--ar-ease); }
+  html:not(.stil) .ar-dienst:hover .ar-dienst-foto img { scale: 1; }
+}
+/* de werkwijze als maatlijn (Blueprint): tekent zich bij het scrollen */
+.ar-stappen-kolom { display: grid; gap: 18px; }
+.ar-maat { position: relative; display: flex; justify-content: space-between; padding-bottom: 14px; }
+.ar-maat::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 9px; border-inline: 1px solid var(--oranje); background: linear-gradient(var(--oranje), var(--oranje)) 0 50% / 100% 1px no-repeat; transform-origin: left; }
+/* het woordmerk over de volle breedte onderaan (bartoszkolenda.com) */
+.ar-voet-merk { overflow: hidden; padding-block: 8px 24px; }
+.ar-voet-merk img { width: 100%; height: auto; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.stil) .ar-maat::after { animation: ar-teken linear both; animation-timeline: view(); animation-range: entry 20% cover 45%; }
+    html:not(.stil) .ar-voet-merk img { animation: ar-merk linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    html:not(.stil) .ar-spread-groot img { animation: ar-par linear both; animation-timeline: view(); }
+  }
+}
+@keyframes ar-teken { from { scale: 0 1; } to { scale: 1 1; } }
+@keyframes ar-merk { from { translate: 0 60%; opacity: .2; } to { translate: 0 0; opacity: 1; } }

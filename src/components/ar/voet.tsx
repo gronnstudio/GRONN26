@@ -35,6 +35,13 @@ export function ArVoet() {
           </div>
         ))}
       </div>
+      {/* het woordmerk over de volle breedte (bartoszkolenda.com); het bestaande logo, niet nagetekend */}
+      <div className="ar-raster ar-voet-merk" aria-hidden>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/woordmerk-primair-antraciet.svg" alt="" className="ar-logo-licht" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/woordmerk-primair.svg" alt="" className="ar-logo-donker" />
+      </div>
       <div className="ar-raster ar-voet-onder">
         <p className="ar-lbl">© 2026 {BUSINESS.name} · Stein en omgeving</p>
         <p className="ar-lbl">KVK {BUSINESS.kvk} · BTW {BUSINESS.btw}</p>
