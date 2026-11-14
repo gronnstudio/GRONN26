@@ -39,13 +39,17 @@ body { background-color: var(--grond); }
 .ar-lijnlink:hover, a:hover > .ar-lijnlink { background-size: 30% 1px; }
 
 /* ── de kop: alleen het logo, scrolt mee weg; de navigatie is het dock ── */
-#inhoud { padding-top: calc(var(--ar-kop) + env(safe-area-inset-top, 0px)); padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+#inhoud#inhoud { padding-top: env(safe-area-inset-top, 0px); padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .ar-kop { position: absolute; z-index: 90; inset: 0 0 auto; height: calc(var(--ar-kop) + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) max(var(--ar-goot), env(safe-area-inset-right, 0px)) 0 max(var(--ar-goot), env(safe-area-inset-left, 0px)); display: flex; align-items: center; gap: 24px; background: var(--grond); color: var(--inkt); }
 .ar-kop-logo { display: flex; align-items: center; min-height: 44px; }
 .ar-kop-logo img { height: 18px; width: auto; }
 .ar-logo-donker { display: none; }
 html.donker .ar-logo-licht { display: none; }
 html.donker .ar-logo-donker { display: block; }
+.ar-kop.ar-inv .ar-logo-licht { display: none; }
+.ar-kop.ar-inv .ar-logo-donker { display: block; }
+html.donker .ar-kop.ar-inv .ar-logo-licht { display: block; }
+html.donker .ar-kop.ar-inv .ar-logo-donker { display: none; }
 .ar-kop-plek { margin-left: clamp(16px, 4vw, 64px); }
 .ar-bel { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border: 1px solid var(--lijn); border-radius: 999px; color: var(--inkt); font-size: 14px; font-weight: 600; text-decoration: none; transition: border-color 300ms; }
 .ar-bel:hover { border-color: var(--inkt); }
@@ -82,6 +86,11 @@ html.donker .ar-logo-donker { display: block; }
 .ar-dock-vak:hover:not([aria-current="page"]) { background: rgb(239 238 234 / .1); }
 /* de huidige pagina: het lichte kiezelknopje met reliëf van het oude dock */
 .ar-dock-vak[aria-current="page"] { width: 64px; background: rgb(239 238 234 / .9); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .3), inset 0 -1.5px .5px 0 rgb(0 0 0 / .3), 0 2px 5px 0 rgb(0 0 0 / .25); }
+/* Omhoog: rond en oranje met de voortgangsring van het oude dock; bovenaan gedimd */
+.ar-dock-omhoog { position: relative; background: var(--oranje); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .35), inset 0 -1.5px .5px 0 rgb(0 0 0 / .25); transition: opacity 400ms, background-color 300ms; }
+.ar-dock-omhoog svg:not(.ring-voortgang) { width: 22px; height: 22px; }
+.ar-dock-omhoog:hover:not(:disabled) { background: var(--oranje); filter: brightness(1.08); }
+.ar-dock-omhoog:disabled { opacity: .3; cursor: default; }
 .ar-dock-vak:focus-visible, .ar-dock-link:focus-visible { outline: 2px solid var(--zand); outline-offset: 2px; }
 .ar-rondknop { display: grid; place-items: center; flex: none; width: 48px; height: 48px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
 .ar-rondknop[aria-pressed="true"] { background: var(--ar-zand); color: var(--g800); }

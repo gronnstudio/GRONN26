@@ -13,16 +13,17 @@ import { Komeet } from "@/components/komeet"
 // (eigenaar, 14 nov 2026: "Kunnen we het menu helemaal vervangen voor dock?",
 // koos Home, Projecten, Vijvers, Tuinen, Menu). Menu klapt de pil zelf omhoog
 // open tot het menu met wat niet in het dock staat ("niks dubbel"). Bovenaan
-// staat alleen nog het logo, dat met de pagina wegscrolt.
+// staat niets meer: geen logo, geen belknop (eigenaar, 14 nov 2026).
 // de iconen en het glas van het oude dock, zonder tekst (eigenaar, 14 nov 2026: "laat de oude iconen en stijl staan van het dock. Zonder tekst")
 const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = [
-  { href: "/", naam: "Home", beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/werk", naam: "Projecten", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/vijvers", naam: "Vijvers", beweging: "golf", icoon: "M2.5 8.5c2 0 2-1.5 4.25-1.5S9 8.5 11 8.5s2-1.5 4.25-1.5 2.25 1.5 4.25 1.5M2.5 14c2 0 2-1.5 4.25-1.5S9 14 11 14s2-1.5 4.25-1.5S17.5 14 19.5 14" },
   { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5V12M6.5 3.5V7.5a4.5 4.5 0 0 0 9 0V3.5L13 5.5 11 3 9 5.5z" },
 ]
 // iconen in dezelfde lijnstijl als het dock in plaats van nummers (eigenaar, 14 nov 2026)
+// Home staat in het paneel; zijn plek in het dock is voor Omhoog (eigenaar, 14 nov 2026)
 const MEER = [
+  { href: "/", naam: "Home", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
   { href: "/over", naam: "Studio", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/journaal", naam: "Journaal", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12" },
   { href: "/shop", naam: "Shop", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
@@ -36,6 +37,14 @@ export function ArKop() {
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<"inhoud" | "weergave">("inhoud")
   const knop = useRef<HTMLButtonElement>(null)
+  // bovenaan de pagina heeft Omhoog geen zin: dan staat hij gedimd
+  const [boven, setBoven] = useState(true)
+  useEffect(() => {
+    const meet = () => setBoven(scrollY < 48)
+    meet()
+    addEventListener("scroll", meet, { passive: true })
+    return () => removeEventListener("scroll", meet)
+  }, [pad])
 
   const [vorig, setVorig] = useState(pad)
   if (pad !== vorig) {
@@ -53,20 +62,6 @@ export function ArKop() {
 
   return (
     <>
-      <header className="ar-kop">
-        <Link href="/" className="ar-kop-logo" aria-label="GRØNN Studio, naar de voorpagina">
-          {/* het bestaande woordmerk, nooit opnieuw getekend */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair-antraciet.svg" alt="" className="ar-logo-licht" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/woordmerk-primair.svg" alt="" className="ar-logo-donker" />
-        </Link>
-        <p className="ar-lbl ar-kop-plek">Vijvers en tuinen · Stein en omgeving</p>
-        <a href={BUSINESS.phoneHref} className="ar-bel" aria-label={`Bel ${BUSINESS.phone}`} onClick={() => track("cta_bel", { plek: "kop" })}>
-          <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden fill="currentColor"><path d="M6.6 2.5 4 3.1C3.3 3.3 2.8 4 3 4.8c1.4 6.3 6 10.9 12.3 12.3.8.2 1.5-.3 1.7-1l.6-2.6c.1-.6-.2-1.2-.7-1.4l-2.8-1.2c-.5-.2-1.1-.1-1.4.3l-1 1.2a10 10 0 0 1-4.6-4.6l1.2-1c.4-.4.5-.9.3-1.4L7.4 3.2c-.2-.5-.8-.8-1.4-.7z" /></svg>
-          <span className="tabular-nums">{BUSINESS.phone}</span>
-        </a>
-      </header>
 
       <button type="button" className="ar-scherm" tabIndex={-1} aria-hidden onClick={() => setOpen(false)} />
 
@@ -117,6 +112,12 @@ export function ArKop() {
 
         <Komeet />
         <ul className="ar-dock-rij">
+          <li>
+            <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label="Terug naar boven" title="Terug naar boven" onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
+              <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
+              <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>
+            </button>
+          </li>
           {DOCK.map((d) => (
             <li key={d.href}>
               <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
