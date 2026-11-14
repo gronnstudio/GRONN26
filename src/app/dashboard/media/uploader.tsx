@@ -2,7 +2,7 @@
 
 import { upload } from "@vercel/blob/client"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 // Kies of sleep foto's en video's; ze gaan rechtstreeks naar de privé Blob-opslag.
 export function Uploader() {
@@ -10,9 +10,12 @@ export function Uploader() {
   const [bezig, setBezig] = useState<{ naam: string; pct: number }[]>([])
   const [fout, setFout] = useState("")
   const [over, setOver] = useState(false)
+  const loopt = useRef(false)
 
   async function stuur(lijst: FileList | null) {
-    if (!lijst?.length) return
+    // één batch tegelijk: een tweede keuze tijdens het uploaden wordt genegeerd
+    if (!lijst?.length || loopt.current) return
+    loopt.current = true
     setFout("")
     const bestanden = [...lijst]
     setBezig(bestanden.map((f) => ({ naam: f.name, pct: 0 })))
@@ -30,6 +33,7 @@ export function Uploader() {
       }
     }
     setBezig([])
+    loopt.current = false
     router.refresh()
   }
 
@@ -43,7 +47,7 @@ export function Uploader() {
       >
         <span className="text-[17px] font-semibold">Kies of sleep foto&apos;s en video&apos;s</span>
         <span className="text-[14px] text-gedempt">JPG, PNG, WebP, HEIC, MP4 of MOV, tot 1 GB per bestand</span>
-        <input type="file" multiple accept="image/*,video/mp4,video/quicktime,video/webm" className="sr-only" onChange={(e) => stuur(e.target.files)} />
+        <input type="file" multiple accept="image/*,video/mp4,video/quicktime,video/webm" disabled={bezig.length > 0} className="sr-only" onChange={(e) => stuur(e.target.files)} />
       </label>
       {bezig.length > 0 && (
         <ul className="m-0 mt-4 list-none space-y-2 p-0" aria-live="polite">
