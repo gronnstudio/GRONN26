@@ -112,11 +112,6 @@ export function ArKop() {
 
         <Komeet />
         <ul className="ar-dock-rij">
-          <li>
-            <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label="Terug naar boven" title="Terug naar boven" onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
-              <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>
-            </button>
-          </li>
           {DOCK.map((d) => (
             <li key={d.href}>
               <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
@@ -130,6 +125,12 @@ export function ArKop() {
               <svg viewBox="0 0 22 22" aria-hidden fill="currentColor">
                 {open ? <path d="M5 5l12 12M17 5 5 17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /> : <><circle cx="6.5" cy="6.5" r="2.2" /><circle cx="15.5" cy="6.5" r="2.2" /><circle cx="6.5" cy="15.5" r="2.2" /><circle cx="15.5" cy="15.5" r="2.2" /></>}
               </svg>
+            </button>
+          </li>
+          {/* Omhoog achteraan, na de vier stippen, zoals in het oude dock (eigenaar, 14 nov 2026) */}
+          <li>
+            <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label="Terug naar boven" title="Terug naar boven" onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
+              <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>
             </button>
           </li>
         </ul>
