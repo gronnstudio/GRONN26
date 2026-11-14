@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
+import { T } from "@/components/taal"
 import type { Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
 export type Kaart = { slug: string; titel: string; beschrijving: string; rubriek: string; datum: string; datumTekst: string; leestijd: number; beeld: FotoData }
@@ -21,7 +22,7 @@ export function JournaalRaster({ kaarten, themas }: { kaarten: Kaart[]; themas: 
   return (
     <section aria-labelledby="journaal-alle" className="wrap mt-[clamp(64px,8vw,120px)]">
       <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-inkt pb-4">
-        <h2 id="journaal-alle" className="syne m-0 text-[clamp(28px,3vw,44px)] leading-[1.1] tracking-[-.02em]">Alle stukken</h2>
+        <h2 id="journaal-alle" className="syne m-0 text-[clamp(28px,3vw,44px)] leading-[1.1] tracking-[-.02em]"><T t={{ nl: "Alle stukken", en: "All pieces" }} /></h2>
         <div role="group" aria-label="Filter op thema" className="flex flex-wrap gap-2">
           {knoppen.map(({ t, aantal, beeld }) => (
             <button

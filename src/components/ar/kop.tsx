@@ -8,6 +8,14 @@ import { track } from "@vercel/analytics"
 import { BUSINESS } from "@/lib/business"
 import { Instellingen } from "@/components/weergave"
 import { Komeet } from "@/components/komeet"
+import { T, kies } from "@/components/taal"
+import { useTaal } from "@/components/taal-klant"
+import type { L } from "@/lib/i18n"
+
+const KENNIS: L = { nl: "Kennismaken", en: "Get in touch" }
+const SLUIT: L = { nl: "Sluit", en: "Close" }
+const OMHOOG: L = { nl: "Terug naar boven", en: "Back to top" }
+const WEERGAVE: L = { nl: "Weergave", en: "Display" }
 
 // De navigatie van de nieuwe site is één dock onderin, op telefoon en desktop
 // (eigenaar, 14 nov 2026: "Kunnen we het menu helemaal vervangen voor dock?",
@@ -15,19 +23,19 @@ import { Komeet } from "@/components/komeet"
 // open tot het menu met wat niet in het dock staat ("niks dubbel"). Bovenaan
 // staat niets meer: geen logo, geen belknop (eigenaar, 14 nov 2026).
 // de iconen en het glas van het oude dock, zonder tekst (eigenaar, 14 nov 2026: "laat de oude iconen en stijl staan van het dock. Zonder tekst")
-const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = [
-  { href: "/werk", naam: "Werk", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
-  { href: "/vijvers", naam: "Vijvers", beweging: "plop", icoon: "M11 2.8s-5.5 6-5.5 10a5.5 5.5 0 0 0 11 0c0-4-5.5-10-5.5-10z" },
-  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
+const DOCK: { href: string; naam: L; beweging: string; icoon: string }[] = [
+  { href: "/werk", naam: { nl: "Werk", en: "Work" }, beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
+  { href: "/vijvers", naam: { nl: "Vijvers", en: "Ponds" }, beweging: "plop", icoon: "M11 2.8s-5.5 6-5.5 10a5.5 5.5 0 0 0 11 0c0-4-5.5-10-5.5-10z" },
+  { href: "/tuinen", naam: { nl: "Tuinen", en: "Gardens" }, beweging: "groei", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
 ]
 // iconen in dezelfde lijnstijl als het dock in plaats van nummers (eigenaar, 14 nov 2026)
 // Home staat in het paneel; zijn plek in het dock is voor Omhoog (eigenaar, 14 nov 2026)
 const MEER = [
-  { href: "/", naam: "Home", icoon: "M3.5 10 11 3.5l7.5 6.5M5.5 8.5v10h11v-10M9 18.5v-5h4v5" },
-  { href: "/over", naam: "Studio", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
-  { href: "/journaal", naam: "Journaal", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12" },
-  { href: "/shop", naam: "Shop", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
-  { href: "/faq", naam: "Vragen", icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M11 15.6v.1" },
+  { href: "/", naam: { nl: "Home", en: "Home" }, icoon: "M3.5 10 11 3.5l7.5 6.5M5.5 8.5v10h11v-10M9 18.5v-5h4v5" },
+  { href: "/over", naam: { nl: "Studio", en: "Studio" }, icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
+  { href: "/journaal", naam: { nl: "Journaal", en: "Journal" }, icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12" },
+  { href: "/shop", naam: { nl: "Shop", en: "Shop" }, icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
+  { href: "/faq", naam: { nl: "Vragen", en: "Questions" }, icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M11 15.6v.1" },
 ]
 
 const WHATSAPP = (
@@ -46,16 +54,18 @@ const PALET = (
 )
 
 const SHOPMENU = [
-  { href: "/tuinen/borderpakketten", naam: "Borderpakketten", sub: "Acht borders, opgestuurd of aangeplant", beeld: "/borderpakketten/vlinderborder.jpg" },
-  { href: "/tuinen/borderpakketten#bodem", naam: "Bodem", sub: "Compost met schors", beeld: "/borderpakketten/compost-franse-schors.jpg" },
-  { href: "/tuinen/borderpakketten#op-maat", naam: "Border op maat", sub: "Ik kom kijken en stel hem samen", beeld: "/borderpakketten/schaduwborder.jpg" },
-  { href: "/tuinen/cadeaubon", naam: "Cadeaubon", sub: "Zelf het bedrag kiezen", beeld: "/borderpakketten/plukborder.jpg" },
+  { href: "/tuinen/borderpakketten", naam: { nl: "Borderpakketten", en: "Border packages" }, sub: { nl: "Acht borders, opgestuurd of aangeplant", en: "Eight borders, shipped or planted" }, beeld: "/borderpakketten/vlinderborder.jpg" },
+  { href: "/tuinen/borderpakketten#bodem", naam: { nl: "Bodem", en: "Soil" }, sub: { nl: "Compost met schors", en: "Compost with bark" }, beeld: "/borderpakketten/compost-franse-schors.jpg" },
+  { href: "/tuinen/borderpakketten#op-maat", naam: { nl: "Border op maat", en: "Custom border" }, sub: { nl: "Ik kom kijken en stel hem samen", en: "I come and look and put it together" }, beeld: "/borderpakketten/schaduwborder.jpg" },
+  { href: "/tuinen/cadeaubon", naam: { nl: "Cadeaubon", en: "Gift card" }, sub: { nl: "Zelf het bedrag kiezen", en: "Choose the amount yourself" }, beeld: "/borderpakketten/plukborder.jpg" },
 ]
 
 const isHier = (pad: string, href: string) => (href === "/" ? pad === "/" : pad === href || pad.startsWith(href + "/"))
 
 export function ArKop() {
   const pad = usePathname()
+  const taal = useTaal()
+  const n = (t: L | string) => kies(t, taal)
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<"inhoud" | "weergave" | "shop">("inhoud")
   const knop = useRef<HTMLButtonElement>(null)
@@ -87,14 +97,14 @@ export function ArKop() {
 
       <button type="button" className="ar-scherm" tabIndex={-1} aria-hidden onClick={() => setOpen(false)} />
 
-      <nav className="ar-dock" data-open={open || undefined} aria-label="Hoofdmenu">
+      <nav className="ar-dock" data-open={open || undefined} aria-label={n({ nl: "Hoofdmenu", en: "Main menu" })}>
         <div className="ar-dock-vel" id="ar-dock-menu" inert={!open}>
           <div className="ar-dock-vel-binnen">
             <div className="ar-dock-vel-inhoud">
               <div className="ar-dock-top">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" />
-                <p className="ar-lbl">{tab === "weergave" ? "Weergave" : tab === "shop" ? "Shop" : "Menu"}</p>
+                <p className="ar-lbl"><T t={tab === "weergave" ? { nl: "Weergave", en: "Display" } : tab === "shop" ? "Shop" : "Menu"} /></p>
               </div>
               {tab === "weergave" ? (
                 <div className="ar-weergave"><Instellingen smal zonderLayout /></div>
@@ -105,13 +115,13 @@ export function ArKop() {
                       <Link href={c.href} transitionTypes={["schuif"]} className="ar-shopmenu-tegel">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={c.beeld} alt="" loading="lazy" />
-                        <span className="ar-shopmenu-naam">{c.naam}</span>
-                        <span className="ar-shopmenu-sub">{c.sub}</span>
+                        <span className="ar-shopmenu-naam"><T t={c.naam} /></span>
+                        <span className="ar-shopmenu-sub"><T t={c.sub} /></span>
                       </Link>
                     </li>
                   ))}
                   <li className="ar-shopmenu-alles">
-                    <Link href="/shop" transitionTypes={["schuif"]} className="ar-knop ar-knop-oranje">Alles in de shop</Link>
+                    <Link href="/shop" transitionTypes={["schuif"]} className="ar-knop ar-knop-oranje"><T t={{ nl: "Alles in de shop", en: "Everything in the shop" }} /></Link>
                   </li>
                 </ul>
               ) : (
@@ -120,7 +130,7 @@ export function ArKop() {
                     <li key={p.href}>
                       <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-link" aria-current={isHier(pad, p.href) ? "page" : undefined}>
                         <svg className="ar-dock-ico" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
-                        <span className="ar-dock-naam">{p.naam}</span>
+                        <span className="ar-dock-naam"><T t={p.naam} /></span>
                       </Link>
                     </li>
                   ))}
@@ -128,13 +138,13 @@ export function ArKop() {
               )}
               <div className="ar-dock-voet" data-tab={tab}>
                 {tab === "inhoud" && (
-                  <Link href="/kennismaken" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]} onClick={() => track("cta_kennismaken", { plek: "dock" })}>Kennismaken</Link>
+                  <Link href="/kennismaken" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]} onClick={() => track("cta_kennismaken", { plek: "dock" })}><T t={KENNIS} /></Link>
                 )}
                 {/* snel contact: het groene WhatsApp-teken, zonder vlak (eigenaar, 14 nov 2026) */}
                 <a href={BUSINESS.whatsapp} className="ar-app-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "dock" })}>
                   {WHATSAPP}
                 </a>
-                <button type="button" className="ar-rondknop" aria-pressed={tab === "weergave"} aria-label="Weergave" title="Weergave" onClick={() => setTab(tab === "weergave" ? "inhoud" : "weergave")}>
+                <button type="button" className="ar-rondknop" aria-pressed={tab === "weergave"} aria-label={n(WEERGAVE)} title={n(WEERGAVE)} onClick={() => setTab(tab === "weergave" ? "inhoud" : "weergave")}>
                   {PALET}
                 </button>
               </div>
@@ -153,10 +163,10 @@ export function ArKop() {
           </li>
           {DOCK.map((d) => (
             <li key={d.href}>
-              <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
+              <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={n(d.naam)} title={n(d.naam)} aria-current={isHier(pad, d.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d.icoon} /></svg>
                 {/* telefoon: alleen het actieve vak draagt zijn naam (eigenaar, 14 nov 2026); desktop: elk vak, de dock is daar volle breedte */}
-                <span className="ar-dock-label" aria-hidden>{d.naam}</span>
+                <span className="ar-dock-label" aria-hidden><T t={d.naam} /></span>
               </Link>
             </li>
           ))}
@@ -167,19 +177,19 @@ export function ArKop() {
                 // desktop: Shop opent een megamenu met de soorten (eigenaar, 14 nov 2026)
                 <button type="button" className="ar-dock-vak" aria-expanded={open && tab === "shop"} aria-controls="ar-dock-menu" aria-current={isHier(pad, "/shop") ? "page" : undefined} onClick={() => { const aan = open && tab === "shop"; setOpen(!aan); setTab("shop") }}>
                   <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
-                  <span className="ar-dock-label">{p.naam}</span>
+                  <span className="ar-dock-label"><T t={p.naam} /></span>
                 </button>
               ) : (
               <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-vak" tabIndex={undefined} aria-current={isHier(pad, p.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
-                <span className="ar-dock-label">{p.naam}</span>
+                <span className="ar-dock-label"><T t={p.naam} /></span>
               </Link>
               )}
             </li>
           ))}
           <li className="ar-dock-alleen-breed">
             <Link href="/kennismaken" transitionTypes={["schuif"]} className="ar-dock-vak ar-dock-kennis" onClick={() => track("cta_kennismaken", { plek: "dock-breed" })}>
-              <span className="ar-dock-label">Kennismaken</span>
+              <span className="ar-dock-label"><T t={KENNIS} /></span>
             </Link>
           </li>
           {/* desktop: WhatsApp en Weergave passen ook in de rij; het paneel toont dan alleen nog de weergave */}
@@ -189,22 +199,22 @@ export function ArKop() {
             </a>
           </li>
           <li className="ar-dock-alleen-breed">
-            <button type="button" className="ar-rondknop" aria-expanded={open && tab === "weergave"} aria-controls="ar-dock-menu" aria-label="Weergave" title="Weergave" onClick={() => { const aan = open && tab === "weergave"; setOpen(!aan); setTab("weergave") }}>
+            <button type="button" className="ar-rondknop" aria-expanded={open && tab === "weergave"} aria-controls="ar-dock-menu" aria-label={n(WEERGAVE)} title={n(WEERGAVE)} onClick={() => { const aan = open && tab === "weergave"; setOpen(!aan); setTab("weergave") }}>
               {PALET}
             </button>
           </li>
           <li className="ar-dock-niet-breed">
-            <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? "Sluit het menu" : "Menu"} title={open ? "Sluit" : "Menu"} onClick={() => { setOpen(!open); setTab("inhoud") }}>
+            <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? n({ nl: "Sluit het menu", en: "Close the menu" }) : "Menu"} title={open ? n(SLUIT) : "Menu"} onClick={() => { setOpen(!open); setTab("inhoud") }}>
               {/* vier stippen als vier perkjes; open worden ze een kruis */}
               <svg viewBox="0 0 22 22" aria-hidden fill="currentColor">
                 {open ? <path d="M5 5l12 12M17 5 5 17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /> : <><circle cx="6.5" cy="6.5" r="2.2" /><circle cx="15.5" cy="6.5" r="2.2" /><circle cx="6.5" cy="15.5" r="2.2" /><circle cx="15.5" cy="15.5" r="2.2" /></>}
               </svg>
-              <span className="ar-dock-label ar-dock-label-breed" aria-hidden>{open ? "Sluit" : "Menu"}</span>
+              <span className="ar-dock-label ar-dock-label-breed" aria-hidden><T t={open ? SLUIT : "Menu"} /></span>
             </button>
           </li>
           {/* Omhoog achteraan, na de vier stippen, zoals in het oude dock (eigenaar, 14 nov 2026) */}
           <li>
-            <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label="Terug naar boven" title="Terug naar boven" onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
+            <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label={n(OMHOOG)} title={n(OMHOOG)} onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
               <svg viewBox="0 0 64 48" aria-hidden className="ar-omhoog-ring"><rect x="3" y="3" width="58" height="42" rx="21" pathLength="1" /></svg>
               {/* 22px groot, dus dikkere lijn: zo even dik als de iconen van 30px (eigenaar, 14 nov 2026) */}
               <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="2.45" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>

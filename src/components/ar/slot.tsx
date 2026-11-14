@@ -1,5 +1,6 @@
 "use client"
 
+import { T } from "@/components/taal"
 import { usePathname } from "next/navigation"
 import { TelLink } from "@/components/handoff/klant"
 import { BUSINESS } from "@/lib/business"
@@ -17,11 +18,11 @@ export function ArSlot() {
   return (
     <section className="ar-slot" aria-labelledby="ar-slot">
       <div className="ar-raster">
-        <p className="ar-lbl">Plan nu, dan begin ik in maart</p>
-        <h2 id="ar-slot" className="ar-slot-kop">Vertel wat je buiten wilt.</h2>
+        <p className="ar-lbl"><T t={{ nl: "Plan nu, dan begin ik in maart", en: "Plan now and I start in March" }} /></p>
+        <h2 id="ar-slot" className="ar-slot-kop"><T t={{ nl: "Vertel wat je buiten wilt.", en: "Tell me what you want outside." }} /></h2>
         <div className="ar-knoppen">
-          <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="slot" className="ar-knop ar-knop-oranje">Start een project</TelLink>
-          <TelLink href={WHATSAPP} gebeurtenis="cta_whatsapp_foto" plek="slot" className="ar-knop ar-knop-lijn-licht">Stuur een foto</TelLink>
+          <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="slot" className="ar-knop ar-knop-oranje"><T t={{ nl: "Start een project", en: "Start a project" }} /></TelLink>
+          <TelLink href={WHATSAPP} gebeurtenis="cta_whatsapp_foto" plek="slot" className="ar-knop ar-knop-lijn-licht"><T t={{ nl: "Stuur een foto", en: "Send a photo" }} /></TelLink>
         </div>
       </div>
     </section>
