@@ -30,12 +30,34 @@ const MEER = [
   { href: "/faq", naam: "Vragen", icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M11 15.6v.1" },
 ]
 
+const WHATSAPP = (
+                  <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden>
+                    <path d="M12 2.6a9.4 9.4 0 0 0-8.1 14.1L2.6 21.4l4.8-1.3A9.4 9.4 0 1 0 12 2.6z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+                    <path d="M8.9 7.2c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.2 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.4l-2.3-1.1c-.3-.1-.6-.2-.8.2l-1 1.3c-.2.2-.4.3-.8.1a8 8 0 0 1-3.9-3.4c-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-1-2.3z" fill="currentColor" transform="translate(12 12) scale(.62) translate(-12 -12.6)" />
+                  </svg>
+)
+const PALET = (
+                  <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                    <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4c1 0 1.6-.7 1.6-1.5 0-.5-.2-.8-.5-1.1-.3-.3-.5-.7-.5-1.1 0-.9.7-1.5 1.6-1.5h1.8a3.7 3.7 0 0 0 3.7-3.7C17.7 5.6 14.3 2.8 10 2.8Z" strokeLinejoin="round" />
+                    <circle cx="6.3" cy="9.3" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="8.6" cy="6.2" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="12.3" cy="6.2" r="1" fill="currentColor" stroke="none" />
+                  </svg>
+)
+
+const SHOPMENU = [
+  { href: "/tuinen/borderpakketten", naam: "Borderpakketten", sub: "Acht borders, opgestuurd of aangeplant", beeld: "/borderpakketten/vlinderborder.jpg" },
+  { href: "/tuinen/borderpakketten#bodem", naam: "Bodem", sub: "Compost met schors", beeld: "/borderpakketten/compost-franse-schors.jpg" },
+  { href: "/tuinen/borderpakketten#op-maat", naam: "Border op maat", sub: "Ik kom kijken en stel hem samen", beeld: "/borderpakketten/schaduwborder.jpg" },
+  { href: "/tuinen/cadeaubon", naam: "Cadeaubon", sub: "Zelf het bedrag kiezen", beeld: "/borderpakketten/plukborder.jpg" },
+]
+
 const isHier = (pad: string, href: string) => (href === "/" ? pad === "/" : pad === href || pad.startsWith(href + "/"))
 
 export function ArKop() {
   const pad = usePathname()
   const [open, setOpen] = useState(false)
-  const [tab, setTab] = useState<"inhoud" | "weergave">("inhoud")
+  const [tab, setTab] = useState<"inhoud" | "weergave" | "shop">("inhoud")
   const knop = useRef<HTMLButtonElement>(null)
   // bovenaan staat alleen de pijl; na scrollen wordt het de oranje knop met voortgangsring (eigenaar, 14 nov 2026)
   const [boven, setBoven] = useState(true)
@@ -72,14 +94,30 @@ export function ArKop() {
               <div className="ar-dock-top">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" />
-                <p className="ar-lbl">{tab === "weergave" ? "Weergave" : "Menu"}</p>
+                <p className="ar-lbl">{tab === "weergave" ? "Weergave" : tab === "shop" ? "Shop" : "Menu"}</p>
               </div>
               {tab === "weergave" ? (
                 <div className="ar-weergave"><Instellingen smal zonderLayout /></div>
+              ) : tab === "shop" ? (
+                <ul className="ar-shopmenu">
+                  {SHOPMENU.map((c) => (
+                    <li key={c.href}>
+                      <Link href={c.href} transitionTypes={["schuif"]} className="ar-shopmenu-tegel">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={c.beeld} alt="" loading="lazy" />
+                        <span className="ar-shopmenu-naam">{c.naam}</span>
+                        <span className="ar-shopmenu-sub">{c.sub}</span>
+                      </Link>
+                    </li>
+                  ))}
+                  <li className="ar-shopmenu-alles">
+                    <Link href="/shop" transitionTypes={["schuif"]} className="ar-knop ar-knop-oranje">Alles in de shop</Link>
+                  </li>
+                </ul>
               ) : (
                 <ol className="ar-dock-lijst">
                   {MEER.map((p) => (
-                    <li key={p.href} className={p.href !== "/" ? "ar-dock-niet-breed" : undefined}>
+                    <li key={p.href}>
                       <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-link" aria-current={isHier(pad, p.href) ? "page" : undefined}>
                         <svg className="ar-dock-ico" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
                         <span className="ar-dock-naam">{p.naam}</span>
@@ -94,19 +132,10 @@ export function ArKop() {
                 )}
                 {/* snel contact: het groene WhatsApp-teken, zonder vlak (eigenaar, 14 nov 2026) */}
                 <a href={BUSINESS.whatsapp} className="ar-app-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "dock" })}>
-                  <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden>
-                    <path d="M12 2.6a9.4 9.4 0 0 0-8.1 14.1L2.6 21.4l4.8-1.3A9.4 9.4 0 1 0 12 2.6z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-                    <path d="M8.9 7.2c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.2 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.4l-2.3-1.1c-.3-.1-.6-.2-.8.2l-1 1.3c-.2.2-.4.3-.8.1a8 8 0 0 1-3.9-3.4c-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-1-2.3z" fill="currentColor" transform="translate(12 12) scale(.62) translate(-12 -12.6)" />
-                  </svg>
+                  {WHATSAPP}
                 </a>
                 <button type="button" className="ar-rondknop" aria-pressed={tab === "weergave"} aria-label="Weergave" title="Weergave" onClick={() => setTab(tab === "weergave" ? "inhoud" : "weergave")}>
-                  {/* een palet */}
-                  <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-                    <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4c1 0 1.6-.7 1.6-1.5 0-.5-.2-.8-.5-1.1-.3-.3-.5-.7-.5-1.1 0-.9.7-1.5 1.6-1.5h1.8a3.7 3.7 0 0 0 3.7-3.7C17.7 5.6 14.3 2.8 10 2.8Z" strokeLinejoin="round" />
-                    <circle cx="6.3" cy="9.3" r="1" fill="currentColor" stroke="none" />
-                    <circle cx="8.6" cy="6.2" r="1" fill="currentColor" stroke="none" />
-                    <circle cx="12.3" cy="6.2" r="1" fill="currentColor" stroke="none" />
-                  </svg>
+                  {PALET}
                 </button>
               </div>
             </div>
@@ -115,6 +144,13 @@ export function ArKop() {
 
         <Komeet />
         <ul className="ar-dock-rij">
+          {/* desktop: Home vooraan in de rij (eigenaar, 14 nov 2026: "we hebben plek voor home") */}
+          <li className="ar-dock-alleen-breed">
+            <Link href="/" transitionTypes={["schuif"]} className="ar-dock-vak" aria-current={pad === "/" ? "page" : undefined}>
+              <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={MEER[0].icoon} /></svg>
+              <span className="ar-dock-label">Home</span>
+            </Link>
+          </li>
           {DOCK.map((d) => (
             <li key={d.href}>
               <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
@@ -127,10 +163,18 @@ export function ArKop() {
           {/* desktop: de dock heeft de ruimte, dus ook deze pagina's direct erin (eigenaar, 14 nov 2026: "maak menu meer items, we hebben de plek!") */}
           {MEER.filter((p) => p.href !== "/").map((p) => (
             <li key={p.href} className="ar-dock-alleen-breed">
+              {p.href === "/shop" ? (
+                // desktop: Shop opent een megamenu met de soorten (eigenaar, 14 nov 2026)
+                <button type="button" className="ar-dock-vak" aria-expanded={open && tab === "shop"} aria-controls="ar-dock-menu" aria-current={isHier(pad, "/shop") ? "page" : undefined} onClick={() => { const aan = open && tab === "shop"; setOpen(!aan); setTab("shop") }}>
+                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
+                  <span className="ar-dock-label">{p.naam}</span>
+                </button>
+              ) : (
               <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-vak" tabIndex={undefined} aria-current={isHier(pad, p.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
                 <span className="ar-dock-label">{p.naam}</span>
               </Link>
+              )}
             </li>
           ))}
           <li className="ar-dock-alleen-breed">
@@ -138,7 +182,18 @@ export function ArKop() {
               <span className="ar-dock-label">Kennismaken</span>
             </Link>
           </li>
-          <li>
+          {/* desktop: WhatsApp en Weergave passen ook in de rij; het paneel toont dan alleen nog de weergave */}
+          <li className="ar-dock-alleen-breed">
+            <a href={BUSINESS.whatsapp} className="ar-app-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "dock-breed" })}>
+              {WHATSAPP}
+            </a>
+          </li>
+          <li className="ar-dock-alleen-breed">
+            <button type="button" className="ar-rondknop" aria-expanded={open && tab === "weergave"} aria-controls="ar-dock-menu" aria-label="Weergave" title="Weergave" onClick={() => { const aan = open && tab === "weergave"; setOpen(!aan); setTab("weergave") }}>
+              {PALET}
+            </button>
+          </li>
+          <li className="ar-dock-niet-breed">
             <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? "Sluit het menu" : "Menu"} title={open ? "Sluit" : "Menu"} onClick={() => { setOpen(!open); setTab("inhoud") }}>
               {/* vier stippen als vier perkjes; open worden ze een kruis */}
               <svg viewBox="0 0 22 22" aria-hidden fill="currentColor">

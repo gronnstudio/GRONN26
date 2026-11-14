@@ -31,7 +31,6 @@ const SOORTEN = [
 ] as const
 
 const EERST = 6
-const chip = "inline-flex min-h-[var(--knop-klein)] items-center gap-2 rounded-full border px-4 text-[14px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inkt"
 
 export function Producten({ producten }: { producten: Product[] }) {
   const [soort, setSoort] = useState<(typeof SOORTEN)[number]["id"]>("alles")
@@ -51,14 +50,17 @@ export function Producten({ producten }: { producten: Product[] }) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-inkt pb-4">
         <div role="group" aria-label="Filter" className="flex flex-wrap gap-2">
           {SOORTEN.map((s) => {
             const aan = soort === s.id
-            const aantal = s.id === "alles" ? producten.length : producten.filter((p) => p.soort === s.id).length
+            const lijstje = s.id === "alles" ? producten : producten.filter((p) => p.soort === s.id)
+            const beeld = lijstje.find((p) => p.foto)?.foto
             return (
-              <button key={s.id} type="button" aria-pressed={aan} onClick={() => setSoort(s.id)} className={`${chip} ${aan ? "border-inkt bg-inkt text-grond" : "border-gedempt text-inkt hover:border-inkt"}`}>
-                <T t={s.naam} /> <span className={`tabular-nums ${aan ? "opacity-70" : "text-gedempt"}`}>{aantal}</span>
+              <button key={s.id} type="button" aria-pressed={aan} onClick={() => setSoort(s.id)} className="group flex min-h-[48px] items-center gap-3 rounded-full border border-lijn py-[6px] pr-[18px] pl-[6px] text-[15px] font-semibold transition-colors hover:border-inkt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inkt aria-pressed:border-inkt aria-pressed:bg-inkt aria-pressed:text-grond">
+                {beeld ? <Foto foto={{ src: beeld.src, width: 1600, height: 1200, alt: "" }} sizes="36px" className="size-[36px] shrink-0 rounded-full!" /> : <span className="size-[36px] shrink-0" />}
+                <T t={s.naam} />
+                <span className="text-[13px] font-normal tabular-nums opacity-70">{lijstje.length}</span>
               </button>
             )
           })}
@@ -72,7 +74,7 @@ export function Producten({ producten }: { producten: Product[] }) {
         </div>
       </div>
 
-      <ul className={`m-0 mt-8 list-none p-0 ${lijst ? "flex flex-col" : "grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5"}`}>
+      <ul className={`m-0 mt-8 list-none p-0 ${lijst ? "flex flex-col" : "grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-[clamp(16px,2vw,32px)] sm:gap-y-[clamp(36px,4vw,64px)]"}`}>
         {zichtbaar.map((p, i) => (
           <li key={p.id} className={`shop-product ${lijst ? "flex items-center gap-4 border-t border-lijn py-4 first:border-t-0 first:pt-0 sm:gap-6" : "flex flex-col"}`}>
             <Link
@@ -80,23 +82,22 @@ export function Producten({ producten }: { producten: Product[] }) {
               href={p.href}
               className={`group no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-inkt rounded-[16px] ${lijst ? "flex min-w-0 flex-1 items-center gap-4 sm:gap-6" : "flex flex-col"}`}
             >
-              <div className={lijst ? "w-[72px] shrink-0 sm:w-[112px]" : ""}>
+              <div className={lijst ? "w-[72px] shrink-0 sm:w-[112px]" : "overflow-hidden rounded-[var(--foto-hoek)]"}>
                 {p.foto ? (
                   <Foto
-                    foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, label: lijst ? undefined : "Sfeerbeeld", en: { alt: p.foto.alt.en, label: lijst ? undefined : "Mood image" } }}
+                    foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, en: { alt: p.foto.alt.en } }}
                     sizes={lijst ? "112px" : "(min-width: 1024px) 400px, 50vw"}
-                    className={`shop-foto ${lijst ? "aspect-square" : "aspect-[4/5]"}`}
+                    className={`shop-foto ${lijst ? "aspect-square" : "aspect-[4/3] transition-[scale] duration-700 group-hover:scale-[1.04]"}`}
                   />
                 ) : (
-                  <div className={`flex items-center justify-center rounded-[16px] border border-dashed border-gedempt text-gedempt ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/5]"}`}>
+                  <div className={`flex items-center justify-center rounded-[16px] border border-dashed border-gedempt text-gedempt ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/3]"}`}>
                     <span className="lbl"><T t={{ nl: "Op maat", en: "Custom" }} /></span>
                   </div>
                 )}
               </div>
               <span className="flex min-w-0 flex-col">
-                <span className={`syne leading-[1.15] tracking-[-.015em] ${lijst ? "text-[18px] sm:text-[20px]" : "mt-3 line-clamp-2 min-h-[2lh] text-[18px] sm:mt-4 sm:line-clamp-1 sm:min-h-0 sm:text-[22px]"}`}><T t={p.naam} /></span>
+                <span className={`syne leading-[1.15] tracking-[-.015em] ${lijst ? "text-[18px] sm:text-[20px]" : "mt-3 line-clamp-2 min-h-[2lh] text-[18px] sm:mt-4 sm:line-clamp-1 sm:min-h-0 sm:text-[clamp(20px,1.8vw,26px)] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4"}`}><T t={p.naam} /></span>
                 <span className={`mt-1 text-[13px] leading-[1.4] text-gedempt sm:text-[14px] ${lijst ? "" : "line-clamp-2 min-h-[2lh]"}`}><T t={p.sub} /></span>
-                {lijst && p.foto ? <span className="lbl mt-1 text-gedempt"><T t={{ nl: "Sfeerbeeld", en: "Mood image" }} /></span> : null}
               </span>
             </Link>
             <div className={lijst ? "flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-5" : "mt-auto flex flex-col items-start gap-2 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3"}>

@@ -16,7 +16,7 @@ export default function Kennismaken() {
   return (
     <>
       {/* Eén lang woord: op de telefoon iets kleiner, zodat het past. */}
-      <div className="max-md:[&_.w-reus]:text-[12vw]!">
+      <div className="max-md:[&_.w-reus]:text-[12vw]! md:[&_.w-reus]:text-[clamp(72px,9.4vw,160px)]!">
         <Opening
           label="Contact"
           titel={{ nl: "Kennismaken", en: "Get in touch" }}
