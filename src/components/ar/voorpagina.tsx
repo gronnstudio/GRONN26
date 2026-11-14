@@ -53,11 +53,12 @@ const STAPPEN = [
 
 // Vanafprijzen incl. btw, op de markt gelegd (14 nov 2026; Trustoo, Homedeal,
 // Slimster: hovenier € 35–65/u, siervijver € 2.500–5.000, renovatie € 1.000–5.000,
-// onderhoudscontract € 50–200 p/m) en Nicks eigen offertes. Voorstel, Nick beslist.
+// onderhoudscontract € 50–200 p/m) en Nicks eigen offertes. Vijverbedragen en onderhoud
+// bevestigd door Nick (14 nov 2026: nieuw € 2.500, renovatie € 4.500, € 45 p/m voor twee bezoeken).
 const PRIJZEN_VIJVER: [string, string][] = [
-  ["Nieuwe vijver", "vanaf € 4.500"],
-  ["Vijverrenovatie", "vanaf € 2.500"],
-  ["Vast onderhoud", "vanaf € 45 p/m"],
+  ["Nieuwe vijver", "vanaf € 2.500"],
+  ["Vijverrenovatie", "vanaf € 4.500"],
+  ["Onderhoud, 2 keer per jaar", "€ 45 p/m"],
   ["Bezoek en doorlichting", "€ 195, verrekend"],
 ]
 const PRIJZEN_TUIN: [string, string][] = [
