@@ -83,9 +83,8 @@ export default function TerrasGeulle() {
                 key={s.nl}
                 data-zie
                 style={{ "--i": i % 2 } as CSSProperties}
-                className="grid grid-cols-[40px_minmax(0,1fr)] items-baseline gap-x-3 border-t border-lijn py-[18px] last:border-b md:grid-cols-[60px_minmax(0,1fr)] md:gap-x-8 md:py-[26px]"
+                className="block border-t border-lijn py-[18px] last:border-b md:py-[26px]"
               >
-                <span className="lbl tabular-nums text-gedempt">{String(i + 1).padStart(2, "0")}</span>
                 <span className="syne text-[clamp(20px,2.3vw,32px)] leading-[1.2] tracking-[-.02em]"><T t={s} /></span>
               </li>
             ))}

@@ -131,7 +131,6 @@ export function ArVoorpagina() {
       {/* ── Werk als index ──────────────────────────────────────── */}
       <section className="ar-inv" aria-labelledby="ar-werk"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
-          <p className="ar-lbl">01</p>
           <h2 id="ar-werk" className="ar-h2">Projecten<b className="ar-punt">.</b></h2>
           <Link href="/werk" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Alle projecten</Link>
         </div>
@@ -147,7 +146,7 @@ export function ArVoorpagina() {
             <Foto foto={F11} sizes="(min-width: 1024px) 14vw, 40vw" className="ar-spread-foto" />
           </div>
           <div className="ar-spread-tekst">
-            <p className="ar-lbl">GR/001 · Uitgelicht</p>
+            <p className="ar-lbl">Uitgelicht</p>
             <h3 id="ar-spread-titel" className="ar-h3">{VIJVER.titel}</h3>
             <dl className="ar-kort">
               {KORT.map(([k, v]) => (
@@ -159,11 +158,10 @@ export function ArVoorpagina() {
         </article>
         <div className="ar-index" role="list">
           <div className="ar-index-kop ar-lbl" aria-hidden>
-            <span>Nr.</span><span>Project</span><span>Soort</span><span>Plaats</span><span>Jaar</span>
+            <span>Project</span><span>Soort</span><span>Plaats</span><span>Jaar</span>
           </div>
           {WERK.map((p) => (
             <Link key={p.href} href={p.href} role="listitem" className="ar-index-rij" transitionTypes={["schuif"]}>
-              <span className="ar-lbl">{p.code.replace(" ", "")}</span>
               <span className="ar-index-naam">{kies(p.naam, "nl")}</span>
               <span className="ar-index-cel">{kies(p.type, "nl")}</span>
               <span className="ar-index-cel">{p.plaats === "—" ? "Limburg" : p.plaats}</span>
@@ -180,7 +178,6 @@ export function ArVoorpagina() {
       {/* ── Diensten ───────────────────────────────────────────── */}
       <section className="ar-raster ar-blok" aria-labelledby="ar-diensten">
         <div className="ar-blokkop">
-          <p className="ar-lbl">02</p>
           <h2 id="ar-diensten" className="ar-h2">Diensten<b className="ar-punt">.</b></h2>
         </div>
         <div className="ar-diensten">
@@ -208,15 +205,13 @@ export function ArVoorpagina() {
       {/* ── Werkwijze ──────────────────────────────────────────── */}
       <section className="ar-inv" aria-labelledby="ar-werkwijze"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
-          <p className="ar-lbl">03</p>
           <h2 id="ar-werkwijze" className="ar-h2">Werkwijze<b className="ar-punt">.</b></h2>
         </div>
         <div className="ar-stappen-kolom">
         <p className="ar-maat ar-lbl" aria-hidden><span>Eerste gesprek</span><span>Oplevering</span></p>
         <ol className="ar-stappen">
-          {STAPPEN.map(([kop, zin], i) => (
+          {STAPPEN.map(([kop, zin]) => (
             <li key={kop} className="ar-op">
-              <span className="ar-stap-nr">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="ar-h3">{kop}</h3>
               <p>{zin}</p>
             </li>

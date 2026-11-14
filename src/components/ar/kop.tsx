@@ -17,13 +17,13 @@ import { Komeet } from "@/components/komeet"
 // de iconen en het glas van het oude dock, zonder tekst (eigenaar, 14 nov 2026: "laat de oude iconen en stijl staan van het dock. Zonder tekst")
 const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = [
   { href: "/werk", naam: "Projecten", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
-  { href: "/vijvers", naam: "Vijvers", beweging: "golf", icoon: "M2.5 8.5c2 0 2-1.5 4.25-1.5S9 8.5 11 8.5s2-1.5 4.25-1.5 2.25 1.5 4.25 1.5M2.5 14c2 0 2-1.5 4.25-1.5S9 14 11 14s2-1.5 4.25-1.5S17.5 14 19.5 14" },
-  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5V12M6.5 3.5V7.5a4.5 4.5 0 0 0 9 0V3.5L13 5.5 11 3 9 5.5z" },
+  { href: "/vijvers", naam: "Vijvers", beweging: "plop", icoon: "M11 2.8s-5.5 6-5.5 10a5.5 5.5 0 0 0 11 0c0-4-5.5-10-5.5-10z" },
+  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
 ]
 // iconen in dezelfde lijnstijl als het dock in plaats van nummers (eigenaar, 14 nov 2026)
 // Home staat in het paneel; zijn plek in het dock is voor Omhoog (eigenaar, 14 nov 2026)
 const MEER = [
-  { href: "/", naam: "Home", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
+  { href: "/", naam: "Home", icoon: "M3.5 10 11 3.5l7.5 6.5M5.5 8.5v10h11v-10M9 18.5v-5h4v5" },
   { href: "/over", naam: "Studio", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/journaal", naam: "Journaal", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12" },
   { href: "/shop", naam: "Shop", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
@@ -54,7 +54,7 @@ export function ArKop() {
 
   useEffect(() => {
     document.documentElement.classList.toggle("ar-open", open)
-    if (!open) return setTab("inhoud")
+    if (!open) return
     const toets = (e: KeyboardEvent) => e.key === "Escape" && (setOpen(false), knop.current?.focus())
     document.addEventListener("keydown", toets)
     return () => document.removeEventListener("keydown", toets)
@@ -114,7 +114,6 @@ export function ArKop() {
         <ul className="ar-dock-rij">
           <li>
             <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label="Terug naar boven" title="Terug naar boven" onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
-              <svg aria-hidden viewBox="0 0 40 40" className="ring-voortgang"><circle cx="20" cy="20" r="19" pathLength="1" /></svg>
               <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>
             </button>
           </li>
@@ -126,7 +125,7 @@ export function ArKop() {
             </li>
           ))}
           <li>
-            <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? "Sluit het menu" : "Menu"} title={open ? "Sluit" : "Menu"} onClick={() => setOpen(!open)}>
+            <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? "Sluit het menu" : "Menu"} title={open ? "Sluit" : "Menu"} onClick={() => { setOpen(!open); setTab("inhoud") }}>
               {/* vier stippen als vier perkjes; open worden ze een kruis */}
               <svg viewBox="0 0 22 22" aria-hidden fill="currentColor">
                 {open ? <path d="M5 5l12 12M17 5 5 17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /> : <><circle cx="6.5" cy="6.5" r="2.2" /><circle cx="15.5" cy="6.5" r="2.2" /><circle cx="6.5" cy="15.5" r="2.2" /><circle cx="15.5" cy="15.5" r="2.2" /></>}

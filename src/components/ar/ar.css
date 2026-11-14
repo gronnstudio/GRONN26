@@ -86,8 +86,8 @@ html.donker .ar-kop.ar-inv .ar-logo-donker { display: none; }
 .ar-dock-vak:hover:not([aria-current="page"]) { background: rgb(239 238 234 / .1); }
 /* de huidige pagina: het lichte kiezelknopje met reliëf van het oude dock */
 .ar-dock-vak[aria-current="page"] { width: 64px; background: rgb(239 238 234 / .9); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .3), inset 0 -1.5px .5px 0 rgb(0 0 0 / .3), 0 2px 5px 0 rgb(0 0 0 / .25); }
-/* Omhoog: rond en oranje met de voortgangsring van het oude dock; bovenaan gedimd */
-.ar-dock-omhoog { position: relative; background: var(--oranje); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .35), inset 0 -1.5px .5px 0 rgb(0 0 0 / .25); transition: opacity 400ms, background-color 300ms; }
+/* Omhoog: dezelfde pil als het kiezelknopje (64 × 48), in het oranje; bovenaan gedimd */
+.ar-dock-omhoog { position: relative; width: 64px; background: var(--oranje); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .35), inset 0 -1.5px .5px 0 rgb(0 0 0 / .25); transition: opacity 400ms, background-color 300ms; }
 .ar-dock-omhoog svg:not(.ring-voortgang) { width: 22px; height: 22px; }
 .ar-dock-omhoog:hover:not(:disabled) { background: var(--oranje); filter: brightness(1.08); }
 .ar-dock-omhoog:disabled { opacity: .3; cursor: default; }
@@ -150,19 +150,19 @@ html:root { --foto-hoek: 4px; }
 
 /* werk als index: regels met een beeld dat meekomt bij aanwijzen */
 .ar-index { display: grid; }
-.ar-index-kop, .ar-index-rij { display: grid; grid-template-columns: 76px minmax(0, 1fr) 40px; gap: 4px 16px; align-items: baseline; }
+.ar-index-kop, .ar-index-rij { display: grid; grid-template-columns: minmax(0, 1fr) 40px; gap: 4px 16px; align-items: baseline; }
 .ar-index-kop { padding-bottom: 12px; border-bottom: 1px solid var(--inkt); }
-.ar-index-kop span:nth-child(n+3):not(:last-child) { display: none; }
+.ar-index-kop span:nth-child(n+2):not(:last-child) { display: none; }
 .ar-index-rij { position: relative; padding-block: clamp(18px, 2.4vw, 30px); border-bottom: 1px solid var(--lijn); color: inherit; text-decoration: none; }
 .ar-index-naam { font-family: var(--font-syne); font-weight: 700; font-size: clamp(26px, 3vw, 46px); line-height: 1.02; letter-spacing: -.035em; transition: color 300ms, translate 500ms var(--ar-ease); }
 .ar-index-cel { color: var(--gedempt); font-size: 15px; }
 .ar-index-rij > .ar-index-cel { display: none; }
-.ar-index-rij > .ar-index-cel:last-of-type { display: block; grid-column: 3; grid-row: 1; text-align: right; }
-.ar-index-beeld { grid-column: 2; width: min(100%, 360px); }
+.ar-index-rij > .ar-index-cel:last-of-type { display: block; grid-column: 2; grid-row: 1; text-align: right; }
+.ar-index-beeld { grid-column: 1; width: min(100%, 360px); }
 .ar-index-foto { aspect-ratio: 4 / 3; }
 .ar-index-rij:focus-visible { outline: 2px solid var(--inkt); outline-offset: 4px; }
 @media (min-width: 900px) {
-  .ar-index-kop, .ar-index-rij { grid-template-columns: 76px minmax(0, 4fr) minmax(0, 1.6fr) minmax(0, 1.2fr) 56px; }
+  .ar-index-kop, .ar-index-rij { grid-template-columns: minmax(0, 4fr) minmax(0, 1.6fr) minmax(0, 1.2fr) 56px; }
   .ar-index-kop span { display: block !important; }
   .ar-index-rij > .ar-index-cel { display: block; }
   .ar-index-rij > .ar-index-cel:last-of-type { grid-column: auto; grid-row: auto; }
