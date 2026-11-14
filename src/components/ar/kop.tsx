@@ -16,7 +16,7 @@ import { Komeet } from "@/components/komeet"
 // staat niets meer: geen logo, geen belknop (eigenaar, 14 nov 2026).
 // de iconen en het glas van het oude dock, zonder tekst (eigenaar, 14 nov 2026: "laat de oude iconen en stijl staan van het dock. Zonder tekst")
 const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = [
-  { href: "/werk", naam: "Projecten", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
+  { href: "/werk", naam: "Werk", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/vijvers", naam: "Vijvers", beweging: "plop", icoon: "M11 2.8s-5.5 6-5.5 10a5.5 5.5 0 0 0 11 0c0-4-5.5-10-5.5-10z" },
   { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
 ]
