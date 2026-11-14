@@ -136,7 +136,8 @@ export function ArKop() {
           <li>
             <button type="button" className="ar-dock-vak ar-dock-omhoog" disabled={boven} aria-label="Terug naar boven" title="Terug naar boven" onClick={() => scrollTo({ top: 0, behavior: document.documentElement.classList.contains("stil") || matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>
               <svg viewBox="0 0 64 48" aria-hidden className="ar-omhoog-ring"><rect x="3" y="3" width="58" height="42" rx="21" pathLength="1" /></svg>
-              <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>
+              {/* 22px groot, dus dikkere lijn: zo even dik als de iconen van 30px (eigenaar, 14 nov 2026) */}
+              <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="2.45" strokeLinecap="round" strokeLinejoin="round"><path d="M11 18V4M5 10l6-6 6 6" /></svg>
             </button>
           </li>
         </ul>
