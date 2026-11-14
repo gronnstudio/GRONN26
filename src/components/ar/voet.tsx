@@ -1,14 +1,16 @@
 import Link from "next/link"
+import { T } from "@/components/taal"
+import type { L } from "@/lib/i18n"
 import "./ar.css"
 import { BUSINESS } from "@/lib/business"
 import { Kopieer } from "@/components/kopieer"
 
 // De voet van de nieuwe site: contact, pagina's en de bedrijfsgegevens. Geen
 // adres (eigenaar, 11 nov 2026), wel KVK en BTW.
-const KOLOMMEN: [string, [string, string][]][] = [
-  ["Diensten", [["/vijvers", "Vijvers"], ["/tuinen", "Tuinen"], ["/tuinen/borderpakketten", "Borderpakketten"], ["/tuinen/materialen", "Materialen"], ["/shop", "Shop"]]],
-  ["Studio", [["/werk", "Projecten"], ["/over", "Over mij"], ["/journaal", "Journaal"], ["/kennismaken", "Kennismaken"], ["/faq", "Vragen"]]],
-  ["Juridisch", [["/voorwaarden", "Voorwaarden"], ["/privacy", "Privacy"], ["/herroeping", "Herroeping"], ["/colofon", "Colofon"], ["/merk", "Merk"], ["/techniek", "Techniek"]]],
+const KOLOMMEN: [L, [string, L][]][] = [
+  [{ nl: "Diensten", en: "Services" }, [["/vijvers", { nl: "Vijvers", en: "Ponds" }], ["/tuinen", { nl: "Tuinen", en: "Gardens" }], ["/tuinen/borderpakketten", { nl: "Borderpakketten", en: "Border packages" }], ["/tuinen/materialen", { nl: "Materialen", en: "Materials" }], ["/shop", { nl: "Shop", en: "Shop" }]]],
+  [{ nl: "Studio", en: "Studio" }, [["/werk", { nl: "Projecten", en: "Projects" }], ["/over", { nl: "Over mij", en: "About me" }], ["/journaal", { nl: "Journaal", en: "Journal" }], ["/kennismaken", { nl: "Kennismaken", en: "Get in touch" }], ["/faq", { nl: "Vragen", en: "Questions" }]]],
+  [{ nl: "Juridisch", en: "Legal" }, [["/voorwaarden", { nl: "Voorwaarden", en: "Terms" }], ["/privacy", { nl: "Privacy", en: "Privacy" }], ["/herroeping", { nl: "Herroeping", en: "Withdrawal" }], ["/colofon", { nl: "Colofon", en: "Colophon" }], ["/merk", { nl: "Merk", en: "Brand" }], ["/techniek", { nl: "Techniek", en: "Technology" }]]],
 ]
 
 export function ArVoet() {
@@ -27,11 +29,11 @@ export function ArVoet() {
         </div>
         <div className="ar-voet-links">
         {KOLOMMEN.map(([kop, links]) => (
-          <div key={kop} className="ar-voet-kolom">
-            <p className="ar-lbl">{kop}</p>
+          <div key={kop.nl} className="ar-voet-kolom">
+            <p className="ar-lbl"><T t={kop} /></p>
             <ul>
               {links.map(([h, t]) => (
-                <li key={h}><Link href={h}>{t}</Link></li>
+                <li key={h}><Link href={h}><T t={t} /></Link></li>
               ))}
             </ul>
           </div>
@@ -50,11 +52,11 @@ export function ArVoet() {
               <rect x="3" y="7" width="10" height="7" rx="1.5" />
               <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
             </svg>
-            <span>Inloggen <span className="ar-voet-login-wie">eigenaar</span></span>
+            <span><T t={{ nl: "Inloggen", en: "Log in" }} /> <span className="ar-voet-login-wie"><T t={{ nl: "eigenaar", en: "owner" }} /></span></span>
           </a>
         </div>
         <div className="ar-voet-rechts">
-          <p className="ar-lbl">© 2026 {BUSINESS.name} · Stein en omgeving</p>
+          <p className="ar-lbl">© 2026 {BUSINESS.name} · <T t={{ nl: "Stein en omgeving", en: "Stein and surroundings" }} /></p>
         </div>
       </div>
       {/* het logo groot als afsluiter; het bestaande woordmerk, niet nagetekend */}

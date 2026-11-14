@@ -87,7 +87,12 @@ html.donker, .donker {
   --lijn: rgba(239, 238, 234, 0.2);
 }
 html.contrast { --gedempt: var(--inkt); --lijn: currentColor; }
-html.groot { font-size: 115%; }
+/* Tekstgrootte in stappen (eigenaar, 14 nov 2026). De nieuwe site rekent in px,
+   dus font-size op html werkt niet; zoom vergroot de inhoud en laat hem opnieuw
+   afbreken. Het dock blijft zijn eigen maat, zodat het niet over de pagina valt. */
+html.tekst-1 :is(main, .ar-slot, .ar-voet) { zoom: 1.15; }
+html.tekst-2 :is(main, .ar-slot, .ar-voet) { zoom: 1.3; }
+html.tekst-3 :is(main, .ar-slot, .ar-voet) { zoom: 1.5; }
 html.onderstreep main a { text-decoration: underline; text-underline-offset: 3px; }
 html.stil *, html.stil *::before, html.stil *::after { transition: none !important; animation: none !important; }
 
@@ -658,4 +663,12 @@ html:not(.plan):has(nav[data-menu][data-open]) body { background-color: #140f0b;
   @media (min-width: 1024px) {
     html:not(.stil):not(.plan):has(nav[data-menu][data-open]) :is(#inhoud, footer.bos-vlak) { transform: translateX(-42vw) scale(.8); }
   }
+}
+/* Koppen zijn al groot: die groeien niet mee, alleen de leestekst */
+html.tekst-1 :is(.ar-titel, .w-reus, .ar-uitspraak, .ar-slot-kop, .w-verder-kop) { zoom: calc(1 / 1.15); }
+html.tekst-2 :is(.ar-titel, .w-reus, .ar-uitspraak, .ar-slot-kop, .w-verder-kop) { zoom: calc(1 / 1.3); }
+html.tekst-3 :is(.ar-titel, .w-reus, .ar-uitspraak, .ar-slot-kop, .w-verder-kop) { zoom: calc(1 / 1.5); }
+html:is(.tekst-2, .tekst-3) main :is(h1, h2, h3, p, li, dd, dt, a, span) { overflow-wrap: break-word; }
+@media (max-width: 759px) {
+  html:is(.tekst-2, .tekst-3) .ar-knoppen { grid-template-columns: minmax(0, 1fr) !important; display: grid; }
 }

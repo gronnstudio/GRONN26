@@ -13,6 +13,8 @@ type Stand = {
   taal: "nl" | "en";
   beweging: boolean;
   groot: boolean;
+  /** Tekstgrootte in stappen (eigenaar, 14 nov 2026): 0 = 100 %, 1 = 115 %, 2 = 130 %, 3 = 150 %. */
+  tekst: 0 | 1 | 2 | 3;
   contrast: boolean;
   onderstreep: boolean;
   /** Lettertoetsen als sneltoets (zoek.tsx); WCAG 2.1.4 wil ze uit kunnen zetten. */
@@ -25,6 +27,7 @@ const STANDAARD: Stand = {
   taal: "nl",
   beweging: false,
   groot: false,
+  tekst: 0,
   contrast: false,
   onderstreep: false,
   toetsen: true,
@@ -38,9 +41,8 @@ const LAYOUTS: Record<Stand["layout"], Tekst> = {
   klassiek: { nl: "Klassiek", en: "Classic" },
   plan: { nl: "Blueprint", en: "Blueprint" },
 };
-const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal" | "layout">, Tekst][] = [
+const SCHAKELAARS: [keyof Omit<Stand, "kleur" | "taal" | "layout" | "tekst" | "groot">, Tekst][] = [
   ["beweging", { nl: "Minder beweging", en: "Less motion" }],
-  ["groot", { nl: "Grotere tekst", en: "Larger text" }],
   ["contrast", { nl: "Meer contrast", en: "More contrast" }],
   ["onderstreep", { nl: "Links onderstrepen", en: "Underline links" }],
   ["toetsen", { nl: "Sneltoetsen", en: "Keyboard shortcuts" }],
@@ -57,9 +59,13 @@ export const isAvond = () => {
 // Er staan twee Instellingen op de pagina (megamenu en Index); na een
 // wijziging lezen ze allebei de bewaarde stand opnieuw.
 const GEWIJZIGD = "gronn-weergave-gewijzigd";
+export const TEKSTSTAPPEN = [100, 115, 130, 150] as const;
 const lees = (): Stand => {
   try {
-    return { ...STANDAARD, ...JSON.parse(localStorage.getItem(KEY) || "{}") };
+    const s = { ...STANDAARD, ...JSON.parse(localStorage.getItem(KEY) || "{}") };
+    // oude aan/uit-schakelaar "Grotere tekst" wordt stap 1
+    if (s.groot && !s.tekst) s.tekst = 1;
+    return { ...s, groot: false };
   } catch {
     return STANDAARD;
   }
@@ -70,7 +76,8 @@ function pasToe(s: Stand) {
   c.toggle("plan", s.layout === "plan");
   c.toggle("donker", s.kleur === "donker" || (s.kleur === "auto" && isAvond()));
   c.toggle("stil", s.beweging);
-  c.toggle("groot", s.groot);
+  c.remove("groot");
+  [1, 2, 3].forEach((n) => c.toggle(`tekst-${n}`, s.tekst === n));
   c.toggle("contrast", s.contrast);
   c.toggle("onderstreep", s.onderstreep);
   c.toggle("en", s.taal === "en");
@@ -211,11 +218,33 @@ export function Instellingen({ smal = false, zonderLayout = false }: { smal?: bo
         </div>
       </fieldset>
       )}
+      <fieldset className="m-0 mb-4 border-0 p-0">
+        <legend className="lbl mb-2.5 p-0 opacity-70"><T t={{ nl: "Tekstgrootte", en: "Text size" }} /></legend>
+        <div className="grid grid-cols-4 rounded-full border border-lijn p-[3px]">
+          {TEKSTSTAPPEN.map((pct, n) => (
+            <label
+              key={pct}
+              className="cursor-pointer rounded-full py-2 text-center text-[13px] font-medium tabular-nums has-checked:bg-inkt has-checked:text-grond has-focus-visible:outline-2"
+            >
+              <input
+                type="radio"
+                name={`tekst${id}`}
+                value={n}
+                checked={stand.tekst === n}
+                onChange={() => zet({ ...stand, tekst: n as Stand["tekst"] })}
+                className="sr-only"
+              />
+              {pct}%
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <div className={breed("lg:col-span-3 lg:grid lg:grid-cols-2 lg:gap-x-8")}>
       {SCHAKELAARS.map(([k, t]) => (
         <label
           key={k}
-          className="flex cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5"
+          // sneltoetsen hebben alleen zin met een toetsenbord: niet op telefoon en tablet (eigenaar, 14 nov 2026)
+          className={`cursor-pointer items-center justify-between gap-3 border-t border-lijn py-2.5 ${k === "toetsen" ? "hidden [@media(hover:hover)_and_(pointer:fine)]:flex" : "flex"}`}
         >
           <span><T t={t} /></span>
           <input

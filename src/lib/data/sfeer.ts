@@ -13,9 +13,9 @@ export const SFEER = {
 
 // voor de draaiende band op de voorpagina: beschrijvend, geen projectnaam
 export const SFEER_BAND = [
-  { foto: SFEER.waterval, titel: "Waterval en vijver", soort: "Helder water", href: "/vijvers" },
-  { foto: SFEER.beek, titel: "Beekloop", soort: "Biofilter", href: "/vijvers" },
-  { foto: SFEER.koi, titel: "Koivijver", soort: "Helder water", href: "/vijvers" },
-  { foto: SFEER.bloemen, titel: "Waterval", soort: "Beplanting", href: "/vijvers" },
-  { foto: SFEER.blad, titel: "Vijverrand", soort: "Planten", href: "/vijvers" },
+  { foto: SFEER.waterval, titel: { nl: "Waterval en vijver", en: "Waterfall and pond" }, soort: { nl: "Helder water", en: "Clear water" }, href: "/vijvers" },
+  { foto: SFEER.beek, titel: { nl: "Beekloop", en: "Stream" }, soort: { nl: "Biofilter", en: "Biofilter" }, href: "/vijvers" },
+  { foto: SFEER.koi, titel: { nl: "Koivijver", en: "Koi pond" }, soort: { nl: "Helder water", en: "Clear water" }, href: "/vijvers" },
+  { foto: SFEER.bloemen, titel: { nl: "Waterval", en: "Waterfall" }, soort: { nl: "Beplanting", en: "Planting" }, href: "/vijvers" },
+  { foto: SFEER.blad, titel: { nl: "Vijverrand", en: "Pond edge" }, soort: { nl: "Planten", en: "Plants" }, href: "/vijvers" },
 ]
