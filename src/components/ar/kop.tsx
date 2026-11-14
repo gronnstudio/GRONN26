@@ -93,13 +93,7 @@ export function ArKop() {
 
       <div id="ar-paneel" className={klein ? "ar-paneel ar-klein" : "ar-paneel"} inert={!open} aria-label="Menu">
         <div>
-        <div className="ar-paneel-tabs">
-          {(["inhoud", "weergave"] as const).map((t) => (
-            <button key={t} type="button" className="ar-lbl ar-paneel-tab" aria-pressed={tab === t} onClick={() => setTab(t)}>
-              {t === "inhoud" ? "Inhoud" : "Weergave"}
-            </button>
-          ))}
-        </div>
+        <p className="ar-lbl ar-paneel-lbl">{tab === "weergave" ? "Weergave" : "Inhoud"}</p>
         {tab === "weergave" ? (
           <div className="ar-weergave"><Instellingen smal /></div>
         ) : (
@@ -117,15 +111,28 @@ export function ArKop() {
         </nav>
         )}
         </div>
+        {/* links de twee tekstknoppen, rechts twee kleine ronde: klein/groot menu en Weergave (eigenaar, 14 nov 2026) */}
         <div className="ar-paneel-voet">
-          <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
-          <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>
-          {/* rond in de hoek (eigenaar, 14 nov 2026); de naam staat in aria-label */}
-          <button type="button" className="ar-kleinknop" aria-pressed={klein} aria-label={klein ? "Groot menu" : "Klein menu"} title={klein ? "Groot menu" : "Klein menu"} onClick={() => setKlein(!klein)}>
-            <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-              {klein ? <path d="M4 5h12M4 10h12M4 15h12" /> : <path d="M7 7h6M7 10h6M7 13h6" />}
-            </svg>
-          </button>
+          <div className="ar-paneel-acties">
+            <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
+            <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>
+          </div>
+          <div className="ar-paneel-rond">
+            <button type="button" className="ar-rondknop" aria-pressed={klein} aria-label={klein ? "Groot menu" : "Klein menu"} title={klein ? "Groot menu" : "Klein menu"} onClick={() => setKlein(!klein)}>
+              <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                {klein ? <path d="M4 5h12M4 10h12M4 15h12" /> : <path d="M7 7h6M7 10h6M7 13h6" />}
+              </svg>
+            </button>
+            <button type="button" className="ar-rondknop" aria-pressed={tab === "weergave"} aria-label="Weergave" title="Weergave" onClick={() => setTab(tab === "weergave" ? "inhoud" : "weergave")}>
+              {/* een palet */}
+              <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4c1 0 1.6-.7 1.6-1.5 0-.5-.2-.8-.5-1.1-.3-.3-.5-.7-.5-1.1 0-.9.7-1.5 1.6-1.5h1.8a3.7 3.7 0 0 0 3.7-3.7C17.7 5.6 14.3 2.8 10 2.8Z" strokeLinejoin="round" />
+                <circle cx="6.3" cy="9.3" r="1" fill="currentColor" stroke="none" />
+                <circle cx="8.6" cy="6.2" r="1" fill="currentColor" stroke="none" />
+                <circle cx="12.3" cy="6.2" r="1" fill="currentColor" stroke="none" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
       {/* de pagina zelf sluit het menu, met een ronde sluitknop op de rand */}

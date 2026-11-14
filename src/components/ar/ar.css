@@ -87,7 +87,12 @@ html.ar-open .ar-paneel { transform: none; }
 .ar-paneel-zin { grid-column: 2; }
 .ar-paneel-link:hover .ar-paneel-naam, .ar-paneel-link[aria-current="page"] .ar-paneel-naam { translate: 10px 0; }
 .ar-paneel-link:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 2px; }
-.ar-paneel-voet { display: flex; flex-wrap: wrap; gap: 12px; }
+.ar-paneel-voet { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.ar-paneel-acties { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.ar-paneel-rond { display: flex; flex-direction: column; gap: 10px; }
+.ar-rondknop { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
+.ar-rondknop[aria-pressed="true"] { background: var(--ar-zand); color: var(--g800); }
+.ar-rondknop:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
 /* de regels komen één voor één binnen als het paneel opengaat */
 .ar-paneel-lijst li { opacity: 0; translate: 40px 0; transition: opacity 500ms var(--ar-ease), translate 700ms var(--ar-ease); }
 html.ar-open .ar-paneel-lijst li { opacity: 1; translate: 0 0; transition-delay: calc(250ms + var(--i) * 60ms); }
@@ -326,9 +331,6 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 }
 
 /* ── klein menu: kleinere namen, alles onderin (eigenaar, 14 nov 2026) ── */
-.ar-kleinknop { position: absolute; right: max(28px, env(safe-area-inset-right, 0px)); bottom: calc(32px + env(safe-area-inset-bottom, 0px)); display: grid; place-items: center; width: 56px; height: 56px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
-.ar-kleinknop[aria-pressed="true"] { background: var(--ar-zand); color: var(--g800); }
-.ar-kleinknop:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
 .ar-paneel.ar-klein { justify-content: flex-end; }
 .ar-klein .ar-paneel-link { padding: 8px 0; }
 .ar-klein .ar-paneel-naam { font-size: clamp(20px, 2.2vw, 28px); }
@@ -336,9 +338,4 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 /* geen oranje tekst, alleen de punt (eigenaar, 14 nov 2026) */
 /* klein menu op de telefoon nog verder omlaag: tot op de rand, Kennismaken naast de ronde knop (eigenaar, 14 nov 2026) */
 @media (max-width: 759px) { .ar-paneel.ar-klein { gap: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); } }
-/* Inhoud en Weergave als twee tabbladen bovenin het menu (eigenaar, 14 nov 2026) */
-.ar-paneel-tabs { display: flex; gap: 24px; padding-bottom: 14px; border-bottom: 1px solid rgb(246 242 233 / .2); }
-.ar-paneel-tab { padding: 0; border: 0; border-bottom: 1px solid transparent; background: none; color: rgb(246 242 233 / .6); cursor: pointer; }
-.ar-paneel-tab[aria-pressed="true"] { color: var(--ar-zand); border-bottom-color: currentColor; }
-.ar-paneel-tab:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
 .ar-weergave { --inkt: var(--ar-zand); --grond: var(--g800); --lijn: rgb(246 242 233 / .2); color: var(--ar-zand); padding-top: 20px; }
