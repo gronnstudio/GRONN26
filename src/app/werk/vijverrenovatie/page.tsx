@@ -1,10 +1,10 @@
+import type { CSSProperties } from "react"
 import type { Metadata } from "next"
 import { GeenFoto } from "@/components/foto"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
-import { Alineas, Cijfer, Citaat, Clip, Doorkijk, Fiche, FotoReeks, Kopregel, Lees, Slot, Volgende } from "@/components/werk/delen"
-import { Fotostapel } from "@/components/werk/fotostapel"
+import { Alineas, Citaat, Clip, Fiche, Figuur, FotoReeks, Kopregel, Lees, Paar, Slot, Volgende } from "@/components/werk/delen"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
 import { Pijl } from "@/components/pijl"
@@ -25,6 +25,8 @@ import {
   type Foto as FotoData,
 } from "@/lib/data/vijverrenovatie"
 
+// Zelfde opbouw als het terras (eigenaar, 14 nov 2026: "terras is mooi, vijverrenovatie
+// wijkt teveel af"): opening, fiche, tekst, stappen, paar, citaat, hoofdstukken, slotbeeld.
 // WF-021: de casestudy van de vijverrenovatie, met de volledige projecttekst
 // uit de data. Alle twaalf hoofdstukken, met hun foto's, clips, de tekening
 // van de waterroute en het beplantingsplan; twee cijfers als momenten.
@@ -34,6 +36,8 @@ import {
 const TITEL = VIJVER.seoTitel.replace(/ — GRØNN Studio$/, "")
 const HELD = FOTOS.F10 as FotoData
 const SLOTBEELD = FOTOS.F01 as FotoData
+// twee beelden naast elkaar, zoals op de terraspagina
+const PAAR = [...fotosVoor("F08"), ...fotosVoor("F09")].slice(0, 2)
 
 export const metadata: Metadata = {
   title: TITEL,
@@ -52,46 +56,11 @@ export const metadata: Metadata = {
 // De titel uit de data, in regels voor de reuzenkop; de zachte koppeltekens
 // laten de twee lange woorden op de telefoon netjes afbreken.
 const REUSTITEL = {
-  nl: "Twee vijvers.\nEén samen\u00adhangend\nwater\u00adsysteem.",
-  en: "Two ponds.\nOne connected\nwater system.",
+  nl: "Twee vijvers.\nEén samen\u00adhangend\nwater\u00adsysteem",
+  en: "Two ponds.\nOne connected\nwater system",
 }
 const EN = VIJVER.en
 const nlEn = (nl: string, en: string) => ({ nl, en })
-
-const IN_HET_KORT: [{ nl: string; en: string }, { nl: string; en: string }, string][] = [
-  [
-    nlEn("Intro", "Intro"),
-    nlEn(
-      "Een bestaande tuin met twee vijvers, een waterval en een beekloop, samen circa 5.000 liter water.",
-      "An existing garden with two ponds, a waterfall and a stream, together about 5,000 litres of water.",
-    ),
-    "opgave",
-  ],
-  [
-    nlEn("Uitdaging", "Challenge"),
-    nlEn(
-      "Alles moest technisch op elkaar aansluiten en in de tuin als één geheel aanvoelen, terwijl filter en aansluitingen bereikbaar blijven.",
-      "Everything had to connect technically and feel like one whole in the garden, while the filter and connections stay accessible.",
-    ),
-    "opgave",
-  ],
-  [
-    nlEn("Oplossing", "Solution"),
-    nlEn(
-      "Eén watersysteem: drukvast pvc, een filter met drie kamers en een bypass, een skimmer en losneembare aansluitingen voor onderhoud.",
-      "One water system: pressure-rated PVC, a three-chamber filter with a bypass, a skimmer and detachable connections for maintenance.",
-    ),
-    "waterroute",
-  ],
-  [
-    nlEn("Resultaat", "Result"),
-    nlEn(
-      "Twee vijvers die samenwerken, na circa 120 uur werk. Het project is in afronding; de beplanting laat het verder groeien.",
-      "Two ponds that work together, after about 120 hours of work. The project is being finished; the planting will let it grow on.",
-    ),
-    "afronding",
-  ],
-]
 
 export default function Vijverrenovatie() {
   return (
@@ -108,7 +77,7 @@ export default function Vijverrenovatie() {
 
       <div className="wrap">
         <Fiche
-          kolommen="md:grid-cols-6"
+          kolommen="sm:grid-cols-3 md:grid-cols-6"
           regels={[
             [nlEn("Code", "Code"), "GR / 001"],
             [nlEn("Type", "Type"), nlEn(VIJVER.categorie, EN.categorie)],
@@ -118,36 +87,7 @@ export default function Vijverrenovatie() {
             [nlEn("Water", "Water"), nlEn("circa 5.000 l", "about 5,000 l")],
           ]}
         />
-      </div>
 
-      {/* Het project in vier regels, zoals de cases van danhoye.com (22 okt
-          2026): wie snel leest, weet het hier; het hele verhaal volgt eronder.
-          Elke zin komt uit de projecttekst. */}
-      <div className="wrap">
-        <section aria-labelledby="kort-kop" className="w-sectie">
-          <Kopregel id="kort-kop" links={<T t={nlEn("In het kort", "In short")} />} />
-          <dl className="m-0">
-            {IN_HET_KORT.map(([k, v, anker]) => (
-              <div key={k.nl} className="grid grid-cols-1 gap-x-8 gap-y-1 border-t border-lijn py-4 last:border-b md:grid-cols-[3fr_9fr]">
-                <dt className="lbl text-gedempt"><T t={k} /></dt>
-                <dd className="m-0 max-w-[62ch] text-[17px] leading-[1.6]">
-                  <T t={v} />{" "}
-                  <a href={`#${anker}`} className="lnk whitespace-nowrap"><T t={nlEn("Lees meer", "Read more")} /> <Pijl richting="s" /></a>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        {/* de stem van de klant, zoals de cases van danhoye.com (23 okt 2026) */}
-        <Citaat tekst={KLANT_CITAAT.tekst} bron={KLANT_CITAAT.bron} />
-      </div>
-
-      <div className="w-sectie">
-        <Fotostapel />
-      </div>
-
-      <div className="wrap">
         <section aria-labelledby="inleiding-kop" className="w-sectie">
           <span id="inleiding-kop" className="sr-only"><T t={nlEn("Inleiding", "Introduction")} /></span>
           {VIJVER.intro.map((t, i) => (
@@ -159,18 +99,27 @@ export default function Vijverrenovatie() {
         </section>
 
         <nav aria-labelledby="inhoud-kop" className="w-sectie">
-          <Kopregel id="inhoud-kop" links={<T t={nlEn("Het hele verhaal", "The whole story")} />}
-            rechts={<T t={nlEn(`${HOOFDSTUKKEN.length} hoofdstukken`, `${HOOFDSTUKKEN.length} chapters`)} />} />
-          <ol className="m-0 list-none columns-1 gap-x-8 p-0 md:columns-2">
-            {HOOFDSTUKKEN.map((h) => (
-              <li key={h.id} className="break-inside-avoid border-t border-lijn">
-                <a href={`#${h.id}`} className="flex min-h-11 items-baseline gap-4 py-3 no-underline">
-                  <span className="w-lijnlink text-[17px] font-medium"><T t={h.kort} /></span>
+          <Kopregel id="inhoud-kop" links={<T t={nlEn("De werkzaamheden", "The work")} />}
+            rechts={<T t={nlEn(`${HOOFDSTUKKEN.length} stappen`, `${HOOFDSTUKKEN.length} steps`)} />} />
+          <ol className="m-0 list-none p-0">
+            {HOOFDSTUKKEN.map((h, i) => (
+              <li key={h.id} data-zie style={{ "--i": i % 2 } as CSSProperties} className="block border-t border-lijn last:border-b">
+                <a href={`#${h.id}`} className="block py-[18px] text-inherit no-underline md:py-[26px]">
+                  <span className="syne text-[clamp(20px,2.3vw,32px)] leading-[1.2] tracking-[-.02em]"><T t={h.kort} /></span>
                 </a>
               </li>
             ))}
           </ol>
         </nav>
+
+        {PAAR.length === 2 ? (
+          <section aria-labelledby="paar-kop" className="w-sectie">
+            <span id="paar-kop" className="sr-only"><T t={nlEn("Beelden", "Images")} /></span>
+            <Paar fotos={PAAR} />
+          </section>
+        ) : null}
+
+        <Citaat tekst={KLANT_CITAAT.tekst} bron={KLANT_CITAAT.bron} />
 
         {HOOFDSTUKKEN.map((h) => {
           const fotos = h.foto ? fotosVoor(h.foto) : []
@@ -182,7 +131,7 @@ export default function Vijverrenovatie() {
                     <T t={h.kort} />
                   </p>
                 </div>
-                <h2 id={`${h.id}-kop`} className="w-titel syne max-w-[22ch] text-[clamp(30px,3.2vw,48px)]! [overflow-wrap:anywhere]" data-zie>
+                <h2 id={`${h.id}-kop`} className="syne m-0 max-w-[26ch] text-[clamp(20px,2.3vw,32px)] leading-[1.2] tracking-[-.02em] [overflow-wrap:anywhere]" data-zie>
                   <T t={h.kop} />
                 </h2>
                 <Lees className="mt-[clamp(32px,4vw,56px)]">
@@ -242,19 +191,6 @@ export default function Vijverrenovatie() {
                 {h.video ? <Clip video={VIDEOS[h.video]} className="mt-[clamp(32px,4vw,56px)]" /> : null}
               </section>
 
-              {h.id === "denkwerk" ? (
-                <Cijfer
-                  getal="120"
-                  wat={nlEn("uur, circa", "hours, approx.")}
-                  uitleg={nlEn(
-                    "inclusief voorbereiding en denkwerk; ongeveer vijftien werkdagen",
-                    "including preparation and thinking time; about fifteen working days",
-                  )}
-                />
-              ) : null}
-              {h.id === "waterroute" ? (
-                <Cijfer getal="2" wat={nlEn("vijvers", "ponds")} uitleg={nlEn("verbonden binnen één watersysteem", "connected within one water system")} />
-              ) : null}
             </div>
           )
         })}
@@ -277,13 +213,13 @@ export default function Vijverrenovatie() {
           </dl>
           <p className="mt-4 mb-0 text-sm text-gedempt"><T t={CIJFERS_NOOT} /></p>
         </section>
-      </div>
 
-      <div className="w-sectie">
-        <Doorkijk foto={SLOTBEELD} sizes="100vw" className="h-[clamp(360px,70vh,820px)] w-full" eigen={false} v={1.5} />
-      </div>
+        <Lees className="w-sectie">
+          <div data-zie>
+            <Figuur foto={SLOTBEELD} sizes="(min-width: 768px) 50vw, 100vw" />
+          </div>
+        </Lees>
 
-      <div className="wrap">
         <Slot kop={SLOT.kop} alineas={[...SLOT.alineas, SLOT.oproep]} knop={nlEn(VIJVER.contactknop, EN.contactknop)} />
         <Volgende hier="/werk/vijverrenovatie" />
       </div>

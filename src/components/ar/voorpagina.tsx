@@ -97,7 +97,7 @@ export function ArVoorpagina() {
         <div className="ar-opening-beeld" aria-label="Beelden van het werk">
           {OPENING.map(({ foto: f, tekst }, i) => (
             <div key={f.src} className="ar-dia" style={{ "--n": i } as React.CSSProperties} aria-hidden={i > 0 || undefined}>
-              <Foto foto={i > 0 ? { ...f, alt: "" } : f} sizes="(min-width: 1024px) 45vw, 100vw" priority={i === 0} className="ar-dia-foto" />
+              <Foto foto={i > 0 ? { ...f, alt: "" } : f} sizes="100vw" priority={i === 0} className="ar-dia-foto" />
               <p className="ar-lbl ar-opening-onderschrift">{tekst}, 2026</p>
             </div>
           ))}
@@ -133,12 +133,13 @@ export function ArVoorpagina() {
       <section className="ar-inv" aria-labelledby="ar-werk"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
           <h2 id="ar-werk" className="ar-h2">Projecten<b className="ar-punt">.</b></h2>
+          <p className="ar-stelling">Werk dat ik zelf heb aangelegd, met de cijfers erbij.</p>
           <Link href="/werk" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Alle projecten</Link>
         </div>
         <div className="ar-werk-inhoud">
         <article className="ar-spread" aria-labelledby="ar-spread-titel">
           <div className="ar-spread-groot" data-v="0.6">
-            <Foto foto={F10} sizes="(min-width: 1024px) 40vw, 90vw" className="ar-spread-foto" />
+            <Foto foto={F10} sizes="100vw" className="ar-spread-foto" />
           </div>
           <div className="ar-spread-klein ar-spread-klein-a" data-v="1.5">
             <Foto foto={F08_1} sizes="(min-width: 1024px) 16vw, 44vw" className="ar-spread-foto" />
@@ -180,6 +181,7 @@ export function ArVoorpagina() {
       <section className="ar-raster ar-blok ar-blok-vol" aria-labelledby="ar-diensten">
         <div className="ar-blokkop">
           <h2 id="ar-diensten" className="ar-h2">Diensten<b className="ar-punt">.</b></h2>
+          <p className="ar-stelling">Vijvers en tuinen, van ontwerp tot onderhoud, met de prijs erbij.</p>
         </div>
         <div className="ar-diensten">
           <Link href="/vijvers" className="ar-dienst" transitionTypes={["schuif"]}>
@@ -207,6 +209,7 @@ export function ArVoorpagina() {
       <section className="ar-inv" aria-labelledby="ar-werkwijze"><div className="ar-raster ar-blok ar-blok-vol">
         <div className="ar-blokkop">
           <h2 id="ar-werkwijze" className="ar-h2">Werkwijze<b className="ar-punt">.</b></h2>
+          <p className="ar-stelling">Van eerste foto tot oplevering in vijf stappen, met één aanspreekpunt.</p>
         </div>
         <div className="ar-stappen-kolom">
         <p className="ar-maat ar-lbl" aria-hidden><span>Eerste gesprek</span><span>Oplevering</span></p>

@@ -8,6 +8,7 @@ import { BON_BEDRAGEN } from "@/lib/data/cadeaubon"
 import { priceLabel } from "@/lib/format"
 import { opslagAan } from "@/lib/beheer/stand"
 import { mollieAan } from "@/lib/mollie"
+import { Pijl } from "@/components/pijl"
 import { Producten, type Product } from "./producten"
 import "./shop.css"
 
@@ -90,7 +91,7 @@ export default function Shop() {
                   <T t={{ nl: `Vanaf ${priceLabel(BON_BEDRAGEN[0])} of een eigen bedrag. Digitaal met eigen bonnummer, of als kaart in een luxe doosje per post.`, en: `From ${priceLabel(BON_BEDRAGEN[0])} or an amount of your choice. Digital with its own number, or as a card in a gift box by post.` }} />
                 </p>
               </div>
-              <Link href="/tuinen/cadeaubon" className={`${knop} self-start`}><T t={{ nl: "Cadeaubon samenstellen →", en: "Make a gift card →" }} /></Link>
+              <Link href="/tuinen/cadeaubon" className={`${knop} self-start`}><T t={{ nl: "Cadeaubon samenstellen", en: "Make a gift card" }} /> <Pijl richting="e" /></Link>
             </div>
           </aside>
         </div>
