@@ -49,9 +49,9 @@ export function WerkOverzicht() {
 
   return (
     <div className="pt-[clamp(56px,7vw,112px)]">
-      <div className="w-kopregel">
-        <h2 className="lbl m-0"><T t={{ nl: "Alle projecten", en: "All projects" }} /></h2>
-        <div className="lbl -my-3 flex gap-6" role="group" aria-label={en ? "How to show the work" : "Weergave van het werk"}>
+      <div className="ar-sectiekop">
+        <h2 className="ar-h2"><T t={{ nl: "Alle projecten", en: "All projects" }} /><b className="ar-punt" aria-hidden>.</b></h2>
+        <div className="ar-lbl -my-3 flex gap-6" role="group" aria-label={en ? "How to show the work" : "Weergave van het werk"}>
           {(["lijst", "raster"] as const).map((w) => (
             <button
               key={w}

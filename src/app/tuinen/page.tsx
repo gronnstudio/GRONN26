@@ -1,14 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { DienstRij } from "@/components/diensten/dienst-rij"
-import { Verder } from "@/components/wereld/verder"
 import { aantalDiensten, diensten, eersteZinL } from "@/components/diensten/kies"
 import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
+import { Pijl } from "@/components/pijl"
 import { SFEER_WEIDE } from "@/components/voorpagina/beelden"
 import { Opening } from "@/components/wereld/opening"
-import { SnelContact } from "@/components/snel-contact"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
@@ -86,7 +85,6 @@ export default function TuinenPagina() {
       <Opening label={{ nl: "Diensten · tuin", en: "Services · garden" }} titel={{ nl: "Tuinen", en: "Gardens" }} zin={<T t={ZIN} />} foto={SFEER_WEIDE} />
 
       <div className="wrap">
-        <SnelContact className="pt-[48px]" />
         {VERVOLG.nl ? <Oplichten tekst={VERVOLG} className="m-0 pt-[clamp(64px,8vw,120px)]" /> : null}
 
         {FASEN.map((f, i) => (
@@ -109,7 +107,7 @@ export default function TuinenPagina() {
             {ELEMENTEN.map((e) => {
               const inhoud = (
                 <>
-                  <span className="syne block text-[clamp(17px,1.8vw,24px)] leading-[1.15] tracking-[-.015em] [overflow-wrap:anywhere]"><T t={e.naam} />{e.href ? "\u00A0→" : null}</span>
+                  <span className="syne block text-[clamp(17px,1.8vw,24px)] leading-[1.15] tracking-[-.015em] [overflow-wrap:anywhere]"><T t={e.naam} />{e.href ? <>{"\u00A0"}<Pijl richting="e" /></> : null}</span>
                   <span className="mt-[6px] block max-w-[40ch] text-[.875rem] leading-[1.5] text-gedempt md:mt-[8px] md:text-base md:leading-[1.6]"><T t={e.zin} /></span>
                 </>
               )
@@ -130,7 +128,7 @@ export default function TuinenPagina() {
               <p className="mt-5 mb-0 max-w-[48ch] text-[17px] leading-[1.55]">
                 <T t={{ nl: "Een kant-en-klare border voor zon, schaduw, vijverrand of droge grond. Aangeplant of opgestuurd, met het plan erbij.", en: "A ready-made border for sun, shade, a pond edge or dry soil. Planted or shipped, with the plan included." }} />
               </p>
-              <p className="w-lijnlink mt-[28px] mb-0 inline-block"><T t={{ nl: "Bekijk de pakketten →", en: "See the packages →" }} /></p>
+              <p className="w-lijnlink mt-[28px] mb-0 inline-block"><T t={{ nl: "Bekijk de pakketten", en: "See the packages" }} /> <Pijl richting="e" /></p>
             </div>
             <div className="md:col-span-5 md:col-start-8">
               <Foto foto={BORDER_FOTO} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/3]" />
@@ -145,11 +143,11 @@ export default function TuinenPagina() {
           <WerkBlok href="/werk/terras-geulle">
             <div className="md:col-span-6 md:col-start-1 md:row-start-1">
               <p className="lbl m-0 text-gedempt">
-                GR / 002 · <T t={TERRAS.categorie} /> · {PLAATS}
+                <T t={TERRAS.categorie} /> · {PLAATS}
               </p>
               <p className="syne m-0 mt-[16px] text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={TERRAS.titel} /></p>
               <p className="w-lijnlink mt-[28px] mb-0 inline-block">
-                <T t={{ nl: "Bekijk het project →", en: "View the project →" }} />
+                <T t={{ nl: "Bekijk het project", en: "View the project" }} /> <Pijl richting="e" />
               </p>
             </div>
             <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--foto-hoek)] md:col-span-5 md:col-start-8 md:row-start-1">
@@ -161,11 +159,6 @@ export default function TuinenPagina() {
         </section>
       </div>
 
-      <Verder voor={{ nl: "Benieuwd naar", en: "Curious about" }}
-        nadruk={{ nl: "het werk", en: "the work" }}
-        na={{ nl: "zelf?", en: "itself?" }}
-        href="/werk"
-        label={{ nl: "Naar Werk", en: "To Work" }} />
     </>
   )
 }

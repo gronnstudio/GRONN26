@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Kruimelpad } from "@/components/kruimelpad"
-import { Verder } from "@/components/wereld/verder"
 import { Foto } from "@/components/foto"
 import { STUKKEN, THEMAS, datumTekst, nummer, seizoen, type Stuk } from "@/lib/data/blog"
 
@@ -129,7 +128,6 @@ export default function JournaalPagina() {
         </section>
       ))}
 
-      <Verder voor="Een vraag over" nadruk="jouw vijver" na="?" href="/kennismaken" label="Naar Kennismaken" />
     </>
   )
 }

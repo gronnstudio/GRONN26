@@ -233,17 +233,6 @@ export function ArVoorpagina() {
         </div>
       </section>
 
-      {/* ── Slot ───────────────────────────────────────────────── */}
-      <section className="ar-slot" aria-labelledby="ar-slot">
-        <div className="ar-raster">
-          <p className="ar-lbl">Plan nu, dan begin ik in maart</p>
-          <h2 id="ar-slot" className="ar-slot-kop">Vertel wat je buiten wilt.</h2>
-          <div className="ar-knoppen">
-            <TelLink href="/start-een-project" gebeurtenis="cta_project" plek="slot" className="ar-knop ar-knop-oranje">Start een project</TelLink>
-            <TelLink href={WHATSAPP} gebeurtenis="cta_whatsapp_foto" plek="slot" className="ar-knop ar-knop-lijn-licht">Stuur een foto</TelLink>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

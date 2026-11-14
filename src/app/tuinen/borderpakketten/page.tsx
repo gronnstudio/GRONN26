@@ -4,7 +4,6 @@ import { Foto } from "@/components/foto"
 import { Stapel } from "@/components/stapel"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
-import { Verder } from "@/components/wereld/verder"
 import { BODEMPAKKETTEN, BORDER_MATEN, BORDER_PRIJS, BORDERPAKKETTEN, type BorderPakket } from "@/lib/data/borderpakketten"
 import { priceLabel } from "@/lib/format"
 import { opslagAan } from "@/lib/beheer/stand"
@@ -251,13 +250,6 @@ export default function BorderpakkettenPagina() {
         </section>
       </div>
 
-      <Verder
-        voor={{ nl: "Liever", en: "Rather" }}
-        nadruk={{ nl: "een hele tuin", en: "a whole garden" }}
-        na="?"
-        href="/tuinen"
-        label={{ nl: "Naar Tuinen", en: "To Gardens" }}
-      />
     </>
   )
 }

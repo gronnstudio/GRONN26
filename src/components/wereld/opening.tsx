@@ -26,9 +26,11 @@ export function Opening({
   children?: ReactNode
 }) {
   const regels = (t: string) =>
-    t.split("\n").map((r, n) => (
+    t.split("\n").map((r, n, alle) => (
       <span key={n} className="w-r">
         {r}
+        {/* de oranje punt van de voorpagina, achter de laatste regel (eigenaar, 14 nov 2026) */}
+        {n === alle.length - 1 ? <b className="ar-punt w-punt" aria-hidden>.</b> : null}
       </span>
     ))
   return (

@@ -1,12 +1,11 @@
 import type { Metadata } from "next"
 import { DienstKolommen, DienstRij } from "@/components/diensten/dienst-rij"
-import { Verder } from "@/components/wereld/verder"
 import { aantalDiensten, diensten, eersteZinL } from "@/components/diensten/kies"
 import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
+import { Pijl } from "@/components/pijl"
 import { Opening } from "@/components/wereld/opening"
-import { SnelContact } from "@/components/snel-contact"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { FOTOS, VIJVER, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
@@ -41,7 +40,6 @@ export default function VijversPagina() {
       <Opening label={{ nl: "Diensten · water", en: "Services · water" }} titel={{ nl: "Vijvers", en: "Ponds" }} zin={<T t={ZIN} />} foto={F01} />
 
       <div className="wrap">
-        <SnelContact className="pt-[48px]" />
         {VERVOLG.nl ? <Oplichten tekst={VERVOLG} className="m-0 pt-[clamp(64px,8vw,120px)]" /> : null}
 
         <section aria-labelledby="vijver-diensten" className="w-sectie">
@@ -73,34 +71,26 @@ export default function VijversPagina() {
             <Foto foto={F10} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/5] md:col-span-5" />
             <div className="md:col-span-6 md:col-start-7">
               <p className="lbl m-0 text-gedempt">
-                GR / 001 · <T t={VIJVER.categorie} /> · <T t={VIJVER.status} />
+                <T t={VIJVER.categorie} /> · <T t={VIJVER.status} />
               </p>
               <p className="syne m-0 mt-[16px] text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={VIJVER.titel} /></p>
               <p className="w-lijnlink mt-[28px] mb-0 inline-block">
-                <T t={{ nl: "Bekijk het project →", en: "View the project →" }} />
+                <T t={{ nl: "Bekijk het project", en: "View the project" }} /> <Pijl richting="e" />
               </p>
             </div>
           </WerkBlok>
         </section>
 
         <section aria-labelledby="vijver-vraag" className="w-sectie">
-          <div className="w-kopregel">
-            <p className="lbl m-0">
-              <T t={{ nl: "Vraag", en: "Question" }} />
-            </p>
+          <div className="ar-sectiekop">
+            <h2 id="vijver-vraag" className="ar-h2 max-w-[18ch]">
+              <T t={{ nl: "Kan ik alleen hulp met mijn vijver krijgen?", en: "Can I get help with just my pond?" }} />
+            </h2>
           </div>
-          <h2 id="vijver-vraag" className="w-titel max-w-[18ch]" data-zie>
-            <T t={{ nl: "Kan ik alleen hulp met mijn vijver krijgen?", en: "Can I get help with just my pond?" }} />
-          </h2>
           <Oplichten tekst={{ nl: "Ja. Elk van deze diensten kun je los vragen.", en: "Yes. You can ask for each of these services on its own." }} className="m-0 mt-[clamp(20px,2.5vw,36px)]" />
         </section>
       </div>
 
-      <Verder voor={{ nl: "Ook", en: "The garden" }}
-        nadruk={{ nl: "de tuin", en: "around it" }}
-        na={{ nl: "eromheen?", en: "too?" }}
-        href="/tuinen"
-        label={{ nl: "Naar Tuinen", en: "To Gardens" }} />
     </>
   )
 }

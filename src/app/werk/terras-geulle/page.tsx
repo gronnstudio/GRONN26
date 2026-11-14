@@ -4,7 +4,6 @@ import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Citaat, Fiche, Figuur, Kopregel, Lees, Paar, Slot, Volgende } from "@/components/werk/delen"
-import { Verder } from "@/components/wereld/verder"
 import "@/components/werk/werk.css"
 import { TERRAS, TERRAS_CITAAT, TERRAS_FOTOS, TERRAS_SLOT, TERRAS_STAPPEN } from "@/lib/data/terras-geulle"
 
@@ -107,13 +106,6 @@ export default function TerrasGeulle() {
         <Slot kop={TERRAS_SLOT.kop} alineas={TERRAS_SLOT.alineas} knop={nlEn(TERRAS.contactknop, EN.contactknop)} />
         <Volgende hier="/werk/terras-geulle" />
       </div>
-      <Verder
-        voor={nlEn("Zoiets voor", "Something like this for")}
-        nadruk={nlEn("jouw tuin", "your garden")}
-        na="?"
-        href="/kennismaken"
-        label={nlEn("Naar Kennismaken", "To Get in touch")}
-      />
     </article>
   )
 }

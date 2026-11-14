@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Kruimelpad } from "@/components/kruimelpad"
 import { Foto } from "@/components/foto"
-import { Verder } from "@/components/wereld/verder"
 import { Figuur } from "@/components/werk/delen"
 import { BUSINESS } from "@/lib/business"
 import { STUKKEN, datumTekst, nummer, stukMet } from "@/lib/data/blog"
@@ -145,7 +144,6 @@ export default async function BlogStuk({ params }: { params: Promise<{ slug: str
         ) : null}
       </div>
 
-      <Verder voor="Meer uit het" nadruk="Journaal" href="/journaal" label="Naar het Journaal" />
     </article>
   )
 }

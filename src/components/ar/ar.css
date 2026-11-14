@@ -13,7 +13,9 @@ html:root {
   --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); --vlak: color-mix(in srgb, var(--inkt) 6%, var(--grond));
   --ar-ease: cubic-bezier(.15, .2, .1, 1); --ar-kop: 76px; --ar-goot: clamp(20px, 4vw, 64px); --ar-aarde: var(--g800); --ar-zand: var(--g50); --ar-op-oranje: var(--g800);
 }
-html.donker:root { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); }
+/* formuliervelden in het grijs van het palet, niet meer zandkleurig (eigenaar, 14 nov 2026) */
+html:root { --veld: #e9ecef; }
+html.donker:root { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); --veld: #343a40; }
 .ar-inv { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 18%, var(--grond)); background: var(--grond); color: var(--inkt); }
 html.donker .ar-inv { --grond: var(--g50); --inkt: var(--g800); --oranje-tekst: #b84000; }
 .ar :is(section, div) { --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); }
@@ -362,3 +364,8 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
 ::view-transition-group(ar-dock) { z-index: 3; animation: none; }
 ::view-transition-old(ar-dock) { display: none; }
 ::view-transition-new(ar-dock) { animation: none; }
+
+/* sectiekop op de andere pagina's, zoals op de voorpagina: grote kop met oranje punt, aantal of link in mono rechts (eigenaar, 14 nov 2026) */
+.ar-sectiekop { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 24px; padding-top: 18px; border-top: 1px solid var(--lijn); margin-bottom: clamp(28px, 4vw, 56px); }
+.ar-sectiekop .ar-h2 { font-size: clamp(32px, 4vw, 56px); }
+.w-punt { font-weight: inherit; }

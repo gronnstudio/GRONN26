@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
 import { ArKop } from "@/components/ar/kop"
 import { ArVoet } from "@/components/ar/voet"
+import { ArSlot } from "@/components/ar/slot"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="inhoud">{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
         <div className="alleen-klassiek contents">
+          <ArSlot />
           <ArVoet />
           <ArKop />
         </div>

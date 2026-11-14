@@ -4,7 +4,6 @@ import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { Alineas, Cijfer, Citaat, Clip, Doorkijk, Fiche, FotoReeks, Kopregel, Lees, Slot, Volgende } from "@/components/werk/delen"
-import { Verder } from "@/components/wereld/verder"
 import { Fotostapel } from "@/components/werk/fotostapel"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
@@ -288,13 +287,6 @@ export default function Vijverrenovatie() {
         <Slot kop={SLOT.kop} alineas={[...SLOT.alineas, SLOT.oproep]} knop={nlEn(VIJVER.contactknop, EN.contactknop)} />
         <Volgende hier="/werk/vijverrenovatie" />
       </div>
-      <Verder
-        voor={nlEn("Zoiets voor", "Something like this for")}
-        nadruk={nlEn("jouw tuin", "your garden")}
-        na="?"
-        href="/kennismaken"
-        label={nlEn("Naar Kennismaken", "To Get in touch")}
-      />
     </article>
   )
 }
