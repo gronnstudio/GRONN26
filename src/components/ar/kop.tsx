@@ -119,13 +119,12 @@ export function ArKop() {
           <div className="ar-paneel-acties" hidden={tab === "weergave"}>
             <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
             <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht ar-paneel-kennis">Kennismaken</Link>
-            {/* snel contact, groen zoals WhatsApp zelf (eigenaar, 14 nov 2026) */}
-            <a href={BUSINESS.whatsapp} className="ar-knop ar-knop-whatsapp" onClick={() => track("cta_whatsapp", { plek: "menu" })}>
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.1A8.8 8.8 0 1 0 12 3.2Z" /><path d="M9.1 8.2c-.5.3-.8.9-.7 1.5.4 2.6 2.4 4.6 5 5 .6.1 1.2-.2 1.5-.7l.5-.9-2-1-.9.9a5.6 5.6 0 0 1-2.4-2.4l.9-.9-1-2-.9.5Z" fill="currentColor" stroke="none" /></svg>
-              WhatsApp
-            </a>
           </div>
           <div className="ar-paneel-rond">
+            {/* snel contact, rond en groen zoals WhatsApp zelf (eigenaar, 14 nov 2026) */}
+            <a href={BUSINESS.whatsapp} className="ar-rondknop ar-rond-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "menu" })}>
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.1A8.8 8.8 0 1 0 12 3.2Z" /><path d="M9.1 8.2c-.5.3-.8.9-.7 1.5.4 2.6 2.4 4.6 5 5 .6.1 1.2-.2 1.5-.7l.5-.9-2-1-.9.9a5.6 5.6 0 0 1-2.4-2.4l.9-.9-1-2-.9.5Z" fill="currentColor" stroke="none" /></svg>
+            </a>
             <button type="button" className="ar-rondknop" aria-pressed={klein} aria-label={klein ? "Groot menu" : "Klein menu"} title={klein ? "Groot menu" : "Klein menu"} onClick={() => setKlein(!klein)}>
               <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                 {klein ? <path d="M4 5h12M4 10h12M4 15h12" /> : <path d="M7 7h6M7 10h6M7 13h6" />}
