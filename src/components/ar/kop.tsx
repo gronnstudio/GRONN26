@@ -7,17 +7,19 @@ import { useEffect, useRef, useState } from "react"
 import { track } from "@vercel/analytics"
 import { BUSINESS } from "@/lib/business"
 import { Instellingen } from "@/components/weergave"
+import { Komeet } from "@/components/komeet"
 
 // De navigatie van de nieuwe site is één dock onderin, op telefoon en desktop
 // (eigenaar, 14 nov 2026: "Kunnen we het menu helemaal vervangen voor dock?",
 // koos Home, Projecten, Vijvers, Tuinen, Menu). Menu klapt de pil zelf omhoog
 // open tot het menu met wat niet in het dock staat ("niks dubbel"). Bovenaan
 // staat alleen nog het logo, dat met de pagina wegscrolt.
-const DOCK: { href: string; naam: string; icoon: string }[] = [
-  { href: "/", naam: "Home", icoon: "M3.5 10 11 3.5l7.5 6.5M5.5 8.5v10h11v-10" },
-  { href: "/werk", naam: "Projecten", icoon: "M3.5 3.5h6v6h-6zM12.5 3.5h6v6h-6zM3.5 12.5h6v6h-6zM12.5 12.5h6v6h-6z" },
-  { href: "/vijvers", naam: "Vijvers", icoon: "M2.5 8.5c2 0 2-1.5 4.25-1.5S9 8.5 11 8.5s2-1.5 4.25-1.5 2.25 1.5 4.25 1.5M2.5 14c2 0 2-1.5 4.25-1.5S9 14 11 14s2-1.5 4.25-1.5S17.5 14 19.5 14" },
-  { href: "/tuinen", naam: "Tuinen", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
+// de iconen en het glas van het oude dock, zonder tekst (eigenaar, 14 nov 2026: "laat de oude iconen en stijl staan van het dock. Zonder tekst")
+const DOCK: { href: string; naam: string; beweging: string; icoon: string }[] = [
+  { href: "/", naam: "Home", beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
+  { href: "/werk", naam: "Projecten", beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
+  { href: "/vijvers", naam: "Vijvers", beweging: "golf", icoon: "M2.5 8.5c2 0 2-1.5 4.25-1.5S9 8.5 11 8.5s2-1.5 4.25-1.5 2.25 1.5 4.25 1.5M2.5 14c2 0 2-1.5 4.25-1.5S9 14 11 14s2-1.5 4.25-1.5S17.5 14 19.5 14" },
+  { href: "/tuinen", naam: "Tuinen", beweging: "groei", icoon: "M11 19.5v-6M7.5 13.5a3.5 3.5 0 0 1-.6-6.95 4.1 4.1 0 0 1 8.2 0 3.5 3.5 0 0 1-.6 6.95z" },
 ]
 const MEER = [
   { href: "/over", naam: "Studio" },
@@ -112,20 +114,21 @@ export function ArKop() {
           </div>
         </div>
 
+        <Komeet />
         <ul className="ar-dock-rij">
           {DOCK.map((d) => (
             <li key={d.href}>
-              <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak" aria-current={isHier(pad, d.href) ? "page" : undefined}>
-                <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={d.icoon} /></svg>
-                {d.naam}
+              <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
+                <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d.icoon} /></svg>
               </Link>
             </li>
           ))}
           <li>
-            <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" onClick={() => setOpen(!open)}>
-              {/* vier stippen als vier perkjes; open draaien ze een kwartslag */}
-              <span className="ar-dock-stip" aria-hidden><i /><i /><i /><i /></span>
-              {open ? "Sluit" : "Menu"}
+            <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? "Sluit het menu" : "Menu"} title={open ? "Sluit" : "Menu"} onClick={() => setOpen(!open)}>
+              {/* vier stippen als vier perkjes; open worden ze een kruis */}
+              <svg viewBox="0 0 22 22" aria-hidden fill="currentColor">
+                {open ? <path d="M5 5l12 12M17 5 5 17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /> : <><circle cx="6.5" cy="6.5" r="2.2" /><circle cx="15.5" cy="6.5" r="2.2" /><circle cx="6.5" cy="15.5" r="2.2" /><circle cx="15.5" cy="15.5" r="2.2" /></>}
+              </svg>
             </button>
           </li>
         </ul>
