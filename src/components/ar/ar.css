@@ -339,3 +339,8 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 /* klein menu op de telefoon nog verder omlaag: tot op de rand, Kennismaken naast de ronde knop (eigenaar, 14 nov 2026) */
 @media (max-width: 759px) { .ar-paneel.ar-klein { gap: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); } }
 .ar-weergave { --inkt: var(--ar-zand); --grond: var(--g800); --lijn: rgb(246 242 233 / .2); color: var(--ar-zand); padding-top: 20px; }
+/* met de dock: geen kopbalk, wel het uitschuifmenu; de knoppen onderin blijven boven de dock (eigenaar, 14 nov 2026) */
+html.dock .ar-kop { display: none; }
+html.dock #inhoud { padding-top: 0; }
+html.dock .ar-paneel, html.dock .ar-paneel.ar-klein { padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }
+@media (min-width: 760px) { html.dock .ar-paneel-naam { font-size: clamp(28px, 3vw, 44px); } }

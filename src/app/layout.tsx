@@ -60,8 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="alleen-klassiek contents">
           <ArVoet />
           {/* de oude dock komt terug als de bezoeker dat kiest in Weergave (eigenaar, 14 nov 2026) */}
-          <div className="geen-dock contents"><ArKop /></div>
-          <div className="alleen-dock contents"><Menu /></div>
+          <ArKop />
+          <div className="alleen-dock contents"><Menu paneel /></div>
         </div>
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).

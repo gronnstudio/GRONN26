@@ -25,7 +25,7 @@ import { useTaal } from "./taal-klant"
 // "Blogs in eigen menu, dat past op desktop. Op mobiel waarschijnlijk niet").
 const HOOFD: { href: string; label: Tekst; bij: string[]; beweging: string; icoon: string; groot?: true }[] = [
   { href: "/", label: "Home", bij: [], beweging: "plop", icoon: "M11 19.5v-7M11 13.5c0-4-2.6-6.5-7-6.5 0 4 2.6 6.5 7 6.5zM11 11c0-4 2.6-6.5 7-6.5 0 4-2.6 6.5-7 6.5z" },
-  { href: "/werk", label: { nl: "Werk", en: "Work" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
+  { href: "/werk", label: { nl: "Projecten", en: "Projects" }, bij: ["/werk"], beweging: "spit", icoon: "M8 2.5h6M11 2.5v9M7 11.5h8v4a4 4 0 0 1-8 0z" },
   { href: "/over", label: "Studio", bij: ["/over", "/techniek"], beweging: "knik", icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/shop", label: "Shop", bij: ["/shop", "/tuinen/borderpakketten", "/tuinen/cadeaubon"], beweging: "groei", icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
   { href: "/journaal", label: "Journaal", bij: ["/journaal"], beweging: "knik", icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12", groot: true },
@@ -36,7 +36,9 @@ const RUST = "text-gebroken-wit hover:not-aria-[current=page]:bg-gebroken-wit/10
 
 const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
 
-export function Menu() {
+// paneel: de vier stippen openen het uitschuifmenu van de nieuwe kop (ArKop) in plaats van het megamenu (eigenaar, 14 nov 2026)
+export const OPEN_PANEEL = "gronn-open-paneel"
+export function Menu({ paneel = false }: { paneel?: boolean }) {
   const pad = usePathname()
   const taal = useTaal()
   const [open, setOpen] = useState(false)
@@ -210,11 +212,11 @@ export function Menu() {
               ref={knop}
               type="button"
               aria-expanded={open}
-              aria-controls="megamenu"
+              aria-controls={paneel ? "ar-paneel" : "megamenu"}
               aria-label="Menu"
               title="Menu"
               className={`grid size-[var(--knop)] cursor-pointer place-items-center rounded-full border-0 bg-transparent transition-[background-color,width,height] duration-500 motion-reduce:transition-none max-lg:size-[var(--knop)] lg:flex lg:w-auto lg:items-center lg:gap-[8px] lg:px-[18px] lg:text-[15px] lg:font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gebroken-wit ${RUST}`}
-              onClick={() => setOpen(!open)}
+              onClick={() => (paneel ? dispatchEvent(new Event(OPEN_PANEEL)) : setOpen(!open))}
             >
               {/* vier stippen als vier perkjes (eigenaar, 18 okt 2026: "for hamburger
                   something else"); open worden ze een kruis */}

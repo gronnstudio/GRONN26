@@ -187,7 +187,7 @@ html.plan .lbl { font-family: var(--font-mono); font-weight: 500; letter-spacing
 html.plan :is(.knop, .knop-klein) { font-family: var(--font-mono); font-weight: 600; }
 /* Elke layout zijn eigen kop, voet en voorpagina; de andere staat uit. */
 html.plan .alleen-klassiek, html:not(.plan) .alleen-plan { display: none !important; }
-html.dock .geen-dock, html:not(.dock) .alleen-dock { display: none !important; }
+html:not(.dock) .alleen-dock { display: none !important; }
 html { touch-action: pan-x pan-y; }
 /* Het dashboard mag wel zoomen (Nick, 2 nov 2026: "kan daar nu niet scrollen of zoomen"). */
 html:has([data-links]) { touch-action: manipulation; }

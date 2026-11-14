@@ -37,11 +37,11 @@ export function ArKop() {
     setOpen(false)
   }
 
-  // kiest de bezoeker in Weergave de dock, dan gaat dit menu dicht (en de pagina weer op volle maat)
+  // met de dock (Weergave) opent de dock dit menu
   useEffect(() => {
-    const kijk = () => document.documentElement.classList.contains("dock") && setOpen(false)
-    addEventListener("gronn-weergave-gewijzigd", kijk)
-    return () => removeEventListener("gronn-weergave-gewijzigd", kijk)
+    const wissel = () => setOpen((o) => !o)
+    addEventListener("gronn-open-paneel", wissel)
+    return () => removeEventListener("gronn-open-paneel", wissel)
   }, [])
 
   useEffect(() => {
