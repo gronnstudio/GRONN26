@@ -128,9 +128,6 @@ export function WerkOverzicht() {
               v={i % 2 === 0 ? 0.6 : 1.4}
               eigen={false}
             />
-            <span className="lbl tabular-nums">
-              {String(i + 1).padStart(2, "0")} — {p.code}
-            </span>
             <span className="syne text-[clamp(28px,3vw,44px)] leading-[1.05] tracking-[-.03em]">
               <span className="w-lijnlink"><T t={p.naam} /></span>
             </span>

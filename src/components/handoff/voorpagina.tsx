@@ -221,7 +221,6 @@ export function HandoffVoorpagina() {
           <ol className="ho-stappen">
             {STAPPEN.map((s, i) => (
               <li key={s.kop}>
-                <span className="ho-lbl">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{s.kop}</h3>
                 <p>{s.tekst}</p>
               </li>

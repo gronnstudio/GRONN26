@@ -87,8 +87,7 @@ export function Waterroute() {
       <figcaption className="mt-8 max-w-[900px]">
         <ol className="lbl m-0 list-none p-0 normal-case">
           {STAPPEN.map((s, i) => (
-            <li key={s.nl} className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-3 border-t border-lijn py-2.5 last:border-b md:grid-cols-[60px_minmax(0,1fr)] md:gap-x-8">
-              <span className="text-gedempt">{String(i + 1).padStart(2, "0")}</span>
+            <li key={s.nl} className="border-t border-lijn py-2.5 last:border-b">
               <span><T t={s} /></span>
             </li>
           ))}

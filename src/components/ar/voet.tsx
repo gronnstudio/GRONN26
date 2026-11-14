@@ -44,9 +44,16 @@ export function ArVoet() {
           <Kopieer label="KVK" waarde={BUSINESS.kvk} />
           <Kopieer label="BTW" waarde={BUSINESS.btw} />
           <Kopieer label="Naam" waarde={BUSINESS.name} />
+          {/* inloggen als vierde knop, met doorbroken rand zoals op de live site (eigenaar, 14 nov 2026) */}
+          <a href="/dashboard" rel="nofollow" className="ar-voet-login">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden>
+              <rect x="3" y="7" width="10" height="7" rx="1.5" />
+              <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+            </svg>
+            <span>Inloggen <span className="ar-voet-login-wie">eigenaar</span></span>
+          </a>
         </div>
         <div className="ar-voet-rechts">
-          <a href="/dashboard" rel="nofollow" className="ar-lbl ar-voet-login">Inloggen · alleen eigenaar</a>
           <p className="ar-lbl">© 2026 {BUSINESS.name} · Stein en omgeving</p>
         </div>
       </div>

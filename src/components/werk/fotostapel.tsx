@@ -50,8 +50,6 @@ export function Fotostapel() {
     }
   }, [])
 
-  const nr = (i: number) => String(i + 1).padStart(2, "0")
-
   return (
     <section className="fs wrap" aria-label={en ? "The project step by step" : "Het project in stappen"}>
       <div ref={kader} className="fs-kader">
@@ -76,7 +74,7 @@ export function Fotostapel() {
         {DIEPTE.map(({ fase, zin }, i) => (
           <li key={i} ref={(el) => { stappen.current[i] = el }} className="fs-stap" style={{ "--i": i } as CSSProperties}>
             <span className="lbl text-oranje-tekst">
-              {nr(i)} · <T t={fase} />
+              <T t={fase} />
             </span>
             <p className="syne m-0 text-[clamp(24px,3vw,40px)] leading-[1.1] tracking-[-.02em]"><T t={zin} /></p>
           </li>

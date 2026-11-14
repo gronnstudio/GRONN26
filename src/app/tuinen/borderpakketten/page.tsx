@@ -43,7 +43,6 @@ function Kaart({ p, nr }: { p: BorderPakket; nr: number }) {
       <article aria-labelledby={id} className="bp-kaart relative overflow-hidden rounded-[16px] border border-lijn bg-vlak">
         <a href={`#open-${p.slug}`} className="flex flex-col no-underline text-inherit focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-inkt lg:h-[min(640px,calc(100svh-160px))]">
           <span className="flex items-baseline gap-4 p-5 sm:p-8">
-            <span className="lbl text-oranje-tekst">{String(nr).padStart(2, "0")}</span>
             <span id={id} className="syne text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></span>
           </span>
           <Foto

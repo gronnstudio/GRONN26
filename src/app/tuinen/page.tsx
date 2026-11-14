@@ -16,9 +16,9 @@ import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
 // WF-020 Tuinen: de rijen per fase (kijken, ontwerpen, aanleggen), die
 // openklappen zoals op Vijvers (WF-031), in de taal van de voorpagina.
 const FASEN = [
-  { id: "fase-kijken", kop: { nl: "A · Kijken", en: "A · Looking" }, diensten: diensten("consultancy") },
-  { id: "fase-ontwerpen", kop: { nl: "B · Ontwerpen", en: "B · Designing" }, diensten: diensten("garden-design", "planting-habitat") },
-  { id: "fase-aanleggen", kop: { nl: "C · Aanleggen", en: "C · Building" }, diensten: diensten("garden-transformation", "implementation") },
+  { id: "fase-kijken", kop: { nl: "Kijken", en: "Looking" }, diensten: diensten("consultancy") },
+  { id: "fase-ontwerpen", kop: { nl: "Ontwerpen", en: "Designing" }, diensten: diensten("garden-design", "planting-habitat") },
+  { id: "fase-aanleggen", kop: { nl: "Aanleggen", en: "Building" }, diensten: diensten("garden-transformation", "implementation") },
 ]
 
 // De inleiding is de samenvatting van Tuinontwerp: de eerste zin in de
@@ -80,7 +80,6 @@ const PLAATS = TERRAS.plaats.split(",")[0]
 
 export default function TuinenPagina() {
   // startnummer per fase, zodat de diensten doorlopen (01…05)
-  const START = FASEN.map((_, i) => FASEN.slice(0, i).reduce((t, f) => t + f.diensten.length, 0))
   return (
     <>
       {/* Tuinen heeft nog geen eigen foto: het sfeerbeeld draagt zijn label. */}
@@ -95,7 +94,7 @@ export default function TuinenPagina() {
             <KopRegel id={f.id} label={f.kop} aantal={aantalDiensten(f.diensten.length)} />
             <div data-zie>
               {f.diensten.map((d, k) => (
-                <DienstRij key={d.slug} nr={String(START[i] + k + 1).padStart(2, "0")} dienst={d} />
+                <DienstRij key={d.slug} dienst={d} />
               ))}
             </div>
           </section>

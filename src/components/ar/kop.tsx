@@ -37,7 +37,7 @@ export function ArKop() {
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<"inhoud" | "weergave">("inhoud")
   const knop = useRef<HTMLButtonElement>(null)
-  // bovenaan de pagina heeft Omhoog geen zin: dan staat hij gedimd
+  // bovenaan de pagina heeft Omhoog geen zin: dan is hij onzichtbaar
   const [boven, setBoven] = useState(true)
   useEffect(() => {
     const meet = () => setBoven(scrollY < 48)

@@ -87,16 +87,19 @@ html.donker .ar-kop.ar-inv .ar-logo-donker { display: none; }
 /* de huidige pagina: het lichte kiezelknopje met reliëf van het oude dock */
 .ar-dock-vak[aria-current="page"] { width: 64px; background: rgb(239 238 234 / .9); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .3), inset 0 -1.5px .5px 0 rgb(0 0 0 / .3), 0 2px 5px 0 rgb(0 0 0 / .25); }
 /* Omhoog: dezelfde pil als het kiezelknopje (64 × 48), in het oranje; bovenaan gedimd */
-.ar-dock-omhoog { position: relative; width: 64px; background: var(--oranje); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .35), inset 0 -1.5px .5px 0 rgb(0 0 0 / .25); transition: opacity 400ms, background-color 300ms; }
+.ar-dock-omhoog { position: relative; width: 64px; background: var(--oranje); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .35), inset 0 -1.5px .5px 0 rgb(0 0 0 / .25); transition: opacity 300ms, transform 300ms, visibility 0s, background-color 300ms; }
 .ar-dock-omhoog svg:not(.ring-voortgang) { width: 22px; height: 22px; }
 .ar-dock-omhoog:hover:not(:disabled) { background: var(--oranje); filter: brightness(1.08); }
-.ar-dock-omhoog:disabled { opacity: .3; cursor: default; }
+/* pas zichtbaar zodra er gescrold is; de plek blijft, zodat de andere iconen niet verspringen (eigenaar, 14 nov 2026) */
+.ar-dock-omhoog:disabled { opacity: 0; transform: scale(.85); visibility: hidden; transition: opacity 300ms, transform 300ms, visibility 0s 300ms; }
+@media (prefers-reduced-motion: reduce) { .ar-dock-omhoog { transition: none !important; } }
 .ar-dock-vak:focus-visible, .ar-dock-link:focus-visible { outline: 2px solid var(--zand); outline-offset: 2px; }
-.ar-rondknop { display: grid; place-items: center; flex: none; width: 48px; height: 48px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
+.ar-rondknop { display: grid; place-items: center; flex: none; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
 .ar-rondknop[aria-pressed="true"] { background: var(--ar-zand); color: var(--g800); }
 .ar-rondknop:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
-.ar-rond-whatsapp { border-color: #25d366; background: #25d366; color: var(--g800); }
-.ar-rond-whatsapp:hover { background: #1ebe5b; }
+/* alleen het lijnicoon, zoals in het dock (eigenaar, 14 nov 2026: "ziet netter uit") */
+.ar-rondknop svg { width: 30px; height: 30px; }
+.ar-rondknop:hover:not([aria-pressed="true"]) { background: rgb(255 255 255 / .08); }
 .ar-scherm { position: fixed; z-index: 94; inset: 0; border: 0; padding: 0; background: rgb(20 18 16 / .45); opacity: 0; pointer-events: none; transition: opacity 400ms; }
 html.ar-open .ar-scherm { opacity: 1; pointer-events: auto; }
 @media (prefers-reduced-motion: reduce) { .ar-dock, .ar-dock-vel, .ar-dock-vel-inhoud, .ar-scherm { transition: none !important; } }
@@ -227,9 +230,16 @@ html:root { --foto-hoek: 4px; }
 .ar-voet-kolom ul { list-style: none; margin: 10px 0 0; padding: 0; }
 .ar-voet-onder { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 24px; padding-block: 24px; border-top: 1px solid var(--lijn); }
 .ar-voet-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
-.ar-voet-kopie { display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px; }
+.ar-voet-kopie { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 8px; font-size: 14px; }
+/* twee kolommen knoppen, even breed (eigenaar, 14 nov 2026) */
+.ar-voet-kopie > * { width: 100%; justify-content: flex-start; white-space: nowrap; }
+.ar-voet-kopie > button > :last-child { margin-left: auto; }
+@media (max-width: 479px) { .ar-voet-kopie { grid-template-columns: repeat(2, minmax(0, 1fr)); font-size: 11px; gap: 6px; } .ar-voet-kopie > * { padding-inline: 10px; gap: 5px; } }
+@media (max-width: 359px) { .ar-voet-kopie { grid-template-columns: minmax(0, 1fr); } }
 .ar-voet-rechts { display: grid; gap: 6px; justify-items: start; }
-.ar-voet-login { display: inline-flex; min-height: 44px; align-items: center; }
+.ar-voet-login { display: inline-flex; align-items: center; gap: 8px; height: var(--knop-klein); padding-inline: var(--knop-binnen-klein); border: 1px dashed var(--lijn); border-radius: 999px; color: var(--gedempt); text-decoration: none; transition: border-color 300ms, color 300ms; }
+.ar-voet-login:hover { border-color: var(--inkt); color: var(--inkt); }
+.ar-voet-login-wie { margin-left: 4px; font-size: .8em; text-transform: uppercase; letter-spacing: .12em; opacity: .7; }
 @media (min-width: 900px) {
   .ar-voet-boven { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; }
   .ar-voet-links { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -329,3 +339,10 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
 .ar-weergave fieldset p { margin-top: 4px !important; font-size: 11px; }
 .ar-weergave label[class*="justify-between"] { padding-block: 7px !important; }
 .ar-weergave button { margin-top: 8px !important; }
+
+/* het dock blijft stil en bovenop terwijl de nieuwe pagina binnenschuift
+   (eigenaar, 14 nov 2026: "Menu bugged bij animatie van inschuiven") */
+.ar-dock { view-transition-name: ar-dock; }
+::view-transition-group(ar-dock) { z-index: 3; animation: none; }
+::view-transition-old(ar-dock) { display: none; }
+::view-transition-new(ar-dock) { animation: none; }

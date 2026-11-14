@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { DienstKolommen, DienstRij } from "@/components/diensten/dienst-rij"
 import { Verder } from "@/components/wereld/verder"
-import { aantalDiensten, diensten, eersteZinL, nr } from "@/components/diensten/kies"
+import { aantalDiensten, diensten, eersteZinL } from "@/components/diensten/kies"
 import { KopRegel, WerkBlok, WerkKop } from "@/components/diensten/werk-blok"
 import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
@@ -49,7 +49,7 @@ export default function VijversPagina() {
           <div data-zie>
             <DienstKolommen />
             {VIJVERDIENSTEN.map((d, i) => (
-              <DienstRij key={d.slug} nr={nr(i)} dienst={d} />
+              <DienstRij key={d.slug} dienst={d} />
             ))}
           </div>
           <p className="lbl m-0 mt-[16px] max-w-[60ch] text-gedempt">

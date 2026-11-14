@@ -226,7 +226,7 @@ export function ArVoorpagina() {
           <Foto foto={F08_2} sizes="(min-width: 1024px) 34vw, 90vw" className="ar-maker-foto" />
         </div>
         <div className="ar-maker-tekst">
-          <p className="ar-lbl">04 · Studio</p>
+          <p className="ar-lbl">Studio</p>
           <h2 id="ar-maker" className="ar-h2">Eén maker, van eerste schets tot laatste plant<b className="ar-punt">.</b></h2>
           <p>Ik ben Nick. GRØNN Studio is mijn eenmanszaak voor vijvers en tuinen in Stein en omgeving. Je hebt één aanspreekpunt, en wie de prijs maakt, legt de tuin ook aan.</p>
           <Link href="/over" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Over mij</Link>
