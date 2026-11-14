@@ -53,8 +53,7 @@ const KAARTEN: Kaart[] = [
       width: 1600,
       height: 1200,
       alt: "Een bloeiende border met zonnehoed en siergras.",
-      label: "Sfeerbeeld",
-      en: { alt: "A flowering border with coneflowers and ornamental grass.", label: "Mood image" },
+          en: { alt: "A flowering border with coneflowers and ornamental grass." },
     },
   },
 ]

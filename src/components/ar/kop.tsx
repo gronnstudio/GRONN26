@@ -79,7 +79,7 @@ export function ArKop() {
               ) : (
                 <ol className="ar-dock-lijst">
                   {MEER.map((p) => (
-                    <li key={p.href}>
+                    <li key={p.href} className={p.href !== "/" ? "ar-dock-niet-breed" : undefined}>
                       <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-link" aria-current={isHier(pad, p.href) ? "page" : undefined}>
                         <svg className="ar-dock-ico" viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
                         <span className="ar-dock-naam">{p.naam}</span>
@@ -124,6 +124,20 @@ export function ArKop() {
               </Link>
             </li>
           ))}
+          {/* desktop: de dock heeft de ruimte, dus ook deze pagina's direct erin (eigenaar, 14 nov 2026: "maak menu meer items, we hebben de plek!") */}
+          {MEER.filter((p) => p.href !== "/").map((p) => (
+            <li key={p.href} className="ar-dock-alleen-breed">
+              <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-vak" tabIndex={undefined} aria-current={isHier(pad, p.href) ? "page" : undefined}>
+                <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
+                <span className="ar-dock-label">{p.naam}</span>
+              </Link>
+            </li>
+          ))}
+          <li className="ar-dock-alleen-breed">
+            <Link href="/kennismaken" transitionTypes={["schuif"]} className="ar-dock-vak ar-dock-kennis" onClick={() => track("cta_kennismaken", { plek: "dock-breed" })}>
+              <span className="ar-dock-label">Kennismaken</span>
+            </Link>
+          </li>
           <li>
             <button ref={knop} type="button" className="ar-dock-vak" aria-expanded={open} aria-controls="ar-dock-menu" aria-label={open ? "Sluit het menu" : "Menu"} title={open ? "Sluit" : "Menu"} onClick={() => { setOpen(!open); setTab("inhoud") }}>
               {/* vier stippen als vier perkjes; open worden ze een kruis */}

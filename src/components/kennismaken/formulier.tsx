@@ -368,8 +368,9 @@ export function KennismakenFormulier() {
   }
 
   return (
-    <div className="mt-[clamp(64px,8vw,120px)] grid items-start gap-y-14 md:grid-cols-[7fr_1fr_4fr]">
-      <form onSubmit={verstuur} noValidate aria-label={kies({ nl: "Kennismaken", en: "Get in touch" }, taal)} className="relative flex flex-col gap-6">
+    <div className="mt-[clamp(64px,8vw,120px)] grid items-start gap-y-14 md:grid-cols-[7fr_1fr_4fr] lg:grid-cols-[5fr_1fr_6fr]">
+      {/* desktop: contact groot en vast links, het formulier breed rechts (eigenaar, 14 nov 2026: "loop desktop na") */}
+      <form onSubmit={verstuur} noValidate aria-label={kies({ nl: "Kennismaken", en: "Get in touch" }, taal)} className="relative flex flex-col gap-6 lg:col-start-3 lg:row-start-1">
         {/* E-mail is type="text" met inputMode="email" (zelfde toetsenbord):
             type="email" haalt spaties stil weg vóór de controle ze ziet. */}
         <Veld label={{ nl: "Naam", en: "Name" }} {...veld("naam")} verplicht autoComplete="name" />
@@ -421,7 +422,7 @@ export function KennismakenFormulier() {
         </p>
       </form>
 
-      <aside aria-label={kies({ nl: "Contactgegevens", en: "Contact details" }, taal)} className="flex flex-col gap-5 border-t border-lijn pt-4 md:col-start-3">
+      <aside aria-label={kies({ nl: "Contactgegevens", en: "Contact details" }, taal)} className="flex flex-col gap-5 border-t border-lijn pt-4 md:col-start-3 lg:sticky lg:top-12 lg:col-start-1 lg:row-start-1 lg:[&>a:not([download])]:syne lg:[&>a:not([download])]:text-[clamp(28px,2.6vw,44px)] lg:[&>a:not([download])]:leading-[1.05] lg:[&>a:not([download])]:tracking-[-.03em]">
         <p className="lbl m-0 text-gedempt"><T t={{ nl: "Liever direct?", en: "Rather direct?" }} /></p>
         <a href={BUSINESS.emailHref} className="w-lijnlink self-start text-[18px] [overflow-wrap:anywhere]">{BUSINESS.email}</a>
         <a href={BUSINESS.phoneHref} className="w-lijnlink self-start text-[18px] tabular-nums">{BUSINESS.phone}</a>

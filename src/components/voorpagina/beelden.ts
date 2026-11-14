@@ -26,12 +26,11 @@ export const T02 = TERRAS_FOTOS.reeks[0]
 /**
  * Sfeerbeeld uit de Brand Guide 2026 (kopie van SFEER.weide in
  * src/lib/data/plekken.ts, dat nog imports uit de oude site mist). Geen werk:
- * het draagt altijd het label Sfeerbeeld.
+ * geen tekst op het beeld (eigenaar, 14 nov 2026: "Ik wil geen tekst over mijn afbeeldingen").
  */
 export const SFEER_WEIDE: Foto = {
   src: "/sfeer/weide-tegenlicht.jpg",
   width: 1600,
   height: 1200,
   alt: "Een hoge, wilde weide in laag tegenlicht, met kleine witte bloemen op de voorgrond.",
-  label: "Sfeerbeeld",
 }

@@ -182,7 +182,7 @@ export default function Vijverrenovatie() {
                     <T t={h.kort} />
                   </p>
                 </div>
-                <h2 id={`${h.id}-kop`} className="w-titel syne max-w-[22ch] [overflow-wrap:anywhere]" data-zie>
+                <h2 id={`${h.id}-kop`} className="w-titel syne max-w-[22ch] text-[clamp(30px,3.2vw,48px)]! [overflow-wrap:anywhere]" data-zie>
                   <T t={h.kop} />
                 </h2>
                 <Lees className="mt-[clamp(32px,4vw,56px)]">

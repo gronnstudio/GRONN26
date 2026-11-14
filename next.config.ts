@@ -92,7 +92,8 @@ const nextConfig: NextConfig = {
     // De blog heet sinds 22 okt 2026 Journaal (eigenaar koos de naam).
     const journaal = [
       { source: "/blog", destination: "/journaal", permanent: true },
-      { source: "/blog/:slug", destination: "/journaal/:slug", permanent: true },
+      // alleen pagina-slugs (zonder punt): de foto's in /public/blog moeten gewoon laden
+      { source: "/blog/:slug([^.]+)", destination: "/journaal/:slug", permanent: true },
     ]
     return [...oud, ...talen, ...dashboard, ...bord, ...journaal, ...WIREFRAMES.filter((n) => !ECHTE_PAGINAS.has(n)).map((n) => ({
       source: `/${n}`,

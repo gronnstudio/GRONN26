@@ -116,8 +116,16 @@ html.donker .ar-kop.ar-inv .ar-logo-donker { display: none; }
 .ar-dock-vak:not([aria-current="page"]) .ar-dock-label, .ar-dock-label-breed { display: none; }
 /* desktop: de dock over de volle breedte, elk vak met icoon en naam naast elkaar
    (eigenaar, 14 nov 2026: "maak dock op desktop volle breedte, hier kunnen we plaats gewoon nuttigen") */
+.ar-dock-alleen-breed { display: none !important; }
 @media (min-width: 1024px) {
-  .ar-dock { width: min(calc(100vw - 48px), 1232px); }
+  .ar-dock-alleen-breed { display: flex !important; }
+  .ar-dock-niet-breed { display: none; }
+  /* donker glas, ook boven licht papier (eigenaar: "dock is grijs") */
+  .ar-dock { width: min(calc(100vw - 48px), 1232px); background: rgb(22 22 21 / .82); -webkit-backdrop-filter: blur(20px) saturate(1.6) brightness(.8); backdrop-filter: blur(20px) saturate(1.6) brightness(.8); }
+  .ar-dock-rij { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  .ar-dock-rij > li:has(.ar-dock-kennis) { flex: none; }
+  .ar-dock-kennis { background: var(--oranje); color: var(--g800) !important; padding-inline: 16px; }
+  .ar-dock-kennis:hover { filter: brightness(1.08); background: var(--oranje) !important; }
   .ar-dock-rij { gap: 8px; }
   .ar-dock-rij > li { justify-self: stretch; display: flex; }
   .ar-dock-vak, .ar-dock-vak[aria-current="page"] { width: 100%; flex-direction: row; gap: 10px; }
@@ -191,6 +199,9 @@ html:root:not(:has([data-links])) { --foto-hoek: 4px; }
 .ar-blokkop { display: grid; gap: 12px; align-content: start; }
 @media (min-width: 1024px) {
   .ar-blok:not(.ar-maker) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+  /* Kolenda-ritme: kop boven met een lijn eronder, inhoud over de volle breedte; geen lege kolom links */
+  .ar-blok:not(.ar-maker) { grid-template-columns: minmax(0, 1fr); }
+  .ar-blok:not(.ar-maker) > .ar-blokkop { position: static; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; padding-bottom: 20px; border-bottom: 1px solid var(--lijn); }
   /* werkwijze: kop boven, vijf stappen over de volle breedte (eigenaar, 14 nov 2026: "waarom is dit zo op elkaar geduwd?") */
   .ar-blok.ar-blok-vol { grid-template-columns: minmax(0, 1fr); }
   .ar-blok-vol .ar-blokkop { position: static; }
@@ -430,4 +441,26 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
   .ar-blok-vol .ar-stappen li:nth-child(5) { --stap: 4; }
   .ar-blok-vol .ar-stappen .ar-h3 { font-size: clamp(36px, 3.4vw, 56px); line-height: 1; letter-spacing: -.035em; }
   .ar-blok-vol .ar-stappen p { font-size: clamp(18px, 1.5vw, 24px); line-height: 1.45; max-width: 36ch; }
+}
+
+/* ── desktop, Kolenda-richting (eigenaar, 14 nov 2026: "ik zie er nog weinig van") ──
+   Uitgelicht project: één beeld over de volle breedte, daaronder de titel groot
+   links en de twee kleine beelden die over de onderrand van het grote beeld vallen. */
+@media (min-width: 1100px) {
+  .ar-spread { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto auto auto; column-gap: 24px; row-gap: 0; }
+  .ar-spread-groot { grid-column: 1 / -1; grid-row: 1; margin-inline: calc(-1 * var(--ar-goot)); }
+  .ar-spread-groot .ar-spread-foto { aspect-ratio: 21 / 9; border-radius: 0; }
+  .ar-spread-klein-a { grid-column: 7 / 10; grid-row: 2 / 4; margin-top: -140px; }
+  .ar-spread-klein-b { grid-column: 10 / 13; grid-row: 2 / 4; margin-top: -60px; }
+  .ar-spread-tekst { grid-column: 1 / 6; grid-row: 2; padding-top: 48px; }
+  .ar-spread-tekst .ar-h3 { font-size: clamp(40px, 4vw, 64px); line-height: 1; letter-spacing: -.035em; }
+  .ar-spread-tekst .ar-kort { width: 100%; }
+}
+/* dock tussen 1024 en 1280: tien vakken, dus zonder icoon bij de pagina's */
+@media (min-width: 1024px) {
+  .ar-dock-rij { grid-template-columns: repeat(7, minmax(0, 1fr)) max-content minmax(0, 1fr) 64px; grid-auto-flow: row; }
+}
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .ar-dock-rij > li:not(:nth-last-child(-n+3)) .ar-dock-vak svg { display: none; }
+  .ar-dock .ar-dock-vak .ar-dock-label { font-size: 13px; }
 }

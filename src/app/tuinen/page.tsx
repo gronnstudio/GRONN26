@@ -72,8 +72,7 @@ const BORDER_FOTO = {
   width: 1600,
   height: 1200,
   alt: BORDERPAKKETTEN[5].alt.nl,
-  label: "Sfeerbeeld",
-  en: { alt: BORDERPAKKETTEN[5].alt.en, label: "Mood image" },
+  en: { alt: BORDERPAKKETTEN[5].alt.en },
 }
 const PLAATS = TERRAS.plaats.split(",")[0]
 

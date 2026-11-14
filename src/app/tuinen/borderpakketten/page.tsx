@@ -45,7 +45,7 @@ function Kaart({ p, nr }: { p: BorderPakket; nr: number }) {
             <span id={id} className="syne text-[clamp(28px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={p.naam} /></span>
           </span>
           <Foto
-            foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: p.alt.nl, label: "Sfeerbeeld", en: { alt: p.alt.en, label: "Mood image" } }}
+            foto={{ src: `/borderpakketten/${p.slug}.jpg`, width: 1600, height: 1200, alt: p.alt.nl, en: { alt: p.alt.en } }}
             sizes="(min-width: 1024px) 1200px, 100vw"
             className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-auto lg:min-h-0 lg:flex-1"
           />
@@ -200,7 +200,7 @@ export default function BorderpakkettenPagina() {
             {BODEMPAKKETTEN.map((b) => (
               <li key={b.slug} className="flex flex-col gap-4 rounded-[16px] bg-vlak p-6 sm:p-8">
                 <Foto
-                  foto={{ src: `/borderpakketten/${b.slug}.jpg`, width: 1600, height: 1200, alt: b.alt.nl, label: "Sfeerbeeld", en: { alt: b.alt.en, label: "Mood image" } }}
+                  foto={{ src: `/borderpakketten/${b.slug}.jpg`, width: 1600, height: 1200, alt: b.alt.nl, en: { alt: b.alt.en } }}
                   sizes="(min-width: 640px) 45vw, 90vw"
                   className="aspect-[4/3]"
                 />

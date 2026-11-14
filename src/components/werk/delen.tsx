@@ -1,5 +1,7 @@
 "use client"
 
+import { Pijl } from "@/components/pijl"
+
 import { kies, T, type Tekst } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { CSSProperties, ReactNode } from "react"
@@ -24,7 +26,7 @@ export function Fiche({ regels, kolommen }: { regels: [Tekst, Tekst][]; kolommen
       {regels.map(([k, v], i) => (
         <div key={kies(k, "nl")} className="flex flex-col gap-1 py-3" data-zie style={volg(i % 6)}>
           <dt className="lbl text-gedempt"><T t={k} /></dt>
-          <dd className="m-0 text-[15px] font-medium tabular-nums"><T t={v} /></dd>
+          <dd className="m-0 text-[17px] font-medium tabular-nums"><T t={v} /></dd>
         </div>
       ))}
     </dl>
@@ -54,7 +56,7 @@ export function Alineas({ teksten }: { teksten: readonly Tekst[] }) {
   return (
     <>
       {teksten.map((t) => (
-        <p key={kies(t, "nl").slice(0, 40)} className="m-0 mb-[1.1em] text-[17px] leading-[1.7]">
+        <p key={kies(t, "nl").slice(0, 40)} className="m-0 mb-[1.1em] text-[clamp(17px,1.25vw,19px)] leading-[1.7]">
           <T t={t} />
         </p>
       ))}
@@ -67,7 +69,7 @@ export function Citaat({ tekst, bron }: { tekst: Tekst; bron: string }) {
   return (
     <section aria-label={taal === "en" ? "Quote" : "Citaat"} className="w-sectie">
       <figure className="m-0 max-w-[1100px]" data-zie>
-        <blockquote className="syne m-0 text-[clamp(30px,4.4vw,64px)] leading-[1.1] tracking-[-.03em]">
+        <blockquote className="syne m-0 text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-.03em]">
           <p className="m-0">“<T t={tekst} />”</p>
         </blockquote>
         <figcaption className="lbl mt-8 text-gedempt">{bron}</figcaption>
@@ -88,7 +90,7 @@ const FASE_EN: Record<NonNullable<FotoData["fase"]>, string> = {
 function Onderschrift({ foto }: { foto: FotoData }) {
   if (!foto.fase && !foto.bijschrift) return null
   return (
-    <figcaption className="mt-3 flex flex-wrap gap-x-3 text-[13px] text-gedempt">
+    <figcaption className="mt-3 flex flex-wrap gap-x-3 text-[14px] text-gedempt">
       {foto.fase ? <span className="lbl"><T t={{ nl: foto.fase, en: FASE_EN[foto.fase] }} /></span> : null}
       {foto.bijschrift ? <span><T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} /></span> : null}
     </figcaption>
@@ -220,7 +222,7 @@ export function Clip({ video, className = "" }: { video: VideoData; className?: 
         preload="none"
         className="block h-auto w-full bg-vlak"
       />
-      {video.bijschrift ? <figcaption className="mt-3 text-[13px] text-gedempt"><T t={video.bijschrift} /></figcaption> : null}
+      {video.bijschrift ? <figcaption className="mt-3 text-[14px] text-gedempt"><T t={video.bijschrift} /></figcaption> : null}
     </figure>
   )
 }
@@ -231,7 +233,7 @@ export function Cijfer({ getal, wat, uitleg }: { getal: string; wat: Tekst; uitl
   return (
     <section aria-label={`${getal} ${kies(wat, taal)}`} className="w-sectie">
       <div className="grid grid-cols-1 items-end gap-x-8 border-t border-lijn pt-3.5 md:grid-cols-12">
-        <p aria-hidden="true" className="syne m-0 text-[clamp(120px,22vw,320px)] leading-[.85] tracking-[-.06em] tabular-nums md:col-span-7" data-zie>
+        <p aria-hidden="true" className="syne m-0 text-[clamp(88px,11vw,168px)] leading-[.85] tracking-[-.06em] tabular-nums md:col-span-7" data-zie>
           {getal}
         </p>
         <div className="mt-4 md:col-span-5 md:mt-0" data-zie style={volg(1)}>
@@ -256,7 +258,7 @@ export function Slot({ kop, alineas, knop }: { kop: Tekst; alineas: readonly Tek
       <Lees className="mt-[clamp(32px,4vw,56px)]">
         <Alineas teksten={alineas} />
         <Link href="/kennismaken" className="lnk w-lijnlink mt-4 inline-block">
-          <T t={knop} /> →
+          <T t={knop} /> <Pijl richting="e" />
         </Link>
       </Lees>
     </section>
@@ -273,8 +275,8 @@ export function Volgende({ hier }: { hier: string }) {
         <p className="lbl m-0"><T t={{ nl: "Volgend project", en: "Next project" }} /></p>
       </div>
       <Link href={p.href} className="group grid grid-cols-1 items-end gap-x-8 gap-y-6 no-underline md:grid-cols-12" data-zie>
-        <span className="syne min-w-0 text-[clamp(36px,5vw,72px)] leading-[1] tracking-[-.035em] [overflow-wrap:anywhere] md:col-span-7">
-          <span className="w-lijnlink"><T t={p.naam} /></span> →
+        <span className="syne min-w-0 text-[clamp(30px,3.2vw,48px)] leading-[1.05] tracking-[-.035em] [overflow-wrap:anywhere] md:col-span-7">
+          <span className="w-lijnlink"><T t={p.naam} /></span> <Pijl richting="e" />
         </span>
         <Doorkijk foto={p.foto} sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/3] w-full md:col-span-5" eigen={false} />
       </Link>

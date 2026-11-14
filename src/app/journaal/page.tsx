@@ -2,7 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Kruimelpad } from "@/components/kruimelpad"
 import { Foto } from "@/components/foto"
-import { STUKKEN, THEMAS, datumTekst, nummer, seizoen, type Stuk } from "@/lib/data/blog"
+import { STUKKEN, THEMAS, beeldVan, datumTekst, seizoen, type Stuk } from "@/lib/data/blog"
+import { JournaalRaster } from "@/components/journaal/raster"
+import { Pijl } from "@/components/pijl"
 
 export const metadata: Metadata = {
   title: "Journaal",
@@ -28,8 +30,8 @@ function Meta({ s }: { s: Stuk }) {
 // de site.
 export default function JournaalPagina() {
   const [cover] = STUKKEN
-  const groepen = THEMAS.map((t) => ({ thema: t, stukken: STUKKEN.filter((s) => s.rubriek === t) })).filter((g) => g.stukken.length)
-  const staand = cover?.beeld ? cover.beeld.height > cover.beeld.width : false
+  const omslag = cover ? beeldVan(cover) : undefined
+  const staand = omslag ? omslag.height > omslag.width : false
   return (
     <>
       <header className="wrap pt-[clamp(120px,14vw,200px)]">
@@ -59,19 +61,19 @@ export default function JournaalPagina() {
                   <p className="m-0 mt-5 max-w-[44ch] text-[clamp(17px,1.4vw,20px)] leading-[1.55] text-gedempt">{cover.beschrijving}</p>
                   <div className="mt-6 flex flex-wrap items-baseline gap-x-6 gap-y-2">
                     <Meta s={cover} />
-                    <p className="lbl m-0">Lees verder →</p>
+                    <p className="lbl m-0">Lees verder <Pijl richting="e" /></p>
                   </div>
                 </div>
                 <div className="aspect-[4/5] md:col-span-5">
-                  <Foto foto={cover.beeld!} priority sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 100vw" className="h-full w-full" />
+                  <Foto foto={omslag!} priority sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 100vw" className="h-full w-full" />
                 </div>
               </article>
             ) : (
               // liggende foto: breed beeld, daaronder titel en inleiding in kolommen
               <article>
-                {cover.beeld ? (
+                {omslag ? (
                   <div className="aspect-[4/3] md:aspect-[16/9] lg:aspect-[2/1]">
-                    <Foto foto={cover.beeld} priority sizes="(min-width: 1280px) 1232px, 100vw" className="h-full w-full" />
+                    <Foto foto={omslag} priority sizes="(min-width: 1280px) 1232px, 100vw" className="h-full w-full" />
                   </div>
                 ) : null}
                 <div className="mt-[clamp(20px,2.5vw,32px)] grid gap-y-4 md:grid-cols-12 md:gap-x-8">
@@ -80,7 +82,7 @@ export default function JournaalPagina() {
                   <div className="md:col-span-3">
                     <p className="m-0 text-[17px] leading-[1.6] text-gedempt">{cover.beschrijving}</p>
                     <div className="mt-4"><Meta s={cover} /></div>
-                    <p className="lbl m-0 mt-4">Lees verder →</p>
+                    <p className="lbl m-0 mt-4">Lees verder <Pijl richting="e" /></p>
                   </div>
                 </div>
               </article>
@@ -89,45 +91,10 @@ export default function JournaalPagina() {
         </div>
       ) : null}
 
-      {groepen.length ? (
-        <nav aria-label="Thema's" className="wrap mt-[clamp(64px,8vw,120px)]">
-          <p className="lbl m-0 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b-2 border-inkt pb-3">
-            <span className="text-gedempt">Direct naar</span>
-            {groepen.map((g) => (
-              <a key={g.thema} href={`#${g.thema.toLowerCase()}`} className="text-inherit no-underline hover:text-oranje-tekst focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-inkt">
-                {g.thema} <span className="text-gedempt">({g.stukken.length})</span>
-              </a>
-            ))}
-          </p>
-        </nav>
-      ) : null}
-
-      {groepen.map((g) => (
-        <section key={g.thema} id={g.thema.toLowerCase()} aria-labelledby={`kop-${g.thema.toLowerCase()}`} className="wrap mt-[clamp(40px,5vw,72px)] scroll-mt-8">
-          <h2 id={`kop-${g.thema.toLowerCase()}`} className="syne m-0 border-b border-lijn pb-3 text-[clamp(28px,3vw,44px)] leading-[1.1] tracking-[-.02em]">{g.thema}</h2>
-          <ol className="m-0 list-none p-0">
-            {g.stukken.map((s) => (
-              <li key={s.slug} className="border-b border-lijn">
-                <Link href={`/journaal/${s.slug}`} className={`${LINK} grid grid-cols-[auto_1fr] items-start gap-x-5 py-[clamp(20px,2.5vw,32px)] md:grid-cols-12 md:items-center md:gap-x-8`}>
-                  <span aria-hidden="true" className="syne text-[clamp(28px,3vw,48px)] leading-[1] tracking-[-.03em] text-gedempt md:col-span-1">{nummer(s)}</span>
-                  <div className="md:col-span-7">
-                    <h3 className={`syne m-0 text-[clamp(22px,2.4vw,34px)] leading-[1.12] tracking-[-.02em] ${TITEL_HOVER}`}>{s.titel}</h3>
-                    <p className="m-0 mt-2 max-w-[60ch] text-[16px] leading-[1.6] text-gedempt max-sm:hidden">{s.beschrijving}</p>
-                    <div className="mt-3 md:hidden"><Meta s={s} /></div>
-                  </div>
-                  <div className="max-md:hidden md:col-span-2"><Meta s={s} /></div>
-                  {s.beeld ? (
-                    <div className="aspect-[4/3] max-md:hidden md:col-span-2">
-                      <Foto foto={s.beeld} sizes="200px" className="h-full w-full" />
-                    </div>
-                  ) : null}
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
-      ))}
-
+      <JournaalRaster
+        themas={[...THEMAS]}
+        kaarten={STUKKEN.slice(1).map((s) => ({ slug: s.slug, titel: s.titel, beschrijving: s.beschrijving, rubriek: s.rubriek, datum: s.datum, datumTekst: datumTekst(s.datum), leestijd: s.leestijd, beeld: beeldVan(s) }))}
+      />
     </>
   )
 }
