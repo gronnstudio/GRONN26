@@ -98,11 +98,11 @@ export function ArKop() {
         <div className="ar-paneel-voet">
           <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
           <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>
-          <button type="button" className="ar-knop ar-knop-lijn-licht ar-kleinknop" aria-pressed={klein} onClick={() => setKlein(!klein)}>
-            <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-              {klein ? <path d="M4 5h12M4 10h12M4 15h12" /> : <path d="M6 7h8M6 10h8M6 13h8" />}
+          {/* rond in de hoek (eigenaar, 14 nov 2026); de naam staat in aria-label */}
+          <button type="button" className="ar-kleinknop" aria-pressed={klein} aria-label={klein ? "Groot menu" : "Klein menu"} title={klein ? "Groot menu" : "Klein menu"} onClick={() => setKlein(!klein)}>
+            <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              {klein ? <path d="M4 5h12M4 10h12M4 15h12" /> : <path d="M7 7h6M7 10h6M7 13h6" />}
             </svg>
-            <span>{klein ? "Groot menu" : "Klein menu"}</span>
           </button>
         </div>
       </div>

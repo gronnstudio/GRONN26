@@ -103,7 +103,7 @@ export function ArVoorpagina() {
         <div className="ar-raster ar-uitspraak-blok">
           <p className="ar-lbl">Van de maker</p>
           <h2 id="ar-uitspraak" className="ar-uitspraak">
-            Een tuin is geen product maar een plek. Ik ontwerp hem, reken hem door en leg hem zelf aan, <em>en je weet vooraf wat het kost.</em>
+            Een tuin is geen product maar een plek. Ik ontwerp hem, reken hem door en leg hem zelf aan, <em>en je weet vooraf wat het kost</em><b className="ar-punt">.</b>
           </h2>
         </div>
         <div className="ar-band">
