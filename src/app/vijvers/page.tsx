@@ -8,6 +8,7 @@ import { Pijl } from "@/components/pijl"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
 import { FOTOS, VIJVER, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
+import { SFEER } from "@/lib/data/sfeer"
 
 // WF-019 Vijvers, met de open rijen van WF-031, in de taal van de voorpagina:
 // donkere opening, tekst die oplicht, blokken die zacht opkomen.
@@ -34,15 +35,6 @@ const F01 = FOTOS.F01 as FotoData
 const F05 = FOTOS.F05 as FotoData
 const F10 = FOTOS.F10 as FotoData
 
-// Sfeer bij "helder water" (Nick, 14 nov 2026). Geen tekst óp de beelden (Nick: "Laat sfeerbeeld weg").
-const sfeer = (src: string, width: number, height: number, alt: string, en: string): FotoData => ({ src: `/sfeer/${src}.jpg`, width, height, alt, en: { alt: en } })
-const SFEER = {
-  waterval: sfeer("waterval-vijver", 1600, 1065, "Waterval die tussen grote keien in een vijver valt", "Waterfall dropping between boulders into a pond"),
-  beek: sfeer("beekloop-stenen", 1063, 1600, "Beekloop over stenen met waterlelies", "Stream over stones with waterlilies"),
-  koi: sfeer("vijver-koi", 1600, 1066, "Koi in helder vijverwater, van bovenaf", "Koi in clear pond water, from above"),
-  blad: sfeer("vijver-blad", 1066, 1600, "Helder water met planten en gras langs de rand", "Clear water with plants and grass along the edge"),
-  bloemen: sfeer("waterval-bloemen", 1600, 1067, "Kleine waterval tussen bloemen en varens", "Small waterfall between flowers and ferns"),
-}
 
 export default function VijversPagina() {
   return (
