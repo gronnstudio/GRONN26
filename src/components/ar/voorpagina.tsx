@@ -24,7 +24,12 @@ const vanaf = (slug: string) => {
 }
 
 // de opening: drie rustige, strakke beelden die om de beurt uitzoomen
-const OPENING = [F10, TERRAS_FOTOS.reeks[0], fotosVoor("F09")[0]]
+// elk beeld draagt zijn eigen onderschrift, dat meewisselt (eigenaar, 14 nov 2026)
+const OPENING = [
+  { foto: F10, tekst: "Vijverrenovatie, waterval en beekloop" },
+  { foto: TERRAS_FOTOS.reeks[0], tekst: "Terras en tegelpad, Geulle" },
+  { foto: fotosVoor("F09")[0], tekst: "Vijverrenovatie, nieuwe beplanting" },
+]
 // de band: projectkaarten met naam en soort eronder (dejongensvanoranje.nl)
 const VIJ = { titel: "Vijverrenovatie", soort: "Ontwerp & aanleg", href: "/werk/vijverrenovatie" }
 const TER = { titel: "Terras Geulle", soort: "Aanleg", href: "/werk/terras-geulle" }
@@ -89,12 +94,12 @@ export function ArVoorpagina() {
           </div>
         </div>
         <div className="ar-opening-beeld" aria-label="Beelden van het werk">
-          {OPENING.map((f, i) => (
+          {OPENING.map(({ foto: f, tekst }, i) => (
             <div key={f.src} className="ar-dia" style={{ "--n": i } as React.CSSProperties} aria-hidden={i > 0 || undefined}>
               <Foto foto={i > 0 ? { ...f, alt: "" } : f} sizes="(min-width: 1024px) 45vw, 100vw" priority={i === 0} className="ar-dia-foto" />
+              <p className="ar-lbl ar-opening-onderschrift">{tekst}, 2026</p>
             </div>
           ))}
-          <p className="ar-lbl ar-opening-onderschrift">Vijverrenovatie en terras Geulle, 2026</p>
         </div>
       </div></section>
 
