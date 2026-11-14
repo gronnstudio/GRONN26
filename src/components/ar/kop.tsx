@@ -12,12 +12,12 @@ import { BUSINESS } from "@/lib/business"
 // zet de pagina opzij en opent rechts de inhoud (naar dejongensvanoranje.nl).
 // Geen dock meer: dit is de enige navigatie.
 const PAGINAS = [
-  { href: "/werk", naam: "Werk", zin: "Projecten" },
-  { href: "/vijvers", naam: "Vijvers", zin: "Aanleg, renovatie, onderhoud" },
-  { href: "/tuinen", naam: "Tuinen", zin: "Ontwerp en aanleg" },
-  { href: "/over", naam: "Studio", zin: "Wie ik ben" },
-  { href: "/journaal", naam: "Journaal", zin: "Korte stukken" },
-  { href: "/shop", naam: "Shop", zin: "Borderpakketten en bonnen" },
+  { href: "/werk", naam: "Projecten" },
+  { href: "/vijvers", naam: "Vijvers" },
+  { href: "/tuinen", naam: "Tuinen" },
+  { href: "/over", naam: "Studio" },
+  { href: "/journaal", naam: "Journaal" },
+  { href: "/shop", naam: "Shop" },
 ]
 
 export function ArKop() {
@@ -88,7 +88,6 @@ export function ArKop() {
                 <Link href={p.href} transitionTypes={["schuif"]} className="ar-paneel-link" aria-current={pad === p.href || pad.startsWith(p.href + "/") ? "page" : undefined}>
                   <span className="ar-lbl">{String(i + 1).padStart(2, "0")}</span>
                   <span className="ar-paneel-naam">{p.naam}</span>
-                  <span className="ar-lbl ar-paneel-zin">{p.zin}</span>
                 </Link>
               </li>
             ))}

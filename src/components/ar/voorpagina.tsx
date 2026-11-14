@@ -42,11 +42,30 @@ const KORT = [
 ]
 const WHATSAPP = `${BUSINESS.whatsapp}?text=${encodeURIComponent("Hoi Nick, hier een foto van mijn tuin/vijver. Kun je even meekijken?")}`
 
+// Vijf stappen (eigenaar, 14 nov 2026: "Maak hier 5 stappen").
 const STAPPEN = [
-  ["Kennismaken", "Een gesprek bij jou in de tuin, of eerst een foto via WhatsApp."],
-  ["Vaste prijs", "Je krijgt vooraf een prijs die vaststaat, met wat er wel en niet in zit."],
+  ["Kennismaken", "Stuur een foto via WhatsApp of bel. Binnen een dag hoor je of ik kan helpen."],
+  ["Bezoek", "Ik kom kijken, meet op en test bodem of water. Leidt het tot werk, dan verreken ik het bezoek."],
+  ["Plan en vaste prijs", "Een plan op papier en een prijs die vaststaat, met wat er wel en niet in zit."],
   ["Aanleg", "Ik doe het werk zelf, van grondwerk tot de laatste plant."],
+  ["Oplevering en nazorg", "We lopen samen alles na. Daarna onderhoud ik het als je wilt, zodat het blijft werken."],
 ] as const
+
+// Vanafprijzen incl. btw, op de markt gelegd (14 nov 2026; Trustoo, Homedeal,
+// Slimster: hovenier € 35–65/u, siervijver € 2.500–5.000, renovatie € 1.000–5.000,
+// onderhoudscontract € 50–200 p/m) en Nicks eigen offertes. Voorstel, Nick beslist.
+const PRIJZEN_VIJVER: [string, string][] = [
+  ["Nieuwe vijver", "vanaf € 4.500"],
+  ["Vijverrenovatie", "vanaf € 2.500"],
+  ["Vast onderhoud", "vanaf € 45 p/m"],
+  ["Bezoek en doorlichting", "€ 195, verrekend"],
+]
+const PRIJZEN_TUIN: [string, string][] = [
+  ["Tuinaanleg", "vanaf € 90 per m²"],
+  ["Border, aangeplant", "€ 75 per m²"],
+  ["Tuinontwerp", "vanaf € 450"],
+  ["Bezoek met advies", "€ 195, verrekend"],
+]
 
 export function ArVoorpagina() {
   return (
@@ -107,7 +126,7 @@ export function ArVoorpagina() {
       <section className="ar-inv" aria-labelledby="ar-werk"><div className="ar-raster ar-blok">
         <div className="ar-blokkop">
           <p className="ar-lbl">01</p>
-          <h2 id="ar-werk" className="ar-h2">Werk</h2>
+          <h2 id="ar-werk" className="ar-h2">Projecten</h2>
           <Link href="/werk" className="ar-lbl ar-lijnlink" transitionTypes={["schuif"]}>Alle projecten</Link>
         </div>
         <div className="ar-werk-inhoud">
@@ -164,8 +183,7 @@ export function ArVoorpagina() {
             <h3 className="ar-h3">Vijvers</h3>
             <p>Een heldere vijver met een filter dat werkt. Aanleg, renovatie en vast onderhoud.</p>
             <dl className="ar-prijzen">
-              <div><dt>Doorlichting</dt><dd>vanaf {euro(vanaf("pond-survey"))}</dd></div>
-              <div><dt>Onderhoud</dt><dd>vanaf {euro(vanaf("maintenance-subscription"))} p/m</dd></div>
+              {PRIJZEN_VIJVER.map(([dt, dd]) => <div key={dt}><dt>{dt}</dt><dd>{dd}</dd></div>)}
             </dl>
             <span className="ar-lbl ar-lijnlink">Naar vijvers</span>
           </Link>
@@ -174,8 +192,7 @@ export function ArVoorpagina() {
             <h3 className="ar-h3">Tuinen</h3>
             <p>Een natuurlijke tuin die bij je huis en je bodem past. Ontwerp, aanleg en beplanting.</p>
             <dl className="ar-prijzen">
-              <div><dt>Kleine tuin of terras</dt><dd>vanaf {euro(vanaf("implementation"))}</dd></div>
-              <div><dt>Borderpakketten</dt><dd>per m²</dd></div>
+              {PRIJZEN_TUIN.map(([dt, dd]) => <div key={dt}><dt>{dt}</dt><dd>{dd}</dd></div>)}
             </dl>
             <span className="ar-lbl ar-lijnlink">Naar tuinen</span>
           </Link>
