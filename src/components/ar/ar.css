@@ -109,7 +109,9 @@ html.ar-open .ar-scherm { display: block; }
 .ar-opening-zin { max-width: 40ch; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.55; }
 .ar-opening-beeld { position: relative; aspect-ratio: 4 / 5; max-height: calc(100svh - var(--ar-kop) - 64px); width: 100%; overflow: hidden; }
 .ar-dia { position: absolute; inset: 0; }
-.ar-dia-foto, .ar-band-foto, .ar-index-foto, .ar-maker-foto { border-radius: 2px !important; }
+/* één kleine hoek voor elke foto, wrapper en beeld gelijk, zodat er nergens een hoekje doorschemert (eigenaar, 14 nov 2026) */
+html:root { --foto-hoek: 4px; }
+.ar :is(.ar-dia-foto, .ar-band-foto, .ar-index-foto, .ar-maker-foto, .ar-spread-foto, .ar-dienst-foto) { background: transparent; }
 .ar-dia-foto { position: absolute !important; inset: 0; }
 .ar-dia:not(:first-child) { opacity: 0; }
 .ar-opening-onderschrift { position: absolute; left: 14px; bottom: 12px; z-index: 2; color: var(--ar-zand); text-shadow: 0 1px 8px rgb(0 0 0 / .5); }
@@ -274,7 +276,6 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 /* het uitgelichte project als losse compositie (studioverde.be) */
 .ar-werk-inhoud { display: grid; gap: clamp(56px, 8vw, 120px); }
 .ar-spread { position: relative; display: grid; gap: 24px; }
-.ar-spread-foto { border-radius: 2px !important; }
 .ar-spread-groot .ar-spread-foto { aspect-ratio: 4 / 3; }
 .ar-spread-klein .ar-spread-foto { aspect-ratio: 3 / 4; }
 .ar-spread-klein { display: none; }
@@ -292,8 +293,8 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
   .ar-spread-tekst { grid-column: 9 / 13; grid-row: 2; }
 }
 /* diensten met een beeld dat rustig uitzoomt (dejongensvanoranje.nl) */
-.ar-dienst-beeld { display: block; overflow: hidden; border-radius: 2px; }
-.ar-dienst-foto { aspect-ratio: 16 / 10; border-radius: 2px !important; }
+.ar-dienst-beeld { display: block; overflow: hidden; border-radius: var(--foto-hoek); }
+.ar-dienst-foto { aspect-ratio: 16 / 10; }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.stil) .ar-dienst-foto img { scale: 1.12; transition: scale 900ms var(--ar-ease); }
   html:not(.stil) .ar-dienst:hover .ar-dienst-foto img { scale: 1; }
