@@ -320,8 +320,6 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 @media (max-width: 759px) {
   #inhoud { padding-top: 0; padding-bottom: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px)); }
   .ar-kop { inset: auto 0 0; height: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px)); padding-top: 0; padding-bottom: env(safe-area-inset-bottom, 0px); border-bottom: 0; border-top: 1px solid var(--lijn); }
-  /* alles onderin, binnen bereik van de duim (eigenaar, 14 nov 2026) */
-  .ar-paneel { justify-content: flex-end; gap: 28px; padding-left: 44px; padding-top: calc(24px + env(safe-area-inset-top, 0px)); padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
-  .ar-sluit { top: auto; bottom: calc(40px + env(safe-area-inset-bottom, 0px)); translate: 50% 0; }
+  .ar-paneel { gap: 24px; padding-top: calc(24px + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px) + 20px); }
   .ar-opening { min-height: auto; }
 }
