@@ -71,17 +71,19 @@ html.donker .ar-logo-donker { display: block; }
 .ar-dock-link:hover .ar-dock-ico, .ar-dock-link[aria-current="page"] .ar-dock-ico { color: var(--zand); }
 .ar-dock-naam { font-family: var(--font-syne); font-weight: 700; font-size: 28px; line-height: 1.05; letter-spacing: -.03em; transition: translate 500ms var(--ar-ease); }
 .ar-dock-link:hover .ar-dock-naam, .ar-dock-link[aria-current="page"] .ar-dock-naam { translate: 8px 0; }
-.ar-dock-voet { display: flex; align-items: center; gap: 8px; }
-.ar-dock-voet .ar-knop { margin-right: auto; white-space: nowrap; padding-inline: 20px; }
-.ar-dock-voet[data-tab="weergave"] { justify-content: flex-end; }
-.ar-dock-rij { position: relative; z-index: 2; list-style: none; margin: 0; padding: 8px; display: flex; justify-content: space-between; }
+/* de knoppen staan op hetzelfde raster van vijf kolommen als het dock: oranje over drie, WhatsApp en palet recht boven de laatste twee */
+.ar-dock-voet { display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; margin-inline: -12px; }
+.ar-dock-voet > * { grid-column: span 1; justify-self: center; }
+.ar-dock-voet .ar-knop { grid-column: 1 / 4; justify-self: stretch; justify-content: center; min-height: 48px; white-space: nowrap; padding-inline: 12px; margin-inline: 2px 6px; }
+.ar-dock-voet[data-tab="weergave"] > :first-child { grid-column: 4; }
+.ar-dock-rij { position: relative; z-index: 2; list-style: none; margin: 0; padding: 8px; display: grid; grid-template-columns: repeat(5, 1fr); justify-items: center; }
 .ar-dock-vak { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--zand); cursor: pointer; transition: background-color 500ms, color 500ms, width 500ms var(--ar-ease); }
 .ar-dock-vak svg { width: 30px; height: 30px; }
 .ar-dock-vak:hover:not([aria-current="page"]) { background: rgb(239 238 234 / .1); }
 /* de huidige pagina: het lichte kiezelknopje met reliëf van het oude dock */
 .ar-dock-vak[aria-current="page"] { width: 64px; background: rgb(239 238 234 / .9); color: var(--g800); box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .3), inset 0 -1.5px .5px 0 rgb(0 0 0 / .3), 0 2px 5px 0 rgb(0 0 0 / .25); }
 .ar-dock-vak:focus-visible, .ar-dock-link:focus-visible { outline: 2px solid var(--zand); outline-offset: 2px; }
-.ar-rondknop { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
+.ar-rondknop { display: grid; place-items: center; flex: none; width: 48px; height: 48px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
 .ar-rondknop[aria-pressed="true"] { background: var(--ar-zand); color: var(--g800); }
 .ar-rondknop:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
 .ar-rond-whatsapp { border-color: #25d366; background: #25d366; color: var(--g800); }
