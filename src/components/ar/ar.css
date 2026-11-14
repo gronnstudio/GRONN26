@@ -6,16 +6,17 @@
 /* Het palet (eigenaar, 13 nov 2026): "wit op zwart en andersom, met accenten
    van oranje", geen tussengrijzen. Wit is #F8F9FA, zwart #212529 (geen puur wit
    of zwart). Gedempte tekst en lijnen zijn de inkt met minder dekking. Blokken
-   met .ar-inv draaien de kleuren om. */
-html:root {
+   met .ar-inv draaien de kleuren om. De pagina's van de eigenaar ([data-links]:
+   dashboard, offertes, handtekening) houden hun zandpalet (eigenaar, 14 nov 2026). */
+html:root:not(:has([data-links])) {
   --g50: #f8f9fa; --g800: #212529;
   --grond: var(--g50); --inkt: var(--g800);
   --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); --vlak: color-mix(in srgb, var(--inkt) 6%, var(--grond));
   --ar-ease: cubic-bezier(.15, .2, .1, 1); --ar-kop: 76px; --ar-goot: clamp(20px, 4vw, 64px); --ar-aarde: var(--g800); --ar-zand: var(--g50); --ar-op-oranje: var(--g800);
 }
 /* formuliervelden in het grijs van het palet, niet meer zandkleurig (eigenaar, 14 nov 2026) */
-html:root { --veld: #e9ecef; }
-html.donker:root { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); --veld: #343a40; }
+html:root:not(:has([data-links])) { --veld: #e9ecef; }
+html.donker:root:not(:has([data-links])) { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); --veld: #343a40; }
 .ar-inv { --grond: var(--g800); --inkt: var(--g50); --oranje-tekst: var(--oranje); --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 18%, var(--grond)); background: var(--grond); color: var(--inkt); }
 html.donker .ar-inv { --grond: var(--g50); --inkt: var(--g800); --oranje-tekst: #b84000; }
 .ar :is(section, div) { --gedempt: color-mix(in srgb, var(--inkt) 72%, var(--grond)); --lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); }
@@ -135,7 +136,7 @@ html.stil :is(.ar-dock, .ar-dock-vel, .ar-dock-vel-inhoud, .ar-scherm) { transit
 .ar-opening-beeld { position: relative; aspect-ratio: 4 / 5; max-height: calc(100svh - var(--ar-kop) - 64px); width: 100%; overflow: hidden; }
 .ar-dia { position: absolute; inset: 0; }
 /* één kleine hoek voor elke foto, wrapper en beeld gelijk, zodat er nergens een hoekje doorschemert (eigenaar, 14 nov 2026) */
-html:root { --foto-hoek: 4px; }
+html:root:not(:has([data-links])) { --foto-hoek: 4px; }
 .ar :is(.ar-dia-foto, .ar-band-foto, .ar-index-foto, .ar-maker-foto, .ar-spread-foto) { background: transparent; }
 /* het dienstbeeld houdt een grijs vlak zolang de foto laadt, zodat er nooit een leeg gat staat (eigenaar, 14 nov 2026) */
 .ar .ar-dienst-foto { background: var(--veld); }
