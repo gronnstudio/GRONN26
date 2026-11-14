@@ -12,13 +12,15 @@ import { Instellingen } from "@/components/weergave"
 // "bouw helemaal vanuit nul"). Logo links, Kennismaken en Menu rechts. Menu
 // zet de pagina opzij en opent rechts de inhoud (naar dejongensvanoranje.nl).
 // Geen dock meer: dit is de enige navigatie.
-const PAGINAS = [
-  { href: "/werk", naam: "Projecten" },
+// dock: staat deze pagina ook in de dock (Weergave → Dock onderin)? Dan niet nog
+// eens in dit menu, "niks dubbel" (eigenaar, 14 nov 2026). "groot" = alleen vanaf 1024px in de dock.
+const PAGINAS: { href: string; naam: string; dock?: "altijd" | "groot" }[] = [
+  { href: "/werk", naam: "Projecten", dock: "altijd" },
   { href: "/vijvers", naam: "Vijvers" },
   { href: "/tuinen", naam: "Tuinen" },
-  { href: "/over", naam: "Studio" },
-  { href: "/journaal", naam: "Journaal" },
-  { href: "/shop", naam: "Shop" },
+  { href: "/over", naam: "Studio", dock: "altijd" },
+  { href: "/journaal", naam: "Journaal", dock: "groot" },
+  { href: "/shop", naam: "Shop", dock: "altijd" },
 ]
 
 export function ArKop() {
@@ -100,9 +102,9 @@ export function ArKop() {
         <nav aria-label="Hoofdmenu">
           <ol className="ar-paneel-lijst">
             {PAGINAS.map((p, i) => (
-              <li key={p.href} style={{ "--i": i } as React.CSSProperties}>
+              <li key={p.href} data-dock={p.dock} style={{ "--i": i } as React.CSSProperties}>
                 <Link href={p.href} transitionTypes={["schuif"]} className="ar-paneel-link" aria-current={pad === p.href || pad.startsWith(p.href + "/") ? "page" : undefined}>
-                  <span className="ar-lbl">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="ar-lbl ar-paneel-nr" aria-hidden />
                   <span className="ar-paneel-naam">{p.naam}</span>
                 </Link>
               </li>
@@ -116,7 +118,12 @@ export function ArKop() {
           {/* in Weergave alleen de ronde knoppen (eigenaar, 14 nov 2026) */}
           <div className="ar-paneel-acties" hidden={tab === "weergave"}>
             <Link href="/start-een-project" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]}>Start een project</Link>
-            <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht">Kennismaken</Link>
+            <Link href="/kennismaken" className="ar-knop ar-knop-lijn-licht ar-paneel-kennis">Kennismaken</Link>
+            {/* snel contact, groen zoals WhatsApp zelf (eigenaar, 14 nov 2026) */}
+            <a href={BUSINESS.whatsapp} className="ar-knop ar-knop-whatsapp" onClick={() => track("cta_whatsapp", { plek: "menu" })}>
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><path d="M12 3.2a8.8 8.8 0 0 0-7.6 13.2L3.2 20.8l4.5-1.1A8.8 8.8 0 1 0 12 3.2Z" /><path d="M9.1 8.2c-.5.3-.8.9-.7 1.5.4 2.6 2.4 4.6 5 5 .6.1 1.2-.2 1.5-.7l.5-.9-2-1-.9.9a5.6 5.6 0 0 1-2.4-2.4l.9-.9-1-2-.9.5Z" fill="currentColor" stroke="none" /></svg>
+              WhatsApp
+            </a>
           </div>
           <div className="ar-paneel-rond">
             <button type="button" className="ar-rondknop" aria-pressed={klein} aria-label={klein ? "Groot menu" : "Klein menu"} title={klein ? "Groot menu" : "Klein menu"} onClick={() => setKlein(!klein)}>

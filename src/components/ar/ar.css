@@ -354,3 +354,11 @@ html.dock .ar-paneel, html.dock .ar-paneel.ar-klein { padding-bottom: calc(110px
 .ar-weergave button { margin-top: 8px !important; }
 .ar-paneel-voet[data-tab="weergave"] { justify-content: flex-end; }
 .ar-paneel-acties[hidden] { display: none; }
+/* nummers tellen alleen wat zichtbaar is (met de dock vallen pagina's weg) */
+.ar-paneel-lijst { counter-reset: nr; }
+.ar-paneel-lijst li { counter-increment: nr; }
+.ar-paneel-nr::before { content: counter(nr, decimal-leading-zero); }
+html.dock .ar-paneel-lijst li[data-dock="altijd"] { display: none; }
+@media (min-width: 1024px) { html.dock .ar-paneel-lijst li[data-dock="groot"], html.dock .ar-paneel-kennis { display: none; } }
+.ar-knop-whatsapp { display: inline-flex; align-items: center; gap: 10px; background: #25d366; color: var(--g800); }
+.ar-knop-whatsapp:hover { background: #1ebe5b; }
