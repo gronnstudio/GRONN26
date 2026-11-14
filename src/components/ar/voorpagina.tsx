@@ -115,7 +115,7 @@ export function ArVoorpagina() {
           <h2 id="ar-uitspraak" className="ar-uitspraak">
             <Beide
               nl={<>Een tuin is geen product maar een plek. Ik ontwerp hem, reken hem door en leg hem zelf aan, <em>en je weet vooraf wat het kost</em></>}
-              en={<>A garden isn't a product but a place. I design it, cost it and build it myself, <em>and you know up front what it costs</em></>}
+              en={<>A garden isn&apos;t a product but a place. I design it, cost it and build it myself, <em>and you know up front what it costs</em></>}
             /><b className="ar-punt">.</b>
           </h2>
         </div>
