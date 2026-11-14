@@ -62,7 +62,7 @@ const PRIJZEN_VIJVER: [string, string][] = [
   ["Bezoek en doorlichting", "€ 195, verrekend"],
 ]
 const PRIJZEN_TUIN: [string, string][] = [
-  ["Tuinaanleg", "vanaf € 3.500"],
+  ["Tuinaanleg", "vanaf € 7.000"],
   ["Border, aangeplant", "€ 75 per m²"],
   ["Tuinontwerp", "vanaf € 2.500"],
   ["Bezoek met advies", "€ 195, verrekend"],
