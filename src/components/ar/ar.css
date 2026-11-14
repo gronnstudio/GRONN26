@@ -38,71 +38,59 @@ body { background-color: var(--grond); }
 .ar-lijnlink { justify-self: start; color: var(--inkt); text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 3px; transition: background-size 400ms var(--ar-ease); }
 .ar-lijnlink:hover, a:hover > .ar-lijnlink { background-size: 30% 1px; }
 
-/* ── de kop ─────────────────────────────────────────────────────── */
-#inhoud { padding-top: var(--ar-kop); }
-.ar-kop { position: fixed; z-index: 90; inset: 0 0 auto; height: calc(var(--ar-kop) + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) max(var(--ar-goot), env(safe-area-inset-right, 0px)) 0 max(var(--ar-goot), env(safe-area-inset-left, 0px)); display: flex; align-items: center; gap: 24px; background: var(--grond); border-bottom: 1px solid transparent; transition: border-color 300ms, transform 800ms var(--ar-ease); }
-.ar-kop[data-gezakt] { border-bottom-color: var(--lijn); }
+/* ── de kop: alleen het logo, scrolt mee weg; de navigatie is het dock ── */
+#inhoud { padding-top: calc(var(--ar-kop) + env(safe-area-inset-top, 0px)); padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+.ar-kop { position: absolute; z-index: 90; inset: 0 0 auto; height: calc(var(--ar-kop) + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) max(var(--ar-goot), env(safe-area-inset-right, 0px)) 0 max(var(--ar-goot), env(safe-area-inset-left, 0px)); display: flex; align-items: center; gap: 24px; background: var(--grond); color: var(--inkt); }
 .ar-kop-logo { display: flex; align-items: center; min-height: 44px; }
 .ar-kop-logo img { height: 18px; width: auto; }
 .ar-logo-donker { display: none; }
 html.donker .ar-logo-licht { display: none; }
 html.donker .ar-logo-donker { display: block; }
 .ar-kop-plek { margin-left: clamp(16px, 4vw, 64px); }
-.ar-kop-rechts { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.ar-bel { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; border: 1px solid var(--lijn); border-radius: 999px; color: var(--inkt); font-size: 14px; font-weight: 600; text-decoration: none; transition: border-color 300ms, background-color 300ms; }
+.ar-bel { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border: 1px solid var(--lijn); border-radius: 999px; color: var(--inkt); font-size: 14px; font-weight: 600; text-decoration: none; transition: border-color 300ms; }
 .ar-bel:hover { border-color: var(--inkt); }
-.ar-bel svg { color: var(--oranje-tekst); }
-@media (max-width: 1199px) { .ar-bel-woord { display: none; } }
-@media (max-width: 759px) { .ar-bel { padding: 0; width: 48px; justify-content: center; } .ar-bel > span { display: none; } }
-.ar-menuknop { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 4px 0 16px; border: 0; background: none; color: var(--inkt); font-family: var(--font-geist-mono), monospace; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
-.ar-menuknop-streep { position: relative; width: 28px; height: 10px; }
-.ar-menuknop-streep::before, .ar-menuknop-streep::after { content: ""; position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor; transition: transform 500ms var(--ar-ease), top 500ms var(--ar-ease); }
-.ar-menuknop-streep::before { top: 0; }
-.ar-menuknop-streep::after { top: 8.5px; }
-.ar-menuknop[aria-expanded="true"] .ar-menuknop-streep::before { top: 4.25px; transform: rotate(20deg); }
-.ar-menuknop[aria-expanded="true"] .ar-menuknop-streep::after { top: 4.25px; transform: rotate(-20deg); }
 @media (max-width: 899px) { .ar-kop-plek { display: none; } }
-@media (max-width: 559px) { .ar-kop-actie { display: none; } }
+@media (max-width: 559px) { .ar-bel { padding: 0; width: 44px; justify-content: center; } .ar-bel > span { display: none; } }
 
-/* ── het menu: de pagina stapt opzij, het paneel komt van rechts ──── */
-body { transition: background-color 800ms var(--ar-ease); }
-html.ar-open { overflow: hidden; }
-html.ar-open body { background-color: var(--g800); }
-html.donker.ar-open body { background-color: var(--g700); }
-#inhoud, .ar-voet { background: var(--grond); transition: transform 900ms var(--ar-ease), border-radius 900ms var(--ar-ease); }
-/* de pagina krimpt naar het midden van het scherm en schuift naar links (dejongensvanoranje.nl) */
-html.ar-open :is(#inhoud, .ar-voet, .ar-kop) { transform: translateX(-70vw) scale(.84); }
-html.ar-open .ar-kop { border-radius: 10px 10px 0 0; }
-@media (min-width: 1024px) {
-  html.ar-open :is(#inhoud, .ar-voet, .ar-kop) { transform: translateX(-40vw) scale(.8); }
-}
-.ar-paneel { --ar-aarde: var(--g800); position: fixed; z-index: 95; inset: 0 0 0 auto; width: min(88vw, 640px); overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: calc(var(--ar-kop) + env(safe-area-inset-top, 0px) + 24px) max(28px, env(safe-area-inset-right, 0px)) calc(32px + env(safe-area-inset-bottom, 0px)) clamp(28px, 4vw, 64px); background: var(--ar-aarde); color: var(--ar-zand); transform: translateX(100%); transition: transform 800ms var(--ar-ease); }
-@media (min-width: 1024px) { .ar-paneel { width: 42vw; } }
-html.ar-open .ar-paneel { transform: none; }
-.ar-paneel .ar-lbl { color: rgb(246 242 233 / .6); }
-.ar-paneel-lbl { padding-bottom: 14px; border-bottom: 1px solid rgb(246 242 233 / .2); }
-.ar-paneel-lijst { list-style: none; margin: 0; padding: 0; }
-.ar-paneel-link { display: grid; grid-template-columns: 36px 1fr; align-items: baseline; gap: 2px 10px; padding: 12px 0; border-bottom: 1px solid rgb(246 242 233 / .2); color: inherit; text-decoration: none; }
-.ar-paneel-naam { font-family: var(--font-syne); font-weight: 700; font-size: clamp(30px, 4.2vw, 56px); line-height: 1; letter-spacing: -.035em; transition: color 300ms, translate 500ms var(--ar-ease); }
-.ar-paneel-zin { grid-column: 2; }
-.ar-paneel-link:hover .ar-paneel-naam, .ar-paneel-link[aria-current="page"] .ar-paneel-naam { translate: 10px 0; }
-.ar-paneel-link:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 2px; }
-.ar-paneel-voet { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
-.ar-paneel-acties { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-.ar-paneel-rond { display: flex; flex-direction: column; gap: 10px; }
-.ar-rondknop { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
+/* ── het dock: één donkere pil onderin die zelf openklapt tot het menu (eigenaar, 14 nov 2026) ── */
+.ar-dock { --zand: var(--ar-zand); --zand-60: rgb(246 242 233 / .6); --zand-20: rgb(246 242 233 / .2); position: fixed; z-index: 95; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; width: min(calc(100vw - 24px), 520px); background: var(--g800); color: var(--zand); border-radius: 32px; box-shadow: 0 10px 32px rgb(0 0 0 / .28), inset 0 0 0 1px rgb(246 242 233 / .12); transition: border-radius 600ms var(--ar-ease); }
+html.donker .ar-dock { background: var(--g700); box-shadow: 0 10px 32px rgb(0 0 0 / .5), inset 0 0 0 1px var(--zand-20); }
+.ar-dock[data-open] { border-radius: 24px; }
+.ar-dock-vel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 600ms var(--ar-ease); }
+.ar-dock[data-open] .ar-dock-vel { grid-template-rows: 1fr; }
+.ar-dock-vel-binnen { min-height: 0; overflow: hidden; }
+.ar-dock-vel-inhoud { max-height: calc(100svh - 120px - env(safe-area-inset-bottom, 0px)); overflow-y: auto; overscroll-behavior: contain; padding: 22px 22px 6px; display: grid; gap: 18px; opacity: 0; transition: opacity 300ms; }
+.ar-dock[data-open] .ar-dock-vel-inhoud { opacity: 1; transition-delay: 200ms; }
+.ar-dock-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--zand-20); }
+.ar-dock-top img { height: 16px; width: auto; }
+.ar-dock .ar-lbl { color: var(--zand-60); }
+.ar-dock-lijst { list-style: none; margin: 0; padding: 0; counter-reset: nr; }
+.ar-dock-lijst li { counter-increment: nr; }
+.ar-dock-link { display: grid; grid-template-columns: 32px 1fr; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--zand-20); color: inherit; text-decoration: none; }
+.ar-dock-nr::before { content: counter(nr, decimal-leading-zero); }
+.ar-dock-naam { font-family: var(--font-syne); font-weight: 700; font-size: 28px; line-height: 1.05; letter-spacing: -.03em; transition: translate 500ms var(--ar-ease); }
+.ar-dock-link:hover .ar-dock-naam, .ar-dock-link[aria-current="page"] .ar-dock-naam { translate: 8px 0; }
+.ar-dock-voet { display: flex; align-items: center; gap: 10px; }
+.ar-dock-voet .ar-knop { margin-right: auto; }
+.ar-dock-voet[data-tab="weergave"] { justify-content: flex-end; }
+.ar-dock-rij { list-style: none; margin: 0; padding: 7px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+.ar-dock-vak { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; width: 100%; height: 50px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: inherit; font-family: var(--font-montserrat), sans-serif; font-size: 11px; font-weight: 500; line-height: 13px; text-decoration: none; cursor: pointer; transition: background-color 300ms; }
+.ar-dock-vak svg { width: 22px; height: 22px; }
+.ar-dock-vak:hover { background: rgb(246 242 233 / .08); }
+.ar-dock-vak[aria-current="page"], .ar-dock-vak[aria-expanded="true"] { background: rgb(246 242 233 / .14); }
+.ar-dock-vak:focus-visible, .ar-dock-link:focus-visible { outline: 2px solid var(--zand); outline-offset: 2px; }
+.ar-dock-stip { display: grid; grid-template-columns: repeat(2, 5px); gap: 4px; place-content: center; width: 22px; height: 22px; }
+.ar-dock-stip i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; transition: transform 400ms var(--ar-ease); }
+.ar-dock-vak[aria-expanded="true"] .ar-dock-stip { transform: rotate(45deg); transition: transform 400ms var(--ar-ease); }
+.ar-rondknop { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border: 1px solid currentColor; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; transition: background-color 300ms, color 300ms; }
 .ar-rondknop[aria-pressed="true"] { background: var(--ar-zand); color: var(--g800); }
 .ar-rondknop:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
-/* de regels komen één voor één binnen als het paneel opengaat */
-.ar-paneel-lijst li { opacity: 0; translate: 40px 0; transition: opacity 500ms var(--ar-ease), translate 700ms var(--ar-ease); }
-html.ar-open .ar-paneel-lijst li { opacity: 1; translate: 0 0; transition-delay: calc(250ms + var(--i) * 60ms); }
-.ar-sluit { position: fixed; z-index: 96; top: 50%; right: min(88vw, 640px); translate: 50% -50%; display: grid; place-items: center; width: 56px; height: 56px; border: 0; border-radius: 999px; background: var(--ar-zand); color: var(--g800); cursor: pointer; opacity: 0; scale: .4; pointer-events: none; box-shadow: 0 8px 24px rgb(0 0 0 / .35); transition: opacity 300ms, scale 500ms var(--ar-ease); }
-@media (min-width: 1024px) { .ar-sluit { right: 42vw; } }
-html.ar-open .ar-sluit { opacity: 1; scale: 1; pointer-events: auto; transition-delay: 450ms; }
-.ar-sluit:hover { background: var(--oranje); }
-.ar-sluit:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
-.ar-scherm { position: fixed; z-index: 92; inset: 0; border: 0; padding: 0; background: transparent; display: none; cursor: pointer; }
-html.ar-open .ar-scherm { display: block; }
+.ar-rond-whatsapp { border-color: #25d366; background: #25d366; color: var(--g800); }
+.ar-rond-whatsapp:hover { background: #1ebe5b; }
+.ar-scherm { position: fixed; z-index: 94; inset: 0; border: 0; padding: 0; background: rgb(20 18 16 / .45); opacity: 0; pointer-events: none; transition: opacity 400ms; }
+html.ar-open .ar-scherm { opacity: 1; pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) { .ar-dock, .ar-dock-vel, .ar-dock-vel-inhoud, .ar-scherm { transition: none !important; } }
+html.stil :is(.ar-dock, .ar-dock-vel, .ar-dock-vel-inhoud, .ar-scherm) { transition: none !important; }
 
 /* ── de opening ─────────────────────────────────────────────────── */
 .ar-opening { background: var(--grond); color: var(--inkt); display: grid; gap: clamp(28px, 4vw, 64px); padding-block: clamp(28px, 5vw, 72px) clamp(56px, 8vw, 120px); }
@@ -147,7 +135,7 @@ html:root { --foto-hoek: 4px; }
 .ar-blokkop { display: grid; gap: 12px; align-content: start; }
 @media (min-width: 1024px) {
   .ar-blok:not(.ar-maker) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
-  .ar-blokkop { position: sticky; top: calc(var(--ar-kop) + 32px); align-self: start; }
+  .ar-blokkop { position: sticky; top: 32px; align-self: start; }
 }
 
 /* werk als index: regels met een beeld dat meekomt bij aanwijzen */
@@ -275,8 +263,7 @@ html:root { --foto-hoek: 4px; }
 @keyframes ar-groei { from { opacity: .2; letter-spacing: -.02em; } to { opacity: 1; letter-spacing: -.05em; } }
 
 html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
-@media (prefers-reduced-motion: reduce) { .ar-band { overflow-x: auto; } .ar-paneel, #inhoud, .ar-voet, .ar-kop { transition: none; } }
-html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
+@media (prefers-reduced-motion: reduce) { .ar-band { overflow-x: auto; } }
 
 /* ── combinatie (13 nov 2026: "kies elementen die elkaar versterken") ── */
 /* het uitgelichte project als losse compositie (studioverde.be) */
@@ -322,43 +309,13 @@ html.stil :is(.ar-paneel, #inhoud, .ar-voet, .ar-kop) { transition: none; }
 @keyframes ar-teken { from { scale: 0 1; } to { scale: 1 1; } }
 @keyframes ar-merk { from { translate: 0 60%; opacity: .2; } to { translate: 0 0; opacity: 1; } }
 
-/* ── telefoon: de menubalk onderaan, binnen bereik van de duim (eigenaar, 14 nov 2026) ── */
-@media (max-width: 759px) {
-  #inhoud { padding-top: 0; padding-bottom: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px)); }
-  .ar-kop { inset: auto 0 0; height: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px)); padding-top: 0; padding-bottom: env(safe-area-inset-bottom, 0px); border-bottom: 0; border-top: 1px solid var(--lijn); }
-  .ar-paneel { gap: 24px; padding-top: calc(24px + env(safe-area-inset-top, 0px)); padding-bottom: calc(var(--ar-kop) + env(safe-area-inset-bottom, 0px) + 20px); }
-  .ar-opening { min-height: auto; }
-}
+@media (max-width: 759px) { .ar-opening { min-height: auto; } }
 
-/* ── klein menu: kleinere namen, alles onderin (eigenaar, 14 nov 2026) ── */
-.ar-paneel.ar-klein { justify-content: flex-end; }
-.ar-klein .ar-paneel-link { padding: 8px 0; }
-.ar-klein .ar-paneel-naam { font-size: clamp(20px, 2.2vw, 28px); }
-
-/* geen oranje tekst, alleen de punt (eigenaar, 14 nov 2026) */
-/* klein menu op de telefoon nog verder omlaag: tot op de rand, Kennismaken naast de ronde knop (eigenaar, 14 nov 2026) */
-@media (max-width: 759px) { .ar-paneel.ar-klein { gap: 16px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); } }
-.ar-weergave { --inkt: var(--ar-zand); --grond: var(--g800); --lijn: rgb(246 242 233 / .2); color: var(--ar-zand); padding-top: 20px; }
-/* met de dock: geen kopbalk, wel het uitschuifmenu; de knoppen onderin blijven boven de dock (eigenaar, 14 nov 2026) */
-html.dock .ar-kop { display: none; }
-html.dock #inhoud { padding-top: 0; }
-html.dock .ar-paneel, html.dock .ar-paneel.ar-klein { padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px)); }
-@media (min-width: 760px) { html.dock .ar-paneel-naam { font-size: clamp(28px, 3vw, 44px); } }
-/* Weergave compacter (eigenaar, 14 nov 2026) */
-.ar-weergave { padding-top: 14px; }
+/* Weergave in het dock, compact (eigenaar, 14 nov 2026) */
+.ar-weergave { --inkt: var(--ar-zand); --grond: var(--g800); --lijn: rgb(246 242 233 / .2); color: var(--ar-zand); }
 .ar-weergave fieldset { margin-bottom: 12px !important; }
 .ar-weergave legend { margin-bottom: 6px !important; }
 .ar-weergave fieldset label { padding-block: 6px !important; }
 .ar-weergave fieldset p { margin-top: 4px !important; font-size: 11px; }
 .ar-weergave label[class*="justify-between"] { padding-block: 7px !important; }
 .ar-weergave button { margin-top: 8px !important; }
-.ar-paneel-voet[data-tab="weergave"] { justify-content: flex-end; }
-.ar-paneel-acties[hidden] { display: none; }
-/* nummers tellen alleen wat zichtbaar is (met de dock vallen pagina's weg) */
-.ar-paneel-lijst { counter-reset: nr; }
-.ar-paneel-lijst li { counter-increment: nr; }
-.ar-paneel-nr::before { content: counter(nr, decimal-leading-zero); }
-html.dock .ar-paneel-lijst li[data-dock="altijd"] { display: none; }
-@media (min-width: 1024px) { html.dock .ar-paneel-lijst li[data-dock="groot"], html.dock .ar-paneel-kennis { display: none; } }
-.ar-rond-whatsapp { border-color: #25d366; background: #25d366; color: var(--g800); }
-.ar-rond-whatsapp:hover { background: #1ebe5b; }
