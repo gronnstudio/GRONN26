@@ -30,6 +30,8 @@ body { background-color: var(--grond); }
 
 /* knoppen: rond, één oranje */
 .ar-knoppen { display: flex; flex-wrap: wrap; gap: 12px; }
+/* op de telefoon twee even brede knoppen naast elkaar (eigenaar, 14 nov 2026) */
+@media (max-width: 639px) { .ar-knoppen { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .ar-knoppen > .ar-knop { padding-inline: 10px; font-size: clamp(11px, 3.1vw, 13px); letter-spacing: .04em; white-space: nowrap; } }
 .ar-knop { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border-radius: 999px; font-family: var(--font-montserrat); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; transition: background-color 300ms var(--ar-ease), color 300ms var(--ar-ease), border-color 300ms var(--ar-ease); }
 .ar-knop-oranje { background: var(--oranje); color: var(--ar-op-oranje); }
 .ar-knop-oranje:hover { background: var(--g800); color: var(--ar-zand); }
