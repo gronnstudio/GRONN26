@@ -119,8 +119,8 @@ export function ArKop() {
             <li key={d.href}>
               <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={d.naam} title={d.naam} aria-current={isHier(pad, d.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d.icoon} /></svg>
-                {/* alleen het actieve vak draagt zijn naam, heel klein in de kiezel (eigenaar, 14 nov 2026) */}
-                {isHier(pad, d.href) && <span className="ar-dock-label" aria-hidden>{d.naam}</span>}
+                {/* telefoon: alleen het actieve vak draagt zijn naam (eigenaar, 14 nov 2026); desktop: elk vak, de dock is daar volle breedte */}
+                <span className="ar-dock-label" aria-hidden>{d.naam}</span>
               </Link>
             </li>
           ))}
@@ -130,6 +130,7 @@ export function ArKop() {
               <svg viewBox="0 0 22 22" aria-hidden fill="currentColor">
                 {open ? <path d="M5 5l12 12M17 5 5 17" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /> : <><circle cx="6.5" cy="6.5" r="2.2" /><circle cx="15.5" cy="6.5" r="2.2" /><circle cx="6.5" cy="15.5" r="2.2" /><circle cx="15.5" cy="15.5" r="2.2" /></>}
               </svg>
+              <span className="ar-dock-label ar-dock-label-breed" aria-hidden>{open ? "Sluit" : "Menu"}</span>
             </button>
           </li>
           {/* Omhoog achteraan, na de vier stippen, zoals in het oude dock (eigenaar, 14 nov 2026) */}
