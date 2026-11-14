@@ -5,6 +5,7 @@ import { F04_2, F08_1, F08_2, F10, F11 } from "@/components/voorpagina/beelden"
 import { VIJVER } from "@/lib/data/vijverrenovatie"
 import { fotosVoor } from "@/lib/data/vijverrenovatie"
 import { TERRAS_FOTOS } from "@/lib/data/terras-geulle"
+import { SFEER, SFEER_BAND } from "@/lib/data/sfeer"
 import { pricingFor } from "@/lib/data/pricing"
 import { BUSINESS } from "@/lib/business"
 import { kies } from "@/components/taal"
@@ -34,8 +35,8 @@ const OPENING = [
 const VIJ = { titel: "Vijverrenovatie", soort: "Ontwerp & aanleg", href: "/werk/vijverrenovatie" }
 const TER = { titel: "Terras Geulle", soort: "Aanleg", href: "/werk/terras-geulle" }
 const BAND = [
-  { foto: F04_2, ...VIJ }, { foto: TERRAS_FOTOS.hoofd, ...TER }, { foto: F11, ...VIJ },
-  { foto: TERRAS_FOTOS.reeks[1], ...TER }, { foto: F08_1, ...VIJ }, { foto: TERRAS_FOTOS.reeks[0], ...TER },
+  { foto: F04_2, ...VIJ }, SFEER_BAND[0], { foto: TERRAS_FOTOS.hoofd, ...TER }, SFEER_BAND[1], { foto: F11, ...VIJ }, SFEER_BAND[2],
+  { foto: TERRAS_FOTOS.reeks[1], ...TER }, SFEER_BAND[3], { foto: F08_1, ...VIJ }, SFEER_BAND[4], { foto: TERRAS_FOTOS.reeks[0], ...TER },
 ]
 // "in het kort" bij het uitgelichte project (studioverde.be), met maatlijnen (Blueprint)
 const KORT = [
@@ -182,7 +183,7 @@ export function ArVoorpagina() {
         </div>
         <div className="ar-diensten">
           <Link href="/vijvers" className="ar-dienst" transitionTypes={["schuif"]}>
-            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...F04_2, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" eager /></span>
+            <span className="ar-dienst-beeld" aria-hidden><Foto foto={{ ...SFEER.waterval, alt: "" }} sizes="(min-width: 760px) 30vw, 90vw" className="ar-dienst-foto" eager /></span>
             <h3 className="ar-h3">Vijvers</h3>
             <p>Een heldere vijver met een filter dat werkt. Aanleg, renovatie en vast onderhoud.</p>
             <dl className="ar-prijzen">
