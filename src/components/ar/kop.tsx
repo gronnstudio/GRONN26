@@ -92,9 +92,9 @@ export function ArKop() {
                 {tab === "inhoud" && (
                   <Link href="/kennismaken" className="ar-knop ar-knop-oranje" transitionTypes={["schuif"]} onClick={() => track("cta_kennismaken", { plek: "dock" })}>Kennismaken</Link>
                 )}
-                {/* snel contact als app-icoon: donker vierkant met het groene WhatsApp-teken (eigenaar, 14 nov 2026) */}
+                {/* snel contact: het groene WhatsApp-teken, zonder vlak (eigenaar, 14 nov 2026) */}
                 <a href={BUSINESS.whatsapp} className="ar-app-whatsapp" aria-label="WhatsApp" title="WhatsApp" onClick={() => track("cta_whatsapp", { plek: "dock" })}>
-                  <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden>
+                  <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden>
                     <path d="M12 2.6a9.4 9.4 0 0 0-8.1 14.1L2.6 21.4l4.8-1.3A9.4 9.4 0 1 0 12 2.6z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
                     <path d="M8.9 7.2c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.2 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.4l-2.3-1.1c-.3-.1-.6-.2-.8.2l-1 1.3c-.2.2-.4.3-.8.1a8 8 0 0 1-3.9-3.4c-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-1-2.3z" fill="currentColor" transform="translate(12 12) scale(.62) translate(-12 -12.6)" />
                   </svg>

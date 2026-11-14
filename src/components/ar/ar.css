@@ -85,9 +85,9 @@ html.donker .ar-kop.ar-inv .ar-logo-donker { display: none; }
 .ar-dock-voet > * { grid-column: span 1; justify-self: center; }
 .ar-dock-voet .ar-knop { grid-column: 1 / 4; justify-self: stretch; justify-content: center; min-height: 48px; white-space: nowrap; padding-inline: 12px; margin-inline: 2px 6px; }
 .ar-dock-voet[data-tab="weergave"] > :first-child { grid-column: 4; }
-/* WhatsApp als app-icoon, in het donker van het paneel (eigenaar, 14 nov 2026) */
-.ar-app-whatsapp { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 13px; background: var(--g800); color: #25d366; box-shadow: inset 0 1px .5px rgb(255 255 255 / .14), 0 4px 12px -4px rgb(0 0 0 / .5); transition: background-color 300ms; }
-.ar-app-whatsapp:hover { background: #2b3035; }
+/* WhatsApp: alleen het groene teken, zonder vlak eromheen (eigenaar, 14 nov 2026) */
+.ar-app-whatsapp { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 999px; color: #25d366; transition: background-color 300ms; }
+.ar-app-whatsapp:hover { background: rgb(37 211 102 / .12); }
 .ar-app-whatsapp:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 3px; }
 .ar-dock-rij { position: relative; z-index: 2; list-style: none; margin: 0; padding: 8px; display: grid; grid-template-columns: repeat(5, 1fr); justify-items: center; }
 .ar-dock-vak { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: var(--zand); cursor: pointer; transition: background-color 500ms, color 500ms, width 500ms var(--ar-ease); }
