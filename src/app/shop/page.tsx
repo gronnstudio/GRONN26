@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { T } from "@/components/taal"
@@ -73,7 +74,7 @@ export default function Shop() {
         <div className="grid gap-x-[clamp(24px,4vw,64px)] gap-y-16 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <section id="borders" aria-label="Producten" className="scroll-mt-[96px]">
             <p className="m-0 mb-5 text-[15px] text-gedempt"><T t={{ nl: `Borders per ${BORDER_MATEN.join(", ").replace(/, (\d+)$/, " of $1")} m² · opgestuurd of aangeplant`, en: `Borders per ${BORDER_MATEN.join(", ").replace(/, (\d+)$/, " or $1")} m² · shipped or planted` }} /></p>
-            <Producten producten={producten} />
+            <Suspense><Producten producten={producten} /></Suspense>
           </section>
 
           {/* Cadeaubon: donker vlak met de kaart zelf, schuin, zoals hij in het doosje ligt. */}

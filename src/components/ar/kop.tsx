@@ -54,10 +54,10 @@ const PALET = (
 )
 
 const SHOPMENU = [
-  { href: "/tuinen/borderpakketten", naam: { nl: "Borderpakketten", en: "Border packages" }, sub: { nl: "Acht borders, opgestuurd of aangeplant", en: "Eight borders, shipped or planted" }, beeld: "/borderpakketten/vlinderborder.jpg" },
-  { href: "/tuinen/borderpakketten#bodem", naam: { nl: "Bodem", en: "Soil" }, sub: { nl: "Compost met schors", en: "Compost with bark" }, beeld: "/borderpakketten/compost-franse-schors.jpg" },
-  { href: "/tuinen/borderpakketten#op-maat", naam: { nl: "Border op maat", en: "Custom border" }, sub: { nl: "Ik kom kijken en stel hem samen", en: "I come and look and put it together" }, beeld: "/borderpakketten/schaduwborder.jpg" },
-  { href: "/tuinen/cadeaubon", naam: { nl: "Cadeaubon", en: "Gift card" }, sub: { nl: "Zelf het bedrag kiezen", en: "Choose the amount yourself" }, beeld: "/borderpakketten/plukborder.jpg" },
+  { href: "/shop?soort=border#borders", naam: { nl: "Borderpakketten", en: "Border packages" }, sub: { nl: "Acht borders, opgestuurd of aangeplant", en: "Eight borders, shipped or planted" }, beeld: "/borderpakketten/vlinderborder.jpg" },
+  { href: "/shop?soort=bodem#borders", naam: { nl: "Bodem", en: "Soil" }, sub: { nl: "Compost met schors", en: "Compost with bark" }, beeld: "/borderpakketten/compost-franse-schors.jpg" },
+  { href: "/shop?soort=bodem#borders", naam: { nl: "Border op maat", en: "Custom border" }, sub: { nl: "Ik kom kijken en stel hem samen", en: "I come and look and put it together" }, beeld: "/borderpakketten/schaduwborder.jpg" },
+  { href: "/shop#cadeau", naam: { nl: "Cadeaubon", en: "Gift card" }, sub: { nl: "Zelf het bedrag kiezen", en: "Choose the amount yourself" }, beeld: "/borderpakketten/plukborder.jpg" },
 ]
 
 const isHier = (pad: string, href: string) => (href === "/" ? pad === "/" : pad === href || pad.startsWith(href + "/"))

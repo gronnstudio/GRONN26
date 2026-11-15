@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
 import { T } from "@/components/taal"
@@ -34,6 +35,14 @@ const EERST = 6
 
 export function Producten({ producten }: { producten: Product[] }) {
   const [soort, setSoort] = useState<(typeof SOORTEN)[number]["id"]>("alles")
+  // het shopmenu linkt naar /shop?soort=… (eigenaar, 15 nov 2026)
+  const vraag = useSearchParams().get("soort")
+  const [vorige, setVorige] = useState<string | null>(null)
+  if (vraag !== vorige) {
+    setVorige(vraag)
+    const s = SOORTEN.find((x) => x.id === vraag)
+    if (s) setSoort(s.id)
+  }
   const [lijst, setLijst] = useState(false)
   const [alles, setAlles] = useState(false)
   const eerstNieuw = useRef<HTMLAnchorElement>(null)
