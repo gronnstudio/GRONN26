@@ -237,6 +237,8 @@ export function ArVoorpagina() {
       <section className="ar-raster ar-blok ar-maker" aria-labelledby="ar-maker">
         <div className="ar-maker-beeld">
           <Foto foto={NICK} sizes="(min-width: 1024px) 34vw, 90vw" className="ar-maker-foto" />
+          {/* Nicks eigen clip (eigenaar, 15 nov 2026: "speel hier mijn filmpje ipv foto"); stil, in een lus, de foto blijft eronder bij minder beweging */}
+          <video className="ar-maker-video" src="/nick/zaagtafel-lach.mp4" poster={NICK.src} autoPlay muted loop playsInline preload="metadata" aria-hidden />
         </div>
         <div className="ar-maker-tekst">
           <p className="ar-lbl">Studio</p>
