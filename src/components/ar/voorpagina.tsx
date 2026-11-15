@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Foto } from "@/components/foto"
 import { WERK } from "@/components/werk/projecten"
-import { F04_2, F08_1, F08_2, F10, F11 } from "@/components/voorpagina/beelden"
+import { F04_2, F08_1, F10, F11 } from "@/components/voorpagina/beelden"
 import { VIJVER } from "@/lib/data/vijverrenovatie"
 import { fotosVoor } from "@/lib/data/vijverrenovatie"
 import { TERRAS_FOTOS } from "@/lib/data/terras-geulle"
@@ -13,6 +13,8 @@ import { TelLink } from "@/components/handoff/klant"
 import type { L } from "@/lib/i18n"
 import "./ar.css"
 
+// Nick aan de steenzaagtafel, uit zijn eigen Media (15 nov 2026)
+const NICK = { src: "/nick/zaagtafel-lach.jpg", width: 720, height: 1280, alt: "Nick lacht met een net gezaagde steen in zijn handen, achter de steenzaagtafel" }
 const START: L = { nl: "Start een project", en: "Start a project" }
 const FOTO: L = { nl: "Stuur een foto", en: "Send a photo" }
 
@@ -234,7 +236,7 @@ export function ArVoorpagina() {
       {/* ── De maker ───────────────────────────────────────────── */}
       <section className="ar-raster ar-blok ar-maker" aria-labelledby="ar-maker">
         <div className="ar-maker-beeld">
-          <Foto foto={F08_2} sizes="(min-width: 1024px) 34vw, 90vw" className="ar-maker-foto" />
+          <Foto foto={NICK} sizes="(min-width: 1024px) 34vw, 90vw" className="ar-maker-foto" />
         </div>
         <div className="ar-maker-tekst">
           <p className="ar-lbl">Studio</p>
