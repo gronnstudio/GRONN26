@@ -1,0 +1,79 @@
+/* Voorpagina architectuur (15 nov 2026). Aachen × Bartosz Kolenda. */
+.x { --x-lijn: color-mix(in srgb, var(--inkt) 16%, var(--grond)); }
+.x .x-punt { color: var(--oranje); font-weight: inherit; }
+.x img { border-radius: 4px; }
+.x-blok { padding-block: clamp(72px, 10vw, 160px); }
+.x-kop { margin: 0; font-family: var(--font-montserrat), sans-serif; font-weight: 500; font-size: clamp(28px, 3vw, 44px); line-height: 1.1; letter-spacing: -.02em; }
+.x-stelling { margin: 0; font-family: var(--font-montserrat), sans-serif; font-weight: 400; font-size: clamp(26px, 3.2vw, 52px); line-height: 1.15; letter-spacing: -.025em; max-width: 26ch; text-wrap: balance; }
+.x-klein { font-size: clamp(22px, 2.2vw, 34px); }
+
+/* opening */
+.x-opening { display: grid; gap: 24px; padding-block: clamp(48px, 8vw, 120px) clamp(48px, 6vw, 96px); }
+.x-reus { margin: 0; font-family: var(--font-montserrat), sans-serif; font-weight: 400; font-size: clamp(64px, 13.5vw, 232px); line-height: .9; letter-spacing: -.06em; }
+.x-reus-r { display: block; }
+.x-onder { margin-top: 8px; }
+.x-kantlijn { display: grid; gap: 16px; align-content: start; max-width: 36ch; }
+.x-kantlijn .ar-knop { justify-self: start; }
+@media (min-width: 1024px) {
+  .x-opening { grid-template-columns: 2fr 5fr 3fr; column-gap: clamp(24px, 3vw, 56px); }
+  .x-reus { grid-column: 1 / -1; }
+  .x-reus-in { padding-left: 14%; }
+  .x-onder { grid-column: 1; }
+  .x-opening-beeld { grid-column: 2; }
+  .x-kantlijn { grid-column: 3; align-self: center; }
+}
+
+/* stelling + drie beelden */
+.x-stelling-blok { display: grid; gap: 48px; }
+.x-drie { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.x-drie li > div { aspect-ratio: 3/4; }
+.x-drie .ar-lbl { margin-top: 8px; }
+@media (min-width: 1024px) {
+  .x-stelling-blok { grid-template-columns: 1fr 1fr; align-items: start; }
+  .x-drie { gap: 20px; margin-top: 12px; }
+  .x-drie li:nth-child(2) { margin-top: 64px; }
+}
+
+/* diensten */
+.x-diensten { display: grid; gap: 40px; border-top: 1px solid var(--x-lijn); }
+.x-diensten-beeld > div { aspect-ratio: 4/5; }
+.x-diensten-beeld img { filter: grayscale(1) contrast(1.05); transition: filter .6s; }
+.x-diensten-beeld:hover img { filter: none; }
+.x-lijst { margin-top: 32px; border-top: 1px solid var(--x-lijn); }
+.x-rij { border-bottom: 1px solid var(--x-lijn); }
+.x-rij summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; cursor: pointer; font-family: var(--font-montserrat), sans-serif; font-weight: 500; font-size: clamp(18px, 1.5vw, 22px); }
+.x-rij summary::-webkit-details-marker { display: none; }
+.x-plus { position: relative; width: 14px; height: 14px; flex: none; }
+.x-plus::before, .x-plus::after { content: ""; position: absolute; inset: 6px 0 auto; height: 1.5px; background: currentColor; transition: transform .3s; }
+.x-plus::after { transform: rotate(90deg); }
+.x-rij[open] .x-plus::after { transform: rotate(0); }
+.x-rij-in { display: grid; gap: 12px; padding-bottom: 24px; max-width: 48ch; color: var(--gedempt); }
+.x-rij-in p { margin: 0; }
+.x-prijs { color: var(--inkt); font-weight: 600; }
+.x-rij-in .ar-lijnlink { justify-self: start; }
+@media (min-width: 1024px) { .x-diensten { grid-template-columns: 5fr 6fr; column-gap: clamp(40px, 6vw, 120px); align-items: start; } .x-lijst { margin-top: 48px; } }
+
+/* donkere strook */
+.x-werk { padding-block: clamp(72px, 9vw, 140px); overflow: hidden; }
+.x-werk-kop { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 40px; }
+.x-alles { display: inline-flex; align-items: center; gap: 8px; color: var(--inkt); text-decoration: none; }
+.x-strook { list-style: none; margin: 0; padding: 0 var(--ar-goot); display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.x-strook::after { content: ""; flex: 0 0 1px; }
+.x-strook li { scroll-margin-left: var(--ar-goot); flex: 0 0 min(80vw, 520px); scroll-snap-align: start; }
+.x-strook li:nth-child(odd) { flex-basis: min(80vw, 680px); }
+.x-strook a { color: inherit; text-decoration: none; display: grid; gap: 12px; }
+.x-strook a > div { height: clamp(260px, 32vw, 460px); }
+.x-strook img { transition: transform .6s; }
+.x-strook a:hover img { transform: scale(1.02); }
+.x-strook p { margin: 0; display: flex; justify-content: space-between; gap: 12px; font-weight: 500; }
+.x-werk-voet { display: grid; gap: 48px; margin-top: clamp(64px, 8vw, 120px); }
+.x-feiten { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.x-feiten > div { border-left: 1px solid var(--lijn); padding-left: 20px; }
+.x-getal { margin: 0 0 8px; font-family: var(--font-montserrat), sans-serif; font-size: clamp(40px, 4.4vw, 72px); line-height: 1; letter-spacing: -.04em; }
+@media (min-width: 1024px) { .x-werk-voet { grid-template-columns: 1fr 1fr; align-items: end; } }
+
+/* slot */
+.x-slot { display: grid; gap: 32px; justify-items: start; }
+
+@media (prefers-reduced-motion: reduce) { .x img { transition: none !important; } }
+.x-opening-beeld > div { aspect-ratio: 4/3; }
