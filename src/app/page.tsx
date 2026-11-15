@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { ArVoorpagina } from "@/components/ar/voorpagina"
+import { ArchVoorpagina as ArVoorpagina } from "@/components/arch/voorpagina"
 import "@/components/voorpagina/voorpagina.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"

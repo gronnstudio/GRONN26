@@ -74,41 +74,45 @@ export function Producten({ producten }: { producten: Product[] }) {
         </div>
       </div>
 
-      <ul className={`m-0 mt-8 list-none p-0 ${lijst ? "flex flex-col" : "grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-[clamp(16px,2vw,32px)] sm:gap-y-[clamp(36px,4vw,64px)]"}`}>
+      {lijst ? (
+      <ul className="m-0 mt-8 flex list-none flex-col p-0">
         {zichtbaar.map((p, i) => (
-          <li key={p.id} className={`shop-product ${lijst ? "flex items-center gap-4 border-t border-lijn py-4 first:border-t-0 first:pt-0 sm:gap-6" : "flex flex-col"}`}>
-            <Link
-              ref={alles && i === EERST ? eerstNieuw : undefined}
-              href={p.href}
-              className={`group no-underline text-inherit focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-inkt rounded-[16px] ${lijst ? "flex min-w-0 flex-1 items-center gap-4 sm:gap-6" : "flex flex-col"}`}
-            >
-              <div className={lijst ? "w-[72px] shrink-0 sm:w-[112px]" : "overflow-hidden rounded-[var(--foto-hoek)]"}>
-                {p.foto ? (
-                  <Foto
-                    foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, en: { alt: p.foto.alt.en } }}
-                    sizes={lijst ? "112px" : "(min-width: 1024px) 400px, 50vw"}
-                    className={`shop-foto ${lijst ? "aspect-square" : "aspect-[4/3] transition-[scale] duration-700 group-hover:scale-[1.04]"}`}
-                  />
-                ) : (
-                  <div className={`flex items-center justify-center rounded-[16px] border border-dashed border-gedempt text-gedempt ${lijst ? "aspect-square rounded-[12px]" : "aspect-[4/3]"}`}>
-                    <span className="lbl"><T t={{ nl: "Op maat", en: "Custom" }} /></span>
-                  </div>
-                )}
+          <li key={p.id} className="shop-product flex items-center gap-4 border-t border-lijn py-4 first:border-t-0 first:pt-0 sm:gap-6">
+            <Link ref={alles && i === EERST ? eerstNieuw : undefined} href={p.href} className="group flex min-w-0 flex-1 items-center gap-4 text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-inkt sm:gap-6">
+              <div className="w-[72px] shrink-0 sm:w-[112px]">
+                {p.foto ? <Foto foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, en: { alt: p.foto.alt.en } }} sizes="112px" className="shop-foto aspect-square" /> : <div className="aspect-square rounded-[4px] bg-vlak" />}
               </div>
               <span className="flex min-w-0 flex-col">
-                <span className={`syne leading-[1.15] tracking-[-.015em] ${lijst ? "text-[18px] sm:text-[20px]" : "mt-3 line-clamp-2 min-h-[2lh] text-[18px] sm:mt-4 sm:line-clamp-1 sm:min-h-0 sm:text-[clamp(20px,1.8vw,26px)] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4"}`}><T t={p.naam} /></span>
-                <span className={`mt-1 text-[13px] leading-[1.4] text-gedempt sm:text-[14px] ${lijst ? "" : "line-clamp-2 min-h-[2lh]"}`}><T t={p.sub} /></span>
+                <span className="syne text-[18px] leading-[1.15] sm:text-[20px]"><T t={p.naam} /></span>
+                <span className="mt-1 text-[13px] leading-[1.4] text-gedempt sm:text-[14px]"><T t={p.sub} /></span>
               </span>
             </Link>
-            <div className={lijst ? "flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-5" : "mt-auto flex flex-col items-start gap-2 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3"}>
-              <span className="text-[15px] tabular-nums"><T t={p.prijs} /></span>
-              <Link href={p.knop.href} className="knop-klein bg-inkt text-grond focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inkt">
-                <T t={p.knop.label} />
-              </Link>
+            <span className="shrink-0 text-[15px] tabular-nums"><T t={p.prijs} /></span>
+          </li>
+        ))}
+      </ul>
+      ) : (
+      // Kaarten in de stijl van Cyclecraft (eigenaar, 15 nov 2026: "gebruik cycle craft
+      // vooral voor de shop"): grijs vlak met het beeld, soort in labelletters, naam,
+      // prijs en een rond plusje rechtsonder. De kaarten raken elkaar via één lijn.
+      <ul className="shop-kaarten m-0 mt-8 grid list-none grid-cols-2 border-t border-l border-lijn p-0 lg:grid-cols-3">
+        {zichtbaar.map((p, i) => (
+          <li key={p.id} className="shop-kaart relative flex flex-col border-r border-b border-lijn p-3 sm:p-5">
+            <Link ref={alles && i === EERST ? eerstNieuw : undefined} href={p.href} className="group flex flex-1 flex-col text-inherit no-underline after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-inkt">
+              <div className="overflow-hidden rounded-[4px] bg-vlak">
+                {p.foto ? <Foto foto={{ src: p.foto.src, width: 1600, height: 1200, alt: p.foto.alt.nl, en: { alt: p.foto.alt.en } }} sizes="(min-width: 1024px) 400px, 50vw" className="shop-foto aspect-square transition-[scale] duration-700 group-hover:scale-[1.04]" /> : <div className="flex aspect-square items-center justify-center"><span className="lbl text-gedempt"><T t={{ nl: "Op maat", en: "Custom" }} /></span></div>}
+              </div>
+              <span className="lbl mt-4 text-gedempt"><T t={SOORTEN.find((x) => x.id === p.soort)!.naam} /></span>
+              <span className="syne mt-1 line-clamp-2 text-[17px] leading-[1.15] sm:text-[clamp(18px,1.6vw,22px)]"><T t={p.naam} /></span>
+            </Link>
+            <div className="mt-3 flex items-end justify-between gap-3">
+              <span className="text-[14px] font-semibold tabular-nums sm:text-[15px]"><T t={p.prijs} /></span>
+              <span aria-hidden className="flex size-[36px] shrink-0 items-center justify-center rounded-full border border-inkt text-[20px] leading-none">+</span>
             </div>
           </li>
         ))}
       </ul>
+      )}
 
       {over > 0 ? (
         <div className="mt-10 flex justify-center">
