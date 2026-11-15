@@ -28,7 +28,7 @@ export default async function MediaPagina() {
     <div className="mx-auto max-w-[1100px] p-5">
       <Kop titel="Media" />
       <p className="mt-2 text-[15px] text-gedempt">
-        {blobs.length} bestanden · {mb(totaal)} in gebruik. Privé: alleen jij ziet ze als je bent ingelogd.
+        {blobs.length} bestanden · {mb(totaal)} in gebruik. Privé: alleen jij ziet ze als je bent ingelogd, en Claude kan ze lezen via de beveiligde Claude-koppeling (alleen lezen).
       </p>
       <div className="mt-6">{aan ? <Uploader /> : <p>Opslag staat uit (geen BLOB_READ_WRITE_TOKEN).</p>}</div>
       <ul className="m-0 mt-8 grid list-none grid-cols-2 gap-4 p-0 sm:grid-cols-3 lg:grid-cols-4">
