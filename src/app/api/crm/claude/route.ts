@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto"
+import { claudeMag } from "@/lib/crm/claude-sleutel"
 import { revalidatePath } from "next/cache"
 import { leesKlanten } from "@/lib/beheer/klanten"
 import { bewaarVersie, type Concept } from "@/lib/crm/bewaar-calculatie"
@@ -11,13 +11,7 @@ import { bewaarVersie, type Concept } from "@/lib/crm/bewaar-calculatie"
 
 export const dynamic = "force-dynamic"
 
-function mag(req: Request) {
-  const sleutel = process.env.CRM_CLAUDE_TOKEN ?? ""
-  const kop = req.headers.get("authorization") ?? ""
-  const gegeven = kop.startsWith("Bearer ") ? kop.slice(7) : ""
-  if (sleutel.length < 32 || gegeven.length !== sleutel.length) return false
-  return timingSafeEqual(Buffer.from(gegeven), Buffer.from(sleutel))
-}
+const mag = claudeMag
 
 const nee = () => Response.json({ fout: "Geen toegang" }, { status: 401 })
 
