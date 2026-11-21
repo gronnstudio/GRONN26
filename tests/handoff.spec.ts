@@ -1,40 +1,61 @@
 import { expect, test } from "./fixtures"
 
-// De handoff "Website 2027" (12 nov 2026): de kop met menu, en de
-// projectaanvraag in vier stappen (13 nov 2026), zowel de foutroute als de
-// gelukte route. Op de telefoon staat het dock in plaats van de kop.
+// De kop, het menu en de voorpagina uit de visuele bouwbrief (21 nov 2026), en
+// de projectaanvraag in vier stappen (13 nov 2026), zowel de foutroute als de
+// gelukte route.
 
-test("desktop @1440: het dock staat onderaan, Werk gaat naar /werk", async ({ page }) => {
+test("desktop @1440: de kop staat bovenaan, Werk gaat naar /werk", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
   const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
   await expect(nav).toBeVisible()
   const box = await nav.boundingBox()
-  expect(box!.y + box!.height).toBeGreaterThan(800)
-  await expect(page.locator(".ho-kop")).toBeHidden()
+  expect(box!.y).toBeLessThan(100)
   await nav.getByRole("link", { name: "Werk" }).click()
   await expect(page).toHaveURL(/\/werk$/)
 })
 
-test("donker thema werkt op de handoff-voorpagina", async ({ page }) => {
+test("donker thema werkt op de voorpagina", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("gronn-weergave", JSON.stringify({ kleur: "donker" })))
   await page.goto("/")
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-test("telefoon @390: het dock onderaan, geen handoff-kop", async ({ page }) => {
+test("telefoon @390: het logo en de menupil bovenin", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/")
-  await expect(page.getByRole("navigation", { name: "Hoofdmenu" })).toBeVisible()
-  await expect(page.locator(".ho-kop")).toBeHidden()
+  await expect(page.getByRole("link", { name: /GRØNN Studio, naar de voorpagina/ }).first()).toBeVisible()
+  const pil = page.getByRole("button", { name: "Menu" })
+  await expect(pil).toBeInViewport()
+  expect((await pil.boundingBox())!.y).toBeLessThan(40)
 })
 
-// De voorpagina van nul (ar/voorpagina.tsx, 13 nov 2026): de opening met twee knoppen.
-test("voorpagina: de opening met Start een project en een foto via WhatsApp", async ({ page }) => {
+// De opening uit de bouwbrief: de gekozen tuin met label, Kennismaken en Bekijk het werk.
+test("voorpagina: de opening met Kennismaken en Bekijk het werk", async ({ page }) => {
   await page.goto("/")
-  await expect(page.locator("#ar-titel")).toBeVisible()
-  await expect(page.getByRole("link", { name: "Start een project" }).first()).toHaveAttribute("href", "/start-een-project")
-  await expect(page.getByRole("link", { name: /Stuur een foto/ }).first()).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/)
+  await expect(page.locator("#ls-titel")).toContainText("Een tuin die met je meegroeit.")
+  await expect(page.locator(".ls-hero .ls-herkomst")).toContainText("Sfeerbeeld · AI-visualisatie")
+  await expect(page.locator(".ls-hero").getByRole("link", { name: "Kennismaken" })).toHaveAttribute("href", "/kennismaken")
+  await expect(page.locator(".ls-hero").getByRole("link", { name: "Bekijk het werk" })).toHaveAttribute("href", "/werk")
+})
+
+// Sfeer en AI dragen altijd hun label; een projectkaart nooit (brief §08).
+test("voorpagina: elk sfeer- en AI-beeld is gelabeld, projectkaarten niet", async ({ page }) => {
+  await page.goto("/")
+  const zonder = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLImageElement>("main img")]
+      .filter((i) => /\/landschap\/|\/borderpakketten\//.test(i.getAttribute("src") || i.currentSrc))
+      .filter((i) => !i.closest(".ls-beeld")?.querySelector(".ls-herkomst")).length,
+  )
+  expect(zonder).toBe(0)
+  await expect(page.locator(".ls-werkkaart .ls-herkomst")).toHaveCount(0)
+})
+
+test("minder beweging: de opening staat meteen in het kader", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" })
+  await page.goto("/")
+  const p = await page.locator(".ls-hero").evaluate((e) => getComputedStyle(e).getPropertyValue("--p").trim())
+  expect(p).toBe("1")
 })
 
 test("aanvraag: verder zonder keuze geeft een fout en blijft op stap 1", async ({ page }) => {
@@ -80,7 +101,7 @@ test("aanvraag: vier stappen tot de bevestiging, met referentie", async ({ page 
   expect(body).toContain("Planning: Binnen 3 maanden")
 })
 
-test("Tuinen in het dock: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
+test("Tuinen in de kop: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
   await page.addInitScript(() => {
     const w = window as unknown as { __vt: string[] }
     w.__vt = []
@@ -112,12 +133,8 @@ test("pijlen zijn getekend (svg), geen ↗-teken dat op iPhone een emoji wordt",
   expect(tekst).not.toMatch(/[↗↓↑]/)
 })
 
-test("voorpagina: de voet sluit direct aan op het slot, geen lege balk", async ({ page }) => {
+test("voorpagina: onder de voet staat geen lege strook", async ({ page }) => {
   await page.goto("/")
-  const gat = await page.evaluate(() => {
-    const eind = document.querySelector(".ar-slot")!.getBoundingClientRect().bottom
-    const voet = document.querySelector("footer.ar-voet")!.getBoundingClientRect().top
-    return Math.round(voet - eind)
-  })
-  expect(gat).toBe(0)
+  const gat = await page.evaluate(() => Math.round(document.documentElement.scrollHeight - (document.querySelector("footer.ls-voet")!.getBoundingClientRect().bottom + scrollY)))
+  expect(gat).toBeLessThanOrEqual(0)
 })
