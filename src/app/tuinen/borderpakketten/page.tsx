@@ -175,6 +175,10 @@ export default function BorderpakkettenPagina() {
           />
         </p>
 
+        <p className="mt-6 mb-0 text-[15px]">
+          <Link href="/tuinen/plantenkiezer" className="lnk"><T t={{ nl: "Weet je niet welke past? Vier vragen in de plantenkiezer", en: "Not sure which fits? Four questions in the plant picker" }} /></Link>
+        </p>
+
         <h2 id="pakketten" className="lbl mt-[clamp(56px,7vw,96px)] mb-5 scroll-mt-[24px] text-gedempt md:scroll-mt-[112px]"><T t={{ nl: `${BORDERPAKKETTEN.length} pakketten`, en: `${BORDERPAKKETTEN.length} packages` }} /></h2>
         <Stapel className="flex flex-col gap-6 [--stapel-top:16px] md:[--stapel-top:24px]">
           {BORDERPAKKETTEN.map((p, i) => (
