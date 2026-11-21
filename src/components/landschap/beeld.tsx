@@ -38,11 +38,6 @@ export function Beeld({
         priority={priority}
         style={beeld.brandpunt ? { objectPosition: beeld.brandpunt } : undefined}
       />
-      {label ? (
-        <span className={`ls-herkomst${labelRechts ? " ls-herkomst-rechts" : ""}`}>
-          <T t={label} />
-        </span>
-      ) : null}
     </div>
   )
 }

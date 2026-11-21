@@ -12,7 +12,7 @@ import { Pijl } from "@/components/pijl"
 import { T, kies } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { L } from "@/lib/i18n"
-import { labelVoor, NICK, VIJVER_SFEER, BEPLANTING, VIJVERRENOVATIE, type Beeld } from "./beelden"
+import { NICK, VIJVER_SFEER, BEPLANTING, VIJVERRENOVATIE, type Beeld } from "./beelden"
 
 // SiteHeader en NavigationOverlay uit de visuele bouwbrief (§05, beelden 13, 14
 // en 22): bovenin het originele woordmerk en de menupil met de komeet; open is
@@ -187,7 +187,6 @@ export function SiteKop() {
                     <figure key={b.href} className="ls-menu-figuur" data-zichtbaar={i === actief || undefined}>
                       <div className="ls-beeld ls-menu-beeld">
                         <Image src={b.beeld.src} alt="" fill sizes="(min-width: 1024px) 34vw, 1px" style={b.beeld.brandpunt ? { objectPosition: b.beeld.brandpunt } : undefined} />
-                        {labelVoor(b.beeld) ? <span className="ls-herkomst"><T t={labelVoor(b.beeld)!} /></span> : null}
                       </div>
                       <figcaption className="ls-menu-zin"><T t={b.zin} /></figcaption>
                     </figure>

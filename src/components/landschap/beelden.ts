@@ -103,3 +103,14 @@ export const TERRAS: Beeld = { ...TERRAS_FOTOS.hoofd, soort: "project" }
 
 /** Het zichtbare herkomstlabel van een beeld, of niets voor eigen werk. */
 export const labelVoor = (b: Beeld): L | null => (b.soort === "sfeer" || b.soort === "ai" ? LABEL[b.soort] : null)
+
+// Nog zeven visualisaties van Nick (21 nov 2026: "Nog meer visualisaties!
+// Gebruik ze waar je wilt"). Zonder label op het beeld (eigenaar, zelfde avond).
+const vis = (src: string, alt: string, en: string): Beeld => ({ soort: "ai", src: `/landschap/${src}.jpg`, width: 1536, height: 1024, alt, en: { alt: en } })
+export const TERRAS_PERGOLA = vis("terras-pergola", "Uitzicht vanonder een houten overkapping op een tuin met bloeiende borders, een appelboom en een pad van natuursteen.", "View from under a wooden canopy onto a garden with flowering borders, an apple tree and a natural stone path.")
+export const REGENTUIN = vis("regentuin", "Een regentuin: de regenpijp loopt via een goot van klinkers in een ondiepe, beplante poel naast een pad.", "A rain garden: the downpipe runs via a brick channel into a shallow planted pool beside a path.")
+export const ZITMUUR = vis("zitmuur", "Een stapelmuur van natuursteen met een houten zitbank erop, varens in de voegen en een pad van oude klinkers.", "A dry stone wall with a wooden bench on top, ferns in the joints and a path of old bricks.")
+export const PAD_BORDERS = vis("pad-borders", "Een slingerend klinkerpad tussen borders met margrieten, ooievaarsbek en siergras onder een fruitboom.", "A winding brick path between borders of daisies, cranesbill and ornamental grass under a fruit tree.")
+export const POEL = vis("poel", "Een natuurlijke poel met waterlelies, oevers vol planten en grote stapstenen bij een klinkerrand.", "A natural pond with water lilies, planted banks and large stepping stones at a brick edge.")
+export const MAANPOORT = vis("maanpoort", "Een stalen ronde poort boven een pad van betonplaten, tussen borders met salie, zonnehoed en duizendblad.", "A round steel gate over a path of concrete slabs, between borders of sage, coneflower and yarrow.")
+export const VIJVER_TERRAS = vis("vijver-terras", "Een vijver met bloeiende oeverbeplanting die weerspiegelt in het water, met een klinkerterras en een bank onder een stalen pergola.", "A pond with flowering bank planting reflected in the water, with a brick terrace and a bench under a steel pergola.")

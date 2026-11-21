@@ -8,10 +8,9 @@ import { TelLink } from "@/components/handoff/klant"
 import { Opening } from "@/components/wereld/opening"
 import { Beeld } from "@/components/landschap/beeld"
 import { Opkomst } from "@/components/landschap/opkomst"
-import type { Beeld as BeeldData } from "@/components/landschap/beelden"
+import { POEL, REGENTUIN, VIJVER_TERRAS, type Beeld as BeeldData } from "@/components/landschap/beelden"
 import "@/components/landschap/landschap.css"
 import { FOTOS, VIJVER, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
-import { SFEER } from "@/lib/data/sfeer"
 
 // Vijvers in de taal van de voorpagina (bouwbrief, 21 nov 2026): opening met
 // eigen werk, één standpunt, de diensten als lijnlijst, sfeer met label, het
@@ -35,7 +34,6 @@ export const metadata: Metadata = {
 
 const F01 = FOTOS.F01 as FotoData
 const F10: BeeldData = { ...(FOTOS.F10 as FotoData), soort: "project" }
-const sfeer = (f: FotoData): BeeldData => ({ ...f, soort: "sfeer" })
 
 export default function VijversPagina() {
   return (
@@ -80,9 +78,9 @@ export default function VijversPagina() {
           <p className="ls-body ls-lees"><T t={{ nl: "Natuurlijke waterval, beekloop en biofiltersysteem. Planten en pomp doen het zware werk.", en: "A natural waterfall, stream and biofilter system. Plants and pump do the heavy lifting." }} /></p>
         </div>
         <div className="ls-beeldrij">
-          <Beeld beeld={sfeer(SFEER.waterval)} sizes="(min-width: 768px) 58vw, 100vw" className="ls-op" />
-          <Beeld beeld={sfeer(SFEER.koi)} sizes="(min-width: 768px) 40vw, 50vw" className="ls-op" labelRechts />
-          <Beeld beeld={sfeer(SFEER.bloemen)} sizes="(min-width: 768px) 40vw, 50vw" className="ls-op" labelRechts />
+          <Beeld beeld={VIJVER_TERRAS} sizes="(min-width: 768px) 58vw, 100vw" className="ls-op" />
+          <Beeld beeld={POEL} sizes="(min-width: 768px) 40vw, 50vw" className="ls-op" labelRechts />
+          <Beeld beeld={REGENTUIN} sizes="(min-width: 768px) 40vw, 50vw" className="ls-op" labelRechts />
         </div>
       </section>
 

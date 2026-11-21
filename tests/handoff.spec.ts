@@ -42,22 +42,19 @@ test("telefoon @390: het logo bovenin, de tabbalk met Menu onderin", async ({ pa
 test("voorpagina: de opening met Kennismaken en Bekijk het werk", async ({ page }) => {
   await page.goto("/")
   await expect(page.locator("#ls-titel")).toContainText("Een tuin die met je meegroeit.")
-  await expect(page.locator(".ls-hero .ls-herkomst")).toContainText("Sfeerbeeld · AI-visualisatie")
   await expect(page.locator(".ls-hero").getByRole("link", { name: "Kennismaken" })).toHaveAttribute("href", "/kennismaken")
   await expect(page.locator(".ls-hero").getByRole("link", { name: "Bekijk het werk" })).toHaveAttribute("href", "/werk")
 })
 
 // Sfeer en AI dragen altijd hun label; een projectkaart nooit (brief §08).
-test("voorpagina: elk sfeer- en AI-beeld is gelabeld, projectkaarten niet", async ({ page }) => {
-  await page.goto("/")
-  const zonder = await page.evaluate(() =>
-    [...document.querySelectorAll<HTMLImageElement>("main img")]
-      .filter((i) => /\/landschap\/|\/borderpakketten\//.test(i.getAttribute("src") || i.currentSrc))
-      .filter((i) => !i.closest(".ls-beeld")?.querySelector(".ls-herkomst")).length,
-  )
-  expect(zonder).toBe(0)
-  await expect(page.locator(".ls-werkkaart .ls-herkomst")).toHaveCount(0)
-})
+// Geen herkomstlabels op beelden (eigenaar, 21 nov 2026: "ai visualisatie wil ik nergens zien!").
+for (const pad of ["/", "/vijvers", "/tuinen", "/werk/vijverrenovatie"]) {
+  test(`${pad}: geen labels op de beelden`, async ({ page }) => {
+    await page.goto(pad)
+    await expect(page.locator(".ls-herkomst")).toHaveCount(0)
+    await expect(page.locator("main")).not.toContainText(/AI-visualisatie|Sfeerbeeld/i)
+  })
+}
 
 test("minder beweging: de opening staat meteen in het kader", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" })

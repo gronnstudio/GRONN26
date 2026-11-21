@@ -7,7 +7,7 @@ import { Pijl } from "@/components/pijl"
 import { Opening } from "@/components/wereld/opening"
 import { Beeld } from "@/components/landschap/beeld"
 import { Opkomst } from "@/components/landschap/opkomst"
-import { BEPLANTING, type Beeld as BeeldData } from "@/components/landschap/beelden"
+import { MAANPOORT, TERRAS_PERGOLA, type Beeld as BeeldData } from "@/components/landschap/beelden"
 import "@/components/landschap/landschap.css"
 import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
@@ -41,21 +41,14 @@ const ELEMENTEN: { naam: L; zin: L; href?: string }[] = [
   { naam: { nl: "Steen en bestrating", en: "Stone and paving" }, zin: { nl: "Klinkers, tegels, muurtjes en randen: alles wat er kan, elk in één zin.", en: "Pavers, tiles, walls and edges: everything that’s possible, each in one sentence." }, href: "/tuinen/materialen" },
 ]
 
-const BORDER: BeeldData = {
-  soort: "sfeer",
-  src: "/borderpakketten/plukborder.jpg",
-  width: 1600,
-  height: 1200,
-  alt: BORDERPAKKETTEN[5].alt.nl,
-  en: { alt: BORDERPAKKETTEN[5].alt.en },
-}
+const BORDER: BeeldData = TERRAS_PERGOLA
 const TERRASBEELD: BeeldData = { ...TERRAS_FOTOS.reeks[0], soort: "project" }
 
 export default function TuinenPagina() {
   return (
     <div className="ls">
       <Opkomst />
-      <Opening label={{ nl: "Tuinen", en: "Gardens" }} titel={{ nl: "Tuinen & renovatie.", en: "Gardens & renovation." }} zin={<T t={ZIN} />} beeld={BEPLANTING} />
+      <Opening label={{ nl: "Tuinen", en: "Gardens" }} titel={{ nl: "Tuinen & renovatie.", en: "Gardens & renovation." }} zin={<T t={ZIN} />} beeld={MAANPOORT} />
 
       {VERVOLG.nl ? (
         <section className="ls-raster ls-sectie ls-twee ls-mob-weg" aria-labelledby="tuin-standpunt">

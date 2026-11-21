@@ -9,7 +9,7 @@ import { Beeld } from "./beeld"
 import { HeroLandschap } from "./hero"
 import { Opkomst } from "./opkomst"
 import {
-  BEEKLOOP, BEPLANTING, BLAUWE_UUR, BORDER, MATERIALEN, NICK, NICK_WERK,
+  BEPLANTING, PAD_BORDERS, ZITMUUR, MAANPOORT, MATERIALEN, NICK, NICK_WERK,
   TERRAS, VIJVERRENOVATIE, VIJVERRENOVATIE_OVERZICHT, VIJVER_SFEER,
 } from "./beelden"
 import "./landschap.css"
@@ -86,7 +86,7 @@ export function LandschapVoorpagina() {
           <p className="ls-body"><T t={{ nl: "Het grote geheel klopt pas als de details samenwerken.", en: "The whole only works when the details work together." }} /></p>
         </div>
         <h2 id="ls-schaal" className="ls-display ls-schaal-kop ls-op"><T t={{ nl: "Van landschap naar detail.", en: "From landscape to detail." }} /></h2>
-        <Beeld beeld={BEEKLOOP} sizes="(min-width: 1024px) 28vw, 70vw" className="ls-schaal-klein ls-op" />
+        <Beeld beeld={ZITMUUR} sizes="(min-width: 1024px) 28vw, 70vw" className="ls-schaal-klein ls-op" />
       </section>
 
       {/* 03 · Werk (beeld 06): alleen eigen werk, met toestemming */}
@@ -126,7 +126,7 @@ export function LandschapVoorpagina() {
         <div className="ls-routes-kop ls-op">
           <p className="ls-label"><T t={{ nl: "Aanbod", en: "Services" }} /></p>
           <h2 id="ls-routes" className="ls-h1"><T t={{ nl: "Wat heeft jouw buitenruimte nodig?", en: "What does your outdoor space need?" }} /></h2>
-          <Beeld beeld={BLAUWE_UUR} sizes="(min-width: 1024px) 34vw, 100vw" className="ls-routes-beeld" />
+          <Beeld beeld={PAD_BORDERS} sizes="(min-width: 1024px) 34vw, 100vw" className="ls-routes-beeld" />
         </div>
         <ul className="ls-routes-lijst">
           {ROUTES.map((r) => (
@@ -165,7 +165,7 @@ export function LandschapVoorpagina() {
             <li><Link href="/tuinen/materialen" transitionTypes={["schuif"]}><T t={{ nl: "Materialen", en: "Materials" }} /> <Pijl richting="e" /></Link></li>
           </ul>
         </div>
-        <Beeld beeld={BORDER} sizes="(min-width: 1024px) 40vw, 100vw" className="ls-zelf-beeld" labelRechts />
+        <Beeld beeld={MAANPOORT} sizes="(min-width: 1024px) 40vw, 100vw" className="ls-zelf-beeld" labelRechts />
       </section>
 
       {/* 05 · Werkwijze (beeld 11) */}
