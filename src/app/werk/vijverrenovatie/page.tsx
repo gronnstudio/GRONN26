@@ -4,7 +4,7 @@ import { GeenFoto } from "@/components/foto"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
 import { Oplichten } from "@/components/wereld/oplichten"
-import { Alineas, Citaat, Clip, Fiche, Figuur, FotoReeks, Kopregel, Lees, Paar, Slot, Volgende } from "@/components/werk/delen"
+import { Alineas, Citaat, Clip, Fiche, Figuur, FotoReeks, Kopregel, Lees, Meer, Paar, Slot, Volgende } from "@/components/werk/delen"
 import { Waterroute } from "@/components/werk/waterroute"
 import "@/components/werk/werk.css"
 import { Pijl } from "@/components/pijl"
@@ -97,7 +97,7 @@ export default function Vijverrenovatie() {
           </Lees>
         </section>
 
-        <nav aria-labelledby="inhoud-kop" className="w-sectie">
+        <nav aria-labelledby="inhoud-kop" className="w-sectie max-md:hidden">
           <Kopregel id="inhoud-kop" links={<T t={nlEn("De werkzaamheden", "The work")} />}
             rechts={<T t={nlEn(`${HOOFDSTUKKEN.length} stappen`, `${HOOFDSTUKKEN.length} steps`)} />} />
           <ol className="m-0 list-none p-0">
@@ -121,7 +121,9 @@ export default function Vijverrenovatie() {
         <Citaat tekst={KLANT_CITAAT.tekst} bron={KLANT_CITAAT.bron} />
 
         {HOOFDSTUKKEN.map((h) => {
-          const fotos = h.foto ? fotosVoor(h.foto) : []
+          // AI-visualisaties staan niet tussen het werk (eigenaar, 21 nov 2026: "ai visualisatie wil ik nergens zien!")
+          const alle = h.foto ? fotosVoor(h.foto) : []
+          const fotos = alle.filter((f) => !f.label)
           return (
             <div key={h.id}>
               <section id={h.id} aria-labelledby={`${h.id}-kop`} className="w-sectie scroll-mt-6">
@@ -134,7 +136,10 @@ export default function Vijverrenovatie() {
                   <T t={h.kop} />
                 </h2>
                 <Lees className="mt-[clamp(32px,4vw,56px)]">
-                  <Alineas teksten={h.alineas} />
+                  <Alineas teksten={h.alineas.slice(0, 1)} />
+                  {h.alineas.length > 1 || h.planttabel ? (
+                  <Meer>
+                  <Alineas teksten={h.alineas.slice(1)} />
                   {h.planttabel ? (
                     <>
                       <div className="my-8 overflow-x-auto">
@@ -171,6 +176,8 @@ export default function Vijverrenovatie() {
                       <Alineas teksten={NA_PLANTTABEL} />
                     </>
                   ) : null}
+                  </Meer>
+                  ) : null}
                 </Lees>
 
                 {h.schema ? (
@@ -183,7 +190,7 @@ export default function Vijverrenovatie() {
                   <div className="mt-[clamp(48px,6vw,96px)]">
                     <FotoReeks fotos={fotos} />
                   </div>
-                ) : h.foto ? (
+                ) : h.foto && alle.length === 0 ? (
                   <GeenFoto wat={`foto ${h.foto} · ${h.kort.nl.toLowerCase()}`} className="mt-[clamp(48px,6vw,96px)] aspect-[4/3] w-full max-w-[560px]" />
                 ) : null}
 

@@ -575,3 +575,9 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-stappen .ls-body { display: block !important; margin-top: 10px; font-size: 15px; line-height: 22px; }
   .ls-stappen li, .ls-stappen li:last-child { min-height: 200px; }
 }
+
+/* Voet op de telefoon: KVK en BTW onder elkaar, daarna de drie links op één regel */
+@media (max-width: 767px) {
+  .ls-voet-kopie { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 8px 20px; width: 100%; }
+  .ls-voet-kopie > :not(a) { grid-column: 1 / -1; justify-self: start; }
+}

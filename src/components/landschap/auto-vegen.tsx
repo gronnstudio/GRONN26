@@ -9,7 +9,8 @@ import { useEffect } from "react"
 // telefoon: de rij blijft midden in beeld staan (sticky) en schuift kaart voor
 // kaart door terwijl je verder scrollt; elke stap klikt vast op een kaart. Na
 // de laatste kaart scrolt de pagina gewoon verder. Vegen met de duim blijft
-// werken; bij minder beweging staat alles stil en veeg je zelf.
+// werken; bij minder beweging staat alles stil en veeg je zelf. De kop erboven
+// reist mee, zodat je ziet waar de kaarten bij horen (geen leeg scherm).
 const RIJEN = ".ls-werkraster, .ls-stappen, .ls-beeldrij"
 const PER_KAART = 0.38 // zoveel schermhoogte scrollen per kaart
 
@@ -28,8 +29,15 @@ export function AutoVegen() {
     const kaartenVan = (rij: HTMLElement) => [...rij.children].filter((k) => (k as HTMLElement).offsetParent) as HTMLElement[]
     const actief = (rij: HTMLElement) => smal.matches && !stil() && kaartenVan(rij).length > 1 && rij.scrollWidth > rij.clientWidth + 4
 
+    const kopVan = (rij: HTMLElement) => {
+      const k = rij.previousElementSibling as HTMLElement | null
+      return k && k.offsetParent ? k : null
+    }
+    const verschoven = new Map<HTMLElement, number>()
     const los = (rij: HTMLElement) => {
       for (const p of ["position", "top", "margin-top"]) rij.style.removeProperty(p)
+      kopVan(rij)?.style.removeProperty("transform")
+      verschoven.delete(rij)
       rij.parentElement?.style.removeProperty("display")
       rij.parentElement?.style.removeProperty("min-height")
     }
@@ -42,7 +50,10 @@ export function AutoVegen() {
         const ouder = rij.parentElement!
         ouder.style.display = "block"
         const vh = innerHeight
-        const top = Math.max(64, (vh - rij.offsetHeight) / 2)
+        // kop + rij samen midden in beeld
+        const kop = kopVan(rij)
+        const kopH = kop ? kop.offsetHeight + 32 : 0
+        const top = Math.max(64, (vh - rij.offsetHeight - kopH) / 2) + kopH
         ouder.style.minHeight = `${Math.round(ouder.offsetHeight + (kaartenVan(rij).length - 1) * PER_KAART * vh)}px`
         rij.style.position = "sticky"
         rij.style.top = `${Math.round(top)}px`
@@ -55,14 +66,20 @@ export function AutoVegen() {
       frame = 0
       for (const rij of rijen) {
         if (!actief(rij)) continue
-        if (Date.now() - (gerakt.get(rij) ?? 0) < 1500) continue
         const kaarten = kaartenVan(rij)
-        const voor = rij.previousElementSibling as HTMLElement | null
+        const kop = kopVan(rij)
         const vast = parseFloat(rij.style.top) || 0
-        // hoe ver de rij al vaststaat: van 0 (net midden in beeld) tot de hele scrollweg
-        const natuurlijk = voor ? voor.getBoundingClientRect().bottom : rij.getBoundingClientRect().top
         const weg = (kaarten.length - 1) * PER_KAART * innerHeight
-        const p = Math.min(1, Math.max(0, (vast - natuurlijk) / weg))
+        // hoe ver de rij al vaststaat: van 0 (net midden in beeld) tot de hele scrollweg
+        const nu = verschoven.get(rij) ?? 0
+        const natuurlijk = kop ? kop.getBoundingClientRect().bottom - nu + 32 : rij.getBoundingClientRect().top
+        const d = Math.min(weg, Math.max(0, vast - natuurlijk))
+        if (kop && Math.abs(d - nu) > 0.5) {
+          kop.style.transform = d ? `translateY(${Math.round(d)}px)` : ""
+          verschoven.set(rij, d)
+        }
+        if (Date.now() - (gerakt.get(rij) ?? 0) < 1500) continue
+        const p = d / weg
         const i = Math.round(p * (kaarten.length - 1))
         if (stand.get(rij) === i) continue
         stand.set(rij, i)

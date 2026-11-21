@@ -10,3 +10,12 @@
    "Eén samenhangend" op het brede scherm op één regel past. */
 .wk-lang .w-reus { font-size: clamp(48px, 8vw, 132px); }
 
+
+/* "Lees verder" in een projecthoofdstuk: alleen op de telefoon zichtbaar */
+.w-meer-knop {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  font-weight: 600; cursor: pointer; list-style: none; text-decoration: underline; text-underline-offset: 4px;
+}
+.w-meer-knop::-webkit-details-marker { display: none; }
+.w-meer[open] > .w-meer-knop { display: none; }
+@media (min-width: 768px) { .w-meer-knop { display: none; } }

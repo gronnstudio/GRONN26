@@ -95,7 +95,7 @@ export default function VijversPagina() {
         </Link>
       </section>
 
-      <section className="ls-raster ls-sectie ls-twee" aria-labelledby="vijver-vraag">
+      <section className="ls-raster ls-sectie ls-twee ls-mob-weg" aria-labelledby="vijver-vraag">
         <div className="ls-twee-kop ls-op">
           <p className="ls-label"><T t={{ nl: "Vraag", en: "Question" }} /></p>
           <h2 id="vijver-vraag" className="ls-h2"><T t={{ nl: "Kan ik alleen hulp met mijn vijver krijgen?", en: "Can I get help with just my pond?" }} /></h2>
