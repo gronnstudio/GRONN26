@@ -518,8 +518,8 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-standpunt .ls-standpunt-beeld { width: 78%; justify-self: end; margin-right: calc(-1 * var(--g)); border-radius: 6px 0 0 6px; aspect-ratio: 3 / 4; margin-top: -8px; }
   .ls-schaal { position: relative; }
   .ls-schaal-groot { margin-left: calc(-1 * var(--g)); width: calc(88% + var(--g)); border-radius: 0 6px 6px 0; aspect-ratio: 4 / 5; }
-  .ls-schaal-klein { display: block !important; position: relative; width: 52%; margin-top: -30%; z-index: 1; outline: 6px solid var(--grond); }
-  .ls-schaal-kop { margin-top: 8px; }
+  .ls-schaal-klein { display: block !important; position: relative; width: 52%; margin-top: -30%; z-index: 1; outline: 6px solid var(--grond); order: 1; justify-self: end; }
+  .ls-schaal-kop { margin-top: 8px; order: 2; }
   .ls-water-beeld, .ls-zelf-beeld, .ls-beeldrij-rand { margin-inline: calc(-1 * var(--g)); border-radius: 0; aspect-ratio: 4 / 5; }
   .ls-studio { grid-template-columns: 1fr 1fr; column-gap: 12px; }
   .ls-studio-tekst { grid-column: 1 / -1; }
