@@ -22,7 +22,7 @@ export default function FaqPagina() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(lijst)).replace(/</g, "\\u003c") }}
       />
       {/* Eén lang woord per regel: op de telefoon iets kleiner, zodat het past. */}
-      <div className="max-md:[&_.w-reus]:text-[13vw]!">
+      <div>
       <Opening
         label={{ nl: `Vragen · ${lijst.length}`, en: `Questions · ${lijst.length}` }}
         titel={{ nl: "Veelgestelde\nvragen", en: "Frequently\nasked\nquestions" }}

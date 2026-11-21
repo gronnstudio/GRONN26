@@ -169,23 +169,7 @@ export function LandschapVoorpagina() {
       </section>
 
       {/* 05 · Werkwijze (beeld 11) */}
-      <section id="werkwijze" className="ls-raster ls-sectie ls-werkwijze" aria-labelledby="ls-werkwijze">
-        <div className="ls-werkwijze-kop ls-op">
-          <p className="ls-label"><T t={{ nl: "Zo werk ik", en: "How I work" }} /></p>
-          <h2 id="ls-werkwijze" className="ls-h1"><T t={{ nl: "Eerst kijken. Dan keuzes maken.", en: "First look. Then make choices." }} /></h2>
-        </div>
-        <ol className="ls-stappen">
-          {STAPPEN.map(([kop, zin], i) => (
-            <li key={kop.nl} className="ls-op">
-              <span className="ls-stap-nr" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <h3 className="ls-h3"><T t={kop} /></h3>
-                <p className="ls-body"><T t={zin} /></p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <LandschapWerkwijze />
 
       {/* 06 · Studio (beeld 10): Nick zelf, geen gegenereerde vervanger */}
       <section className="ls-raster ls-sectie ls-studio" aria-labelledby="ls-studio">
@@ -201,5 +185,28 @@ export function LandschapVoorpagina() {
         <Beeld beeld={NICK_WERK} sizes="(min-width: 1024px) 18vw, 50vw" className="ls-studio-werk ls-op" />
       </section>
     </div>
+  )
+}
+
+/** De werkwijze in vijf stappen; ook op Studio. */
+export function LandschapWerkwijze() {
+  return (
+    <section id="werkwijze" className="ls-raster ls-sectie ls-werkwijze" aria-labelledby="ls-werkwijze">
+      <div className="ls-werkwijze-kop ls-op">
+        <p className="ls-label"><T t={{ nl: "Zo werk ik", en: "How I work" }} /></p>
+        <h2 id="ls-werkwijze" className="ls-h1"><T t={{ nl: "Eerst kijken. Dan keuzes maken.", en: "First look. Then make choices." }} /></h2>
+      </div>
+      <ol className="ls-stappen">
+        {STAPPEN.map(([kop, zin], i) => (
+          <li key={kop.nl} className="ls-op">
+            <span className="ls-stap-nr" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3 className="ls-h3"><T t={kop} /></h3>
+              <p className="ls-body"><T t={zin} /></p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
   )
 }

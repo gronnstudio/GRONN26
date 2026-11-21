@@ -314,3 +314,131 @@ html:not(:has([data-links])) body { padding-bottom: 0; }
 .ls-voet .ls-voet-links, .ls-voet .ls-voet-onder { width: min(1280px, calc(100% - 2 * var(--g))); padding-inline: 0; }
 .ls-menu-contact { align-items: center; }
 .ls-menu-contact > span { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* ═══ De andere pagina's (Nick, 21 nov 2026: "de home pagina is geweldig,
+   maar de rest van de pagina's vreselijk"). Eén opening, één raster en één
+   letterschaal voor elke subpagina, zodat ze dezelfde rust hebben als de
+   voorpagina. De oude gedeelde klassen (wrap, lbl, w-sectie, w-onthul,
+   ar-h2) volgen hier de brief, zodat ook Journaal, Shop en Vragen meegaan. */
+html:root:not(:has([data-links])) { --goot: var(--g); --breedte: calc(1280px + 2 * var(--g)); }
+html:root:not(:has([data-links])) .lbl { font-family: var(--font-montserrat), sans-serif; font-size: 12px; line-height: 18px; font-weight: 600; letter-spacing: .08em; }
+html:root:not(:has([data-links])) .syne { font-family: var(--font-syne), sans-serif; font-weight: 700; }
+html:root:not(:has([data-links])) .ar-punt, html:root:not(:has([data-links])) .w-punt { display: none; }
+html:root:not(:has([data-links])) .ar-h2 { font-size: clamp(36px, 26.6px + 2.41vw, 60px); line-height: 1.08; letter-spacing: -.03em; }
+html:root:not(:has([data-links])) .ar-sectiekop .ar-h2 { font-size: clamp(32px, 24.2px + 2vw, 52px); }
+html:root:not(:has([data-links])) .ar-sectiekop { border-top: 0; padding-top: 0; align-items: end; }
+.w-sectie { padding-top: clamp(64px, 22px + 10.79vw, 160px); }
+.w-onthul { margin: 0; max-width: 30em; font-family: var(--font-montserrat), sans-serif; font-weight: 500; font-size: clamp(20px, 15.6px + 1.12vw, 30px); line-height: 1.45; letter-spacing: -.01em; }
+.w-kopregel { border-top: 1px solid var(--lijn); padding-top: 16px; }
+.w-lijnlink { color: var(--oranje-tekst); font-weight: 600; }
+
+/* de opening: zelfde opbouw als de voorpagina, zonder het grote doek */
+.ls-opening { padding-top: clamp(24px, 4vw, 56px); padding-bottom: 0; background: var(--grond); }
+.ls-opening-tekst { display: grid; gap: 20px; }
+.ls-opening-links { display: grid; gap: 14px; min-width: 0; }
+.ls-opening-label .kruimelpad ol, .ls-opening-label .w-label { margin: 0; color: var(--gedempt); }
+.ls-opening-label .kruimelpad [aria-current] { color: var(--inkt); }
+.ls-opening-kop { overflow-wrap: break-word; hyphens: manual; max-width: 16ch; }
+.ls-opening-zin { max-width: 30em; color: var(--gedempt); }
+.ls-opening-extra { padding-top: 24px; }
+.ls-opening-beeld { margin-top: clamp(32px, 4vw, 64px); }
+.ls-opening-beeld .w-beeld { aspect-ratio: 4 / 3; border-radius: 6px; }
+@media (min-width: 768px) { .ls-opening-beeld .w-beeld { aspect-ratio: 21 / 9; } }
+@media (min-width: 1024px) {
+  .ls-opening-tekst { grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); column-gap: 64px; align-items: end; }
+  .ls-opening-zin { padding-bottom: 8px; }
+}
+/* een opening zonder beeld krijgt lucht tot de inhoud */
+.ls-opening:not(:has(.ls-opening-beeld)) { padding-bottom: clamp(16px, 2vw, 32px); }
+.wk-opening-terras .w-beeld img { object-position: 50% 65%; }
+
+/* ── bouwstenen voor de subpagina's ───────────────────────────────── */
+.ls-twee { display: grid; gap: 32px; }
+.ls-twee-kop { display: grid; gap: 14px; align-content: start; justify-items: start; }
+@media (min-width: 1024px) {
+  .ls-twee { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+  .ls-twee-kop { grid-column: 1 / 6; position: sticky; top: 112px; align-self: start; }
+  .ls-twee-inhoud { grid-column: 7 / 13; min-width: 0; }
+}
+.ls-diensten-noot { margin-top: 16px; color: var(--gedempt); }
+.ls-beeldrij { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ls-beeldrij > :first-child { grid-column: 1 / -1; aspect-ratio: 3 / 2; }
+.ls-beeldrij > :not(:first-child) { aspect-ratio: 4 / 5; }
+@media (min-width: 768px) {
+  .ls-beeldrij { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
+  .ls-beeldrij > :first-child { grid-column: 1 / 8; grid-row: 1 / 3; aspect-ratio: auto; min-height: 100%; }
+  .ls-beeldrij > :nth-child(2) { grid-column: 8 / 13; aspect-ratio: 3 / 2; }
+  .ls-beeldrij > :nth-child(3) { grid-column: 8 / 13; aspect-ratio: 3 / 2; }
+}
+.ls-elementen { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--lijn); }
+.ls-elementen li { border-bottom: 1px solid var(--lijn); }
+.ls-element { display: grid; gap: 6px; padding-block: 20px; color: inherit; text-decoration: none; }
+a.ls-element { grid-template-columns: minmax(0, 1fr) auto; }
+a.ls-element .ls-body { grid-column: 1; }
+a.ls-element .ls-route-pijl { grid-row: 1 / 3; }
+.ls-element .ls-body { color: var(--gedempt); max-width: 32em; }
+a.ls-element:hover .ls-h3 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+a.ls-element:is(:hover, :focus-visible) .ls-route-pijl { translate: 6px 0; color: var(--oranje-tekst); }
+@media (min-width: 768px) { .ls-elementen { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+
+.ls-feiten { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--lijn); }
+.ls-feiten > div { display: grid; gap: 4px; padding: 16px 16px 16px 0; border-bottom: 1px solid var(--lijn); }
+.ls-feiten dt { margin: 0; }
+.ls-feiten dd { margin: 0; font: 600 18px/1.4 var(--font-montserrat), sans-serif; }
+@media (min-width: 768px) { .ls-feiten { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.ls-verhaal { display: grid; gap: clamp(56px, 8vw, 120px); }
+.ls-hoofdstuk { display: grid; gap: 24px; margin: 0; }
+.ls-hoofdstuk-beeld { aspect-ratio: 4 / 3; }
+.ls-hoofdstuk figcaption { margin-top: 10px; }
+@media (min-width: 1024px) {
+  .ls-hoofdstuk { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: center; }
+  .ls-hoofdstuk-tekst { grid-column: 1 / 6; }
+  .ls-hoofdstuk-fig { grid-column: 7 / 13; margin: 0; }
+  .ls-hoofdstuk:nth-child(even) .ls-hoofdstuk-tekst { grid-column: 8 / 13; grid-row: 1; }
+  .ls-hoofdstuk:nth-child(even) .ls-hoofdstuk-fig { grid-column: 1 / 7; grid-row: 1; }
+}
+.ls-hoofdstuk-fig { margin: 0; }
+
+.ls-portret-opening { display: grid; gap: 24px; }
+.ls-portret-opening .ls-beeld { aspect-ratio: 4 / 5; }
+@media (min-width: 1024px) {
+  .ls-portret-opening { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; }
+  .ls-portret-opening > :first-child { grid-column: 1 / 7; }
+  /* klein en rechtop (eigenaar, 14 nov 2026: "die foto is te groooooooot!") */
+  .ls-portret-opening > :last-child { grid-column: 9 / 13; }
+}
+
+/* /werk: één project per blok, beeld groot, tekst ernaast op de onderlijn */
+.ls-werkpagina { gap: 20px; }
+.ls-werkpagina .ls-werkbeeld { aspect-ratio: 4 / 3; }
+.ls-werkpagina-tekst { display: grid; gap: 14px; justify-items: start; }
+.ls-werkpagina .ls-werknaam { margin-top: 0; display: block; }
+a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+@media (min-width: 1024px) {
+  .ls-werkpagina { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: end; }
+  .ls-werkpagina .ls-werkbeeld { grid-column: 1 / 9; grid-row: 1; aspect-ratio: 3 / 2; }
+  .ls-werkpagina-tekst { grid-column: 9 / 13; grid-row: 1; padding-left: 16px; }
+  .ls-werkpagina-rechts .ls-werkbeeld { grid-column: 5 / 13; }
+  .ls-werkpagina-rechts .ls-werkpagina-tekst { grid-column: 1 / 5; padding: 0 16px 0 0; }
+  .ls-werkpagina .ls-h1 { font-size: clamp(32px, 2.8vw, 44px); line-height: 1.1; }
+}
+
+/* Tuinen: fasen met het label links van de rijen */
+.ls-fase { display: grid; gap: 12px; padding-top: 32px; scroll-margin-top: 96px; }
+.ls-fase:first-of-type { padding-top: 0; }
+.ls-fase-kop { margin: 0; }
+@media (min-width: 1024px) {
+  .ls-fase { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding-top: 48px; }
+  .ls-fase-kop { grid-column: 1 / 3; padding-top: 28px; }
+  .ls-fase > div { grid-column: 3 / 13; }
+}
+.ls-vraag { display: grid; gap: 28px; justify-items: start; }
+
+/* Studio: Nicks eigen tekst, rustig leesbaar */
+.ls-hoofdstuk-groot { font-size: clamp(17px, 15.7px + .34vw, 20px); line-height: 1.65; max-width: 32em; }
+.ls-verhaal-slot { margin-top: clamp(64px, 9vw, 140px); max-width: 20em; }
+.ls-portret-opening .w-onthul { align-self: start; }
+@media (min-width: 1024px) { .ls-portret-opening .w-onthul { align-self: end; padding-bottom: 8px; } }
+.ls-kennis { padding-top: clamp(32px, 4vw, 56px); padding-bottom: clamp(64px, 8vw, 128px); }
+#inhoud article { padding-bottom: clamp(64px, 8vw, 128px); }

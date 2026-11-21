@@ -39,7 +39,7 @@ export default function TerrasGeulle() {
     <article>
       <div className="wk-opening wk-opening-terras">
         <Opening
-          label={nlEn("GR / 002 · Terras Geulle", "GR / 002 · Patio Geulle")}
+          label={nlEn("Terras Geulle", "Patio Geulle")}
           titel={REUSTITEL}
           zin={<T t={nlEn(TERRAS.ondertitel, EN.ondertitel)} />}
           foto={HELD}
@@ -49,9 +49,8 @@ export default function TerrasGeulle() {
 
       <div className="wrap">
         <Fiche
-          kolommen="sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-9"
+          kolommen="sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-8"
           regels={[
-            [nlEn("Code", "Code"), "GR / 002"],
             [nlEn("Type", "Type"), nlEn(TERRAS.categorie, EN.categorie)],
             [nlEn("Plaats", "Location"), "Geulle"],
             [nlEn("Wanneer", "When"), nlEn(TERRAS.wanneer, EN.wanneer)],

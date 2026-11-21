@@ -67,7 +67,7 @@ export default function Vijverrenovatie() {
     <article>
       <div className="wk-opening wk-lang">
         <Opening
-          label={{ nl: `GR / 001 · ${VIJVER.categorie}`, en: `GR / 001 · ${EN.categorie}` }}
+          label={{ nl: VIJVER.categorie, en: EN.categorie }}
           titel={REUSTITEL}
           zin={<T t={nlEn(VIJVER.ondertitel, EN.ondertitel)} />}
           foto={HELD}
@@ -77,9 +77,8 @@ export default function Vijverrenovatie() {
 
       <div className="wrap">
         <Fiche
-          kolommen="sm:grid-cols-3 md:grid-cols-6"
+          kolommen="sm:grid-cols-3 md:grid-cols-5"
           regels={[
-            [nlEn("Code", "Code"), "GR / 001"],
             [nlEn("Type", "Type"), nlEn(VIJVER.categorie, EN.categorie)],
             [nlEn("Jaar", "Year"), "2026"],
             [nlEn("Status", "Status"), nlEn(VIJVER.status, EN.status)],

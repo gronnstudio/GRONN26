@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import { Foto } from "@/components/foto"
-import { PORTRET } from "@/components/over/portret"
-import { Werkwijze } from "@/components/voorpagina/werkwijze"
-import "@/components/voorpagina/voorpagina.css"
 import { T } from "@/components/taal"
 import { Opening } from "@/components/wereld/opening"
-import { Oplichten } from "@/components/wereld/oplichten"
+import { Beeld } from "@/components/landschap/beeld"
+import { Opkomst } from "@/components/landschap/opkomst"
+import { NICK, type Beeld as BeeldData } from "@/components/landschap/beelden"
+import { LandschapWerkwijze } from "@/components/landschap/voorpagina"
+import "@/components/landschap/landschap.css"
 import { OVER_MIJ } from "@/lib/data/teksten"
 import { FOTOS, fotosVoor, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
@@ -19,7 +19,7 @@ const MOESTUIN: FotoData = {
 }
 
 // Na elke alinea één echte foto van Nick of zijn werk, passend bij wat er
-// staat; de laatste twee korte alinea's lopen zonder foto door naar het slot.
+// staat; de laatste korte alinea loopt zonder foto door naar het slot.
 const VERHAAL_FOTOS: FotoData[] = [
   FOTOS.F01 as FotoData, // kijken naar licht, water en beplanting
   FOTOS.F11 as FotoData, // bouwen met de handen
@@ -28,11 +28,12 @@ const VERHAAL_FOTOS: FotoData[] = [
   FOTOS.F10 as FotoData, // bodem, water en planten die bij de plek passen
   fotosVoor("F08")[1], // vaak ook modder
 ]
-const HOOFDSTUKKEN = VERHAAL_FOTOS.length
+const eigen = (f: FotoData): BeeldData => ({ ...f, soort: f.src.includes("/studio/") ? "studio" : "project" })
 
-// Over mij in de taal van de voorpagina: donkere opening met het portret
-// groot, Nicks eigen tekst letterlijk, Zo werk ik als het raster van de voorpagina
-// en het bosgroene Kennismaken-vlak.
+// Studio in de taal van de voorpagina (bouwbrief, 21 nov 2026): opening met
+// Nicks eerste zin en het portret, daarna zijn eigen tekst letterlijk in
+// hoofdstukken met een eigen foto, om en om, en de werkwijze van de voorpagina.
+// Bijschriften staan onder de foto, nooit erop.
 export const metadata: Metadata = {
   title: "Over mij",
   description: OVER_MIJ[0].nl,
@@ -40,65 +41,53 @@ export const metadata: Metadata = {
 
 export default function Over() {
   const [eerste, ...rest] = OVER_MIJ
+  const metFoto = rest.slice(0, VERHAAL_FOTOS.length)
+  const zonder = rest.slice(VERHAAL_FOTOS.length)
   return (
-    <>
-      <Opening label={{ nl: "Hovenier en ecologisch ontwerper", en: "Gardener and ecological designer" }} titel={{ nl: "Over mij", en: "About me" }}>
-        {/* Het portret staat rechtop; daarom een eigen kader (3:2, op de
-            telefoon 4:5) met het gezicht in beeld, in plaats van 16:9. */}
-        {/* op desktop klein en rechtop (eigenaar, 14 nov 2026: "die foto is te groooooooot!") */}
-        <figure className="w-groei m-0 md:max-w-[380px]">
-          <Foto
-            foto={PORTRET}
-            priority
-            sizes="(min-width: 768px) 380px, 100vw"
-            className="aspect-[4/5] [&_img]:object-[50%_30%]"
-          />
-          <figcaption className="lbl mt-4 text-gedempt">Nick Peters · GRØNN Studio</figcaption>
-        </figure>
+    <div className="ls">
+      <Opkomst />
+      <Opening
+        label="Studio"
+        titel={{ nl: "Van ontwerp tot uitvoering: één aanspreekpunt.", en: "From design to build: one point of contact." }}
+        zin={<T t={{ nl: "Hovenier en ecologisch ontwerper, in Stein en omgeving.", en: "Gardener and ecological designer, in and around Stein." }} />}
+      >
+        <div className="ls-portret-opening">
+          <p className="w-onthul"><T t={eerste} /></p>
+          <Beeld beeld={NICK} priority sizes="(min-width: 1024px) 50vw, 100vw" className="ls-portret-beeld" />
+        </div>
       </Opening>
 
-      <section aria-labelledby="h-verhaal" className="wrap w-sectie">
-        <div className="w-kopregel">
-          <h2 id="h-verhaal" className="lbl m-0 font-normal">Nick Peters</h2>
-          <span className="lbl text-gedempt">GRØNN Studio</span>
+      <section className="ls-raster ls-sectie" aria-labelledby="h-verhaal">
+        <div className="ls-sectiekop ls-op">
+          <div>
+            <p className="ls-label">Nick Peters</p>
+            <h2 id="h-verhaal" className="ls-h1"><T t={{ nl: "Waar ik vandaan kom.", en: "Where I come from." }} /></h2>
+          </div>
         </div>
-        <Oplichten tekst={eerste} className="m-0" />
-        {/* Het verhaal in hoofdstukken onder elkaar: elke alinea met haar
-            foto, om en om links en rechts (versimpeld 24 okt 2026; schoof
-            sinds 19 okt zijwaarts). */}
-        <div className="mt-[clamp(40px,5vw,72px)]">
-            {rest.slice(0, HOOFDSTUKKEN).map((alinea, i) => {
-              const foto = VERHAAL_FOTOS[i]
-              const boven = i % 2 === 0
-              return (
-                <div key={i} className="w-hoofdstuk">
-                  <div className={`w-hoofdstuk-tekst ${boven ? "" : "md:order-2"}`}>
-                    <span className="lbl text-gedempt">{String(i + 1).padStart(2, "0")} / {String(HOOFDSTUKKEN).padStart(2, "0")}</span>
-                    <Oplichten tekst={alinea} className="mt-4 mb-0 text-[clamp(17px,1.5vw,23px)]! leading-[1.55]!" />
-                  </div>
-                  <figure className="w-hoofdstuk-foto">
-                    <Foto foto={foto} sizes="(min-width: 768px) 50vw, 100vw" className="h-full" />
-                    {foto.bijschrift ? (
-                      <figcaption className="lbl absolute bottom-3 left-3 rounded-full bg-antraciet/80 px-2.5 py-1 text-gebroken-wit">
-                        <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
-                      </figcaption>
-                    ) : null}
-                  </figure>
-                </div>
-              )
-            })}
-          {rest.slice(HOOFDSTUKKEN).map((alinea, i) => (
-            <div key={i} className="mx-auto max-w-[680px] py-[6svh]">
-              <Oplichten tekst={alinea} className="m-0 text-[clamp(18px,1.6vw,24px)]! leading-[1.6]!" />
-            </div>
-          ))}
+        <div className="ls-verhaal">
+          {metFoto.map((alinea, i) => {
+            const foto = VERHAAL_FOTOS[i]
+            return (
+              <div key={i} className="ls-hoofdstuk">
+                <p className="ls-body ls-hoofdstuk-tekst ls-hoofdstuk-groot ls-op"><T t={alinea} /></p>
+                <figure className="ls-hoofdstuk-fig ls-op">
+                  <Beeld beeld={eigen(foto)} sizes="(min-width: 1024px) 50vw, 100vw" className="ls-hoofdstuk-beeld" />
+                  {foto.bijschrift ? (
+                    <figcaption className="ls-annotatie">
+                      <T t={foto.en?.bijschrift ? { nl: foto.bijschrift, en: foto.en.bijschrift } : foto.bijschrift} />
+                    </figcaption>
+                  ) : null}
+                </figure>
+              </div>
+            )
+          })}
         </div>
+        {zonder.map((alinea, i) => (
+          <p key={i} className="ls-h2 ls-verhaal-slot ls-op"><T t={alinea} /></p>
+        ))}
       </section>
 
-      <div className="vp-wortel">
-        <Werkwijze />
-      </div>
-
-    </>
+      <LandschapWerkwijze />
+    </div>
   )
 }
