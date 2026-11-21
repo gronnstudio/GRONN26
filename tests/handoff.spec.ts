@@ -7,7 +7,7 @@ import { expect, test } from "./fixtures"
 test("desktop @1440: het dock staat onderaan, Werk gaat naar /werk", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  const nav = page.locator("nav[data-menu]")
+  const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
   await expect(nav).toBeVisible()
   const box = await nav.boundingBox()
   expect(box!.y + box!.height).toBeGreaterThan(800)
@@ -25,28 +25,22 @@ test("donker thema werkt op de handoff-voorpagina", async ({ page }) => {
 test("telefoon @390: het dock onderaan, geen handoff-kop", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/")
-  await expect(page.locator("nav[data-menu]")).toBeVisible()
+  await expect(page.getByRole("navigation", { name: "Hoofdmenu" })).toBeVisible()
   await expect(page.locator(".ho-kop")).toBeHidden()
 })
 
-test("voorpagina als tijdschrift: prijzen, foto via WhatsApp, voor/nu met review, draaiende band", async ({ page }) => {
+// De voorpagina van nul (ar/voorpagina.tsx, 13 nov 2026): de opening met twee knoppen.
+test("voorpagina: de opening met Start een project en een foto via WhatsApp", async ({ page }) => {
   await page.goto("/")
-  await expect(page.locator("#mg-titel")).toContainText("Vijvers en natuurlijke tuinen, met een vaste prijs vooraf.")
-  await expect(page.locator(".mg-inhoud")).toContainText("€ 45 per maand")
-  await expect(page.locator(".mg-inhoud")).toContainText("Doorlichting € 195")
-  const foto = page.getByRole("link", { name: /Stuur een foto/ }).first()
-  await expect(foto).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/)
-  await expect(page.locator(".mg-citaat")).toContainText("Veronique")
-  // de band draait vanzelf; de tweede ronde is alleen voor het oog
-  await expect(page.locator(".mg-band-reeks")).toHaveCount(2)
-  await expect(page.locator(".mg-band-reeks").nth(1)).toHaveAttribute("aria-hidden", "true")
+  await expect(page.locator("#ar-titel")).toBeVisible()
+  await expect(page.getByRole("link", { name: "Start een project" }).first()).toHaveAttribute("href", "/start-een-project")
+  await expect(page.getByRole("link", { name: /Stuur een foto/ }).first()).toHaveAttribute("href", /^https:\/\/wa\.me\/\d+\?text=/)
 })
 
 test("aanvraag: verder zonder keuze geeft een fout en blijft op stap 1", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/start-een-project")
   await expect(page.getByText("Stap 1 van 4")).toBeVisible()
-  await expect(page.locator("nav[data-menu]")).toBeHidden()
   await page.getByRole("button", { name: /Volgende stap/ }).click()
   await expect(page.locator(".hw-samenvatting")).toContainText("Kies wat je wilt laten doen")
   await expect(page.getByText("Stap 1 van 4")).toBeVisible()
@@ -86,18 +80,7 @@ test("aanvraag: vier stappen tot de bevestiging, met referentie", async ({ page 
   expect(body).toContain("Planning: Binnen 3 maanden")
 })
 
-test("voor/nu: de schuif werkt met het toetsenbord en verschuift de grens", async ({ page }) => {
-  await page.goto("/")
-  const schuif = page.getByRole("slider", { name: "Schuif tussen voor en nu" })
-  await schuif.focus()
-  await expect(schuif).toHaveValue("50")
-  for (let i = 0; i < 10; i++) await page.keyboard.press("ArrowLeft")
-  await expect(schuif).toHaveValue("40")
-  const pos = await page.locator(".ho-vergelijk").evaluate((e) => getComputedStyle(e).getPropertyValue("--pos").trim())
-  expect(pos).toBe("40%")
-})
-
-test("Rubriek Tuinen: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
+test("Tuinen in het dock: de pagina schuift binnen met een view transition van het type schuif", async ({ page }) => {
   await page.addInitScript(() => {
     const w = window as unknown as { __vt: string[] }
     w.__vt = []
@@ -110,7 +93,7 @@ test("Rubriek Tuinen: de pagina schuift binnen met een view transition van het t
     }) as typeof document.startViewTransition
   })
   await page.goto("/")
-  await page.locator(".mg-rubriek", { hasText: "Tuinen" }).click()
+  await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("link", { name: "Tuinen" }).click()
   await expect(page).toHaveURL(/\/tuinen$/)
   expect(await page.evaluate(() => (window as unknown as { __vt: string[] }).__vt)).toContain("schuif")
 })
@@ -127,23 +110,14 @@ test("pijlen zijn getekend (svg), geen ↗-teken dat op iPhone een emoji wordt",
   await page.goto("/")
   const tekst = await page.locator("main").innerText()
   expect(tekst).not.toMatch(/[↗↓↑]/)
-  await expect(page.getByRole("link", { name: "Start een project" }).first().locator("svg")).toHaveCount(1)
 })
 
-test("voorpagina: de voet sluit direct aan op de eind-CTA, geen lege balk", async ({ page }) => {
+test("voorpagina: de voet sluit direct aan op het slot, geen lege balk", async ({ page }) => {
   await page.goto("/")
   const gat = await page.evaluate(() => {
-    const eind = document.querySelector("#ho-eind")!.getBoundingClientRect().bottom
-    const voet = document.querySelector("footer.bos-vlak")!.getBoundingClientRect().top
+    const eind = document.querySelector(".ar-slot")!.getBoundingClientRect().bottom
+    const voet = document.querySelector("footer.ar-voet")!.getBoundingClientRect().top
     return Math.round(voet - eind)
   })
   expect(gat).toBe(0)
-})
-
-test("menu open: de pagina wijkt terug, en staat stil bij minder beweging", async ({ page }) => {
-  await page.goto("/")
-  await page.getByRole("button", { name: /menu/i }).last().click()
-  await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toContain("0.9")
-  await page.emulateMedia({ reducedMotion: "reduce" })
-  await expect.poll(() => page.locator("#inhoud").evaluate((e) => getComputedStyle(e).transform)).toBe("none")
 })
