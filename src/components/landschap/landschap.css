@@ -581,3 +581,9 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-voet-kopie { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 8px 20px; width: 100%; }
   .ls-voet-kopie > :not(a) { grid-column: 1 / -1; justify-self: start; }
 }
+
+/* Telefoon: tikvlakken van minstens 44px, tekst nooit kleiner dan 16px */
+@media (max-width: 767px) {
+  .kruimelpad a { display: inline-block; padding-block: 14px; margin-block: -14px; }
+  .ls-stappen .ls-body { font-size: 16px !important; line-height: 24px !important; }
+}

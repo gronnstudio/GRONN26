@@ -1,5 +1,6 @@
 "use client"
 
+import { Pijl } from "@/components/pijl"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useId, useRef, useState, type FocusEvent, type FormEvent, type ReactNode, type RefObject } from "react"
@@ -414,7 +415,7 @@ export function KennismakenFormulier() {
           disabled={status === "bezig"}
           className="knop self-start border-0 bg-oranje text-antraciet transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-inkt disabled:cursor-wait disabled:opacity-60"
         >
-          {status === "bezig" ? <T t={{ nl: "Versturen…", en: "Sending…" }} /> : <T t={{ nl: "Verstuur →", en: "Send →" }} />}
+          {status === "bezig" ? <T t={{ nl: "Versturen…", en: "Sending…" }} /> : <><T t={{ nl: "Verstuur", en: "Send" }} /> <Pijl richting="e" /></>}
         </button>
         <p className="lbl m-0 text-gedempt">
           <T t={{ nl: "Je bericht gaat via FormSubmit naar mijn mailbox.", en: "Your message reaches my inbox via FormSubmit." }} /> ·{" "}
@@ -426,7 +427,7 @@ export function KennismakenFormulier() {
         <p className="lbl m-0 text-gedempt"><T t={{ nl: "Liever direct?", en: "Rather direct?" }} /></p>
         <a href={BUSINESS.emailHref} className="w-lijnlink self-start text-[18px] [overflow-wrap:anywhere]">{BUSINESS.email}</a>
         <a href={BUSINESS.phoneHref} className="w-lijnlink self-start text-[18px] tabular-nums">{BUSINESS.phone}</a>
-        <a href="/contact.vcf" download="gronn-studio.vcf" className="w-lijnlink self-start text-[15px]"><T t={{ nl: "Visitekaartje bewaren", en: "Save business card" }} /></a>
+        <a href="/contact.vcf" download="gronn-studio.vcf" className="w-lijnlink inline-flex min-h-[44px] items-center self-start text-[15px]"><T t={{ nl: "Visitekaartje bewaren", en: "Save business card" }} /></a>
         <a href={BUSINESS.whatsapp} className="w-lijnlink self-start text-[18px]">WhatsApp</a>
         <p className="lbl mt-4 mb-0 text-gedempt">
           {BUSINESS.address.area}

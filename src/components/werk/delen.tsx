@@ -276,8 +276,8 @@ export function Slot({ kop, alineas, knop }: { kop: Tekst; alineas: readonly Tek
       </h2>
       <Lees className="mt-[clamp(32px,4vw,56px)]">
         <Alineas teksten={alineas} />
-        <Link href="/kennismaken" className="lnk w-lijnlink mt-4 inline-block">
-          <T t={knop} /> <Pijl richting="e" />
+        <Link href="/kennismaken" className="knop mt-4 border-0 bg-oranje text-antraciet">
+          <T t={knop} /> <Pijl richting="ne" />
         </Link>
       </Lees>
     </section>
