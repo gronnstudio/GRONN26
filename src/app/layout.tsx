@@ -6,6 +6,7 @@ import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
 import "@/components/ar/ar.css"
 import { SiteKop } from "@/components/landschap/kop"
 import { SiteVoet } from "@/components/landschap/voet"
+import { AutoVegen } from "@/components/landschap/auto-vegen"
 import "@/components/landschap/landschap.css"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* De kop, het menu en de voet uit de visuele bouwbrief (21 nov 2026);
               het dock onderin is daarmee vervangen. */}
           <SiteVoet />
+          <AutoVegen />
         </div>
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).

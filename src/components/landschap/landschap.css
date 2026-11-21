@@ -570,3 +570,8 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-werkraster .ls-werknaam { font-size: 21px; line-height: 26px; }
   .ls-werkraster .ls-werknaam svg { display: none; }
 }
+@media (max-width: 767px) {
+  /* in de werkwijzekaart is ruimte: de korte uitleg mag er weer in */
+  .ls-stappen .ls-body { display: block !important; margin-top: 10px; font-size: 15px; line-height: 22px; }
+  .ls-stappen li, .ls-stappen li:last-child { min-height: 200px; }
+}
