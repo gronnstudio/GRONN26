@@ -43,7 +43,7 @@ export default function VijversPagina() {
       <Opkomst />
       <Opening label={{ nl: "Vijvers & water", en: "Ponds & water" }} titel={{ nl: "Water dat werkt.", en: "Water that works." }} zin={<T t={ZIN} />} foto={F01} />
 
-      <section className="ls-raster ls-sectie ls-twee" aria-labelledby="vijver-standpunt">
+      <section className="ls-raster ls-sectie ls-twee ls-mob-weg" aria-labelledby="vijver-standpunt">
         <div className="ls-twee-kop ls-op">
           <p className="ls-label"><T t={{ nl: "Standpunt", en: "Point of view" }} /></p>
           <h2 id="vijver-standpunt" className="ls-h2"><T t={{ nl: "Ik bekijk de vijver als geheel: water, techniek en beplanting.", en: "I look at the pond as a whole: water, technology and planting." }} /></h2>

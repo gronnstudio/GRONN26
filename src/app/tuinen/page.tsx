@@ -58,7 +58,7 @@ export default function TuinenPagina() {
       <Opening label={{ nl: "Tuinen", en: "Gardens" }} titel={{ nl: "Tuinen & renovatie.", en: "Gardens & renovation." }} zin={<T t={ZIN} />} beeld={BEPLANTING} />
 
       {VERVOLG.nl ? (
-        <section className="ls-raster ls-sectie ls-twee" aria-labelledby="tuin-standpunt">
+        <section className="ls-raster ls-sectie ls-twee ls-mob-weg" aria-labelledby="tuin-standpunt">
           <div className="ls-twee-kop ls-op">
             <p className="ls-label"><T t={{ nl: "Standpunt", en: "Point of view" }} /></p>
             <h2 id="tuin-standpunt" className="ls-h2"><T t={{ nl: "Eerst kijken. Dan keuzes maken.", en: "First look. Then make choices." }} /></h2>

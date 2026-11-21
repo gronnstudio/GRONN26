@@ -442,3 +442,40 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
 @media (min-width: 1024px) { .ls-portret-opening .w-onthul { align-self: end; padding-bottom: 8px; } }
 .ls-kennis { padding-top: clamp(32px, 4vw, 56px); padding-bottom: clamp(64px, 8vw, 128px); }
 #inhoud article { padding-bottom: clamp(64px, 8vw, 128px); }
+
+/* ── telefoon: minder tekst, meer beeld en lucht (Nick, 21 nov 2026: "ziet
+   rommelig uit op mobiel, minder tekst is beter"). Per blok één kop en
+   hooguit één zin; tweede beelden, bijzinnen, labels en noten alleen vanaf
+   768px. Desktop verandert niet. ─────────────────────────────────── */
+@media (max-width: 767px) {
+  .ls-mob-weg,
+  .ls-hero .ls-annotatie,
+  .ls-standpunt .ls-body,
+  .ls-schaal-tekst, .ls-schaal-klein,
+  .ls-werkraster .ls-annotatie, .ls-werkkaart-breed, .ls-werk-noot,
+  .ls-route-zin,
+  .ls-water-rechts .ls-body,
+  .ls-zelf .ls-body, .ls-zelf .ls-lijnlijst li + li,
+  .ls-stappen .ls-body,
+  .ls-studio-tekst .ls-body,
+  .ls-diensten-noot,
+  .ls-element .ls-body,
+  .ls-beeldrij > :not(:first-child),
+  .ls-uitnodiging-tekst .ls-body,
+  .ls-sectiekop .ls-label, .ls-twee-kop .ls-label, .ls-standpunt-tekst > .ls-label,
+  .ls-werkwijze-kop .ls-label, .ls-studio-tekst > .ls-label, .ls-zelf-tekst > .ls-label,
+  .ls-routes-kop .ls-label, .ls-water > .ls-label,
+  .ls-sectiekop > .ls-body { display: none !important; }
+
+  /* meer lucht tussen de blokken, rustiger koppen */
+  .ls-sectie { padding-top: 88px; }
+  .ls-sectiekop { margin-bottom: 28px; }
+  .ls-h1 { font-size: 34px; line-height: 38px; }
+  .ls-h2 { font-size: 28px; line-height: 32px; }
+  .ls-route { padding-block: 18px; }
+  .ls-stappen li { padding-block: 16px; }
+  .ls-element { padding-block: 16px; }
+  .ls-werkraster { gap: 32px; }
+  .ls-water-tekst { margin-top: 0; }
+  .ls-beeldrij > :first-child { aspect-ratio: 4 / 5; }
+}

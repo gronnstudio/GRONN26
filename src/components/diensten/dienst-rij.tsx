@@ -60,7 +60,7 @@ export function DienstRij({ dienst }: { dienst: Service }) {
         <span className="syne col-start-1 row-start-1 min-w-0 text-[clamp(22px,2.3vw,32px)] leading-[1.1] tracking-[-.02em] [overflow-wrap:anywhere]">
           <T t={{ nl: afbreekbaar(dienst.title.nl), en: dienst.title.en }} />
         </span>
-        <span className="col-start-1 row-start-2 leading-[1.6] text-gedempt md:col-start-2 md:row-start-1"><T t={dienst.summary} /></span>
+        <span className="col-start-1 row-start-2 leading-[1.6] text-gedempt max-md:hidden md:col-start-2 md:row-start-1"><T t={dienst.summary} /></span>
         <span className="lbl col-start-1 row-start-3 tabular-nums md:col-start-3 md:row-start-1 md:text-right"><T t={kortePrijs(dienst)} /></span>
         <span aria-hidden="true" className="col-start-2 row-start-1 text-right text-gedempt md:col-start-4">
           <span className="group-open:hidden">+</span>
