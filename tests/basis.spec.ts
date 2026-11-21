@@ -40,7 +40,7 @@ test("menu: paginawissel komt aan en de nieuwe h1 krijgt focus", async ({ page }
   await page.goto("/")
   // pas klikken als er geen doek meer ligt; op CI viel de klik soms nog onder de opening
   await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
-  await page.click('nav[data-menu] a[href="/werk"]')
+  await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("link", { name: "Werk" }).click()
   await expect(page).toHaveURL(/\/werk$/, { timeout: 10_000 })
   await expect(page.locator("h1")).toBeVisible({ timeout: 10_000 })
   await expect(page.locator(".og")).toBeHidden({ timeout: 10_000 })
@@ -66,9 +66,11 @@ test("kennismaken: lege verzending toont fouten en verstuurt niets", async ({ pa
 
 test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/over")
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.click('#megamenu label:has(input[value="donker"])')
+  // het dock (ar/kop.tsx): op desktop opent Weergave het paneel boven de pil
+  await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("button", { name: "Weergave" }).click()
+  await page.click('#ar-dock-menu label:has(input[value="donker"])')
   await expect(page.locator("html")).toHaveClass(/donker/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
@@ -84,54 +86,55 @@ for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
   })
 }
 
+// Het dock (ar/kop.tsx, eigenaar 14 nov 2026): op de telefoon Werk, Vijvers,
+// Tuinen, Menu en Omhoog; Menu klapt de pil open met de rest. Op desktop staat
+// alles direct in de rij en is er geen Menu-knop.
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
 for (const b of [390, 1440]) {
-  test(`menu @${b}: Home, Werk, Studio, Shop en een hamburger met het megamenu`, async ({ page }) => {
+  test(`dock @${b}: de vakken, de huidige pagina en Omhoog`, async ({ page }) => {
     await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
     await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
-    const nav = page.locator("nav[data-menu]")
-    for (const naam of ["Home", "Werk", "Studio", "Shop"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+    const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
+    for (const naam of ["Werk", "Vijvers", "Tuinen"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
     await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
-    // Journaal (was Blog) staat vanaf desktop in de pil, op de telefoon in het megamenu (eigenaar, 21 okt 2026)
-    await expect(nav.getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b >= 1024 })
-    const vijvers = page.locator('#megamenu label:has(input[value="donker"])')
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
-    // de pil blijft op het scherm, ook tijdens het lezen
+    const omhoog = nav.getByRole("button", { name: "Terug naar boven" })
+    await expect(omhoog).toBeDisabled()
     await page.mouse.wheel(0, 800)
-    await page.waitForTimeout(300)
-    await expect(nav.getByRole("link", { name: "Shop", exact: true })).toBeInViewport()
-    const omhoog = page.getByRole("button", { name: "Terug naar boven" })
-    await expect(omhoog).toBeVisible()
+    await expect(omhoog).toBeEnabled()
+    await expect(nav.getByRole("link", { name: "Tuinen", exact: true })).toBeInViewport()
+    const menu = page.locator("#ar-dock-menu")
     if (b < 1024) {
-      // de pil krimpt niet, en Omhoog ligt achteraan concentrisch in de ronding
-      const [p, o] = await Promise.all([nav.locator("ul").first().boundingBox(), omhoog.boundingBox()])
-      expect(Math.round(p!.height)).toBe(64)
-      expect(Math.round(p!.x + p!.width - o!.x - o!.width)).toBe(Math.round(o!.y - p!.y))
+      await expect(nav.locator(".ar-dock-rij").getByRole("link", { name: "Studio", exact: true })).toBeHidden()
+      await nav.getByRole("button", { name: "Menu" }).click()
+      for (const naam of ["Home", "Studio", "Journaal", "Shop", "Vragen"]) await expect(menu.getByRole("link", { name: naam, exact: true })).toBeVisible()
+      await page.keyboard.press("Escape")
+      await expect(nav.getByRole("button", { name: "Menu" })).toBeFocused()
+      await expect(menu).toHaveAttribute("inert", "")
+    } else {
+      await expect(nav.getByRole("button", { name: "Menu" })).toBeHidden()
+      for (const naam of ["Home", "Studio", "Journaal", "Vragen"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+      // Shop opent het shopmenu met de soorten
+      await nav.getByRole("button", { name: "Shop" }).click()
+      await expect(menu.getByRole("link", { name: /Borderpakketten/ })).toBeVisible()
     }
-    await page.getByRole("button", { name: "Menu" }).click()
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "1")
-    await expect(vijvers).toBeVisible()
-    await expect(page.locator("#megamenu").getByRole("link", { name: "Journaal", exact: true })).toBeVisible({ visible: b < 1024 })
-    await expect(page.locator('#megamenu input[value="donker"]')).toBeAttached()
-    await page.keyboard.press("Escape")
-    await expect(page.locator("#megamenu")).toHaveCSS("opacity", "0")
   })
 }
 
-test("uitlijning: kop, voet en de brede menubalk op één lijn, ook op een breed scherm", async ({ page }) => {
+test("uitlijning: kop en voet op één lijn", async ({ page }) => {
   await zonderIntro(page)
-  await page.setViewportSize({ width: 1920, height: 900 })
-  // De voorpagina volgt sinds 13 nov 2026 het raster van de handoff (1440).
+  await page.setViewportSize({ width: 1440, height: 900 })
+  // De voet is sinds 14 nov 2026 de nieuwe (ar/voet.tsx, raster van 1520);
+  // de kop van deze pagina's staat nog op het raster van 1440. Tot 1440 breed
+  // vallen ze samen. Het dock is gecentreerd en geen lijn meer.
   for (const route of ["/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
-    const [h1, voet, kennis] = await page.evaluate(() => {
+    const [h1, voet] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
-      const wrap = document.querySelector("footer .wrap")!
-      const voet = Math.round(wrap.getBoundingClientRect().left + parseFloat(getComputedStyle(wrap).paddingLeft))
-      return [links("main h1"), voet, links("nav[data-menu] > ul")]
+      return [links("main h1"), links("footer.ar-voet .ar-voet-contact")]
     })
-    expect([h1, kennis], route).toEqual([voet, voet])
+    // 2px speling: de goot van de nieuwe voet (--ar-goot) en die van de oude kop (--goot) verschillen nog net
+    expect(Math.abs(h1 - voet), `${route}: kop ${h1}, voet ${voet}`).toBeLessThanOrEqual(2)
   }
 })
 
@@ -314,18 +317,16 @@ test("layout: Klassiek is de standaard, ook voor wie bij de 50/50 Blueprint kree
   await page.goto("/over")
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
   await expect(page.locator("html")).toHaveClass(/\bdonker\b/)
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.click('#megamenu label:has(input[value="plan"])')
-  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await page.reload()
-  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
+  await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
 })
 
 test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet Blueprint uit en dat blijft bewaard", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  await expect(page.locator("nav[data-menu]")).toBeVisible()
+  const dock = page.getByRole("navigation", { name: "Hoofdmenu" })
+  await expect(dock).toBeVisible()
   await expect(page.locator(".bk")).toBeHidden()
   await expect(page.getByRole("button", { name: "Bekijk als blueprint" })).toHaveCount(0)
 
@@ -333,7 +334,7 @@ test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/\bplan\b/)
   await expect(page.locator(".bk")).toBeVisible()
-  await expect(page.locator("nav[data-menu]")).toBeHidden()
+  await expect(dock).toBeHidden()
   await expect(page.locator("h1:visible")).toHaveCount(1)
   await page.getByRole("button", { name: "Klassieke layout" }).click()
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
@@ -341,13 +342,14 @@ test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
 })
 
-test("layout: Blueprint kiezen in Weergave via het megamenu", async ({ page }) => {
+// Het dock biedt geen keuze Klassiek/Blueprint meer (eigenaar, 14 nov 2026; Instellingen zonderLayout)
+test("layout: Weergave in het dock heeft geen Blueprint-keuze", async ({ page }) => {
   await zonderIntro(page)
+  await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/over")
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.click('#megamenu label:has(input[value="plan"])')
-  await expect(page.locator("html")).toHaveClass(/\bplan\b/)
-  await expect(page.locator(".bk")).toBeVisible()
+  await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("button", { name: "Weergave" }).click()
+  await expect(page.locator('#ar-dock-menu input[value="donker"]')).toBeAttached()
+  await expect(page.locator('#ar-dock-menu input[value="plan"]')).toHaveCount(0)
 })
 
 test("tuinplan, index: een blad kiezen gaat naar die pagina", async ({ page }) => {

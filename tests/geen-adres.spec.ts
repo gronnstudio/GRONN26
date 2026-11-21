@@ -4,7 +4,8 @@ import { expect, test } from "./fixtures"
 // 2026: "haal openlijke adresgegevens van de website, ivm stalking"). Het
 // adres zelf staat bewust niet in deze test: de repo is openbaar. We zoeken
 // naar de vorm van een Nederlandse postcode en naar een straatadres in JSON-LD.
-const POSTCODE = /\b\d{4} ?[A-Z]{2}\b/
+// Na de twee letters geen derde letter: "© 2026 GRØNN" in hoofdletters is geen postcode.
+const POSTCODE = /\b\d{4} ?[A-Z]{2}(?!\p{L})/u
 const PAGINAS = ["/", "/kennismaken", "/colofon", "/privacy", "/voorwaarden", "/herroeping", "/drukwerk/voorwaarden", "/drukwerk/herroeping", "/drukwerk/privacy"]
 
 for (const pad of PAGINAS) {
