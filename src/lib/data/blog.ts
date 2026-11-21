@@ -195,7 +195,73 @@ Een oude stronk of een stapel takken in een hoek van de tuin is een feest voor s
 
 Twijfel je over een boom of een stronk in je tuin? Stuur me een foto via WhatsApp, dan kijk ik even mee. Moet er iets gebeuren, dan krijg je vooraf een vaste prijs.`
 
+// Winter: foto van Pexels (Onkel Ramirez), gekozen door Nick (21 nov 2026).
+// Geen label en geen bijschrift (Nick, 14 nov 2026).
+const WINTER_BORDER: Foto = {
+  src: "/blog/winter-border-berijpt.jpg",
+  width: 1064,
+  height: 1600,
+  alt: "Een tuin in de winter met berijpte siergrassen en bomen die zijn blijven staan",
+}
+
+const WINTER = `Veel mensen ruimen in november en december hun tuin flink op. Alles wat bruin is gaat eraf, de border wordt kaal geknipt en de groene container zit vol. Het ziet er netjes uit. Maar met dat snoeiafval verdwijnt ook een groot deel van wat er in je tuin leeft.
+
+## Waarom je beter wacht met opruimen
+
+De meeste vlinders gaan de winter niet door als vlinder, maar als ei, rups of pop. Die zitten op plekken die je in de herfst juist weghaalt: in holle stengels, in dorre bladeren, in oude zaadhoofden en tussen takken. Lieveheersbeestjes, wilde bijen en spinnen doen hetzelfde. Knip je alles af en gooi je het in de container, dan gooi je ze mee weg.
+
+Een tuin die wat ruiger de winter in gaat, staat in het voorjaar sneller vol leven. En er is nog een voordeel: oude stengels en blad beschermen de wortels van je vaste planten tegen vorst.
+
+## Wat je laat staan
+
+- Vaste planten met stevige stengels. Denk aan zonnehoed, hemelsleutel, kattenstaart, verbena en siergrassen. Ze blijven rechtop staan en zien er met rijp erop prachtig uit.
+- Zaadhoofden. Puttertjes, mezen en mussen eten in de winter de zaden uit kaardebollen, zonnebloemen en zonnehoed.
+- Holle stengels. Laat een deel van de stengels staan tot halverwege april. Wilde bijen en andere insecten overwinteren erin of gebruiken ze in het voorjaar als nestplek.
+- Blad onder struiken en in de border. Dat wordt vanzelf humus. Daar schreef ik eerder een apart stuk over.
+- Een takkenhoop of een oude stronk in een rustige hoek. Daar schuilen egels, kikkers en kevers.
+
+## Wat je wel snoeit of weghaalt
+
+Ruiger betekent niet dat je niets doet. Dit kun je gewoon aanpakken:
+
+- Planten die over het pad of de oprit hangen. Daar wil je niet langs strijken als het nat is.
+- Zieke of beschimmelde planten. Haal die weg en gooi ze in de container, niet op de composthoop.
+- Planten die al plat liggen en rotten. Die beschermen niets meer en kunnen het gras eronder verstikken.
+- Blad op het gazon en op je vijver. Op het gras wordt het een bruine plek, in de vijver gaat het rotten. Hark het van het gras en leg het in de border.
+
+## Wanneer ruim je dan wel op?
+
+Wacht tot het voorjaar echt begint. Een goede vuistregel is: als het een paar weken achter elkaar overdag boven de tien graden is, meestal in maart of begin april. Dan zijn de meeste insecten wakker en vertrokken.
+
+Doe het in stappen. Knip niet de hele border in één keer af, maar begin met de helft en doe de rest twee weken later. Gooi het snoeisel niet meteen weg, maar leg het een paar weken op een hoop in een hoek van de tuin. Zo kan wat er nog in zit alsnog wegkruipen.
+
+## En de vijver?
+
+Rond de vijver geldt hetzelfde. Laat de oeverplanten en het riet aan de rand staan tot het voorjaar. Holle stengels van riet en lisdodde laten bovendien wat lucht in het water als de vijver dichtvriest. Haal alleen weg wat in het water hangt en daar ligt te rotten.
+
+## Kort samengevat
+
+- Laat stevige stengels, zaadhoofden en blad in de border staan.
+- Haal weg wat in de weg hangt, ziek is of plat ligt te rotten.
+- Ruim op in maart of april, in stappen, en laat het snoeisel eerst even liggen.
+
+Wil je dat ik je tuin in het voorjaar in één keer goed opruim en klaarmaak voor het nieuwe seizoen? Stuur me een foto via WhatsApp. Je krijgt vooraf een vaste prijs.`
+
 const RECENT: Stuk[] = [
+  {
+    slug: "tuin-in-de-winter",
+    titel: "Je tuin in de winter: wat je laat staan en wat je wel snoeit",
+    beschrijving: "Een kale tuin in de winter lijkt netjes, maar hij is leeg. Zo kies je wat je laat staan, wat je wel snoeit en wanneer je in het voorjaar opruimt.",
+    datum: "2026-11-21",
+    rubriek: "Seizoen",
+    leestijd: leestijdVan(WINTER),
+    beeld: WINTER_BORDER,
+    blokken: blokkenUit(WINTER),
+    bronnen: [
+      "BNNVARA Vroege Vogels. (2014, 6 november). Tip: Help de vlinder door de winter. https://www.bnnvara.nl/vroegevogels/artikelen/tip-help-de-vlinder-door-de-winter",
+      "NOS. (2024, 6 augustus). Wat jij kunt doen voor meer fladderende vlinders in je tuin, of op je balkon. https://nos.nl/artikel/2532039-wat-jij-kunt-doen-voor-meer-fladderende-vlinders-in-je-tuin-of-op-je-balkon",
+    ],
+  },
   {
     slug: "paddenstoelen-in-de-tuin",
     titel: "Paddenstoelen in je tuin: goed teken of reden tot zorg?",
