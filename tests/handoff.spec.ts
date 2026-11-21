@@ -21,13 +21,21 @@ test("donker thema werkt op de voorpagina", async ({ page }) => {
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-test("telefoon @390: het logo en de menupil bovenin", async ({ page }) => {
+// De telefoon als app (Nick, 21 nov 2026): logo bovenin, tabbalk met Menu onderin onder de duim.
+test("telefoon @390: het logo bovenin, de tabbalk met Menu onderin", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/")
   await expect(page.getByRole("link", { name: /GRØNN Studio, naar de voorpagina/ }).first()).toBeVisible()
-  const pil = page.getByRole("button", { name: "Menu" })
-  await expect(pil).toBeInViewport()
-  expect((await pil.boundingBox())!.y).toBeLessThan(40)
+  const balk = page.getByRole("navigation", { name: "Tabbalk" })
+  await expect(balk.getByRole("link", { name: "Werk" })).toBeVisible()
+  const menu = balk.getByRole("button", { name: "Menu" })
+  await expect(menu).toBeInViewport()
+  const vak = (await menu.boundingBox())!
+  expect(vak.y + vak.height).toBeGreaterThan(844 - 70)
+  await menu.click()
+  await expect(page.getByRole("dialog", { name: "Menu" })).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(menu).toBeFocused()
 })
 
 // De opening uit de bouwbrief: de gekozen tuin met label, Kennismaken en Bekijk het werk.

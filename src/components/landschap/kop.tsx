@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type RefObject } from "react"
 import { track } from "@vercel/analytics"
 import { BUSINESS } from "@/lib/business"
 import { Instellingen } from "@/components/weergave"
@@ -59,6 +59,9 @@ export function SiteKop() {
   const [actief, setActief] = useState(0)
   const [gescrold, setGescrold] = useState(false)
   const knop = useRef<HTMLButtonElement>(null)
+  const tabknop = useRef<HTMLButtonElement>(null)
+  // de zichtbare menuknop: de pil bovenin, of op de telefoon het Menu-vak in de tabbalk
+  const terug = () => (knop.current?.offsetParent ? knop.current : tabknop.current)?.focus()
 
   // bij een nieuwe pagina dicht
   const [vorig, setVorig] = useState(pad)
@@ -83,7 +86,7 @@ export function SiteKop() {
     const toets = (e: KeyboardEvent) => {
       if (e.key !== "Escape") return
       setOpen(false)
-      knop.current?.focus()
+      terug()
     }
     document.addEventListener("keydown", toets)
     return () => {
@@ -218,8 +221,42 @@ export function SiteKop() {
         </div>
       </div>
 
+      <TabBalk pad={pad} open={open} wissel={wissel} knop={tabknop} />
       <Omhoog />
     </>
+  )
+}
+
+// De telefoon als app (Nick, 21 nov 2026: "Treat the mobile website like mobile
+// app design!"): onderin, onder de duim, een tabbalk met vijf vakken, elk met
+// icoon en naam. Menu opent dezelfde index als de pil op groter scherm.
+const TABS: { href: string; naam: L; icoon: string }[] = [
+  { href: "/", naam: { nl: "Home", en: "Home" }, icoon: "M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" },
+  { href: "/werk", naam: { nl: "Werk", en: "Work" }, icoon: "M14.5 4.5l5 5M17 7l-8.5 8.5M8.5 15.5 5 19m3.5-3.5-2-2 2.5-2.5 4 4-2.5 2.5z" },
+  { href: "/vijvers", naam: { nl: "Vijvers", en: "Ponds" }, icoon: "M12 4.5c3 3.6 5.5 6.8 5.5 9.7a5.5 5.5 0 0 1-11 0c0-2.9 2.5-6.1 5.5-9.7z" },
+  { href: "/tuinen", naam: { nl: "Tuinen", en: "Gardens" }, icoon: "M12 20v-8m0 0c0-3.5-2.5-6-6.5-6 0 3.5 2.5 6 6.5 6zm0 0c0-3.5 2.5-6 6.5-6 0 3.5-2.5 6-6.5 6z" },
+]
+
+function TabBalk({ pad, open, wissel, knop }: { pad: string; open: boolean; wissel: () => void; knop: RefObject<HTMLButtonElement | null> }) {
+  const taal = useTaal()
+  return (
+    <nav className="ls-tabbalk" aria-label={kies({ nl: "Tabbalk", en: "Tab bar" }, taal)}>
+      {TABS.map((t) => {
+        const hier = !open && (t.href === "/" ? pad === "/" : isHier(pad, t.href))
+        return (
+          <Link key={t.href} href={t.href} transitionTypes={["schuif"]} className="ls-tab" aria-current={hier ? "page" : undefined}>
+            <svg viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d={t.icoon} /></svg>
+            <span><T t={t.naam} /></span>
+          </Link>
+        )
+      })}
+      <button ref={knop} type="button" className="ls-tab" aria-expanded={open} aria-controls="ls-menu" onClick={wissel}>
+        <svg viewBox="0 0 24 24" aria-hidden fill="currentColor">
+          {open ? <path d="M7 7l10 10M17 7 7 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /> : <><circle cx="8" cy="8" r="1.9" /><circle cx="16" cy="8" r="1.9" /><circle cx="8" cy="16" r="1.9" /><circle cx="16" cy="16" r="1.9" /></>}
+        </svg>
+        <span>{open ? <T t={{ nl: "Sluiten", en: "Close" }} /> : "Menu"}</span>
+      </button>
+    </nav>
   )
 }
 

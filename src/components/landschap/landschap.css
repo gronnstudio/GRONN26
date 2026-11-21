@@ -479,3 +479,94 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-water-tekst { margin-top: 0; }
   .ls-beeldrij > :first-child { aspect-ratio: 4 / 5; }
 }
+
+/* ── telefoon, tweede ronde (Nick, 21 nov 2026: "everything looks stacked,
+   pretty boring"): niet alles onder elkaar. Werk, werkwijze en sfeer vegen
+   zijwaarts (scroll-snap, met een stukje van de volgende in beeld), beelden
+   overlappen en verspringen, sommige lopen tot de rand, de routes staan als
+   tegels in een raster van twee. Alleen CSS, desktop blijft gelijk. ─── */
+@media (max-width: 767px) {
+  /* zijwaarts vegen */
+  .ls-werkraster, .ls-stappen, .ls-beeldrij {
+    display: flex !important; gap: 12px; overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(-1 * var(--g)); padding-inline: var(--g); scroll-padding-inline: var(--g);
+  }
+  .ls-werkraster::-webkit-scrollbar, .ls-stappen::-webkit-scrollbar, .ls-beeldrij::-webkit-scrollbar { display: none; }
+  .ls-werkraster > *, .ls-stappen > li, .ls-beeldrij > * { flex: 0 0 82%; scroll-snap-align: start; margin-top: 0 !important; }
+  .ls-werkkaart .ls-werkbeeld, .ls-werkkaart-klein .ls-werkbeeld { aspect-ratio: 4 / 5; }
+  .ls-beeldrij > * { aspect-ratio: 4 / 5 !important; }
+  .ls-beeldrij > :not(:first-child) { display: block !important; }
+
+  /* werkwijze als kaarten */
+  .ls-stappen { border: 0; }
+  .ls-stappen li, .ls-stappen li:last-child { flex-basis: 72%; display: grid; grid-template-columns: 1fr; align-content: space-between; gap: 48px; min-height: 220px; padding: 20px; border: 1px solid var(--lijn); border-radius: 16px; }
+  .ls-stappen li:nth-child(odd) { background: var(--veld); border-color: transparent; }
+  .ls-stap-nr { padding-top: 0; font-size: 13px; }
+  .ls-stappen .ls-h3 { font-size: 26px; line-height: 30px; }
+
+  /* routes als tegels, twee naast elkaar */
+  .ls-routes-lijst { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border: 0; }
+  /* de tegel is de li (kaart, 16px); de link vult hem */
+  .ls-routes-lijst li { border: 1px solid var(--lijn); border-radius: 16px; overflow: hidden; }
+  .ls-routes-lijst li:nth-child(1), .ls-routes-lijst li:nth-child(4) { background: var(--inkt); color: var(--grond); border-color: var(--inkt); }
+  .ls-route { display: grid; grid-template-columns: 1fr; align-content: space-between; height: 100%; min-height: 150px; padding: 16px; border: 0; box-sizing: border-box; }
+  .ls-route-naam { font-size: 21px; line-height: 25px; }
+  .ls-route-pijl { grid-column: 1; grid-row: auto; justify-self: end; align-self: end; font-size: 22px; }
+
+  /* overlappende en verspringende beelden */
+  .ls-standpunt .ls-standpunt-beeld { width: 78%; justify-self: end; margin-right: calc(-1 * var(--g)); border-radius: 6px 0 0 6px; aspect-ratio: 3 / 4; margin-top: -8px; }
+  .ls-schaal { position: relative; }
+  .ls-schaal-groot { margin-left: calc(-1 * var(--g)); width: calc(88% + var(--g)); border-radius: 0 6px 6px 0; aspect-ratio: 4 / 5; }
+  .ls-schaal-klein { display: block !important; position: relative; width: 52%; margin-top: -30%; z-index: 1; outline: 6px solid var(--grond); }
+  .ls-schaal-kop { margin-top: 8px; }
+  .ls-water-beeld, .ls-zelf-beeld, .ls-beeldrij-rand { margin-inline: calc(-1 * var(--g)); border-radius: 0; aspect-ratio: 4 / 5; }
+  .ls-studio { grid-template-columns: 1fr 1fr; column-gap: 12px; }
+  .ls-studio-tekst { grid-column: 1 / -1; }
+  .ls-studio-portret { grid-column: 1; aspect-ratio: 3 / 4; }
+  .ls-studio-werk { display: block; grid-column: 2; aspect-ratio: 3 / 4; margin-top: 48px; }
+
+  /* subpagina's: het projectbeeld tot de rand, elementen als tegels */
+  .ls-werkpagina .ls-werkbeeld { margin-inline: calc(-1 * var(--g)); border-radius: 0; aspect-ratio: 4 / 5; }
+  .ls-elementen { grid-template-columns: 1fr 1fr; gap: 10px; border: 0; }
+  .ls-elementen li { border: 1px solid var(--lijn); border-radius: 16px; overflow: hidden; }
+  .ls-element, a.ls-element { display: grid; grid-template-columns: 1fr; align-content: space-between; height: 100%; min-height: 120px; padding: 16px; box-sizing: border-box; }
+  .ls-element .ls-h3 { font-size: 19px; line-height: 23px; overflow-wrap: anywhere; hyphens: auto; }
+  a.ls-element .ls-route-pijl { grid-row: auto; justify-self: end; font-size: 20px; }
+  .ls-opening-beeld .w-beeld { aspect-ratio: 4 / 5; }
+  .ls-opening-beeld { margin-inline: calc(-1 * var(--g)); }
+  .ls-opening-beeld .w-beeld, .ls-opening-beeld .ls-beeld { border-radius: 0; }
+}
+
+/* ── de telefoon als app: tabbalk onderin, kleine vaste kop bovenin ─── */
+.ls-tabbalk { display: none; }
+@media (max-width: 767px) {
+  .ls-menuknop { display: none; }
+  .ls-kop { position: sticky; top: 0; background: color-mix(in srgb, var(--grond) 88%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid transparent; }
+  .ls-kop-binnen { height: calc(56px + env(safe-area-inset-top, 0px)); justify-content: center; }
+  .ls-logo img { height: 22px; }
+  .ls-tabbalk {
+    position: fixed; z-index: 125; left: 0; right: 0; bottom: 0;
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-right, 0px));
+    background: color-mix(in srgb, var(--grond) 92%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--lijn); color: var(--gedempt);
+  }
+  html.ls-menu-open .ls-tabbalk { background: #202020; color: rgb(239 238 234 / .7); border-top-color: rgb(239 238 234 / .18); }
+  .ls-tab { display: grid; justify-items: center; align-content: center; gap: 3px; min-height: 52px; padding: 0; border: 0; background: none; color: inherit; font: 500 11px/13px var(--font-montserrat), sans-serif; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .ls-tab svg { width: 24px; height: 24px; }
+  .ls-tab[aria-current="page"], .ls-tab[aria-expanded="true"] { color: var(--inkt); font-weight: 700; }
+  .ls-tab[aria-current="page"] svg { color: var(--oranje-tekst); }
+  html.ls-menu-open .ls-tab[aria-expanded="true"] { color: #efeeea; }
+  .ls-tab:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; border-radius: 12px; }
+  .ls-omhoog { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+  .ls-menu-binnen { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+  .ls-menu-top { height: calc(56px + env(safe-area-inset-top, 0px)); justify-content: center; }
+  .ls-voet-onder { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 767px) {
+  /* in een app staat er niets over de inhoud: terug naar boven zit niet los op de telefoon */
+  .ls-omhoog { display: none; }
+  .ls-werkraster .ls-werknaam { font-size: 21px; line-height: 26px; }
+  .ls-werkraster .ls-werknaam svg { display: none; }
+}
