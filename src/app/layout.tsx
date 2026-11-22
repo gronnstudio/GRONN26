@@ -14,6 +14,7 @@ import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
 import { Zoek } from "@/components/zoek"
 import { Sneltoetsen } from "@/components/sneltoetsen"
+import { AtlasFlap } from "@/components/atlas-flap"
 import { T } from "@/components/taal"
 import { PullToRefresh } from "@/components/vernieuw"
 import { zoekIndex } from "@/lib/zoek-index"
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <Zoek index={zoekIndex()} />
         <Sneltoetsen />
+        <AtlasFlap />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
         {/* alleen in de app-weergave: daar is geen browser om te verversen */}
