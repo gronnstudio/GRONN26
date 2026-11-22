@@ -634,3 +634,6 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
 .ls-cirkellink-op-oranje, .ls-cirkellink-op-oranje .ls-cirkel { color: #202020; }
 .ls-cirkellink-op-oranje .ls-cirkel { border-color: #202020; }
 .ls-cirkellink-op-oranje:hover .ls-cirkel, .ls-cirkellink-op-oranje:focus-visible .ls-cirkel { background: #202020; color: #ff5b04; }
+/* in een projectkaart: de hele kaart is de link */
+a:hover .ls-cirkellink .ls-cirkel, a:focus-visible .ls-cirkellink .ls-cirkel { background: var(--oranje); color: #202020; }
+a:hover .ls-cirkellink .ls-cirkellink-pijl, a:focus-visible .ls-cirkellink .ls-cirkellink-pijl { translate: 6px 0; }

@@ -75,7 +75,7 @@ export function LandschapVoorpagina() {
           <p className="ls-body ls-lees">
             <T t={{ nl: "Planten, water en bodem werken samen. Ik ontwerp en maak buitenruimtes die met de seizoenen veranderen. Met aandacht voor hoe je de tuin gebruikt én hoe hij zich ontwikkelt.", en: "Plants, water and soil work together. I design and build outdoor spaces that change with the seasons, with attention to how you use the garden and how it develops." }} />
           </p>
-          <a href="#werkwijze" className="ls-tekstlink"><T t={{ nl: "Zo werk ik", en: "How I work" }} /> <Pijl richting="e" /></a>
+          <CirkelLink href="#werkwijze" voor={{ nl: "Zo", en: "How I" }} woord={{ nl: "werk ik", en: "work" }} />
         </div>
         <Beeld beeld={BEPLANTING} sizes="(min-width: 1024px) 40vw, 100vw" className="ls-standpunt-beeld ls-op" labelRechts />
       </section>
@@ -181,7 +181,7 @@ export function LandschapVoorpagina() {
           <p className="ls-body ls-lees">
             <T t={{ nl: "Ik ben Nick Peters, ontwerper en hovenier achter GRØNN Studio. Ik kijk naar het geheel en werk het buiten uit: van water en beplanting tot de aansluiting van materialen.", en: "I'm Nick Peters, the designer and gardener behind GRØNN Studio. I look at the whole and work it out on site: from water and planting to how the materials meet." }} />
           </p>
-          <Link href="/over" className="ls-tekstlink" transitionTypes={["schuif"]}><T t={{ nl: "Meer over mij", en: "More about me" }} /> <Pijl richting="e" /></Link>
+          <CirkelLink href="/over" transitionTypes={["schuif"]} voor={{ nl: "Meer over", en: "More about" }} woord={{ nl: "mij", en: "me" }} />
         </div>
         <Beeld beeld={NICK} sizes="(min-width: 1024px) 30vw, 100vw" className="ls-studio-portret ls-op" />
         <Beeld beeld={NICK_WERK} sizes="(min-width: 1024px) 18vw, 50vw" className="ls-studio-werk ls-op" />

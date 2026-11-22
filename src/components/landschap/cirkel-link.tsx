@@ -16,3 +16,14 @@ export function CirkelLink({ voor, woord, ...rest }: { voor: L; woord: L } & Omi
     </Link>
   )
 }
+
+// Dezelfde vorm als tekst binnen een grotere link (projectkaarten): geen eigen
+// link, de ring vult zich als de hele kaart wordt aangewezen.
+export function CirkelWoord({ voor, woord }: { voor: L; woord: L }) {
+  return (
+    <span className="ls-cirkellink">
+      <span><T t={voor} /> <span className="ls-cirkel"><T t={woord} /></span></span>
+      <Pijl richting="e" className="ls-cirkellink-pijl" />
+    </span>
+  )
+}

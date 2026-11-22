@@ -4,6 +4,7 @@ import { DienstRij } from "@/components/diensten/dienst-rij"
 import { diensten, eersteZinL } from "@/components/diensten/kies"
 import { T } from "@/components/taal"
 import { Pijl } from "@/components/pijl"
+import { CirkelWoord } from "@/components/landschap/cirkel-link"
 import { Opening } from "@/components/wereld/opening"
 import { Beeld } from "@/components/landschap/beeld"
 import { Opkomst } from "@/components/landschap/opkomst"
@@ -129,7 +130,7 @@ export default function TuinenPagina() {
           <span className="ls-werkpagina-tekst">
             <span className="ls-label"><T t={{ nl: "Tuinwerk", en: "Garden work" }} /> · {TERRAS.plaats.split(",")[0]}</span>
             <span id="tuin-werk" className="ls-h1 ls-werknaam"><T t={{ nl: TERRAS.titel, en: TERRAS.en.titel }} /></span>
-            <span className="ls-tekstlink"><T t={{ nl: "Bekijk het project", en: "View the project" }} /> <Pijl richting="e" /></span>
+            <CirkelWoord voor={{ nl: "Bekijk het", en: "View the" }} woord={{ nl: "project", en: "project" }} />
           </span>
         </Link>
       </section>
