@@ -485,15 +485,27 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
   .ar-blokkop > .ar-lijnlink { justify-self: end; }
 }
 
-/* megamenu van de shop, alleen desktop (eigenaar, 14 nov 2026) */
-.ar-shopmenu { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
-.ar-shopmenu-tegel { display: grid; gap: 4px; color: var(--ar-zand); text-decoration: none; }
-.ar-shopmenu-tegel img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; margin-bottom: 10px; transition: opacity 300ms; }
-.ar-shopmenu-tegel:hover img { opacity: .85; }
-.ar-shopmenu-tegel:focus-visible { outline: 2px solid var(--ar-zand); outline-offset: 4px; border-radius: 4px; }
-.ar-shopmenu-naam { font-family: var(--font-syne); font-size: 20px; letter-spacing: -.02em; }
-.ar-shopmenu-sub { font-size: 14px; color: var(--zand-60); }
-.ar-shopmenu-alles { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
+/* megamenu's, alleen desktop (eigenaar, 14 nov 2026 voor de shop; 22 nov 2026:
+   "maak mega menu groter, zet op allerhande links een interactief mega menu"):
+   links de onderdelen in grote letters, rechts een groot beeld dat meewisselt. */
+.ar-mega { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 3vw, 48px); align-items: stretch; }
+.ar-mega-lijst { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.ar-mega-link { display: grid; gap: 6px; padding: 18px 0; border-bottom: 1px solid var(--zand-20); color: var(--zand); text-decoration: none; }
+.ar-mega-naam { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-family: var(--font-syne); font-weight: 600; font-size: clamp(28px, 2.6vw, 44px); line-height: 1.05; letter-spacing: -.03em; opacity: .55; transition: opacity 250ms; }
+.ar-mega-pijl { font-size: .6em; opacity: 0; translate: -12px 0; transition: opacity 250ms, translate 350ms var(--ar-ease); }
+.ar-mega-sub { font-size: 15px; color: var(--zand-60); }
+.ar-mega-link[data-actief] .ar-mega-naam { opacity: 1; }
+.ar-mega-link[data-actief] .ar-mega-pijl { opacity: 1; translate: 0 0; }
+.ar-mega-link:focus-visible { outline: 2px solid var(--zand); outline-offset: 4px; border-radius: 4px; }
+.ar-mega-alles { margin-top: auto; padding-top: 24px; }
+.ar-mega-alles .ar-knop { gap: 10px; }
+.ar-mega-beeld { position: relative; min-height: min(52vh, 520px); border-radius: 6px; overflow: hidden; background: var(--zand-20); }
+.ar-mega-beeld img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; scale: 1.06; transition: opacity 450ms, scale 900ms var(--ar-ease); }
+.ar-mega-beeld img[data-actief] { opacity: 1; scale: 1; }
+@media (prefers-reduced-motion: reduce) { .ar-mega-beeld img, .ar-mega-pijl, .ar-mega-naam { transition: none; } }
+html.stil :is(.ar-mega-beeld img, .ar-mega-pijl, .ar-mega-naam) { transition: none; }
+/* het megamenu mag hoger dan het gewone paneel */
+.ar-dock[data-mega] .ar-dock-vel-inhoud { padding: 28px 32px 12px; gap: 24px; }
 
 /* Meer contrast geldt ook binnen de blokken, die hun eigen gedempte tinten zetten */
 html.contrast :is(.ar :is(section, div), .ar-inv, .ar-voet, .ar-slot, .ar-dock) { --gedempt: var(--inkt); --lijn: color-mix(in srgb, var(--inkt) 60%, var(--grond)); }

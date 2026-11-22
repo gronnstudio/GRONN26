@@ -114,9 +114,17 @@ for (const b of [390, 1440]) {
     } else {
       await expect(nav.getByRole("button", { name: "Menu" })).toBeHidden()
       for (const naam of ["Home", "Studio", "Journaal", "Vragen"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
-      // Shop opent het shopmenu met de soorten
-      await nav.getByRole("button", { name: "Shop" }).click()
+      // aanwijzen opent het megamenu van die sectie; het beeld wisselt mee
+      await nav.locator(".ar-dock-rij").getByRole("link", { name: "Shop", exact: true }).hover()
       await expect(menu.getByRole("link", { name: /Borderpakketten/ })).toBeVisible()
+      await nav.locator(".ar-dock-rij").getByRole("link", { name: "Vijvers", exact: true }).hover()
+      const renovatie = menu.getByRole("link", { name: /Renovatie/ })
+      await expect(renovatie).toBeVisible()
+      await renovatie.hover()
+      await expect(menu.locator(".ar-mega-beeld img[data-actief]")).toHaveAttribute("src", "/landschap/vijver-terras.jpg")
+      // de dock verlaten sluit het weer
+      await page.mouse.move(10, 10)
+      await expect(menu).toHaveAttribute("inert", "")
     }
   })
 }

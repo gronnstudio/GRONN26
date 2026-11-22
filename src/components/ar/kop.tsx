@@ -11,6 +11,8 @@ import { Komeet } from "@/components/komeet"
 import { T, kies } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { L } from "@/lib/i18n"
+import { Pijl } from "@/components/pijl"
+import { MEGA } from "./mega"
 
 const KENNIS: L = { nl: "Kennismaken", en: "Get in touch" }
 const SLUIT: L = { nl: "Sluit", en: "Close" }
@@ -54,12 +56,6 @@ const PALET = (
                   </svg>
 )
 
-const SHOPMENU = [
-  { href: "/shop?soort=border#borders", naam: { nl: "Borderpakketten", en: "Border packages" }, sub: { nl: "Acht borders, opgestuurd of aangeplant", en: "Eight borders, shipped or planted" }, beeld: "/borderpakketten/vlinderborder.jpg" },
-  { href: "/shop?soort=bodem#borders", naam: { nl: "Bodem", en: "Soil" }, sub: { nl: "Compost met schors", en: "Compost with bark" }, beeld: "/borderpakketten/compost-franse-schors.jpg" },
-  { href: "/shop?soort=bodem#borders", naam: { nl: "Border op maat", en: "Custom border" }, sub: { nl: "Ik kom kijken en stel hem samen", en: "I come and look and put it together" }, beeld: "/borderpakketten/schaduwborder.jpg" },
-  { href: "/shop#cadeau", naam: { nl: "Cadeaubon", en: "Gift card" }, sub: { nl: "Zelf het bedrag kiezen", en: "Choose the amount yourself" }, beeld: "/borderpakketten/plukborder.jpg" },
-]
 
 const isHier = (pad: string, href: string) => (href === "/" ? pad === "/" : pad === href || pad.startsWith(href + "/"))
 
@@ -68,8 +64,25 @@ export function ArKop() {
   const taal = useTaal()
   const n = (t: L | string) => kies(t, taal)
   const [open, setOpen] = useState(false)
-  const [tab, setTab] = useState<"inhoud" | "weergave" | "shop">("inhoud")
+  // "inhoud" en "weergave" zijn de vaste panelen; elke andere waarde is een sectie uit MEGA
+  const [tab, setTab] = useState<string>("inhoud")
+  const [actief, setActief] = useState(0)
   const knop = useRef<HTMLButtonElement>(null)
+  const mega = MEGA[tab]
+  // desktop: een sectie aanwijzen klapt haar megamenu open, de dock verlaten sluit het weer
+  const klok = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const kanWijzen = () => matchMedia("(min-width: 1024px) and (hover: hover)").matches
+  const wijs = (href: string) => {
+    if (!MEGA[href] || !kanWijzen()) return
+    clearTimeout(klok.current)
+    klok.current = setTimeout(() => { setTab(href); setActief(0); setOpen(true) }, open ? 60 : 140)
+  }
+  const laat = () => {
+    clearTimeout(klok.current)
+    if (MEGA[tab]) klok.current = setTimeout(() => setOpen(false), 260)
+  }
+  const blijf = () => clearTimeout(klok.current)
+  useEffect(() => () => clearTimeout(klok.current), [])
   // bovenaan staat alleen de pijl; na scrollen wordt het de oranje knop met voortgangsring (eigenaar, 14 nov 2026)
   const [boven, setBoven] = useState(true)
   useEffect(() => {
@@ -98,7 +111,7 @@ export function ArKop() {
 
       <button type="button" className="ar-scherm" tabIndex={-1} aria-hidden onClick={() => setOpen(false)} />
 
-      <nav className="ar-dock" data-open={open || undefined} aria-label={n({ nl: "Hoofdmenu", en: "Main menu" })}>
+      <nav className="ar-dock" data-open={open || undefined} data-mega={(open && mega) ? "" : undefined} onMouseEnter={blijf} onMouseLeave={laat} aria-label={n({ nl: "Hoofdmenu", en: "Main menu" })}>
         <div className="ar-dock-vel" id="ar-dock-menu" inert={!open}>
           <div className="ar-dock-vel-binnen">
             <div className="ar-dock-vel-inhoud">
@@ -107,26 +120,32 @@ export function ArKop() {
                 <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="ls-logo-licht" />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="ls-logo-donker" />
-                <p className="ar-lbl"><T t={tab === "weergave" ? { nl: "Weergave", en: "Display" } : tab === "shop" ? "Shop" : "Menu"} /></p>
+                <p className="ar-lbl"><T t={tab === "weergave" ? { nl: "Weergave", en: "Display" } : mega ? mega.titel : "Menu"} /></p>
               </div>
               {tab === "weergave" ? (
                 <div className="ar-weergave"><Instellingen smal zonderLayout /></div>
-              ) : tab === "shop" ? (
-                <ul className="ar-shopmenu">
-                  {SHOPMENU.map((c) => (
-                    <li key={c.href}>
-                      <Link href={c.href} transitionTypes={["schuif"]} className="ar-shopmenu-tegel">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={c.beeld} alt="" loading="lazy" />
-                        <span className="ar-shopmenu-naam"><T t={c.naam} /></span>
-                        <span className="ar-shopmenu-sub"><T t={c.sub} /></span>
-                      </Link>
+              ) : mega ? (
+                <div className="ar-mega">
+                  <ul className="ar-mega-lijst">
+                    {mega.links.map((l, i) => (
+                      <li key={l.naam.nl}>
+                        <Link href={l.href} transitionTypes={["schuif"]} className="ar-mega-link" data-actief={i === actief || undefined} onMouseEnter={() => setActief(i)} onFocus={() => setActief(i)}>
+                          <span className="ar-mega-naam"><T t={l.naam} /><Pijl richting="e" className="ar-mega-pijl" /></span>
+                          <span className="ar-mega-sub"><T t={l.sub} /></span>
+                        </Link>
+                      </li>
+                    ))}
+                    <li className="ar-mega-alles">
+                      <Link href={mega.alles.href} transitionTypes={["schuif"]} className="ar-knop ar-knop-oranje"><T t={mega.alles.naam} /> <Pijl richting="e" /></Link>
                     </li>
-                  ))}
-                  <li className="ar-shopmenu-alles">
-                    <Link href="/shop" transitionTypes={["schuif"]} className="ar-knop ar-knop-oranje"><T t={{ nl: "Alles in de shop", en: "Everything in the shop" }} /></Link>
-                  </li>
-                </ul>
+                  </ul>
+                  <div className="ar-mega-beeld" aria-hidden>
+                    {mega.links.map((l, i) => (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img key={l.naam.nl} src={l.beeld} alt="" data-actief={i === actief || undefined} />
+                    ))}
+                  </div>
+                </div>
               ) : (
                 <ol className="ar-dock-lijst">
                   {MEER.map((p) => (
@@ -166,7 +185,7 @@ export function ArKop() {
           </li>
           {DOCK.map((d) => (
             <li key={d.href}>
-              <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} aria-label={n(d.naam)} title={n(d.naam)} aria-current={isHier(pad, d.href) ? "page" : undefined}>
+              <Link href={d.href} transitionTypes={["schuif"]} className="ar-dock-vak menu-icoon" data-beweging={d.beweging} onMouseEnter={() => wijs(d.href)} aria-label={n(d.naam)} title={n(d.naam)} aria-current={isHier(pad, d.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={d.icoon} /></svg>
                 {/* telefoon: alleen het actieve vak draagt zijn naam (eigenaar, 14 nov 2026); desktop: elk vak, de dock is daar volle breedte */}
                 <span className="ar-dock-label" aria-hidden><T t={d.naam} /></span>
@@ -176,18 +195,10 @@ export function ArKop() {
           {/* desktop: de dock heeft de ruimte, dus ook deze pagina's direct erin (eigenaar, 14 nov 2026: "maak menu meer items, we hebben de plek!") */}
           {MEER.filter((p) => p.href !== "/" && p.href !== "/tuinen/borderpakketten").map((p) => (
             <li key={p.href} className="ar-dock-alleen-breed">
-              {p.href === "/shop" ? (
-                // desktop: Shop opent een megamenu met de soorten (eigenaar, 14 nov 2026)
-                <button type="button" className="ar-dock-vak" aria-expanded={open && tab === "shop"} aria-controls="ar-dock-menu" aria-current={isHier(pad, "/shop") ? "page" : undefined} onClick={() => { const aan = open && tab === "shop"; setOpen(!aan); setTab("shop") }}>
-                  <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
-                  <span className="ar-dock-label"><T t={p.naam} /></span>
-                </button>
-              ) : (
-              <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-vak" tabIndex={undefined} aria-current={isHier(pad, p.href) ? "page" : undefined}>
+              <Link href={p.href} transitionTypes={["schuif"]} className="ar-dock-vak" onMouseEnter={() => wijs(p.href)} aria-current={isHier(pad, p.href) ? "page" : undefined}>
                 <svg viewBox="0 0 22 22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={p.icoon} /></svg>
                 <span className="ar-dock-label"><T t={p.naam} /></span>
               </Link>
-              )}
             </li>
           ))}
           <li className="ar-dock-alleen-breed">
