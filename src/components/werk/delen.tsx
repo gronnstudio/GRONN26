@@ -86,7 +86,7 @@ export function Alineas({ teksten }: { teksten: readonly Tekst[] }) {
 export function Citaat({ tekst, bron }: { tekst: Tekst; bron: string }) {
   const taal = useTaal()
   return (
-    <section aria-label={taal === "en" ? "Quote" : "Citaat"} className="w-sectie">
+    <section aria-label={`${taal === "en" ? "Quote from" : "Citaat van"} ${bron}`} className="w-sectie">
       <figure className="m-0 max-w-[1100px]" data-zie>
         <blockquote className="syne m-0 text-[clamp(26px,2.8vw,40px)] leading-[1.15] tracking-[-.03em]">
           <p className="m-0">“<T t={tekst} />”</p>

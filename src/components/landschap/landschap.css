@@ -291,7 +291,9 @@ html.donker .ls-voet { border-top: 1px solid var(--lijn); }
 .ls-voet-sociaal:hover { filter: brightness(1.12); }
 .ls-voet-insta { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
 .ls-voet-linkedin { background: #0a66c2; }
-.ls-voet-login { height: var(--knop-klein, 36px); min-height: 0 !important; padding: 0 14px; border: 1px dashed currentColor; border-radius: 999px; color: var(--gedempt) !important; text-decoration: none; transition: color 200ms; }
+.ls-voet-earth { gap: 6px; height: var(--knop-klein, 36px); min-height: 0 !important; padding: 0 14px; border: 1px solid currentColor; border-radius: 999px; font-weight: 600; white-space: nowrap; text-decoration: none; transition: background-color 200ms, color 200ms; }
+.ls-voet-earth:hover { background: var(--inkt); color: var(--grond) !important; }
+.ls-voet-login { white-space: nowrap; height: var(--knop-klein, 36px); min-height: 0 !important; padding: 0 14px; border: 1px dashed currentColor; border-radius: 999px; color: var(--gedempt) !important; text-decoration: none; transition: color 200ms; }
 .ls-voet-login:hover { color: var(--inkt) !important; }
 @media (min-width: 1024px) { .ls-voet-onder { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
 
@@ -581,10 +583,11 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-stappen li, .ls-stappen li:last-child { min-height: 200px; }
 }
 
-/* Voet op de telefoon: KVK en BTW onder elkaar, daarna de drie links op één regel */
+/* Voet op de telefoon: KVK en BTW onder elkaar, daarna Instagram, LinkedIn en Earth op één regel, Inloggen eronder */
 @media (max-width: 767px) {
   .ls-voet-kopie { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 8px 20px; width: 100%; }
-  .ls-voet-kopie > :not(a) { grid-column: 1 / -1; justify-self: start; }
+  .ls-voet-kopie > :not(a), .ls-voet-kopie > .ls-voet-login { grid-column: 1 / -1; justify-self: start; }
+  .ls-voet-kopie { gap: 12px; }
 }
 
 /* Telefoon: tikvlakken van minstens 44px, tekst nooit kleiner dan 16px */
