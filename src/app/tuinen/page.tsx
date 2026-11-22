@@ -10,6 +10,7 @@ import { Beeld } from "@/components/landschap/beeld"
 import { Opkomst } from "@/components/landschap/opkomst"
 import { BEPLANTING, MAANPOORT, MATERIALEN, PAD_BORDERS, POEL, REGENTUIN, TERRAS_PERGOLA, ZITMUUR, type Beeld as BeeldData } from "@/components/landschap/beelden"
 import "@/components/landschap/landschap.css"
+import { dienstenSchema, ldJson } from "@/lib/schema"
 import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
 import type { L } from "@/lib/i18n"
@@ -52,6 +53,7 @@ const TERRASBEELD: BeeldData = { ...TERRAS_FOTOS.reeks[0], soort: "project" }
 export default function TuinenPagina() {
   return (
     <div className="ls">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(dienstenSchema(FASEN.flatMap((f) => f.diensten), "/tuinen")) }} />
       <Opkomst />
       <Opening label={{ nl: "Tuinen", en: "Gardens" }} titel={{ nl: "Tuinen & renovatie.", en: "Gardens & renovation." }} zin={<T t={ZIN} />} beeld={MAANPOORT} />
 

@@ -11,6 +11,7 @@ import { Beeld } from "@/components/landschap/beeld"
 import { Opkomst } from "@/components/landschap/opkomst"
 import { POEL, REGENTUIN, VIJVER_TERRAS, type Beeld as BeeldData } from "@/components/landschap/beelden"
 import "@/components/landschap/landschap.css"
+import { dienstenSchema, ldJson } from "@/lib/schema"
 import { FOTOS, VIJVER, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
 
 // Vijvers in de taal van de voorpagina (bouwbrief, 21 nov 2026): opening met
@@ -39,6 +40,7 @@ const F10: BeeldData = { ...(FOTOS.F10 as FotoData), soort: "project" }
 export default function VijversPagina() {
   return (
     <div className="ls">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldJson(dienstenSchema(VIJVERDIENSTEN, "/vijvers")) }} />
       <Opkomst />
       <Opening label={{ nl: "Vijvers & water", en: "Ponds & water" }} titel={{ nl: "Water dat werkt.", en: "Water that works." }} zin={<T t={ZIN} />} foto={F01} />
 

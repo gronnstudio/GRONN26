@@ -44,10 +44,11 @@ export default async function BlogStuk({ params }: { params: Promise<{ slug: str
     headline: s.titel,
     description: s.beschrijving,
     datePublished: s.datum,
+    dateModified: s.datum,
     image: s.beeld ? `https://gronn.studio${s.beeld.src}` : undefined,
     inLanguage: "nl-NL",
-    author: { "@type": "Person", name: "Nick Peters" },
-    publisher: { "@type": "Organization", name: "GRØNN Studio", url: "https://gronn.studio" },
+    author: { "@type": "Person", name: "Nick Peters", jobTitle: "Hovenier en ecologisch ontwerper", url: "https://gronn.studio/over", sameAs: [BUSINESS.linkedin, BUSINESS.instagram] },
+    publisher: { "@type": "Organization", "@id": "https://gronn.studio/#organisation", name: "GRØNN Studio", url: "https://gronn.studio" },
     mainEntityOfPage: `https://gronn.studio/journaal/${s.slug}`,
   }
   // het openingsbeeld staat al bovenaan; niet nog eens in de tekst
