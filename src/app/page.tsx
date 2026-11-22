@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
-import { ArVoorpagina } from "@/components/ar/voorpagina"
+import { LandschapVoorpagina } from "@/components/landschap/voorpagina"
 import "@/components/voorpagina/voorpagina.css"
 import { T, type Tekst } from "@/components/taal"
 import { Plan } from "@/components/blad/plan"
@@ -46,11 +46,10 @@ export default function Voorpagina() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema()).replace(/</g, "\\u003c") }} />
 
-      {/* De voorpagina uit de handoff "Website 2027" is de voorpagina
-          (eigenaar, 13 nov 2026: "zet alles tot aan de footer over op de live
-          website"). De voet en het dock blijven die van de live site. */}
+      {/* De voorpagina uit de visuele bouwbrief "Van landschap naar detail"
+          (Nick, 21 nov 2026). */}
       <div className="alleen-klassiek">
-        <ArVoorpagina />
+        <LandschapVoorpagina />
       </div>
 
       <div className="alleen-plan">

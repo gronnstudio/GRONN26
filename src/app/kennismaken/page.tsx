@@ -15,15 +15,14 @@ export const metadata: Metadata = {
 export default function Kennismaken() {
   return (
     <>
-      {/* Eén lang woord: op de telefoon iets kleiner, zodat het past. */}
-      <div className="max-md:[&_.w-reus]:text-[12vw]! md:[&_.w-reus]:text-[clamp(72px,9.4vw,160px)]!">
+      <div className="ls">
         <Opening
-          label="Contact"
-          titel={{ nl: "Kennismaken", en: "Get in touch" }}
+          label={{ nl: "Kennismaken", en: "Get in touch" }}
+          titel={{ nl: "Vertel wat je buiten wilt.", en: "Tell me what you want outside." }}
           zin={<T t={{ nl: "Ik reageer meestal binnen twee werkdagen.", en: "I usually reply within two working days." }} />}
         />
       </div>
-      <div className="wrap">
+      <div className="ls-raster ls-kennis">
         {/* wie al weet wat hij wil, gaat meteen door naar de aanvraag (eigenaar, 14 nov 2026) */}
         <p className="mb-[clamp(32px,4vw,56px)] max-w-[46ch] text-gedempt">
           <T t={{ nl: "Weet je al wat je wilt laten maken?", en: "Already know what you want built?" }} />{" "}

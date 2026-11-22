@@ -32,9 +32,7 @@ export function Foto({
   return (
     <div className={`relative overflow-hidden rounded-[var(--foto-hoek)] bg-vlak ${className}`}>
       <Image src={foto.src} alt={alt} fill sizes={sizes} priority={priority} loading={priority ? undefined : eager ? "eager" : undefined} className={`object-cover ${STOCK.test(foto.src) ? "" : "[filter:saturate(1.22)_contrast(1.08)_brightness(1.03)]"}`} />
-      {foto.label ? (
-        <span className="lbl absolute top-3 left-3 rounded-full bg-antraciet/85 px-2.5 py-1 text-gebroken-wit"><T t={foto.en?.label ? { nl: foto.label, en: foto.en.label } : foto.label} /></span>
-      ) : null}
+      {/* geen labels op beelden (eigenaar, 21 nov 2026: "ai visualisatie wil ik nergens zien!") */}
     </div>
   )
 }

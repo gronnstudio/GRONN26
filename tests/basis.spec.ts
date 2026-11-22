@@ -124,16 +124,14 @@ for (const b of [390, 1440]) {
 test("uitlijning: kop en voet op één lijn", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
-  // De voet is sinds 14 nov 2026 de nieuwe (ar/voet.tsx, raster van 1520);
-  // de kop van deze pagina's staat nog op het raster van 1440. Tot 1440 breed
-  // vallen ze samen. Het dock is gecentreerd en geen lijn meer.
+  // De kop en de voet uit de bouwbrief (landschap/) staan op hetzelfde raster
+  // van 1280px met 64px marge; het logo en de voet beginnen op dezelfde lijn.
   for (const route of ["/vijvers", "/over"]) {
     await page.goto(route, { waitUntil: "domcontentloaded" })
     const [h1, voet] = await page.evaluate(() => {
       const links = (s: string) => Math.round(document.querySelector(s)!.getBoundingClientRect().left)
-      return [links("main h1"), links("footer.ar-voet .ar-voet-contact")]
+      return [links(".ls-kop .ls-logo"), links("footer.ls-voet .ls-uitnodiging-tekst")]
     })
-    // 2px speling: de goot van de nieuwe voet (--ar-goot) en die van de oude kop (--goot) verschillen nog net
     expect(Math.abs(h1 - voet), `${route}: kop ${h1}, voet ${voet}`).toBeLessThanOrEqual(2)
   }
 })

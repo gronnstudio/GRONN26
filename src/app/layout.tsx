@@ -3,9 +3,12 @@ import { Analytics } from "@vercel/analytics/next"
 import { LayoutMeting } from "@/components/layout-meting"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { geistMono, montserrat, mono, plex, smal, syne } from "@/fonts"
+import "@/components/ar/ar.css"
+import { SiteKop } from "@/components/landschap/kop"
+import { SiteVoet } from "@/components/landschap/voet"
+import { AutoVegen } from "@/components/landschap/auto-vegen"
 import { ArKop } from "@/components/ar/kop"
-import { ArVoet } from "@/components/ar/voet"
-import { ArSlot } from "@/components/ar/slot"
+import "@/components/landschap/landschap.css"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
@@ -55,11 +58,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div className="alleen-plan contents"><Kop /></div>
+        <div className="alleen-klassiek contents"><SiteKop /></div>
         <main id="inhoud">{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
         <div className="alleen-klassiek contents">
-          <ArSlot />
-          <ArVoet />
+          {/* De kop, het menu en de voet uit de visuele bouwbrief (21 nov 2026);
+              het dock onderin is daarmee vervangen. */}
+          <SiteVoet />
+          <AutoVegen />
           <ArKop />
         </div>
         <Zoek index={zoekIndex()} />

@@ -5,6 +5,7 @@ import { Pijl } from "@/components/pijl"
 import { kies, T, type Tekst } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { CSSProperties, ReactNode } from "react"
+import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
 import type { Foto as FotoData, Video as VideoData } from "@/lib/data/vijverrenovatie"
@@ -49,6 +50,24 @@ export function Lees({ children, className = "" }: { children: ReactNode; classN
     <div className={`grid grid-cols-1 gap-x-8 md:grid-cols-[3fr_6fr_3fr] ${className}`}>
       <div className="min-w-0 md:col-start-2">{children}</div>
     </div>
+  )
+}
+
+// Op de telefoon staat per hoofdstuk alleen de eerste alinea open; de rest
+// achter "Lees verder" (eigenaar, 21 nov 2026: "minder tekst is beter op
+// mobiel"). Vanaf 768px staat alles meteen open, zonder knop.
+export function Meer({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDetailsElement>(null)
+  useEffect(() => {
+    if (ref.current && matchMedia("(min-width: 768px)").matches) ref.current.open = true
+  }, [])
+  return (
+    <details ref={ref} className="w-meer">
+      <summary className="w-meer-knop">
+        <T t={{ nl: "Lees verder", en: "Read more" }} />
+      </summary>
+      {children}
+    </details>
   )
 }
 
@@ -257,8 +276,8 @@ export function Slot({ kop, alineas, knop }: { kop: Tekst; alineas: readonly Tek
       </h2>
       <Lees className="mt-[clamp(32px,4vw,56px)]">
         <Alineas teksten={alineas} />
-        <Link href="/kennismaken" className="lnk w-lijnlink mt-4 inline-block">
-          <T t={knop} /> <Pijl richting="e" />
+        <Link href="/kennismaken" className="knop mt-4 border-0 bg-oranje text-antraciet">
+          <T t={knop} /> <Pijl richting="ne" />
         </Link>
       </Lees>
     </section>

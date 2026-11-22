@@ -35,6 +35,7 @@ const MEER = [
   { href: "/over", naam: { nl: "Studio", en: "Studio" }, icoon: "M11 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM4 19c1-4 4-5.5 7-5.5s6 1.5 7 5.5" },
   { href: "/journaal", naam: { nl: "Journaal", en: "Journal" }, icoon: "M3 5.5c3-1 5.5-.5 8 1.5 2.5-2 5-2.5 8-1.5v12c-3-1-5.5-.5-8 1.5-2.5-2-5-2.5-8-1.5zM11 7v12" },
   { href: "/shop", naam: { nl: "Shop", en: "Shop" }, icoon: "M4.5 8h13l-1 11.5h-11zM8 8V6a3 3 0 0 1 6 0v2" },
+  { href: "/tuinen/borderpakketten", naam: { nl: "Zelf aan de slag", en: "Do it yourself" }, icoon: "M6 19.5h10M11 19.5V10m0 0c-3 0-5-2-5-5.5 3 0 5 2 5 5.5zm0 0c3 0 5-2 5-5.5-3 0-5 2-5 5.5z" },
   { href: "/faq", naam: { nl: "Vragen", en: "Questions" }, icoon: "M11 19.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17zM8.6 8.6a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.6M11 15.6v.1" },
 ]
 
@@ -103,7 +104,9 @@ export function ArKop() {
             <div className="ar-dock-vel-inhoud">
               <div className="ar-dock-top">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" />
+                <img src="/brand/woordmerk-primair-antraciet.svg" alt="GRØNN Studio" className="ls-logo-licht" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/woordmerk-primair.svg" alt="GRØNN Studio" className="ls-logo-donker" />
                 <p className="ar-lbl"><T t={tab === "weergave" ? { nl: "Weergave", en: "Display" } : tab === "shop" ? "Shop" : "Menu"} /></p>
               </div>
               {tab === "weergave" ? (
@@ -171,7 +174,7 @@ export function ArKop() {
             </li>
           ))}
           {/* desktop: de dock heeft de ruimte, dus ook deze pagina's direct erin (eigenaar, 14 nov 2026: "maak menu meer items, we hebben de plek!") */}
-          {MEER.filter((p) => p.href !== "/").map((p) => (
+          {MEER.filter((p) => p.href !== "/" && p.href !== "/tuinen/borderpakketten").map((p) => (
             <li key={p.href} className="ar-dock-alleen-breed">
               {p.href === "/shop" ? (
                 // desktop: Shop opent een megamenu met de soorten (eigenaar, 14 nov 2026)
