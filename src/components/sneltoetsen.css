@@ -1,0 +1,51 @@
+/* Sneltoetsen: een lipje rechts midden aan de rand, in het glas van de dock,
+   en een paneel dat vanaf dezelfde rand binnenschuift (eigenaar, 22 nov 2026).
+   Alleen met muis of trackpad op een breed scherm. */
+.snel-tab { display: none; }
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .snel-tab {
+    position: fixed; z-index: 90; right: 0; top: 50%; translate: 6px -50%;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    padding: 18px 12px 18px 10px; border: 0; border-radius: 14px 0 0 14px; cursor: pointer;
+    color: #efeeea; background: rgb(22 22 21 / .82);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6) brightness(.8); backdrop-filter: blur(20px) saturate(1.6) brightness(.8);
+    box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .22), 0 10px 40px -12px rgb(0 0 0 / .45);
+    transition: translate 400ms cubic-bezier(.22, 1, .36, 1), background-color 300ms;
+  }
+  .snel-tab:hover, .snel-tab:focus-visible { translate: 0 -50%; background: rgb(22 22 21 / .94); }
+  .snel-tab:focus-visible { outline: 2px solid #ff5b04; outline-offset: 3px; }
+  .snel-tab svg { color: #ff5b04; }
+  .snel-tab-tekst { writing-mode: vertical-rl; rotate: 180deg; font: 600 13px/1 var(--font-montserrat), sans-serif; letter-spacing: .04em; }
+}
+/* niet op de eigenaarspagina's en niet terwijl het dockmenu open is */
+html:has([data-links]) .snel-tab, html.ar-open .snel-tab { display: none; }
+
+.snel-paneel {
+  --p-grond: #f6f5f1; --p-inkt: #202020; --p-gedempt: rgb(32 32 32 / .66); --p-lijn: rgb(32 32 32 / .14);
+  position: fixed; inset: 0 0 0 auto; margin: auto 16px auto auto; width: min(420px, calc(100vw - 32px)); max-height: calc(100svh - 32px);
+  padding: 0; border: 0; border-radius: 20px; overflow-y: auto; overscroll-behavior: contain;
+  color: var(--p-inkt); background: var(--p-grond); box-shadow: 0 24px 80px -24px rgb(0 0 0 / .5);
+}
+html.donker .snel-paneel { --p-grond: #202020; --p-inkt: #efeeea; --p-gedempt: rgb(239 238 234 / .7); --p-lijn: rgb(239 238 234 / .16); }
+.snel-paneel::backdrop { background: rgb(20 18 16 / .45); }
+.snel-paneel[open] { animation: snel-in 450ms cubic-bezier(.22, 1, .36, 1); }
+@keyframes snel-in { from { translate: 40px 0; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .snel-paneel[open] { animation: none; } .snel-tab { transition: none; } }
+html.stil .snel-paneel[open] { animation: none; }
+
+.snel-binnen { display: grid; gap: 24px; padding: 24px 24px 20px; }
+.snel-kop { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--p-lijn); }
+.snel-titel { margin: 0; font: 600 28px/1.1 var(--font-syne), sans-serif; letter-spacing: -.03em; }
+.snel-titel::after { content: "."; color: #ff5b04; }
+.snel-sluit { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
+.snel-sluit:hover { background: var(--p-lijn); }
+.snel-sluit:focus-visible, .snel-knop:focus-visible, .snel-schakel input:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.snel-groep { margin: 0 0 8px; font: 600 12px/1.4 var(--font-montserrat), sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--p-gedempt); }
+.snel-lijst { display: grid; margin: 0; padding: 0; list-style: none; font: 500 15px/1.4 var(--font-montserrat), sans-serif; }
+.snel-lijst li { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 40px; border-bottom: 1px solid var(--p-lijn); }
+.snel-toetsen { display: flex; gap: 4px; flex: none; }
+.snel-kbd { display: inline-grid; place-items: center; min-width: 28px; height: 26px; padding: 0 7px; border: 1px solid var(--p-lijn); border-bottom-width: 2px; border-radius: 7px; font: 600 12px/1 var(--font-montserrat), sans-serif; color: var(--p-inkt); background: color-mix(in srgb, var(--p-inkt) 5%, transparent); }
+.snel-voet { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.snel-knop { min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: #ff5b04; color: #202020; font: 600 15px/1 var(--font-montserrat), sans-serif; cursor: pointer; }
+.snel-schakel { display: flex; align-items: center; gap: 10px; min-height: 44px; font: 500 15px/1 var(--font-montserrat), sans-serif; cursor: pointer; }
+.snel-schakel input { width: 20px; height: 20px; accent-color: var(--p-inkt); cursor: pointer; }

@@ -77,7 +77,7 @@ export default function VijversPagina() {
           </div>
           <p className="ls-body ls-lees"><T t={{ nl: "Natuurlijke waterval, beekloop en biofiltersysteem. Planten en pomp doen het zware werk.", en: "A natural waterfall, stream and biofilter system. Plants and pump do the heavy lifting." }} /></p>
         </div>
-        <div className="ls-beeldrij">
+        <div className="ls-beeldrij" tabIndex={0} role="region" aria-label="Beelden van helder water">
           <Beeld beeld={VIJVER_TERRAS} sizes="(min-width: 768px) 58vw, 100vw" className="ls-op" />
           <Beeld beeld={POEL} sizes="(min-width: 768px) 40vw, 50vw" className="ls-op" labelRechts />
           <Beeld beeld={REGENTUIN} sizes="(min-width: 768px) 40vw, 50vw" className="ls-op" labelRechts />

@@ -134,6 +134,12 @@ html.stil *, html.stil *::before, html.stil *::after { transition: none !importa
    clip in plaats van hidden, zodat sticky blijft werken; pan-x pan-y laat
    alleen scrollen toe, geen knijp- of dubbeltikzoom. */
 html, body { overflow-x: clip; }
+/* WCAG 2.4.11: een element met focus verdwijnt nooit onder de dock onderin */
+html { scroll-padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); }
+/* WCAG 2.4.1: de link "Naar de inhoud" verschijnt pas bij Tab */
+.overslaan { position: fixed; z-index: 200; left: 16px; top: 16px; display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border-radius: 999px; background: #ff5b04; color: #202020; font: 600 15px/1 var(--font-montserrat), sans-serif; text-decoration: none; translate: 0 -200%; transition: translate 200ms; }
+.overslaan:focus { translate: 0 0; outline: 2px solid #202020; outline-offset: 2px; }
+#inhoud:focus { outline: none; }
 
 /* ── Layout Tuinplan (25 okt 2026, eigenaar: "kunnen we een switch maken
    tussen beide layouts? Ook in weergave menu?"). Weergave → Layout zet
