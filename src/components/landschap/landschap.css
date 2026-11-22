@@ -286,7 +286,7 @@ html.donker .ls-voet { border-top: 1px solid var(--lijn); }
 .ls-voet-kopie { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font: 500 13px/1 var(--font-montserrat), sans-serif; }
 .ls-voet-kopie > a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; }
 .ls-voet-login { color: var(--gedempt) !important; }
-@media (min-width: 1024px) { .ls-voet-onder { padding-bottom: 24px; } }
+@media (min-width: 1024px) { .ls-voet-onder { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
 
 /* ── rustige opkomst, één keer per bezoek (opkomst.tsx) ───────────── */
 .ls-op { transition: opacity 400ms var(--ls-ease), translate 400ms var(--ls-ease); }
