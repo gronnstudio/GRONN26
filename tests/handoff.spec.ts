@@ -120,7 +120,8 @@ test("Tuinen in de kop: de pagina schuift binnen met een view transition van het
       return orig(arg as Parameters<typeof orig>[0])
     }) as typeof document.startViewTransition
   })
-  await page.goto("/")
+  // pas klikken na hydratatie: anders is het een gewone paginalading zonder view transition
+  await page.goto("/", { waitUntil: "networkidle" })
   await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("link", { name: "Tuinen" }).click()
   await expect(page).toHaveURL(/\/tuinen$/)
   expect(await page.evaluate(() => (window as unknown as { __vt: string[] }).__vt)).toContain("schuif")
