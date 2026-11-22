@@ -84,6 +84,11 @@ html.donker .ar-logo-donker { display: block; }
 .ar-dock-link:hover .ar-dock-naam { translate: 8px 0; }
 .ar-dock-link:not([aria-current="page"]) .ar-dock-naam { color: var(--zand-60); transition: color 300ms, translate 500ms var(--ar-ease); }
 .ar-dock-link:hover .ar-dock-naam { color: var(--zand); }
+/* de familie onder de pagina's: GRØNN Earth en Outdoor, zoals in de backbone (eigenaar, 22 nov 2026) */
+.ar-familie { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; padding: 12px 0 14px; }
+.ar-familie .ar-lbl { flex-basis: 100%; margin: 0; }
+.ar-familie-link { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; color: var(--zand); font-weight: 600; font-size: 15px; text-decoration: none; }
+.ar-familie-link:hover { text-decoration: underline; text-underline-offset: 4px; }
 /* de knoppen staan op hetzelfde raster van vijf kolommen als het dock: oranje over drie, WhatsApp en palet recht boven de laatste twee */
 .ar-dock-voet { display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; margin-inline: -12px; }
 .ar-dock-voet > * { grid-column: span 1; justify-self: center; }
@@ -465,7 +470,7 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
   .ar-dock-rij { grid-template-columns: repeat(8, minmax(0, 1fr)) max-content 48px 48px 64px; grid-auto-flow: row; align-items: center; }
   .ar-dock-rij > li.ar-dock-alleen-breed:has(.ar-app-whatsapp, .ar-rondknop) { justify-content: center; }
   /* alles staat in de rij; het paneel is hier alleen nog de weergave */
-  .ar-dock-lijst, .ar-dock-voet { display: none; }
+  .ar-dock-lijst, .ar-dock-voet, .ar-familie { display: none; }
 }
 @media (min-width: 1024px) and (max-width: 1279px) {
   .ar-dock-rij > li:not(:nth-last-child(-n+4)) .ar-dock-vak svg { display: none; }

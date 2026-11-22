@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { T } from "@/components/taal"
 import { Pijl } from "@/components/pijl"
 import { Kopieer } from "@/components/kopieer"
-import { EARTH_URL } from "@/components/atlas-flap"
+import { FAMILIE } from "@/lib/familie"
 import { TelLink } from "@/components/handoff/klant"
 import { BUSINESS } from "@/lib/business"
 import type { L } from "@/lib/i18n"
@@ -72,7 +72,7 @@ export function SiteVoet() {
           <a href={BUSINESS.linkedin} className="ls-voet-sociaal ls-voet-linkedin" aria-label="LinkedIn" title="LinkedIn">
             <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.2c0-1.24-.02-2.84-1.73-2.84-1.73 0-2 1.35-2 2.75V21h-4z" /></svg>
           </a>
-          <a href={EARTH_URL} className="ls-voet-earth">GRØNN Earth <Pijl richting="ne" /></a>
+          {FAMILIE.map((f) => <a key={f.id} href={f.href} className="ls-voet-earth">{f.naam} <Pijl richting="ne" /></a>)}
           <a href="/dashboard" rel="nofollow" className="ls-voet-login"><T t={{ nl: "Inloggen eigenaar", en: "Owner log in" }} /></a>
         </div>
         <p className="ls-annotatie">© 2026 {BUSINESS.name} · <span lang="en">Designing Living Ecosystems</span></p>
