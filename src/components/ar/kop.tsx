@@ -48,12 +48,12 @@ const WHATSAPP = (
                     <path d="M8.9 7.2c-.3-.6-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3.1s1.3 3.6 1.5 3.8c.2.3 2.6 4.1 6.4 5.6 3.2 1.2 3.8 1 4.5.9.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.4l-2.3-1.1c-.3-.1-.6-.2-.8.2l-1 1.3c-.2.2-.4.3-.8.1a8 8 0 0 1-3.9-3.4c-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.6l-1-2.3z" fill="currentColor" transform="translate(12 12) scale(.62) translate(-12 -12.6)" />
                   </svg>
 )
+// Weergave: het toegankelijkheidspoppetje in een cirkel (eigenaar, 22 nov 2026), gelijk aan de backbone
 const PALET = (
-                  <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-                    <path d="M10 2.8a7.2 7.2 0 1 0 0 14.4c1 0 1.6-.7 1.6-1.5 0-.5-.2-.8-.5-1.1-.3-.3-.5-.7-.5-1.1 0-.9.7-1.5 1.6-1.5h1.8a3.7 3.7 0 0 0 3.7-3.7C17.7 5.6 14.3 2.8 10 2.8Z" strokeLinejoin="round" />
-                    <circle cx="6.3" cy="9.3" r="1" fill="currentColor" stroke="none" />
-                    <circle cx="8.6" cy="6.2" r="1" fill="currentColor" stroke="none" />
-                    <circle cx="12.3" cy="6.2" r="1" fill="currentColor" stroke="none" />
+                  <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="10" cy="10" r="7.6" />
+                    <circle cx="10" cy="6.2" r="1.15" fill="currentColor" stroke="none" />
+                    <path d="M6.4 8.3 10 9.1l3.6-.8M10 9.1v2.6m0 0-2 3.2m2-3.2 2 3.2" />
                   </svg>
 )
 
