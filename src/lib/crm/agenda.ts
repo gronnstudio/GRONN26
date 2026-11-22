@@ -35,14 +35,13 @@ export function zonderContact(tekst: string) {
     .replace(/\+?\d[\d\s-]{7,}\d/g, (m) => (m.replace(/\D/g, "").length >= 9 ? "…" : m))
 }
 
-// Vaste onderhoudsklanten (Nick, 2 nov 2026): een klant met de tag "onderhoud" komt elk seizoen
-// terug in de planning, op de eerste maandag van maart, juni, oktober en december. Geen eigen
+// Vaste onderhoudsklanten: een klant met de tag "onderhoud" komt twee keer per jaar terug in de
+// planning (Nick, 22 nov 2026: twee bezoeken, zoals het abonnement van EUR 45 p/m op de site),
+// op de eerste maandag van maart en oktober. Geen eigen
 // schema per klant: wie anders wil, plant de echte dag zelf in. Verloren klanten tellen niet mee.
 export const SEIZOENEN = [
   { maand: 3, naam: "Voorjaarsbeurt" },
-  { maand: 6, naam: "Zomerbeurt" },
   { maand: 10, naam: "Herfstbeurt" },
-  { maand: 12, naam: "Winterbeurt" },
 ] as const
 
 export const isOnderhoud = (k: Klant) => k.fase !== "Verloren" && k.tags.some((t) => t.trim().toLowerCase() === "onderhoud")

@@ -51,7 +51,7 @@ export default async function Planning({ searchParams }: { searchParams: Promise
 
   return (
     <>
-      <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag. Klanten met de tag onderhoud komen elk seizoen terug." />
+      <Kop pad={[{ naam: "Werk" }, { naam: "Planning" }]} titel="Planning" sub="De komende twee maanden: wat je inplant, en wanneer je wie wilde opvolgen. Te laat opvolgen staat bij vandaag. Klanten met de tag onderhoud komen in maart en oktober terug." />
       <Tabs label="Planning bekijken als" tabs={[{ id: "kalender", naam: "Kalender" }, { id: "bord", naam: "Planbord per week" }]} actief={bord ? "bord" : "kalender"} href={(t) => (t === "bord" ? "/dashboard/planning?weergave=bord" : "/dashboard/planning")} />
       <main className="mx-auto grid max-w-[1440px] @min-[1060px]:grid-cols-[minmax(0,1fr)_380px] gap-8 px-8 py-6">
         <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8">
