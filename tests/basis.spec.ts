@@ -68,10 +68,9 @@ test("weergave: donker kiezen zet html.donker en blijft bewaard", async ({ page 
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/over")
-  // het menu uit de bouwbrief (landschap/kop.tsx): Weergave staat onderin het menu
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.locator("#ls-menu").getByRole("button", { name: "Weergave" }).click()
-  await page.click('#ls-menu label:has(input[value="donker"])')
+  // het dock (ar/kop.tsx): op desktop opent Weergave het paneel boven de pil
+  await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("button", { name: "Weergave" }).click()
+  await page.click('#ar-dock-menu label:has(input[value="donker"])')
   await expect(page.locator("html")).toHaveClass(/donker/)
   await page.reload()
   await expect(page.locator("html")).toHaveClass(/donker/)
@@ -87,36 +86,38 @@ for (const [uur, donker] of [["12:00", false], ["21:00", true]] as const) {
   })
 }
 
-// Het menu uit de visuele bouwbrief (landschap/kop.tsx, 21 nov 2026): bovenin
-// het logo en de menupil, open een index van vijf woorden. Escape sluit en
-// zet de focus terug op de pil; de pagina erachter is zolang inert.
+// Het dock (ar/kop.tsx, eigenaar 14 nov 2026): op de telefoon Werk, Vijvers,
+// Tuinen, Menu en Omhoog; Menu klapt de pil open met de rest. Op desktop staat
+// alles direct in de rij en is er geen Menu-knop.
 // Elke breedte een eigen test: twee keer goto op één pagina brak op CI af met ERR_ABORTED.
 for (const b of [390, 1440]) {
-  test(`menu @${b}: vijf bestemmingen, de huidige pagina, Escape en Omhoog`, async ({ page }) => {
+  test(`dock @${b}: de vakken, de huidige pagina en Omhoog`, async ({ page }) => {
     await zonderIntro(page)
     await page.setViewportSize({ width: b, height: 800 })
     await page.goto("/werk/terras-geulle", { waitUntil: "domcontentloaded" })
-    const pil = page.getByRole("button", { name: "Menu" })
-    await expect(pil).toHaveAttribute("aria-expanded", "false")
-    if (b >= 1024) {
-      const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
-      await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
+    const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
+    for (const naam of ["Werk", "Vijvers", "Tuinen"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+    await expect(nav.getByRole("link", { name: "Werk", exact: true })).toHaveAttribute("aria-current", "page")
+    const omhoog = nav.getByRole("button", { name: "Terug naar boven" })
+    await expect(omhoog).toBeDisabled()
+    await page.mouse.wheel(0, 800)
+    await expect(omhoog).toBeEnabled()
+    await expect(nav.getByRole("link", { name: "Tuinen", exact: true })).toBeInViewport()
+    const menu = page.locator("#ar-dock-menu")
+    if (b < 1024) {
+      await expect(nav.locator(".ar-dock-rij").getByRole("link", { name: "Studio", exact: true })).toBeHidden()
+      await nav.getByRole("button", { name: "Menu" }).click()
+      for (const naam of ["Home", "Studio", "Journaal", "Shop", "Vragen"]) await expect(menu.getByRole("link", { name: naam, exact: true })).toBeVisible()
+      await page.keyboard.press("Escape")
+      await expect(nav.getByRole("button", { name: "Menu" })).toBeFocused()
+      await expect(menu).toHaveAttribute("inert", "")
+    } else {
+      await expect(nav.getByRole("button", { name: "Menu" })).toBeHidden()
+      for (const naam of ["Home", "Studio", "Journaal", "Vragen"]) await expect(nav.getByRole("link", { name: naam, exact: true })).toBeVisible()
+      // Shop opent het shopmenu met de soorten
+      await nav.getByRole("button", { name: "Shop" }).click()
+      await expect(menu.getByRole("link", { name: /Borderpakketten/ })).toBeVisible()
     }
-    await pil.click()
-    const menu = page.getByRole("dialog", { name: "Menu" })
-    await expect(menu).toBeVisible()
-    for (const naam of ["Werk", "Vijvers", "Tuinen", "Studio", "Kennismaken"]) await expect(menu.getByRole("link", { name: new RegExp(naam) }).first()).toBeVisible()
-    await expect(menu.getByRole("link", { name: /Werk/ })).toHaveAttribute("aria-current", "page")
-    for (const naam of ["Journaal", "Vragen", "Shop"]) await expect(menu.getByRole("link", { name: naam, exact: true })).toBeVisible()
-    await expect(page.locator("#inhoud")).toHaveAttribute("inert")
-    await page.keyboard.press("Escape")
-    await expect(menu).toBeHidden()
-    await expect(page.getByRole("button", { name: "Menu" })).toBeFocused()
-    await expect(page.locator("#inhoud")).not.toHaveAttribute("inert")
-    const omhoog = page.locator(".ls-omhoog")
-    await expect(omhoog).not.toHaveAttribute("data-zichtbaar")
-    await page.mouse.wheel(0, 1200)
-    await expect(omhoog).toHaveAttribute("data-zichtbaar")
   })
 }
 
@@ -322,7 +323,7 @@ test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
-  const dock = page.getByRole("button", { name: "Menu" })
+  const dock = page.getByRole("navigation", { name: "Hoofdmenu" })
   await expect(dock).toBeVisible()
   await expect(page.locator(".bk")).toBeHidden()
   await expect(page.getByRole("button", { name: "Bekijk als blueprint" })).toHaveCount(0)
@@ -339,15 +340,14 @@ test("layout: geen blueprintknop in de voet; Klassieke layout in het stempel zet
   await expect(page.locator("html")).not.toHaveClass(/\bplan\b/)
 })
 
-// Het menu biedt geen keuze Klassiek/Blueprint (eigenaar, 14 nov 2026; Instellingen zonderLayout)
-test("layout: Weergave in het menu heeft geen Blueprint-keuze", async ({ page }) => {
+// Het dock biedt geen keuze Klassiek/Blueprint meer (eigenaar, 14 nov 2026; Instellingen zonderLayout)
+test("layout: Weergave in het dock heeft geen Blueprint-keuze", async ({ page }) => {
   await zonderIntro(page)
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/over")
-  await page.getByRole("button", { name: "Menu" }).click()
-  await page.locator("#ls-menu").getByRole("button", { name: "Weergave" }).click()
-  await expect(page.locator('#ls-menu input[value="donker"]')).toBeAttached()
-  await expect(page.locator('#ls-menu input[value="plan"]')).toHaveCount(0)
+  await page.getByRole("navigation", { name: "Hoofdmenu" }).getByRole("button", { name: "Weergave" }).click()
+  await expect(page.locator('#ar-dock-menu input[value="donker"]')).toBeAttached()
+  await expect(page.locator('#ar-dock-menu input[value="plan"]')).toHaveCount(0)
 })
 
 test("tuinplan, index: een blad kiezen gaat naar die pagina", async ({ page }) => {

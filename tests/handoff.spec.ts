@@ -4,14 +4,14 @@ import { expect, test } from "./fixtures"
 // de projectaanvraag in vier stappen (13 nov 2026), zowel de foutroute als de
 // gelukte route.
 
-test("desktop @1440: de kop staat bovenaan, Werk gaat naar /werk", async ({ page }) => {
+test("desktop @1440: het logo bovenaan, het dock onderin, Werk gaat naar /werk", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto("/")
+  await expect(page.getByRole("link", { name: /GRØNN Studio, naar de voorpagina/ }).first()).toBeVisible()
   const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
-  await expect(nav).toBeVisible()
-  const box = await nav.boundingBox()
-  expect(box!.y).toBeLessThan(100)
-  await nav.getByRole("link", { name: "Werk" }).click()
+  const box = (await nav.boundingBox())!
+  expect(box.y + box.height).toBeGreaterThan(900 - 120)
+  await nav.getByRole("link", { name: "Werk", exact: true }).click()
   await expect(page).toHaveURL(/\/werk$/)
 })
 
@@ -21,19 +21,21 @@ test("donker thema werkt op de voorpagina", async ({ page }) => {
   await expect(page.locator("html")).toHaveClass(/donker/)
 })
 
-// De telefoon als app (Nick, 21 nov 2026): logo bovenin, tabbalk met Menu onderin onder de duim.
-test("telefoon @390: het logo bovenin, de tabbalk met Menu onderin", async ({ page }) => {
+// Het dock van de live site (eigenaar, 22 nov 2026), met een groot uitklappend menu waarin ook Shop staat.
+test("telefoon @390: het logo bovenin, het dock onderin, Menu klapt groot uit met Shop", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto("/")
   await expect(page.getByRole("link", { name: /GRØNN Studio, naar de voorpagina/ }).first()).toBeVisible()
-  const balk = page.getByRole("navigation", { name: "Tabbalk" })
-  await expect(balk.getByRole("link", { name: "Werk" })).toBeVisible()
-  const menu = balk.getByRole("button", { name: "Menu" })
+  const nav = page.getByRole("navigation", { name: "Hoofdmenu" })
+  const menu = nav.getByRole("button", { name: "Menu" })
   await expect(menu).toBeInViewport()
   const vak = (await menu.boundingBox())!
-  expect(vak.y + vak.height).toBeGreaterThan(844 - 70)
+  expect(vak.y + vak.height).toBeGreaterThan(844 - 90)
   await menu.click()
-  await expect(page.getByRole("dialog", { name: "Menu" })).toBeVisible()
+  const shop = page.locator("#ar-dock-menu").getByRole("link", { name: "Shop", exact: true })
+  await expect(shop).toBeVisible()
+  const woord = await shop.locator(".ar-dock-naam").evaluate((e) => parseFloat(getComputedStyle(e).fontSize))
+  expect(woord).toBeGreaterThanOrEqual(28)
   await page.keyboard.press("Escape")
   await expect(menu).toBeFocused()
 })

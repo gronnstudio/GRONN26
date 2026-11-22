@@ -7,6 +7,7 @@ import "@/components/ar/ar.css"
 import { SiteKop } from "@/components/landschap/kop"
 import { SiteVoet } from "@/components/landschap/voet"
 import { AutoVegen } from "@/components/landschap/auto-vegen"
+import { ArKop } from "@/components/ar/kop"
 import "@/components/landschap/landschap.css"
 import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               het dock onderin is daarmee vervangen. */}
           <SiteVoet />
           <AutoVegen />
+          <ArKop />
         </div>
         <Zoek index={zoekIndex()} />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).

@@ -499,3 +499,24 @@ html.stil .ar-band, .ar-band:focus-within { overflow-x: auto; }
 html.contrast :is(.ar :is(section, div), .ar-inv, .ar-voet, .ar-slot, .ar-dock) { --gedempt: var(--inkt); --lijn: color-mix(in srgb, var(--inkt) 60%, var(--grond)); }
 .ar-rondknop[aria-pressed="true"]:hover { color: var(--g800); }
 .ar-maker-foto img { object-position: 50% 14%; }
+
+/* Menu klapt groot uit (eigenaar, 22 nov 2026: "bij menu mag je het menu groter
+   uitklappen", "Die kleine dingen wil ik ook groot"): op de telefoon bijna
+   schermbreed, met grote woorden; elk woord even groot, ook Shop. */
+@media (max-width: 1023px) {
+  .ar-dock { transition: border-radius 600ms var(--ar-ease), background-color 400ms, width 500ms var(--ar-ease); }
+  .ar-dock[data-open] { width: calc(100vw - 16px); }
+  .ar-dock-vel-inhoud { padding: 24px 22px 8px; gap: 22px; }
+  .ar-dock-link { grid-template-columns: 44px 1fr; padding: 12px 0; }
+  .ar-dock-ico { width: 26px; height: 26px; }
+  .ar-dock-naam { font-size: clamp(28px, 8.4vw, 40px); }
+}
+@media (prefers-reduced-motion: reduce) { .ar-dock { transition: none; } }
+
+/* Licht thema: het open menu is ook licht (eigenaar, 22 nov 2026: "Als thema op
+   licht staat moet menu ook licht zijn"). Het gesloten dock blijft het glas. */
+html:not(.donker) .ar-dock[data-open] {
+  --zand: #202020; --zand-60: rgb(32 32 32 / .62); --zand-20: rgb(32 32 32 / .14);
+  color: #202020; background: rgb(246 245 241 / .94);
+  box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .6), 0 10px 40px -12px rgb(0 0 0 / .35);
+}
