@@ -1,7 +1,6 @@
 /* "Van landschap naar detail": de visuele bouwbrief van 21 nov 2026.
    80 % architecturale rust, 20 % interactie. UI alleen in gebroken wit
-   #EFEEEA, antraciet #202020 en aarde-oranje #FF5B04 (oranje tekst op licht
-   #B84000); groen komt uit de foto's. Syne Bold voor koppen, Montserrat voor
+   #EFEEEA, antraciet #202020 en aarde-oranje #FF5B04 (ook als tekst, sinds 22 nov 2026); groen komt uit de foto's. Syne Bold voor koppen, Montserrat voor
    de rest. Knoppen rond, kaarten 16px, foto's 6px. Raster max 1280px, marge
    24/40/64px. Beweging alleen als extra laag, stil bij minder beweging. */
 
@@ -10,7 +9,10 @@
 html:root:not(:has([data-links])) {
   --g50: #efeeea; --g800: #202020;
   --grond: var(--g50); --inkt: var(--g800);
-  --oranje: #ff5b04; --oranje-tekst: #b84000;
+  --oranje: #ff5b04;
+  /* alleen licht oranje, ook als tekst (eigenaar, 22 nov 2026: "ik wil dat
+     je enkel licht oranje gebruikt"); op het zand 2,9:1 */
+  --oranje-tekst: var(--oranje);
   --veld: #e4e3de;
   --foto-hoek: 6px;
   --g: 24px;
@@ -637,3 +639,10 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
 /* in een projectkaart: de hele kaart is de link */
 a:hover .ls-cirkellink .ls-cirkel, a:focus-visible .ls-cirkellink .ls-cirkel { background: var(--oranje); color: #202020; }
 a:hover .ls-cirkellink .ls-cirkellink-pijl, a:focus-visible .ls-cirkellink .ls-cirkellink-pijl { translate: 6px 0; }
+
+/* Voorpagina: de foto loopt tot helemaal boven, het primaire logo (wit met de
+   oranje P) staat erop (eigenaar, 22 nov 2026: "maak afbeelding tot boven aan
+   en gebruik primair logo"). De kop scrolt mee weg, ook op de telefoon. */
+html:has(.ls-hero) .ls-kop { position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(rgb(0 0 0 / .32), transparent); border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; color: #efeeea; }
+html:has(.ls-hero) .ls-logo-licht { display: none; }
+html:has(.ls-hero) .ls-logo-donker { display: block; }
