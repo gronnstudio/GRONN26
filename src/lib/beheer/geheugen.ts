@@ -12,7 +12,7 @@ Facturen en boekhouding in DigiBoox. Geen bedrijfsaansprakelijkheidsverzekering 
 
 # Prijzen en marges (incl. btw)
 Vijverdoorlichting €195; najaarsbeurt €250/350/450–650; winterklaar €95–185; bladnet €125/175/250.
-Tuin aanleggen vanaf €3.000, omvormen vanaf €5.000. Uurloon ±€55–60 ex btw.
+Tuinontwerp en tuin aanleggen vanaf €2.500, omvormen vanaf €5.000. Uurloon ±€55–60 ex btw.
 Materiaalopslag 10–15% op grote posten, 15–25% op kleine spullen; geen winkelnamen op offertes.
 Offertenummer GR-O // JJJJ-MMDD-01; intern overzicht GR-N met hetzelfde nummer.
 
