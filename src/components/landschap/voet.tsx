@@ -64,8 +64,13 @@ export function SiteVoet() {
         <div className="ls-voet-kopie">
           <Kopieer label="KVK" waarde={BUSINESS.kvk} />
           <Kopieer label="BTW" waarde={BUSINESS.btw} />
-          <a href={BUSINESS.instagram}>Instagram</a>
-          <a href={BUSINESS.linkedin}>LinkedIn</a>
+          {/* ronde knoppen in de kleur van Instagram en LinkedIn (eigenaar, 22 nov 2026) */}
+          <a href={BUSINESS.instagram} className="ls-voet-sociaal ls-voet-insta" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none" /></svg>
+          </a>
+          <a href={BUSINESS.linkedin} className="ls-voet-sociaal ls-voet-linkedin" aria-label="LinkedIn" title="LinkedIn">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.2c0-1.24-.02-2.84-1.73-2.84-1.73 0-2 1.35-2 2.75V21h-4z" /></svg>
+          </a>
           <a href="/dashboard" rel="nofollow" className="ls-voet-login"><T t={{ nl: "Inloggen eigenaar", en: "Owner log in" }} /></a>
         </div>
         <p className="ls-annotatie">© 2026 {BUSINESS.name} · <span lang="en">Designing Living Ecosystems</span></p>
