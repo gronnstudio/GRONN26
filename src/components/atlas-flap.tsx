@@ -1,8 +1,9 @@
 import { T } from "@/components/taal"
 
-// GRØNN Earth, de tuinencyclopedie (was GRØNN Atlas). Eén adres hier: zodra
-// gronn.earth gekocht en gekoppeld is, alleen deze regel aanpassen.
-export const EARTH_URL = "https://gronn-atlas.vercel.app"
+import { FAMILIE } from "@/lib/familie"
+
+// GRØNN Earth, de tuinencyclopedie (was GRØNN Atlas). Adres in src/lib/familie.ts.
+export const EARTH_URL = FAMILIE[0].href
 
 // Een flapje links midden aan de rand naar GRØNN Earth (eigenaar, 22 nov
 // 2026). Het spiegelbeeld van het Sneltoetsen-lipje rechts; op de telefoon

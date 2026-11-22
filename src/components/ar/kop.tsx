@@ -13,6 +13,7 @@ import { useTaal } from "@/components/taal-klant"
 import type { L } from "@/lib/i18n"
 import { Pijl } from "@/components/pijl"
 import { MEGA } from "./mega"
+import { FAMILIE } from "@/lib/familie"
 
 const KENNIS: L = { nl: "Kennismaken", en: "Get in touch" }
 const SLUIT: L = { nl: "Sluit", en: "Close" }
@@ -157,6 +158,16 @@ export function ArKop() {
                     </li>
                   ))}
                 </ol>
+              )}
+              {tab === "inhoud" && !mega && (
+                <div className="ar-familie">
+                  <p className="ar-lbl"><T t={{ nl: "De familie", en: "The family" }} /></p>
+                  {FAMILIE.map((f) => (
+                    <a key={f.id} href={f.href} className="ar-familie-link">
+                      {f.naam} <Pijl richting="ne" />
+                    </a>
+                  ))}
+                </div>
               )}
               <div className="ar-dock-voet" data-tab={tab}>
                 {tab === "inhoud" && (

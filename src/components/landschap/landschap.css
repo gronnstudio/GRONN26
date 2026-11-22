@@ -585,8 +585,8 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
 
 /* Voet op de telefoon: KVK en BTW onder elkaar, daarna Instagram, LinkedIn en Earth op één regel, Inloggen eronder */
 @media (max-width: 767px) {
-  .ls-voet-kopie { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 8px 20px; width: 100%; }
-  .ls-voet-kopie > :not(a), .ls-voet-kopie > .ls-voet-login { grid-column: 1 / -1; justify-self: start; }
+  .ls-voet-kopie { display: grid; grid-template-columns: repeat(2, max-content) 1fr; justify-content: start; gap: 8px 20px; width: 100%; }
+  .ls-voet-kopie > :not(a), .ls-voet-kopie > .ls-voet-login, .ls-voet-kopie > .ls-voet-earth { grid-column: 1 / -1; justify-self: start; }
   .ls-voet-kopie { gap: 12px; }
 }
 
