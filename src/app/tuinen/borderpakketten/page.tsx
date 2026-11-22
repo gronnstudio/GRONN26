@@ -1,3 +1,4 @@
+import { CirkelLink } from "@/components/landschap/cirkel-link"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Foto } from "@/components/foto"
@@ -225,9 +226,7 @@ export default function BorderpakkettenPagina() {
             <h2 id="cadeau-kop" className="syne mt-4 mb-0 text-[clamp(30px,3.4vw,48px)] leading-[1.05] tracking-[-.025em]"><T t={{ nl: "Geef een tuin cadeau", en: "Give a garden" }} /></h2>
             <p className="mt-4 mb-0 max-w-[52ch] text-[17px] leading-[1.55]"><T t={{ nl: "Vanaf € 50, voor een vijverbeurt, een border of een voorjaarsbeurt. Met een eigen bonnummer, direct klaar om te printen.", en: "From € 50, for a pond service, a border or a spring tidy-up. With its own number, ready to print right away." }} /></p>
           </div>
-          <Link href="/tuinen/cadeaubon" className="knop shrink-0 self-start bg-antraciet text-gebroken-wit focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-antraciet sm:self-auto">
-            <T t={{ nl: "Cadeaubon kopen →", en: "Buy a gift card →" }} />
-          </Link>
+          <CirkelLink href="/tuinen/cadeaubon" className="ls-cirkellink-op-oranje shrink-0 self-start sm:self-auto" voor={{ nl: "Koop een", en: "Buy a" }} woord={{ nl: "cadeaubon", en: "gift card" }} />
         </section>
 
         <section id="op-maat" aria-labelledby="op-maat-kop" className="mt-[clamp(72px,9vw,140px)] scroll-mt-[96px] rounded-[16px] bg-vlak p-[clamp(24px,4vw,56px)]">

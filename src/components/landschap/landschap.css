@@ -618,3 +618,22 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-stappen li:nth-child(odd) { background: var(--veld); }
   .ls-werkwijze { padding-bottom: 48px; }
 }
+
+/* Tekstlink met een omcirkeld woord in plaats van een omlijnde knop (eigenaar, 22 nov 2026).
+   Het woord krijgt de afwijkende kleur, de cirkel is met de hand getekend en
+   trekt zich opnieuw bij aanwijzen; zonder beweging staat hij gewoon stil. */
+.ls-cirkellink { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 6px 0; color: var(--inkt); text-decoration: none; font-family: var(--font-syne), sans-serif; font-weight: 600; font-size: clamp(20px, 15px + 1vw, 26px); line-height: 1.2; letter-spacing: -.02em; }
+.ls-cirkel { position: relative; display: inline-block; margin-inline: .3em .2em; color: var(--oranje-tekst); white-space: nowrap; }
+.ls-cirkel svg { position: absolute; inset: -.4em -.62em -.34em; width: calc(100% + 1.24em); height: calc(100% + .74em); overflow: visible; pointer-events: none; }
+.ls-cirkel path { fill: none; stroke: var(--oranje); stroke-width: 2.2; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.ls-cirkellink-pijl { font-size: .8em; transition: translate 350ms cubic-bezier(.22, 1, .36, 1); }
+.ls-cirkellink:hover .ls-cirkellink-pijl, .ls-cirkellink:focus-visible .ls-cirkellink-pijl { translate: 6px 0; }
+.ls-cirkellink:hover .ls-cirkel path { animation: ls-cirkel-trek 700ms cubic-bezier(.22, 1, .36, 1); }
+.ls-cirkellink:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; border-radius: 6px; }
+@keyframes ls-cirkel-trek { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .ls-cirkel path { animation: none !important; stroke-dashoffset: 0; } .ls-cirkellink-pijl { transition: none; } }
+html.stil .ls-cirkel path { animation: none !important; stroke-dashoffset: 0; }
+/* op een oranje vlak: antraciet woord, lichte cirkel (oranje draagt nooit oranje of witte tekst) */
+.ls-cirkellink-op-oranje { color: #202020; }
+.ls-cirkellink-op-oranje .ls-cirkel { color: #202020; }
+.ls-cirkellink-op-oranje .ls-cirkel path { stroke: #f8f7f3; }

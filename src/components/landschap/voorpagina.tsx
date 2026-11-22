@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react"
 import Link from "next/link"
+import { CirkelLink } from "./cirkel-link"
 import { ViewTransition } from "react"
 import { T } from "@/components/taal"
 import { Pijl } from "@/components/pijl"
@@ -60,7 +61,7 @@ export function LandschapVoorpagina() {
               <TelLink href="/kennismaken" gebeurtenis="cta_kennismaken" plek="opening" className="ls-knop ls-knop-actie">
                 <T t={{ nl: "Kennismaken", en: "Get in touch" }} /> <Pijl richting="ne" />
               </TelLink>
-              <Link href="/werk" className="ls-knop ls-knop-lijn"><T t={{ nl: "Bekijk het werk", en: "See the work" }} /> <Pijl richting="e" /></Link>
+              <CirkelLink href="/werk" voor={{ nl: "Bekijk het", en: "See the" }} woord={{ nl: "werk", en: "work" }} />
             </div>
           </div>
         </div>
@@ -97,7 +98,7 @@ export function LandschapVoorpagina() {
             <p className="ls-label"><T t={{ nl: "Werk", en: "Work" }} /></p>
             <h2 id="ls-werk" className="ls-h1"><T t={{ nl: "Van eerste idee naar buiten.", en: "From first idea to outside." }} /></h2>
           </div>
-          <Link href="/werk" className="ls-knop ls-knop-lijn"><T t={{ nl: "Bekijk al het werk", en: "See all the work" }} /> <Pijl richting="e" /></Link>
+          <CirkelLink href="/werk" voor={{ nl: "Bekijk al het", en: "See all the" }} woord={{ nl: "werk", en: "work" }} />
         </div>
         <div className="ls-werkraster">
           <Link href={VIJ.href} className="ls-werkkaart ls-werkkaart-groot ls-op" transitionTypes={["schuif"]}>
@@ -150,7 +151,7 @@ export function LandschapVoorpagina() {
           <h2 id="ls-water" className="ls-display"><T t={{ nl: "Water dat werkt.", en: "Water that works." }} /></h2>
           <div className="ls-water-rechts">
             <p className="ls-body"><T t={{ nl: "Ik bekijk de vijver als geheel: water, techniek en beplanting.", en: "I look at the pond as a whole: water, technology and planting." }} /></p>
-            <Link href="/vijvers" className="ls-knop ls-knop-lijn" transitionTypes={["schuif"]}><T t={{ nl: "Meer over vijvers", en: "More about ponds" }} /> <Pijl richting="e" /></Link>
+            <CirkelLink href="/vijvers" transitionTypes={["schuif"]} voor={{ nl: "Meer over", en: "More about" }} woord={{ nl: "vijvers", en: "ponds" }} />
           </div>
         </div>
       </section>
