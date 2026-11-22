@@ -242,7 +242,7 @@ a.ls-werkkaart:hover .ls-werkbeeld img { scale: 1.03; }
 .ls-werkwijze { display: grid; gap: 32px; }
 .ls-werkwijze-kop { display: grid; gap: 14px; align-content: start; }
 .ls-stappen { list-style: none; margin: 0; padding: 0; }
-.ls-stappen li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 8px; padding-block: 24px; border-top: 1px solid var(--lijn); }
+.ls-stappen li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding-block: 24px; border-top: 1px solid var(--lijn); }
 .ls-stappen li:last-child { border-bottom: 1px solid var(--lijn); }
 .ls-stap-nr { padding-top: 8px; font: 500 13px/1 var(--font-montserrat), sans-serif; color: var(--gedempt); font-variant-numeric: tabular-nums; }
 .ls-stappen .ls-body { margin-top: 8px; color: var(--gedempt); max-width: 34em; }
@@ -250,7 +250,7 @@ a.ls-werkkaart:hover .ls-werkbeeld img { scale: 1.03; }
   .ls-werkwijze { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
   .ls-werkwijze-kop { grid-column: 1 / 6; }
   .ls-stappen { grid-column: 7 / 13; }
-  .ls-stappen li { grid-template-columns: 64px minmax(0, 1fr); }
+  .ls-stappen li { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ── 06 · studio ─────────────────────────────────────────────────── */
