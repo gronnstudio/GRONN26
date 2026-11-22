@@ -58,7 +58,7 @@ export const isAvond = () => {
 
 // Er staan twee Instellingen op de pagina (megamenu en Index); na een
 // wijziging lezen ze allebei de bewaarde stand opnieuw.
-const GEWIJZIGD = "gronn-weergave-gewijzigd";
+export const GEWIJZIGD = "gronn-weergave-gewijzigd";
 export const TEKSTSTAPPEN = [100, 115, 130, 150] as const;
 const lees = (): Stand => {
   try {

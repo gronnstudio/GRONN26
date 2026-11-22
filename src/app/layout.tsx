@@ -13,6 +13,8 @@ import "@/components/handoff/handoff.css"
 import { Kop } from "@/components/blad/kop"
 import "@/components/blad/blad.css"
 import { Zoek } from "@/components/zoek"
+import { Sneltoetsen } from "@/components/sneltoetsen"
+import { T } from "@/components/taal"
 import { PullToRefresh } from "@/components/vernieuw"
 import { zoekIndex } from "@/lib/zoek-index"
 import "@/components/wereld/wereld.css"
@@ -57,9 +59,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: VOORVERF }} />
       </head>
       <body>
+        {/* WCAG 2.4.1: met Tab eerst langs de navigatie heen naar de inhoud */}
+        <a href="#inhoud" className="overslaan"><T t={{ nl: "Naar de inhoud", en: "Skip to content" }} /></a>
         <div className="alleen-plan contents"><Kop /></div>
         <div className="alleen-klassiek contents"><SiteKop /></div>
-        <main id="inhoud">{children}</main>
+        <main id="inhoud" tabIndex={-1}>{children}</main>
         <div className="alleen-plan contents"><Stempel /></div>
         <div className="alleen-klassiek contents">
           {/* De kop, het menu en de voet uit de visuele bouwbrief (21 nov 2026);
@@ -69,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ArKop />
         </div>
         <Zoek index={zoekIndex()} />
+        <Sneltoetsen />
         {/* Bezoeken en laadsnelheid, zonder cookies (11 okt 2026; zie /privacy).
             Ze tellen pas als ze in het Vercel-dashboard aanstaan. */}
         {/* alleen in de app-weergave: daar is geen browser om te verversen */}

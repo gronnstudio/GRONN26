@@ -146,3 +146,36 @@ test("voorpagina: onder de voet staat geen lege strook", async ({ page }) => {
   const gat = await page.evaluate(() => Math.round(document.documentElement.scrollHeight - (document.querySelector("footer.ls-voet")!.getBoundingClientRect().bottom + scrollY)))
   expect(gat).toBeLessThanOrEqual(0)
 })
+
+test("sneltoetsen: lipje rechts midden opent de lijst, ? ook, Esc sluit", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/", { waitUntil: "networkidle" })
+  const lipje = page.getByRole("button", { name: "Sneltoetsen" })
+  const doos = await lipje.boundingBox()
+  expect(doos && Math.abs(doos.x + doos.width - 1440)).toBeLessThanOrEqual(8)
+  expect(doos && Math.abs(doos.y + doos.height / 2 - 450)).toBeLessThanOrEqual(4)
+  await lipje.click()
+  const paneel = page.getByRole("dialog", { name: "Sneltoetsen" })
+  await expect(paneel).toBeVisible()
+  await expect(paneel.getByText("Ga naar (G, dan…)")).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(paneel).toBeHidden()
+  await page.keyboard.press("?")
+  await expect(paneel).toBeVisible()
+})
+
+test("WCAG: Naar de inhoud is de eerste Tab-stop en focus komt niet onder de dock", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/", { waitUntil: "networkidle" })
+  await page.keyboard.press("Tab")
+  await expect(page.getByRole("link", { name: "Naar de inhoud" })).toBeFocused()
+  const dockTop = await page.locator(".ar-dock").evaluate((d) => d.getBoundingClientRect().top)
+  for (let i = 0; i < 30; i++) {
+    await page.keyboard.press("Tab")
+    const r = await page.evaluate(() => {
+      const e = document.activeElement as HTMLElement
+      return e && !e.closest(".ar-dock, .snel-tab") ? e.getBoundingClientRect().bottom : 0
+    })
+    expect(r).toBeLessThanOrEqual(dockTop + 1)
+  }
+})

@@ -18,7 +18,7 @@ import type { Soort, Treffer } from "@/lib/zoek-index"
 
 export const OPEN_ZOEK = "gronn:zoek"
 
-const GA_NAAR: { toets: string; href: string; label: { nl: string; en: string } }[] = [
+export const GA_NAAR: { toets: string; href: string; label: { nl: string; en: string } }[] = [
   { toets: "h", href: "/", label: { nl: "Home", en: "Home" } },
   { toets: "v", href: "/vijvers", label: { nl: "Vijvers", en: "Ponds" } },
   { toets: "t", href: "/tuinen", label: { nl: "Tuinen", en: "Gardens" } },
