@@ -143,8 +143,9 @@ export const PRICING: Record<string, Pricing> = {
       },
     ],
   },
-  // Vanafprijzen voor de tuindiensten (5 okt 2026; aanleggen € 3.000 en omvormen
-  // € 5.000 van de eigenaar; de rest voorgesteld na "bedenk zelf
+  // Vanafprijzen voor de tuindiensten (5 okt 2026; omvormen € 5.000 van de eigenaar;
+  // ontwerp en aanleggen vanaf € 2.500, eigenaar 14 nov 2026, bevestigd 23 nov;
+  // de rest voorgesteld na "bedenk zelf
   // prijzen" op basis van de echte offertes in Drive): offerte achtertuin Stein
   // (GR-O 202609140002: € 9.895 incl. btw voor ~50 m²; borders ~€ 75/m²) en de
   // offerte Fase 1 consult (€ 175 excl. btw). Alle bedragen incl. btw.
@@ -156,7 +157,7 @@ export const PRICING: Record<string, Pricing> = {
   "garden-design": {
     basis: "from",
     vatIncluded: true,
-    tiers: [{ label: { en: "Design for a small garden", nl: "Ontwerp voor een kleine tuin" }, amount: 450 }],
+    tiers: [{ label: { en: "Design for a small garden", nl: "Ontwerp voor een kleine tuin" }, amount: 2500 }],
     offset: {
       en: "Have me build it? Then I offset half the design fee against the first invoice. Never all of it — a design that becomes free teaches everyone that the thinking was worth nothing.",
       nl: "Laat je het door mij aanleggen? Dan verreken ik de helft van het ontwerpbedrag met de eerste factuur. Nooit alles — een ontwerp dat gratis wordt, leert iedereen dat het denkwerk niets waard was.",
@@ -175,7 +176,7 @@ export const PRICING: Record<string, Pricing> = {
   implementation: {
     basis: "from",
     vatIncluded: true,
-    tiers: [{ label: { en: "Building a small garden or terrace", nl: "Een kleine tuin of terras aanleggen" }, amount: 3000 }],
+    tiers: [{ label: { en: "Building a small garden or terrace", nl: "Een kleine tuin of terras aanleggen" }, amount: 2500 }],
   },
 }
 
