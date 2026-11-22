@@ -520,3 +520,5 @@ html:not(.donker) .ar-dock[data-open] {
   color: #202020; background: rgb(246 245 241 / .94);
   box-shadow: inset 0 1px .5px 0 rgb(255 255 255 / .6), 0 10px 40px -12px rgb(0 0 0 / .35);
 }
+/* Weergave in het lichte open menu: donkere tekst op licht (eigenaar, 22 nov 2026: "Hier gaat ook iets drastisch mis") */
+html:not(.donker) .ar-dock[data-open] .ar-weergave { --inkt: #202020; --grond: #efeeea; --lijn: rgb(32 32 32 / .16); --gedempt: rgb(32 32 32 / .66); color: #202020; }

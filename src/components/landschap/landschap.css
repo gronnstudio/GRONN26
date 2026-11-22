@@ -604,3 +604,17 @@ a.ls-werkpagina:hover .ls-werknaam { text-decoration: underline; text-decoration
   .ls-beeldkaarten > li { flex: 0 0 74%; scroll-snap-align: start; }
   .ls-beeldkaart .ls-h3 { font-size: 22px; line-height: 27px; }
 }
+
+/* Werkwijze op de telefoon: een stapel. Elke kaart blijft bovenin hangen en de
+   volgende schuift er bij het scrollen overheen (eigenaar, 22 nov 2026: "kunnen
+   we daar een stapel van maken met scrollen?"). Pure CSS, geen JS. */
+@media (max-width: 767px) {
+  .ls-stappen { display: grid !important; gap: 16px; overflow: visible; margin-inline: 0; padding-inline: 0; scroll-snap-type: none; }
+  .ls-stappen > li, .ls-stappen li:last-child {
+    position: sticky; top: calc(72px + var(--i, 0) * 12px);
+    min-height: 200px; background: var(--grond);
+    box-shadow: 0 -10px 30px -18px rgb(0 0 0 / .35);
+  }
+  .ls-stappen li:nth-child(odd) { background: var(--veld); }
+  .ls-werkwijze { padding-bottom: 48px; }
+}

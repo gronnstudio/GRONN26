@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import Link from "next/link"
 import { ViewTransition } from "react"
 import { T } from "@/components/taal"
@@ -198,7 +199,7 @@ export function LandschapWerkwijze() {
       </div>
       <ol className="ls-stappen">
         {STAPPEN.map(([kop, zin], i) => (
-          <li key={kop.nl} className="ls-op">
+          <li key={kop.nl} className="ls-op" style={{ "--i": i } as CSSProperties}>
             <div>
               <h3 className="ls-h3"><T t={kop} /></h3>
               <p className="ls-body"><T t={zin} /></p>

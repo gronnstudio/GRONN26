@@ -11,7 +11,7 @@ import { useEffect } from "react"
 // de laatste kaart scrolt de pagina gewoon verder. Vegen met de duim blijft
 // werken; bij minder beweging staat alles stil en veeg je zelf. De kop erboven
 // reist mee, zodat je ziet waar de kaarten bij horen (geen leeg scherm).
-const RIJEN = ".ls-werkraster, .ls-stappen, .ls-beeldrij, .ls-beeldkaarten"
+const RIJEN = ".ls-werkraster, .ls-beeldrij, .ls-beeldkaarten"
 const PER_KAART = 0.38 // zoveel schermhoogte scrollen per kaart
 
 export function AutoVegen() {
