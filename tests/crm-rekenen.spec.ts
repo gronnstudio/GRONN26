@@ -513,16 +513,15 @@ test("jaaroverzicht: facturen en uren per maand, per uur excl. btw", async () =>
   expect(j[11].gefactureerd).toBe(0)
 })
 
-test("onderhoud: tag geeft elk seizoen een beurt op de eerste maandag, verloren telt niet", async () => {
+test("onderhoud: tag geeft twee beurten per jaar (maart, oktober) op de eerste maandag, verloren telt niet", async () => {
   const { onderhoudsbeurten } = await import("../src/lib/crm/agenda")
   const vast = normaliseer({ id: "v", naam: "Anna de Vries", tags: ["Onderhoud"], fase: "Opgeleverd" })
   const weg = normaliseer({ id: "w", naam: "Weg", tags: ["onderhoud"], fase: "Verloren" })
   const los = normaliseer({ id: "l", naam: "Los", tags: ["vijver"] })
-  const b = onderhoudsbeurten([vast, weg, los], "2026-11-02", "2027-06-30")
+  const b = onderhoudsbeurten([vast, weg, los], "2026-11-02", "2027-10-31")
   expect(b.map((x) => [x.datum, x.wat])).toEqual([
-    ["2026-12-07", "Winterbeurt Anna de Vries"],
     ["2027-03-01", "Voorjaarsbeurt Anna de Vries"],
-    ["2027-06-07", "Zomerbeurt Anna de Vries"],
+    ["2027-10-04", "Herfstbeurt Anna de Vries"],
   ])
   expect(b[0]).toMatchObject({ wie: "Anna", href: "/dashboard/klanten/v" })
 })
