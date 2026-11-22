@@ -11,7 +11,7 @@ import { useEffect } from "react"
 // de laatste kaart scrolt de pagina gewoon verder. Vegen met de duim blijft
 // werken; bij minder beweging staat alles stil en veeg je zelf. De kop erboven
 // reist mee, zodat je ziet waar de kaarten bij horen (geen leeg scherm).
-const RIJEN = ".ls-werkraster, .ls-stappen, .ls-beeldrij"
+const RIJEN = ".ls-werkraster, .ls-stappen, .ls-beeldrij, .ls-beeldkaarten"
 const PER_KAART = 0.38 // zoveel schermhoogte scrollen per kaart
 
 export function AutoVegen() {
@@ -34,6 +34,7 @@ export function AutoVegen() {
       return k && k.offsetParent ? k : null
     }
     const verschoven = new Map<HTMLElement, number>()
+    const wegVan = new Map<HTMLElement, number>()
     const los = (rij: HTMLElement) => {
       for (const p of ["position", "top", "margin-top"]) rij.style.removeProperty(p)
       kopVan(rij)?.style.removeProperty("transform")
@@ -54,7 +55,9 @@ export function AutoVegen() {
         const kop = kopVan(rij)
         const kopH = kop ? kop.offsetHeight + 32 : 0
         const top = Math.max(64, (vh - rij.offsetHeight - kopH) / 2) + kopH
-        ouder.style.minHeight = `${Math.round(ouder.offsetHeight + (kaartenVan(rij).length - 1) * PER_KAART * vh)}px`
+        const weg = (kaartenVan(rij).length - 1) * PER_KAART * vh
+        wegVan.set(rij, weg)
+        ouder.style.minHeight = `${Math.round(ouder.offsetHeight + weg)}px`
         rij.style.position = "sticky"
         rij.style.top = `${Math.round(top)}px`
         rij.style.marginTop = "32px"
@@ -69,17 +72,19 @@ export function AutoVegen() {
         const kaarten = kaartenVan(rij)
         const kop = kopVan(rij)
         const vast = parseFloat(rij.style.top) || 0
-        const weg = (kaarten.length - 1) * PER_KAART * innerHeight
+        const weg = wegVan.get(rij) ?? (kaarten.length - 1) * PER_KAART * innerHeight
         // hoe ver de rij al vaststaat: van 0 (net midden in beeld) tot de hele scrollweg
         const nu = verschoven.get(rij) ?? 0
         const natuurlijk = kop ? kop.getBoundingClientRect().bottom - nu + 32 : rij.getBoundingClientRect().top
-        const d = Math.min(weg, Math.max(0, vast - natuurlijk))
+        // de kop volgt de echte plek van de rij (niet een rekensom met de schermhoogte:
+        // op de iPhone verandert die met de adresbalk en schoot de kop over de kaarten)
+        const d = Math.max(0, rij.getBoundingClientRect().top - natuurlijk)
         if (kop && Math.abs(d - nu) > 0.5) {
           kop.style.transform = d ? `translateY(${Math.round(d)}px)` : ""
           verschoven.set(rij, d)
         }
         if (Date.now() - (gerakt.get(rij) ?? 0) < 1500) continue
-        const p = d / weg
+        const p = Math.min(1, d / weg)
         const i = Math.round(p * (kaarten.length - 1))
         if (stand.get(rij) === i) continue
         stand.set(rij, i)

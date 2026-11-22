@@ -7,7 +7,7 @@ import { Pijl } from "@/components/pijl"
 import { Opening } from "@/components/wereld/opening"
 import { Beeld } from "@/components/landschap/beeld"
 import { Opkomst } from "@/components/landschap/opkomst"
-import { MAANPOORT, TERRAS_PERGOLA, type Beeld as BeeldData } from "@/components/landschap/beelden"
+import { BEPLANTING, MAANPOORT, MATERIALEN, PAD_BORDERS, POEL, REGENTUIN, TERRAS_PERGOLA, ZITMUUR, type Beeld as BeeldData } from "@/components/landschap/beelden"
 import "@/components/landschap/landschap.css"
 import { TERRAS, TERRAS_FOTOS } from "@/lib/data/terras-geulle"
 import { BORDERPAKKETTEN } from "@/lib/data/borderpakketten"
@@ -31,14 +31,18 @@ export const metadata: Metadata = {
   description: INLEIDING,
 }
 
-const ELEMENTEN: { naam: L; zin: L; href?: string }[] = [
-  { naam: { nl: "Vijver of poel", en: "Pond" }, zin: { nl: "Water trekt binnen een seizoen kikkers, libellen en vogels.", en: "Within a season, water draws frogs, dragonflies and birds." }, href: "/vijvers" },
-  { naam: { nl: "Inheemse border", en: "Native border" }, zin: { nl: "Planten die hier thuishoren. Insecten kennen ze al.", en: "Plants that belong here. Insects already know them." }, href: "/tuinen/borderpakketten" },
-  { naam: { nl: "Bloemenweide", en: "Flower meadow" }, zin: { nl: "Eén of twee keer per jaar maaien in plaats van elke week.", en: "Mown once or twice a year instead of every week." } },
-  { naam: { nl: "Stapelmuurtje", en: "Dry stone wall" }, zin: { nl: "Losse stenen met planten in de kieren: hoogte en schuilplek in één.", en: "Loose stones with plants in the gaps: height and shelter in one." } },
-  { naam: { nl: "Gemengde haag", en: "Mixed hedge" }, zin: { nl: "Inheemse struiken in plaats van een schutting: bloesem, bessen en nestplek.", en: "Native shrubs instead of a fence: blossom, berries and nesting space." } },
-  { naam: { nl: "Grind en regenwater", en: "Gravel and rainwater" }, zin: { nl: "Minder tegels, zodat de regen in je eigen tuin wegzakt.", en: "Fewer tiles, so the rain soaks into your own garden." } },
-  { naam: { nl: "Steen en bestrating", en: "Stone and paving" }, zin: { nl: "Klinkers, tegels, muurtjes en randen: alles wat er kan, elk in één zin.", en: "Pavers, tiles, walls and edges: everything that’s possible, each in one sentence." }, href: "/tuinen/materialen" },
+// Klikbare beeldkaarten in plaats van tekstregels (eigenaar, 22 nov 2026:
+// "Maak dit uitgebreider met plaatjes stapels die klikbaar zijn ipv links").
+// Elke kaart gaat ergens heen; zonder eigen pagina naar Kennismaken.
+const ELEMENTEN: { naam: L; zin: L; href: string; beeld: BeeldData }[] = [
+  { naam: { nl: "Vijver of poel", en: "Pond" }, zin: { nl: "Water trekt binnen een seizoen kikkers, libellen en vogels.", en: "Within a season, water draws frogs, dragonflies and birds." }, href: "/vijvers", beeld: POEL },
+  { naam: { nl: "Inheemse border", en: "Native border" }, zin: { nl: "Planten die hier thuishoren. Insecten kennen ze al.", en: "Plants that belong here. Insects already know them." }, href: "/tuinen/borderpakketten", beeld: PAD_BORDERS },
+  { naam: { nl: "Bloemenweide", en: "Flower meadow" }, zin: { nl: "Eén of twee keer per jaar maaien in plaats van elke week.", en: "Mown once or twice a year instead of every week." }, href: "/kennismaken", beeld: BEPLANTING },
+  { naam: { nl: "Stapelmuur", en: "Dry stone wall" }, zin: { nl: "Losse stenen met planten in de kieren: hoogte en schuilplek in één.", en: "Loose stones with plants in the gaps: height and shelter in one." }, href: "/tuinen/materialen", beeld: ZITMUUR },
+  { naam: { nl: "Gemengde haag", en: "Mixed hedge" }, zin: { nl: "Inheemse struiken in plaats van een schutting: bloesem, bessen en nestplek.", en: "Native shrubs instead of a fence: blossom, berries and nesting space." }, href: "/kennismaken", beeld: MAANPOORT },
+  { naam: { nl: "Regenwater", en: "Rainwater" }, zin: { nl: "Minder tegels, zodat de regen in je eigen tuin wegzakt.", en: "Fewer tiles, so the rain soaks into your own garden." }, href: "/kennismaken", beeld: REGENTUIN },
+  { naam: { nl: "Steen en bestrating", en: "Stone and paving" }, zin: { nl: "Klinkers, tegels, muurtjes en randen: alles wat er kan.", en: "Pavers, tiles, walls and edges: everything that’s possible." }, href: "/tuinen/materialen", beeld: MATERIALEN },
+  { naam: { nl: "Terras en pergola", en: "Terrace and pergola" }, zin: { nl: "Een plek om te zitten, met schaduw die meegroeit.", en: "A place to sit, with shade that grows along." }, href: "/werk/terras-geulle", beeld: TERRAS_PERGOLA },
 ]
 
 const BORDER: BeeldData = TERRAS_PERGOLA
@@ -91,21 +95,16 @@ export default function TuinenPagina() {
             <h2 id="tuin-elementen" className="ls-h1"><T t={{ nl: "Wat er in een natuurlijke tuin kan.", en: "What a natural garden can hold." }} /></h2>
           </div>
         </div>
-        <ul className="ls-elementen">
-          {ELEMENTEN.map((e) => {
-            const inhoud = (
-              <>
-                <span className="ls-h3"><T t={e.naam} /></span>
+        <ul className="ls-beeldkaarten">
+          {ELEMENTEN.map((e) => (
+            <li key={e.naam.nl} className="ls-op">
+              <Link href={e.href} className="ls-beeldkaart" transitionTypes={["schuif"]}>
+                <Beeld beeld={e.beeld} sizes="(min-width: 1024px) 25vw, (min-width: 768px) 45vw, 72vw" className="ls-beeldkaart-beeld" decoratief />
+                <span className="ls-h3"><T t={e.naam} /> <Pijl richting="e" className="ls-beeldkaart-pijl" /></span>
                 <span className="ls-body"><T t={e.zin} /></span>
-                {e.href ? <Pijl richting="e" className="ls-route-pijl" /> : null}
-              </>
-            )
-            return (
-              <li key={e.naam.nl} className="ls-op">
-                {e.href ? <Link href={e.href} className="ls-element" transitionTypes={["schuif"]}>{inhoud}</Link> : <div className="ls-element">{inhoud}</div>}
-              </li>
-            )
-          })}
+              </Link>
+            </li>
+          ))}
         </ul>
       </section>
 

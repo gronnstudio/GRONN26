@@ -12,7 +12,7 @@ import { Pijl } from "@/components/pijl"
 import { T, kies } from "@/components/taal"
 import { useTaal } from "@/components/taal-klant"
 import type { L } from "@/lib/i18n"
-import { NICK, VIJVER_SFEER, BEPLANTING, VIJVERRENOVATIE, type Beeld } from "./beelden"
+import { NICK, VIJVER_SFEER, BEPLANTING, VIJVERRENOVATIE, PAD_BORDERS, TERRAS_PERGOLA, MAANPOORT, type Beeld } from "./beelden"
 
 // SiteHeader en NavigationOverlay uit de visuele bouwbrief (§05, beelden 13, 14
 // en 22): bovenin het originele woordmerk en de menupil met de komeet; open is
@@ -27,16 +27,15 @@ const HOOFD: Bestemming[] = [
   { href: "/vijvers", naam: { nl: "Vijvers", en: "Ponds" }, beeld: VIJVER_SFEER, zin: { nl: "Water als levend onderdeel van je tuin.", en: "Water as a living part of your garden." } },
   { href: "/tuinen", naam: { nl: "Tuinen", en: "Gardens" }, beeld: BEPLANTING, zin: { nl: "Beplanting die met de seizoenen meegroeit.", en: "Planting that grows with the seasons." } },
   { href: "/over", naam: { nl: "Studio", en: "Studio" }, beeld: NICK, zin: { nl: "Ik ben Nick, ontwerper en hovenier.", en: "I'm Nick, designer and gardener." } },
+  // Alles even groot, ook Shop, Zelf aan de slag, Journaal en Vragen (eigenaar, 22 nov 2026:
+  // "Ik wil shop in het menu!", "Niet klein", "Die kleine dingen wil ik ook groot")
+  { href: "/shop", naam: { nl: "Shop", en: "Shop" }, beeld: PAD_BORDERS, zin: { nl: "Borderpakketten en wat je zelf nodig hebt.", en: "Border packages and what you need yourself." } },
+  { href: "/tuinen/borderpakketten", naam: { nl: "Zelf aan de slag", en: "Do it yourself" }, beeld: TERRAS_PERGOLA, zin: { nl: "Een goed plan voor wie zelf wil aanleggen.", en: "A good plan for those who want to build it themselves." } },
+  { href: "/journaal", naam: { nl: "Journaal", en: "Journal" }, beeld: MAANPOORT, zin: { nl: "Wat er buiten gebeurt, per seizoen.", en: "What happens outside, season by season." } },
+  { href: "/faq", naam: { nl: "Vragen", en: "Questions" }, beeld: null, zin: { nl: "Antwoord op wat mensen me vaak vragen.", en: "Answers to what people often ask me." } },
   { href: "/kennismaken", naam: { nl: "Kennismaken", en: "Get in touch" }, beeld: null, zin: { nl: "Vertel wat je buiten wilt.", en: "Tell me what you want outside." } },
 ]
-const LAGER: [string, L][] = [
-  ["/tuinen/borderpakketten", { nl: "Zelf aan de slag", en: "Do it yourself" }],
-  ["/journaal", { nl: "Journaal", en: "Journal" }],
-  ["/faq", { nl: "Vragen", en: "Questions" }],
-  ["/shop", { nl: "Shop", en: "Shop" }],
-]
 const isHier = (pad: string, href: string) => pad === href || pad.startsWith(href + "/")
-const nr = (i: number) => String(i + 1).padStart(2, "0")
 
 function Logo({ wit = false }: { wit?: boolean }) {
   return (
@@ -139,7 +138,7 @@ export function SiteKop() {
         <div className="ls-raster ls-menu-binnen">
           <div className="ls-menu-top">
             <Link href="/" className="ls-logo" aria-label={n({ nl: "GRØNN Studio, naar de voorpagina", en: "GRØNN Studio, to the home page" })} onClick={() => setOpen(false)}>
-              <Logo wit />
+              <Logo />
             </Link>
           </div>
 
@@ -172,13 +171,18 @@ export function SiteKop() {
                         if (b.href === "/kennismaken") track("cta_kennismaken", { plek: "menu" })
                       }}
                     >
-                      <span className="ls-menu-nr" aria-hidden>{nr(i)}</span>
                       <span className="ls-menu-woord"><T t={b.naam} /></span>
                       <Pijl richting="e" className="ls-menu-pijl" />
                       {isHier(pad, b.href) ? <span className="ls-menu-hier"><T t={{ nl: "Je bent hier", en: "You are here" }} /></span> : null}
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <button type="button" className="ls-menu-link" aria-pressed={weergave} onClick={() => setWeergave(true)}>
+                    <span className="ls-menu-woord"><T t={{ nl: "Weergave", en: "Display" }} /></span>
+                    <Pijl richting="e" className="ls-menu-pijl" />
+                  </button>
+                </li>
               </ol>
               {/* de preview ondersteunt alleen; het menu werkt ook zonder */}
               <div className="ls-menu-preview" aria-hidden>
@@ -202,16 +206,6 @@ export function SiteKop() {
           )}
 
           <div className="ls-menu-voet">
-            <ul className="ls-menu-lager">
-              {LAGER.map(([href, naam]) => (
-                <li key={href}><Link href={href} onClick={() => setOpen(false)}><T t={naam} /></Link></li>
-              ))}
-              <li>
-                <button type="button" aria-pressed={weergave} onClick={() => setWeergave(!weergave)}>
-                  <T t={{ nl: "Weergave", en: "Display" }} />
-                </button>
-              </li>
-            </ul>
             <p className="ls-menu-contact">
               <span><T t={{ nl: "Stein en omgeving", en: "Stein and surroundings" }} /></span>
               <a href={BUSINESS.emailHref}>{BUSINESS.email}</a>

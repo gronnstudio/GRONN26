@@ -199,7 +199,6 @@ export function LandschapWerkwijze() {
       <ol className="ls-stappen">
         {STAPPEN.map(([kop, zin], i) => (
           <li key={kop.nl} className="ls-op">
-            <span className="ls-stap-nr" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
             <div>
               <h3 className="ls-h3"><T t={kop} /></h3>
               <p className="ls-body"><T t={zin} /></p>
