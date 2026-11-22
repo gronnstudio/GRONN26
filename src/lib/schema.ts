@@ -1,5 +1,7 @@
 import { BUSINESS } from "@/lib/business"
 import { SERVICE_AREA_TOWNS } from "@/lib/werkgebied"
+import { pricingFor } from "@/lib/data/pricing"
+import type { Service } from "@/lib/data/services"
 
 // Gestructureerde gegevens voor zoekmachines (uit gronn.studio, ingekort).
 // Alleen echte gegevens uit business.ts en werkgebied.ts: geen
@@ -42,3 +44,46 @@ export function studioSchema() {
     sameAs: [BUSINESS.instagram],
   }
 }
+
+/**
+ * De diensten op een pagina als Service, met de gepubliceerde prijs uit
+ * pricing.ts (incl. btw). Zonder prijs (ontwerp: altijd offerte) geen offers.
+ * Zo kan een zoekmachine of AI-antwoord "wat kost een vijver in Stein"
+ * beantwoorden met dezelfde bedragen als de dienstrijen.
+ */
+export function dienstenSchema(lijst: Service[], pad: string) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": lijst.map((s) => {
+      const p = pricingFor(s.slug)
+      const laagste = p ? Math.min(...p.tiers.map((t) => t.amount)) : undefined
+      return {
+        "@type": "Service",
+        "@id": `${SITE}${pad}#${s.slug}`,
+        name: s.title.nl,
+        description: s.summary.nl,
+        url: `${SITE}${pad}`,
+        provider: { "@id": `${SITE}/#organisation` },
+        areaServed: SERVICE_AREA_TOWNS.map((name) => ({ "@type": "City", name })),
+        offers:
+          p && laagste !== undefined
+            ? {
+                "@type": "Offer",
+                priceCurrency: "EUR",
+                price: laagste,
+                priceSpecification: {
+                  "@type": p.basis === "monthly" ? "UnitPriceSpecification" : "PriceSpecification",
+                  priceCurrency: "EUR",
+                  ...(p.basis === "fixed" ? { price: laagste } : { minPrice: laagste }),
+                  ...(p.basis === "monthly" ? { unitText: "maand" } : {}),
+                  valueAddedTaxIncluded: true,
+                },
+              }
+            : undefined,
+      }
+    }),
+  }
+}
+
+/** Een JSON-LD-blok veilig als tekst voor een <script>. */
+export const ldJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c")
