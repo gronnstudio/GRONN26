@@ -24,7 +24,7 @@ const PAGINAS: Record<string, { naam: Tekst; ouder?: string }> = {
   "/tuinen/cadeaubon": { naam: { nl: "Cadeaubon", en: "Gift card" }, ouder: "/shop" },
   "/tuinen/cadeaubon/bon": { naam: { nl: "Je bon", en: "Your card" }, ouder: "/tuinen/cadeaubon" },
   "/werk": { naam: { nl: "Projecten", en: "Projects" } },
-  "/werk/vijverrenovatie": { naam: { nl: "Vijverrenovatie", en: "Pond renovation" }, ouder: "/werk" },
+  "/werk/vijverrenovatie": { naam: { nl: "Vijverrenovatie Elsloo", en: "Pond renovation Elsloo" }, ouder: "/werk" },
   "/werk/terras-geulle": { naam: { nl: "Terras in Geulle", en: "Terrace in Geulle" }, ouder: "/werk" },
   "/over": { naam: "Studio" },
   "/techniek": { naam: { nl: "Techniek", en: "Tech" }, ouder: "/over" },

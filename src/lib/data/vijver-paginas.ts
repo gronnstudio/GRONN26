@@ -35,7 +35,7 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
     slug: "aanleggen",
     seoTitel: "Vijver aanleggen in Stein en omgeving",
     beschrijving:
-      "Een nieuwe vijver laten aanleggen in Stein, Elsloo, Geleen, Beek of Sittard. Plek, diepte, folie, filter en rand in één plan, met een vaste prijs vooraf. Vanaf € 2.500.",
+      "Een nieuwe vijver laten aanleggen in Stein, Elsloo, Geleen, Beek of Sittard. Natuurvijver, vijver met vissen of zwemvijver: plek, diepte, folie, filter en rand in één plan, met een vaste prijs vooraf. Vanaf € 2.500.",
     label: { nl: "Vijver aanleggen", en: "Building a pond" },
     titel: { nl: "Een vijver laten aanleggen.", en: "Having a pond built." },
     zin: {
@@ -83,6 +83,13 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
         },
       },
       {
+        vraag: { nl: "Leg je ook zwemvijvers aan?", en: "Do you build swimming ponds too?" },
+        antwoord: {
+          nl: "Ja, een zwemvijver of natuurzwembad kan, eventueel samen met een collega die daarin gespecialiseerd is. Je houdt één aanspreekpunt: mij. Stuur een foto van je tuin, dan bekijken we wat er past.",
+          en: "Yes, a swimming pond or natural pool is possible, if needed together with a colleague who specialises in it. You keep one point of contact: me. Send a photo of your garden and we will look at what fits.",
+        },
+      },
+      {
         vraag: { nl: "Waar laat je de grond?", en: "Where does the soil go?" },
         antwoord: {
           nl: "Een vijver van een paar kuub geeft een paar kuub grond. We spreken vooraf af waar die heen gaat, bijvoorbeeld in een verhoogde border, of dat ik hem afvoer.",
@@ -94,7 +101,7 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
       { href: "/journaal/vijver-aanleggen-waar-begin-je", naam: { nl: "Een vijver aanleggen: waar begin je?", en: "Building a pond: where do you start?" } },
       { href: "/journaal/inheemse-waterplanten", naam: { nl: "Inheemse waterplanten", en: "Native water plants" } },
       { href: "/vijvers/waterval-en-beekloop", naam: { nl: "Een waterval of beekloop erbij", en: "Adding a waterfall or stream" } },
-      { href: "/werk/vijverrenovatie", naam: { nl: "Project: vijverrenovatie", en: "Project: pond renovation" } },
+      { href: "/werk/vijverrenovatie", naam: { nl: "Project: vijverrenovatie in Elsloo", en: "Project: pond renovation in Elsloo" } },
     ],
   },
   {
@@ -115,8 +122,8 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
         en: "Green water is not a disease, it is a sign: too many nutrients, too few plants or a filter that can’t keep up. I measure first, with drop tests rather than strips, and look at the whole pond: water, technology and planting. Then you know why it goes wrong and what it costs to fix.",
       },
       {
-        nl: "Soms is een najaarsbeurt genoeg. Soms moet de vijver opnieuw: nieuwe folie, een ander filter, een betere rand. Zo ging het bij de vijverrenovatie op de projectpagina: twee vijvers, een waterval en een beekloop, nu één systeem. Daarna houdt een onderhoudsabonnement hem in balans, met twee bezoeken per jaar.",
-        en: "Sometimes an autumn service is enough. Sometimes the pond has to be redone: new liner, another filter, a better edge. That is how the pond renovation on the project page went: two ponds, a waterfall and a stream, now one system. After that, a maintenance plan keeps it in balance, with two visits a year.",
+        nl: "Soms is een najaarsbeurt genoeg. Soms moet de vijver opnieuw: nieuwe folie, een ander filter, een betere rand. Zo ging het bij de vijverrenovatie in Elsloo: twee vijvers, een waterval en een beekloop, nu één systeem. Daarna houdt een onderhoudsabonnement hem in balans, met twee bezoeken per jaar.",
+        en: "Sometimes an autumn service is enough. Sometimes the pond has to be redone: new liner, another filter, a better edge. That is how the pond renovation in Elsloo went: two ponds, a waterfall and a stream, now one system. After that, a maintenance plan keeps it in balance, with two visits a year.",
       },
     ],
     lijst: [
@@ -157,7 +164,7 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
       },
     ],
     links: [
-      { href: "/werk/vijverrenovatie", naam: { nl: "Project: vijverrenovatie", en: "Project: pond renovation" } },
+      { href: "/werk/vijverrenovatie", naam: { nl: "Project: vijverrenovatie in Elsloo", en: "Project: pond renovation in Elsloo" } },
       { href: "/journaal/groen-water-in-het-voorjaar", naam: { nl: "Groen water in het voorjaar", en: "Green water in spring" } },
       { href: "/journaal/vijver-winterklaar-maken", naam: { nl: "Je vijver winterklaar maken", en: "Winterising your pond" } },
       { href: "/journaal/bladnet-vijver", naam: { nl: "Een bladnet op je vijver", en: "A leaf net on your pond" } },
@@ -198,7 +205,7 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
       { term: { nl: "Prijs", en: "Price" }, waarde: { nl: "Vaste prijs na een foto of bezoek", en: "Fixed price after a photo or visit" } },
       WERKGEBIED,
       WIE,
-      { term: { nl: "Gemaakt", en: "Built" }, waarde: { nl: "Waterval en beekloop bij de vijverrenovatie", en: "Waterfall and stream at the pond renovation" } },
+      { term: { nl: "Gemaakt", en: "Built" }, waarde: { nl: "Waterval en beekloop in Elsloo", en: "Waterfall and stream in Elsloo" } },
     ],
     vragen: [
       {
@@ -218,7 +225,7 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
     ],
     links: [
       { href: "/journaal/beekloop-of-waterval", naam: { nl: "Een beekloop of waterval: wat komt erbij kijken", en: "A stream or waterfall: what is involved" } },
-      { href: "/werk/vijverrenovatie", naam: { nl: "Project: vijverrenovatie met waterval en beekloop", en: "Project: pond renovation with waterfall and stream" } },
+      { href: "/werk/vijverrenovatie", naam: { nl: "Project: vijverrenovatie in Elsloo, met waterval en beekloop", en: "Project: pond renovation in Elsloo, with waterfall and stream" } },
       { href: "/vijvers/aanleggen", naam: { nl: "Een nieuwe vijver aanleggen", en: "Building a new pond" } },
     ],
   },

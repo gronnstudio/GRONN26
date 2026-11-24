@@ -77,9 +77,10 @@ export default function Vijverrenovatie() {
 
       <div className="wrap">
         <Fiche
-          kolommen="sm:grid-cols-3 md:grid-cols-5"
+          kolommen="sm:grid-cols-3 md:grid-cols-6"
           regels={[
             [nlEn("Type", "Type"), nlEn(VIJVER.categorie, EN.categorie)],
+            [nlEn("Plaats", "Location"), "Elsloo"],
             [nlEn("Jaar", "Year"), "2026"],
             [nlEn("Status", "Status"), nlEn(VIJVER.status, EN.status)],
             [nlEn("Tijd", "Time"), nlEn("circa 120 uur", "about 120 hours")],

@@ -41,7 +41,7 @@ ${TUINEN.map((s) => regel(s, "/tuinen")).join("\n")}
 
 ## Werk
 
-- [Vijverrenovatie](${SITE}/werk/vijverrenovatie): ongeveer 5.000 liter water, twee vijvers, een waterval en een beekloop als één systeem.
+- [Vijverrenovatie in Elsloo](${SITE}/werk/vijverrenovatie): ongeveer 5.000 liter water, twee vijvers, een waterval en een beekloop als één systeem.
 - [Terras in Geulle](${SITE}/werk/terras-geulle)
 
 ## Over

@@ -30,7 +30,7 @@ export const WERK: WerkProject[] = [
     titel: { nl: VIJVER.titel, en: VIJVER.en.titel },
     naam: { nl: VIJVER.categorie, en: VIJVER.en.categorie },
     type: { nl: VIJVER.categorie, en: VIJVER.en.categorie },
-    plaats: "—",
+    plaats: "Elsloo",
     status: { nl: VIJVER.status, en: VIJVER.en.status },
     foto: FOTOS.F10 as Foto,
     morph: "project-vijverrenovatie",
