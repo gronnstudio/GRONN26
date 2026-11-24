@@ -54,7 +54,7 @@ export function LandschapVoorpagina() {
           </div>
           <div className="ls-hero-rechts">
             <p className="ls-body ls-hero-zin">
-              <T t={{ nl: "Ik ontwerp, maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein, Elsloo, Urmond en omgeving.", en: "I design, build and maintain ponds and natural gardens for homeowners in Stein, Elsloo, Urmond and around." }} />
+              <T t={{ nl: "Ik ontwerp, maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein, Elsloo, Urmond en omgeving, met een vaste prijs vooraf.", en: "I design, build and maintain ponds and natural gardens for homeowners in Stein, Elsloo, Urmond and around, with a fixed price up front." }} />
             </p>
             <p className="ls-annotatie" lang="en">Designing Living Ecosystems</p>
             <div className="ls-knoppen">

@@ -29,7 +29,7 @@ const INLEIDING = FASEN[1].diensten[0].summary.nl
 const [ZIN, VERVOLG] = eersteZinL(FASEN[1].diensten[0].summary)
 
 export const metadata: Metadata = {
-  title: "Natuurlijke tuin laten ontwerpen en aanleggen in Stein en omgeving",
+  title: "Natuurlijke tuin aanleggen in Stein",
   description: INLEIDING,
 }
 

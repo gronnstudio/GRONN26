@@ -12,7 +12,7 @@ import type { Beeld as BeeldData } from "@/components/landschap/beelden"
 import "@/components/landschap/landschap.css"
 
 const BESCHRIJVING =
-  "Echt werk van GRØNN Studio: een vijverrenovatie met twee vijvers, een waterval en een beekloop, en een terras van 24 m² in Geulle."
+  "Echt werk van GRØNN Studio: een vijverrenovatie in Elsloo met twee vijvers, een waterval en een beekloop, en een terras van 24 m² in Geulle."
 
 export const metadata: Metadata = {
   title: "Werk",
@@ -36,7 +36,7 @@ export default function WerkPagina() {
       <Opening
         label={{ nl: "Werk", en: "Work" }}
         titel={{ nl: "Van eerste idee naar buiten.", en: "From first idea to outside." }}
-        zin={<T t={{ nl: BESCHRIJVING, en: "Real work by GRØNN Studio: a pond renovation with two ponds, a waterfall and a stream, and a 24 m² patio in Geulle." }} />}
+        zin={<T t={{ nl: BESCHRIJVING, en: "Real work by GRØNN Studio: a pond renovation in Elsloo with two ponds, a waterfall and a stream, and a 24 m² patio in Geulle." }} />}
       />
 
       {WERK.map((p, i) => {

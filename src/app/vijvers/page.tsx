@@ -31,7 +31,7 @@ const INLEIDING = VIJVERDIENSTEN[1].summary.nl
 const [ZIN, VERVOLG] = eersteZinL(VIJVERDIENSTEN[1].summary)
 
 export const metadata: Metadata = {
-  title: "Vijvers: aanleggen, renoveren en onderhoud in Stein en omgeving",
+  title: "Vijvers aanleggen en onderhouden in Stein",
   description: INLEIDING,
 }
 

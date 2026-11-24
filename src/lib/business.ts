@@ -18,7 +18,7 @@ export const BUSINESS = {
     province: "Limburg",
     country: "Nederland",
   },
-  phone: "+316 181 180 14",
+  phone: "06 181 180 14",
   phoneHref: "tel:+31618118014",
   email: "hello@gronn.studio",
   emailHref: "mailto:hello@gronn.studio",

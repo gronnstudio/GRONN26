@@ -12,7 +12,7 @@ import { mollieAan } from "@/lib/mollie"
 import "./stapel.css"
 
 export const metadata: Metadata = {
-  title: "Borderpakketten: kant-en-klare borders, aangeplant of opgestuurd",
+  title: "Borderpakketten, aangeplant of opgestuurd",
   description: "Kant-en-klare borders voor zon, schaduw, vijverrand of droge grond, met plan van boven. Aangeplant in Stein en omgeving of opgestuurd.",
   alternates: { canonical: "/tuinen/borderpakketten" },
 }

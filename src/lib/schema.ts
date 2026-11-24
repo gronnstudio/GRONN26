@@ -23,7 +23,7 @@ export function studioSchema() {
     description: "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
     url: SITE,
     email: BUSINESS.email,
-    telephone: BUSINESS.phone,
+    telephone: BUSINESS.phoneHref.replace("tel:", ""),
     address: {
       "@type": "PostalAddress",
       addressLocality: BUSINESS.address.city,
