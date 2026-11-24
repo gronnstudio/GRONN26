@@ -654,3 +654,9 @@ a:hover .ls-cirkellink .ls-cirkellink-pijl, a:focus-visible .ls-cirkellink .ls-c
 html:has(.ls-hero) .ls-kop { position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(rgb(0 0 0 / .32), transparent); border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; color: #efeeea; }
 html:has(.ls-hero) .ls-logo-licht { display: none; }
 html:has(.ls-hero) .ls-logo-donker { display: block; }
+
+/* ── vijverdienstpagina's (/vijvers/[dienst], 24 nov 2026) ─────────── */
+.vd-lijst { margin: 24px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.ls-twee-inhoud > .ls-body + .ls-body { margin-top: 16px; }
+.vd-vraag { display: grid; gap: 10px; }
+.vd-vraag + .vd-vraag { margin-top: 32px; }

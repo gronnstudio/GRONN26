@@ -3,6 +3,7 @@ import { STUKKEN } from "@/lib/data/blog"
 import { SERVICE_AREA_TOWNS } from "@/lib/werkgebied"
 import { diensten } from "@/components/diensten/kies"
 import { kortePrijs } from "@/components/diensten/prijs"
+import { VIJVER_PAGINAS } from "@/lib/data/vijver-paginas"
 
 // /llms.txt: een korte, platte samenvatting van de site voor AI-assistenten
 // (voorstel op llmstxt.org). Alles komt uit dezelfde bronnen als de pagina's:
@@ -31,6 +32,7 @@ Contact: ${BUSINESS.email}, WhatsApp ${BUSINESS.whatsapp} (stuur een foto van je
 ## Vijvers
 
 ${VIJVERS.map((s) => regel(s, "/vijvers")).join("\n")}
+${VIJVER_PAGINAS.map((p) => `- [${p.seoTitel}](${SITE}/vijvers/${p.slug}): ${p.beschrijving}`).join("\n")}
 
 ## Tuinen
 

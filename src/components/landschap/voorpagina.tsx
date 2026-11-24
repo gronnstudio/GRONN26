@@ -49,12 +49,12 @@ export function LandschapVoorpagina() {
       <HeroLandschap>
         <div className="ls-raster ls-hero-tekst">
           <div className="ls-hero-links">
-            <p className="ls-label"><T t={{ nl: "Vijvers en tuinen · Stein", en: "Ponds and gardens · Stein" }} /></p>
+            <p className="ls-label"><T t={{ nl: "Hovenier in Stein", en: "Gardener in Stein" }} /></p>
             <h1 id="ls-titel" className="ls-display"><T t={{ nl: "Een tuin die met je meegroeit.", en: "A garden that grows with you." }} /></h1>
           </div>
           <div className="ls-hero-rechts">
             <p className="ls-body ls-hero-zin">
-              <T t={{ nl: "Ik ontwerp, maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving.", en: "I design, build and maintain ponds and natural gardens for homeowners in and around Stein." }} />
+              <T t={{ nl: "Ik ontwerp, maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein, Elsloo, Urmond en omgeving.", en: "I design, build and maintain ponds and natural gardens for homeowners in Stein, Elsloo, Urmond and around." }} />
             </p>
             <p className="ls-annotatie" lang="en">Designing Living Ecosystems</p>
             <div className="ls-knoppen">

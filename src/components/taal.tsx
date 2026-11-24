@@ -7,7 +7,8 @@ import type { L } from "@/lib/i18n"
 // <span lang> met display: contents; CSS verbergt de andere taal. Zo is er
 // geen flits, geen hydratieverschil, en werkt het ook zonder JS.
 // Alleen voor attributen (aria-label, alt, placeholder) is JS nodig: useTaal()
-// in taal-klant.ts.
+// in taal-klant.ts. De Engelse helft draagt data-nosnippet: Google zette
+// anders de verborgen Engelse zin in het zoekresultaat (online strategie, 24 nov 2026).
 
 export type Tekst = string | L
 export type Taal = "nl" | "en"
@@ -28,7 +29,7 @@ export function Beide({ nl, en }: { nl: ReactNode; en: ReactNode }) {
   return (
     <>
       <span lang="nl" className="t-nl">{nl}</span>
-      <span lang="en" className="t-en">{en}</span>
+      <span lang="en" className="t-en" data-nosnippet>{en}</span>
     </>
   )
 }

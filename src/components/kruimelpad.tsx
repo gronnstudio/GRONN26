@@ -12,6 +12,9 @@ import { T, kies, type Tekst } from "@/components/taal"
 // 404) krijgt geen kruimelpad.
 const PAGINAS: Record<string, { naam: Tekst; ouder?: string }> = {
   "/vijvers": { naam: { nl: "Vijvers", en: "Ponds" } },
+  "/vijvers/aanleggen": { naam: { nl: "Aanleggen", en: "Building" }, ouder: "/vijvers" },
+  "/vijvers/renoveren-en-onderhoud": { naam: { nl: "Renoveren en onderhoud", en: "Renovation and care" }, ouder: "/vijvers" },
+  "/vijvers/waterval-en-beekloop": { naam: { nl: "Waterval en beekloop", en: "Waterfall and stream" }, ouder: "/vijvers" },
   "/tuinen": { naam: { nl: "Tuinen", en: "Gardens" } },
   "/tuinen/materialen": { naam: { nl: "Materialen", en: "Materials" }, ouder: "/tuinen" },
   "/shop": { naam: "Shop" },
