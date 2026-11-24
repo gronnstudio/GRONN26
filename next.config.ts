@@ -60,6 +60,8 @@ const nextConfig: NextConfig = {
       },
       // De wireframes zijn werkmateriaal: nooit in zoekmachines.
       { source: "/wireframes/:pad*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      // Alleen gronn.studio in Google: gronn26.vercel.app toont dezelfde site (24 nov 2026).
+      { source: "/:pad*", has: [{ type: "host", value: ".*\\.vercel\\.app" }], headers: [{ key: "X-Robots-Tag", value: "noindex" }] },
     ]
   },
   async rewrites() {

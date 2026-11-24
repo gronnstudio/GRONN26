@@ -25,7 +25,7 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gronn.studio"),
-  title: { default: `${BUSINESS.name} · Vijvers en tuinen in Stein en omgeving`, template: `%s · ${BUSINESS.name}` },
+  title: { default: `Hovenier in Stein: vijvers en natuurlijke tuinen · ${BUSINESS.name}`, template: `%s · ${BUSINESS.name}` },
   description:
     "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
   // Elke pagina zijn eigen canonieke adres, en een deelbeeld voor WhatsApp en

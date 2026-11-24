@@ -22,7 +22,7 @@ import { studioSchema } from "@/lib/schema"
 // opmerkingen, het uitgevoerde werk als detailbladen en de poort naar
 // Kennismaken.
 export const metadata: Metadata = {
-  title: { absolute: `${BUSINESS.name} · Vijvers en tuinen in Stein en omgeving` },
+  title: { absolute: `Hovenier in Stein: vijvers en natuurlijke tuinen · ${BUSINESS.name}` },
   description:
     "Ik maak en onderhoud vijvers en natuurlijke tuinen voor huiseigenaren in Stein en omgeving, met een vaste prijs vooraf.",
 }
@@ -52,7 +52,7 @@ export default function Voorpagina() {
         <LandschapVoorpagina />
       </div>
 
-      <div className="alleen-plan">
+      <div className="alleen-plan" data-nosnippet>
       <section className="wrap b-titel" aria-labelledby="plan-kop">
         <p className="lbl m-0"><T t={{ nl: "Blad B-01 · Plattegrond · Stein en omgeving", en: "Sheet B-01 · Site plan · Stein and surroundings" }} /></p>
         <h1 id="plan-kop">

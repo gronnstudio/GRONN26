@@ -20,10 +20,10 @@ export const MEGA: Record<string, Mega> = {
   "/vijvers": {
     titel: { nl: "Vijvers", en: "Ponds" },
     links: [
-      { href: "/vijvers#vijver-diensten", naam: { nl: "Nieuwe vijver", en: "New pond" }, sub: { nl: "Vanaf € 2.500", en: "From € 2,500" }, beeld: "/sfeer/waterval-vijver.jpg" },
-      { href: "/vijvers#vijver-diensten", naam: { nl: "Renovatie", en: "Renovation" }, sub: { nl: "Vanaf € 4.500", en: "From € 4,500" }, beeld: "/landschap/vijver-terras.jpg" },
-      { href: "/vijvers#vijver-diensten", naam: { nl: "Onderhoud", en: "Maintenance" }, sub: { nl: "€ 45 per maand, twee bezoeken per jaar", en: "€ 45 a month, two visits a year" }, beeld: "/sfeer/vijver-koi.jpg" },
-      { href: "/vijvers#vijver-helder", naam: { nl: "Helder water", en: "Clear water" }, sub: { nl: "Zonder filter schoonmaken", en: "Without cleaning filters" }, beeld: "/sfeer/vijver-blad.jpg" },
+      { href: "/vijvers/aanleggen", naam: { nl: "Nieuwe vijver", en: "New pond" }, sub: { nl: "Vanaf € 2.500", en: "From € 2,500" }, beeld: "/sfeer/waterval-vijver.jpg" },
+      { href: "/vijvers/renoveren-en-onderhoud", naam: { nl: "Renovatie", en: "Renovation" }, sub: { nl: "Vanaf € 4.500", en: "From € 4,500" }, beeld: "/landschap/vijver-terras.jpg" },
+      { href: "/vijvers/renoveren-en-onderhoud", naam: { nl: "Onderhoud", en: "Maintenance" }, sub: { nl: "€ 45 per maand, twee bezoeken per jaar", en: "€ 45 a month, two visits a year" }, beeld: "/sfeer/vijver-koi.jpg" },
+      { href: "/vijvers/waterval-en-beekloop", naam: { nl: "Helder water", en: "Clear water" }, sub: { nl: "Zonder filter schoonmaken", en: "Without cleaning filters" }, beeld: "/sfeer/vijver-blad.jpg" },
     ],
     alles: { href: "/vijvers", naam: { nl: "Alles over vijvers", en: "All about ponds" } },
   },

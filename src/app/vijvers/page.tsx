@@ -13,6 +13,7 @@ import { POEL, REGENTUIN, VIJVER_TERRAS, type Beeld as BeeldData } from "@/compo
 import "@/components/landschap/landschap.css"
 import { dienstenSchema, ldJson } from "@/lib/schema"
 import { FOTOS, VIJVER, type Foto as FotoData } from "@/lib/data/vijverrenovatie"
+import { VIJVER_PAGINAS } from "@/lib/data/vijver-paginas"
 
 // Vijvers in de taal van de voorpagina (bouwbrief, 21 nov 2026): opening met
 // eigen werk, één standpunt, de diensten als lijnlijst, sfeer met label, het
@@ -30,7 +31,7 @@ const INLEIDING = VIJVERDIENSTEN[1].summary.nl
 const [ZIN, VERVOLG] = eersteZinL(VIJVERDIENSTEN[1].summary)
 
 export const metadata: Metadata = {
-  title: "Vijvers",
+  title: "Vijvers: aanleggen, renoveren en onderhoud in Stein en omgeving",
   description: INLEIDING,
 }
 
@@ -51,6 +52,22 @@ export default function VijversPagina() {
         </div>
         <div className="ls-twee-inhoud ls-op">
           {VERVOLG.nl ? <p className="w-onthul"><T t={VERVOLG} /></p> : null}
+        </div>
+      </section>
+
+      <section className="ls-raster ls-sectie ls-twee" aria-labelledby="vijver-onderwerp">
+        <div className="ls-twee-kop ls-op">
+          <p className="ls-label"><T t={{ nl: "Per onderwerp", en: "By topic" }} /></p>
+          <h2 id="vijver-onderwerp" className="ls-h2"><T t={{ nl: "Aanleggen, renoveren of stromend water.", en: "Building, renovating or moving water." }} /></h2>
+        </div>
+        <div className="ls-twee-inhoud ls-op">
+          <ul className="ls-lijnlijst">
+            {VIJVER_PAGINAS.map((p) => (
+              <li key={p.slug}>
+                <Link href={`/vijvers/${p.slug}`} transitionTypes={["schuif"]}><T t={p.label} /> <Pijl richting="e" /></Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
