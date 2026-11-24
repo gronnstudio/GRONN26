@@ -184,9 +184,10 @@ export const DIEPTE: { foto: Foto; fase: L; zin: L }[] = (
  */
 export const VIJVER = {
   titel: "Twee vijvers. Eén samenhangend watersysteem.",
-  seoTitel: "Vijverrenovatie met waterval en beekloop — GRØNN Studio",
+  seoTitel: "Vijverrenovatie in Elsloo met waterval en beekloop — GRØNN Studio",
+  plaats: "Elsloo",
   omschrijving:
-    "Twee vijvers, circa 5.000 liter water en 120 uur werk. Ontdek de techniek, het denkwerk en de beplanting achter deze vijverrenovatie van GRØNN Studio.",
+    "Twee vijvers, circa 5.000 liter water en 120 uur werk. Ontdek de techniek, het denkwerk en de beplanting achter deze vijverrenovatie in Elsloo.",
   categorie: "Vijverrenovatie",
   auteur: "Nick Peters, GRØNN Studio",
   status: "In afronding",
