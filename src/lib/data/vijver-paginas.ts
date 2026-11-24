@@ -35,7 +35,7 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
     slug: "aanleggen",
     seoTitel: "Vijver aanleggen in Stein en omgeving",
     beschrijving:
-      "Een nieuwe vijver laten aanleggen in Stein, Elsloo, Geleen, Beek of Sittard. Natuurvijver, vijver met vissen of zwemvijver: plek, diepte, folie, filter en rand in één plan, met een vaste prijs vooraf. Vanaf € 2.500.",
+      "Een vijver laten aanleggen in Stein en omgeving: natuurvijver, vijver met vissen of zwemvijver. Eén plan, een vaste prijs vooraf. Vanaf € 2.500.",
     label: { nl: "Vijver aanleggen", en: "Building a pond" },
     titel: { nl: "Een vijver laten aanleggen.", en: "Having a pond built." },
     zin: {
@@ -106,9 +106,9 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
   },
   {
     slug: "renoveren-en-onderhoud",
-    seoTitel: "Vijver renoveren en onderhouden in Stein en omgeving",
+    seoTitel: "Vijver renoveren en onderhouden in Stein",
     beschrijving:
-      "Groen water, een lekke vijver of een filter dat niet meer werkt? Vijverrenovatie en vijveronderhoud in Stein en omgeving: doorlichting € 195, najaarsbeurt, winterklaar en onderhoud vanaf € 45 per maand.",
+      "Groen water, lek of een filter dat niet werkt? Vijverrenovatie en vijveronderhoud in Stein en omgeving. Doorlichting € 195, onderhoud vanaf € 45 p/m.",
     label: { nl: "Renoveren en onderhoud", en: "Renovation and care" },
     titel: { nl: "Je vijver renoveren of onderhouden.", en: "Renovating or caring for your pond." },
     zin: {
@@ -173,9 +173,9 @@ export const VIJVER_PAGINAS: VijverPagina[] = [
   },
   {
     slug: "waterval-en-beekloop",
-    seoTitel: "Waterval of beekloop bij je vijver, Stein en omgeving",
+    seoTitel: "Waterval of beekloop bij je vijver",
     beschrijving:
-      "Een waterval of beekloop bij je vijver laten aanleggen in Stein en omgeving. Pomp, filter bovenaan, drukvaste leidingen, folie en natuursteen: stromend water dat de vijver helder houdt.",
+      "Een waterval of beekloop bij je vijver in Stein en omgeving. Pomp, filter bovenaan, leidingen, folie en natuursteen: stromend water dat helder blijft.",
     label: { nl: "Waterval en beekloop", en: "Waterfall and stream" },
     titel: { nl: "Een waterval of beekloop bij je vijver.", en: "A waterfall or stream by your pond." },
     zin: {
