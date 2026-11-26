@@ -89,8 +89,9 @@ const nextConfig: NextConfig = {
     ]
     // De QR-code op het tuinbord wijst naar /bord (eigenaar, 15 okt 2026). Staat
     // het bord bij een project, dan wijst deze regel naar dat project; tijdelijk,
-    // zodat browsers de bestemming niet onthouden.
-    const bord = [{ source: "/bord", destination: "/werk", permanent: false }]
+    // zodat browsers de bestemming niet onthouden. Sinds 26 nov 2026 naar de
+    // voorpagina (eigenaar: "verwijs hem voor nu naar de hoofdpagina").
+    const bord = [{ source: "/bord", destination: "/", permanent: false }]
     // De blog heet sinds 22 okt 2026 Journaal (eigenaar koos de naam).
     const journaal = [
       { source: "/blog", destination: "/journaal", permanent: true },
