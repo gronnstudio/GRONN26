@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Blok, Kop } from "@/components/crm/kop"
 import { EIGEN_PAGINAS, KOPPELINGEN } from "@/lib/beheer/data"
-import { LEVERANCIERS, STAND } from "@/lib/beheer/leveranciers"
+import { LEVERANCIERS, STAND, VAST } from "@/lib/beheer/leveranciers"
 
 // Alles op één plek (eigenaar, 21 okt 2026: "alles waar we links voor hebben
 // gemaakt kun je in dashboard makkelijk bereikbaar maken"): de diensten die je
@@ -22,8 +22,11 @@ export default function Links() {
         <Blok titel="Eigen pagina's · niet in het menu">
           <Raster items={EIGEN_PAGINAS.map((k) => ({ naam: k.naam, sub: k.uitleg, href: k.href }))} />
         </Blok>
+        <Blok titel="Vaste leveranciers" rechts={<Link href="/dashboard/leveranciers" className="text-accent-tekst">Contact, prijslijsten en afspraken →</Link>}>
+          <Raster items={VAST.flatMap((l) => (l.links ?? []).map((k) => ({ naam: `${l.naam} · ${k.tekst}`, sub: l.wat, href: k.href })))} />
+        </Blok>
         <Blok titel="Zakelijke accounts" rechts={<Link href="/dashboard/leveranciers" className="text-accent-tekst">Alle leveranciers →</Link>}>
-          <Raster items={LEVERANCIERS.map((l) => ({ naam: l.naam, sub: `${STAND[l.account].naam} · ${l.wat}`, href: l.href }))} />
+          <Raster items={LEVERANCIERS.map((l) => ({ naam: l.naam, sub: `${STAND[l.account].naam} · ${l.wat}`, href: l.href ?? "/dashboard/leveranciers" }))} />
         </Blok>
       </main>
     </>
