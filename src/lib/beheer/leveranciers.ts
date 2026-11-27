@@ -19,7 +19,8 @@ export const STAND = {
 export type Leverancier = {
   naam: string
   wat: string
-  href: string
+  /** Leeg = geen site bekend (bijv. bestellen via een Mollie-link). */
+  href?: string
   plaats?: string
   /** Ongeveer, over de weg vanaf Stein. Leeg = online of merk. */
   km?: number
@@ -27,6 +28,12 @@ export type Leverancier = {
   /** Stalen, catalogus of brochure aanvragen */
   stalen?: { tekst: string; href?: string }
   account?: Stand
+  /** Vaste contactpersoon. Alleen zakelijke gegevens van de leverancier zelf. */
+  contact?: { naam?: string; telefoon?: string; email?: string }
+  /** Handige links naast de site: B2B-webshop, prijslijst, beeldmateriaal. */
+  links?: { tekst: string; href: string }[]
+  /** Afspraken die je bij bestellen wilt weten (levering, betaling). */
+  notities?: string[]
 }
 
 export type Groep = { id: string; naam: string; leveranciers: Leverancier[] }
@@ -52,7 +59,12 @@ export const GROEPEN: Groep[] = [
     naam: "Bestrating",
     leveranciers: [
       { naam: "Dirix", plaats: "Elsloo", km: 3, wat: "Tegels, klinkers, natuursteen, grind, zand; showroom, afhalen of laten leveren", href: "https://www.dirix.nl/tuin-en-bouw", zakelijk: "Vragen", stalen: { tekst: "Showroom, ma–vr 8–16 uur" } },
-      { naam: "Steenrijk", plaats: "Sittard", km: 12, wat: "Sierbestrating, natuursteen, keramiek; showtuin altijd open", href: "https://steenrijk.info", zakelijk: "Ja", stalen: { tekst: "Stalen vragen aan de balie" } },
+      {
+        naam: "Steenrijk Sierbestrating", plaats: "Sittard", km: 12, wat: "Sierbestrating, natuursteen, keramiek; showtuin altijd open", href: "https://steenrijk.info", zakelijk: "Ja",
+        stalen: { tekst: "Stalen vragen aan de balie" },
+        contact: { naam: "Kai van der Ven", email: "info@steenrijk.info" },
+        notities: ["Geen prijslijst: prijzen wisselen, vraag per klus een offerte (30 okt).", "Levert ook met kooiaap, tegen meerprijs voor transport."],
+      },
       { naam: "Wildkamp", wat: "Tuinmaterialen", href: "https://www.wildkamp.nl/", zakelijk: "Niet bevestigd", account: "wacht" },
       { naam: "The Flagstone Company", wat: "Flagstones, steenstrips, natuursteen", href: "https://www.flagstones.nl/", zakelijk: "Vragen", stalen: { tekst: "Flagstone Magazine gratis", href: "https://www.natuursteenstrips.nl/het-flagstone-magazine/" } },
       { naam: "Gardenlux", wat: "Merk: tegels, klinkers, natuursteen, hout (via dealer)", href: "https://www.gardenlux.nl", zakelijk: "Via dealer", stalen: { tekst: "Tuincatalogus gratis per post", href: "https://www.gardenlux.nl/tuincatalogus-aanvraag" } },
@@ -64,6 +76,25 @@ export const GROEPEN: Groep[] = [
     naam: "Grond & schors",
     leveranciers: [
       { naam: "Dirix", plaats: "Elsloo", km: 3, wat: "Teelaarde, compost, boomschors, zand; big bag of los gestort", href: "https://www.dirix.nl/tuin-en-bouw", zakelijk: "Vragen" },
+      {
+        naam: "Bio-Kultura", wat: "Biologische bodemproducten, per pallet of los gestort", href: "https://www.bio-kultura.nl", zakelijk: "Ja, B2B-webshop",
+        contact: { naam: "Mariëtte Blaas", telefoon: "0343-785371", email: "info@bio-kultura.nl" },
+        links: [
+          { tekst: "B2B-webshop", href: "http://www.bio-kulturab2b.nl" },
+          { tekst: "Prijslijst (Canva)", href: "https://www.canva.com/design/DAG7lAPpp5w/AemSHzI5QsKVNqDSVh1yyQ/view" },
+          { tekst: "Beeldmateriaal en logo's (Drive)", href: "https://drive.google.com/drive/folders/1g43JsEaIa0pTMT3Cz_VFeJU8jO1DjM5J" },
+        ],
+        notities: [
+          "Prijs per pallet; transport kost overal in Nederland hetzelfde.",
+          "Los gestort vanaf 20 m³. Kipper en palletwagen standaard, kooiaap tegen meerprijs.",
+          "Geleverd binnen 2–3 werkdagen, factuur na levering.",
+          "Ze delen graag voor- en na-foto's op hun socials.",
+        ],
+      },
+      {
+        naam: "Bomat", wat: "Grond, zand, korrelmix en grind in big bags", zakelijk: "Ja",
+        notities: ["Bestellen per mail, betalen via een Mollie-link.", "Kooiaap en heftruck tegen meerprijs als losstorten niet kan (factuur BM25-1422: € 227,48)."],
+      },
       { naam: "Muysers Potgrond", plaats: "Reuver", km: 50, wat: "Dennenschors, Franse schors, compost, teelgrond, big bags", href: "https://www.muyserspotgrond.nl", zakelijk: "Ja, richt zich op hoveniers" },
       { naam: "Attero", plaats: "Maastricht", km: 20, wat: "Keurcompost, ook afhalen", href: "https://www.attero.nl/nl/producten-afnemen/bodemverbeteraars/", zakelijk: "Ja" },
     ],
@@ -75,7 +106,12 @@ export const GROEPEN: Groep[] = [
       { naam: "Tuincentrum Lemmens", plaats: "Munstergeleen", km: 12, wat: "Bomen, heesters, vaste planten; ook compost, schors en bestrating; hoveniers komen er al", href: "https://www.lemmensvof.nl", zakelijk: "Vragen" },
       { naam: "Marnis Kwekerij", plaats: "Bunde", km: 15, wat: "Eigen kweek zonder bestrijdingsmiddelen: vaste planten, schaduwplanten, inheemse soorten", href: "https://www.marnis.nl", zakelijk: "Vragen" },
       { naam: "Kwekerij Bastin", plaats: "Aalbeek", km: 20, wat: "Duurzaam gekweekte vaste planten, prairieplanten, kruiden", href: "https://www.bastin.nl", zakelijk: "Vragen" },
-      { naam: "Directplant", wat: "Alle tuinplanten, gratis geleverd", href: "https://www.directplant.nl/customer/account/login/", zakelijk: "Ja, 20% korting", account: "actief" },
+      {
+        naam: "Directplant", wat: "Alle tuinplanten, gratis geleverd", href: "https://www.directplant.nl/customer/account/login/", zakelijk: "Ja, 20% korting", account: "actief",
+        contact: { email: "info@directplant.nl" },
+        links: [{ tekst: "Zakelijk bestellen", href: "https://www.directplant.nl/directplant/zakelijkbestellen" }],
+        notities: ["Gratis geleverd in NL en BE. Plantenleverancier voor de borderpakketten."],
+      },
       { naam: "Bomenbezorgd", wat: "Bomen", href: "https://www.bomenbezorgdtobusiness.nl/inloggen", zakelijk: "Ja", account: "actief" },
       { naam: "Boomkwekerij H. Maessen", plaats: "Echt", km: 25, wat: "Bomen, hagen, heesters, vaste planten", href: "https://www.limburgplant.nl/home/", zakelijk: "Aangevraagd per mail, 20 okt", account: "wacht" },
       { naam: "Cruydt-Hoeck", wat: "Zaden van inheemse wilde planten", href: "https://www.cruydthoeck.nl", zakelijk: "Vragen", stalen: { tekst: "Gedrukte catalogus bestellen", href: "https://www.cruydthoeck.nl" } },
@@ -110,6 +146,11 @@ export const GROEPEN: Groep[] = [
     ],
   },
 ]
+
+/** Leveranciers met een contactpersoon, extra links of afspraken: het eerste
+ * tabblad "Vast" (eigenaar, 27 nov 2026: "zet die link en andere links in
+ * dashboard op een handige manier"). */
+export const VAST = GROEPEN.flatMap((g) => g.leveranciers.filter((l) => l.contact || l.links || l.notities))
 
 /** De accounts die je al hebt, voor het overzicht op /dashboard. */
 export const LEVERANCIERS = GROEPEN.flatMap((g) =>

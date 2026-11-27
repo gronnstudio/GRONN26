@@ -34,7 +34,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     ...klanten.flatMap((k) => k.stukken.map((s) => ({ groep: "Offertes en facturen", titel: s.nummer, sub: `${s.soort} · ${k.naam}`, href: `/dashboard/klanten/${k.id}?tab=stukken` }))),
     // Alleen eigen items: de duizenden regels uit prijslijsten zoek je op de catalogus zelf.
     ...catalogus.filter(isEigen).map((i) => ({ groep: "Catalogus", titel: i.naam, sub: [i.leverancier, i.eenheid].filter(Boolean).join(" · "), href: `/dashboard/catalogus?q=${encodeURIComponent(i.naam)}` })),
-    ...LEVERANCIERS.flatMap((g) => g.leveranciers.map((l) => ({ groep: "Leveranciers", titel: l.naam, sub: `${g.naam} · ${l.wat}`, href: `/dashboard/leveranciers?tab=${g.id}` }))),
+    ...LEVERANCIERS.flatMap((g) => g.leveranciers.map((l) => ({ groep: "Leveranciers", titel: l.naam, sub: `${g.naam} · ${l.wat}`, href: `/dashboard/leveranciers?tab=${l.contact || l.links || l.notities ? "vast" : g.id}` }))),
   ]
   const tellers = {
     aanvragen: stand.aanvragen.filter((a) => !a.klaar).length,

@@ -551,6 +551,7 @@ test("systeem: elke pagina één h1, geen fouten, geen overloop, licht en donker
     "/dashboard/prijs",
     "/dashboard/catalogus",
     "/dashboard/leveranciers",
+    "/dashboard/leveranciers?tab=grond",
     "/dashboard/geld",
     "/dashboard/offertes",
     "/dashboard/facturen",
